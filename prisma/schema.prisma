@@ -12,3 +12,57 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+
+enum Role {
+  OWNER
+  BUYER
+}
+
+enum OrderStatus {
+  PENDING
+  IN_PROGRESS
+  SHIPPED
+  COMPLETED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(BUYER)
+  orders    Order[]
+  createdAt DateTime @default(now())
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  price       Int
+  imageUrl    String
+  isActive    Boolean  @default(true)
+
+  orderItems OrderItem[]
+}
+
+model Order {
+  id        String      @id @default(uuid())
+  status    OrderStatus @default(PENDING)
+  total     Int
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+  items     OrderItem[]
+  createdAt DateTime    @default(now())
+}
+
+model OrderItem {
+  id        String @id @default(uuid())
+  orderId  String
+  productId String
+  quantity Int
+  price    Int
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+}
