@@ -1,5 +1,5 @@
 @reference "tailwindcss";
-@reference "../../../app/globals.css";
+@reference "../../../globals.css";
 
 .root {
   @apply relative grid items-start gap-1 grid-cols-1 overflow-x-hidden;

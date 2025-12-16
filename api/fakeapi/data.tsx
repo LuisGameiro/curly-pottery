@@ -2,6 +2,8 @@
 // TEST DATA - Fully typed to match Product interface
 // ============================================
 
+import { url } from "node:inspector";
+
 // Helper function to create ProductPrice objects
 const createPrice = (value:number, currencyCode = 'USD', retailPrice = null) => ({
   value,
@@ -156,8 +158,8 @@ const relatedProductsData = {
 // Static pages data
 const pagesData = {
   pages: [
-    { id: 'page-1', title: 'About Us', slug: 'about-us', body: 'Test about page content.' },
-    { id: 'page-2', title: 'Contact', slug: 'contact', body: 'Test contact page content.' }
+    { id: 'page-1', title: 'About Us', slug: 'about-us', body: 'Test about page content.' ,url: '/about'},
+    { id: 'page-2', title: 'Contact', slug: 'contact', body: 'Test contact page content.' ,url: '/contact'}
   ]
 };
 

@@ -1,6 +1,6 @@
-/* 
+
 @reference "tailwindcss";
-@reference "../../../app/globals.css";
+@reference "../../../globals.css";
 
 .root {
   @apply sticky top-0 bg-primary z-40 transition-all duration-150;
@@ -36,4 +36,4 @@
     @apply shadow-md;
     transform: scale(1.05);
   }
-} */
+}

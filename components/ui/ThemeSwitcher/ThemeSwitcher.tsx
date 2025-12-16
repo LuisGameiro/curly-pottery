@@ -18,7 +18,7 @@ const ThemeSwitcher = () => {
         >
           <button
             className={
-              'w-[125px] h-30 pl-2 pr-1 rounded-md border border-accent-2 flex items-center justify-between transition-colors ease-linear hover:border-accent-3 hover:shadow-xs'
+              'w-[125px] h-10 pl-2 pr-1 rounded-md border border-accent-2 flex items-center justify-between transition-colors ease-linear hover:border-accent-3 hover:shadow-xs'
             }
             aria-label="Theme Switcher"
           >

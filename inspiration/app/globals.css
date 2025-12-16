@@ -1,9 +1,13 @@
-@import "tailwindcss";
+/* @import "tailwindcss"; */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Core theme from your v4 setup */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -44,9 +48,56 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Your custom extensions migrated from old JS config */
+  --size-8xl: 1920px; /* maxWidth */
+  
+  /* Custom colors - map to your CSS variables */
+  --color-primary: var(--primary);
+  --color-primary-2: var(--primary-2);
+  --color-secondary: var(--secondary);
+  --color-secondary-2: var(--secondary-2);
+  --color-hover: var(--hover);
+  --color-hover-1: var(--hover-1);
+  --color-hover-2: var(--hover-2);
+  --color-accent-0: var(--accent-0);
+  --color-accent-1: var(--accent-1);
+  --color-accent-2: var(--accent-2);
+  --color-accent-3: var(--accent-3);
+  --color-accent-4: var(--accent-4);
+  --color-accent-5: var(--accent-5);
+  --color-accent-6: var(--accent-6);
+  --color-accent-7: var(--accent-7);
+  --color-accent-8: var(--accent-8);
+  --color-accent-9: var(--accent-9);
+  --color-violet: var(--violet);
+  --color-violet-light: var(--violet-light);
+  --color-violet-dark: var(--violet-dark);
+  --color-pink: var(--pink);
+  --color-pink-light: var(--pink-light);
+  --color-cyan: var(--cyan);
+  --color-blue: var(--blue);
+  --color-green: var(--green);
+  --color-red: var(--red);
+  
+  /* Text colors */
+  --color-text-base: var(--text-base);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  
+  /* Shadows */
+  --shadow-outline-normal: 0 0 0 2px var(--accent-2);
+  --shadow-magical: rgba(0, 0, 0, 0.02) 0px 30px 30px, rgba(0, 0, 0, 0.03) 0px 0px 8px, rgba(0, 0, 0, 0.05) 0px 1px 0px;
+  
+  /* Typography */
+  --leading-extra-loose: 2.2;
+  
+  /* Scale */
+  --scale-120: 1.2;
 }
 
 :root {
+  /* Your existing v4 light mode variables */
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
@@ -79,9 +130,41 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+  
+  /* ADD YOUR CUSTOM COLOR VARIABLES HERE for light mode */
+  --primary-2: oklch(0.3 0.05 265.755); /* Example - replace with your values */
+  --secondary-2: oklch(0.85 0.02 247.896);
+  --hover: oklch(0.95 0.01 247.896);
+  --hover-1: oklch(0.92 0.01 247.896);
+  --hover-2: oklch(0.89 0.01 247.896);
+  --accent-0: oklch(0.98 0.005 250);
+  --accent-1: oklch(0.95 0.01 250);
+  --accent-2: oklch(0.9 0.02 250);
+  --accent-3: oklch(0.85 0.03 250);
+  --accent-4: oklch(0.8 0.04 250);
+  --accent-5: oklch(0.75 0.05 250);
+  --accent-6: oklch(0.7 0.06 250);
+  --accent-7: oklch(0.65 0.07 250);
+  --accent-8: oklch(0.6 0.08 250);
+  --accent-9: oklch(0.55 0.09 250);
+  --violet: oklch(0.6 0.25 300);
+  --violet-light: oklch(0.7 0.2 300);
+  --violet-dark: oklch(0.5 0.3 300);
+  --pink: oklch(0.7 0.25 350);
+  --pink-light: oklch(0.8 0.2 350);
+  --cyan: oklch(0.7 0.2 220);
+  --blue: oklch(0.6 0.25 250);
+  --green: oklch(0.65 0.25 150);
+  --red: oklch(0.65 0.25 25);
+  
+  /* Text color variables */
+  --text-base: var(--foreground);
+  --text-primary: var(--primary);
+  --text-secondary: var(--muted-foreground);
 }
 
 .dark {
+  /* Your existing v4 dark mode variables */
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
   --card: oklch(0.208 0.042 265.755);
@@ -113,6 +196,37 @@
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
+  
+  /* ADD YOUR CUSTOM COLOR VARIABLES HERE for dark mode */
+  --primary-2: oklch(0.8 0.02 255.508);
+  --secondary-2: oklch(0.35 0.045 260.031);
+  --hover: oklch(0.35 0.045 260.031);
+  --hover-1: oklch(0.4 0.045 260.031);
+  --hover-2: oklch(0.45 0.045 260.031);
+  --accent-0: oklch(0.25 0.02 250);
+  --accent-1: oklch(0.3 0.03 250);
+  --accent-2: oklch(0.35 0.04 250);
+  --accent-3: oklch(0.4 0.05 250);
+  --accent-4: oklch(0.45 0.06 250);
+  --accent-5: oklch(0.5 0.07 250);
+  --accent-6: oklch(0.55 0.08 250);
+  --accent-7: oklch(0.6 0.09 250);
+  --accent-8: oklch(0.65 0.1 250);
+  --accent-9: oklch(0.7 0.11 250);
+  --violet: oklch(0.5 0.3 300);
+  --violet-light: oklch(0.6 0.25 300);
+  --violet-dark: oklch(0.4 0.35 300);
+  --pink: oklch(0.6 0.3 350);
+  --pink-light: oklch(0.7 0.25 350);
+  --cyan: oklch(0.6 0.25 220);
+  --blue: oklch(0.5 0.3 250);
+  --green: oklch(0.55 0.3 150);
+  --red: oklch(0.6 0.3 25);
+  
+  /* Text color variables for dark mode */
+  --text-base: var(--foreground);
+  --text-primary: var(--primary);
+  --text-secondary: var(--muted-foreground);
 }
 
 @layer base {

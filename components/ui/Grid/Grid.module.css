@@ -1,5 +1,5 @@
 @reference "tailwindcss";
-@reference "../../../app/globals.css";
+@reference "../../../globals.css";
 
 .root {
   @apply grid grid-cols-1 gap-0;

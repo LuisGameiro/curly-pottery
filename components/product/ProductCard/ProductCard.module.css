@@ -1,5 +1,5 @@
 @reference "tailwindcss";
-@reference "../../../app/globals.css";
+@reference "../../../globals.css";
 
 .root {
   @apply relative max-h-full w-full box-border overflow-hidden

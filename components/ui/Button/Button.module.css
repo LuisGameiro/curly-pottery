@@ -1,5 +1,5 @@
 @reference "tailwindcss";
-@reference "../../../app/globals.css";
+@reference "../../../globals.css";
 
 .root {
   @apply bg-accent-9 text-accent-0 cursor-pointer inline-flex

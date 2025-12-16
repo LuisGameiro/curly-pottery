@@ -1,5 +1,5 @@
 @reference "tailwindcss";
-@reference "../../../app/globals.css";
+@reference "../../../globals.css";
 
 .actions {
   @apply flex p-1 border-accent-2 border items-center justify-center

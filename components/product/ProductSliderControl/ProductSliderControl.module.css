@@ -1,5 +1,5 @@
 @reference "tailwindcss";
-@reference "../../../app/globals.css";
+@reference "../../../globals.css";
 
 .control {
   @apply bg-violet absolute bottom-10 right-10 flex flex-row

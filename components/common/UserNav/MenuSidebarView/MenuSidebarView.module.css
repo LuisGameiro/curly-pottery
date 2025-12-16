@@ -1,5 +1,5 @@
 @reference "tailwindcss";
-@reference "../../../../app/globals.css";
+@reference "../../../../globals.css";
 
 .root {
   @apply px-4 sm:px-6 sm:w-full flex-1 z-20;

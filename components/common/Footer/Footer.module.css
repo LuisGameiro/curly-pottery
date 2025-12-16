@@ -1,5 +1,5 @@
-/* @reference "tailwindcss";
-@reference "../../../app/globals.css";
+@reference "tailwindcss";
+@reference "../../../globals.css";
 
 .root {
   @apply border-t border-accent-2;
@@ -13,4 +13,4 @@
   &:hover > svg {
     @apply scale-110;
   }
-} */
+}

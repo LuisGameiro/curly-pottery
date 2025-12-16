@@ -1,5 +1,5 @@
-// import '@assets/main.css'
-// import '@assets/chrome-bug.css'
+import '../globals.css'
+import '@assets/chrome-bug.css'
 import 'keen-slider/keen-slider.min.css'
 
 import { FC, ReactNode, useEffect } from 'react'
@@ -19,9 +19,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
      <Head />
-      
       <ManagedUIContext>
-        <Layout pageProps={pageProps}>
+        <Layout pageProps={pageProps} >
           <Component {...pageProps} />
         </Layout>
       </ManagedUIContext>

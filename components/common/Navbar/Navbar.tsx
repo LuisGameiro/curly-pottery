@@ -24,7 +24,7 @@ const Navbar: FC<NavbarProps> = ({ links }) => (
                   <div className="flex items-center flex-row">
 
             <Logo />
-            <h1 className="ml-2 font-bold text-4xl">Curly Pottery</h1>
+            <h1 className="mx-2 text-accent-1">Curly Pottery</h1>
             </div>
           </Link>
           <nav className={s.navMenu}>

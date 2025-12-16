@@ -66,7 +66,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   
   const [invalidPaths, log] = missingLocaleInPages()
   const paths = pages
-    .map((page) => page?.url??'toto')
+    .map((page) => page?.url)
     .filter((url) => {
       if (!url || !locales) return url
       // If there are locales, only include the pages that include one of the available locales

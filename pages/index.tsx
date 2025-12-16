@@ -43,7 +43,7 @@ export default function Home({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
-      <Grid variant="filled">
+      {/* <Grid variant="filled">
         {products.slice(0, 3).map((product: any, i: number) => (
           <ProductCard
             key={product.id}
@@ -78,13 +78,13 @@ export default function Home({
             }}
           />
         ))}
-      </Grid>
+      </Grid> */}
       <Marquee>
         {products.slice(3).map((product: any, i: number) => (
           <ProductCard key={product.id} product={product} variant="slim" />
         ))}
-      </Marquee> 
-     {/* <HomeAllProductsGrid
+      </Marquee>
+      {/* <HomeAllProductsGrid
         newestProducts={products}
         categories={categories}
         brands={brands}
