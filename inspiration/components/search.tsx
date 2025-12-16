@@ -44,7 +44,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
   const { pathname, category, brand } = useSearchMeta(asPath)
 
   const activeCategory = categories.find((cat: any) => cat.slug === category)
-  const activeBrand = brands.find((b: Brand) => b.slug === brand)
+  const activeBrand = null // brands.find((b: Brand) => b.slug === brand)
 
   const { data, error } = useSearch({
     search: typeof q === 'string' ? q : '',
@@ -240,7 +240,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                         </a>
                       </Link>
                     </li>
-                    {brands.map(({ path, name, id }: Brand) => (
+                    {/* {brands.map(({ path, name, id }: Brand) => (
                       <li
                         key={path}
                         className={cn(
@@ -267,7 +267,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                           </a>
                         </Link>
                       </li>
-                    ))}
+                    ))} */}
                   </ul>
                 </div>
               </div>

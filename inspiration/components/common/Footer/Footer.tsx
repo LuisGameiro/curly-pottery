@@ -39,7 +39,7 @@ const Footer: FC<Props> = ({ className, pages }) => {
               <span className="rounded-full border border-accent-6 mr-2">
                 <Logo />
               </span>
-              <span>ACME</span>
+              <span>Curly Pottery</span>
             </Link>
           </div>
           <div className="col-span-1 lg:col-span-7">
@@ -72,7 +72,7 @@ const Footer: FC<Props> = ({ className, pages }) => {
         </div>
         <div className="pt-6 pb-10 flex flex-col md:flex-row justify-between items-center space-y-4 text-accent-6 text-sm">
           <div>
-            <span>&copy; 2020 ACME, Inc. All rights reserved.</span>
+            <span>&copy; 2020 Curly Pottery, Inc. All rights reserved.</span>
           </div>
           <div className="flex items-center text-primary text-sm">
             <span className="text-primary">Created by</span>

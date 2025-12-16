@@ -1,0 +1,26 @@
+@reference "tailwindcss";
+@reference "../../../app/globals.css";
+
+.root {
+  @apply py-12 flex flex-col w-full px-6;
+
+  @media (min-width: 768px) {
+    @apply flex-row;
+  }
+
+  & .asideWrapper {
+    @apply pr-3 w-full relative;
+
+    @media (min-width: 768px) {
+      @apply w-48;
+    }
+  }
+
+  & .aside {
+    @apply flex flex-row w-full justify-around mb-12;
+
+    @media (min-width: 768px) {
+      @apply mb-0 block sticky top-32;
+    }
+  }
+}
