@@ -45,12 +45,13 @@ const ProductCard: FC<Props> = ({
     >
       {variant === 'slim' && (
         <>
-          <div className={s.header}>
-            <span>{product.name}</span>
+          <div className='absolute top-0 top-0 bg-transparent left-0 z-20' >
+            <span>{product.categories[0]}</span>
           </div>
+
           {product?.images && (
             <Image
-              quality="85"
+              quality="100"
               src={product.images[0]?.url || placeholderImg}
               alt={product.name || 'Product Image'}
               height={320}
@@ -71,14 +72,9 @@ const ProductCard: FC<Props> = ({
             />
           )} */}
           {!noNameTag && (
-            <div className={s.header}>
-              <h3 className={s.name}>
+              <h3 className='absolute top-0 left-0 z-20 px-2 py-1 text-xl font-medium text-foreground'>
                 <span>{product.name}</span>
               </h3>
-              <div className={s.price}>
-                {`${price} ${product.price?.currencyCode}`}
-              </div>
-            </div>
           )}
           <div className={s.imageContainer}>
             {product?.images && (
@@ -92,6 +88,9 @@ const ProductCard: FC<Props> = ({
                 {...imgProps}
               />
             )}
+            <div className="absolute bottom-2 right-2 z-20 rounded-md bg-background/30  px-2 py-1 text-sm font-medium text-foreground backdrop-blur">
+              {`${price} ${product.price?.currencyCode}`}
+            </div>
           </div>
         </>
       )}
@@ -105,10 +104,10 @@ const ProductCard: FC<Props> = ({
               variant={product.variants[0] as any}
             />
           )} */}
-          <ProductTag
+          {/* <ProductTag
             name={product.name}
             price={`${price} ${product.price?.currencyCode}`}
-          />
+          /> */}
           <div className={s.imageContainer}>
             {product?.images && (
               <Image

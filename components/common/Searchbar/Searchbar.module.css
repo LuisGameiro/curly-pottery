@@ -25,8 +25,8 @@
   @apply h-5 w-5;
 }
 
-@screen sm {
+/* @screen sm {
   .input {
     min-width: 300px;
   }
-}
+} */

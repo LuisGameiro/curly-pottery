@@ -25,14 +25,14 @@ const links = [
 ]
 
 const Footer: FC<Props> = ({ className, pages }) => {
-  const { sitePages } = usePages(pages)
+  // const { sitePages } = usePages(pages)
   const rootClassName = cn(s.root, className)
 
   return (
     <footer className={rootClassName}>
       <Container>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 border-b border-accent-2 py-12 text-primary transition-colors duration-150">
-          <div className="col-span-1 lg:col-span-2">
+        <div className="grid grid-cols-12  max-w-12/12 py-8   border-b border-accent-2 pt-4 text-primary transition-colors duration-150">
+          {/* <div className="col-span-1 lg:col-span-2">
             <Link
               href="/"
               className="flex flex-initial items-center font-bold md:mr-24"
@@ -42,10 +42,10 @@ const Footer: FC<Props> = ({ className, pages }) => {
               </span>
               <span>Curly Pottery</span>
             </Link>
-          </div>
-          <div className="col-span-1 lg:col-span-7">
-            <div className="grid md:grid-rows-4 md:grid-cols-3 md:grid-flow-col">
-              <span key={'faq'} className="py-3 md:py-0 md:pb-4">
+          </div> */}
+          <div className="col-span-5 mx-8 md:ml-64">
+            <div className="grid space-y-3 ">
+              <span key={'faq'}>
                 <Link
                   href={'/faq'}
                   className="text-accent-9 hover:text-accent-6 transition ease-in-out duration-150"
@@ -53,7 +53,7 @@ const Footer: FC<Props> = ({ className, pages }) => {
                   FAQ
                 </Link>
               </span>
-              <span key={'contacts'} className="py-3 md:py-0 md:pb-4">
+              <span key={'contacts'}>
                 <Link
                   href={'/contacts'}
                   className="text-accent-9 hover:text-accent-6 transition ease-in-out duration-150"
@@ -61,7 +61,7 @@ const Footer: FC<Props> = ({ className, pages }) => {
                   Contacts
                 </Link>
               </span>
-                     <span key={'about'} className="py-3 md:py-0 md:pb-4">
+                     <span key={'about'}>
                 <Link
                   href={'/about'}
                   className="text-accent-9 hover:text-accent-6 transition ease-in-out duration-150"
@@ -69,20 +69,9 @@ const Footer: FC<Props> = ({ className, pages }) => {
                   About
                 </Link>
               </span>
-
-              {[...links, ...sitePages].map((page) => (
-                <span key={page.url} className="py-3 md:py-0 md:pb-4">
-                  <Link
-                    href={page.url!}
-                    className="text-accent-9 hover:text-accent-6 transition ease-in-out duration-150"
-                  >
-                    {page.name}
-                  </Link>
-                </span>
-              ))}
             </div>
           </div>
-          <div className="col-span-1 lg:col-span-3 flex items-start lg:justify-end text-primary">
+          <div className="col-span-7 flex items-start justify-end text-primary">
             <div className="flex space-x-4 items-center h-10">
               <ThemeSwitcher />
               <I18nWidget />
@@ -90,7 +79,7 @@ const Footer: FC<Props> = ({ className, pages }) => {
             </div>
           </div>
         </div>
-        <div className="pt-6 pb-10 flex flex-col md:flex-row justify-between items-center space-y-4 text-accent-6 text-sm">
+        <div className="py-2 flex flex-col md:flex-row justify-between items-center px-4 text-accent-6 text-sm">
           <span>&copy; 2025 curly pottery, Inc. All rights reserved.</span>
           <span >Created by Luis Gameiro</span>
 
@@ -100,27 +89,27 @@ const Footer: FC<Props> = ({ className, pages }) => {
   )
 }
 
-function usePages(pages?: Page[]) {
-  const { locale } = useRouter()
-  const sitePages: Page[] = []
+// function usePages(pages?: Page[]) {
+//   const { locale } = useRouter()
+//   const sitePages: Page[] = []
 
-  if (pages) {
-    pages.forEach((page) => {
-      const slug = page.url && getSlug(page.url)
-      if (!slug) return
-      if (locale && !slug.startsWith(`${locale}/`)) return
-      sitePages.push(page)
-    })
-  }
+//   if (pages) {
+//     pages.forEach((page) => {
+//       const slug = page.url && getSlug(page.url)
+//       if (!slug) return
+//       if (locale && !slug.startsWith(`${locale}/`)) return
+//       sitePages.push(page)
+//     })
+//   }
 
-  return {
-    sitePages: sitePages.sort(bySortOrder),
-  }
-}
+//   return {
+//     sitePages: sitePages.sort(bySortOrder),
+//   }
+// }
 
-// Sort pages by the sort order assigned in the BC dashboard
-function bySortOrder(a: Page, b: Page) {
-  return (a.sort_order ?? 0) - (b.sort_order ?? 0)
-}
+// // Sort pages by the sort order assigned in the BC dashboard
+// function bySortOrder(a: Page, b: Page) {
+//   return (a.sort_order ?? 0) - (b.sort_order ?? 0)
+// }
 
 export default Footer

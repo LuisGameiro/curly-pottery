@@ -9,7 +9,7 @@ export interface ProductPrice {
    * The currency code for the price. This is a 3-letter ISO 4217 code.
    * @example USD
    */
-  currencyCode?: 'USD' | 'EUR' | 'ARS' | 'GBP' | string
+  currencyCode?: 'GDP' |'USD' | 'EUR' | 'ARS' | string 
   /**
    * The retail price of the product. This can be used to mark a product as on sale, when `retailPrice` is higher than the price a.k.a `value`.
    */
@@ -26,7 +26,7 @@ export interface ProductOption {
    * The product option’s name.
    * @example `Color` or `Size`
    */
-  displayName: string
+  displayName: 'Color' | 'Size' | string
   /**
    * List of option values.
    * @example `["Red", "Green", "Blue"]`
@@ -38,7 +38,9 @@ export interface ProductOptionValues {
   /**
    * A string that uniquely identifies the option value.
    */
-  label: string
+  label: string,
+
+  glaze?: string[],
   /**
    * List of hex colors used to display the actual colors in the swatches instead of the name.
    */
@@ -130,9 +132,28 @@ export interface Product {
    */
   options: ProductOption[]
   /**
-   * The product’s vendor name.
+   * Indicates if the product is available for sale.
    */
-  vendor?: string
+  availableForSale?: boolean
+  /**
+   * The total quantity of the product in stock across all variants.
+   */
+  stock?: number
+  /**
+   * List of categories the product belongs to.
+   */
+  categories: string[]
+
+  glazes?: string[];
+
+  /** 
+   * Dimensions of the product
+  */
+  dimensions?: {
+    height: number
+    width: number
+    depth: number
+  }
 }
 
 export interface SearchProductsBody {

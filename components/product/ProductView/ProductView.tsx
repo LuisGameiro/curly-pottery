@@ -10,28 +10,32 @@ import { Container, Text } from '@components/ui'
 import { SEO } from '@components/common'
 import ProductSidebar from '../ProductSidebar'
 import ProductTag from '../ProductTag'
+import { relatedProductsData } from 'api/fakeapi/data'
 interface ProductViewProps {
   product: Product
   relatedProducts: Product[]
 }
 
-const ProductView: FC<ProductViewProps> = ({ product, relatedProducts }) => {
+const ProductView: FC<ProductViewProps> = ({ product }) => {
   // const { price } = usePrice({
   //   amount: product.price.value,
   //   baseAmount: product.price.retailPrice,
   //   currencyCode: product.price.currencyCode!,
   // })
+const relatedProducts =  relatedProductsData.products
+
+  
 const { price } = { price: '$0.00' }
   return (
     <>
       <Container className="max-w-none w-full" clean>
         <div className={cn(s.root, 'fit')}>
           <div className={cn(s.main, 'fit')}>
-            <ProductTag
+            {/* <ProductTag
               name={product.name}
               price={`${price} ${product.price?.currencyCode}`}
               fontSize={32}
-            />
+            /> */}
             <div className={s.sliderContainer}>
               <ProductSlider key={product.id}>
                 {product.images.map((image, i) => (
@@ -65,16 +69,17 @@ const { price } = { price: '$0.00' }
           />
         </div>
         <hr className="mt-7 border-accent-2" />
-        <section className="py-12 px-6 mb-10">
-          <Text variant="sectionHeading">Related Products</Text>
+        <section className="py-12 px-6 mb-10 text-primary">
+          <Text variant="sectionHeading" className='text-accent-4'>Related Products</Text>
           <div className={s.relatedProductsGrid}>
-            {relatedProducts.map((p) => (
+            {relatedProducts.slice(0,3).map((p) => (
               <div key={p.path} className="bg-accent-0 border border-accent-2">
                 <ProductCard
-                  noNameTag
+                  noNameTag 
                   product={p}
                   key={p.path}
-                  variant="simple"
+                  variant="default"
+                  
                   className="animated fadeIn"
                   imgProps={{
                     alt: p.name,

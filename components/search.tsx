@@ -28,35 +28,38 @@ import {
   useSearchMeta,
 } from '@lib/search'
 import ErrorMessage from './ui/ErrorMessage'
+import { categories as categoriesData, productsData } from 'api/fakeapi/data'
 
-export default function Search({ categories, brands }: SearchPropsType) {
+export default function Search( ) {
   const [activeFilter, setActiveFilter] = useState('')
   const [toggleFilter, setToggleFilter] = useState(false)
-
+  
   const router = useRouter()
   const { asPath, locale } = router
+
+  const [category, setCategory] = useState(router.query.category || '')
   const { q, sort } = router.query
   // `q` can be included but because categories and designers can't be searched
   // in the same way of products, it's better to ignore the search input if one
   // of those is selected
   const query = filterQuery({ sort })
-
-  const { pathname, category, brand } = useSearchMeta(asPath)
+  const categories = categoriesData
+  const products = productsData.products
 
   const activeCategory = categories.find((cat: any) => cat.slug === category)
-  const activeBrand = brands.find((b: Brand) => b.slug === brand)
+  // const activeBrand = brands.find((b: Brand) => b.slug === brand)
 
-  const { data, error } = useSearch({
-    search: typeof q === 'string' ? q : '',
-    categoryId: activeCategory?.id,
-    brandId: activeBrand?.id,
-    sort: typeof sort === 'string' ? sort : '',
-    locale,
-  })
+  // // const { data, error } = useSearch({
+  // //   search: typeof q === 'string' ? q : '',
+  // //   categoryId: activeCategory?.id,
+  // //   brandId: activeBrand?.id,
+  // //   sort: typeof sort === 'string' ? sort : '',
+  // //   locale,
+  // // })
 
-  if (error) {
-    return <ErrorMessage error={error} />
-  }
+  // // if (error) {
+  // //   return <ErrorMessage error={error} />
+  // // }
 
   const handleClick = (event: any, filter: string) => {
     if (filter !== activeFilter) {
@@ -108,7 +111,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                   : ''
               }`}
             >
-              <div className="rounded-xs bg-accent-0 shadow-2xs lg:bg-none lg:shadow-none">
+              <div className="rounded-xs shadow-2xs lg:bg-none lg:shadow-none">
                 <div
                   role="menu"
                   aria-orientation="vertical"
@@ -124,7 +127,8 @@ export default function Search({ categories, brands }: SearchPropsType) {
                       )}
                     >
                       <Link
-                        href={{ pathname: getCategoryPath('', brand), query }}
+                        href={'/'}
+                        // href={{ pathname: getCategoryPath('', brand), query }}
                         legacyBehavior
                       >
                         <a
@@ -149,7 +153,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                       >
                         <Link
                           href={{
-                            pathname: getCategoryPath(cat.path, brand),
+                            //pathname: getCategoryPath(cat.path, brand),
                             query,
                           }}
                           legacyBehavior
@@ -170,9 +174,10 @@ export default function Search({ categories, brands }: SearchPropsType) {
               </div>
             </div>
           </div>
+          </div>
 
           {/* Designs */}
-          <div className="relative inline-block w-full">
+          {/* <div className="relative inline-block w-full">
             <div className="lg:hidden mt-3">
               <span className="rounded-md shadow-xs">
                 <button
@@ -218,14 +223,14 @@ export default function Search({ categories, brands }: SearchPropsType) {
                     <li
                       className={cn(
                         'block text-sm leading-5 text-accent-4 lg:text-base lg:no-underline lg:font-bold lg:tracking-wide hover:bg-accent-1 lg:hover:bg-transparent hover:text-accent-8 focus:outline-hidden focus:bg-accent-1 focus:text-accent-8',
-                        {
-                          underline: !activeBrand?.name,
-                        }
+                        // {
+                        //   underline: !activeBrand?.name,
+                        // }
                       )}
                     >
                       <Link
                         href={{
-                          pathname: getDesignerPath('', category),
+                          // pathname: getDesignerPath('', category),
                           query,
                         }}
                         legacyBehavior
@@ -240,7 +245,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                         </a>
                       </Link>
                     </li>
-                    {brands.map(({ path, name, id }: Brand) => (
+                    {pro.map(({ path, name, id }: Brand) => (
                       <li
                         key={path}
                         className={cn(
@@ -273,10 +278,12 @@ export default function Search({ categories, brands }: SearchPropsType) {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
+
+
         {/* Products */}
         <div className="col-span-8 order-3 lg:order-0">
-          {(q || activeCategory || activeBrand) && (
+          {/* {(q || activeCategory) && (
             <div className="mb-12 transition ease-in duration-75">
               {data ? (
                 <>
@@ -318,13 +325,13 @@ export default function Search({ categories, brands }: SearchPropsType) {
                 <>Searching...</>
               )}
             </div>
-          )}
-          {data ? (
+          )} */}
+          {products ? (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {data.products.map((product: Product) => (
+              {products.map((product) => (
                 <ProductCard
                   variant="simple"
-                  key={product.path}
+                  key={product?.path}
                   className="animated fadeIn"
                   product={product}
                   imgProps={{
@@ -343,7 +350,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                 </Skeleton>
               ))}
             </div>
-          )}{' '}
+          )}
         </div>
 
         {/* Sort */}
@@ -380,7 +387,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                 activeFilter !== 'sort' || toggleFilter !== true ? 'hidden' : ''
               }`}
             >
-              <div className="rounded-xs bg-accent-0 shadow-2xs lg:bg-none lg:shadow-none">
+              <div className="rounded-xs shadow-2xs lg:bg-none lg:shadow-none">
                 <div
                   role="menu"
                   aria-orientation="vertical"
@@ -395,19 +402,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                         }
                       )}
                     >
-                      <Link
-                        href={{ pathname, query: filterQuery({ q }) }}
-                        legacyBehavior
-                      >
-                        <a
-                          onClick={(e) => handleClick(e, 'sort')}
-                          className={
-                            'block lg:inline-block px-4 py-2 lg:p-0 lg:my-2 lg:mx-4'
-                          }
-                        >
-                          Relevance
-                        </a>
-                      </Link>
+              
                     </li>
                     {Object.entries(SORT).map(([key, text]) => (
                       <li
@@ -421,7 +416,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                       >
                         <Link
                           href={{
-                            pathname,
+                            // pathname,
                             query: filterQuery({ q, sort: key }),
                           }}
                           legacyBehavior
@@ -442,7 +437,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
               </div>
             </div>
           </div>
-        </div>
+        </div> 
       </div>
     </Container>
   )

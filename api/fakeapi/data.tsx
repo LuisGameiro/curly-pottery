@@ -2,6 +2,7 @@
 // TEST DATA - Fully typed to match Product interface
 // ============================================
 
+import { Categories } from "@lib/types/categories";
 import { url } from "node:inspector";
 
 // Helper function to create ProductPrice objects
@@ -42,50 +43,244 @@ const productsData = {
       id: '1',
       name: 'Test Product 1',
       description: 'A great test product with multiple variants.',
-      descriptionHtml: '<p>A great test product with multiple variants.</p>',
       slug: 'test-product-1',
+      categories: ['plates'],
       path: '/products/test-product-1',
       images: [
-        { url: '/test-image1.jpg', alt: 'Test Product 1 Main' },
-        { url: '/test-image1-2.jpg', alt: 'Test Product 1 Alternate' }
+        { url: 'https://picsum.photos/600/600?random=2', alt: 'Test Product 1' }
       ],
-      variants: [
-        createVariant('v1-1', [
-          createOption('color', 'Color', [
-            { label: 'Red', hexColors: ['#ff0000'] },
-            { label: 'Blue', hexColors: ['#0000ff'] }
-          ])
-        ], { value: 2999, retailPrice: 3999 }, { url: '/test-image1-red.jpg', alt: 'Red Variant' }),
-        createVariant('v1-2', [
-          createOption('color', 'Color', [{ label: 'Blue', hexColors: ['#0000ff'] }])
-        ], { value: 2999 }, { url: '/test-image1-blue.jpg', alt: 'Blue Variant' })
+      price: { value: 2999, currencyCode: 'GBP' },
+      stock: 12,
+      dimensions: {
+        widthCm: 28,
+        heightCm: 3,
+        depthCm: 28
+      },
+      glazeVariants: [
+        { name: 'Gloss White', hex: '#f5f5f5' },
+        { name: 'Ocean Blue', hex: '#2f6fa3' }
       ],
-      price: createPrice(2999, 'USD', 3999),
-      options: [
-        createOption('color', 'Color', ['Red', 'Blue', 'Green']),
-        createOption('size', 'Size', ['Small', 'Medium', 'Large'])
-      ],
-      vendor: 'Test Vendor A'
+      vendor: 'Curly Pottery'
     },
+
     {
       id: '2',
-      name: 'Test Product 2',
-      description: 'Another excellent item with premium features.',
-      slug: 'test-product-2',
-      path: '/products/test-product-2',
-      images: [{ url: '/test-image2.jpg', alt: 'Test Product 2' }],
-      variants: [
-        createVariant('v2-1', [
-          createOption('material', 'Material', ['Wood', 'Metal'])
-        ], { value: 4999 }, { url: '/test-image2.jpg', alt: 'Standard Variant' })
+      name: 'Stoneware Mug',
+      description: 'Durable stoneware mug for daily use.',
+      slug: 'stoneware-mug',
+      categories: ['mugs'],
+      path: '/products/stoneware-mug',
+      images: [
+        { url: 'https://picsum.photos/600/600?random=3', alt: 'Stoneware Mug' }
       ],
-      price: createPrice(4999, 'USD'),
-      options: [createOption('material', 'Material', ['Wood', 'Metal'])],
-      vendor: 'Test Vendor B'
+      price: { value: 1899, currencyCode: 'GBP' },
+      stock: 34,
+      dimensions: {
+        widthCm: 9,
+        heightCm: 10,
+        depthCm: 9
+      },
+      glazeVariants: [
+        { name: 'Matte Black', hex: '#2b2b2b' },
+        { name: 'Speckled Cream', hex: '#e8e1d6' }
+      ],
+      vendor: 'Curly Pottery'
     },
-    // Add more products following the same structure...
+
+    {
+      id: '3',
+      name: 'Ceramic Vase',
+      description: 'Handcrafted ceramic vase.',
+      slug: 'ceramic-vase',
+      categories: ['vases'],
+      path: '/products/ceramic-vase',
+      images: [
+        { url: 'https://picsum.photos/600/600?random=4', alt: 'Ceramic Vase' }
+      ],
+      price: { value: 3599, currencyCode: 'GBP' },
+      stock: 8,
+      dimensions: {
+        widthCm: 14,
+        heightCm: 26,
+        depthCm: 14
+      },
+      glazeVariants: [
+        { name: 'Forest Green', hex: '#2f5d50' },
+        { name: 'Sandstone', hex: '#c8b79e' }
+      ],
+      vendor: 'Curly Pottery'
+    },
+
+    {
+      id: '4',
+      name: 'Clay Bowl',
+      description: 'Minimalist clay bowl.',
+      slug: 'clay-bowl',
+      categories: ['bowls'],
+      path: '/products/clay-bowl',
+      images: [
+        { url: 'https://picsum.photos/600/600?random=5', alt: 'Clay Bowl' }
+      ],
+      price: { value: 2499, currencyCode: 'GBP' },
+      stock: 20,
+      dimensions: {
+        widthCm: 18,
+        heightCm: 6,
+        depthCm: 18
+      },
+      glazeVariants: [
+        { name: 'Warm Beige', hex: '#d6c6ad' },
+        { name: 'Charcoal', hex: '#444444' }
+      ],
+      vendor: 'Curly Pottery'
+    },
+
+    {
+      id: '5',
+      name: 'Decorative Plate',
+      description: 'Decorative handmade plate.',
+      slug: 'decorative-plate',
+      categories: ['plates'],
+      path: '/products/decorative-plate',
+      images: [
+        { url: 'https://picsum.photos/600/600?random=6', alt: 'Decorative Plate' }
+      ],
+      price: { value: 2799, currencyCode: 'GBP' },
+      stock: 15,
+      dimensions: {
+        widthCm: 30,
+        heightCm: 2.5,
+        depthCm: 30
+      },
+      glazeVariants: [
+        { name: 'Indigo', hex: '#3f51b5' },
+        { name: 'Ivory', hex: '#faf7f2' }
+      ],
+      vendor: 'Curly Pottery'
+    },
+
+    {
+      id: '6',
+      name: 'Porcelain Cup',
+      description: 'Fine porcelain cup.',
+      slug: 'porcelain-cup',
+      categories: ['cups', 'mugs'],
+      path: '/products/porcelain-cup',
+      images: [
+        { url: 'https://picsum.photos/600/600?random=11', alt: 'Porcelain Cup' }
+      ],
+      price: { value: 1599, currencyCode: 'GBP' },
+      stock: 40,
+      dimensions: {
+        widthCm: 8,
+        heightCm: 9,
+        depthCm: 8
+      },
+      glazeVariants: [
+        { name: 'Pure White', hex: '#ffffff' },
+        { name: 'Soft Grey', hex: '#dcdcdc' }
+      ],
+      vendor: 'Curly Pottery'
+    },
+
+    {
+      id: '7',
+      name: 'Serving Platter',
+      description: 'Large serving platter for gatherings.',
+      slug: 'serving-platter',
+      categories: ['platters', 'plates'],
+      path: '/products/serving-platter',
+      images: [
+        { url: 'https://picsum.photos/600/600?random=12', alt: 'Serving Platter' }
+      ],
+      price: { value: 4299, currencyCode: 'GBP' },
+      stock: 6,
+      dimensions: {
+        widthCm: 40,
+        heightCm: 3,
+        depthCm: 28
+      },
+      glazeVariants: [
+        { name: 'Deep Blue', hex: '#1f3c88' },
+        { name: 'Stone Grey', hex: '#9e9e9e' }
+      ],
+      vendor: 'Curly Pottery'
+    },
+
+    {
+      id: '8',
+      name: 'Planter Pot',
+      description: 'Indoor ceramic planter pot.',
+      slug: 'planter-pot',
+      categories: ['planters'],
+      path: '/products/planter-pot',
+      images: [
+        { url: 'https://picsum.photos/600/600?random=13', alt: 'Planter Pot' }
+      ],
+      price: { value: 3199, currencyCode: 'GBP' },
+      stock: 10,
+      dimensions: {
+        widthCm: 20,
+        heightCm: 18,
+        depthCm: 20
+      },
+      glazeVariants: [
+        { name: 'Moss Green', hex: '#6b8f71' },
+        { name: 'Terracotta', hex: '#c96f4a' }
+      ],
+      vendor: 'Curly Pottery'
+    },
+
+    {
+      id: '9',
+      name: 'Ceramic Storage Box',
+      description: 'Lidded ceramic storage box.',
+      slug: 'ceramic-box',
+      categories: ['boxes', 'storage'],
+      path: '/products/ceramic-box',
+      images: [
+        { url: 'https://picsum.photos/600/600?random=14', alt: 'Ceramic Box' }
+      ],
+      price: { value: 2899, currencyCode: 'GBP' },
+      stock: 9,
+      dimensions: {
+        widthCm: 16,
+        heightCm: 12,
+        depthCm: 16
+      },
+      glazeVariants: [
+        { name: 'Ash Grey', hex: '#b0b0b0' },
+        { name: 'Midnight Blue', hex: '#1a237e' }
+      ],
+      vendor: 'Curly Pottery'
+    },
+
+    {
+      id: '10',
+      name: 'Tea Set',
+      description: 'Complete handcrafted tea set.',
+      slug: 'tea-set',
+      categories: ['sets', 'teaware'],
+      path: '/products/tea-set',
+      images: [
+        { url: 'https://picsum.photos/600/600?random=15', alt: 'Tea Set' }
+      ],
+      price: { value: 8999, currencyCode: 'GBP' },
+      stock: 4,
+      dimensions: {
+        widthCm: 32,
+        heightCm: 18,
+        depthCm: 32
+      },
+      glazeVariants: [
+        { name: 'Celadon', hex: '#9bb7a5' },
+        { name: 'Crackle White', hex: '#f2efe9' }
+      ],
+      vendor: 'Curly Pottery'
+    }
   ]
-};
+}
+
 
 // Single product detail (with full variant/option structure)
 const getSingleProductData = (slug) => {
@@ -98,9 +293,9 @@ const getSingleProductData = (slug) => {
       slug,
       path: `/products/${slug}`,
       images: [
-        { url: `/products/${slug}/main.jpg`, alt: 'Main View' },
-        { url: `/products/${slug}/angle.jpg`, alt: 'Angle View' },
-        { url: `/products/${slug}/detail.jpg`, alt: 'Detail View' }
+        { url:'https://picsum.photos/600/600?random=16', alt: 'Main View' },
+        { url: 'https://picsum.photos/600/600?random=17', alt: 'Angle View' },
+        { url: 'https://picsum.photos/600/600?random=18', alt: 'Detail View' }
       ],
       variants: [
         createVariant('v101-1', [
@@ -109,14 +304,14 @@ const getSingleProductData = (slug) => {
           ]),
           createOption('size', 'Size', ['256GB', '512GB', '1TB'])
         ], { value: 8999, retailPrice: 9999 }, 
-        { url: `/products/${slug}/black.jpg`, alt: 'Black Variant' }),
+        { url: 'https://picsum.photos/600/600?random=21', alt: 'Black Variant' }),
         createVariant('v101-2', [
           createOption('color', 'Color', [
             { label: 'Arctic Silver', hexColors: ['#c0c0c0', '#d8d8d8'] }
           ]),
           createOption('size', 'Size', ['256GB', '512GB'])
         ], { value: 8999 }, 
-        { url: `/products/${slug}/silver.jpg`, alt: 'Silver Variant' })
+        { url: 'https://picsum.photos/600/600?random=22', alt: 'Silver Variant' })
       ],
       price: createPrice(8999, 'USD', 9999),
       options: [
@@ -137,21 +332,12 @@ const getSingleProductData = (slug) => {
 // Related products (4 products)
 const relatedProductsData = {
   products: [
-    {
-      id: '7',
-      name: 'Related Product 1',
-      description: 'Compatible accessory for the main product.',
-      slug: 'related-1',
-      path: '/products/related-1',
-      images: [{ url: '/related1.jpg', alt: 'Related Product 1' }],
-      variants: [
-        createVariant('v7-1', [], { value: 3499 }, { url: '/related1.jpg', alt: 'Standard' })
-      ],
-      price: createPrice(3499, 'USD'),
-      options: [createOption('type', 'Type', ['Standard', 'Pro'])],
-      vendor: 'Accessory Maker'
-    },
-    // Add 3 more related products...
+    productsData.products[2],
+    productsData.products[5],
+    productsData.products[3],
+    productsData.products[6],
+    productsData.products[1],
+
   ]
 };
 
@@ -192,6 +378,17 @@ const siteInfo = {
 };
 
 
+const categories: Categories[] = [
+  { id: 'cat-1', name: 'Plates', url: '/search?category=plates' , image:'https://picsum.photos/600/600?random=201'},
+  { id: 'cat-2', name: 'Mugs', url: '/category?category=mugs' , image:'https://picsum.photos/600/600?random=202'},
+  { id: 'cat-3', name: 'Vases', url: '/category?category=vase' , image:'https://picsum.photos/600/600?random=203'},
+  { id: 'cat-4', name: 'Bowls', url: '/category?category=bowls' , image:'https://picsum.photos/600/600?random=204'},
+  { id: 'cat-5', name: 'Cups', url: '/category?category=cups' , image:'https://picsum.photos/600/600?random=205'},
+  { id: 'cat-6', name: 'Planters', url: '/category?category=planters' , image:'https://picsum.photos/600/600?random=206'},
+  { id: 'cat-6', name: 'Boxes', url: '/category?category=boxes' , image:'https://picsum.photos/600/600?random=207'}
+
+]
+
 
 // ============================================
 // ASSIGN DATA (matching your destructuring pattern)
@@ -201,7 +398,7 @@ const siteInfo = {
 // const { pages } = pagesData;
 // const { categories, brands } = siteInfo;
 
-export { productsData, pagesData, siteInfo ,getSingleProductData ,relatedProductsData};
+export { productsData, pagesData, siteInfo ,categories,getSingleProductData ,relatedProductsData};
 
 // // Get single product detail based on the slug from params
 // // Replace 'test-product-1' with params!.slug from your actual params

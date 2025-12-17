@@ -1,7 +1,6 @@
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 
-import commerce from '@lib/api/commerce'
-import { pagesData, productsData, siteInfo } from 'packages/fakeapi/data'
+import { pagesData, productsData, siteInfo } from 'api/fakeapi/data'
 
 export async function getSearchStaticProps({
   preview,

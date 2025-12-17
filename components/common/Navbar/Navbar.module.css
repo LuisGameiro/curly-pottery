@@ -16,7 +16,7 @@
 }
 
 .link {
-  @apply inline-flex items-center leading-6 flex flex-row
+  @apply inline-flex items-center leading-6 flex flex-row text-2xl font-semibold
   transition ease-in-out duration-75 cursor-pointer
   text-accent-5;
 }
@@ -30,10 +30,13 @@
 }
 
 .logo {
-  @apply cursor-pointer rounded-full border transform duration-100 ease-in-out;
+  @apply cursor-pointer rounded-full border transform duration-100 ease-in-out text-3xl font-bold;
 
   &:hover {
-    @apply shadow-md;
-    transform: scale(1.05);
+    @apply text-accent-8;
   }
+}
+
+.hidden {
+  transform: translateY(-100%);
 }

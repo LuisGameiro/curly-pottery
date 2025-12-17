@@ -41,7 +41,7 @@ export async function getStaticProps({
     return {
         props: {
         },
-        revalidate: 200,
+        revalidate: 2000,
     }
 }
 
@@ -90,7 +90,6 @@ export default function FAQ() {
                         </div>
                     ))}
                 </div>
-
             </section>
         </div>
 

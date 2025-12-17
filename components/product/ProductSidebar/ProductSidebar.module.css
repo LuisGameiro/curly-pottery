@@ -2,12 +2,13 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply relative grid items-start gap-1 grid-cols-1 overflow-x-hidden;
+  @apply relative grid items-start gap-1 grid-cols-1 overflow-x-hidden bg-accent-0
+  ;
   min-height: auto;
 }
 
 .main {
-  @apply relative px-0 pb-0 box-border  flex flex-col col-span-1;
+  @apply relative px-0 pb-0 box-border  flex flex-col col-span-1 bg-accent-0;
   min-height: 500px;
 }
 
@@ -60,9 +61,9 @@
   width: 100%;
 }
 
-.wishlistButton {
+/* .wishlistButton {
   @apply absolute z-30 top-0 right-0;
-}
+} */
 
 .relatedProductsGrid {
   @apply grid grid-cols-2 py-2 gap-2 md:grid-cols-4 md:gap-7;
