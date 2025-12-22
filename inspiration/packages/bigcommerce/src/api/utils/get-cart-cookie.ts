@@ -3,7 +3,7 @@ import { serialize, CookieSerializeOptions } from 'cookie'
 export default function getCartCookie(
   name: string,
   cartId?: string,
-  maxAge?: number
+  maxAge?: number,
 ) {
   const options: CookieSerializeOptions =
     cartId && maxAge

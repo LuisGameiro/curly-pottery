@@ -5,7 +5,7 @@ import { getCommerceApi } from '..'
 const fetchGraphqlApi: GraphQLFetcher = async (
   query: string,
   { variables } = {},
-  options?: FetchOptions
+  options?: FetchOptions,
 ) => {
   const config = getCommerceApi().getConfig()
 

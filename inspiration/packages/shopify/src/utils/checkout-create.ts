@@ -17,7 +17,7 @@ import { FetcherOptions } from '@vercel/commerce/utils/types'
 
 export const checkoutCreate = async (
   fetch: <T = any, B = Body>(options: FetcherOptions<B>) => Promise<T>,
-  lineItems: CheckoutLineItemInput[]
+  lineItems: CheckoutLineItemInput[],
 ): Promise<CheckoutCreatePayload> => {
   const { checkoutCreate } = await fetch<Mutation, MutationCheckoutCreateArgs>({
     query: checkoutCreateMutation,

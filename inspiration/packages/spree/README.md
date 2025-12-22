@@ -19,7 +19,6 @@ An integration of [Spree Commerce](https://spreecommerce.org/) within NextJS Com
    ```
 
 1. Set `NEXT_PUBLIC_SPREE_CATEGORIES_TAXONOMY_PERMALINK` and `NEXT_PUBLIC_SPREE_BRANDS_TAXONOMY_PERMALINK` environment variables:
-
    - They rely on [taxonomies'](https://dev-docs.spreecommerce.org/internals/products#taxons-and-taxonomies) permalinks in Spree.
    - Go to the Spree admin panel and create `Categories` and `Brands` taxonomies if they don't exist and copy their permalinks into `.env.local` in NextJS Commerce.
 

@@ -1,5 +1,8 @@
 import type { OperationContext } from '@vercel/commerce/api/operations'
-import type { Category, GetSiteInfoOperation } from '@vercel/commerce/types/site'
+import type {
+  Category,
+  GetSiteInfoOperation,
+} from '@vercel/commerce/types/site'
 
 import type { RawCategory } from '../../types/category'
 import type { OrdercloudConfig, Provider } from '../index'
@@ -8,7 +11,7 @@ export type GetSiteInfoResult<
   T extends { categories: any[]; brands: any[] } = {
     categories: Category[]
     brands: any[]
-  }
+  },
 > = T
 
 export default function getSiteInfoOperation({

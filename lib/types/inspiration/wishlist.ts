@@ -1,97 +1,97 @@
-import { Product } from './product'
+import { Product } from "./product";
 
 export interface WishlistItem {
   /**
    * The unique identifier for the item.
    */
-  id: string
+  id: string;
   /**
    * The unique identifier for the product associated with the wishlist item.
    */
-  productId: string
+  productId: string;
   /**
    * The unique identifier for the product variant associated with the wishlist item.
    */
-  variantId: string
+  variantId: string;
   /**
    * The product associated with the wishlist item.
    */
-  product: Product
+  product: Product;
 }
 
 export interface Wishlist {
   /**
    * The unique identifier for the wishlist.
    */
-  id: string
+  id: string;
   /**
    * List of items in the wishlist.
    */
-  items: WishlistItem[]
+  items: WishlistItem[];
 
   /**
    * Some providers require a token to add an item to a wishlist
    */
-  token?: string
+  token?: string;
 }
 
 export interface WishlistItemBody {
   /**
    * The unique identifier for the product variant to associate with the wishlist.
    */
-  variantId: string
+  variantId: string;
   /**
    * The unique identifier for the product to associate with the wishlist.
    */
-  productId: string
+  productId: string;
   /**
    * Some providers require to provide a token to make a request
    */
-  wishlistToken?: string
+  wishlistToken?: string;
 }
 
 export type GetWishlistHook = {
-  data: Wishlist | null | undefined
-  body: { includeProducts?: boolean }
-  input: { includeProducts?: boolean }
-  fetcherInput: { customerId: string; includeProducts?: boolean }
-  swrState: { isEmpty: boolean }
-}
+  data: Wishlist | null | undefined;
+  body: { includeProducts?: boolean };
+  input: { includeProducts?: boolean };
+  fetcherInput: { customerId: string; includeProducts?: boolean };
+  swrState: { isEmpty: boolean };
+};
 
 export type AddItemHook = {
-  data: Wishlist | null | undefined
-  body: { item: WishlistItemBody }
-  fetcherInput: { item: WishlistItemBody }
-  actionInput: WishlistItemBody
-}
+  data: Wishlist | null | undefined;
+  body: { item: WishlistItemBody };
+  fetcherInput: { item: WishlistItemBody };
+  actionInput: WishlistItemBody;
+};
 
 export type RemoveItemHook = {
-  data: Wishlist | null | undefined
-  body: { itemId: string; wishlistToken?: string }
-  fetcherInput: { itemId: string; wishlistToken?: string }
-  actionInput: { id: string }
-  input: { wishlist?: { includeProducts?: boolean } }
-}
+  data: Wishlist | null | undefined;
+  body: { itemId: string; wishlistToken?: string };
+  fetcherInput: { itemId: string; wishlistToken?: string };
+  actionInput: { id: string };
+  input: { wishlist?: { includeProducts?: boolean } };
+};
 
 export type WishlistSchema = {
   endpoint: {
-    options: {}
+    options: {};
     handlers: {
       getWishlist: GetWishlistHook & {
-        data: Wishlist | null
-        body: { customerToken?: string }
-      }
+        data: Wishlist | null;
+        body: { customerToken?: string };
+      };
       addItem: AddItemHook & {
-        body: { customerToken?: string }
-      }
+        body: { customerToken?: string };
+      };
       removeItem: RemoveItemHook & {
-        body: { customerToken?: string }
-      }
-    }
-  }
-}
+        body: { customerToken?: string };
+      };
+    };
+  };
+};
 
 export type GetCustomerWishlistOperation = {
-  data: { wishlist?: Wishlist }
-  variables: { customerId: string }
-}
+  data: { wishlist?: Wishlist };
+  variables: { customerId: string };
+};

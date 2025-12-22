@@ -34,7 +34,7 @@ export const handler: SWRHook<GetCartHook> = {
       'input: ',
       input,
       'options: ',
-      options
+      options,
     )
 
     let spreeCartResponse: IOrder | null
@@ -85,9 +85,8 @@ export const handler: SWRHook<GetCartHook> = {
     }
 
     if (!spreeCartResponse || spreeCartResponse?.data.attributes.completed_at) {
-      const { data: spreeCartCreateSuccessResponse } = await createEmptyCart(
-        fetch
-      )
+      const { data: spreeCartCreateSuccessResponse } =
+        await createEmptyCart(fetch)
 
       spreeCartResponse = spreeCartCreateSuccessResponse
 
@@ -100,7 +99,7 @@ export const handler: SWRHook<GetCartHook> = {
   },
   useHook: ({ useData }) => {
     const useWrappedHook: ReturnType<SWRHook<GetCartHook>['useHook']> = (
-      input
+      input,
     ) => {
       const response = useData({
         swrOptions: { revalidateOnFocus: false, ...input?.swrOptions },

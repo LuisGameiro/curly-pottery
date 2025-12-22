@@ -37,7 +37,7 @@ export const handler = {
   },
   useHook: ({ fetch }: MutationHookContext<RemoveItemHook>) =>
     function useHook<T extends Card | undefined = undefined>(
-      ctx: { item?: T } = {}
+      ctx: { item?: T } = {},
     ) {
       const { item } = ctx
       const { mutate } = useCards()

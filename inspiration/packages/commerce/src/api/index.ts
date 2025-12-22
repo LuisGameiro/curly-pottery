@@ -34,7 +34,7 @@ export type APISchemas =
 
 export type GetAPISchema<
   C extends CommerceAPI<any>,
-  S extends APISchemas = APISchemas
+  S extends APISchemas = APISchemas,
 > = {
   schema: S
   endpoint: EndpointContext<C, S['endpoint']>
@@ -42,7 +42,7 @@ export type GetAPISchema<
 
 export type EndpointContext<
   C extends CommerceAPI,
-  E extends EndpointSchemaBase
+  E extends EndpointSchemaBase,
 > = {
   handler: Endpoint<C, E>
   handlers: EndpointHandlers<C, E>
@@ -57,12 +57,12 @@ export type EndpointSchemaBase = {
 
 export type Endpoint<
   C extends CommerceAPI,
-  E extends EndpointSchemaBase
+  E extends EndpointSchemaBase,
 > = APIEndpoint<C, EndpointHandlers<C, E>, any, E['options']>
 
 export type EndpointHandlers<
   C extends CommerceAPI,
-  E extends EndpointSchemaBase
+  E extends EndpointSchemaBase,
 > = {
   [H in keyof E['handlers']]: APIHandler<
     C,
@@ -93,7 +93,7 @@ export class CommerceAPICore<P extends APIProvider = APIProvider> {
   getConfig(userConfig: Partial<P['config']> = {}): P['config'] {
     return Object.entries(userConfig).reduce(
       (cfg, [key, value]) => Object.assign(cfg, { [key]: value }),
-      { ...this.provider.config }
+      { ...this.provider.config },
     )
   }
 
@@ -103,11 +103,11 @@ export class CommerceAPICore<P extends APIProvider = APIProvider> {
 }
 
 export function getCommerceApi<P extends APIProvider>(
-  customProvider: P
+  customProvider: P,
 ): CommerceAPI<P> {
   const commerce = Object.assign(
     new CommerceAPICore(customProvider),
-    defaultOperations as AllOperations<P>
+    defaultOperations as AllOperations<P>,
   )
   const ops = customProvider.operations
 
@@ -116,7 +116,7 @@ export function getCommerceApi<P extends APIProvider>(
     if (op) {
       commerce[k] = withOperationCallback(
         k,
-        op({ commerce })
+        op({ commerce }),
       ) as AllOperations<P>[typeof k]
     }
   })
@@ -128,13 +128,13 @@ export type EndpointHandler = (req: NextRequest) => Promise<APIResponse>
 
 export function getEndpoint<
   P extends APIProvider,
-  T extends GetAPISchema<any, any>
+  T extends GetAPISchema<any, any>,
 >(
   commerce: CommerceAPI<P>,
   context: T['endpoint'] & {
     config?: P['config']
     options?: T['schema']['endpoint']['options']
-  }
+  },
 ): EndpointHandler {
   const cfg = commerce.getConfig(context.config)
   return function apiHandler(req) {
@@ -155,7 +155,7 @@ export const createEndpoint =
     context?: Partial<API['endpoint']> & {
       config?: P['config']
       options?: API['schema']['endpoint']['options']
-    }
+    },
   ): EndpointHandler => {
     return getEndpoint(commerce, { ...endpoint, ...context })
   }
@@ -171,16 +171,16 @@ export interface CommerceAPIConfig {
   fetch<Data = any, Variables = any>(
     query: string,
     queryData?: CommerceAPIFetchOptions<Variables>,
-    options?: FetchOptions
+    options?: FetchOptions,
   ): Promise<GraphQLFetcherResult<Data>>
 }
 
 export type GraphQLFetcher<
   Data extends GraphQLFetcherResult = GraphQLFetcherResult,
-  Variables = any
+  Variables = any,
 > = (
   query: string,
-  queryData?: CommerceAPIFetchOptions<Variables>
+  queryData?: CommerceAPIFetchOptions<Variables>,
 ) => Promise<Data>
 
 export interface GraphQLFetcherResult<Data = any> {

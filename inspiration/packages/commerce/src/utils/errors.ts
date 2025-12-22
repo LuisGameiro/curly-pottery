@@ -40,7 +40,7 @@ export class FetcherError extends CommerceError {
   constructor(
     options: {
       status: number
-    } & ErrorProps
+    } & ErrorProps,
   ) {
     super(options)
     this.status = options.status

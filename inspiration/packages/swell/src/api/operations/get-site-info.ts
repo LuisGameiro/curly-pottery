@@ -8,7 +8,7 @@ export type GetSiteInfoResult<
   T extends { categories: any[]; brands: any[] } = {
     categories: Category[]
     brands: Brand[]
-  }
+  },
 > = T
 
 export default function getSiteInfoOperation({

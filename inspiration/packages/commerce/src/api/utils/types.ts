@@ -19,7 +19,7 @@ export type APIHandlerContext<
   C extends CommerceAPI,
   H extends APIHandlers<C> = {},
   Data = any,
-  Options extends {} = {}
+  Options extends {} = {},
 > = {
   req: NextRequest
   commerce: C
@@ -33,9 +33,9 @@ export type APIHandler<
   H extends APIHandlers<C> = {},
   Data = any,
   Body = any,
-  Options extends {} = {}
+  Options extends {} = {},
 > = (
-  context: APIHandlerContext<C, H, Data, Options> & { body: Body }
+  context: APIHandlerContext<C, H, Data, Options> & { body: Body },
 ) => Promise<APIResponse<Data>>
 
 export type APIHandlers<C extends CommerceAPI> = {
@@ -46,7 +46,7 @@ export type APIEndpoint<
   C extends CommerceAPI = CommerceAPI,
   H extends APIHandlers<C> = {},
   Data = any,
-  Options extends {} = {}
+  Options extends {} = {},
 > = (
-  context: APIHandlerContext<C, H, Data, Options>
+  context: APIHandlerContext<C, H, Data, Options>,
 ) => Promise<APIResponse<Data>>

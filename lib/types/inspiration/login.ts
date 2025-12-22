@@ -2,30 +2,30 @@ export interface LoginBody {
   /**
    * The user's email address.
    */
-  email: string
+  email: string;
   /**
    * The user's password.
    */
-  password: string
+  password: string;
 }
 
 export type LoginHook = {
-  data: null
-  actionInput: LoginBody
-  fetcherInput: LoginBody
-  body: LoginBody
-}
+  data: null;
+  actionInput: LoginBody;
+  fetcherInput: LoginBody;
+  body: LoginBody;
+};
 
 export type LoginSchema = {
   endpoint: {
-    options: {}
+    options: {};
     handlers: {
-      login: LoginHook
-    }
-  }
-}
+      login: LoginHook;
+    };
+  };
+};
 
 export type LoginOperation = {
-  data: { result?: string; status?: number; headers?: Headers }
-  variables: unknown
-}
+  data: { result?: string; status?: number; headers?: Headers };
+  variables: unknown;
+};

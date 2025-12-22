@@ -27,7 +27,7 @@ export default function loginOperation({
     opts: {
       variables: T['variables']
       config?: BigcommerceConfig
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function login<T extends LoginOperation>({
@@ -44,7 +44,7 @@ export default function loginOperation({
 
     const { data, res } = await config.fetch<RecursivePartial<LoginMutation>>(
       query,
-      { variables }
+      { variables },
     )
 
     const headers = new Headers()

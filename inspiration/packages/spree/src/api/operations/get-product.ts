@@ -27,7 +27,7 @@ export default function getProductOperation({
       variables: T['variables']
       config?: Partial<SpreeApiConfig>
       preview?: boolean
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getProduct<T extends GetProductOperation>({
@@ -45,7 +45,7 @@ export default function getProductOperation({
       'getProductVariables: ',
       getProductVariables,
       'config: ',
-      userConfig
+      userConfig,
     )
 
     if (!getProductVariables?.slug) {
@@ -81,7 +81,7 @@ export default function getProductOperation({
     return {
       product: normalizeProduct(
         spreeSuccessResponse,
-        spreeSuccessResponse.data
+        spreeSuccessResponse.data,
       ),
     }
   }

@@ -52,13 +52,13 @@ const signup: SignupEndpoint['handlers']['signup'] = async ({
 
     // Set Cookie
     const cookieExpirationDate = getCookieExpirationDate(
-      config.customerCookieMaxAgeInDays
+      config.customerCookieMaxAgeInDays,
     )
 
     const authCookie = prepareSetCookie(
       config.customerCookie,
       JSON.stringify(token),
-      token.accessTokenExpiration ? { expires: cookieExpirationDate } : {}
+      token.accessTokenExpiration ? { expires: cookieExpirationDate } : {},
     )
 
     return {
@@ -78,7 +78,7 @@ const signup: SignupEndpoint['handlers']['signup'] = async ({
         {
           status: 401,
           code: 'invalid_credentials',
-        }
+        },
       )
     } else {
       throw error

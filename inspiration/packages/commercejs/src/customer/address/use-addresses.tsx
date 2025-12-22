@@ -26,9 +26,9 @@ export const handler: SWRHook<GetAddressesHook> = {
                 },
                 enumerable: true,
               },
-            }
+            },
           ),
-        []
+        [],
       )
     },
 }

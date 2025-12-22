@@ -10,12 +10,12 @@ import { Wishlist } from '@vercel/commerce/types/wishlist'
 
 const normalizeWishlist = (
   spreeSuccessResponse: SpreeSdkResponse,
-  spreeWishlist: WishlistAttr
+  spreeWishlist: WishlistAttr,
 ): Wishlist => {
   const spreeWishedItems = jsonApi.findRelationshipDocuments<WishedItemAttr>(
     spreeSuccessResponse,
     spreeWishlist,
-    'wished_items'
+    'wished_items',
   )
 
   const items: Wishlist['items'] = spreeWishedItems.map((spreeWishedItem) => {
@@ -23,12 +23,12 @@ const normalizeWishlist = (
       jsonApi.findSingleRelationshipDocument<VariantAttr>(
         spreeSuccessResponse,
         spreeWishedItem,
-        'variant'
+        'variant',
       )
 
     if (spreeWishedVariant === null) {
       throw new MissingVariantError(
-        `Couldn't find variant for wished item with id ${spreeWishedItem.id}.`
+        `Couldn't find variant for wished item with id ${spreeWishedItem.id}.`,
       )
     }
 
@@ -36,12 +36,12 @@ const normalizeWishlist = (
       jsonApi.findSingleRelationshipDocument<ProductAttr>(
         spreeSuccessResponse,
         spreeWishedVariant,
-        'product'
+        'product',
       )
 
     if (spreeWishedProduct === null) {
       throw new MissingProductError(
-        `Couldn't find product for variant with id ${spreeWishedVariant.id}.`
+        `Couldn't find product for variant with id ${spreeWishedVariant.id}.`,
       )
     }
 

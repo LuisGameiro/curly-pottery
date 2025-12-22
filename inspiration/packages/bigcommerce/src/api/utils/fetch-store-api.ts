@@ -9,7 +9,7 @@ const fetchStoreApi =
       method?: string
       body?: any
       headers?: HeadersInit
-    }
+    },
   ): Promise<T> => {
     const config = getConfig()
     let res: Response
@@ -26,7 +26,7 @@ const fetchStoreApi =
       })
     } catch (error: any) {
       throw new BigcommerceNetworkError(
-        `Fetch to Bigcommerce failed: ${error.message}`
+        `Fetch to Bigcommerce failed: ${error.message}`,
       )
     }
 
@@ -48,7 +48,7 @@ const fetchStoreApi =
     if (res.status !== 204 && !isJSON) {
       throw new BigcommerceApiError(
         `Fetch to Bigcommerce API failed, expected JSON content but found: ${contentType}`,
-        res
+        res,
       )
     }
 

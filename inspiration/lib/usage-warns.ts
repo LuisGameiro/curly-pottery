@@ -17,7 +17,7 @@ BigCommerce are expected to have a locale or they will be ignored.\n
 Please update the ${pages} to include the default locale or make the ${pages} invisible by
 unchecking the "Navigation Menu" option in the settings of ${
           single ? 'the' : 'each'
-        } web page\n`
+        } web page\n`,
       )
     }
   }

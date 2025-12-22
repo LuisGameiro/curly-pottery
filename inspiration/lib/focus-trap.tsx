@@ -63,6 +63,6 @@ export default function FocusTrap({ children, focusFirst = false }: Props) {
       className: 'outline-hidden focus-trap',
       tabIndex: -1,
     },
-    children
+    children,
   )
 }

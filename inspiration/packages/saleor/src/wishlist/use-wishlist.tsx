@@ -13,7 +13,7 @@ export type Wishlist = {
       variant_id: number
       id: number
       product: Product
-    }
+    },
   ]
 }
 
@@ -32,7 +32,7 @@ export const fetcher: HookFetcher<Wishlist | null, UseWishlistInput> = () => {
 export function extendHook(
   customFetcher: typeof fetcher,
   // swrOptions?: SwrOptions<Wishlist | null, UseWishlistInput>
-  swrOptions?: any
+  swrOptions?: any,
 ) {
   const useWishlist = ({ includeProducts }: UseWishlistOptions = {}) => {
     return { data: null }

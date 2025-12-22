@@ -33,7 +33,7 @@ export type GetSiteInfoResult<
   T extends { categories: any[]; brands: any[] } = {
     categories: Category[]
     brands: any[]
-  }
+  },
 > = T
 
 export default function getSiteInfoOperation({
@@ -48,7 +48,7 @@ export default function getSiteInfoOperation({
     opts: {
       config?: Partial<SpreeApiConfig>
       preview?: boolean
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getSiteInfo<T extends GetSiteInfoOperation>({
@@ -68,7 +68,7 @@ export default function getSiteInfoOperation({
       'getSiteInfoVariables ',
       getSiteInfoVariables,
       'config: ',
-      userConfig
+      userConfig,
     )
 
     const createVariables = (parentPermalink: string): SpreeSdkVariables => ({
@@ -90,7 +90,7 @@ export default function getSiteInfoOperation({
       SpreeSdkVariables
     >('__UNUSED__', {
       variables: createVariables(
-        requireConfigValue('categoriesTaxonomyPermalink') as string
+        requireConfigValue('categoriesTaxonomyPermalink') as string,
       ),
     })
 
@@ -99,7 +99,7 @@ export default function getSiteInfoOperation({
       SpreeSdkVariables
     >('__UNUSED__', {
       variables: createVariables(
-        requireConfigValue('brandsTaxonomyPermalink') as string
+        requireConfigValue('brandsTaxonomyPermalink') as string,
       ),
     })
 

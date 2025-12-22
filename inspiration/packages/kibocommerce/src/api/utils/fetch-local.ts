@@ -3,7 +3,7 @@ import type { GraphQLFetcher } from '@vercel/commerce/api'
 import type { KiboCommerceConfig } from '../index'
 
 const fetchGraphqlApi: (
-  getConfig: () => KiboCommerceConfig
+  getConfig: () => KiboCommerceConfig,
 ) => GraphQLFetcher =
   (getConfig) =>
   async (query: string, { variables, preview } = {}, headers?: HeadersInit) => {

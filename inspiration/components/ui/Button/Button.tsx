@@ -46,7 +46,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
       [s.loading]: loading,
       [s.disabled]: disabled,
     },
-    className
+    className,
   )
 
   return (

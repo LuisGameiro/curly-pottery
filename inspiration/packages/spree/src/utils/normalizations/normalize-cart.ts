@@ -30,17 +30,17 @@ const isColorProductOption = (productOptionType: OptionTypeAttr) => {
 
 const normalizeVariant = (
   spreeSuccessResponse: SpreeSdkResponse,
-  spreeVariant: VariantAttr
+  spreeVariant: VariantAttr,
 ): ProductVariant => {
   const spreeProduct = jsonApi.findSingleRelationshipDocument<ProductAttr>(
     spreeSuccessResponse,
     spreeVariant,
-    'product'
+    'product',
   )
 
   if (spreeProduct === null) {
     throw new MissingLineItemVariantError(
-      `Couldn't find product for variant with id ${spreeVariant.id}.`
+      `Couldn't find product for variant with id ${spreeVariant.id}.`,
     )
   }
 
@@ -48,14 +48,14 @@ const normalizeVariant = (
     jsonApi.findRelationshipDocuments<SpreeProductImage>(
       spreeSuccessResponse,
       spreeVariant,
-      'images'
+      'images',
     )
 
   let lineItemImage
 
   const variantImage = getMediaGallery(
     spreeVariantImageRecords,
-    createGetAbsoluteImageUrl(requireConfigValue('imageHost') as string)
+    createGetAbsoluteImageUrl(requireConfigValue('imageHost') as string),
   )[0]
 
   if (variantImage) {
@@ -65,12 +65,12 @@ const normalizeVariant = (
       jsonApi.findRelationshipDocuments<SpreeProductImage>(
         spreeSuccessResponse,
         spreeProduct,
-        'images'
+        'images',
       )
 
     const productImage = getMediaGallery(
       spreeProductImageRecords,
-      createGetAbsoluteImageUrl(requireConfigValue('imageHost') as string)
+      createGetAbsoluteImageUrl(requireConfigValue('imageHost') as string),
     )[0]
 
     lineItemImage = productImage
@@ -103,29 +103,29 @@ const normalizeVariant = (
 
 const normalizeLineItem = (
   spreeSuccessResponse: SpreeSdkResponse,
-  spreeLineItem: LineItemAttr
+  spreeLineItem: LineItemAttr,
 ): LineItem => {
   const variant = jsonApi.findSingleRelationshipDocument<VariantAttr>(
     spreeSuccessResponse,
     spreeLineItem,
-    'variant'
+    'variant',
   )
 
   if (variant === null) {
     throw new MissingLineItemVariantError(
-      `Couldn't find variant for line item with id ${spreeLineItem.id}.`
+      `Couldn't find variant for line item with id ${spreeLineItem.id}.`,
     )
   }
 
   const product = jsonApi.findSingleRelationshipDocument<ProductAttr>(
     spreeSuccessResponse,
     variant,
-    'product'
+    'product',
   )
 
   if (product === null) {
     throw new MissingLineItemVariantError(
-      `Couldn't find product for variant with id ${variant.id}.`
+      `Couldn't find product for variant with id ${variant.id}.`,
     )
   }
 
@@ -135,7 +135,7 @@ const normalizeLineItem = (
   const spreeOptionValues = jsonApi.findRelationshipDocuments(
     spreeSuccessResponse,
     variant,
-    'option_values'
+    'option_values',
   )
 
   const options: SelectedOption[] = spreeOptionValues.map(
@@ -144,12 +144,12 @@ const normalizeLineItem = (
         jsonApi.findSingleRelationshipDocument<OptionTypeAttr>(
           spreeSuccessResponse,
           spreeOptionValue,
-          'option_type'
+          'option_type',
         )
 
       if (spreeOptionType === null) {
         throw new MissingLineItemVariantError(
-          `Couldn't find option type of option value with id ${spreeOptionValue.id}.`
+          `Couldn't find option type of option value with id ${spreeOptionValue.id}.`,
         )
       }
 
@@ -162,7 +162,7 @@ const normalizeLineItem = (
         name: spreeOptionType.attributes.presentation,
         value: label,
       }
-    }
+    },
   )
 
   return {
@@ -180,13 +180,13 @@ const normalizeLineItem = (
 
 const normalizeCart = (
   spreeSuccessResponse: SpreeSdkResponse,
-  spreeCart: OrderAttr
+  spreeCart: OrderAttr,
 ): Cart => {
   const lineItems = jsonApi
     .findRelationshipDocuments<LineItemAttr>(
       spreeSuccessResponse,
       spreeCart,
-      'line_items'
+      'line_items',
     )
     .map((lineItem) => normalizeLineItem(spreeSuccessResponse, lineItem))
 

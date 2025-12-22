@@ -34,7 +34,7 @@ export class APIAuthenticationHelper {
 
   constructor(
     { clientId = '', sharedSecret = '', authUrl = '' }: KiboCommerceConfig,
-    authTicketCache?: AuthTicketCache
+    authTicketCache?: AuthTicketCache,
   ) {
     this._clientId = clientId
     this._sharedSecret = sharedSecret
@@ -69,7 +69,7 @@ export class APIAuthenticationHelper {
     // perform authentication
     const authTicket = await fetch(
       `${this._authUrl}/api/platform/applications/authtickets/oauth`,
-      options
+      options,
     ).then((response) => response.json())
     // set expiration time in ms on auth ticket
     this._calculateTicketExpiration(authTicket)
@@ -86,7 +86,7 @@ export class APIAuthenticationHelper {
     // perform auth ticket refresh
     const refreshedTicket = await fetch(
       `${this._authUrl}/api/platform/applications/authtickets/refresh-ticket`,
-      options
+      options,
     ).then((response) => response.json())
 
     return refreshedTicket

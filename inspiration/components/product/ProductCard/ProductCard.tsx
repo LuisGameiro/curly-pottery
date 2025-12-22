@@ -34,7 +34,7 @@ const ProductCard: FC<Props> = ({
   const rootClassName = cn(
     s.root,
     { [s.slim]: variant === 'slim', [s.simple]: variant === 'simple' },
-    className
+    className,
   )
 
   return (

@@ -42,7 +42,7 @@ const removeItem: WishlistEndpoint['handlers']['removeItem'] = async ({
         wishlistItemId: removedItem?.id,
       },
     },
-    { headers: { 'x-vol-user-claims': accessToken } }
+    { headers: { 'x-vol-user-claims': accessToken } },
   )
 
   if (removeItemFromWishlistResponse?.data?.deleteWishlistItem) {
@@ -56,7 +56,7 @@ const removeItem: WishlistEndpoint['handlers']['removeItem'] = async ({
     data: {
       ...wishlist,
       items: wishlist?.items?.map((item: any) =>
-        normalizeWishlistItem(item, config)
+        normalizeWishlistItem(item, config),
       ),
     },
   }

@@ -2,42 +2,42 @@ export interface Category {
   /**
    * Unique identifier for the category.
    */
-  id: string
+  id: string;
   /**
    * Name of the category.
    */
-  name: string
+  name: string;
   /**
    *  A human-friendly unique string for the category, automatically generated from its name.
    * @example "t-shirts"
    */
-  slug: string
+  slug: string;
   /**
    * Relative URL on the storefront for the category.
    * @example /t-shirts
    */
-  path: string
+  path: string;
 }
 
 export interface Brand {
   /**
    * Unique identifier for the brand.
    */
-  id: string
+  id: string;
   /**
    * Name of the brand.
    */
-  name: string
+  name: string;
   /**
    *  A human-friendly unique string for the category, automatically generated from its name.
    * @example "Curly Pottery"
    */
-  slug: string
+  slug: string;
   /**
    * Relative URL on the storefront for this brand.
    * @example "/Curly Pottery"
    */
-  path: string
+  path: string;
 }
 
 /**
@@ -45,7 +45,7 @@ export interface Brand {
  */
 export type GetSiteInfoOperation = {
   data: {
-    categories: Category[]
-    brands: Brand[]
-  }
-}
+    categories: Category[];
+    brands: Brand[];
+  };
+};

@@ -19,7 +19,7 @@ const getCheckout: CheckoutEndpoint['handlers']['getCheckout'] = async ({
     `/v3/carts/${cartId}/redirect_urls`,
     {
       method: 'POST',
-    }
+    },
   )
 
   const customerId =

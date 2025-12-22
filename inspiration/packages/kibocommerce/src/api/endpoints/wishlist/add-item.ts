@@ -24,7 +24,7 @@ const buildAddToWishlistVariables = ({
   const { product } = productResponse.data
 
   const selectedOptions = product.variations?.find(
-    (v: any) => v.productCode === variantId
+    (v: any) => v.productCode === variantId,
   ).options
   const quantity = 1
   let options: any[] = []
@@ -91,7 +91,7 @@ const addItem: WishlistEndpoint['handlers']['addItem'] = async ({
           },
         },
       },
-      { headers: { 'x-vol-user-claims': accessToken } }
+      { headers: { 'x-vol-user-claims': accessToken } },
     )
     wishlist = createWishlistResponse?.data?.createWishlist
   }
@@ -109,7 +109,7 @@ const addItem: WishlistEndpoint['handlers']['addItem'] = async ({
         wishlist,
       }),
     },
-    { headers: { 'x-vol-user-claims': accessToken } }
+    { headers: { 'x-vol-user-claims': accessToken } },
   )
 
   if (addItemToWishlistResponse?.data?.createWishlistItem) {
@@ -124,7 +124,7 @@ const addItem: WishlistEndpoint['handlers']['addItem'] = async ({
     data: {
       ...wishlist,
       items: wishlist?.items?.map((item: any) =>
-        normalizeWishlistItem(item, config)
+        normalizeWishlistItem(item, config),
       ),
     },
   }

@@ -8,7 +8,7 @@ export default function nodeHandler<P extends APIProvider>(
   commerce: CommerceAPI<P>,
   endpoints: {
     [key: string]: (commerce: CommerceAPI<P>) => EndpointHandler
-  }
+  },
 ) {
   const paths = Object.keys(endpoints)
 
@@ -17,14 +17,14 @@ export default function nodeHandler<P extends APIProvider>(
       Object.assign(acc, {
         [path]: endpoints[path](commerce),
       }),
-    {}
+    {},
   )
 
   return async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       if (!req.query.commerce) {
         throw new Error(
-          'Invalid configuration. Please make sure that the /pages/api/commerce/[[...commerce]].ts route is configured correctly, and it passes the commerce instance.'
+          'Invalid configuration. Please make sure that the /pages/api/commerce/[[...commerce]].ts route is configured correctly, and it passes the commerce instance.',
         )
       }
 
@@ -39,8 +39,8 @@ export default function nodeHandler<P extends APIProvider>(
       if (!paths.includes(path)) {
         throw new Error(
           `Endpoint handler not implemented. Please use one of the available api endpoints: ${paths.join(
-            ', '
-          )}`
+            ', ',
+          )}`,
         )
       }
 

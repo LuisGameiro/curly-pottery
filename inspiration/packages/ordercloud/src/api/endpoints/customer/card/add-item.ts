@@ -40,7 +40,7 @@ const addItem: CustomerCardEndpoint['handlers']['addItem'] = async ({
     },
     {
       token,
-    }
+    },
   ).then((response: OredercloudCreditCard) => response.ID)
 
   // Assign payment to order
@@ -53,7 +53,7 @@ const addItem: CustomerCardEndpoint['handlers']['addItem'] = async ({
     },
     {
       token,
-    }
+    },
   ).then((response: { ID: string }) => response.ID)
 
   // Accept payment to order

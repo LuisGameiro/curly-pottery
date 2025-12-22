@@ -32,7 +32,7 @@ export const handler: MutationHook<RemoveItemHook> = {
           await mutate(cart, false)
           return cart
         },
-        [mutate]
+        [mutate],
       )
     },
 }

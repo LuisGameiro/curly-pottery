@@ -71,25 +71,25 @@ export const CheckoutProvider: FC<{ children?: ReactNode }> = (props) => {
 
   const setCardFields = useCallback(
     (card: CardFields) => dispatch({ type: 'SET_CARD_FIELDS', card }),
-    [dispatch]
+    [dispatch],
   )
 
   const setAddressFields = useCallback(
     (address: AddressFields) =>
       dispatch({ type: 'SET_ADDRESS_FIELDS', address }),
-    [dispatch]
+    [dispatch],
   )
 
   const clearCheckoutFields = useCallback(
     () => dispatch({ type: 'CLEAR_CHECKOUT_FIELDS' }),
-    [dispatch]
+    [dispatch],
   )
 
   const cardFields = useMemo(() => state.cardFields, [state.cardFields])
 
   const addressFields = useMemo(
     () => state.addressFields,
-    [state.addressFields]
+    [state.addressFields],
   )
 
   const value = useMemo(
@@ -106,7 +106,7 @@ export const CheckoutProvider: FC<{ children?: ReactNode }> = (props) => {
       setCardFields,
       setAddressFields,
       clearCheckoutFields,
-    ]
+    ],
   )
 
   return <CheckoutContext.Provider value={value} {...props} />

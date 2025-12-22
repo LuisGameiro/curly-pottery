@@ -18,7 +18,7 @@ const updateItem: CartEndpoint['handlers']['updateItem'] = async ({
   if (item.variantId) {
     specs = await restBuyerFetch(
       'GET',
-      `/me/products/${item.productId}/variants/${item.variantId}`
+      `/me/products/${item.productId}/variants/${item.variantId}`,
     ).then((res: RawVariant) => res.Specs)
   }
 
@@ -33,7 +33,7 @@ const updateItem: CartEndpoint['handlers']['updateItem'] = async ({
     },
     {
       token,
-    }
+    },
   )
 
   // Get cart

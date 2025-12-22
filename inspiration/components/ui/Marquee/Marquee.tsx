@@ -20,7 +20,7 @@ const Marquee: FC<MarqueeProps> = ({
       [s.primary]: variant === 'primary',
       [s.secondary]: variant === 'secondary',
     },
-    className
+    className,
   )
 
   return (

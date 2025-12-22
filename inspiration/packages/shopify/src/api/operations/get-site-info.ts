@@ -20,7 +20,7 @@ export default function getSiteInfoOperation({
     opts: {
       config?: Partial<ShopifyConfig>
       preview?: boolean
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getSiteInfo<T extends GetSiteInfoOperation>({

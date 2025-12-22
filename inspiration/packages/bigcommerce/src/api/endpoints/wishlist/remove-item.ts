@@ -28,7 +28,7 @@ const removeItem: WishlistEndpoint['handlers']['removeItem'] = async ({
 
   const result = await config.storeApiFetch<{ data: BCWishlist } | null>(
     `/v3/wishlists/${wishlist.id}/items/${itemId}`,
-    { method: 'DELETE' }
+    { method: 'DELETE' },
   )
 
   return { data: result?.data ? normalizeWishlist(result.data) : null }

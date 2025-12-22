@@ -24,7 +24,7 @@ export const handler: SWRHook<CustomerHook> = {
       'input: ',
       input,
       'options: ',
-      options
+      options,
     )
 
     if (!isLoggedIn()) {
@@ -51,7 +51,7 @@ export const handler: SWRHook<CustomerHook> = {
 
       const normalizedUser = normalizeUser(
         spreeAccountInfoSuccessResponse,
-        spreeUser
+        spreeUser,
       )
 
       return normalizedUser
@@ -68,7 +68,7 @@ export const handler: SWRHook<CustomerHook> = {
   },
   useHook: ({ useData }) => {
     const useWrappedHook: ReturnType<SWRHook<CustomerHook>['useHook']> = (
-      input
+      input,
     ) => {
       return useData({
         swrOptions: {

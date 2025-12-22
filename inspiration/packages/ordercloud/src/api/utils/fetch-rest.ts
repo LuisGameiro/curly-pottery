@@ -70,7 +70,7 @@ export async function fetchData<T>(opts: {
         authorization: `Bearer ${token}`,
       },
       body: body ? JSON.stringify(body) : undefined,
-    }
+    },
   )
 
   // If something failed getting the data response
@@ -101,19 +101,19 @@ export async function fetchData<T>(opts: {
 }
 
 export const createBuyerFetcher: (
-  getConfig: () => OrdercloudConfig
+  getConfig: () => OrdercloudConfig,
 ) => <T>(
   method: string,
   path: string,
   body?: Record<string, unknown>,
-  fetchOptions?: Record<string, any>
+  fetchOptions?: Record<string, any>,
 ) => Promise<T> =
   (getConfig) =>
   async <T>(
     method: string,
     path: string,
     body?: Record<string, unknown>,
-    fetchOptions?: Record<string, any>
+    fetchOptions?: Record<string, any>,
   ) => {
     if (fetchOptions?.token) {
       token = fetchOptions?.token

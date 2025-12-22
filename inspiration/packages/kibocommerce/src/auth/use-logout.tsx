@@ -25,7 +25,7 @@ export const handler: MutationHook<LogoutHook> = {
           await mutateCart(null, false)
           return data
         },
-        [fetch, mutate, mutateCart]
+        [fetch, mutate, mutateCart],
       )
     },
 }

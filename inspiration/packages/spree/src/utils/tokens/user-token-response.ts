@@ -5,7 +5,7 @@ import UserTokenResponseParseError from '../../errors/UserTokenResponseParseErro
 
 export const getUserTokenResponse = (): IOAuthToken | undefined => {
   const stringifiedToken = Cookies.get(
-    requireConfigValue('userCookieName') as string
+    requireConfigValue('userCookieName') as string,
   )
 
   if (!stringifiedToken) {
@@ -18,7 +18,7 @@ export const getUserTokenResponse = (): IOAuthToken | undefined => {
     return token
   } catch (parseError) {
     throw new UserTokenResponseParseError(
-      'Could not parse stored user token response.'
+      'Could not parse stored user token response.',
     )
   }
 }
@@ -49,7 +49,7 @@ export const setUserTokenResponse = (token: IOAuthToken) => {
   Cookies.set(
     requireConfigValue('userCookieName') as string,
     JSON.stringify(token),
-    cookieOptions
+    cookieOptions,
   )
 }
 

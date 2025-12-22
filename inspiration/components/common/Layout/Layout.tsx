@@ -36,7 +36,7 @@ const ForgotPassword = dynamic(
   () => import('@components/auth/ForgotPassword'),
   {
     ...dynamicProps,
-  }
+  },
 )
 
 const FeatureBar = dynamic(() => import('@components/common/FeatureBar'), {

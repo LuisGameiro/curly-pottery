@@ -21,12 +21,12 @@ const getCategories = async ({
           'Accept-Language': locale,
         },
       }),
-    }
+    },
   )
 
   return (
     data.collections?.edges?.map(({ node }: CollectionEdge) =>
-      normalizeCategory(node)
+      normalizeCategory(node),
     ) ?? []
   )
 }

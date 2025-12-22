@@ -8,8 +8,8 @@ const getMediaGallery = (
   getImageUrl: (
     image: SpreeProductImage,
     minWidth: number,
-    minHeight: number
-  ) => string | null
+    minHeight: number,
+  ) => string | null,
 ) => {
   return images.reduce<Image[]>((productImages, _, imageIndex) => {
     const url = getImageUrl(images[imageIndex], 800, 800)

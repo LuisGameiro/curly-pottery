@@ -16,7 +16,7 @@ const getCart: CartEndpoint['handlers']['getCart'] = async ({
       const result = await config.storeApiFetch<{
         data?: BigcommerceCart
       } | null>(
-        `/v3/carts/${cartId}?include=line_items.physical_items.options,line_items.digital_items.options`
+        `/v3/carts/${cartId}?include=line_items.physical_items.options,line_items.digital_items.options`,
       )
 
       return {

@@ -39,7 +39,7 @@ export const handler: MutationHook<AddItemHook> = {
           await mutate(cart, false)
           return cart
         },
-        [mutate]
+        [mutate],
       )
     },
 }

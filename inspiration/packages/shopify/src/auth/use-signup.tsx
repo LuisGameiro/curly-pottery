@@ -61,7 +61,7 @@ export const handler: MutationHook<SignupHook> = {
           await mutate()
           return data
         },
-        [fetch, mutate]
+        [fetch, mutate],
       )
     },
 }

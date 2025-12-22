@@ -23,13 +23,13 @@ import login from './operations/login'
 
 if (!API_URL) {
   throw new Error(
-    `The environment variable NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN is missing and it's required to access your store`
+    `The environment variable NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN is missing and it's required to access your store`,
   )
 }
 
 if (!API_TOKEN) {
   throw new Error(
-    `The environment variable NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN is missing and it's required to access your store`
+    `The environment variable NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN is missing and it's required to access your store`,
   )
 }
 export interface ShopifyConfig extends CommerceAPIConfig {}
@@ -63,7 +63,7 @@ export type Provider = typeof provider
 export type ShopifyAPI<P extends Provider = Provider> = CommerceAPI<P>
 
 export function getCommerceApi<P extends Provider>(
-  customProvider: P = provider as any
+  customProvider: P = provider as any,
 ): ShopifyAPI<P> {
   return commerceApi(customProvider)
 }

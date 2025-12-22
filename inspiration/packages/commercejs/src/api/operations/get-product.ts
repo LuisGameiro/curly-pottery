@@ -24,13 +24,13 @@ export default function getProductOperation({
       variables?.slug || '',
       {
         type: 'permalink',
-      }
+      },
     )
 
     const { data: variants } = await sdkFetch(
       'products',
       'getVariants',
-      product.id
+      product.id,
     )
 
     const productFormatted = normalizeProduct(product, variants)

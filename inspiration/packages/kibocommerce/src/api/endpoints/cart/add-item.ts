@@ -20,7 +20,7 @@ const buildAddToCartVariables = ({
   const { product } = productResponse.data
 
   const selectedOptions = product.variations?.find(
-    (v: any) => v.productCode === variantId
+    (v: any) => v.productCode === variantId,
   ).options
 
   let options: any[] = []
@@ -75,14 +75,14 @@ const addItem: CartEndpoint['handlers']['addItem'] = async ({
     {
       variables: buildAddToCartVariables({ ...item, productResponse }),
     },
-    { headers: { 'x-vol-user-claims': accessToken } }
+    { headers: { 'x-vol-user-claims': accessToken } },
   )
   let currentCart = null
   if (addToCartResponse.data.addItemToCurrentCart) {
     let result = await config.fetch(
       getCartQuery,
       {},
-      { headers: { 'x-vol-user-claims': accessToken } }
+      { headers: { 'x-vol-user-claims': accessToken } },
     )
     currentCart = result?.data?.currentCart
   }

@@ -41,7 +41,7 @@ export const handler = {
   },
   useHook: ({ fetch }: MutationHookContext<RemoveItemHook>) =>
     function useHook<T extends LineItem | undefined = undefined>(
-      ctx: { item?: T } = {}
+      ctx: { item?: T } = {},
     ) {
       const { item } = ctx
       const { mutate } = useCart()

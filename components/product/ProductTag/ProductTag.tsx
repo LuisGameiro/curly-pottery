@@ -1,17 +1,17 @@
-import cn from 'clsx'
-import s from './ProductTag.module.css'
+import cn from "clsx";
+import s from "./ProductTag.module.css";
 
 interface ProductTagProps {
-  className?: string
-  name: string
-  price: string
-  fontSize?: number
+  className?: string;
+  name: string;
+  price: string;
+  fontSize?: number;
 }
 
 const ProductTag: React.FC<ProductTagProps> = ({
   name,
   price,
-  className = '',
+  className = "",
   fontSize = 32,
 }) => {
   return (
@@ -29,7 +29,7 @@ const ProductTag: React.FC<ProductTagProps> = ({
       </h3>
       <div className={s.price}>{price}</div>
     </div>
-  )
-}
+  );
+};
 
-export default ProductTag
+export default ProductTag;

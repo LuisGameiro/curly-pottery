@@ -17,7 +17,7 @@ const ErrorMessages: FC<ErrorMessageProps> = ({ error, className }) => {
     <div
       className={cn(
         'flex flex-col text-red py-2.5 px-4 border border-solid border-red',
-        className
+        className,
       )}
     >
       <span>{error.message}</span>

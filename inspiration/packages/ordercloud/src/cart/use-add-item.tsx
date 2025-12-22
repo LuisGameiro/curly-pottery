@@ -42,7 +42,7 @@ export const handler: MutationHook<AddItemHook> = {
 
           return data
         },
-        [fetch, mutate]
+        [fetch, mutate],
       )
     },
 }

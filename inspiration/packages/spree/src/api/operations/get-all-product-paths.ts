@@ -16,7 +16,7 @@ export default function getAllProductPathsOperation({
   commerce,
 }: OperationContext<SpreeApiProvider>) {
   async function getAllProductPaths<
-    T extends GetAllProductPathsOperation
+    T extends GetAllProductPathsOperation,
   >(opts?: {
     variables?: T['variables']
     config?: Partial<SpreeApiConfig>
@@ -26,7 +26,7 @@ export default function getAllProductPathsOperation({
     opts: {
       variables?: T['variables']
       config?: Partial<SpreeApiConfig>
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getAllProductPaths<T extends GetAllProductPathsOperation>({
@@ -45,11 +45,11 @@ export default function getAllProductPathsOperation({
       'getAllProductPathsVariables: ',
       getAllProductPathsVariables,
       'config: ',
-      userConfig
+      userConfig,
     )
 
     const productsCount = requireConfigValue(
-      'lastUpdatedProductsPrerenderCount'
+      'lastUpdatedProductsPrerenderCount',
     )
 
     if (productsCount === 0) {

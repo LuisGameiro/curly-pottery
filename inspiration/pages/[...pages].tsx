@@ -31,7 +31,7 @@ export async function getStaticProps({
   const path = params?.pages.join('/')
   const slug = locale ? `${locale}/${path}` : path
   const pageItem = pages.find((p: Page) =>
-    p.url ? getSlug(p.url) === slug : false
+    p.url ? getSlug(p.url) === slug : false,
   )
   const data =
     pageItem &&
@@ -40,8 +40,7 @@ export async function getStaticProps({
       config,
       preview,
     }))
-  const data =
-    pageItem && { page: pageItem } // Mocking the data object since we are using fake data
+  const data = pageItem && { page: pageItem } // Mocking the data object since we are using fake data
   const page = data?.page
 
   if (!page) {
@@ -62,7 +61,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
 
   const { products } = productsData // This contains the array of 6 products
   const { pages } = pagesData // This contains the array of pages
-  
+
   const [invalidPaths, log] = missingLocaleInPages()
   const paths = pages
     .map((page) => page.url)
@@ -81,9 +80,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   }
 }
 
-export default function Pages({
-  page,
-}: {page: Page}) {
+export default function Pages({ page }: { page: Page }) {
   const router = useRouter()
 
   return router.isFallback ? (

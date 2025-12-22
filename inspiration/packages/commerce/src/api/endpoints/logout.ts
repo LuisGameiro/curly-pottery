@@ -17,7 +17,7 @@ const logoutEndpoint: GetAPISchema<
   const redirectTo = new URL(req.url).searchParams.get('redirectTo')
 
   const body = logoutBodySchema.parse(
-    typeof redirectTo === 'string' ? { redirectTo } : {}
+    typeof redirectTo === 'string' ? { redirectTo } : {},
   )
 
   return handlers['logout']({ ...ctx, body })

@@ -20,7 +20,7 @@ export default function loginOperation({
       variables: T['variables']
       config?: Partial<SwellConfig>
       res: Response
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function login<T extends LoginOperation>({

@@ -44,7 +44,7 @@ const addItem: WishlistEndpoint['handlers']['addItem'] = async ({
       body: JSON.stringify({
         items: [parseWishlistItem(item)],
       }),
-    }
+    },
   )
 
   // Returns Wishlist

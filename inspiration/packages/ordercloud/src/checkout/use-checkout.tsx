@@ -37,7 +37,7 @@ export const handler: SWRHook<GetCheckoutHook> = {
               enumerable: true,
             },
           }),
-        [response, submit]
+        [response, submit],
       )
     },
 }

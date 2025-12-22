@@ -23,7 +23,7 @@ const getProducts: ProductsEndpoint['handlers']['getProducts'] = async ({
     'GET',
     url.pathname + url.search,
     null,
-    { token }
+    { token },
   ).then((response: { Items: any[] }) => response.Items)
 
   return {

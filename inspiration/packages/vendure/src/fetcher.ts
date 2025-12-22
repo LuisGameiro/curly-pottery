@@ -29,7 +29,7 @@ export const fetcher: Fetcher = async ({
     process.env.NEXT_PUBLIC_VENDURE_SHOP_API_URL
   if (!shopApiUrl) {
     throw new Error(
-      'The Vendure Shop API url has not been provided. Please define NEXT_PUBLIC_VENDURE_SHOP_API_URL in .env.local'
+      'The Vendure Shop API url has not been provided. Please define NEXT_PUBLIC_VENDURE_SHOP_API_URL in .env.local',
     )
   }
   const hasBody = Boolean(variables || query)

@@ -23,7 +23,7 @@ async function getCustomerId({
       headers: {
         cookie: `${config.customerCookie}=${customerToken}`,
       },
-    }
+    },
   )
 
   return String(data?.customer?.entityId)

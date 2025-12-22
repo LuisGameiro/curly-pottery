@@ -10,16 +10,16 @@ const getCheckout: CheckoutEndpoint['handlers']['getCheckout'] = async ({
   // Register credit card
   const payments = await restBuyerFetch(
     'GET',
-    `/orders/Outgoing/${cartId}/payments`
+    `/orders/Outgoing/${cartId}/payments`,
   ).then((response: { Items: unknown[] }) => response.Items)
 
   const address = await restBuyerFetch(
     'GET',
     `/orders/Outgoing/${cartId}`,
     null,
-    { token }
+    { token },
   ).then(
-    (response: { ShippingAddressID: string }) => response.ShippingAddressID
+    (response: { ShippingAddressID: string }) => response.ShippingAddressID,
   )
 
   // Return cart and errors

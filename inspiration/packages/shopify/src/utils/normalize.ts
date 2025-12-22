@@ -91,7 +91,7 @@ const normalizeProductVariants = ({ edges }: ProductVariantConnection) => {
           return options
         }),
       }
-    }
+    },
   )
 }
 
@@ -176,7 +176,7 @@ function normalizeLineItem({
 
 export const normalizePage = (
   { title: name, handle, ...page }: ShopifyPage,
-  locale: string = 'en-US'
+  locale: string = 'en-US',
 ): Page => ({
   ...page,
   url: `/${locale}/${handle}`,

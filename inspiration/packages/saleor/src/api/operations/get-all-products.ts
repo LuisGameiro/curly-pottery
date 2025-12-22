@@ -43,13 +43,13 @@ export default function getAllProductsOperation({
             'Accept-Language': locale,
           }),
         },
-      }
+      },
     )
 
     if (featured) {
       const products =
         data?.collection.products?.edges?.map(
-          ({ node: p }: ProductCountableEdge) => normalizeProduct(p)
+          ({ node: p }: ProductCountableEdge) => normalizeProduct(p),
         ) ?? []
 
       return {
@@ -58,7 +58,7 @@ export default function getAllProductsOperation({
     } else {
       const products =
         data?.products?.edges?.map(({ node: p }: ProductCountableEdge) =>
-          normalizeProduct(p)
+          normalizeProduct(p),
         ) ?? []
 
       return {

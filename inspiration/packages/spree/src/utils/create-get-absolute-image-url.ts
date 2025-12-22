@@ -6,7 +6,7 @@ const createGetAbsoluteImageUrl =
   (
     image: SpreeProductImage,
     minWidth: number,
-    minHeight: number
+    minHeight: number,
   ): string | null => {
     let url
 

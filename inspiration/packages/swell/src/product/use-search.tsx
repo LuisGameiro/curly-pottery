@@ -35,7 +35,7 @@ export const handler: SWRHook<SearchProductsHook> = {
     })
 
     const products = results.map((product: SwellProduct) =>
-      normalizeProduct(product)
+      normalizeProduct(product),
     )
 
     return {

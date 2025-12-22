@@ -14,7 +14,7 @@ import type { WishlistItem } from '@vercel/commerce/types/wishlist'
 
 export function normalizeProduct(
   productNode: KiboProduct,
-  config: any
+  config: any,
 ): Product {
   const product = {
     id: productNode.productCode || '',
@@ -83,7 +83,7 @@ export function normalizeCart(data: any): Cart {
     lineItems: data.items.map(normalizeLineItem),
     lineItemsSubtotalPrice: data?.items.reduce(
       (acc: number, obj: { subtotal: number }) => acc + obj.subtotal,
-      0
+      0,
     ),
     subtotalPrice: data?.subtotal,
     totalPrice: data?.total,
@@ -141,7 +141,7 @@ export function normalizeCategory(category: PrCategory): Category {
 export function normalizeWishlistItem(
   item: any,
   config: any,
-  includeProducts = false
+  includeProducts = false,
 ): WishlistItem {
   if (includeProducts) {
     return {

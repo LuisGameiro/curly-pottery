@@ -5,13 +5,13 @@ import type { KiboCommerceConfig } from '../index'
 import { APIAuthenticationHelper } from './api-auth-helper'
 
 const fetchGraphqlApi: (
-  getConfig: () => KiboCommerceConfig
+  getConfig: () => KiboCommerceConfig,
 ) => GraphQLFetcher =
   (getConfig) =>
   async (
     query: string,
     { variables, preview } = {},
-    options?: FetchOptions
+    options?: FetchOptions,
   ) => {
     const config = getConfig()
     const authHelper = new APIAuthenticationHelper(config)
@@ -34,8 +34,8 @@ const fetchGraphqlApi: (
     if (json.errors) {
       console.warn(
         `Kibo API Request Correlation ID: ${res.headers.get(
-          'x-vol-correlation'
-        )}`
+          'x-vol-correlation',
+        )}`,
       )
       throw new FetcherError({
         errors: json.errors ?? [

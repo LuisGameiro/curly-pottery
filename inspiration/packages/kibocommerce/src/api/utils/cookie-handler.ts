@@ -43,7 +43,7 @@ export default class CookieHandler {
   }
   setAnonymousShopperCookie(anonymousShopperTokenResponse: any) {
     const cookieExpirationDate = getCookieExpirationDate(
-      this.config.customerCookieMaxAgeInDays
+      this.config.customerCookieMaxAgeInDays,
     )
 
     const authCookie = prepareSetCookie(
@@ -51,7 +51,7 @@ export default class CookieHandler {
       JSON.stringify(anonymousShopperTokenResponse),
       anonymousShopperTokenResponse?.accessTokenExpiration
         ? { expires: cookieExpirationDate }
-        : {}
+        : {},
     )
     this.headers = {
       'Set-Cookie': authCookie,

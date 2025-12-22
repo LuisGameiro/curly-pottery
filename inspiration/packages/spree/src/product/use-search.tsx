@@ -34,7 +34,7 @@ export const handler: SWRHook<SearchProductsHook> = {
       'input: ',
       input,
       'options: ',
-      options
+      options,
     )
 
     const taxons = [input.categoryId, input.brandId].filter(Boolean)
@@ -71,7 +71,7 @@ export const handler: SWRHook<SearchProductsHook> = {
     })
 
     const normalizedProducts: Product[] = spreeSuccessResponse.data.map(
-      (spreeProduct) => normalizeProduct(spreeSuccessResponse, spreeProduct)
+      (spreeProduct) => normalizeProduct(spreeSuccessResponse, spreeProduct),
     )
 
     const found = spreeSuccessResponse.data.length > 0
@@ -80,7 +80,7 @@ export const handler: SWRHook<SearchProductsHook> = {
   },
   useHook: ({ useData }) => {
     const useWrappedHook: ReturnType<SWRHook<SearchProductsHook>['useHook']> = (
-      input = {}
+      input = {},
     ) => {
       return useData({
         input: [

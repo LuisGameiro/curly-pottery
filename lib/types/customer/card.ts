@@ -2,17 +2,17 @@ export interface Card {
   /**
    * Unique identifier for the card.
    */
-  id: string
+  id: string;
   /**
    * Masked card number. Contains only the last 4 digits.
    * @example "4242"
    */
-  mask: string
+  mask: string;
   /**
    * The card's brand.
    * @example "Visa, Mastercard, etc."
    */
-  provider: string
+  provider: string;
 }
 
 /**
@@ -22,48 +22,48 @@ export interface CardFields {
   /**
    *  Name on the card.
    */
-  cardHolder: string
+  cardHolder: string;
   /**
    * The card's number, consisting of 16 digits.
    */
-  cardNumber: string
+  cardNumber: string;
   /**
    * The card's expiry month and year, in the format MM/YY.
    * @example "01/25"
    */
-  cardExpireDate: string
+  cardExpireDate: string;
   /**
    * The card's security code, consisting of 3 digits.
    */
-  cardCvc: string
+  cardCvc: string;
   /**
    *  The customer's first name.
    */
-  firstName: string
+  firstName: string;
   /**
    * The customer's last name.
    */
-  lastName: string
+  lastName: string;
   /**
    * Company name.
    */
-  company: string
+  company: string;
   /**
    * The customer's billing address street number.
    */
-  streetNumber: string
+  streetNumber: string;
   /**
    * The customer's billing address zip code.
    */
-  zipCode: string
+  zipCode: string;
   /**
    * The customer's billing address city.
    */
-  city: string
+  city: string;
   /**
    * The customer's billing address country.
    */
-  country: string
+  country: string;
 }
 
 /**
@@ -71,68 +71,68 @@ export interface CardFields {
  */
 
 export type GetCardsHook = {
-  data: Card[] | null
-  input: {}
-  fetcherInput: { cartId?: string }
-  swrState: { isEmpty: boolean }
-}
+  data: Card[] | null;
+  input: {};
+  fetcherInput: { cartId?: string };
+  swrState: { isEmpty: boolean };
+};
 
 export type AddItemHook = {
-  data: Card | null
-  input?: CardFields
-  fetcherInput: CardFields
-  body: { item: CardFields }
-  actionInput: CardFields
-}
+  data: Card | null;
+  input?: CardFields;
+  fetcherInput: CardFields;
+  body: { item: CardFields };
+  actionInput: CardFields;
+};
 
 export type UpdateItemHook = {
-  data: Card | null
-  input: { item?: CardFields; wait?: number }
-  fetcherInput: { itemId: string; item: CardFields }
-  body: { itemId: string; item: CardFields }
-  actionInput: CardFields & { id: string }
-}
+  data: Card | null;
+  input: { item?: CardFields; wait?: number };
+  fetcherInput: { itemId: string; item: CardFields };
+  body: { itemId: string; item: CardFields };
+  actionInput: CardFields & { id: string };
+};
 
 export type RemoveItemHook = {
-  data: Card | null
-  input: { item?: Card }
-  fetcherInput: { itemId: string }
-  body: { itemId: string }
-  actionInput: { id: string }
-}
+  data: Card | null;
+  input: { item?: Card };
+  fetcherInput: { itemId: string };
+  body: { itemId: string };
+  actionInput: { id: string };
+};
 
 export interface CustomerCardHooks {
-  getCards: GetCardsHook
-  addItem: AddItemHook
-  updateItem: UpdateItemHook
-  removeItem: RemoveItemHook
+  getCards: GetCardsHook;
+  addItem: AddItemHook;
+  updateItem: UpdateItemHook;
+  removeItem: RemoveItemHook;
 }
 
 /**
  * Customer card API handlers.
  */
 export type AddItemHandler = AddItemHook & {
-  body: { cartId: string }
-}
+  body: { cartId: string };
+};
 
 export type UpdateItemHandler = UpdateItemHook & {
-  body: { cartId: string }
-}
+  body: { cartId: string };
+};
 
 export type RemoveItemHandler = RemoveItemHook & {
-  body: { cartId: string }
-}
+  body: { cartId: string };
+};
 
 export type CustomerCardHandlers = {
-  getCards: GetCardsHook
-  addItem: AddItemHandler
-  updateItem: UpdateItemHandler
-  removeItem: RemoveItemHandler
-}
+  getCards: GetCardsHook;
+  addItem: AddItemHandler;
+  updateItem: UpdateItemHandler;
+  removeItem: RemoveItemHandler;
+};
 
 export type CustomerCardSchema = {
   endpoint: {
-    options: {}
-    handlers: CustomerCardHandlers
-  }
-}
+    options: {};
+    handlers: CustomerCardHandlers;
+  };
+};

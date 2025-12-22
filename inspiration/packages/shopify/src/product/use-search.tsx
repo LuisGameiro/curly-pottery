@@ -52,7 +52,7 @@ export const handler: SWRHook<SearchProductsHook> = {
       products = brandId
         ? data.node?.products?.edges?.filter(
             ({ node: { vendor } }: ProductEdge) =>
-              vendor.replace(/\s+/g, '-').toLowerCase() === brandId
+              vendor.replace(/\s+/g, '-').toLowerCase() === brandId,
           )
         : data.node?.products?.edges
     } else {
@@ -66,7 +66,7 @@ export const handler: SWRHook<SearchProductsHook> = {
 
     return {
       products: products?.map(({ node }) =>
-        normalizeProduct(node as ShopifyProduct)
+        normalizeProduct(node as ShopifyProduct),
       ),
       found: !!products?.length,
     }

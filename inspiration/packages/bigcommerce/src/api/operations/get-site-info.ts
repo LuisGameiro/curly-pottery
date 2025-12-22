@@ -61,7 +61,7 @@ export default function getSiteInfoOperation({
     opts: {
       config?: Partial<BigcommerceConfig>
       preview?: boolean
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getSiteInfo<T extends GetSiteInfoOperation>({

@@ -17,7 +17,7 @@ const getCategories = async (config: SaleorConfig): Promise<Category[]> => {
         name,
         slug,
         path: `/${slug}`,
-      })
+      }),
     ) ?? []
   )
 }

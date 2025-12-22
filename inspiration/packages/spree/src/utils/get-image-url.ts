@@ -5,7 +5,7 @@ import type { ImageStyle, SpreeProductImage } from '../types'
 const getImageUrl = (
   image: SpreeProductImage,
   minWidth: number,
-  _: number
+  _: number,
 ): string | null => {
   // every image is still resized in vue-storefront-api, no matter what getImageUrl returns
   if (image) {
@@ -31,7 +31,7 @@ const getImageUrl = (
           ? bSIndex
           : styleIndex
       },
-      null
+      null,
     )
 
     if (bestStyleIndex !== null) {

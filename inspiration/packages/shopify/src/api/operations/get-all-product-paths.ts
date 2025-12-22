@@ -15,7 +15,7 @@ export default function getAllProductPathsOperation({
   commerce,
 }: OperationContext<Provider>) {
   async function getAllProductPaths<
-    T extends GetAllProductPathsOperation
+    T extends GetAllProductPathsOperation,
   >(opts?: {
     variables?: T['variables']
     config?: ShopifyConfig
@@ -25,7 +25,7 @@ export default function getAllProductPathsOperation({
     opts: {
       variables?: T['variables']
       config?: ShopifyConfig
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getAllProductPaths<T extends GetAllProductPathsOperation>({

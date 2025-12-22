@@ -20,7 +20,7 @@ const updateItem: CartEndpoint['handlers']['updateItem'] = async ({
     {
       variables: { itemId: itemId, quantity: item.quantity },
     },
-    { headers: { 'x-vol-user-claims': accessToken } }
+    { headers: { 'x-vol-user-claims': accessToken } },
   )
 
   let currentCart = null
@@ -28,7 +28,7 @@ const updateItem: CartEndpoint['handlers']['updateItem'] = async ({
     let result = await config.fetch(
       getCartQuery,
       {},
-      { headers: { 'x-vol-user-claims': accessToken } }
+      { headers: { 'x-vol-user-claims': accessToken } },
     )
     currentCart = result?.data?.currentCart
   }

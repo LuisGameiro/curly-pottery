@@ -20,7 +20,7 @@ const API_URL = process.env.NEXT_PUBLIC_VENDURE_SHOP_API_URL
 
 if (!API_URL) {
   throw new Error(
-    `The environment variable NEXT_PUBLIC_VENDURE_SHOP_API_URL is missing and it's required to access your store`
+    `The environment variable NEXT_PUBLIC_VENDURE_SHOP_API_URL is missing and it's required to access your store`,
   )
 }
 
@@ -52,7 +52,7 @@ export type Provider = typeof provider
 export type VendureAPI<P extends Provider = Provider> = CommerceAPI<P>
 
 export function getCommerceApi<P extends Provider>(
-  customProvider: P = provider as any
+  customProvider: P = provider as any,
 ): CommerceAPI<P> {
   return commerceApi(customProvider)
 }

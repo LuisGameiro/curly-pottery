@@ -2,15 +2,15 @@ import type {
   GetStaticPathsContext,
   GetStaticPropsContext,
   InferGetStaticPropsType,
-} from 'next'
+} from "next";
 // import commerce from '@lib/api/commerce'
-import { Text } from '@components/ui'
-import { Layout } from '@components/common'
-import getSlug from '@lib/get-slug'
-import { missingLocaleInPages } from '@lib/usage-warns'
-import type { Page } from '@lib/types/inspiration/page'
-import { useRouter } from 'next/router'
-import { productsData, pagesData, siteInfo } from 'api/fakeapi/data'
+import { Text } from "@components/ui";
+import { Layout } from "@components/common";
+import getSlug from "@lib/get-slug";
+import { missingLocaleInPages } from "@lib/usage-warns";
+import type { Page } from "@lib/types/inspiration/page";
+import { useRouter } from "next/router";
+import { productsData, pagesData, siteInfo } from "api/fakeapi/data";
 
 export async function getStaticProps({
   preview,
@@ -18,22 +18,22 @@ export async function getStaticProps({
   locale,
   locales,
 }: GetStaticPropsContext<{ pages: string[] }>) {
-  const config = { locale, locales }
+  const config = { locale, locales };
   // const pagesPromise = commerce.getAllPages({ config, preview })
   // const siteInfoPromise = commerce.getSiteInfo({ config, preview })
   // const { pages } = await pagesPromise
   // const { categories } = await siteInfoPromise
 
-  const { products } = productsData // This contains the array of 6 products
-  const { pages } = pagesData // This contains the array of pages
-  const { categories, brands } = siteInfo // These contain the categories and brands arrays
+  const { products } = productsData; // This contains the array of 6 products
+  const { pages } = pagesData; // This contains the array of pages
+  const { categories, brands } = siteInfo; // These contain the categories and brands arrays
 
-  const path = params?.pages.join('/')
-  const slug = locale ? `${locale}/${path}` : path
+  const path = params?.pages.join("/");
+  const slug = locale ? `${locale}/${path}` : path;
   // const pageItem = pages.find((p: Page) =>
   //   p.url ? getSlug(p.url) === slug : false
   // )
-  const pageItem = pages[0]
+  const pageItem = pages[0];
   // const data =
   //   pageItem &&
   //   (await commerce.getPage({
@@ -41,51 +41,48 @@ export async function getStaticProps({
   //     config,
   //     preview,
   //   }))
-  const data =
-    pageItem && { page: pageItem } // Mocking the data object since we are using fake data
-  const page = data?.page
+  const data = pageItem && { page: pageItem }; // Mocking the data object since we are using fake data
+  const page = data?.page;
 
   if (!page) {
     return {
       notFound: true,
-    }
+    };
   }
 
   return {
     props: { pages, page, categories },
     revalidate: 60 * 60, // Every hour
-  }
+  };
 }
 
 export async function getStaticPaths({ locales }: GetStaticPathsContext) {
-  const config = { locales }
+  const config = { locales };
   // const { pages }: { pages: Page[] } = await commerce.getAllPages({ config })
 
-  const { products } = productsData // This contains the array of 6 products
-  const { pages } = pagesData // This contains the array of pages
-  
-  const [invalidPaths, log] = missingLocaleInPages()
+  const { products } = productsData; // This contains the array of 6 products
+  const { pages } = pagesData; // This contains the array of pages
+
+  const [invalidPaths, log] = missingLocaleInPages();
   const paths = pages
     .map((page) => page?.url)
     .filter((url) => {
-      if (!url || !locales) return url
+      if (!url || !locales) return url;
       // If there are locales, only include the pages that include one of the available locales
-      if (locales.includes(getSlug(url).split('/')[0])) return url
+      if (locales.includes(getSlug(url).split("/")[0])) return url;
 
-      invalidPaths.push(url)
-    })
-  log()
+      invalidPaths.push(url);
+    });
+  log();
 
   return {
     paths,
-    fallback: 'blocking',
-  }
+    fallback: "blocking",
+  };
 }
 
-export default function Pages({
-  page,
-}: {page: Page}) {
-  const router = useRouter()
+export default function Pages({ page }: { page: Page }) {
+  const router = useRouter();
 
   return router.isFallback ? (
     <h1>Loading...</h1> // TODO (BC) Add Skeleton Views
@@ -93,7 +90,7 @@ export default function Pages({
     <div className="max-w-2xl mx-8 sm:mx-auto py-20">
       {page?.body && <Text html={page.body} />}
     </div>
-  )
+  );
 }
 
-Pages.Layout = Layout
+Pages.Layout = Layout;

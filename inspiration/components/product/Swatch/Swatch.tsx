@@ -36,7 +36,7 @@ const Swatch: React.FC<Omit<ButtonProps, 'variant'> & SwatchProps> = ({
       [s.dark]: color ? isDark(color) : false,
       [s.textLabel]: !color && label && label.length > 3,
     },
-    className
+    className,
   )
 
   return (

@@ -29,7 +29,7 @@ export default function getPageOperation({
       variables: T['variables']
       config?: Partial<SpreeApiConfig>
       preview?: boolean
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getPage<T extends GetPageOperation>({
@@ -50,7 +50,7 @@ export default function getPageOperation({
       'preview: ',
       preview,
       'url: ',
-      url
+      url,
     )
 
     const config = commerce.getConfig(userConfig)
@@ -71,7 +71,7 @@ export default function getPageOperation({
     const normalizedPage: Page = normalizePage(
       spreeSuccessResponse,
       spreeSuccessResponse.data,
-      config.locales || []
+      config.locales || [],
     )
 
     return { page: normalizedPage }

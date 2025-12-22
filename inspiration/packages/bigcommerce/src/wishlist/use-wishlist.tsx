@@ -51,7 +51,7 @@ export const handler: SWRHook<GetWishlistHook> = {
               enumerable: true,
             },
           }),
-        [response]
+        [response],
       )
     },
 }

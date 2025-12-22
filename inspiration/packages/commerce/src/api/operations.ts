@@ -31,12 +31,15 @@ export type Operation = {
   }
 }[AllowedOperations]
 
-export const defaultOperations = OPERATIONS.reduce((ops, k) => {
-  ops[k] = noop
-  return ops
-}, {} as { [K in AllowedOperations]: typeof noop })
+export const defaultOperations = OPERATIONS.reduce(
+  (ops, k) => {
+    ops[k] = noop
+    return ops
+  },
+  {} as { [K in AllowedOperations]: typeof noop },
+)
 
-export type AllowedOperations = typeof OPERATIONS[number]
+export type AllowedOperations = (typeof OPERATIONS)[number]
 
 export type Operations<P extends APIProvider> = {
   login: {
@@ -51,7 +54,7 @@ export type Operations<P extends APIProvider> = {
         variables: T['variables']
         config?: P['config']
         res: Response
-      } & OperationOptions
+      } & OperationOptions,
     ): Promise<T['data']>
   }
 
@@ -65,7 +68,7 @@ export type Operations<P extends APIProvider> = {
       opts: {
         config?: P['config']
         preview?: boolean
-      } & OperationOptions
+      } & OperationOptions,
     ): Promise<T['data']>
   }
 
@@ -81,7 +84,7 @@ export type Operations<P extends APIProvider> = {
         variables: T['variables']
         config?: P['config']
         preview?: boolean
-      } & OperationOptions
+      } & OperationOptions,
     ): Promise<T['data']>
   }
 
@@ -95,7 +98,7 @@ export type Operations<P extends APIProvider> = {
       opts: {
         config?: P['config']
         preview?: boolean
-      } & OperationOptions
+      } & OperationOptions,
     ): Promise<T['data']>
   }
 
@@ -111,7 +114,7 @@ export type Operations<P extends APIProvider> = {
         variables: T['variables']
         config?: P['config']
         includeProducts?: boolean
-      } & OperationOptions
+      } & OperationOptions,
     ): Promise<T['data']>
   }
 
@@ -125,7 +128,7 @@ export type Operations<P extends APIProvider> = {
       opts: {
         variables?: T['variables']
         config?: P['config']
-      } & OperationOptions
+      } & OperationOptions,
     ): Promise<T['data']>
   }
 
@@ -141,7 +144,7 @@ export type Operations<P extends APIProvider> = {
         variables?: T['variables']
         config?: P['config']
         preview?: boolean
-      } & OperationOptions
+      } & OperationOptions,
     ): Promise<T['data']>
   }
 
@@ -157,7 +160,7 @@ export type Operations<P extends APIProvider> = {
         variables: T['variables']
         config?: P['config']
         preview?: boolean
-      } & OperationOptions
+      } & OperationOptions,
     ): Promise<T['data']>
   }
 }

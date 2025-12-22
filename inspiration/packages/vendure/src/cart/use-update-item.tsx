@@ -49,7 +49,7 @@ export const handler = {
       ctx: {
         item?: LineItem
         wait?: number
-      } = {}
+      } = {},
     ) => {
       const { item } = ctx
       const { mutate } = useCart()
@@ -77,7 +77,7 @@ export const handler = {
           await mutate(data, false)
           return data
         },
-        [fetch, mutate]
+        [fetch, mutate],
       )
     },
 }

@@ -7,7 +7,7 @@ const validateProductsPrerenderCount = (prerenderCount: unknown): number => {
     prerenderCountInteger = prerenderCount
   } else {
     throw new TypeError(
-      'prerenderCount count must be a string containing a number or an integer.'
+      'prerenderCount count must be a string containing a number or an integer.',
     )
   }
 

@@ -7,7 +7,7 @@ import { getToken } from '../../utils/index'
 const fetchGraphqlApi: GraphQLFetcher = async (
   query: string,
   { variables } = {},
-  options?: FetchOptions
+  options?: FetchOptions,
 ) => {
   const token = getToken()
 
@@ -36,7 +36,7 @@ const fetchGraphqlApi: GraphQLFetcher = async (
           message: `${type ? `${type}, ` : ''}${message}`,
         },
       ],
-      status || res.status
+      status || res.status,
     )
   }
 

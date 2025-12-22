@@ -24,7 +24,7 @@ export default function getProductOperation({
       variables: T['variables']
       config?: Partial<ShopifyConfig>
       preview?: boolean
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getProduct<T extends GetProductOperation>({
@@ -52,7 +52,7 @@ export default function getProductOperation({
             'Accept-Language': locale,
           },
         }),
-      }
+      },
     )
 
     return {

@@ -8,7 +8,7 @@ const revokeUserTokens = async (
   fetch: HookFetcherContext<{
     data: any
   }>['fetch'],
-  userTokens: UserOAuthTokens
+  userTokens: UserOAuthTokens,
 ): Promise<void> => {
   const spreeRevokeTokensResponses = await Promise.allSettled([
     fetch<GraphQLFetcherResult<EmptyObjectResponse>>({
@@ -34,12 +34,12 @@ const revokeUserTokens = async (
   ])
 
   const anyRejected = spreeRevokeTokensResponses.some(
-    (response) => response.status === 'rejected'
+    (response) => response.status === 'rejected',
   )
 
   if (anyRejected) {
     throw new TokensNotRejectedError(
-      'Some tokens could not be rejected in Spree.'
+      'Some tokens could not be rejected in Spree.',
     )
   }
 

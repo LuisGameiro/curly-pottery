@@ -4,7 +4,7 @@ import type { CommercejsCart, CommercejsLineItem } from '../types'
 type CommercejsLineItemType = CommercejsLineItem & { image: { url: string } }
 
 const normalizeLineItem = (
-  commercejsLineItem: CommercejsLineItemType
+  commercejsLineItem: CommercejsLineItemType,
 ): LineItem => {
   const {
     id,
@@ -45,7 +45,7 @@ const normalizeLineItem = (
 }
 
 export const normalizeCart = (
-  commercejsCart: CommercejsCart | { cart: CommercejsCart }
+  commercejsCart: CommercejsCart | { cart: CommercejsCart },
 ): Cart => {
   const {
     id,

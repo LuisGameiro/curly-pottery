@@ -10,7 +10,7 @@ const prettyPrintSpreeSdkErrors = (error: errors.SpreeSDKError): string => {
       prettyOutput += `\nSpree validation errors:\n${JSON.stringify(
         error.errors,
         null,
-        2
+        2,
       )}`
     }
   }

@@ -20,7 +20,7 @@ const fetcher: Fetcher = async ({
           'Accept-Language': locale,
         }),
       },
-    })
+    }),
   )
 }
 

@@ -40,7 +40,7 @@ export type Provider = typeof provider
 export type CommercejsAPI<P extends Provider = Provider> = CommerceAPI<P | any>
 
 export function getCommerceApi<P extends Provider>(
-  customProvider: P = provider as any
+  customProvider: P = provider as any,
 ): CommercejsAPI<P> {
   return commerceApi(customProvider as any)
 }

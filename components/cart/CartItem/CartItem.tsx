@@ -1,40 +1,44 @@
-import { ChangeEvent, useEffect, useState } from 'react'
-import cn from 'clsx'
-import Image from 'next/image'
-import Link from 'next/link'
-import s from './CartItem.module.css'
-import { useUI } from '@components/ui/context'
-import type { LineItem } from '@lib/types/inspiration/cart'
+import { ChangeEvent, useEffect, useState } from "react";
+import cn from "clsx";
+import Image from "next/image";
+import Link from "next/link";
+import s from "./CartItem.module.css";
+import { useUI } from "@components/ui/context";
+import type { LineItem } from "@lib/types/inspiration/cart";
 // import usePrice from '@framework/product/use-price'
 // import useUpdateItem from '@framework/cart/use-update-item'
 // import useRemoveItem from '@framework/cart/use-remove-item'
-import Quantity from '@components/ui/Quantity'
+import Quantity from "@components/ui/Quantity";
 
 type ItemOption = {
-  name: string
-  nameId: number
-  value: string
-  valueId: number
-}
+  name: string;
+  nameId: number;
+  value: string;
+  valueId: number;
+};
 
-const placeholderImg = '/product-img-placeholder.svg'
+const placeholderImg = "/product-img-placeholder.svg";
 
 const CartItem = ({
   item,
-  variant = 'default',
+  variant = "default",
   currencyCode,
   ...rest
 }: {
-  variant?: 'default' | 'display'
-  item: LineItem
-  currencyCode: string
+  variant?: "default" | "display";
+  item: LineItem;
+  currencyCode: string;
 }) => {
-  const { closeSidebarIfPresent } = useUI()
-  const [removing, setRemoving] = useState(false)
-  const [quantity, setQuantity] = useState<number>(item.quantity)
-  const removeItem = (item: LineItem) => {new Promise(()=>{})}// useRemoveItem()
-  const updateItem = ({quantity}:{quantity:number})=>{new Promise(()=>{})}// useUpdateItem({ item })
-  const { price } = { price: '$0.00' }
+  const { closeSidebarIfPresent } = useUI();
+  const [removing, setRemoving] = useState(false);
+  const [quantity, setQuantity] = useState<number>(item.quantity);
+  const removeItem = (item: LineItem) => {
+    new Promise(() => {});
+  }; // useRemoveItem()
+  const updateItem = ({ quantity }: { quantity: number }) => {
+    new Promise(() => {});
+  }; // useUpdateItem({ item })
+  const { price } = { price: "$0.00" };
   // const { price } = usePrice({
   //   amount: item.variant.price * item.quantity,
   //   baseAmount: item.variant.listPrice * item.quantity,
@@ -44,42 +48,42 @@ const CartItem = ({
   const handleChange = async ({
     target: { value },
   }: ChangeEvent<HTMLInputElement>) => {
-    setQuantity(Number(value))
-    await updateItem({ quantity: Number(value) })
-  }
+    setQuantity(Number(value));
+    await updateItem({ quantity: Number(value) });
+  };
 
   const increaseQuantity = async (n = 1) => {
-    const val = Number(quantity) + n
-    setQuantity(val)
-    await updateItem({ quantity: val })
-  }
+    const val = Number(quantity) + n;
+    setQuantity(val);
+    await updateItem({ quantity: val });
+  };
 
   const handleRemove = async () => {
-    setRemoving(true)
+    setRemoving(true);
     try {
-      await removeItem(item)
+      await removeItem(item);
     } catch (error) {
-      setRemoving(false)
+      setRemoving(false);
     }
-  }
+  };
 
   // TODO: Add a type for this
-  const options = (item as any).options
+  const options = (item as any).options;
 
   useEffect(() => {
     // Reset the quantity state if the item quantity changes
     if (item.quantity !== Number(quantity)) {
-      setQuantity(item.quantity)
+      setQuantity(item.quantity);
     }
     // TODO: currently not including quantity in deps is intended, but we should
     // do this differently as it could break easily
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [item.quantity])
+  }, [item.quantity]);
 
   return (
     <li
       className={cn(s.root, {
-        'opacity-50 pointer-events-none': removing,
+        "opacity-50 pointer-events-none": removing,
       })}
       {...rest}
     >
@@ -92,7 +96,7 @@ const CartItem = ({
               width={64}
               height={64}
               src={item.variant.image?.url || placeholderImg}
-              alt={item.variant.image?.alt || 'Product Image'}
+              alt={item.variant.image?.alt || "Product Image"}
             />
           </Link>
         </div>
@@ -113,7 +117,7 @@ const CartItem = ({
                   className="text-sm font-semibold text-accent-7 inline-flex items-center justify-center"
                 >
                   {option.name}
-                  {option.name === 'Color' ? (
+                  {option.name === "Color" ? (
                     <span
                       className="mx-2 rounded-full bg-transparent border w-5 h-5 p-1 text-accent-9 inline-flex items-center justify-center overflow-hidden"
                       style={{
@@ -125,12 +129,12 @@ const CartItem = ({
                       {option.value}
                     </span>
                   )}
-                  {i === options.length - 1 ? '' : <span className="mr-3" />}
+                  {i === options.length - 1 ? "" : <span className="mr-3" />}
                 </div>
               ))}
             </div>
           )}
-          {variant === 'display' && (
+          {variant === "display" && (
             <div className="text-sm tracking-wider">{quantity}x</div>
           )}
         </div>
@@ -138,7 +142,7 @@ const CartItem = ({
           <span>{price}</span>
         </div>
       </div>
-      {variant === 'default' && (
+      {variant === "default" && (
         <Quantity
           value={quantity}
           handleRemove={handleRemove}
@@ -148,7 +152,7 @@ const CartItem = ({
         />
       )}
     </li>
-  )
-}
+  );
+};
 
-export default CartItem
+export default CartItem;

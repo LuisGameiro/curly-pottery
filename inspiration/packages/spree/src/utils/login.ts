@@ -15,7 +15,7 @@ const login = async (
     data: any
   }>['fetch'],
   getTokenParameters: AuthTokenAttr,
-  associateGuestCart: boolean
+  associateGuestCart: boolean,
 ): Promise<void> => {
   const { data: spreeGetTokenSuccessResponse } = await fetch<
     GraphQLFetcherResult<IOAuthToken>

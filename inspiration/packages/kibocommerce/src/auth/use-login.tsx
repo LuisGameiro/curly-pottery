@@ -37,7 +37,7 @@ export const handler: MutationHook<LoginHook> = {
           await mutateCart()
           return data
         },
-        [fetch, mutate, mutateCart]
+        [fetch, mutate, mutateCart],
       )
     },
 }

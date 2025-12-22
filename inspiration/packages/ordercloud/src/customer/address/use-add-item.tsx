@@ -32,7 +32,7 @@ export const handler: MutationHook<AddItemHook> = {
           await mutate(data ? [data] : [], false)
           return data
         },
-        [fetch, mutate]
+        [fetch, mutate],
       )
     },
 }

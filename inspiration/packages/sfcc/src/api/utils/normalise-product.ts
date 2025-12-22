@@ -6,7 +6,7 @@ import type {
 } from '@vercel/commerce/types/product'
 
 const normaliseOptions = (
-  options: SFCCProduct.ShopperProducts.Product['variationAttributes']
+  options: SFCCProduct.ShopperProducts.Product['variationAttributes'],
 ): Product['options'] => {
   if (!Array.isArray(options)) return []
 
@@ -20,7 +20,7 @@ const normaliseOptions = (
 }
 
 const normaliseVariants = (
-  variants: SFCCProduct.ShopperProducts.Product['variants']
+  variants: SFCCProduct.ShopperProducts.Product['variants'],
 ): Product['variants'] => {
   if (!Array.isArray(variants)) return []
 
@@ -50,7 +50,7 @@ const normaliseVariants = (
 }
 
 export function normalizeProduct(
-  product: SFCCProduct.ShopperProducts.Product
+  product: SFCCProduct.ShopperProducts.Product,
 ): Product {
   return {
     id: product.id,
@@ -73,7 +73,7 @@ export function normalizeProduct(
 }
 
 export function normalizeSearchProducts(
-  products: Search.ShopperSearch.ProductSearchHit[]
+  products: Search.ShopperSearch.ProductSearchHit[],
 ): Product[] {
   return products.map((product) => ({
     id: product.productId,

@@ -8,7 +8,7 @@ import isJsonContentType from './is-json-content-type'
 export const fetchResponseKey = Symbol('fetch-response-key')
 
 const createCustomizedFetchFetcher: CreateCustomizedFetchFetcher = (
-  fetcherOptions
+  fetcherOptions,
 ) => {
   const { FetchError } = errors
   const sharedHeaders = {
@@ -46,12 +46,12 @@ const createCustomizedFetchFetcher: CreateCustomizedFetchFetcher = (
             method: method.toUpperCase(),
             headers: { ...sharedHeaders, ...headers },
             ...payload,
-          }
+          },
         )
 
         try {
           console.info(
-            `Calling the Spree API: ${request.method} ${request.url}`
+            `Calling the Spree API: ${request.method} ${request.url}`,
           )
 
           const response: Response = await fetch(request)

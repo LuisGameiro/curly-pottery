@@ -21,7 +21,7 @@ export default function getAllPagesOperation({
     opts: {
       config?: Partial<SpreeApiConfig>
       preview?: boolean
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getAllPages<T extends GetAllPagesOperation>({
@@ -44,7 +44,7 @@ export default function getAllPagesOperation({
       'preview: ',
       preview,
       'url: ',
-      url
+      url,
     )
 
     const config = commerce.getConfig(userConfig)
@@ -72,7 +72,7 @@ export default function getAllPagesOperation({
 
     const normalizedPages: Page[] = spreeSuccessResponse.data.map<Page>(
       (spreePage) =>
-        normalizePage(spreeSuccessResponse, spreePage, config.locales || [])
+        normalizePage(spreeSuccessResponse, spreePage, config.locales || []),
     )
 
     return { pages: normalizedPages }

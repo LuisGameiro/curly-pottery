@@ -120,7 +120,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                         'block text-sm leading-5 text-accent-4 lg:text-base lg:no-underline lg:font-bold lg:tracking-wide hover:bg-accent-1 lg:hover:bg-transparent hover:text-accent-8 focus:outline-hidden focus:bg-accent-1 focus:text-accent-8',
                         {
                           underline: !activeCategory?.name,
-                        }
+                        },
                       )}
                     >
                       <Link
@@ -144,7 +144,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                           'block text-sm leading-5 text-accent-4 hover:bg-accent-1 lg:hover:bg-transparent hover:text-accent-8 focus:outline-hidden focus:bg-accent-1 focus:text-accent-8',
                           {
                             underline: activeCategory?.id === cat.id,
-                          }
+                          },
                         )}
                       >
                         <Link
@@ -220,7 +220,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                         'block text-sm leading-5 text-accent-4 lg:text-base lg:no-underline lg:font-bold lg:tracking-wide hover:bg-accent-1 lg:hover:bg-transparent hover:text-accent-8 focus:outline-hidden focus:bg-accent-1 focus:text-accent-8',
                         {
                           underline: !activeBrand?.name,
-                        }
+                        },
                       )}
                     >
                       <Link
@@ -392,7 +392,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                         'block text-sm leading-5 text-accent-4 lg:text-base lg:no-underline lg:font-bold lg:tracking-wide hover:bg-accent-1 lg:hover:bg-transparent hover:text-accent-8 focus:outline-hidden focus:bg-accent-1 focus:text-accent-8',
                         {
                           underline: !sort,
-                        }
+                        },
                       )}
                     >
                       <Link
@@ -416,7 +416,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                           'block text-sm leading-5 text-accent-4 hover:bg-accent-1 lg:hover:bg-transparent hover:text-accent-8 focus:outline-hidden focus:bg-accent-1 focus:text-accent-8',
                           {
                             underline: sort === key,
-                          }
+                          },
                         )}
                       >
                         <Link

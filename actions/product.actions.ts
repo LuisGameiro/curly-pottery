@@ -18,7 +18,7 @@ export async function createProduct(formData: FormData) {
       requiresShipping: formData.get("requiresShipping") === "on",
 
       categories: {
-        connect: categories.map(id => ({ id })),
+        connect: categories.map((id) => ({ id })),
       },
 
       variants: {
@@ -46,7 +46,6 @@ export async function createProduct(formData: FormData) {
   revalidatePath("/admin/products");
 }
 
-
 export async function updateProduct(id: string, formData: FormData) {
   const categories = formData.getAll("categories") as string[];
   const variants = JSON.parse(formData.get("variants") as string);
@@ -61,7 +60,7 @@ export async function updateProduct(id: string, formData: FormData) {
       requiresShipping: formData.get("requiresShipping") === "on",
 
       categories: {
-        set: categories.map(id => ({ id })),
+        set: categories.map((id) => ({ id })),
       },
 
       // Simplest approach: delete & recreate variants
@@ -102,7 +101,7 @@ export async function getProductBySlug(slug: string) {
     },
   });
 
-  return serializeProductVariant([ productsRaw ])[0];
+  return serializeProductVariant([productsRaw])[0];
 }
 
 export async function deleteProduct(id: string) {
@@ -115,10 +114,8 @@ export async function deleteProduct(id: string) {
 
 export async function getRandomProducts(limit = 3) {
   const productsRaw = await prisma.product.findMany();
-  const products = serializeProduct(productsRaw)
-  return products
-    .sort(() => 0.5 - Math.random())
-    .slice(0, limit);
+  const products = serializeProduct(productsRaw);
+  return products.sort(() => 0.5 - Math.random()).slice(0, limit);
 }
 
 export async function getAllProducts() {
@@ -132,17 +129,14 @@ export async function getAllProducts() {
     },
   });
   return serializeProductVariant(productsRaw);
-
 }
-
 
 export async function getRelatedProducts(
   categories: string[],
   excludeId?: string,
-  limit:number = 3,
-
+  limit: number = 3,
 ) {
-  if (!categories.length) return []
+  if (!categories.length) return [];
 
   // Count how many products match
   const count = await prisma.product.count({
@@ -154,11 +148,11 @@ export async function getRelatedProducts(
       },
       ...(excludeId && { id: { not: excludeId } }), // exclude current product if needed
     },
-  })
+  });
 
-  if (count === 0) return []
+  if (count === 0) return [];
 
-  const skip = Math.floor(Math.random() * Math.max(1, count - limit))
+  const skip = Math.floor(Math.random() * Math.max(1, count - limit));
 
   const relatedProducts = await prisma.product.findMany({
     where: {
@@ -171,9 +165,8 @@ export async function getRelatedProducts(
     },
     take: limit,
     skip,
-  })
+  });
   return serializeProductVariant(relatedProducts);
-
 }
 
 export const serializeProduct = (productsRaw: any[]) => {
@@ -181,10 +174,8 @@ export const serializeProduct = (productsRaw: any[]) => {
     ...product,
     createdAt: product.createdAt.toISOString(),
     updatedAt: product.updatedAt.toISOString(),
-
   }));
-
-}
+};
 
 export const serializeProductVariant = (productsRaw: any[]) => {
   return productsRaw.map((product) => ({
@@ -202,14 +193,11 @@ export const serializeProductVariant = (productsRaw: any[]) => {
       updatedAt: category.updatedAt.toISOString(),
     })),
   }));
-
-}
-
+};
 
 // A simple helper to omit keys
 export function exclude(obj: object, keys: string[]) {
   return Object.fromEntries(
-    Object.entries(obj).filter(([key]) => !keys.includes(key))
+    Object.entries(obj).filter(([key]) => !keys.includes(key)),
   );
 }
-

@@ -26,7 +26,7 @@ export default function getPageOperation({
       variables: T['variables']
       config?: Partial<ShopifyConfig>
       preview?: boolean
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getPage<T extends GetPageOperation>({
@@ -54,7 +54,7 @@ export default function getPageOperation({
             'Accept-Language': locale,
           },
         }),
-      }
+      },
     )
 
     return page ? { page: normalizePage(page as ShopifyPage, locale) } : {}

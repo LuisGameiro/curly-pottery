@@ -53,11 +53,11 @@ export type ProductNode = ProductEdge['node']
 export type GetAllProductsResult<
   T extends Record<keyof GetAllProductsResult, any[]> = {
     products: ProductEdge[]
-  }
+  },
 > = T
 
 function getProductsType(
-  relevance?: GetAllProductsOperation['variables']['relevance']
+  relevance?: GetAllProductsOperation['variables']['relevance'],
 ) {
   switch (relevance) {
     case 'featured':
@@ -85,7 +85,7 @@ export default function getAllProductsOperation({
       variables?: T['variables']
       config?: Partial<BigcommerceConfig>
       preview?: boolean
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getAllProducts<T extends GetAllProductsOperation>({
@@ -115,7 +115,7 @@ export default function getAllProductsOperation({
     // required in case there's a custom `query`
     const { data } = await config.fetch<RecursivePartial<GetAllProductsQuery>>(
       query,
-      { variables }
+      { variables },
     )
     const edges = data.site?.[field]?.edges
     const products = filterEdges(edges as RecursiveRequired<typeof edges>)

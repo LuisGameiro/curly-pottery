@@ -24,7 +24,7 @@ export default function getAllPagesOperation({
     opts: {
       config?: Partial<ShopifyConfig>
       preview?: boolean
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getAllPages<T extends GetAllPagesOperation>({
@@ -55,14 +55,14 @@ export default function getAllPagesOperation({
             'Accept-Language': locale,
           },
         }),
-      }
+      },
     )
 
     return {
       pages: locales.reduce<Page[]>(
         (arr, locale) =>
           arr.concat(normalizePages(data.pages.edges as PageEdge[], locale)),
-        []
+        [],
       ),
     }
   }

@@ -10,7 +10,7 @@ export default function getAllProductPathsOperation({
   commerce,
 }: OperationContext<Provider>) {
   async function getAllProductPaths<
-    T extends GetAllProductPathsOperation
+    T extends GetAllProductPathsOperation,
   >(opts?: {
     variables?: T['variables']
     config?: SwellConfig
@@ -20,7 +20,7 @@ export default function getAllProductPathsOperation({
     opts: {
       variables?: T['variables']
       config?: SwellConfig
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getAllProductPaths<T extends GetAllProductPathsOperation>({

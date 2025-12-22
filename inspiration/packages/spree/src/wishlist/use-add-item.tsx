@@ -28,7 +28,7 @@ export const handler: MutationHook<AddItemHook> = {
       'input: ',
       input,
       'options: ',
-      options
+      options,
     )
 
     const {
@@ -80,7 +80,7 @@ export const handler: MutationHook<AddItemHook> = {
 
           return data
         },
-        [wishlist]
+        [wishlist],
       )
     }
 

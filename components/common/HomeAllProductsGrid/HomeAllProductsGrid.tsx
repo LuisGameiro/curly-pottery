@@ -1,16 +1,16 @@
-import { FC } from 'react'
-import Link from 'next/link'
-import type { Product } from '@lib/types/inspiration/product'
-import { Grid } from '@components/ui'
-import { ProductCard } from '@components/product'
-import s from './HomeAllProductsGrid.module.css'
-import { getCategoryPath, getDesignerPath } from '@lib/search'
-import { Brand, Category } from '@lib/types/inspiration/site'
+import { FC } from "react";
+import Link from "next/link";
+import type { Product } from "@lib/types/inspiration/product";
+import { Grid } from "@components/ui";
+import { ProductCard } from "@components/product";
+import s from "./HomeAllProductsGrid.module.css";
+import { getCategoryPath, getDesignerPath } from "@lib/search";
+import { Brand, Category } from "@lib/types/inspiration/site";
 
 interface Props {
-  categories?: Category[]
-  brands?: Brand[]
-  products?: Product[]
+  categories?: Category[];
+  brands?: Brand[];
+  products?: Product[];
 }
 
 const HomeAllProductsGrid: FC<Props> = ({
@@ -24,7 +24,7 @@ const HomeAllProductsGrid: FC<Props> = ({
         <div className={s.aside}>
           <ul className="mb-10">
             <li className="py-1 text-base font-bold tracking-wide">
-              <Link href={getCategoryPath('')}>All Categories</Link>
+              <Link href={getCategoryPath("")}>All Categories</Link>
             </li>
             {categories?.map((cat: any) => (
               <li key={cat.path} className="py-1 text-accent-8 text-base">
@@ -34,7 +34,7 @@ const HomeAllProductsGrid: FC<Props> = ({
           </ul>
           <ul className="">
             <li className="py-1 text-base font-bold tracking-wide">
-              <Link href={getDesignerPath('')}>All Designers</Link>
+              <Link href={getDesignerPath("")}>All Designers</Link>
             </li>
             {brands?.map(({ path, name }) => (
               <li key={path} className="py-1 text-accent-8 text-base">
@@ -61,7 +61,7 @@ const HomeAllProductsGrid: FC<Props> = ({
         </Grid>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default HomeAllProductsGrid
+export default HomeAllProductsGrid;

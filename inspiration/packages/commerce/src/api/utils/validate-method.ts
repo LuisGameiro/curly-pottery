@@ -5,7 +5,7 @@ export type HTTP_METHODS = 'OPTIONS' | 'GET' | 'POST' | 'PUT' | 'DELETE'
 
 export default function validateMethod(
   req: NextRequest,
-  allowedMethods: HTTP_METHODS[]
+  allowedMethods: HTTP_METHODS[],
 ) {
   const methods = allowedMethods.includes('OPTIONS')
     ? allowedMethods
@@ -28,8 +28,8 @@ export default function validateMethod(
           headers: {
             Allow: methods.join(', '),
           },
-        }
-      )
+        },
+      ),
     )
   }
 
@@ -42,7 +42,7 @@ export default function validateMethod(
           Allow: methods.join(', '),
           'Content-Length': '0',
         },
-      })
+      }),
     )
   }
 }

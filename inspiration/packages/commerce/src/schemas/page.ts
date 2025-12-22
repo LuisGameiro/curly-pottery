@@ -14,5 +14,5 @@ export const pagesPathsSchema = z.array(
     page: z.object({
       path: z.string().startsWith('/'),
     }),
-  })
+  }),
 )

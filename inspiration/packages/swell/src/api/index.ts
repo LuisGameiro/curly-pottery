@@ -49,7 +49,7 @@ export type Provider = typeof provider
 export type SwellAPI<P extends Provider = Provider> = CommerceAPI<P>
 
 export function getCommerceApi<P extends Provider>(
-  customProvider: P = provider as any
+  customProvider: P = provider as any,
 ): CommerceAPI<P> {
   return commerceApi(customProvider)
 }

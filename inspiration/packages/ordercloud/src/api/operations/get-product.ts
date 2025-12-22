@@ -24,19 +24,19 @@ export default function getProductOperation({
     // Get a single product
     const productPromise = restBuyerFetch<RawProduct>(
       'GET',
-      `/me/products/${variables?.slug}`
+      `/me/products/${variables?.slug}`,
     )
 
     // Get product specs
     const specsPromise = restBuyerFetch<{ Items: RawSpec[] }>(
       'GET',
-      `/me/products/${variables?.slug}/specs`
+      `/me/products/${variables?.slug}/specs`,
     ).then((res) => res.Items)
 
     // Get product variants
     const variantsPromise = restBuyerFetch<{ Items: RawVariant[] }>(
       'GET',
-      `/me/products/${variables?.slug}/variants`
+      `/me/products/${variables?.slug}/variants`,
     ).then((res) => res.Items)
 
     // Execute all promises in parallel

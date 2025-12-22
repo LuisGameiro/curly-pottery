@@ -8,7 +8,13 @@ import { useRouter } from 'next/router'
 import { Layout } from '@components/common'
 import { ProductView } from '@components/product'
 import commerce from '@lib/api/commerce'
-import { getSingleProductData, productsData, pagesData, siteInfo, relatedProductsData } from 'packages/fakeapi/data'
+import {
+  getSingleProductData,
+  productsData,
+  pagesData,
+  siteInfo,
+  relatedProductsData,
+} from 'packages/fakeapi/data'
 
 export async function getStaticProps({
   params,
@@ -34,9 +40,9 @@ export async function getStaticProps({
   // const { product } = await productPromise
   // const { products: relatedProducts } = await allProductsPromise
 
-  const productSlug = params!.slug || 'test-product-1';
-  const { product } = getSingleProductData(productSlug);
-  const { products: relatedProducts } = relatedProductsData;
+  const productSlug = params!.slug || 'test-product-1'
+  const { product } = getSingleProductData(productSlug)
+  const { products: relatedProducts } = relatedProductsData
   const { products } = productsData // This contains the array of 6 products
   const { pages } = pagesData // This contains the array of pages
   const { categories, brands } = siteInfo // These contain the categories and brands arrays

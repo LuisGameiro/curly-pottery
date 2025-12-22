@@ -8,7 +8,7 @@ type MethodKeys<T> = {
 // Calls the relevant Commerce.js SDK method based on resource and method arguments.
 export default async function sdkFetch<
   Resource extends keyof Commerce,
-  Method extends MethodKeys<Commerce[Resource]>
+  Method extends MethodKeys<Commerce[Resource]>,
 >(
   resource: Resource,
   method: Method,

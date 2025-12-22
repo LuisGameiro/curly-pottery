@@ -2,7 +2,9 @@ import type { GetCheckoutHook } from '@vercel/commerce/types/checkout'
 
 import { useMemo } from 'react'
 import { SWRHook } from '@vercel/commerce/utils/types'
-import useCheckout, { UseCheckout } from '@vercel/commerce/checkout/use-checkout'
+import useCheckout, {
+  UseCheckout,
+} from '@vercel/commerce/checkout/use-checkout'
 import useSubmitCheckout from './use-submit-checkout'
 import { useCheckoutContext } from '@components/checkout/context'
 
@@ -20,10 +22,10 @@ export const handler: SWRHook<GetCheckoutHook> = {
 
       // Basic validation - check that at least one field has a value.
       const hasEnteredCard = Object.values(cardFields).some(
-        (fieldValue) => !!fieldValue
+        (fieldValue) => !!fieldValue,
       )
       const hasEnteredAddress = Object.values(addressFields).some(
-        (fieldValue) => !!fieldValue
+        (fieldValue) => !!fieldValue,
       )
 
       const response = useMemo(
@@ -33,7 +35,7 @@ export const handler: SWRHook<GetCheckoutHook> = {
             hasShipping: hasEnteredAddress,
           },
         }),
-        [hasEnteredCard, hasEnteredAddress]
+        [hasEnteredCard, hasEnteredAddress],
       )
 
       return useMemo(
@@ -46,7 +48,7 @@ export const handler: SWRHook<GetCheckoutHook> = {
               enumerable: true,
             },
           }),
-        [submit, response]
+        [submit, response],
       )
     },
 }

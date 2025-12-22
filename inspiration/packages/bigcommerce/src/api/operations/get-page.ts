@@ -21,7 +21,7 @@ export default function getPageOperation({
       variables: T['variables']
       config?: Partial<BigcommerceConfig>
       preview?: boolean
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getPage<T extends GetPageOperation>({

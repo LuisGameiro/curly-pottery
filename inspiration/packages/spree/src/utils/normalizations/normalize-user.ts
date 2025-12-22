@@ -4,7 +4,7 @@ import type { SpreeSdkResponse } from '../../types'
 
 const normalizeUser = (
   _spreeSuccessResponse: SpreeSdkResponse,
-  spreeUser: AccountAttr
+  spreeUser: AccountAttr,
 ): Customer => {
   return {
     id: spreeUser.id,

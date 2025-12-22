@@ -16,7 +16,7 @@ const updateItem: CartEndpoint['handlers']['updateItem'] = async ({
       body: JSON.stringify({
         line_item: parseCartItem(item),
       }),
-    }
+    },
   )
 
   return {
@@ -25,7 +25,7 @@ const updateItem: CartEndpoint['handlers']['updateItem'] = async ({
       'Set-Cookie': getCartCookie(
         config.cartCookie,
         cartId,
-        config.cartCookieMaxAge
+        config.cartCookieMaxAge,
       ),
     },
   }

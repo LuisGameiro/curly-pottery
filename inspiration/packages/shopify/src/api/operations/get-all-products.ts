@@ -26,7 +26,7 @@ export default function getAllProductsOperation({
       variables?: T['variables']
       config?: Partial<ShopifyConfig>
       preview?: boolean
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getAllProducts<T extends GetAllProductsOperation>({
@@ -53,12 +53,12 @@ export default function getAllProductsOperation({
             'Accept-Language': locale,
           },
         }),
-      }
+      },
     )
 
     return {
       products: data.products.edges.map(({ node }) =>
-        normalizeProduct(node as ShopifyProduct)
+        normalizeProduct(node as ShopifyProduct),
       ),
     }
   }

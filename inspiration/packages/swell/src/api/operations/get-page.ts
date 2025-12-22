@@ -26,7 +26,7 @@ export default function getPageOperation({
       variables: T['variables']
       config?: Partial<SwellConfig>
       preview?: boolean
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getPage<T extends GetPageOperation>({

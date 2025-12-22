@@ -7,10 +7,11 @@ import type {
 
 const getSpreeSdkMethodFromEndpointPath = <
   ExactSpreeSdkClientType extends Client,
-  ResultResponseSuccessType extends SpreeSdkResultResponseSuccessType = SpreeSdkResultResponseSuccessType
+  ResultResponseSuccessType extends SpreeSdkResultResponseSuccessType =
+    SpreeSdkResultResponseSuccessType,
 >(
   client: ExactSpreeSdkClientType,
-  path: string
+  path: string,
 ): SpreeSdkMethod<ResultResponseSuccessType> => {
   const pathParts = path.split('.')
   const reachedPath: string[] = []
@@ -27,14 +28,14 @@ const getSpreeSdkMethodFromEndpointPath = <
     if (typeof checkedNode !== 'object') {
       throw new SpreeSdkMethodFromEndpointPathError(
         `Couldn't reach ${path}. Farthest path reached was: ${reachedPath.join(
-          '.'
-        )}.`
+          '.',
+        )}.`,
       )
     }
 
     if (checkedNode === null) {
       throw new SpreeSdkMethodFromEndpointPathError(
-        `Path ${path} doesn't exist.`
+        `Path ${path} doesn't exist.`,
       )
     }
 
@@ -50,8 +51,8 @@ const getSpreeSdkMethodFromEndpointPath = <
   ) {
     throw new SpreeSdkMethodFromEndpointPathError(
       `Couldn't reach ${path}. Farthest path reached was: ${reachedPath.join(
-        '.'
-      )}.`
+        '.',
+      )}.`,
     )
   }
 

@@ -57,7 +57,7 @@ export const handler: MutationHook<any> = {
       ctx: {
         item?: T
         wait?: number
-      } = {}
+      } = {},
     ) {
       const { item } = ctx
       const { mutate } = useCart() as any
@@ -89,7 +89,7 @@ export const handler: MutationHook<any> = {
 
           return data
         }, ctx.wait ?? 500),
-        [fetch, mutate]
+        [fetch, mutate],
       )
     },
 }

@@ -23,7 +23,7 @@ export interface OrdercloudConfig extends CommerceAPIConfig {
     method: string,
     resource: string,
     body?: Record<string, unknown>,
-    fetchOptions?: Record<string, any>
+    fetchOptions?: Record<string, any>,
   ) => Promise<T>
   apiVersion: string
   tokenCookie: string
@@ -56,7 +56,7 @@ export type Provider = typeof provider
 export type OrdercloudAPI<P extends Provider = Provider> = CommerceAPI<P | any>
 
 export function getCommerceApi<P extends Provider>(
-  customProvider: P = provider as any
+  customProvider: P = provider as any,
 ): OrdercloudAPI<P> {
   return commerceApi(customProvider as any)
 }

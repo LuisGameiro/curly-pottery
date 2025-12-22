@@ -82,7 +82,7 @@ export default function getAllProductPathsOperation({
       variables: T['variables']
       config?: Partial<BigcommerceConfig>
       preview?: boolean
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getProduct<T extends GetProductOperation>({

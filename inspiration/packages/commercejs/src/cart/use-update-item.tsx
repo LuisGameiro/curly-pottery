@@ -43,7 +43,7 @@ export const handler = {
       ctx: {
         item?: T
         wait?: number
-      } = {}
+      } = {},
     ) => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const { mutate } = useCart() as any
@@ -76,7 +76,7 @@ export const handler = {
           await mutate(cart, false)
           return cart
         }, ctx.wait ?? 500),
-        [mutate, item]
+        [mutate, item],
       )
     },
 }

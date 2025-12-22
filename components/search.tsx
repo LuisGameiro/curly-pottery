@@ -1,43 +1,43 @@
-import cn from 'clsx'
-import Link from 'next/link'
-import { useState } from 'react'
-import { useRouter } from 'next/router'
-import { Layout } from '@components/common'
-import { ProductCard } from '@components/product'
-import { Container, Skeleton } from '@components/ui'
-import rangeMap from '@lib/range-map'
+import cn from "clsx";
+import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { Layout } from "@components/common";
+import { ProductCard } from "@components/product";
+import { Container, Skeleton } from "@components/ui";
+import rangeMap from "@lib/range-map";
 
 const SORT = {
-  'trending-desc': 'Trending',
-  'latest-desc': 'Latest arrivals',
-  'price-asc': 'Price: Low to high',
-  'price-desc': 'Price: High to low',
-}
+  "trending-desc": "Trending",
+  "latest-desc": "Latest arrivals",
+  "price-asc": "Price: Low to high",
+  "price-desc": "Price: High to low",
+};
 
 import {
   filterQuery,
   getCategoryPath,
   getDesignerPath,
   useSearchMeta,
-} from '@lib/search'
-import ErrorMessage from './ui/ErrorMessage'
-import { categories as categoriesData, productsData } from 'api/fakeapi/data'
+} from "@lib/search";
+import ErrorMessage from "./ui/ErrorMessage";
+import { categories as categoriesData, productsData } from "api/fakeapi/data";
 
-export default function Shop( ) {
-  const [activeFilter, setActiveFilter] = useState('')
-  const [toggleFilter, setToggleFilter] = useState(false)
-  
-  const router = useRouter()
-  const { asPath, locale } = router
+export default function Shop() {
+  const [activeFilter, setActiveFilter] = useState("");
+  const [toggleFilter, setToggleFilter] = useState(false);
 
-  const [category, setCategory] = useState(router.query.category || '')
-  const { q, sort } = router.query
+  const router = useRouter();
+  const { asPath, locale } = router;
+
+  const [category, setCategory] = useState(router.query.category || "");
+  const { q, sort } = router.query;
   // `q` can be included but because categories and designers can't be searched
   // in the same way of products, it's better to ignore the search input if one
   // of those is selected
-  const query = filterQuery({ sort })
+  const query = filterQuery({ sort });
 
-  const activeCategory = categories.find((cat: any) => cat.slug === category)
+  const activeCategory = categories.find((cat: any) => cat.slug === category);
   // const activeBrand = brands.find((b: Brand) => b.slug === brand)
 
   // // const { data, error } = useSearch({
@@ -54,12 +54,12 @@ export default function Shop( ) {
 
   const handleClick = (event: any, filter: string) => {
     if (filter !== activeFilter) {
-      setToggleFilter(true)
+      setToggleFilter(true);
     } else {
-      setToggleFilter(!toggleFilter)
+      setToggleFilter(!toggleFilter);
     }
-    setActiveFilter(filter)
-  }
+    setActiveFilter(filter);
+  };
 
   return (
     <Container>
@@ -71,7 +71,7 @@ export default function Shop( ) {
               <span className="rounded-md shadow-xs">
                 <button
                   type="button"
-                  onClick={(e) => handleClick(e, 'categories')}
+                  onClick={(e) => handleClick(e, "categories")}
                   className="flex justify-between w-full rounded-xs border border-accent-3 px-4 py-3 bg-accent-0 text-sm leading-5 font-medium text-accent-4 hover:text-accent-5 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-normal active:bg-accent-1 active:text-accent-8 transition ease-in-out duration-150"
                   id="options-menu"
                   aria-haspopup="true"
@@ -79,7 +79,7 @@ export default function Shop( ) {
                 >
                   {activeCategory?.name
                     ? `Category: ${activeCategory?.name}`
-                    : 'All Categories'}
+                    : "All Categories"}
                   <svg
                     className="-mr-1 ml-2 h-5 w-5"
                     xmlns="http://www.w3.org/2000/svg"
@@ -97,9 +97,9 @@ export default function Shop( ) {
             </div>
             <div
               className={`origin-top-left absolute lg:relative left-0 mt-2 w-full rounded-md shadow-lg lg:shadow-none z-10 mb-10 lg:block ${
-                activeFilter !== 'categories' || toggleFilter !== true
-                  ? 'hidden'
-                  : ''
+                activeFilter !== "categories" || toggleFilter !== true
+                  ? "hidden"
+                  : ""
               }`}
             >
               <div className="rounded-xs shadow-2xs lg:bg-none lg:shadow-none">
@@ -111,21 +111,21 @@ export default function Shop( ) {
                   <ul>
                     <li
                       className={cn(
-                        'block text-sm leading-5 text-accent-4 lg:text-base lg:no-underline lg:font-bold lg:tracking-wide hover:bg-accent-1 lg:hover:bg-transparent hover:text-accent-8 focus:outline-hidden focus:bg-accent-1 focus:text-accent-8',
+                        "block text-sm leading-5 text-accent-4 lg:text-base lg:no-underline lg:font-bold lg:tracking-wide hover:bg-accent-1 lg:hover:bg-transparent hover:text-accent-8 focus:outline-hidden focus:bg-accent-1 focus:text-accent-8",
                         {
                           underline: !activeCategory?.name,
-                        }
+                        },
                       )}
                     >
                       <Link
-                        href={'/'}
+                        href={"/"}
                         // href={{ pathname: getCategoryPath('', brand), query }}
                         legacyBehavior
                       >
                         <a
-                          onClick={(e) => handleClick(e, 'categories')}
+                          onClick={(e) => handleClick(e, "categories")}
                           className={
-                            'block lg:inline-block px-4 py-2 lg:p-0 lg:my-2 lg:mx-4'
+                            "block lg:inline-block px-4 py-2 lg:p-0 lg:my-2 lg:mx-4"
                           }
                         >
                           All Categories
@@ -136,10 +136,10 @@ export default function Shop( ) {
                       <li
                         key={cat.path}
                         className={cn(
-                          'block text-sm leading-5 text-accent-4 hover:bg-accent-1 lg:hover:bg-transparent hover:text-accent-8 focus:outline-hidden focus:bg-accent-1 focus:text-accent-8',
+                          "block text-sm leading-5 text-accent-4 hover:bg-accent-1 lg:hover:bg-transparent hover:text-accent-8 focus:outline-hidden focus:bg-accent-1 focus:text-accent-8",
                           {
                             underline: activeCategory?.id === cat.id,
-                          }
+                          },
                         )}
                       >
                         <Link
@@ -150,9 +150,9 @@ export default function Shop( ) {
                           legacyBehavior
                         >
                           <a
-                            onClick={(e) => handleClick(e, 'categories')}
+                            onClick={(e) => handleClick(e, "categories")}
                             className={
-                              'block lg:inline-block px-4 py-2 lg:p-0 lg:my-2 lg:mx-4'
+                              "block lg:inline-block px-4 py-2 lg:p-0 lg:my-2 lg:mx-4"
                             }
                           >
                             {cat.name}
@@ -165,10 +165,10 @@ export default function Shop( ) {
               </div>
             </div>
           </div>
-          </div>
+        </div>
 
-          {/* Designs */}
-          {/* <div className="relative inline-block w-full">
+        {/* Designs */}
+        {/* <div className="relative inline-block w-full">
             <div className="lg:hidden mt-3">
               <span className="rounded-md shadow-xs">
                 <button
@@ -271,7 +271,6 @@ export default function Shop( ) {
           </div>
         </div> */}
 
-
         {/* Products */}
         <div className="col-span-8 order-3 lg:order-0">
           {/* {(q || activeCategory) && (
@@ -351,13 +350,13 @@ export default function Shop( ) {
               <span className="rounded-md shadow-xs">
                 <button
                   type="button"
-                  onClick={(e) => handleClick(e, 'sort')}
+                  onClick={(e) => handleClick(e, "sort")}
                   className="flex justify-between w-full rounded-xs border border-accent-3 px-4 py-3 bg-accent-0 text-sm leading-5 font-medium text-accent-4 hover:text-accent-5 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-normal active:bg-accent-1 active:text-accent-8 transition ease-in-out duration-150"
                   id="options-menu"
                   aria-haspopup="true"
                   aria-expanded="true"
                 >
-                  {sort ? SORT[sort as keyof typeof SORT] : 'Relevance'}
+                  {sort ? SORT[sort as keyof typeof SORT] : "Relevance"}
                   <svg
                     className="-mr-1 ml-2 h-5 w-5"
                     xmlns="http://www.w3.org/2000/svg"
@@ -375,7 +374,7 @@ export default function Shop( ) {
             </div>
             <div
               className={`origin-top-left absolute lg:relative left-0 mt-2 w-full rounded-md shadow-lg lg:shadow-none z-10 mb-10 lg:block ${
-                activeFilter !== 'sort' || toggleFilter !== true ? 'hidden' : ''
+                activeFilter !== "sort" || toggleFilter !== true ? "hidden" : ""
               }`}
             >
               <div className="rounded-xs shadow-2xs lg:bg-none lg:shadow-none">
@@ -387,22 +386,20 @@ export default function Shop( ) {
                   <ul>
                     <li
                       className={cn(
-                        'block text-sm leading-5 text-accent-4 lg:text-base lg:no-underline lg:font-bold lg:tracking-wide hover:bg-accent-1 lg:hover:bg-transparent hover:text-accent-8 focus:outline-hidden focus:bg-accent-1 focus:text-accent-8',
+                        "block text-sm leading-5 text-accent-4 lg:text-base lg:no-underline lg:font-bold lg:tracking-wide hover:bg-accent-1 lg:hover:bg-transparent hover:text-accent-8 focus:outline-hidden focus:bg-accent-1 focus:text-accent-8",
                         {
                           underline: !sort,
-                        }
+                        },
                       )}
-                    >
-              
-                    </li>
+                    ></li>
                     {Object.entries(SORT).map(([key, text]) => (
                       <li
                         key={key}
                         className={cn(
-                          'block text-sm leading-5 text-accent-4 hover:bg-accent-1 lg:hover:bg-transparent hover:text-accent-8 focus:outline-hidden focus:bg-accent-1 focus:text-accent-8',
+                          "block text-sm leading-5 text-accent-4 hover:bg-accent-1 lg:hover:bg-transparent hover:text-accent-8 focus:outline-hidden focus:bg-accent-1 focus:text-accent-8",
                           {
                             underline: sort === key,
-                          }
+                          },
                         )}
                       >
                         <Link
@@ -413,9 +410,9 @@ export default function Shop( ) {
                           legacyBehavior
                         >
                           <a
-                            onClick={(e) => handleClick(e, 'sort')}
+                            onClick={(e) => handleClick(e, "sort")}
                             className={
-                              'block lg:inline-block px-4 py-2 lg:p-0 lg:my-2 lg:mx-4'
+                              "block lg:inline-block px-4 py-2 lg:p-0 lg:my-2 lg:mx-4"
                             }
                           >
                             {text}
@@ -428,10 +425,10 @@ export default function Shop( ) {
               </div>
             </div>
           </div>
-        </div> 
+        </div>
       </div>
     </Container>
-  )
+  );
 }
 
-Shop.Layout = Layout
+Shop.Layout = Layout;

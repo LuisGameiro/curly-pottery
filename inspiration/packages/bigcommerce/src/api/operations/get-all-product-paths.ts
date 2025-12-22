@@ -26,7 +26,7 @@ export default function getAllProductPathsOperation({
   commerce,
 }: OperationContext<Provider>) {
   async function getAllProductPaths<
-    T extends GetAllProductPathsOperation
+    T extends GetAllProductPathsOperation,
   >(opts?: {
     variables?: T['variables']
     config?: BigcommerceConfig
@@ -36,7 +36,7 @@ export default function getAllProductPathsOperation({
     opts: {
       variables?: T['variables']
       config?: BigcommerceConfig
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getAllProductPaths<T extends GetAllProductPathsOperation>({
@@ -58,7 +58,7 @@ export default function getAllProductPathsOperation({
 
     return {
       products: filterEdges(products as RecursiveRequired<typeof products>).map(
-        ({ node }) => node
+        ({ node }) => node,
       ),
     }
   }

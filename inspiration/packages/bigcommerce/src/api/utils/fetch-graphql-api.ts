@@ -7,7 +7,7 @@ const fetchGraphqlApi: (getConfig: () => BigcommerceConfig) => GraphQLFetcher =
   async (
     query: string,
     { variables, preview } = {},
-    options?: FetchOptions
+    options?: FetchOptions,
   ): Promise<any> => {
     // log.warn(query)
     const config = getConfig()

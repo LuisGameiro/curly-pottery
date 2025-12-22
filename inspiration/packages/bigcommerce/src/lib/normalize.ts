@@ -51,7 +51,7 @@ export function normalizeProduct(productNode: ProductNode): Product {
             ? productOptions.edges.map(normalizeProductOption)
             : [],
           ...rest,
-        })
+        }),
       ) || [],
     options: productOptions?.edges?.map(normalizeProductOption) || [],
     slug: path?.replace(/^\/+|\/+$/g, ''),

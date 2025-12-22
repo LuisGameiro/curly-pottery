@@ -18,7 +18,7 @@ export type PickRequired<T, K extends keyof T> = Omit<T, K> & {
  * Core fetcher added by CommerceProvider
  */
 export type Fetcher<T = any, B = any> = (
-  options: FetcherOptions<B>
+  options: FetcherOptions<B>,
 ) => T | Promise<T>
 
 export type FetcherOptions<Body = any> = {
@@ -32,11 +32,11 @@ export type FetcherOptions<Body = any> = {
 export type HookFetcher<Data, Input = null, Result = any> = (
   options: HookFetcherOptions | null,
   input: Input,
-  fetch: <T = Result, Body = any>(options: FetcherOptions<Body>) => Promise<T>
+  fetch: <T = Result, Body = any>(options: FetcherOptions<Body>) => Promise<T>,
 ) => Data | Promise<Data>
 
 export type HookFetcherFn<H extends HookSchemaBase> = (
-  context: HookFetcherContext<H>
+  context: HookFetcherContext<H>,
 ) => H['data'] | Promise<H['data']>
 
 export type HookFetcherContext<H extends HookSchemaBase> = {
@@ -44,9 +44,9 @@ export type HookFetcherContext<H extends HookSchemaBase> = {
   input: H['fetcherInput']
   fetch: <
     T = H['fetchData'] extends {} | null ? H['fetchData'] : any,
-    B = H['body']
+    B = H['body'],
   >(
-    options: FetcherOptions<B>
+    options: FetcherOptions<B>,
   ) => Promise<T>
 }
 
@@ -63,12 +63,12 @@ export type HookFetchInput = { [k: string]: HookInputValue }
 
 export type HookFunction<
   Input extends { [k: string]: unknown } | undefined,
-  T
+  T,
 > = keyof Input extends never
   ? () => T
   : Partial<Input> extends Input
-  ? (input?: Input) => T
-  : (input: Input) => T
+    ? (input?: Input) => T
+    : (input: Input) => T
 
 export type HookSchemaBase = {
   // Data obj returned by the hook
@@ -100,7 +100,7 @@ export type MutationSchemaBase = HookSchemaBase & {
  */
 export type SWRHook<H extends SWRHookSchemaBase> = {
   useHook(
-    context: SWRHookContext<H>
+    context: SWRHookContext<H>,
   ): HookFunction<
     H['input'] & { swrOptions?: SwrOptions<H['data'], H['fetcherInput']> },
     ResponseState<H['data']> & H['swrState'] & H['mutations']
@@ -121,7 +121,7 @@ export type SWRHookContext<H extends SWRHookSchemaBase> = {
  */
 export type MutationHook<H extends MutationSchemaBase> = {
   useHook(
-    context: MutationHookContext<H>
+    context: MutationHookContext<H>,
   ): HookFunction<
     H['input'],
     HookFunction<H['actionInput'], H['data'] | Promise<H['data']>>
@@ -134,10 +134,12 @@ export type MutationHookContext<H extends MutationSchemaBase> = {
   fetch: keyof H['fetcherInput'] extends never
     ? () => H['data'] | Promise<H['data']>
     : Partial<H['fetcherInput']> extends H['fetcherInput']
-    ? (context?: {
-        input?: H['fetcherInput']
-      }) => H['data'] | Promise<H['data']>
-    : (context: { input: H['fetcherInput'] }) => H['data'] | Promise<H['data']>
+      ? (context?: {
+          input?: H['fetcherInput']
+        }) => H['data'] | Promise<H['data']>
+      : (context: {
+          input: H['fetcherInput']
+        }) => H['data'] | Promise<H['data']>
 }
 
 export type SwrOptions<Data, Input = null, Result = any> = SWRConfiguration<

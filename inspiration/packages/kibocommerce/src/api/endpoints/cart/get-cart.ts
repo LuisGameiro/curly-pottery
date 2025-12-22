@@ -27,7 +27,7 @@ const getCart: CartEndpoint['handlers']['getCart'] = async ({
     let result = await config.fetch(
       getCartQuery,
       {},
-      { headers: { 'x-vol-user-claims': accessToken } }
+      { headers: { 'x-vol-user-claims': accessToken } },
     )
     currentCart = result?.data?.currentCart
     headers = cookieHandler.headers

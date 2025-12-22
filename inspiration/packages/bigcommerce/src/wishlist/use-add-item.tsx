@@ -35,7 +35,7 @@ export const handler: MutationHook<AddItemHook> = {
           await mutate()
           return data
         },
-        [fetch, mutate, customer]
+        [fetch, mutate, customer],
       )
     },
 }

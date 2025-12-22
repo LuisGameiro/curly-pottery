@@ -1,31 +1,31 @@
-import { cn } from '@lib/utils'
-import s from './Marquee.module.css'
-import { FC, ReactNode, Component,Children } from 'react'
-import { default as FastMarquee } from 'react-fast-marquee'
+import { cn } from "@lib/utils";
+import s from "./Marquee.module.css";
+import { FC, ReactNode, Component, Children } from "react";
+import { default as FastMarquee } from "react-fast-marquee";
 
 interface MarqueeProps {
-  className?: string
-  children?: ReactNode[] | Component[] | any[]
-  variant?: 'primary' | 'secondary'
+  className?: string;
+  children?: ReactNode[] | Component[] | any[];
+  variant?: "primary" | "secondary";
 }
 
 const Marquee: FC<MarqueeProps> = ({
   children = [],
-  className = '',
-  variant = 'primary',
+  className = "",
+  variant = "primary",
 }) => {
   const rootClassName = cn(
     s.root,
     {
-      [s.primary]: variant === 'primary',
-      [s.secondary]: variant === 'secondary',
+      [s.primary]: variant === "primary",
+      [s.secondary]: variant === "secondary",
     },
-    className
-  )
+    className,
+  );
 
   return (
     <FastMarquee gradient={false} className={rootClassName} autoFill={true}>
-      {Children.map(children, (child:Children) => ({
+      {Children.map(children, (child: Children) => ({
         ...child,
         props: {
           ...child.props,
@@ -33,7 +33,7 @@ const Marquee: FC<MarqueeProps> = ({
         },
       }))}
     </FastMarquee>
-  )
-}
+  );
+};
 
-export default Marquee
+export default Marquee;

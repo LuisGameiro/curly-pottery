@@ -18,7 +18,7 @@ const fetcher: Fetcher = async ({
         Authorization: `JWT ${token}`,
         'Content-Type': 'application/json',
       },
-    })
+    }),
   )
 }
 

@@ -1,46 +1,43 @@
-import { FC } from 'react'
-import Link from 'next/link'
-import Image, { ImageProps } from 'next/image'
-import { Category } from '@lib/types/category'
+import { FC } from "react";
+import Link from "next/link";
+import Image, { ImageProps } from "next/image";
+import { Category } from "@lib/types/category";
 
 interface Props {
-  className?: string
-  cat: Category
-  noNameTag?: boolean
-  imgProps?: Omit<ImageProps, 'src' | 'layout' | 'placeholder' | 'blurDataURL'>
+  className?: string;
+  cat: Category;
+  noNameTag?: boolean;
+  imgProps?: Omit<ImageProps, "src" | "layout" | "placeholder" | "blurDataURL">;
 }
 
-const placeholderImg = '/product-img-placeholder.svg'
+const placeholderImg = "/product-img-placeholder.svg";
 
-const CategoriesCard: FC<Props> = ({
-  cat,
-  imgProps,
-}) => {
+const CategoriesCard: FC<Props> = ({ cat, imgProps }) => {
   if (!cat) return null;
   return (
     <Link
       href={`/shop/category?=${cat?.name}`}
       aria-label={cat?.name}
       className="relative block h-full w-full overflow-hidden"
-      >
-
+    >
       {cat.image && (
         <Image
           quality="100"
           src={cat.image || placeholderImg}
-          alt={cat.name || 'Product Image'}
+          alt={cat.name || "Product Image"}
           height={320}
           width={320}
           {...imgProps}
         />
       )}
 
-  <div className="absolute inset-0 z-20 flex items-center justify-center">
-    <h1 className=" bg-accent-3/60 text-2xl px-5 py-1 text-center">        
-      {cat.name}</h1>
+      <div className="absolute inset-0 z-20 flex items-center justify-center">
+        <h1 className=" bg-accent-3/60 text-2xl px-5 py-1 text-center">
+          {cat.name}
+        </h1>
       </div>
     </Link>
-  )
-}
+  );
+};
 
-export default CategoriesCard
+export default CategoriesCard;

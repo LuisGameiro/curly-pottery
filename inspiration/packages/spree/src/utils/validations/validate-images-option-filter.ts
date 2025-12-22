@@ -1,5 +1,5 @@
 const validateImagesOptionFilter = (
-  optionTypeNameOrFalse: unknown
+  optionTypeNameOrFalse: unknown,
 ): string | false => {
   if (!optionTypeNameOrFalse || optionTypeNameOrFalse === 'false') {
     return false

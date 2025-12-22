@@ -60,7 +60,7 @@ export const transformRequest = (req: NextApiRequest) => {
  * @returns Headers
  */
 export const transformHeaders = (
-  headers: Record<string, string | number | string[]> | Headers = {}
+  headers: Record<string, string | number | string[]> | Headers = {},
 ) => {
   if (headers instanceof Headers) {
     return headers
@@ -77,7 +77,7 @@ export const transformHeaders = (
 
 export const setHeaders = (
   res: NextApiResponse,
-  headers: Record<string, string | number | string[]> | Headers = {}
+  headers: Record<string, string | number | string[]> | Headers = {},
 ) => {
   if (headers instanceof Headers) {
     headers.forEach((value, key) => {

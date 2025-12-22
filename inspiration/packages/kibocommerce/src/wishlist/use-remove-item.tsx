@@ -34,7 +34,7 @@ export const handler: MutationHook<RemoveItemHook> = {
           await mutate()
           return data
         },
-        [fetch, mutate, customer]
+        [fetch, mutate, customer],
       )
     },
 }

@@ -13,11 +13,11 @@ const isomorphicConfig = {
   defaultLocale: process.env.NEXT_PUBLIC_SPREE_DEFAULT_LOCALE,
   cartCookieName: process.env.NEXT_PUBLIC_SPREE_CART_COOKIE_NAME,
   cartCookieExpire: validateCookieExpire(
-    process.env.NEXT_PUBLIC_SPREE_CART_COOKIE_EXPIRE
+    process.env.NEXT_PUBLIC_SPREE_CART_COOKIE_EXPIRE,
   ),
   userCookieName: process.env.NEXT_PUBLIC_SPREE_USER_COOKIE_NAME,
   userCookieExpire: validateCookieExpire(
-    process.env.NEXT_PUBLIC_SPREE_CART_COOKIE_EXPIRE
+    process.env.NEXT_PUBLIC_SPREE_CART_COOKIE_EXPIRE,
   ),
   imageHost: process.env.NEXT_PUBLIC_SPREE_IMAGE_HOST,
   categoriesTaxonomyPermalink:
@@ -25,25 +25,25 @@ const isomorphicConfig = {
   brandsTaxonomyPermalink:
     process.env.NEXT_PUBLIC_SPREE_BRANDS_TAXONOMY_PERMALINK,
   allProductsTaxonomyId: validateAllProductsTaxonomyId(
-    process.env.NEXT_PUBLIC_SPREE_ALL_PRODUCTS_TAXONOMY_ID
+    process.env.NEXT_PUBLIC_SPREE_ALL_PRODUCTS_TAXONOMY_ID,
   ),
   showSingleVariantOptions:
     process.env.NEXT_PUBLIC_SPREE_SHOW_SINGLE_VARIANT_OPTIONS === 'true',
   lastUpdatedProductsPrerenderCount: validateProductsPrerenderCount(
-    process.env.NEXT_PUBLIC_SPREE_LAST_UPDATED_PRODUCTS_PRERENDER_COUNT
+    process.env.NEXT_PUBLIC_SPREE_LAST_UPDATED_PRODUCTS_PRERENDER_COUNT,
   ),
   productPlaceholderImageUrl: validatePlaceholderImageUrl(
-    process.env.NEXT_PUBLIC_SPREE_PRODUCT_PLACEHOLDER_IMAGE_URL
+    process.env.NEXT_PUBLIC_SPREE_PRODUCT_PLACEHOLDER_IMAGE_URL,
   ),
   lineItemPlaceholderImageUrl: validatePlaceholderImageUrl(
-    process.env.NEXT_PUBLIC_SPREE_LINE_ITEM_PLACEHOLDER_IMAGE_URL
+    process.env.NEXT_PUBLIC_SPREE_LINE_ITEM_PLACEHOLDER_IMAGE_URL,
   ),
   imagesOptionFilter: validateImagesOptionFilter(
-    process.env.NEXT_PUBLIC_SPREE_IMAGES_OPTION_FILTER
+    process.env.NEXT_PUBLIC_SPREE_IMAGES_OPTION_FILTER,
   ),
   imagesSize: validateImagesSize(process.env.NEXT_PUBLIC_SPREE_IMAGES_SIZE),
   imagesQuality: validateImagesQuality(
-    process.env.NEXT_PUBLIC_SPREE_IMAGES_QUALITY
+    process.env.NEXT_PUBLIC_SPREE_IMAGES_QUALITY,
   ),
   loginAfterSignup: process.env.NEXT_PUBLIC_SPREE_LOGIN_AFTER_SIGNUP === 'true',
 }
@@ -70,7 +70,7 @@ export default forceIsomorphicConfigValues(
     'imagesSize',
     'imagesQuality',
     'loginAfterSignup',
-  ]
+  ],
 )
 
 type IsomorphicConfig = typeof isomorphicConfig

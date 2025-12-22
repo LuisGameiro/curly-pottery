@@ -33,7 +33,7 @@ export const handler: MutationHook<LogoutHook> = {
           await mutate(null, false)
           return data
         },
-        [fetch, mutate]
+        [fetch, mutate],
       )
     },
 }

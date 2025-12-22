@@ -23,7 +23,7 @@ export const handler: MutationHook<RemoveItemHook> = {
       'input: ',
       input,
       'options: ',
-      options
+      options,
     )
 
     const { itemId, wishlistToken } = input
@@ -66,7 +66,7 @@ export const handler: MutationHook<RemoveItemHook> = {
 
           return data
         },
-        [wishlist]
+        [wishlist],
       )
     }
 

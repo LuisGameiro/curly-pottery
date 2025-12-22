@@ -1,6 +1,6 @@
 "use server";
 
-import { put, del} from "@vercel/blob";
+import { put, del } from "@vercel/blob";
 export async function uploadImages(formData: FormData) {
   const files = formData.getAll("files") as File[];
 
@@ -18,11 +18,11 @@ export async function uploadImages(formData: FormData) {
         {
           access: "public",
           contentType: file.type,
-        }
+        },
       );
 
       return blob.url;
-    })
+    }),
   );
 
   return uploads.filter(Boolean) as string[];

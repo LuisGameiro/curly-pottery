@@ -7,13 +7,13 @@ const validateImagesQuality = (quality: unknown): number => {
     quality_level = quality
   } else {
     throw new TypeError(
-      'prerenderCount count must be a string containing a number or an integer.'
+      'prerenderCount count must be a string containing a number or an integer.',
     )
   }
 
   if (quality_level === NaN) {
     throw new TypeError(
-      'prerenderCount count must be a string containing a number or an integer.'
+      'prerenderCount count must be a string containing a number or an integer.',
     )
   }
 

@@ -129,55 +129,55 @@ export const UIProvider: FC<{ children?: ReactNode }> = (props) => {
 
   const openSidebar = useCallback(
     () => dispatch({ type: 'OPEN_SIDEBAR' }),
-    [dispatch]
+    [dispatch],
   )
   const closeSidebar = useCallback(
     () => dispatch({ type: 'CLOSE_SIDEBAR' }),
-    [dispatch]
+    [dispatch],
   )
   const toggleSidebar = useCallback(
     () =>
       state.displaySidebar
         ? dispatch({ type: 'CLOSE_SIDEBAR' })
         : dispatch({ type: 'OPEN_SIDEBAR' }),
-    [dispatch, state.displaySidebar]
+    [dispatch, state.displaySidebar],
   )
   const closeSidebarIfPresent = useCallback(
     () => state.displaySidebar && dispatch({ type: 'CLOSE_SIDEBAR' }),
-    [dispatch, state.displaySidebar]
+    [dispatch, state.displaySidebar],
   )
 
   const openDropdown = useCallback(
     () => dispatch({ type: 'OPEN_DROPDOWN' }),
-    [dispatch]
+    [dispatch],
   )
   const closeDropdown = useCallback(
     () => dispatch({ type: 'CLOSE_DROPDOWN' }),
-    [dispatch]
+    [dispatch],
   )
 
   const openModal = useCallback(
     () => dispatch({ type: 'OPEN_MODAL' }),
-    [dispatch]
+    [dispatch],
   )
   const closeModal = useCallback(
     () => dispatch({ type: 'CLOSE_MODAL' }),
-    [dispatch]
+    [dispatch],
   )
 
   const setUserAvatar = useCallback(
     (value: string) => dispatch({ type: 'SET_USER_AVATAR', value }),
-    [dispatch]
+    [dispatch],
   )
 
   const setModalView = useCallback(
     (view: MODAL_VIEWS) => dispatch({ type: 'SET_MODAL_VIEW', view }),
-    [dispatch]
+    [dispatch],
   )
 
   const setSidebarView = useCallback(
     (view: SIDEBAR_VIEWS) => dispatch({ type: 'SET_SIDEBAR_VIEW', view }),
-    [dispatch]
+    [dispatch],
   )
 
   const value = useMemo(
@@ -196,7 +196,7 @@ export const UIProvider: FC<{ children?: ReactNode }> = (props) => {
       setUserAvatar,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [state]
+    [state],
   )
 
   return <UIContext.Provider value={value} {...props} />

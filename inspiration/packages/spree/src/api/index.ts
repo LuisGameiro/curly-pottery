@@ -39,7 +39,7 @@ export type SpreeApi<P extends SpreeApiProvider = SpreeApiProvider> =
   CommerceAPI<P>
 
 export function getCommerceApi<P extends SpreeApiProvider>(
-  customProvider: P = provider as any
+  customProvider: P = provider as any,
 ): SpreeApi<P> {
   return commerceApi(customProvider)
 }

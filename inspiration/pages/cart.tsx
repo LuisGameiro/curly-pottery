@@ -37,13 +37,13 @@ export default function Cart() {
     data && {
       amount: Number(data.subtotalPrice),
       currencyCode: data.currency.code,
-    }
+    },
   )
   const { price: total } = usePrice(
     data && {
       amount: Number(data.totalPrice),
       currencyCode: data.currency.code,
-    }
+    },
   )
 
   const goToCheckout = () => {

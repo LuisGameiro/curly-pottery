@@ -31,18 +31,18 @@ const imagesOptionFilter = requireConfigValue('imagesOptionFilter') as
 
 const normalizeProduct = (
   spreeSuccessResponse: SpreeSdkResponse,
-  spreeProduct: ProductAttr
+  spreeProduct: ProductAttr,
 ): Product => {
   const spreePrimaryVariant =
     jsonApi.findSingleRelationshipDocument<VariantAttr>(
       spreeSuccessResponse,
       spreeProduct,
-      'primary_variant'
+      'primary_variant',
     )
 
   if (spreePrimaryVariant === null) {
     throw new MissingPrimaryVariantError(
-      `Couldn't find primary variant for product with id ${spreeProduct.id}.`
+      `Couldn't find primary variant for product with id ${spreeProduct.id}.`,
     )
   }
 
@@ -65,7 +65,7 @@ const normalizeProduct = (
   const spreeVariantRecords = jsonApi.findRelationshipDocuments(
     spreeSuccessResponse,
     spreeProduct,
-    'variants'
+    'variants',
   )
 
   // Use variants with option values if available. Fall back to
@@ -83,7 +83,7 @@ const normalizeProduct = (
         const spreeOptionValues = jsonApi.findRelationshipDocuments(
           spreeSuccessResponse,
           spreeVariantRecord,
-          'option_values'
+          'option_values',
         )
 
         // Only include options which are used by variants.
@@ -92,13 +92,13 @@ const normalizeProduct = (
           variantOptions = expandOptions(
             spreeSuccessResponse,
             spreeOptionValue,
-            variantOptions
+            variantOptions,
           )
 
           options = expandOptions(
             spreeSuccessResponse,
             spreeOptionValue,
-            options
+            options,
           )
         })
       }
@@ -108,13 +108,13 @@ const normalizeProduct = (
         sku: spreeVariantRecord.attributes.sku || spreeVariantRecord.id,
         options: variantOptions,
       }
-    }
+    },
   )
 
   const spreePrimaryVariantImageRecords = jsonApi.findRelationshipDocuments(
     spreeSuccessResponse,
     spreePrimaryVariant,
-    'images'
+    'images',
   )
 
   let spreeVariantImageRecords: JsonApiDocument[]
@@ -127,28 +127,28 @@ const normalizeProduct = (
           ...jsonApi.findRelationshipDocuments(
             spreeSuccessResponse,
             spreeVariantRecord,
-            'images'
+            'images',
           ),
         ]
       },
-      []
+      [],
     )
   } else {
     const spreeOptionTypes = jsonApi.findRelationshipDocuments(
       spreeSuccessResponse,
       spreeProduct,
-      'option_types'
+      'option_types',
     )
 
     const imagesFilterOptionType = spreeOptionTypes.find(
       (spreeOptionType) =>
-        spreeOptionType.attributes.name === imagesOptionFilter
+        spreeOptionType.attributes.name === imagesOptionFilter,
     )
 
     if (!imagesFilterOptionType) {
       console.warn(
         `Couldn't find option type having name ${imagesOptionFilter} for product with id ${spreeProduct.id}.` +
-          ' Showing no images for this product.'
+          ' Showing no images for this product.',
       )
 
       spreeVariantImageRecords = []
@@ -167,19 +167,19 @@ const normalizeProduct = (
                 imagesFilterOptionType.relationships.option_values.data.some(
                   (filterOptionTypeValueIdentifier: RelationType) =>
                     filterOptionTypeValueIdentifier.id ===
-                    spreeVariantOptionValuesIdentifier.id
-                )
+                    spreeVariantOptionValuesIdentifier.id,
+                ),
             )
 
           if (!spreeOptionValueOfFilterTypeIdentifier) {
             throw new MissingOptionValueError(
-              `Couldn't find option value related to option type with id ${imagesOptionTypeFilterId}.`
+              `Couldn't find option value related to option type with id ${imagesOptionTypeFilterId}.`,
             )
           }
 
           const optionValueImagesAlreadyIncluded =
             includedOptionValuesImagesIds.includes(
-              spreeOptionValueOfFilterTypeIdentifier.id
+              spreeOptionValueOfFilterTypeIdentifier.id,
             )
 
           if (optionValueImagesAlreadyIncluded) {
@@ -187,7 +187,7 @@ const normalizeProduct = (
           }
 
           includedOptionValuesImagesIds.push(
-            spreeOptionValueOfFilterTypeIdentifier.id
+            spreeOptionValueOfFilterTypeIdentifier.id,
           )
 
           return [
@@ -195,11 +195,11 @@ const normalizeProduct = (
             ...jsonApi.findRelationshipDocuments(
               spreeSuccessResponse,
               spreeVariantRecord,
-              'images'
+              'images',
             ),
           ]
         },
-        []
+        [],
       )
     }
   }
@@ -211,7 +211,7 @@ const normalizeProduct = (
 
   const productImages = getMediaGallery(
     spreeImageRecords,
-    createGetAbsoluteImageUrl(requireConfigValue('imageHost') as string)
+    createGetAbsoluteImageUrl(requireConfigValue('imageHost') as string),
   )
 
   const images: Image[] =

@@ -2,7 +2,7 @@ import type { Product } from '@vercel/commerce/types/product'
 import type { CommercejsProduct, CommercejsVariant } from '../types'
 
 function getOptionsFromVariantGroups(
-  variantGroups: CommercejsProduct['variant_groups']
+  variantGroups: CommercejsProduct['variant_groups'],
 ): Product['options'] {
   const optionsFromVariantGroups = variantGroups.map(
     ({ id, name: variantName, options }) => ({
@@ -11,14 +11,14 @@ function getOptionsFromVariantGroups(
       values: options.map(({ name: optionName }) => ({
         label: optionName,
       })),
-    })
+    }),
   )
   return optionsFromVariantGroups
 }
 
 function normalizeVariants(
   variants: Array<CommercejsVariant> = [],
-  variantGroups: CommercejsProduct['variant_groups']
+  variantGroups: CommercejsProduct['variant_groups'],
 ) {
   if (!Array.isArray(variants)) return []
   return variants?.map((variant) => ({
@@ -27,10 +27,10 @@ function normalizeVariants(
     options: Object.entries(variant.options).map(
       ([variantGroupId, variantOptionId]) => {
         const variantGroupFromId = variantGroups.find(
-          (group) => group.id === variantGroupId
+          (group) => group.id === variantGroupId,
         )
         const valueLabel = variantGroupFromId?.options.find(
-          (option) => option.id === variantOptionId
+          (option) => option.id === variantOptionId,
         )?.name
 
         return {
@@ -43,14 +43,14 @@ function normalizeVariants(
             },
           ],
         }
-      }
+      },
     ),
   }))
 }
 
 export function normalizeProduct(
   commercejsProduct: CommercejsProduct,
-  commercejsProductVariants: Array<CommercejsVariant> = []
+  commercejsProductVariants: Array<CommercejsVariant> = [],
 ): Product {
   const { id, name, description, permalink, assets, price, variant_groups } =
     commercejsProduct
@@ -73,7 +73,7 @@ export function normalizeProduct(
     },
     variants: normalizeVariants(
       commercejsProductVariants,
-      variant_groups || []
+      variant_groups || [],
     ),
     options: variant_groups ? getOptionsFromVariantGroups(variant_groups) : [],
   }

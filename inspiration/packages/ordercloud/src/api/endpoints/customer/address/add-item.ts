@@ -29,7 +29,7 @@ const addItem: CustomerAddressEndpoint['handlers']['addItem'] = async ({
     {
       ShippingAddressID: address,
     },
-    { token }
+    { token },
   )
 
   return { data: null }

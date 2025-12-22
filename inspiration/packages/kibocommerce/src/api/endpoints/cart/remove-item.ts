@@ -21,7 +21,7 @@ const removeItem: CartEndpoint['handlers']['removeItem'] = async ({
     {
       variables: { id: itemId },
     },
-    { headers: { 'x-vol-user-claims': accessToken } }
+    { headers: { 'x-vol-user-claims': accessToken } },
   )
 
   let currentCart = null
@@ -29,7 +29,7 @@ const removeItem: CartEndpoint['handlers']['removeItem'] = async ({
     let result = await config.fetch(
       getCartQuery,
       {},
-      { headers: { 'x-vol-user-claims': accessToken } }
+      { headers: { 'x-vol-user-claims': accessToken } },
     )
     currentCart = result?.data?.currentCart
   }

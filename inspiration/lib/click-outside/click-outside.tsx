@@ -78,7 +78,7 @@ const ClickOutside: FC<ClickOutsideProps> = forwardRef(
     return React.cloneElement(child, {
       ref: mergeRefs([composedRefCallback, innerRef, forwardedRef]),
     })
-  }
+  },
 )
 
 ClickOutside.displayName = 'ClickOutside'

@@ -2,35 +2,35 @@ export interface Discount {
   /**
    * The value of the discount, can be an amount or percentage.
    */
-  value: number
+  value: number;
 }
 
 export interface Measurement {
   /**
    * The measurement's value.
    */
-  value: number
+  value: number;
   /**
    * The measurement's unit, such as "KILOGRAMS", "GRAMS", "POUNDS" & "OOUNCES".
    */
-  unit: 'KILOGRAMS' | 'GRAMS' | 'POUNDS' | 'OUNCES'
+  unit: "KILOGRAMS" | "GRAMS" | "POUNDS" | "OUNCES";
 }
 
 export interface Image {
   /**
    * The URL of the image.
    */
-  url: string
+  url: string;
   /**
    * A word or phrase that describes the content of an image.
    */
-  alt?: string
+  alt?: string;
   /**
    * The image's width.
    */
-  width?: number
+  width?: number;
   /**
    * The image's height.
    */
-  height?: number
+  height?: number;
 }

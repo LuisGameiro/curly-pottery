@@ -22,7 +22,7 @@ export type UseData = <H extends SWRHookSchemaBase>(
   },
   input: HookFetchInput | HookSWRInput,
   fetcherFn: Fetcher,
-  swrOptions?: SwrOptions<H['data'], H['fetcherInput']>
+  swrOptions?: SwrOptions<H['data'], H['fetcherInput']>,
 ) => ResponseState<H['data']>
 
 const useData: UseData = (options, input, fetcherFn, swrOptions) => {
@@ -60,7 +60,7 @@ const useData: UseData = (options, input, fetcherFn, swrOptions) => {
         : null
     },
     fetcher,
-    swrOptions
+    swrOptions,
   )
 
   if (!('isLoading' in response)) {

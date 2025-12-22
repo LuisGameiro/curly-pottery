@@ -45,6 +45,6 @@ export async function getAllCategories() {
   return categoriesRaw.map((cat) => ({
     ...cat,
     createdAt: cat.createdAt.toISOString(), // Convert Date to String
-    updatedAt: cat.updatedAt.toISOString(), 
+    updatedAt: cat.updatedAt.toISOString(),
   }));
 }

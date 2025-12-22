@@ -29,7 +29,7 @@ export const handler: MutationHook<AddItemHook> = {
       'input: ',
       input,
       'options: ',
-      options
+      options,
     )
 
     const { quantity, productId, variantId } = input
@@ -53,9 +53,8 @@ export const handler: MutationHook<AddItemHook> = {
     }
 
     if (!token) {
-      const { data: spreeCartCreateSuccessResponse } = await createEmptyCart(
-        fetch
-      )
+      const { data: spreeCartCreateSuccessResponse } =
+        await createEmptyCart(fetch)
 
       setCartToken(spreeCartCreateSuccessResponse.data.attributes.token)
       token = ensureIToken()
@@ -79,7 +78,7 @@ export const handler: MutationHook<AddItemHook> = {
 
         if (!isLoggedIn()) {
           setCartToken(
-            spreeRetroactiveCartCreateSuccessResponse.data.attributes.token
+            spreeRetroactiveCartCreateSuccessResponse.data.attributes.token,
           )
         }
 
@@ -88,7 +87,7 @@ export const handler: MutationHook<AddItemHook> = {
 
         return normalizeCart(
           spreeRetroactiveCartCreateSuccessResponse,
-          spreeRetroactiveCartCreateSuccessResponse.data
+          spreeRetroactiveCartCreateSuccessResponse.data,
         )
       }
 
@@ -109,7 +108,7 @@ export const handler: MutationHook<AddItemHook> = {
 
           return data
         },
-        [mutate]
+        [mutate],
       )
     }
 

@@ -10,7 +10,7 @@ export type RootNode<T extends HasParent> = {
 
 export function arrayToTree<T extends HasParent>(
   nodes: T[],
-  currentState?: RootNode<T>
+  currentState?: RootNode<T>,
 ): RootNode<T> {
   const topLevelNodes: Array<TreeNode<T>> = []
   const mappedArr: { [id: string]: TreeNode<T> } = {}
@@ -53,7 +53,7 @@ export function arrayToTree<T extends HasParent>(
  * tree.
  */
 function treeToMap<T extends HasParent>(
-  tree?: RootNode<T>
+  tree?: RootNode<T>,
 ): Map<string, TreeNode<T>> {
   const nodeMap = new Map<string, TreeNode<T>>()
   function visit(node: TreeNode<T>) {

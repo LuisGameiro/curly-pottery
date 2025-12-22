@@ -56,7 +56,7 @@ const Text: FunctionComponent<TextProps> = ({
           [s.pageHeading]: variant === 'pageHeading',
           [s.sectionHeading]: variant === 'sectionHeading',
         },
-        className
+        className,
       )}
       onClick={onClick}
       style={style}

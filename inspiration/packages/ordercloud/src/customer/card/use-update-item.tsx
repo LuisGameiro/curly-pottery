@@ -46,7 +46,7 @@ export const handler: MutationHook<any> = {
 
           return data
         },
-        [fetch, mutate]
+        [fetch, mutate],
       )
     },
 }

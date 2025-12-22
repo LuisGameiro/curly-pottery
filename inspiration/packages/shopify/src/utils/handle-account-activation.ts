@@ -10,7 +10,7 @@ import { customerActivateByUrlMutation } from './mutations'
 
 const handleAccountActivation = async (
   fetch: <T = any, B = Body>(options: FetcherOptions<B>) => Promise<T>,
-  input: MutationCustomerActivateByUrlArgs
+  input: MutationCustomerActivateByUrlArgs,
 ) => {
   try {
     const { customerActivateByUrl } = await fetch<

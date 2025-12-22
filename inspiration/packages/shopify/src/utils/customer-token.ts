@@ -5,7 +5,7 @@ export const getCustomerToken = () => Cookies.get(SHOPIFY_CUSTOMER_TOKEN_COOKIE)
 
 export const setCustomerToken = (
   token: string | null,
-  options?: CookieAttributes
+  options?: CookieAttributes,
 ) => {
   if (!token) {
     Cookies.remove(SHOPIFY_CUSTOMER_TOKEN_COOKIE)
@@ -15,7 +15,7 @@ export const setCustomerToken = (
       token,
       options ?? {
         expires: SHOPIFY_COOKIE_EXPIRE,
-      }
+      },
     )
   }
 }

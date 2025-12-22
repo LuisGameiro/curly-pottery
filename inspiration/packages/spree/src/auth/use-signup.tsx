@@ -26,7 +26,7 @@ export const handler: MutationHook<SignupHook> = {
       'input: ',
       input,
       'options: ',
-      options
+      options,
     )
 
     const { email, password } = input
@@ -87,7 +87,7 @@ export const handler: MutationHook<SignupHook> = {
 
           return data
         },
-        [customer, cart, wishlist]
+        [customer, cart, wishlist],
       )
     }
 

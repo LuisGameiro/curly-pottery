@@ -21,7 +21,7 @@ export const handler: MutationHook<LogoutHook> = {
         await mutate(null, false)
         return null
       },
-      [mutate]
+      [mutate],
     )
   },
 }

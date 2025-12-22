@@ -7,7 +7,7 @@ const fetchGraphqlApi: (getConfig: () => SFCCConfig) => GraphQLFetcher =
   async (
     query: string,
     { variables, preview } = {},
-    options?: FetchOptions
+    options?: FetchOptions,
   ) => {
     const config = getConfig()
     const res = await fetch(config.commerceUrl, {

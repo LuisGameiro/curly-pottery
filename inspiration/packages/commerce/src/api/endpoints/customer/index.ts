@@ -24,7 +24,7 @@ const customerEndpoint: GetAPISchema<
         output,
         z.object({
           customer: customerSchema,
-        })
+        }),
       )
     : { status: 204 }
 }

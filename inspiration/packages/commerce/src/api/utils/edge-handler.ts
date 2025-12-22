@@ -6,7 +6,7 @@ import { transformHeaders } from '.'
 
 export default function edgeHandler<P extends APIProvider>(
   commerce: CommerceAPI<P>,
-  endpoints: Record<string, (commerce: CommerceAPI<P>) => EndpointHandler>
+  endpoints: Record<string, (commerce: CommerceAPI<P>) => EndpointHandler>,
 ) {
   const endpointsKeys = Object.keys(endpoints)
 
@@ -15,7 +15,7 @@ export default function edgeHandler<P extends APIProvider>(
       Object.assign(acc, {
         [endpoint]: endpoints[endpoint](commerce),
       }),
-    {}
+    {},
   )
 
   return async (req: NextRequest) => {
@@ -34,8 +34,8 @@ export default function edgeHandler<P extends APIProvider>(
       if (!endpointsKeys.includes(endpoint)) {
         throw new Error(
           `Endpoint "${endpoint}" not implemented. Please use one of the available api endpoints: ${endpointsKeys.join(
-            ', '
-          )}`
+            ', ',
+          )}`,
         )
       }
 

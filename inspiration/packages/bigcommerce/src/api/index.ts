@@ -40,7 +40,7 @@ export interface BigcommerceConfig extends CommerceAPIConfig {
       method?: string
       body?: any
       headers?: HeadersInit
-    }
+    },
   ): Promise<T>
 }
 
@@ -56,19 +56,19 @@ const STOREFRONT_HASH = process.env.BIGCOMMERCE_STORE_API_STORE_HASH
 
 if (!API_URL) {
   throw new Error(
-    `The environment variable BIGCOMMERCE_STOREFRONT_API_URL is missing and it's required to access your store`
+    `The environment variable BIGCOMMERCE_STOREFRONT_API_URL is missing and it's required to access your store`,
   )
 }
 
 if (!API_TOKEN) {
   throw new Error(
-    `The environment variable BIGCOMMERCE_STOREFRONT_API_TOKEN is missing and it's required to access your store`
+    `The environment variable BIGCOMMERCE_STOREFRONT_API_TOKEN is missing and it's required to access your store`,
   )
 }
 
 if (!(STORE_API_URL && STORE_API_TOKEN && STORE_API_CLIENT_ID)) {
   throw new Error(
-    `The environment variables BIGCOMMERCE_STORE_API_URL, BIGCOMMERCE_STORE_API_TOKEN, BIGCOMMERCE_STORE_API_CLIENT_ID have to be set in order to access the REST API of your store`
+    `The environment variables BIGCOMMERCE_STORE_API_URL, BIGCOMMERCE_STORE_API_TOKEN, BIGCOMMERCE_STORE_API_CLIENT_ID have to be set in order to access the REST API of your store`,
   )
 }
 
@@ -120,7 +120,7 @@ export type APIs =
 export type BigcommerceAPI<P extends Provider = Provider> = CommerceAPI<P>
 
 export function getCommerceApi<P extends Provider>(
-  customProvider: P = provider as any
+  customProvider: P = provider as any,
 ): BigcommerceAPI<P> {
   return commerceApi(customProvider)
 }

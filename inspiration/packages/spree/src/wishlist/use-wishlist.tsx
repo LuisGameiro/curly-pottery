@@ -25,7 +25,7 @@ export const handler: SWRHook<GetWishlistHook> = {
       'input: ',
       input,
       'options: ',
-      options
+      options,
     )
 
     if (!isLoggedIn()) {
@@ -63,12 +63,12 @@ export const handler: SWRHook<GetWishlistHook> = {
 
     return normalizeWishlist(
       spreeWishlistsDefaultSuccessResponse,
-      spreeWishlistsDefaultSuccessResponse.data
+      spreeWishlistsDefaultSuccessResponse.data,
     )
   },
   useHook: ({ useData }) => {
     const useWrappedHook: ReturnType<SWRHook<GetWishlistHook>['useHook']> = (
-      input
+      input,
     ) => {
       const response = useData({
         swrOptions: {
@@ -87,7 +87,7 @@ export const handler: SWRHook<GetWishlistHook> = {
               enumerable: true,
             },
           }),
-        [response]
+        [response],
       )
     }
 

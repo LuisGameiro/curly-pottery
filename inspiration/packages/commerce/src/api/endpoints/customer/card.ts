@@ -38,7 +38,7 @@ const customerCardEndpoint: GetAPISchema<
     const body = { ...input }
     return parse(
       await handlers['getCards']({ ...ctx, body }),
-      z.array(cardSchema).optional()
+      z.array(cardSchema).optional(),
     )
   }
 

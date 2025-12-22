@@ -73,7 +73,7 @@ const normalizeProductImages = (images: SwellImage[]) => {
 
 const normalizeProductVariants = (
   variants: SwellVariant[],
-  productOptions: swellProductOption[]
+  productOptions: swellProductOption[],
 ) => {
   return variants?.map(
     ({ id, name, price, option_value_ids: optionValueIds = [] }) => {
@@ -84,7 +84,7 @@ const normalizeProductVariants = (
       const options = optionValueIds.map((id) => {
         const matchingOption = productOptions.find((option) => {
           return option.values.find(
-            (value: SwellProductOptionValue) => value.id == id
+            (value: SwellProductOptionValue) => value.id == id,
           )
         })
         return normalizeProductOption({
@@ -103,7 +103,7 @@ const normalizeProductVariants = (
         // requiresShipping: true,
         options,
       }
-    }
+    },
   )
 }
 

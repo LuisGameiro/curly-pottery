@@ -5,7 +5,7 @@ export const getCustomerToken = () => Cookies.get(SWELL_CUSTOMER_TOKEN_COOKIE)
 
 export const setCustomerToken = (
   token: string | null,
-  options?: CookieAttributes
+  options?: CookieAttributes,
 ) => {
   if (!token) {
     Cookies.remove(SWELL_CUSTOMER_TOKEN_COOKIE)
@@ -15,7 +15,7 @@ export const setCustomerToken = (
       token,
       options ?? {
         expires: SWELL_COOKIE_EXPIRE,
-      }
+      },
     )
   }
 }

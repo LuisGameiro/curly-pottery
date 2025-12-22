@@ -42,7 +42,7 @@ export type SFCCProviderAPI<P extends Provider = Provider> = CommerceAPI<
 >
 
 export function getCommerceApi<P extends Provider>(
-  customProvider: P = provider as any
+  customProvider: P = provider as any,
 ): SFCCProviderAPI<P> {
   return commerceApi(customProvider as any)
 }

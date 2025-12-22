@@ -158,7 +158,7 @@ const { price, discount, basePrice } = usePrice(
     currencyCode: data.currency.code,
     // If `baseAmount` is used, a discount will be calculated
     // baseAmount: number,
-  }
+  },
 )
 // ...
 ```
@@ -298,7 +298,7 @@ const WishlistButton = ({ productId, variant }) => {
 
   const { data: customer } = useCustomer()
   const itemInWishlist = data?.items?.find(
-    (item) => item.product_id === productId && item.variant_id === variant.id
+    (item) => item.product_id === productId && item.variant_id === variant.id,
   )
 
   const handleWishlistChange = async (e) => {

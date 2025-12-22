@@ -1,37 +1,35 @@
-
-import Link from 'next/link'
-import type { FullProduct, Product } from '@lib/types/product'
-import s from './ProductCard.module.css'
-import Image, { ImageProps } from 'next/image'
+import Link from "next/link";
+import type { FullProduct, Product } from "@lib/types/product";
+import s from "./ProductCard.module.css";
+import Image, { ImageProps } from "next/image";
 // import WishlistButton from '@components/wishlist/WishlistButton'
 // import usePrice from '@framework/product/use-price'
-import ProductTag from '../ProductTag'
-import { cn } from '@lib/utils'
-import { FC } from 'react'
+import ProductTag from "../ProductTag";
+import { cn } from "@lib/utils";
+import { FC } from "react";
 
 interface Props {
-  className?: string
-  product: Product
-  noNameTag?: boolean
-  imgProps?: Omit<ImageProps, 'src' | 'layout' | 'placeholder' | 'blurDataURL'>
-  variant?: 'default' | 'slim' | 'simple'
+  className?: string;
+  product: Product;
+  noNameTag?: boolean;
+  imgProps?: Omit<ImageProps, "src" | "layout" | "placeholder" | "blurDataURL">;
+  variant?: "default" | "slim" | "simple";
 }
 
-const placeholderImg = '/product-img-placeholder.svg'
+const placeholderImg = "/product-img-placeholder.svg";
 
 const ProductCard: FC<Props> = ({
   product,
   imgProps,
   className,
   noNameTag = false,
-  variant = 'default',
+  variant = "default",
 }) => {
-
   const rootClassName = cn(
     s.root,
-    { [s.slim]: variant === 'slim', [s.simple]: variant === 'simple' },
-    className
-  )
+    { [s.slim]: variant === "slim", [s.simple]: variant === "simple" },
+    className,
+  );
 
   return (
     <Link
@@ -39,9 +37,9 @@ const ProductCard: FC<Props> = ({
       className={rootClassName}
       aria-label={product.name}
     >
-      {variant === 'slim' && (
+      {variant === "slim" && (
         <>
-          <div className='absolute top-0 bg-transparent left-0 z-20' >
+          <div className="absolute top-0 bg-transparent left-0 z-20">
             <span>{product.categories[0]}</span>
           </div>
 
@@ -49,7 +47,7 @@ const ProductCard: FC<Props> = ({
             <Image
               quality="100"
               src={product.images[0] || placeholderImg}
-              alt={product.name || 'Product Image'}
+              alt={product.name || "Product Image"}
               height={320}
               width={320}
               {...imgProps}
@@ -58,17 +56,17 @@ const ProductCard: FC<Props> = ({
         </>
       )}
 
-      {variant === 'simple' && (
+      {variant === "simple" && (
         <>
           {!noNameTag && (
-              <h3 className='absolute top-0 left-0 z-20 px-2 py-1 text-xl font-medium text-foreground'>
-                <span>{product.name}</span>
-              </h3>
+            <h3 className="absolute top-0 left-0 z-20 px-2 py-1 text-xl font-medium text-foreground">
+              <span>{product.name}</span>
+            </h3>
           )}
           <div className={s.imageContainer}>
             {product?.images && (
               <Image
-                alt={product.name || 'Product Image'}
+                alt={product.name || "Product Image"}
                 className={s.productImage}
                 src={product.images[0] || placeholderImg}
                 height={540}
@@ -84,7 +82,7 @@ const ProductCard: FC<Props> = ({
         </>
       )}
 
-      {variant === 'default' && (
+      {variant === "default" && (
         <>
           {/* <ProductTag
             name={product.name}
@@ -93,13 +91,12 @@ const ProductCard: FC<Props> = ({
           <div className={s.imageContainer}>
             {product?.images && (
               <Image
-                alt={product.name || 'Product Image'}
+                alt={product.name || "Product Image"}
                 className={s.productImage}
                 src={product.images[0] || placeholderImg}
                 height={540}
                 width={540}
                 quality="100"
-                
                 {...imgProps}
               />
             )}
@@ -107,7 +104,7 @@ const ProductCard: FC<Props> = ({
         </>
       )}
     </Link>
-  )
-}
+  );
+};
 
-export default ProductCard
+export default ProductCard;

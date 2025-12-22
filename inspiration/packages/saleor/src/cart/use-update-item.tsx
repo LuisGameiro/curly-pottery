@@ -72,7 +72,7 @@ export const handler = {
       ctx: {
         item?: T
         wait?: number
-      } = {}
+      } = {},
     ) => {
       const { item } = ctx
       const { mutate } = useCart() as any
@@ -101,7 +101,7 @@ export const handler = {
           await mutate(data, false)
           return data
         }, ctx.wait ?? 500),
-        [fetch, mutate]
+        [fetch, mutate],
       )
     },
 }

@@ -19,7 +19,7 @@ const Modal: FC<ModalProps> = ({ children, onClose }) => {
         return onClose()
       }
     },
-    [onClose]
+    [onClose],
   )
 
   useEffect(() => {

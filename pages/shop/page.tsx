@@ -1,52 +1,54 @@
-import type { GetServerSideProps } from 'next'
-import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
+import type { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
+import { useMemo, useState } from "react";
 
-import { prisma } from 'prisma/prisma'
-import { cn } from '@lib/utils'
+import { prisma } from "prisma/prisma";
+import { cn } from "@lib/utils";
 
-import { ProductCard } from '@components/product'
-import { Skeleton } from '@components/ui'
-import { Layout } from '@components/common'
-import { Category } from '@lib/types/category'
-import { Product } from '@lib/types/product'
-import { serializeProduct, serializeProductVariant } from 'actions/product.actions'
-
+import { ProductCard } from "@components/product";
+import { Skeleton } from "@components/ui";
+import { Layout } from "@components/common";
+import { Category } from "@lib/types/category";
+import { Product } from "@lib/types/product";
+import {
+  serializeProduct,
+  serializeProductVariant,
+} from "actions/product.actions";
 
 interface ShopPageProps {
-  products: Product[]
-  categories: Category[]
-  activeCategory: string | null
+  products: Product[];
+  categories: Category[];
+  activeCategory: string | null;
 }
 
 export const getServerSideProps: GetServerSideProps<ShopPageProps> = async ({
   query,
 }) => {
   const categorySlug =
-    typeof query.category === 'string' ? query.category : null
+    typeof query.category === "string" ? query.category : null;
 
-  console.error('Category Slug:', categorySlug)
+  console.error("Category Slug:", categorySlug);
 
   const categories = await prisma.category.findMany({
-    orderBy: { name: 'asc' },
-  })
+    orderBy: { name: "asc" },
+  });
 
-const products = await prisma.product.findMany({
-  where: categorySlug
-    ? {
-        categories: {
-          some: {
-            slug: categorySlug, // Or whatever the field name is in your Category model
+  const products = await prisma.product.findMany({
+    where: categorySlug
+      ? {
+          categories: {
+            some: {
+              slug: categorySlug, // Or whatever the field name is in your Category model
+            },
           },
-        },
-      }
-    : undefined,
-  include: { 
-    categories: true, 
-    variants: true 
-  },
-})
-  console.error('Category Slug:', products)
+        }
+      : undefined,
+    include: {
+      categories: true,
+      variants: true,
+    },
+  });
+  console.error("Category Slug:", products);
 
   return {
     props: {
@@ -54,8 +56,8 @@ const products = await prisma.product.findMany({
       categories: serializeProduct(categories),
       activeCategory: categorySlug,
     },
-  }
-}
+  };
+};
 
 /* ----------------------------------------
    PAGE
@@ -66,38 +68,48 @@ export default function Shop({
   categories,
   activeCategory,
 }: ShopPageProps) {
-  const router = useRouter()
-  const [openFilter, setOpenFilter] = useState(false)
-const [sortMethod, setSortMethod] = useState('newest');
+  const router = useRouter();
+  const [openFilter, setOpenFilter] = useState(false);
+  const [sortMethod, setSortMethod] = useState("newest");
 
   const sortedProducts = useMemo(() => {
     // Create a copy so we don't mutate the original array
     const list = [...products];
 
     switch (sortMethod) {
-      case 'price-asc':
-        return list.sort((a, b) => Math.min(...a.variants.map(v => v.price)) - Math.min(...b.variants.map(v => v.price)));
-      case 'price-desc':
-        return list.sort((a, b) => Math.max(...b.variants.map(v => v.price)) - Math.max(...a.variants.map(v => v.price)));
-      case 'name-asc':
+      case "price-asc":
+        return list.sort(
+          (a, b) =>
+            Math.min(...a.variants.map((v) => v.price)) -
+            Math.min(...b.variants.map((v) => v.price)),
+        );
+      case "price-desc":
+        return list.sort(
+          (a, b) =>
+            Math.max(...b.variants.map((v) => v.price)) -
+            Math.max(...a.variants.map((v) => v.price)),
+        );
+      case "name-asc":
         return list.sort((a, b) => a.name.localeCompare(b.name));
-      case 'name-desc':
+      case "name-desc":
         return list.sort((a, b) => b.name.localeCompare(a.name));
       default: // 'newest'
-        return list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        return list.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+        );
     }
   }, [sortMethod, products]);
   const handleCategoryClick = (slug?: string) => {
-    setOpenFilter(false)
-  router.replace(
-    {
-      pathname: '/shop',
-      query: slug ? { category: slug } : {},
-    },
-    undefined,
-    { shallow: false }
-  )
-  }
+    setOpenFilter(false);
+    router.replace(
+      {
+        pathname: "/shop",
+        query: slug ? { category: slug } : {},
+      },
+      undefined,
+      { shallow: false },
+    );
+  };
 
   return (
     <div className="container mx-auto px-4 py-10">
@@ -105,8 +117,8 @@ const [sortMethod, setSortMethod] = useState('newest');
         <aside className="lg:col-span-3  text-accent-3">
           <div className="flex items-center gap-2 mb-6">
             <label className="font-medium text-accent-6">Sort by:</label>
-            <select 
-              value={sortMethod} 
+            <select
+              value={sortMethod}
               onChange={(e) => setSortMethod(e.target.value)}
               className=" bg-primary font-semibold outline-none cursor-pointer"
             >
@@ -123,11 +135,11 @@ const [sortMethod, setSortMethod] = useState('newest');
           >
             Categories
           </button>
-          <ul className={cn('space-y-2 lg:block',{ hidden: !openFilter })}>
+          <ul className={cn("space-y-2 lg:block", { hidden: !openFilter })}>
             <li
               className={cn(
-                'cursor-pointer font-medium',
-                !activeCategory && 'underline'
+                "cursor-pointer font-medium",
+                !activeCategory && "underline",
               )}
               onClick={() => handleCategoryClick()}
             >
@@ -138,8 +150,8 @@ const [sortMethod, setSortMethod] = useState('newest');
               <li
                 key={cat.id}
                 className={cn(
-                  'cursor-pointer hover:underline',
-                  activeCategory === cat.name && 'underline font-semibold'
+                  "cursor-pointer hover:underline",
+                  activeCategory === cat.name && "underline font-semibold",
                 )}
                 onClick={() => handleCategoryClick(cat.slug)}
               >
@@ -147,11 +159,7 @@ const [sortMethod, setSortMethod] = useState('newest');
               </li>
             ))}
           </ul>
-
-
-
         </aside>
-
 
         <main className="lg:col-span-9">
           {products.length ? (
@@ -181,7 +189,7 @@ const [sortMethod, setSortMethod] = useState('newest');
         </main>
       </div>
     </div>
-  )
+  );
 }
 
-Shop.Layout = Layout
+Shop.Layout = Layout;

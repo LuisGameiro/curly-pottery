@@ -1,4 +1,4 @@
-import getSlug from '../../lib/get-slug'
+import getSlug from "../../lib/get-slug";
 
 /**
  * Behaviors covered:
@@ -12,39 +12,41 @@ import getSlug from '../../lib/get-slug'
  * 8. Is idempotent (calling twice yields same result)
  */
 
-describe('getSlug', () => {
-  it('removes a single leading slash', () => {
-    expect(getSlug('/product')).toBe('product')
-  })
+describe("getSlug", () => {
+  it("removes a single leading slash", () => {
+    expect(getSlug("/product")).toBe("product");
+  });
 
-  it('removes a single trailing slash', () => {
-    expect(getSlug('product/')).toBe('product')
-  })
+  it("removes a single trailing slash", () => {
+    expect(getSlug("product/")).toBe("product");
+  });
 
-  it('removes both leading and trailing slashes', () => {
-    expect(getSlug('/product/')).toBe('product')
-  })
+  it("removes both leading and trailing slashes", () => {
+    expect(getSlug("/product/")).toBe("product");
+  });
 
-  it('leaves internal slashes untouched', () => {
-    expect(getSlug('/category/product/variant')).toBe('category/product/variant')
-  })
+  it("leaves internal slashes untouched", () => {
+    expect(getSlug("/category/product/variant")).toBe(
+      "category/product/variant",
+    );
+  });
 
-  it('returns empty string for only slashes', () => {
-    expect(getSlug('////')).toBe('')
-  })
+  it("returns empty string for only slashes", () => {
+    expect(getSlug("////")).toBe("");
+  });
 
-  it('works with empty string input', () => {
-    expect(getSlug('')).toBe('')
-  })
+  it("works with empty string input", () => {
+    expect(getSlug("")).toBe("");
+  });
 
-  it('works with nested paths', () => {
-    expect(getSlug('/a/b/c/')).toBe('a/b/c')
-  })
+  it("works with nested paths", () => {
+    expect(getSlug("/a/b/c/")).toBe("a/b/c");
+  });
 
-  it('is idempotent', () => {
-    const once = getSlug('/a/b/')
-    const twice = getSlug(once)
-    expect(once).toBe('a/b')
-    expect(twice).toBe('a/b')
-  })
-})
+  it("is idempotent", () => {
+    const once = getSlug("/a/b/");
+    const twice = getSlug(once);
+    expect(once).toBe("a/b");
+    expect(twice).toBe("a/b");
+  });
+});

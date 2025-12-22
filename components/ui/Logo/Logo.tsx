@@ -20,10 +20,9 @@
 
 // export default Logo
 
+import Image from "next/image";
 
-import Image from 'next/image';
-
-const Logo = ({ className = '', ...props }) => (
+const Logo = ({ className = "", ...props }) => (
   <Image
     src="/logo.png"
     alt="Logo"

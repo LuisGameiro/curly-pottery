@@ -19,7 +19,7 @@ const handleLogin = (data: CreateToken) => {
 
 export const handleAutomaticLogin = async (
   fetch: <T = any, B = Body>(options: FetcherOptions<B>) => Promise<T>,
-  input: MutationTokenCreateArgs
+  input: MutationTokenCreateArgs,
 ) => {
   try {
     const { tokenCreate } = await fetch<Mutation, MutationTokenCreateArgs>({

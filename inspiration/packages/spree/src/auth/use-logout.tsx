@@ -26,7 +26,7 @@ export const handler: MutationHook<LogoutHook> = {
       'input: ',
       input,
       'options: ',
-      options
+      options,
     )
 
     const userToken = ensureUserTokenResponse()

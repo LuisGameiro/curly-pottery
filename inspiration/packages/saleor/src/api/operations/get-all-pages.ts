@@ -34,7 +34,7 @@ export default function getAllPagesOperation({
             'Accept-Language': locale,
           },
         }),
-      }
+      },
     )
 
     const pages =
@@ -44,7 +44,7 @@ export default function getAllPagesOperation({
           url: `/${locale}/${slug}`,
           body: node.content || '',
           name,
-        })
+        }),
       ) ?? []
 
     return { pages }

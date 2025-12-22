@@ -12,7 +12,7 @@ export function getProductVariant(product: Product, opts: SelectedOptions) {
         ) {
           return option.values.find((v) => v.label.toLowerCase() === value)
         }
-      })
+      }),
     )
   })
   return variant
@@ -20,7 +20,7 @@ export function getProductVariant(product: Product, opts: SelectedOptions) {
 
 export function selectDefaultOptionFromProduct(
   product: Product,
-  updater: Dispatch<SetStateAction<SelectedOptions>>
+  updater: Dispatch<SetStateAction<SelectedOptions>>,
 ) {
   // Selects the default option
   product.variants[0]?.options?.forEach((v) => {

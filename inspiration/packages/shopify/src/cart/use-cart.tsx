@@ -55,7 +55,7 @@ export const handler: SWRHook<GetCartHook> = {
               enumerable: true,
             },
           }),
-        [response]
+        [response],
       )
     },
 }

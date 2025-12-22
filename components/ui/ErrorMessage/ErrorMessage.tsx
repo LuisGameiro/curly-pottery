@@ -1,23 +1,23 @@
-import type { FC } from 'react'
-import cn from 'clsx'
+import type { FC } from "react";
+import cn from "clsx";
 
 interface ErrorMessageProps {
   error: {
-    message: string
-    code?: string
+    message: string;
+    code?: string;
     errors?: {
-      message: string
-    }[]
-  }
-  className?: string
+      message: string;
+    }[];
+  };
+  className?: string;
 }
 
 const ErrorMessages: FC<ErrorMessageProps> = ({ error, className }) => {
   return (
     <div
       className={cn(
-        'flex flex-col text-red py-2.5 px-4 border border-solid border-red',
-        className
+        "flex flex-col text-red py-2.5 px-4 border border-solid border-red",
+        className,
       )}
     >
       <span>{error.message}</span>
@@ -29,7 +29,7 @@ const ErrorMessages: FC<ErrorMessageProps> = ({ error, className }) => {
         </ul>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ErrorMessages
+export default ErrorMessages;

@@ -7,7 +7,7 @@ import ensureIToken from './tokens/ensure-itoken'
 const createEmptyCart = (
   fetch: HookFetcherContext<{
     data: any
-  }>['fetch']
+  }>['fetch'],
 ): Promise<GraphQLFetcherResult<IOrder>> => {
   const token: IToken | undefined = ensureIToken()
 

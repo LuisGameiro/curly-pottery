@@ -27,7 +27,7 @@ export default function getAllProductsOperation({
       variables?: T['variables']
       config?: Partial<SpreeApiConfig>
       preview?: boolean
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getAllProducts<T extends GetAllProductsOperation>({
@@ -42,11 +42,11 @@ export default function getAllProductsOperation({
       'getAllProductsVariables: ',
       getAllProductsVariables,
       'config: ',
-      userConfig
+      userConfig,
     )
 
     const defaultProductsTaxonomyId = requireConfigValue(
-      'allProductsTaxonomyId'
+      'allProductsTaxonomyId',
     ) as string | false
 
     const first = getAllProductsVariables.first
@@ -82,7 +82,7 @@ export default function getAllProductsOperation({
     })
 
     const normalizedProducts: Product[] = spreeSuccessResponse.data.map(
-      (spreeProduct) => normalizeProduct(spreeSuccessResponse, spreeProduct)
+      (spreeProduct) => normalizeProduct(spreeSuccessResponse, spreeProduct),
     )
 
     return { products: normalizedProducts }

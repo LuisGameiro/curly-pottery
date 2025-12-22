@@ -5,7 +5,7 @@ import { SpreeSdkResponse } from '../../types'
 const normalizePage = (
   _spreeSuccessResponse: SpreeSdkResponse,
   spreePage: PageAttr,
-  commerceLocales: string[]
+  commerceLocales: string[],
 ): Page => {
   // If the locale returned by Spree is not available, search
   // for a similar one.

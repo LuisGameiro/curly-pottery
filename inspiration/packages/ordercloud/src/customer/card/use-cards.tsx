@@ -27,7 +27,7 @@ export const handler: SWRHook<GetCardsHook> = {
               enumerable: true,
             },
           }),
-        [response]
+        [response],
       )
     },
 }

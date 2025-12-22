@@ -16,13 +16,13 @@ const isColorProductOption = (productOption: ExpandedProductOption) => {
 const expandOptions = (
   spreeSuccessResponse: JsonApiResponse,
   spreeOptionValue: JsonApiDocument,
-  accumulatedOptions: ExpandedProductOption[]
+  accumulatedOptions: ExpandedProductOption[],
 ): ExpandedProductOption[] => {
   const spreeOptionTypeIdentifier = spreeOptionValue.relationships.option_type
     .data as RelationType
 
   const existingOptionIndex = accumulatedOptions.findIndex(
-    (option) => option.id == spreeOptionTypeIdentifier.id
+    (option) => option.id == spreeOptionTypeIdentifier.id,
   )
 
   let option: ExpandedProductOption
@@ -30,12 +30,12 @@ const expandOptions = (
   if (existingOptionIndex === -1) {
     const spreeOptionType = jsonApi.findDocument<OptionTypeAttr>(
       spreeSuccessResponse,
-      spreeOptionTypeIdentifier
+      spreeOptionTypeIdentifier,
     )
 
     if (!spreeOptionType) {
       throw new SpreeResponseContentError(
-        `Option type with id ${spreeOptionTypeIdentifier.id} not found.`
+        `Option type with id ${spreeOptionTypeIdentifier.id} not found.`,
       )
     }
 
@@ -59,7 +59,7 @@ const expandOptions = (
     : spreeOptionValue.attributes.presentation
 
   const productOptionValueExists = option.values.some(
-    (optionValue: ProductOptionValues) => optionValue.label === label
+    (optionValue: ProductOptionValues) => optionValue.label === label,
   )
 
   if (!productOptionValueExists) {

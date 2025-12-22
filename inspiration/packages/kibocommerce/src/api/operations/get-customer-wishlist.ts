@@ -12,7 +12,7 @@ export default function getCustomerWishlistOperation({
   commerce,
 }: OperationContext<any>) {
   async function getCustomerWishlist<
-    T extends GetCustomerWishlistOperation
+    T extends GetCustomerWishlistOperation,
   >(opts: {
     variables: T['variables']
     config?: KiboCommerceConfig
@@ -24,7 +24,7 @@ export default function getCustomerWishlistOperation({
       variables: T['variables']
       config?: KiboCommerceConfig
       includeProducts?: boolean
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getCustomerWishlist<T extends GetCustomerWishlistOperation>({

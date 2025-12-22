@@ -1,35 +1,34 @@
-import type { GetStaticPropsContext } from 'next'
+import type { GetStaticPropsContext } from "next";
 // import useCustomer from '@framework/customer/use-customer'
 
-import { Layout } from '@components/common'
-import { Container, Text } from '@components/ui'
+import { Layout } from "@components/common";
+import { Container, Text } from "@components/ui";
 
 export async function getStaticProps({
   preview,
   locale,
   locales,
 }: GetStaticPropsContext) {
-  const config = { locale, locales }
+  const config = { locale, locales };
   // const pagesPromise = commerce.getAllPages({ config, preview })
   // const siteInfoPromise = commerce.getSiteInfo({ config, preview })
   // const { pages } = await pagesPromise
   // const { categories } = await siteInfoPromise
-   return {
-    props: {  },
-  }
+  return {
+    props: {},
+  };
 }
 
 export default function Profile() {
-  const { data } =  {
-    data:{ firstName:'luis',
-    lastName:'gaga', 
-    email: 'l.gameiro@gmail.com ',
-    address: 'some street'
-    }
+  const { data } = {
+    data: {
+      firstName: "luis",
+      lastName: "gaga",
+      email: "l.gameiro@gmail.com ",
+      address: "some street",
+    },
+  };
 
-  }
-  
-  
   return (
     <Container className="pt-4">
       <Text variant="pageHeading">My Profile</Text>
@@ -54,7 +53,7 @@ export default function Profile() {
         )}
       </div>
     </Container>
-  )
+  );
 }
 
-Profile.Layout = Layout
+Profile.Layout = Layout;

@@ -99,7 +99,7 @@ export function CoreCommerceProvider<P extends Provider>({
   const { locale, cartCookie } = providerRef.current
   const cfg = useMemo(
     () => ({ providerRef, fetcherRef, locale, cartCookie }),
-    [locale, cartCookie]
+    [locale, cartCookie],
   )
 
   return <Commerce.Provider value={cfg}>{children}</Commerce.Provider>

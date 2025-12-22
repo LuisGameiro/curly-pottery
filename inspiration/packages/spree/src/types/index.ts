@@ -27,11 +27,13 @@ export type SpreeSdkResponseWithRawResponse = SpreeSdkResponse & {
 export type SpreeSdkResultResponseSuccessType = SpreeSdkResponseWithRawResponse
 
 export type SpreeSdkMethodReturnType<
-  ResultResponseSuccessType extends SpreeSdkResultResponseSuccessType = SpreeSdkResultResponseSuccessType
+  ResultResponseSuccessType extends SpreeSdkResultResponseSuccessType =
+    SpreeSdkResultResponseSuccessType,
 > = Promise<ResultResponse<ResultResponseSuccessType>>
 
 export type SpreeSdkMethod<
-  ResultResponseSuccessType extends SpreeSdkResultResponseSuccessType = SpreeSdkResultResponseSuccessType
+  ResultResponseSuccessType extends SpreeSdkResultResponseSuccessType =
+    SpreeSdkResultResponseSuccessType,
 > = (...args: any[]) => SpreeSdkMethodReturnType<ResultResponseSuccessType>
 
 export type SpreeSdkVariables = {

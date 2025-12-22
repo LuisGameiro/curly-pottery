@@ -51,7 +51,7 @@ export const handler = {
 
           return data
         },
-        [fetch, mutate]
+        [fetch, mutate],
       )
     },
 }

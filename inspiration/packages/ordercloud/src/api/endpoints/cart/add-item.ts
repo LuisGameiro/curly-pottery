@@ -19,7 +19,7 @@ const addItem: CartEndpoint['handlers']['addItem'] = async ({
       'POST',
       `/orders/Outgoing`,
       {},
-      { token }
+      { token },
     )
 
     cartId = ID
@@ -44,7 +44,7 @@ const addItem: CartEndpoint['handlers']['addItem'] = async ({
           secure: process.env.NODE_ENV === 'production',
           path: '/',
           sameSite: 'lax',
-        })
+        }),
       )
     }
   }
@@ -57,7 +57,7 @@ const addItem: CartEndpoint['handlers']['addItem'] = async ({
       'GET',
       `/me/products/${item.productId}/variants/${item.variantId}`,
       null,
-      { token }
+      { token },
     )
     specs = Specs
   }
@@ -71,7 +71,7 @@ const addItem: CartEndpoint['handlers']['addItem'] = async ({
       Quantity: item.quantity,
       Specs: specs,
     },
-    { token }
+    { token },
   )
 
   // Get cart & line items

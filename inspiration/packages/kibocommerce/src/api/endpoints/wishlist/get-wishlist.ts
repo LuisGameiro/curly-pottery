@@ -33,7 +33,7 @@ const getWishlist: WishlistEndpoint['handlers']['getWishlist'] = async ({
       data: {
         ...wishlist,
         items: wishlist?.items?.map((item: any) =>
-          normalizeWishlistItem(item, config, includeProducts)
+          normalizeWishlistItem(item, config, includeProducts),
         ),
       },
     }

@@ -2,7 +2,7 @@ import { FetcherError } from '@vercel/commerce/utils/errors'
 import { errors } from '@spree/storefront-api-v2-sdk'
 
 const convertSpreeErrorToGraphQlError = (
-  error: errors.SpreeError
+  error: errors.SpreeError,
 ): FetcherError => {
   if (error instanceof errors.ExpandedSpreeError) {
     // Assuming error.errors[key] is a list of strings.
@@ -22,7 +22,7 @@ const convertSpreeErrorToGraphQlError = (
       // Naively assume sdkErrorKey is a label. Capitalize it for a better
       // out-of-the-box experience.
       const capitalizedSdkErrorKey = sdkErrorKey.replace(/^\w/, (firstChar) =>
-        firstChar.toUpperCase()
+        firstChar.toUpperCase(),
       )
 
       return {

@@ -15,7 +15,7 @@ const submitCheckout: CheckoutEndpoint['handlers']['submitCheckout'] = async ({
     'checkout',
     'generateTokenFrom',
     'cart',
-    cartId
+    cartId,
   )
 
   const shippingMethods = await sdkFetcher(
@@ -24,7 +24,7 @@ const submitCheckout: CheckoutEndpoint['handlers']['submitCheckout'] = async ({
     checkoutToken,
     {
       country: 'US',
-    }
+    },
   )
 
   const shippingMethodToUse = shippingMethods?.[0]?.id || ''

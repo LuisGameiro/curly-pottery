@@ -30,7 +30,7 @@ const client = makeClient({
 })
 
 const normalizeSpreeSuccessResponse = (
-  storeResponse: ResultResponse<SpreeSdkResponseWithRawResponse>
+  storeResponse: ResultResponse<SpreeSdkResponseWithRawResponse>,
 ): GraphQLFetcherResult<SpreeSdkResponse> => {
   const data = storeResponse.success()
   const rawFetchResponse = data[fetchResponseKey]
@@ -42,7 +42,7 @@ const normalizeSpreeSuccessResponse = (
 }
 
 const fetcher: Fetcher<GraphQLFetcherResult<SpreeSdkResponse>> = async (
-  requestOptions
+  requestOptions,
 ) => {
   const { url, method, variables, query } = requestOptions
 
@@ -51,12 +51,12 @@ const fetcher: Fetcher<GraphQLFetcherResult<SpreeSdkResponse>> = async (
     'url = ',
     url,
     'requestOptions = ',
-    requestOptions
+    requestOptions,
   )
 
   if (!variables) {
     throw new SpreeSdkMethodFromEndpointPathError(
-      `Required FetcherVariables not provided.`
+      `Required FetcherVariables not provided.`,
     )
   }
 
@@ -88,7 +88,7 @@ const fetcher: Fetcher<GraphQLFetcherResult<SpreeSdkResponse>> = async (
     replayUnauthorizedRequest
   ) {
     console.info(
-      'Request ended with 401. Replaying request after refreshing the user token.'
+      'Request ended with 401. Replaying request after refreshing the user token.',
     )
 
     await ensureFreshUserAccessToken(client)
@@ -103,15 +103,15 @@ const fetcher: Fetcher<GraphQLFetcherResult<SpreeSdkResponse>> = async (
     console.warn('Replaying the request failed', replayedStoreResponse.fail())
 
     throw new RefreshTokenError(
-      'Could not authorize request with current access token.'
+      'Could not authorize request with current access token.',
     )
   }
 
   if (storeResponseError instanceof errors.SpreeError) {
     console.error(
       `Request to spree resulted in an error:\n\n${prettyPrintSpreeSdkErrors(
-        storeResponse.fail()
-      )}`
+        storeResponse.fail(),
+      )}`,
     )
 
     throw convertSpreeErrorToGraphQlError(storeResponseError)

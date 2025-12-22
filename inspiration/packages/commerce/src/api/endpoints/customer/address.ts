@@ -40,7 +40,7 @@ const customerShippingEndpoint: GetAPISchema<
     const body = getCartBodySchema.parse({ cartId })
     return parse(
       await handlers['getAddresses']({ ...ctx, body }),
-      addressSchema
+      addressSchema,
     )
   }
 

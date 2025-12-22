@@ -36,7 +36,7 @@ export default function getProductOperation({
             'Accept-Language': locale,
           },
         }),
-      }
+      },
     )
 
     return {

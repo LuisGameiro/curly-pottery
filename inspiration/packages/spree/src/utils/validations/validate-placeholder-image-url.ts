@@ -1,5 +1,5 @@
 const validatePlaceholderImageUrl = (
-  placeholderUrlOrFalse: unknown
+  placeholderUrlOrFalse: unknown,
 ): string | false => {
   if (!placeholderUrlOrFalse || placeholderUrlOrFalse === 'false') {
     return false

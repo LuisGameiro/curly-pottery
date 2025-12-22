@@ -26,7 +26,7 @@ const Grid: FC<GridProps> = ({
       [s.default]: variant === 'default',
       [s.filled]: variant === 'filled',
     },
-    className
+    className,
   )
   return <div className={rootClassName}>{children}</div>
 }

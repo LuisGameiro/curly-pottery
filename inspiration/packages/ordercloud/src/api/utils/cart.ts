@@ -3,7 +3,7 @@ import type { OrdercloudCart, OrdercloudLineItem } from '../../types/cart'
 
 export function formatCart(
   cart: OrdercloudCart,
-  lineItems: OrdercloudLineItem[]
+  lineItems: OrdercloudLineItem[],
 ): Cart {
   return {
     id: cart.ID,

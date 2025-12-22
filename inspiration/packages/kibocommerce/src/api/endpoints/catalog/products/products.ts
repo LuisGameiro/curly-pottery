@@ -22,7 +22,7 @@ const getProducts: ProductsEndpoint['handlers']['getProducts'] = async ({
   const { data } = await config.fetch(productSearchQuery, { variables })
   const found = data?.products?.items?.length > 0 ? true : false
   let productsResponse = data?.products?.items.map((item: any) =>
-    normalizeProduct(item, config)
+    normalizeProduct(item, config),
   )
   const products: Product[] = found ? productsResponse : []
 

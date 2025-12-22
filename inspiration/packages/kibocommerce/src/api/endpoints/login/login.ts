@@ -21,13 +21,13 @@ const login: LoginEndpoint['handlers']['login'] = async ({
 
     // Set Cookie
     const cookieExpirationDate = getCookieExpirationDate(
-      config.customerCookieMaxAgeInDays
+      config.customerCookieMaxAgeInDays,
     )
 
     const authCookie = prepareSetCookie(
       config.customerCookie,
       JSON.stringify(token),
-      token.accessTokenExpiration ? { expires: cookieExpirationDate } : {}
+      token.accessTokenExpiration ? { expires: cookieExpirationDate } : {},
     )
 
     return { data: null, headers: { 'Set-Cookie': authCookie } }
@@ -42,7 +42,7 @@ const login: LoginEndpoint['handlers']['login'] = async ({
         {
           status: 401,
           code: 'invalid_credentials',
-        }
+        },
       )
     } else {
       throw error

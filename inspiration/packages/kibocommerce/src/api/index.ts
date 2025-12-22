@@ -53,11 +53,11 @@ export const provider = { config, operations }
 
 export type KiboCommerceProvider = typeof provider
 export type KiboCommerceAPI<
-  P extends KiboCommerceProvider = KiboCommerceProvider
+  P extends KiboCommerceProvider = KiboCommerceProvider,
 > = CommerceAPI<P | any>
 
 export function getCommerceApi<P extends KiboCommerceProvider>(
-  customProvider: P = provider as any
+  customProvider: P = provider as any,
 ): KiboCommerceAPI<P> {
   return commerceApi(customProvider as any)
 }

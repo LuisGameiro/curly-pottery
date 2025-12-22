@@ -13,7 +13,7 @@ import type { SpreeSdkResponseWithRawResponse } from '../../types'
 import prettyPrintSpreeSdkErrors from '../../utils/pretty-print-spree-sdk-errors'
 
 export type CreateApiFetch = (
-  getConfig: () => SpreeApiConfig
+  getConfig: () => SpreeApiConfig,
 ) => GraphQLFetcher<GraphQLFetcherResult<any>, any>
 
 // TODO: GraphQLFetcher<GraphQLFetcherResult<any>, any> should be GraphQLFetcher<GraphQLFetcherResult<any>, SpreeSdkVariables>.
@@ -39,21 +39,21 @@ const createApiFetch: CreateApiFetch = (_getConfig) => {
       'queryData = ',
       queryData,
       'fetchOptions = ',
-      fetchOptions
+      fetchOptions,
     )
 
     const { variables } = queryData
 
     if (!variables) {
       throw new SpreeSdkMethodFromEndpointPathError(
-        `Required SpreeSdkVariables not provided.`
+        `Required SpreeSdkVariables not provided.`,
       )
     }
 
     const storeResponse: ResultResponse<SpreeSdkResponseWithRawResponse> =
       await getSpreeSdkMethodFromEndpointPath(
         client,
-        variables.methodPath
+        variables.methodPath,
       )(...variables.arguments)
 
     if (storeResponse.isSuccess()) {
@@ -71,8 +71,8 @@ const createApiFetch: CreateApiFetch = (_getConfig) => {
     if (storeResponseError instanceof errors.SpreeError) {
       console.error(
         `Request to spree resulted in an error:\n\n${prettyPrintSpreeSdkErrors(
-          storeResponse.fail()
-        )}`
+          storeResponse.fail(),
+        )}`,
       )
 
       throw convertSpreeErrorToGraphQlError(storeResponseError)

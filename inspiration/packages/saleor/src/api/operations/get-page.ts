@@ -32,7 +32,7 @@ export default function getPageOperation({
             'Accept-Language': locale,
           },
         }),
-      }
+      },
     )
 
     return {

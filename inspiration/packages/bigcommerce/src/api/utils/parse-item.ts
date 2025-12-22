@@ -14,7 +14,7 @@ type BCCartItemBody = {
 }
 
 export const parseWishlistItem = (
-  item: WishlistItemBody
+  item: WishlistItemBody,
 ): BCWishlistItemBody => ({
   product_id: Number(item.productId),
   variant_id: Number(item.variantId),

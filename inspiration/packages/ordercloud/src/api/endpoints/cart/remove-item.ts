@@ -16,7 +16,7 @@ const removeItem: CartEndpoint['handlers']['removeItem'] = async ({
     null,
     {
       token,
-    }
+    },
   )
 
   // Get cart

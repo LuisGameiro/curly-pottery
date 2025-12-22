@@ -7,7 +7,7 @@ const validateCookieExpire = (expire: unknown): number => {
     expireInteger = expire
   } else {
     throw new TypeError(
-      'expire must be a string containing a number or an integer.'
+      'expire must be a string containing a number or an integer.',
     )
   }
 

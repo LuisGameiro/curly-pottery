@@ -10,7 +10,7 @@ import validateMethod, { HTTP_METHODS } from './validate-method'
  */
 export default function validateHandlers(
   req: NextRequest,
-  allowedOperations: { [k in HTTP_METHODS]?: APIHandler<any, any> }
+  allowedOperations: { [k in HTTP_METHODS]?: APIHandler<any, any> },
 ) {
   const methods = Object.keys(allowedOperations) as HTTP_METHODS[]
   const allowedMethods = methods.reduce<HTTP_METHODS[]>((arr, method) => {

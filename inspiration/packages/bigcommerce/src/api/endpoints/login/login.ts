@@ -24,7 +24,7 @@ const login: LoginEndpoint['handlers']['login'] = async ({
         invalidCredentials.test(error.message)
           ? 'Cannot find an account that matches the provided credentials'
           : error.message,
-        { status: 401 }
+        { status: 401 },
       )
     } else {
       throw error

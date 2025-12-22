@@ -20,7 +20,7 @@ const handleLogin = (data: any) => {
 
 export const handleAutomaticLogin = async (
   fetch: <T = any, B = Body>(options: FetcherOptions<B>) => Promise<T>,
-  input: CustomerAccessTokenCreateInput
+  input: CustomerAccessTokenCreateInput,
 ) => {
   try {
     const loginData = await fetch({

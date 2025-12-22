@@ -1,15 +1,15 @@
 export type LogoutHook = {
-  data: null
+  data: null;
   body: {
-    redirectTo?: string
-  }
-}
+    redirectTo?: string;
+  };
+};
 
 export type LogoutSchema = {
   endpoint: {
-    options: {}
+    options: {};
     handlers: {
-      logout: LogoutHook
-    }
-  }
-}
+      logout: LogoutHook;
+    };
+  };
+};

@@ -32,7 +32,7 @@ export const handler: MutationHook<SubmitCheckoutHook> = {
 
           return data
         },
-        [fetch]
+        [fetch],
       )
     },
 }

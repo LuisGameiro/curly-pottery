@@ -12,7 +12,7 @@ export default function getCustomerWishlistOperation({
   commerce,
 }: OperationContext<Provider>) {
   async function getCustomerWishlist<
-    T extends GetCustomerWishlistOperation
+    T extends GetCustomerWishlistOperation,
   >(opts: {
     variables: T['variables']
     config?: BigcommerceConfig
@@ -24,7 +24,7 @@ export default function getCustomerWishlistOperation({
       variables: T['variables']
       config?: BigcommerceConfig
       includeProducts?: boolean
-    } & OperationOptions
+    } & OperationOptions,
   ): Promise<T['data']>
 
   async function getCustomerWishlist<T extends GetCustomerWishlistOperation>({
@@ -40,7 +40,7 @@ export default function getCustomerWishlistOperation({
     config = commerce.getConfig(config)
 
     const { data = [] } = await config.storeApiFetch<{ data: BCWishlist[] }>(
-      `/v3/wishlists?customer_id=${variables.customerId}`
+      `/v3/wishlists?customer_id=${variables.customerId}`,
     )
 
     const wishlist = data[0]

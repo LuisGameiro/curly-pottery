@@ -17,7 +17,6 @@ export async function getSearchStaticProps({
   const { pages } = pagesData // This contains the array of pages
   const { categories, brands } = siteInfo // These contain the categories and brands arrays
 
-
   return {
     props: {
       pages,

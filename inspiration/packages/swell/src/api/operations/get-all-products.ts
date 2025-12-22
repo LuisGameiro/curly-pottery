@@ -31,7 +31,7 @@ export default function getAllProductsOperation({
       },
     ])
     const products = results.map((product: SwellProduct) =>
-      normalizeProduct(product)
+      normalizeProduct(product),
     )
 
     return {

@@ -12,7 +12,7 @@ export const setCartToken = (cartToken: string) => {
   Cookies.set(
     requireConfigValue('cartCookieName') as string,
     cartToken,
-    cookieOptions
+    cookieOptions,
   )
 }
 

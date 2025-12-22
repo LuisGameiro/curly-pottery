@@ -13,7 +13,7 @@ export const productOptionSchema = z.object({
     z.object({
       label: z.string(),
       hexColors: z.array(z.string()).optional(),
-    })
+    }),
   ),
 })
 
@@ -48,7 +48,7 @@ export const productSchema = z.object({
 })
 
 export const productsPathsSchema = z.array(
-  z.object({ path: z.string().startsWith('/') })
+  z.object({ path: z.string().startsWith('/') }),
 )
 
 export const searchProductBodySchema = z.object({

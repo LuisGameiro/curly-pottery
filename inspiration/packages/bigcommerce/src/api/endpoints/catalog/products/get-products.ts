@@ -43,7 +43,7 @@ const getProducts: ProductsEndpoint['handlers']['getProducts'] = async ({
   url.searchParams.set('include_fields', 'id')
 
   const { data } = await config.storeApiFetch<{ data: { id: number }[] }>(
-    url.pathname + url.search
+    url.pathname + url.search,
   )
 
   const ids = data.map((p) => String(p.id))

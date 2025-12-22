@@ -36,7 +36,7 @@ export default function getAllPagesOperation({
           ...rest,
           url: `/${locale}/${slug}`,
           body: body ?? '',
-        })
+        }),
       ) ?? []
     return {
       pages,
