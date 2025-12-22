@@ -1,6 +1,6 @@
 import type { UseSubmitCheckout } from '../checkout/use-submit-checkout'
-import type { AddressFields } from './customer/address'
-import type { Card, CardFields } from './customer/card'
+import type { AddressFields } from '../customer/address'
+import type { Card, CardFields } from '../customer/card'
 import type { LineItem } from './cart'
 
 export interface Checkout {

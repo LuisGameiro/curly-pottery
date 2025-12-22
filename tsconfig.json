@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "",
+    "baseUrl": "./",
     "target": "esnext",
     "module": "esnext",
     "lib": [
@@ -36,6 +36,9 @@
       ],
       "@assets/*": [
         "assets/*"
+      ],
+            "@public/*": [
+        "public/*"
       ],
       "@components/*": [
         "components/*"

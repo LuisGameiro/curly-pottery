@@ -378,16 +378,7 @@ const siteInfo = {
 };
 
 
-const categories: Categories[] = [
-  { id: 'cat-1', name: 'Plates', url: '/search?category=plates' , image:'https://picsum.photos/600/600?random=201'},
-  { id: 'cat-2', name: 'Mugs', url: '/category?category=mugs' , image:'https://picsum.photos/600/600?random=202'},
-  { id: 'cat-3', name: 'Vases', url: '/category?category=vase' , image:'https://picsum.photos/600/600?random=203'},
-  { id: 'cat-4', name: 'Bowls', url: '/category?category=bowls' , image:'https://picsum.photos/600/600?random=204'},
-  { id: 'cat-5', name: 'Cups', url: '/category?category=cups' , image:'https://picsum.photos/600/600?random=205'},
-  { id: 'cat-6', name: 'Planters', url: '/category?category=planters' , image:'https://picsum.photos/600/600?random=206'},
-  { id: 'cat-6', name: 'Boxes', url: '/category?category=boxes' , image:'https://picsum.photos/600/600?random=207'}
 
-]
 
 
 // ============================================

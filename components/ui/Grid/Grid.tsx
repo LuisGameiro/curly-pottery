@@ -14,7 +14,7 @@ const Grid: FC<GridProps> = ({
   layout = 'A',
   children,
   variant = 'default',
-}) => {
+}: GridProps) => {
   const rootClassName = cn(
     s.root,
     {

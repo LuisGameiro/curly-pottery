@@ -26,7 +26,7 @@ export interface AddressFields {
   /**
    * Company name.
    */
-  company: string
+  company?: string
   /**
    * The customer's billing address street number.
    */
@@ -38,7 +38,7 @@ export interface AddressFields {
   /**
    * The customer's billing address zip code.
    */
-  zipCode: string
+  postalCode: string
   /**
    * The customer's billing address city.
    */

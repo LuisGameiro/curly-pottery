@@ -1,6 +1,6 @@
-import cn from 'clsx'
+import { cn } from '@lib/utils'
 import s from './Marquee.module.css'
-import { FC, ReactNode, Component, Children } from 'react'
+import { FC, ReactNode, Component,Children } from 'react'
 import { default as FastMarquee } from 'react-fast-marquee'
 
 interface MarqueeProps {
@@ -10,8 +10,8 @@ interface MarqueeProps {
 }
 
 const Marquee: FC<MarqueeProps> = ({
+  children = [],
   className = '',
-  children,
   variant = 'primary',
 }) => {
   const rootClassName = cn(
@@ -24,8 +24,8 @@ const Marquee: FC<MarqueeProps> = ({
   )
 
   return (
-    <FastMarquee gradient={false} className={rootClassName}>
-      {Children.map(children, (child) => ({
+    <FastMarquee gradient={false} className={rootClassName} autoFill={true}>
+      {Children.map(children, (child:Children) => ({
         ...child,
         props: {
           ...child.props,

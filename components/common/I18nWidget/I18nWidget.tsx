@@ -1,4 +1,3 @@
-import cn from 'clsx'
 import Link from 'next/link'
 import { FC, useState } from 'react'
 import { useRouter } from 'next/router'
@@ -6,6 +5,7 @@ import s from './I18nWidget.module.css'
 import { Cross, ChevronRight } from '@components/icons'
 import ClickOutside from '@lib/click-outside'
 import Image from 'next/image'
+import { cn } from '@lib/utils'
 interface LOCALE_DATA {
   name: string
   img: {
@@ -25,7 +25,7 @@ const LOCALES_MAP: Record<string, LOCALE_DATA> = {
   'en-US': {
     name: 'English',
     img: {
-      filename: 'flag-en-uk.svg',
+      filename: 'flag-en-us.svg',
       alt: 'Uk Flag',
     },
   },
@@ -47,7 +47,7 @@ const I18nWidget: FC = () => {
     <ClickOutside active={display} onClick={() => setDisplay(false)}>
       <nav className={s.root}>
         <div
-          className="flex items-center relative"
+          className="flex items-center relative bg-accent-0"
           onClick={() => setDisplay(!display)}
         >
           <button className={s.button} aria-label="Language selector">

@@ -1,22 +1,23 @@
 import { memo } from 'react'
 import { Swatch } from '@components/product'
-import type { ProductOption } from '@commerce/types/product'
+import type { ProductOption } from '@lib/types/inspiration/product'
 import { SelectedOptions } from '../helpers'
+import { Product, ProductVariant } from 'prisma/generated/prisma/client'
 
 interface ProductOptionsProps {
-  options: ProductOption[]
-  selectedOptions: SelectedOptions
-  setSelectedOptions: React.Dispatch<React.SetStateAction<SelectedOptions>>
+  product: Product
+  variant: ProductVariant
+  setVariant: (variant: ProductVariant) => void
 }
 
 const ProductOptions: React.FC<ProductOptionsProps> = ({
-  options,
-  selectedOptions,
-  setSelectedOptions,
+  product,
+  variant,
+  setVariant,
 }) => {
   return (
     <div>
-      {options.map((opt) => (
+      {product.variants.map((opt) => (
         <div className="pb-4" key={opt.displayName}>
           <h2 className="uppercase font-medium text-sm tracking-wide">
             {opt.displayName}

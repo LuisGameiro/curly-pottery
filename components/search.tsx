@@ -1,17 +1,10 @@
 import cn from 'clsx'
-import type { SearchPropsType } from '@lib/search-props'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-
-import type { Brand } from '@lib/types/site'
-import type { Product } from '@lib/types/product'
-
 import { Layout } from '@components/common'
 import { ProductCard } from '@components/product'
 import { Container, Skeleton } from '@components/ui'
-
-// import useSearch from '@framework/product/use-search'
 import rangeMap from '@lib/range-map'
 
 const SORT = {
@@ -30,7 +23,7 @@ import {
 import ErrorMessage from './ui/ErrorMessage'
 import { categories as categoriesData, productsData } from 'api/fakeapi/data'
 
-export default function Search( ) {
+export default function Shop( ) {
   const [activeFilter, setActiveFilter] = useState('')
   const [toggleFilter, setToggleFilter] = useState(false)
   
@@ -43,8 +36,6 @@ export default function Search( ) {
   // in the same way of products, it's better to ignore the search input if one
   // of those is selected
   const query = filterQuery({ sort })
-  const categories = categoriesData
-  const products = productsData.products
 
   const activeCategory = categories.find((cat: any) => cat.slug === category)
   // const activeBrand = brands.find((b: Brand) => b.slug === brand)
@@ -443,4 +434,4 @@ export default function Search( ) {
   )
 }
 
-Search.Layout = Layout
+Shop.Layout = Layout

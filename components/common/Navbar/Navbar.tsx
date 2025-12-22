@@ -23,12 +23,12 @@ const Navbar: FC<NavbarProps> = () => (
           <Link href="/" className={s.logo} aria-label="Logo">
             <div className="flex items-center flex-row">
               <Logo />
-              <h1 className="ml-4 mr-8 text-primary-foreground">Curly Pottery</h1>
+              <h1 className="ml-4 mr-8 text-primary-foreground hidden md:block">Curly Pottery</h1>
             </div>
           </Link>
 
           <nav className={s.navMenu}>
-            <Link href="/search" className={s.link}>
+            <Link href="/shop" className={s.link}>
               Shop
             </Link>
             <Link

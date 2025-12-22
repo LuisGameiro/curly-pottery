@@ -1,4 +1,3 @@
-/* @reference "tailwindcss";
 @reference "../../../globals.css";
 
 .root {
@@ -48,4 +47,4 @@
   .closeButton {
     @apply hidden;
   }
-} */
+}

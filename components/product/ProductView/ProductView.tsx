@@ -1,83 +1,83 @@
 import cn from 'clsx'
 import Image from 'next/image'
 import s from './ProductView.module.css'
-import { FC } from 'react'
-import type { Product } from '@lib/types/product'
-// import usePrice from '@framework/product/use-price'
-// import { WishlistButton } from '@components/wishlist'
+import { FC, useEffect,useState } from 'react'
+
 import { ProductSlider, ProductCard } from '@components/product'
 import { Container, Text } from '@components/ui'
 import { SEO } from '@components/common'
 import ProductSidebar from '../ProductSidebar'
-import ProductTag from '../ProductTag'
-import { relatedProductsData } from 'api/fakeapi/data'
+import { Product } from '@lib/types/product'
+import { getRelatedProducts } from 'actions/product.actions'
+import { ProductVariant } from 'prisma/generated/prisma/client'
+
 interface ProductViewProps {
   product: Product
-  relatedProducts: Product[]
 }
 
 const ProductView: FC<ProductViewProps> = ({ product }) => {
-  // const { price } = usePrice({
-  //   amount: product.price.value,
-  //   baseAmount: product.price.retailPrice,
-  //   currencyCode: product.price.currencyCode!,
-  // })
-const relatedProducts =  relatedProductsData.products
 
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([])
+  const [variant , setVariant] = useState<ProductVariant>(product.variants[0]);
+
+
+  console.log('Product in ProductView:', product);
+  // useEffect(() => {
+  //   const fetchRelated = async () => {
+  //     try {
+  //       const res = await getRelatedProducts(product.categories, product.id, 3)
+  //       setRelatedProducts(res)
+  //     } catch (err) {
+  //       console.error('Failed to fetch related products', err)
+  //     }
+  //   }
+
+  //   fetchRelated()
+  // }, [product])
   
-const { price } = { price: '$0.00' }
   return (
     <>
       <Container className="max-w-none w-full" clean>
         <div className={cn(s.root, 'fit')}>
           <div className={cn(s.main, 'fit')}>
-            {/* <ProductTag
-              name={product.name}
-              price={`${price} ${product.price?.currencyCode}`}
-              fontSize={32}
-            /> */}
             <div className={s.sliderContainer}>
               <ProductSlider key={product.id}>
-                {product.images.map((image, i) => (
-                  <div key={image.url} className={s.imageContainer}>
+                {variant.images.map((image, i) => (
+                  <div key={image} className={s.imageContainer}>
                     <Image
                       className={s.img}
-                      src={image.url!}
-                      alt={image.alt || 'Product Image'}
+                      src={image}
+                      alt={`${product.name} Image ${i}`}
                       width={600}
                       height={600}
                       priority={i === 0}
-                      quality="85"
+                      quality="100"
                     />
                   </div>
                 ))}
               </ProductSlider>
             </div>
-            {/* {process.env.COMMERCE_WISHLIST_ENABLED && (
-              <WishlistButton
-                className={s.wishlistButton}
-                productId={product.id}
-                variant={product.variants[0]}
-              />
-            )} */}
           </div>
 
           <ProductSidebar
             key={product.id}
             product={product}
+            variant={variant}
+            setVariant={setVariant}
             className={s.sidebar}
           />
         </div>
         <hr className="mt-7 border-accent-2" />
+        {relatedProducts.length > 0 && (
         <section className="py-12 px-6 mb-10 text-primary">
           <Text variant="sectionHeading" className='text-accent-4'>Related Products</Text>
           <div className={s.relatedProductsGrid}>
-            {relatedProducts.slice(0,3).map((p) => (
-              <div key={p.path} className="bg-accent-0 border border-accent-2">
+            { relatedProducts.map((p) => (
+              <div key={p.slug} className="bg-accent-0 border border-accent-2">
                 <ProductCard
                   noNameTag 
                   product={p}
-                  key={p.path}
+                  key={p.slug}
                   variant="default"
                   
                   className="animated fadeIn"
@@ -89,7 +89,7 @@ const { price } = { price: '$0.00' }
               </div>
             ))}
           </div>
-        </section>
+        </section>  )}
       </Container>
       <SEO
         title={product.name}
@@ -100,7 +100,7 @@ const { price } = { price: '$0.00' }
           description: product.description,
           images: [
             {
-              url: product.images[0]?.url!,
+              url: product.images[0],
               width: '800',
               height: '600',
               alt: product.name,

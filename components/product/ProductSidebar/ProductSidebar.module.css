@@ -2,9 +2,13 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply relative grid items-start gap-1 grid-cols-1 overflow-x-hidden bg-accent-0
-  ;
+  @apply relative grid items-start gap-1 grid-cols-1 overflow-x-hidden bg-accent-0;
   min-height: auto;
+}
+
+.h2 {
+  font-weight: bold
+  /* @apply text-4xl font-semibold mb-2; */
 }
 
 .main {

@@ -1,11 +1,29 @@
 import Layout from '@components/common/Layout';
 import { Button } from '@components/ui';
+import { GetStaticPropsContext } from 'next';
 import React, { useState } from 'react';
+
 interface FormData {
     name: string;
     email: string;
     message: string;
-}export default function Contacts() {
+}
+
+export async function getStaticProps({
+    preview,
+    locale,
+    locales,
+}: GetStaticPropsContext) {
+    const config = { locale, locales }
+
+    return {
+        props: {
+        },
+        revalidate: 2000,
+    }
+}
+
+export default function Contacts() {
 const [formData, setFormData] = useState<FormData>({
         name: '',
         email: '',

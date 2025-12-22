@@ -1,5 +1,20 @@
 import Layout from '@components/common/Layout';
+import { GetStaticPropsContext } from 'next';
 import React from 'react';
+
+export async function getStaticProps({
+    preview,
+    locale,
+    locales,
+}: GetStaticPropsContext) {
+    const config = { locale, locales }
+
+    return {
+        props: {
+        },
+        revalidate: 2000,
+    }
+}
 
 export default function About() {
     return (

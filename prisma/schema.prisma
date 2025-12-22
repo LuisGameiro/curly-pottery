@@ -6,9 +6,188 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  output   = "./generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+  //url      = env("DATABASE_URL")
+}
+
+/**
+ * -------------------- ENUMS --------------------
+ */
+
+enum CurrencyCode {
+  USD
+  EUR
+  GBP
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  COMPLETED
+  CANCELLED
+}
+
+enum SizeNames {
+  XXS
+  XS
+  S
+  M
+  L
+  XL
+  XXL
+}
+
+/**
+ * -------------------- CATEGORY --------------------
+ */
+
+model Category {
+  id    String @id @default(cuid())
+  name  String
+  slug  String
+  url   String
+  image String
+
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+/**
+ * -------------------- PRODUCT --------------------
+ */
+model Product {
+  id          String @id @default(cuid())
+  name        String
+  description String
+  slug        String @unique
+
+  // Default images for the product
+  images String[]
+
+  // Relations
+  variants   ProductVariant[]
+  categories Category[]
+
+  requiresShipping Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductVariant {
+  id               String       @id @default(cuid())
+  sku              String       @unique
+  price            Float
+  currency         CurrencyCode @default(GBP)
+  stock            Int          @default(0)
+  availableForSale Boolean      @default(true)
+  images           String[]
+
+  // Size Fields
+  sizeName SizeNames??
+
+  // Color & Glaze Fields
+  colorName String? // "Midnight Black"
+  colorHex  String? // "#000000"
+
+  //details
+  details json?
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Ensure uniqueness across the product's attributes
+  @@unique([productId, sizeName, colorName])
+}
+
+/**
+ * -------------------- CUSTOMER --------------------
+ */
+model Customer {
+  id               String  @id @default(cuid())
+  firstName        String
+  lastName         String
+  email            String  @unique
+  phone            String?
+  company          String?
+  notes            String?
+  acceptsMarketing Boolean @default(false)
+
+  // One Customer can have many addresses/cards
+  addresses Address[]
+  orders    Order[]
+  cart      Cart? // Usually 1 active cart per customer
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/**
+ * -------------------- ADDRESS --------------------
+ */
+
+model Address {
+  id           String  @id @default(cuid())
+  type         String // billing | shipping
+  firstName    String
+  lastName     String
+  company      String?
+  streetNumber String
+  apartments   String
+  postalCode   String
+  city         String
+  country      String
+
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+model Cart {
+  id                     String       @id @default(cuid())
+  customerId             String       @unique
+  customer               Customer     @relation(fields: [customerId], references: [id])
+  currency               CurrencyCode @default(GBP)
+  taxesIncluded          Boolean      @default(false)
+  lineItems              Json
+  discounts              Json?
+  lineItemsSubtotalPrice Float //sum of item price
+  subtotalPrice          Float // include discounts before taxes and shipping
+  totalPrice             Float // includes taxes and shipping
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+}
+
+/**
+ * -------------------- ORDER --------------------
+ */
+
+model Order {
+  id         String      @id @default(cuid())
+  customerId String
+  customer   Customer    @relation(fields: [customerId], references: [id])
+  status     OrderStatus @default(PENDING)
+
+  lineItems     Json
+  discounts     Json?
+  taxesIncluded Boolean @default(false)
+
+  shippingAddress Json?
+  billingAddress  Json
+  paymentCard     Json?
+  subtotalPrice   Float
+  totalPrice      Float
+  currency        CurrencyCode @default(GBP)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 }
