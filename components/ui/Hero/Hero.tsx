@@ -1,6 +1,8 @@
 import React, { FC } from "react";
 import { Container } from "@components/ui";
 import { ArrowRight } from "@components/icons";
+import { Text } from "@components/ui";
+
 import s from "./Hero.module.css";
 import Link from "next/link";
 interface HeroProps {
@@ -11,15 +13,19 @@ interface HeroProps {
 
 const Hero: FC<HeroProps> = ({ headline, description }) => {
   return (
-    <div className="bg-accent-9 border-b border-t border-accent-2">
+    <div className="bg-secondary border-b border-t border-border">
       <Container>
         <div className={s.root}>
-          <h2 className={s.title}>{headline}</h2>
-          <div className={s.description}>
-            <p>{description}</p>
+           <Text  className={s.title} variant='heading'>
+            {headline}
+          </Text>
+          <div className={s.description}>           
+          <Text variant='body'>
+            {description}
+          </Text>
             <Link
               href="/about"
-              className="flex items-center text-accent-0 pt-3 font-bold hover:underline cursor-pointer w-max-content"
+              className="flex items-center pt-3 font-bold hover:underline cursor-pointer w-max-content content-center"
             >
               Read it here
               <ArrowRight width="20" heigh="20" className="ml-1" />

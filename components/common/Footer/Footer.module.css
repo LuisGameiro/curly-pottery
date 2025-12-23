@@ -2,7 +2,7 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply border-t border-accent-2;
+  @apply border-t border-border bg-primary;
 }
 
 .link {

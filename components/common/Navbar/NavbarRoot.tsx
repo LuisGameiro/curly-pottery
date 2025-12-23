@@ -1,7 +1,7 @@
 import { FC, useState, useEffect, ReactNode, useRef } from "react";
 import throttle from "lodash.throttle";
-import cn from "clsx";
 import s from "./Navbar.module.css";
+import { cn } from "@lib/utils";
 
 const NavbarRoot: FC<{ children?: ReactNode }> = ({ children }) => {
   const [hasScrolled, setHasScrolled] = useState(false);
@@ -12,14 +12,12 @@ const NavbarRoot: FC<{ children?: ReactNode }> = ({ children }) => {
     const handleScroll = throttle(() => {
       const scrollTop = document.documentElement.scrollTop;
 
-      // Shadow logic
       setHasScrolled(scrollTop > 0);
 
-      // Hide-on-scroll-down logic
       if (scrollTop > lastScrollTop.current && scrollTop > 80) {
-        setHidden(true); // scrolling down
+        setHidden(true); 
       } else {
-        setHidden(false); // scrolling up
+        setHidden(false); 
       }
 
       lastScrollTop.current = scrollTop;

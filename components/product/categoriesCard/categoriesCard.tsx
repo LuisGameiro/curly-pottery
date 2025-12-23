@@ -32,7 +32,7 @@ const CategoriesCard: FC<Props> = ({ cat, imgProps }) => {
       )}
 
       <div className="absolute inset-0 z-20 flex items-center justify-center">
-        <h1 className=" bg-accent-3/60 text-2xl px-5 py-1 text-center">
+        <h1 className=" bg-accent-3/60 text-2xl px-5 py-1 text-center text-on-primary">
           {cat.name}
         </h1>
       </div>

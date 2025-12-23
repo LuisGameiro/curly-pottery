@@ -1,11 +1,13 @@
-@import "tailwindcss"; 
+@import "tailwindcss";
 @import "tw-animate-css";
 
+/* @import url("https://cdn.jsdelivr.net/fontsource/fonts/crimson-pro:vf@latest/latin-wght-normal.woff2"); */
 @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant light (&:where(.light, .light *));
 
 @theme {
   --breakpoint-sm: 640px;
-  --breakpoint-md: 768px;  /* This “md” fixes your error */
+  --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
   --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1536px;
@@ -13,42 +15,19 @@
 
 
 @theme inline {
-  /* Core theme from your v4 setup */
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-
-
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-secondary-foreground: var(--secondary-foreground);
+  --color-primary: var(--primary);
+  --color-primary-2: var(--primary-2);
   --color-primary-foreground: var(--primary-foreground);
 
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
-
-  /* Your custom extensions migrated from old JS config */
-  --size-8xl: 1920px; /* maxWidth */
-  
-  /* Custom colors - map to your CSS variables */
-  --color-primary: var(--primary);
-
-  --color-primary-2: var(--primary-2);
   --color-secondary: var(--secondary);
   --color-secondary-2: var(--secondary-2);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
   --color-hover: var(--hover);
-  --color-hover-1: var(--hover-1);
-  --color-hover-2: var(--hover-2);
+  --color-border: var(--border);
+
   --color-accent-0: var(--accent-0);
   --color-accent-1: var(--accent-1);
   --color-accent-2: var(--accent-2);
@@ -59,141 +38,137 @@
   --color-accent-7: var(--accent-7);
   --color-accent-8: var(--accent-8);
   --color-accent-9: var(--accent-9);
+
   --color-violet: var(--violet);
-  --color-violet-light: var(--violet-light);
-  --color-violet-dark: var(--violet-dark);
   --color-pink: var(--pink);
-  --color-pink-light: var(--pink-light);
   --color-cyan: var(--cyan);
   --color-blue: var(--blue);
   --color-green: var(--green);
   --color-red: var(--red);
-  
-  /* Text colors */
+
   --color-text-base: var(--text-base);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  
-  /* Shadows */
+  --color-on-primary: var(--on-primary);
+  --color-on-secondary: var(--on-secondary);
+
   --shadow-outline-normal: 0 0 0 2px var(--accent-2);
   --shadow-magical: rgba(0, 0, 0, 0.02) 0px 30px 30px, rgba(0, 0, 0, 0.03) 0px 0px 8px, rgba(0, 0, 0, 0.05) 0px 1px 0px;
-  
-  /* Typography */
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  /* --font-crimson-pro: "Crimson Pro", serif; */
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
   --leading-extra-loose: 2.2;
-  
-  /* Scale */
+  --size-8xl: 1920px;
   --scale-120: 1.2;
+
+   --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
 }
 
-.dark {
-  /* Your existing v4 light mode variables */
+:root, .light {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-
-
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-
   
-  /* ADD YOUR CUSTOM COLOR VARIABLES HERE for light mode */
-  --primary-2: oklch(0.3 0.05 265.755); /* Example - replace with your values */
-  --secondary-2: oklch(0.85 0.02 247.896);
-  --hover: oklch(0.95 0.01 247.896);
-  --hover-1: oklch(0.92 0.01 247.896);
-  --hover-2: rgb(214, 219, 225);
-  --accent-0: oklch(0.6 0.25 300);
-  --accent-1: oklch(0.95 0.01 250);
-  --accent-2: oklch(0.9 0.02 250);
-  --accent-3: oklch(0.85 0.03 250);
-  --accent-4: oklch(0.8 0.04 250);
-  --accent-5: oklch(0.75 0.05 250);
-  --accent-6: oklch(0.7 0.06 250);
-  --accent-7: oklch(0.65 0.07 250);
-  --accent-8: oklch(0.6 0.08 250);
-  --accent-9: oklch(0.55 0.09 250);
-  --violet: oklch(0.6 0.25 300);
-  --violet-light: oklch(0.7 0.2 300);
-  --violet-dark: oklch(0.5 0.3 300);
-  --pink: oklch(0.7 0.25 350);
-  --pink-light: oklch(0.8 0.2 350);
-  --cyan: oklch(0.7 0.2 220);
-  --blue: oklch(0.6 0.25 250);
-  --green: oklch(0.65 0.25 150);
-  --red: oklch(0.65 0.25 25);
+  /* Backgrounds & Text */
+  --background: #f1fbff;         /* Your light blue tint */
+  --foreground: #000000;         /* Your solid black */
+  --text-base: #000000;
+  --on-primary: #0440d8;       /* Your deep blue text */
+  --on-secondary: #64748b;     /* Muted blue-grey */
+
+  /* Primary (Yellow/Gold) */
+  --primary: #fde372;            /* Your signature yellow */
+  --primary-2: #e5cc65;          /* Slightly darker yellow for hover */
+  --primary-foreground: #000000;
+
+  /* Secondary (Electric Blue) */
+  --secondary: #3b67d4;          /* Your vibrant blue */
+  --secondary-2: #2d52ab;        /* Deep blue hover */
+  --secondary-foreground: #ffffff;
+
+  /* UI Elements */
+  --border: #d1e5f0;             /* Soft blue border */
+  --hover: #e6f4fa;
   
-  /* Text color variables */
-  --text-base: var(--foreground);
-  --text-primary: var(--primary);
-  --text-secondary: var(--muted-foreground);
+  /* Accent Scale (Lightest to Darkest) 
+     Based on your #f1fbff background */
+  --accent-0: #f1fbff;
+  --accent-1: #e2f2f9;
+  --accent-2: #d4eaf4;
+  --accent-3: #c6e2ef;
+  --accent-4: #b8dae9;
+  --accent-5: #9ebcca;
+  --accent-6: #849eaa;
+  --accent-7: #6a808b;
+  --accent-8: #50626b;
+  --accent-9: #36444b;
+
+  /* Status Colors (Matched to your saturation) */
+  --violet: #8b5cf6;
+  --pink: #ec4899;
+  --cyan: #06b6d4;
+  --blue: #3b82f6;
+  --green: #10b981;
+  --red: #ef4444;
 }
+.dark {
+  /* Backgrounds & Text */
+  --background: #05070a;         /* Near black, very subtle depth */
+  --foreground: #e1e7ef;         /* Slightly dimmed white to reduce eye strain */
+  --text-base: #e1e7ef;
+  --on-primary: #1e3a8a; 
+  --on-secondary: #64748b;       /* Dimmer secondary text */
 
-.root {
-  /* Your existing v4 dark mode variables */
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
+  /* Primary (Yellow/Gold) - Kept bright for pop */
+  --primary: #fde372;
+  --primary-2: #ffe98a;
+  --primary-foreground: #000000;
 
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
+  /* Secondary (Deep Blue) - Darkened to blend into the shadows */
+  --secondary: #1e3a8a;
+  --secondary-2: #2563eb;
+  --secondary-foreground: #ffffff;
 
+  /* UI Elements - Much stealthier */
+  --border: #121820;             /* Subtle borders */
+  --hover: #0f172a;              /* Very dark hover state */
 
+  /* Accent Scale (OLED to Steel) */
+  --accent-0: #05070a;           /* True depth */
+  --accent-1: #0a0f16;
+  --accent-2: #111823;           /* Perfect for Card backgrounds */
+  --accent-3: #1a222e;           /* For elevated elements like Modals */
+  --accent-4: #242e3d;
+  --accent-5: #334155;
+  --accent-6: #475569;
+  --accent-7: #64748b;
+  --accent-8: #94a3b8;
+  --accent-9: #e1e7ef;
 
-  
-  /* ADD YOUR CUSTOM COLOR VARIABLES HERE for dark mode */
-  --primary-2: oklch(0.8 0.02 255.508);
-  --secondary-2: oklch(0.35 0.045 260.031);
-  --hover: oklch(0.35 0.045 260.031);
-  --hover-1: oklch(0.4 0.045 260.031);
-  --hover-2: oklch(0.45 0.045 260.031);
-  --accent-0: oklch(0.6 0.25 300);
-  --accent-1: oklch(0.3 0.03 250);
-  --accent-2: oklch(0.35 0.04 250);
-  --accent-3: oklch(0.4 0.05 250);
-  --accent-4: oklch(0.45 0.06 250);
-  --accent-5: oklch(0.5 0.07 250);
-  --accent-6: oklch(0.55 0.08 250);
-  --accent-7: oklch(0.6 0.09 250);
-  --accent-8: oklch(0.65 0.1 250);
-  --accent-9: oklch(0.7 0.11 250);
-  --violet: oklch(0.5 0.3 300);
-  --violet-light: oklch(0.6 0.25 300);
-  --violet-dark: oklch(0.4 0.35 300);
-  --pink: oklch(0.6 0.3 350);
-  --pink-light: oklch(0.7 0.25 350);
-  --cyan: oklch(0.6 0.25 220);
-  --blue: oklch(0.5 0.3 250);
-  --green: oklch(0.55 0.3 150);
-  --red: oklch(0.6 0.3 25);
-  
-  /* Text color variables for dark mode */
-  --text-base: var(--foreground);
-  --text-primary: var(--primary);
-  --text-secondary: var(--muted-foreground);
+  /* Status Colors (Slightly more "neon" to punch through the black) */
+  --violet: #8b5cf6;
+  --pink: #ec4899;
+  --cyan: #06b6d4;
+  --blue: #3b82f6;
+  --green: #10b981;
+  --red: #ef4444;
 }
 
 @layer base {
   * {
-    @apply border-border ;
+    @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground w-full min-h-screen flex flex-col;
   }

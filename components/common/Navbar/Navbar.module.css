@@ -18,23 +18,20 @@
 .link {
   @apply inline-flex items-center leading-6 flex flex-row text-2xl font-semibold
   transition ease-in-out duration-75 cursor-pointer
-  text-accent-5;
+  text-secondary hover:text-secondary-2 ;
 }
 
-.link:hover {
-  @apply text-accent-9;
+/* .link:hover {
+  @apply text-secondary-2;
 }
 
 .link:focus {
-  @apply outline-none text-accent-8;
-}
+  @apply outline-none text-secondary-2;
+} */
 
 .logo {
-  @apply cursor-pointer rounded-full border transform duration-100 ease-in-out text-3xl font-bold;
+  @apply cursor-pointer rounded-full border-on-secondary border-2 transform duration-100 ease-in-out text-3xl font-bold;
 
-  &:hover {
-    @apply text-accent-8;
-  }
 }
 
 .hidden {

@@ -20,19 +20,18 @@ const links = [
   },
 ];
 
-const Footer: FC<Props> = ({ className, pages }) => {
-  const rootClassName = cn(s.root, className);
+const Footer: FC<Props> = ({  pages }) => {
 
   return (
-    <footer className={rootClassName}>
+    <footer className={s.root}>
       <Container>
-        <div className="flex flex-col md:flex-row justify-between items-start py-12 border-b border-accent-2 gap-10">
+        <div className="flex flex-col sm:flex-row justify-between items-start py-12 border-b border-border gap-10">
           <div className="shrink-0">
             <Link href="/" className="flex items-center font-bold">
-              <span className="rounded-full border-2 border-accent-6 mr-2 p-1">
+              <span className="rounded-full border-2 border-border mr-2 p-1">
                 <Logo />
               </span>
-              <span className="text-2xl text-accent-0">Curly Pottery</span>
+              <span className="text-2xl text-on-primary">Curly Pottery</span>
             </Link>
           </div>
 
@@ -41,7 +40,7 @@ const Footer: FC<Props> = ({ className, pages }) => {
               <Link
                 key={item}
                 href={`/${item.toLowerCase()}`}
-                className="text-accent-9 hover:text-accent-6 transition-colors duration-150"
+                className="text-on-secondary hover:text-accent-6 transition-colors duration-150"
               >
                 {item}
               </Link>

@@ -10,11 +10,6 @@ import type { Page } from "@lib/types/inspiration/page";
 import type { Category } from "@lib/types/inspiration/site";
 import type { Link as LinkProps } from "../UserNav/MenuSidebarView";
 import { cn } from "@lib/utils";
-import { CheckoutProvider } from "inspiration/components/checkout/context";
-import { CartSidebarView } from "@components/cart";
-import CheckoutSidebarView from "inspiration/components/checkout/CheckoutSidebarView";
-import PaymentMethodView from "inspiration/components/checkout/PaymentMethodView";
-import ShippingView from "inspiration/components/checkout/ShippingView";
 
 const Loading = () => (
   <div className="w-80 h-80 flex items-center text-center justify-center p-3">
@@ -105,14 +100,14 @@ const Layout: React.FC<Props> = ({
     // <CommerceProvider locale={locale}>
     //       </CommerceProvider>
 
-    <div className={cn(s.root, "min-h-screen")}>
+    <div className={s.root}>
       <Navbar links={navBarlinks} />
       <main className="fit">{children}</main>
       <Footer pages={pageProps.pages} />
       <ModalUI />
-      <CheckoutProvider>
+      {/* <CheckoutProvider> */}
         <SidebarUI links={navBarlinks} />
-      </CheckoutProvider>
+      {/* </CheckoutProvider> */}
       <FeatureBar
         title="This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy."
         hide={acceptedCookies}

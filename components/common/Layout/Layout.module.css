@@ -2,6 +2,6 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply h-full bg-primary mx-auto transition-colors duration-150;
+  @apply h-full bg-background mx-auto transition-colors duration-150 min-h-screen;
   max-width: 2460px;
 }

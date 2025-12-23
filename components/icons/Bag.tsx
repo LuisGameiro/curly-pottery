@@ -6,6 +6,7 @@ const Bag = ({ ...props }) => {
       viewBox="0 0 20 22"
       fill="none"
       stroke="currentColor"
+      className="text-on-primary"
       {...props}
     >
       <path

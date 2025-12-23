@@ -47,7 +47,7 @@ const I18nWidget: FC = () => {
     <ClickOutside active={display} onClick={() => setDisplay(false)}>
       <nav className={s.root}>
         <div
-          className="flex items-center relative bg-accent-0"
+          className="flex items-center relative"
           onClick={() => setDisplay(!display)}
         >
           <button className={s.button} aria-label="Language selector">

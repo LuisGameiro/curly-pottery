@@ -5,7 +5,7 @@ import CategoryTable from "./CategoryTable";
 export const dynamic = "force-dynamic"; // Ensures data is always fresh
 
 export default async function CategoriesPage() {
-  const categories = await getAllCategories();
+  // const categories = await getAllCategories();
 
   return (
     <div className="max-w-6xl mx-auto py-8 px-4">

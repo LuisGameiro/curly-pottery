@@ -15,7 +15,7 @@
 
 .leftControl:hover,
 .rightControl:hover {
-  background-color: var(--violet-dark);
+  background-color: var(--violet);
 }
 
 .leftControl:focus,

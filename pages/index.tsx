@@ -11,7 +11,7 @@ export async function getStaticProps({
   locales,
 }: GetStaticPropsContext) {
   const config = { locale, locales };
-  const products = await getRandomProducts(5);
+  const products = await getRandomProducts(6);
   const categories = await getAllCategories();
 
   return {
@@ -28,7 +28,7 @@ export default function Home({
   categories,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <main className="flex flex-col bg-accent-9">
+    <main className="flex flex-col bg-background">
       <Grid variant="filled" layout="A">
         {products.map((product: any, i: number) => (
           <ProductCard
@@ -36,8 +36,8 @@ export default function Home({
             product={product}
             imgProps={{
               alt: product.name,
-              width: i === 0 ? 1080 : 540,
-              height: i === 0 ? 1080 : 540,
+              width: 1080,
+              height: 1080,
               priority: true,
             }}
           />

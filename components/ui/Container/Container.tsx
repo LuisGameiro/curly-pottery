@@ -1,4 +1,4 @@
-import cn from "clsx";
+import { cn } from "@lib/utils";
 import React, { FC } from "react";
 
 interface ContainerProps {
@@ -12,7 +12,7 @@ const Container: FC<ContainerProps> = ({
   children,
   className,
   el = "div",
-  clean = false, // Full Width Screen
+  clean = false, 
 }) => {
   const rootClassName = cn(className, {
     "mx-auto max-w-7xl px-6 w-full": !clean,

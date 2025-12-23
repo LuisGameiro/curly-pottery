@@ -159,7 +159,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
 
         {forSale ? (
           <div
-            className="bg-destructive text-accent-0 cursor-pointer 
+            className="bg-red text-accent-0 cursor-pointer 
   px-10 py-3 leading-6 transition ease-in-out duration-150
   shadow-sm text-center justify-center 
   border border-transparent items-center text-sm font-semibold
