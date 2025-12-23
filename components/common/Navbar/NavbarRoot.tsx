@@ -15,9 +15,9 @@ const NavbarRoot: FC<{ children?: ReactNode }> = ({ children }) => {
       setHasScrolled(scrollTop > 0);
 
       if (scrollTop > lastScrollTop.current && scrollTop > 80) {
-        setHidden(true); 
+        setHidden(true);
       } else {
-        setHidden(false); 
+        setHidden(false);
       }
 
       lastScrollTop.current = scrollTop;

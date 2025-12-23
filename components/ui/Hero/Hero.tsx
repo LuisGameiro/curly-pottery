@@ -16,13 +16,11 @@ const Hero: FC<HeroProps> = ({ headline, description }) => {
     <div className="bg-secondary border-b border-t border-border">
       <Container>
         <div className={s.root}>
-           <Text  className={s.title} variant='heading'>
+          <Text className={s.title} variant="heading">
             {headline}
           </Text>
-          <div className={s.description}>           
-          <Text variant='body'>
-            {description}
-          </Text>
+          <div className={s.description}>
+            <Text variant="body">{description}</Text>
             <Link
               href="/about"
               className="flex items-center pt-3 font-bold hover:underline cursor-pointer w-max-content content-center"

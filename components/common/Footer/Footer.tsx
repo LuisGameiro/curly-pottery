@@ -20,8 +20,7 @@ const links = [
   },
 ];
 
-const Footer: FC<Props> = ({  pages }) => {
-
+const Footer: FC<Props> = ({ pages }) => {
   return (
     <footer className={s.root}>
       <Container>

@@ -38,7 +38,6 @@ const Navbar: FC<NavbarProps> = () => (
           </nav>
         </div>
 
-
         <div className="flex items-center justify-end flex-1 space-x-8">
           <UserNav />
         </div>

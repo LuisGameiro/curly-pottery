@@ -12,7 +12,7 @@ const Container: FC<ContainerProps> = ({
   children,
   className,
   el = "div",
-  clean = false, 
+  clean = false,
 }) => {
   const rootClassName = cn(className, {
     "mx-auto max-w-7xl px-6 w-full": !clean,

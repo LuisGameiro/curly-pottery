@@ -106,7 +106,7 @@ const Layout: React.FC<Props> = ({
       <Footer pages={pageProps.pages} />
       <ModalUI />
       {/* <CheckoutProvider> */}
-        <SidebarUI links={navBarlinks} />
+      <SidebarUI links={navBarlinks} />
       {/* </CheckoutProvider> */}
       <FeatureBar
         title="This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy."

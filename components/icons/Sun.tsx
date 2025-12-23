@@ -9,8 +9,7 @@ const Sun = ({ ...props }) => {
       strokeLinecap="round"
       strokeLinejoin="round"
       fill="none"
-            className={`text-on-primary `}
-
+      className={`text-on-primary `}
       shapeRendering="geometricPrecision"
       {...props}
     >
