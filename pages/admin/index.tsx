@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { Package, FolderTree, LayoutDashboard, Settings } from "lucide-react";
 import Layout from "@components/common/Layout";
-import AdminLayout from "./adminLayout";
+import AdminLayout from "./products/layout";
 
 export default function Admin({ children }: { children: React.ReactNode }) {
   return (

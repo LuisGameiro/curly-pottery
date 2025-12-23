@@ -14,8 +14,7 @@ type Params = {
 interface ProductPageProps {
   product: Product;
 }
-
-export default function ProductPage({ product }: ProductPageProps) {
+export default function AdminCategories({ product }: ProductPageProps) {
   const router = useRouter();
 
   if (router.isFallback) {

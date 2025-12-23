@@ -1,4 +1,3 @@
-import cn from "clsx";
 import Image from "next/image";
 import s from "./ProductView.module.css";
 import { FC, useEffect, useState } from "react";
@@ -8,8 +7,19 @@ import { Container, Text } from "@components/ui";
 import { SEO } from "@components/common";
 import ProductSidebar from "../ProductSidebar";
 import { Product } from "@lib/types/product";
-import { getRelatedProducts } from "actions/product.actions";
 import { ProductVariant } from "prisma/generated/prisma/client";
+import { cn } from "@lib/utils";
+
+export const getRelatedProducts = async (categories: string[], excludeId: number) => {
+  const params = new URLSearchParams({
+    categories: categories.join(','),
+    excludeId: excludeId.toString(),
+    limit: '4'
+  });
+
+  const res = await fetch(`/api/related-products?${params}`);
+  return res.json();
+};
 
 interface ProductViewProps {
   product: Product;
@@ -19,42 +29,41 @@ const ProductView: FC<ProductViewProps> = ({ product }) => {
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [variant, setVariant] = useState<ProductVariant>(product.variants[0]);
 
-  console.log("Product in ProductView:", product);
-  // useEffect(() => {
-  //   const fetchRelated = async () => {
-  //     try {
-  //       const res = await getRelatedProducts(product.categories, product.id, 3)
-  //       setRelatedProducts(res)
-  //     } catch (err) {
-  //       console.error('Failed to fetch related products', err)
-  //     }
-  //   }
+  useEffect(() => {
+    const fetchRelated = async () => {
+      try {
+        const res = await getRelatedProducts(product.categories, product.id, 3)
+        setRelatedProducts(res)
+        console.log("related producs:", res);
 
-  //   fetchRelated()
-  // }, [product])
+      } catch (err) {
+        console.error('Failed to fetch related products', err)
+      }
+    }
+
+    fetchRelated()
+  }, [product])
 
   return (
     <>
-      <Container className="max-w-none w-full" clean>
-        <div className={cn(s.root, "fit")}>
+      <Container className="max-w-none w-full " clean>
+        <section className={cn(s.root, "fit")}>
           <div className={cn(s.main, "fit")}>
-            <div className={s.sliderContainer}>
-              <ProductSlider key={product.id}>
-                {variant.images.map((image, i) => (
-                  <div key={image} className={s.imageContainer}>
-                    <Image
-                      className={s.img}
-                      src={image}
-                      alt={`${product.name} Image ${i}`}
-                      width={600}
-                      height={600}
-                      priority={i === 0}
-                      quality="100"
-                    />
-                  </div>
-                ))}
-              </ProductSlider>
-            </div>
+            <ProductSlider key={product.id}>
+              {variant.images.map((image, i) => (
+                <div key={image} className={s.imageContainer}>
+                  <Image
+                    className={s.img}
+                    src={image}
+                    alt={`${product.name} Image ${i}`}
+                    width={600}
+                    height={600}
+                    priority={i === 0}
+                    quality="100"
+                  />
+                </div>
+              ))}
+            </ProductSlider>
           </div>
 
           <ProductSidebar
@@ -64,18 +73,19 @@ const ProductView: FC<ProductViewProps> = ({ product }) => {
             setVariant={setVariant}
             className={s.sidebar}
           />
-        </div>
+        </section>
         <hr className="mt-7 border-accent-2" />
+
         {relatedProducts.length > 0 && (
           <section className="py-12 px-6 mb-10 text-primary">
-            <Text variant="sectionHeading" className="text-accent-4">
+            <Text variant="sectionHeading" >
               Related Products
             </Text>
             <div className={s.relatedProductsGrid}>
               {relatedProducts.map((p) => (
                 <div
                   key={p.slug}
-                  className="bg-accent-0 border border-accent-2"
+                  className="bg-background border border-border"
                 >
                   <ProductCard
                     noNameTag
@@ -93,6 +103,7 @@ const ProductView: FC<ProductViewProps> = ({ product }) => {
             </div>
           </section>
         )}
+
       </Container>
       <SEO
         title={product.name}

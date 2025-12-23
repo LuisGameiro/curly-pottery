@@ -9,10 +9,22 @@
 .slider {
   @apply relative h-full transition-opacity duration-150;
   opacity: 0;
+    cursor: grab;
+
 }
 
 .slider.show {
   opacity: 1;
+}
+
+
+.slider:active {
+  cursor: grabbing;
+}
+
+/* Ensure slides don't have weird spacing during drag */
+.keen-slider__slide {
+  overflow: hidden;
 }
 
 .thumb {
@@ -32,7 +44,7 @@
 .album {
   width: 100%;
   height: 100%;
-  @apply bg-violet;
+  @apply bg-background ;
   box-sizing: content-box;
   overflow-y: hidden;
   overflow-x: auto;

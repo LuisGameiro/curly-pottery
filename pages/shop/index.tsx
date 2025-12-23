@@ -14,12 +14,12 @@ import {
   serializeProduct,
   serializeProductVariant,
 } from "actions/product.actions";
-import { set } from "zod";
 
-interface ShopPageProps {
+export interface ShopPageProps {
   products: Product[];
   categories: Category[];
   activeCategory: string | null;
+  admin?: boolean;
 }
 
 export const getServerSideProps: GetServerSideProps<ShopPageProps> = async ({
@@ -37,12 +37,12 @@ export const getServerSideProps: GetServerSideProps<ShopPageProps> = async ({
   const products = await prisma.product.findMany({
     where: categorySlug
       ? {
-          categories: {
-            some: {
-              slug: categorySlug, // Or whatever the field name is in your Category model
-            },
+        categories: {
+          some: {
+            slug: categorySlug,
           },
-        }
+        },
+      }
       : undefined,
     include: {
       categories: true,
@@ -60,7 +60,7 @@ export const getServerSideProps: GetServerSideProps<ShopPageProps> = async ({
   };
 };
 
-const sortLabels = {
+export const sortLabels = {
   newest: "Newest first",
   "price-asc": "Price: Low to High",
   "price-desc": "Price: High to Low",
@@ -68,14 +68,11 @@ const sortLabels = {
   "name-desc": "Alphabeticallly: Z-A",
 };
 
-/* ----------------------------------------
-   PAGE
----------------------------------------- */
-
 export default function Shop({
   products,
   categories,
   activeCategory,
+  admin = false,
 }: ShopPageProps) {
   const router = useRouter();
   const [openFilter, setOpenFilter] = useState(false);
@@ -134,13 +131,13 @@ export default function Shop({
             </label>
 
             <button
-              className="w-full bg-accent-1 text-text-base border-2 border-border px-4 py-3 rounded-lg font-semibold flex justify-between items-center hover:bg-white transition-colors lg:cursor-default lg:hover:bg-accent-1"
+              className="w-full bg-accent-1 text-text-base border-2 border-border px-4 py-3 rounded-lg font-semibold flex justify-between items-center hover:bg-background transition-colors lg:cursor-default lg:hover:bg-accent-1 lg:hidden"
               onClick={() => setOpenSort((v) => !v)}
             >
               <span>{sortLabels[sortMethod]}</span>
               <svg
                 className={cn(
-                  "transition-transform lg:hidden",
+                  "transition-transform",
                   openSort && "rotate-180",
                 )}
                 xmlns="http://www.w3.org/2000/svg"
@@ -186,7 +183,7 @@ export default function Shop({
             </label>
 
             <button
-              className="w-full bg-accent-1 text-text-base border-2 border-border px-4 py-3 rounded-lg font-semibold flex justify-between items-center hover:bg-white transition-colors lg:cursor-default lg:hover:bg-accent-1"
+              className="w-full bg-accent-1 text-text-base border-2 border-border px-4 py-3 rounded-lg font-semibold flex justify-between items-center hover:bg-white transition-colors lg:cursor-default lg:hover:bg-accent-1 lg:hidden"
               onClick={() => setOpenFilter((v) => !v)}
             >
               <span>{activeCategory || "All Categories"}</span>
@@ -205,7 +202,6 @@ export default function Shop({
               </svg>
             </button>
 
-            {/* Category List */}
             <ul
               className={cn(
                 "space-y-1 mt-2 p-2 bg-white border-2 border-border rounded-xl shadow-xl lg:shadow-none lg:border-0 lg:bg-transparent lg:p-0 lg:mt-0 lg:block transition-all",
@@ -242,6 +238,7 @@ export default function Shop({
             </ul>
           </div>
         </aside>
+        
         <main className="lg:col-span-9">
           {products.length ? (
             <div className="grid grid-cols-2 sm:grid-cols-3  gap-2 sm:gap-6">
@@ -249,6 +246,7 @@ export default function Shop({
                 <ProductCard
                   key={product.id}
                   product={product}
+                  admin={admin}
                   variant="simple"
                   imgProps={{
                     width: 480,

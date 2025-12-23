@@ -38,7 +38,7 @@ export async function deleteCategory(id: string) {
 export async function getAllCategories() {
   const categoriesRaw = await prisma.category.findMany({
     orderBy: {
-      name: "desc",
+      name: "asc",
     },
   });
 

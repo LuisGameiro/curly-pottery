@@ -6,10 +6,10 @@ import React, {
   useRef,
   useEffect,
 } from "react";
-import cn from "clsx";
 import { a } from "@react-spring/web";
 import s from "./ProductSlider.module.css";
 import ProductSliderControl from "../ProductSliderControl";
+import { cn } from "@lib/utils";
 
 interface ProductSliderProps {
   children?: React.ReactNode[];
@@ -29,16 +29,20 @@ const ProductSlider: React.FC<ProductSliderProps> = ({
     loop: true,
     slides: { perView: 1 },
     created: () => setIsMounted(true),
+    drag: true,
+rubberband: true, // Adds resistance at the end of loops
     slideChanged(s) {
       const slideNumber = s.track.details.rel;
       setCurrentSlide(slideNumber);
 
       if (thumbsContainerRef.current) {
         const $el = document.getElementById(`thumb-${slideNumber}`);
-        if (slideNumber >= 3) {
-          thumbsContainerRef.current.scrollLeft = $el!.offsetLeft;
-        } else {
-          thumbsContainerRef.current.scrollLeft = 0;
+        if ($el) {
+          // Improved smooth scrolling for thumbnails
+          thumbsContainerRef.current.scrollTo({
+            left: $el.offsetLeft - (thumbsContainerRef.current.offsetWidth / 2) + ($el.offsetWidth / 2),
+            behavior: 'smooth'
+          });
         }
       }
     },
@@ -73,7 +77,29 @@ const ProductSlider: React.FC<ProductSliderProps> = ({
       }
     };
   }, []);
+// useEffect(() => {
+//     const slider = sliderContainerRef.current;
+//     if (!slider) return;
 
+//     const preventNavigation = (event: TouchEvent) => {
+//       const touchXPosition = event.touches[0].pageX;
+//       const touchXRadius = event.touches[0].radiusX || 0;
+
+//       // Only prevent if very close to edges to allow browser "Back" gesture 
+//       // but keep the slider responsive
+//       if (
+//         touchXPosition - touchXRadius < 10 ||
+//         touchXPosition + touchXRadius > window.innerWidth - 10
+//       ) {
+//         event.preventDefault();
+//       }
+//     };
+
+//     slider.addEventListener("touchstart", preventNavigation, { passive: false });
+//     return () => slider.removeEventListener("touchstart", preventNavigation);
+//   }, []);
+
+  
   const onPrev = React.useCallback(() => slider.current?.prev(), [slider]);
   const onNext = React.useCallback(() => slider.current?.next(), [slider]);
 

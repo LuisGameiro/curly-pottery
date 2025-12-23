@@ -1,7 +1,7 @@
 import s from "./ProductSidebar.module.css";
 // import { useAddItem } from '@framework/cart'
 import { FC, useEffect, useState } from "react";
-import type { CurrencyCode, Product } from "@lib/types/product";
+import type { CurrencyCode } from "@lib/types/product";
 import { Button, Text, Rating, Collapse, useUI } from "@components/ui";
 import {
   getProductVariant,
@@ -11,10 +11,11 @@ import {
 import ErrorMessage from "@components/ui/ErrorMessage";
 import Link from "next/link";
 import { cn } from "@lib/utils";
-import { ProductVariant } from "prisma/generated/prisma/client";
+import { Product, ProductVariant } from "prisma/generated/prisma/client";
 import ProductOptions from "../ProductOptions";
 import { Discount } from "@lib/types/customer";
 import { Locale } from "next/dist/compiled/@vercel/og/satori";
+import { calculatePrice } from "@lib/calculate-price";
 
 interface ProductSidebarProps {
   product: Product;
@@ -37,10 +38,11 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
     productId: string;
     variantId: string;
   }) => {
-    new Promise(() => {});
+    new Promise(() => { });
   };
   const { openSidebar, setSidebarView } = useUI();
   const [loading, setLoading] = useState(false);
+  const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState<null | Error>(null);
   const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({});
 
@@ -48,7 +50,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
     selectDefaultOptionFromProduct(product, setSelectedOptions);
   }, [product]);
 
-  const forSale = variant?.stock === 0 || !variant?.availableForSale;
+  const forSale = variant?.stock !== 0 || variant?.availableForSale;
 
   const addToCart = async () => {
     setLoading(true);
@@ -73,63 +75,20 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
     }
   };
 
-  function calculatePrice(
-    price: number,
-    currency: CurrencyCode,
-    discounts: Discount[] | null = null,
-    locale: CurrencyCode = "GBP",
-  ) {
-    const symbolConvert: Record<CurrencyCode, string> = {
-      USD: "$",
-      GBP: "£",
-      EUR: "€",
-    };
-
-    const conversionRate: Record<CurrencyCode, number> = {
-      USD: 1.33,
-      GBP: 1.0,
-      EUR: 1.4,
-    };
-
-    // 1. Convert the base price to the locale currency
-    let priceCalculated = price * conversionRate[locale];
-    let finalPrice = priceCalculated;
-
-    // 2. Apply all discounts in the array
-    if (discounts && discounts.length > 0) {
-      discounts.forEach((discount) => {
-        if (discount.type === "FIXED_AMOUNT") {
-          // Subtract fixed amount (e.g., £5 off)
-          finalPrice -= discount.value;
-        } else if (discount.type === "PERCENTAGE") {
-          // Subtract percentage (e.g., 0.10 for 10% off)
-          finalPrice -= finalPrice * discount.value;
-        }
-      });
-    }
-
-    // Ensure price doesn't go below zero
-    finalPrice = Math.max(0, finalPrice);
-
-    return {
-      priceCalculated: priceCalculated.toFixed(2) + symbolConvert[locale],
-      priceDiscount: finalPrice.toFixed(2) + symbolConvert[locale],
-      hasDiscount: finalPrice < priceCalculated,
-    };
-  }
   const price = calculatePrice(variant.price, variant.currency, [
     { type: "FIXED_AMOUNT", value: 10 },
   ]);
 
   return (
-    <div className={cn(className, "space-y-8")}>
-      {/* button to add cart */}
-      <h1 className="text-3xl font-semibold ">{product.name}</h1>
-      {product.categories.map((category) => (
-        <span key={category.id} className={"text-xl mr-2"}>
-          {category.name}
-        </span>
-      ))}
+    <div className={cn(className, "space-y-4")}>
+      <section>
+        <h1 className="text-3xl font-semibold ">{product.name}</h1>
+        {product.categories.map((category) => (
+          <span key={category.id} className={"text-xl mr-2"}>
+            {category.name}
+          </span>
+        ))}
+      </section>
 
       <section>
         <p className="text-lg font-medium  space-x-2 my-2">
@@ -140,7 +99,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
               </span>
               <span>{price.priceDiscount}</span>
 
-              <span className=" bg-red-600 p-1 px-2 border-2 border-accent-9 bg-center">
+              <span className=" bg-red-500 p-1 px-2 border-2 border-accent-9 bg-center">
                 SALE
               </span>
             </>
@@ -153,11 +112,11 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
           VAT included for EU orders. Duties and import taxes are calculated at
           checkout for U.S. customers Shipping calculated at checkout.{" "}
         </p>
-        <p className="y-2">
+        <p className="py-2">
           {error && <ErrorMessage message={error.message} />}
         </p>
 
-        {forSale ? (
+        {!forSale ? (
           <div
             className="bg-red text-accent-0 cursor-pointer 
   px-10 py-3 leading-6 transition ease-in-out duration-150
@@ -165,22 +124,42 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
   border border-transparent items-center text-sm font-semibold
   tracking-wide"
           >
-            <h3 className="">OUT OF STOCK</h3>
+            <h3 className={s.button}>OUT OF STOCK</h3>
             <Link href="/contacts">
               Please contact us if you want to order this product
             </Link>
           </div>
         ) : (
-          <Button
-            aria-label="Add to Cart"
-            type="button"
-            className={s.button}
-            onClick={addToCart}
-            loading={loading}
-            disabled={variant.availableForSale}
-          >
-            {variant?.availableForSale ? "Not Available" : "Add To Cart"}
-          </Button>
+          <div className="flex flex-row gap-2 items-center border border-border">
+            <div className="flex flex-row  text-xl font-semibold">
+              <button
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                className=" px-4  hover:bg-accent-1 transition"
+              >
+                -
+              </button>
+              <span className="flex flex-row px-6  col-span-2 justify-center font-semibold select-none">
+                {quantity}
+              </span>
+              <button
+                onClick={() => setQuantity(quantity + 1)}
+                className="px-4  hover:bg-accent-1 transition "
+              >
+                +
+              </button>
+            </div>
+            <Button
+              aria-label="Add to Cart"
+              type="button"
+              className={s.button}
+              onClick={addToCart}
+              loading={loading}
+              disabled={!variant.availableForSale}
+            >
+              {variant?.availableForSale ? "Add To Cart" : "Not Available"}
+            </Button>
+          </div>
+
         )}
       </section>
 
@@ -188,11 +167,11 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
         className="wrap-break-word w-full max-w-xl "
         html={product.description}
       />
-      {/* <ProductOptions
+      <ProductOptions
         product={product}
         setVariant={setVariant}
         variant={variant}
-      />  */}
+      /> 
 
       <section>
         {variant?.details?.length > 0 && (

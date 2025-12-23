@@ -2,20 +2,20 @@
 @reference "../../../globals.css";
 
 .control {
-  @apply bg-violet absolute bottom-10 right-10 flex flex-row
+  @apply bg-secondary absolute bottom-10 right-10 flex flex-row
   border-accent-0 border text-accent-0 z-30 shadow-xl select-none;
   height: 48px;
 }
 
 .leftControl,
 .rightControl {
-  @apply px-9 cursor-pointer;
+  @apply px-9 cursor-pointer ;
   transition: background-color 0.2s ease;
 }
 
 .leftControl:hover,
 .rightControl:hover {
-  background-color: var(--violet);
+  @apply bg-secondary-2/80;
 }
 
 .leftControl:focus,

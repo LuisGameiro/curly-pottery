@@ -8,7 +8,7 @@
 }
 
 .nav {
-  @apply relative flex flex-row justify-between py-4 md:py-4;
+  @apply relative flex flex-row justify-between py-4 ;
 }
 
 .navMenu {
@@ -16,7 +16,7 @@
 }
 
 .link {
-  @apply inline-flex items-center leading-6 flex flex-row text-2xl font-semibold
+  @apply inline-flex items-center leading-6 flex-row text-2xl font-semibold
   transition ease-in-out duration-75 cursor-pointer
   text-secondary hover:text-secondary-2 ;
 }

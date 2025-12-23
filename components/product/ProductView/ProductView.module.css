@@ -7,17 +7,15 @@
 }
 
 .main {
-  @apply relative px-0 pb-0 box-border  flex flex-col col-span-1;
+  @apply relative px-0 pb-0 box-border  flex-col col-span-1 flex items-center justify-center overflow-x-hidden bg-background;;
   min-height: 500px;
 }
 
 .sidebar {
-  @apply bg-accent-6 flex flex-col col-span-1 mx-auto max-w-4xl px-6 py-6 w-full h-full;
+  @apply bg-secondary/70 flex flex-col col-span-1 mx-auto max-w-4xl px-6 py-6 w-full h-full;
 }
 
-.sliderContainer {
-  @apply flex items-center justify-center overflow-x-hidden bg-violet;
-}
+
 
 .imageContainer {
   @apply flex items-center justify-center w-full h-full relative;

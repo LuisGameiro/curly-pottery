@@ -7,6 +7,7 @@ import Image, { ImageProps } from "next/image";
 import ProductTag from "../ProductTag";
 import { cn } from "@lib/utils";
 import { FC } from "react";
+import { calculatePrice } from "@lib/calculate-price";
 
 interface Props {
   className?: string;
@@ -14,6 +15,7 @@ interface Props {
   noNameTag?: boolean;
   imgProps?: Omit<ImageProps, "src" | "layout" | "placeholder" | "blurDataURL">;
   variant?: "default" | "slim" | "simple";
+  admin?: boolean;
 }
 
 const placeholderImg = "/product-img-placeholder.svg";
@@ -24,6 +26,7 @@ const ProductCard: FC<Props> = ({
   className,
   noNameTag = false,
   variant = "default",
+  admin = false,
 }) => {
   const rootClassName = cn(
     s.root,
@@ -31,16 +34,18 @@ const ProductCard: FC<Props> = ({
     className,
   );
 
+  const { priceCalculated, priceDiscount, hasDiscount } = product?.variants ? calculatePrice(product.variants[0].price, product.variants[0].currency, product.variants[0].discounts) : { priceCalculated: '$0.00', priceDiscount: '$0.00', hasDiscount: false };
+
   return (
     <Link
-      href={`/shop/${product.slug}`}
+      href={admin?`/admin/product/${product.slug}`:`/shop/${product.slug}`}
       className={rootClassName}
       aria-label={product.name}
     >
       {variant === "slim" && (
         <>
           <div className="absolute top-0 bg-transparent left-0 z-20">
-            <span>{product.categories[0]}</span>
+            <span>{product.categories[0].name}</span>
           </div>
 
           {product?.images && (
@@ -59,8 +64,8 @@ const ProductCard: FC<Props> = ({
       {variant === "simple" && (
         <>
           {!noNameTag && (
-            <h3 className="absolute top-0 left-0 z-20 px-2 py-1 text-xl font-medium text-foreground">
-              <span>{product.name}</span>
+            <h3 className="absolute bg-accent-3/60 top-0 left-0 z-20 px-2 py-1 text-xs md:text-md  lg:text-xl font-medium text-foreground">
+              {product.name}
             </h3>
           )}
           <div className={s.imageContainer}>
@@ -76,7 +81,17 @@ const ProductCard: FC<Props> = ({
               />
             )}
             <div className="absolute bottom-2 right-2 z-20 rounded-md bg-background/30  px-2 py-1 text-sm font-medium text-foreground backdrop-blur">
-              {`${product.variants[0].price} ${product.variants[0].currency}`}
+              {hasDiscount ? (
+                <>
+                  <span className="line-through opacity-40 mr-1">
+                    {priceCalculated}
+                  </span>
+                  <span>{priceDiscount}</span>
+                </>
+              ) : (
+                <span>{priceCalculated}</span>
+              )}
+
             </div>
           </div>
         </>
