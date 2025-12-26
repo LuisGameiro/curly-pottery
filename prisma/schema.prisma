@@ -105,6 +105,7 @@ model ProductVariant {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  discounts json?
   // Ensure uniqueness across the product's attributes
   @@unique([productId, sizeName, colorName])
 }

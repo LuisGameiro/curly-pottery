@@ -2,21 +2,25 @@ import { FC } from "react";
 import Link from "next/link";
 import Image, { ImageProps } from "next/image";
 import { Category } from "@lib/types/category";
+import { deleteCategory } from "actions/category.actions";
 
 interface Props {
   className?: string;
   cat: Category;
   noNameTag?: boolean;
   imgProps?: Omit<ImageProps, "src" | "layout" | "placeholder" | "blurDataURL">;
+  admin?: boolean;
 }
 
 const placeholderImg = "/product-img-placeholder.svg";
 
-const CategoriesCard: FC<Props> = ({ cat, imgProps }) => {
+const CategoriesCard: FC<Props> = ({ cat, imgProps, admin }) => {
   if (!cat) return null;
+
+
   return (
     <Link
-      href={`/shop/category?=${cat?.name}`}
+      href={admin?`/admin/categories/${cat?.slug}` : `/shop/category?=${cat?.name}`}
       aria-label={cat?.name}
       className="relative block h-full w-full overflow-hidden"
     >

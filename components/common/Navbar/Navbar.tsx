@@ -14,7 +14,7 @@ interface NavbarProps {
   links?: Link[];
 }
 
-const Navbar: FC<NavbarProps> = () => (
+const Navbar: FC<NavbarProps> = ({ links }) => (
   <NavbarRoot>
     <Container clean className="max-w-10/12 mx-auto">
       <div className={s.nav}>
@@ -28,15 +28,21 @@ const Navbar: FC<NavbarProps> = () => (
             </div>
           </Link>
 
-          <nav className={s.navMenu}>
-            <Link href="/shop" className={s.link}>
-              Shop
-            </Link>
-            <Link href={"/contacts"} className={s.link}>
-              Contacts
-            </Link>
-          </nav>
+          {links ? (
+            <nav className={s.navMenu}>
+              {links.map((link) => (
+                <Link key={link.href} href={link.href} className={s.link}>
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          ) : null}
+
+          <div className="hidden lg:block lg:ml-8">
+            <Searchbar />
+          </div>
         </div>
+
 
         <div className="flex items-center justify-end flex-1 space-x-8">
           <UserNav />

@@ -4,6 +4,7 @@ import { Product } from "@lib/types/product";
 import { revalidatePath } from "next/cache";
 import { prisma } from "prisma/prisma";
 import { ca } from "zod/v4/locales";
+import { serializeProductVariant, serializeProduct } from "./helpers";
 
 export async function createProduct(formData: FormData) {
   const categories = formData.getAll("categories") as string[];
@@ -104,6 +105,20 @@ export async function getProductBySlug(slug: string) {
   return serializeProductVariant([productsRaw])[0];
 }
 
+export async function getProductById(id: string) {
+  const productsRaw = await prisma.product.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      variants: true,
+      categories: true,
+    },
+  });
+
+  return serializeProductVariant([productsRaw])[0];
+}
+
 export async function deleteProduct(id: string) {
   await prisma.product.delete({
     where: { id },
@@ -169,35 +184,3 @@ export async function getRelatedProducts(
   return serializeProductVariant(relatedProducts);
 }
 
-export const serializeProduct = (productsRaw: any[]) => {
-  return productsRaw.map((product) => ({
-    ...product,
-    createdAt: product.createdAt.toISOString(),
-    updatedAt: product.updatedAt.toISOString(),
-  }));
-};
-
-export const serializeProductVariant = (productsRaw: any[]) => {
-  return productsRaw.map((product) => ({
-    ...product,
-    createdAt: product.createdAt.toISOString(),
-    updatedAt: product.updatedAt.toISOString(),
-    variants: product.variants.map((variant: any) => ({
-      ...variant,
-      createdAt: variant.createdAt.toISOString(),
-      updatedAt: variant.updatedAt.toISOString(),
-    })),
-    categories: product.categories.map((category: any) => ({
-      ...category,
-      createdAt: category.createdAt.toISOString(),
-      updatedAt: category.updatedAt.toISOString(),
-    })),
-  }));
-};
-
-// A simple helper to omit keys
-export function exclude(obj: object, keys: string[]) {
-  return Object.fromEntries(
-    Object.entries(obj).filter(([key]) => !keys.includes(key)),
-  );
-}

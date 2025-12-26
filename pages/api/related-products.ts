@@ -1,4 +1,4 @@
-import { serializeProductVariant } from "actions/product.actions";
+import { serializeProductVariant } from "actions/helpers";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "prisma/prisma";
 
@@ -9,7 +9,6 @@ export default async function handler(
   try {
     const { categories, excludeId, limit = "3" } = req.query;
 
-    // Validate categories
     if (!categories) {
       return res.status(400).json({ error: "Missing categories" });
     }
@@ -25,17 +24,14 @@ export default async function handler(
       return res.status(400).json({ error: "Categories array is empty" });
     }
 
-    // Validate limit
     const limitNum = Number(limit);
     if (isNaN(limitNum) || limitNum <= 0) {
       return res.status(400).json({ error: "Invalid limit value" });
     }
 
-    // Validate excludeId (numeric)
     const excludeIdNum =
       excludeId && !isNaN(Number(excludeId)) ? Number(excludeId) : undefined;
 
-    // Count matching products
     const count = await prisma.product.count({
       where: {
         categories: { some: { name: { in: categoriesArray } } },
@@ -44,14 +40,12 @@ export default async function handler(
     });
 
     if (count === 0) {
-      return res.status(200).json([]); // No related products
+      return res.status(200).json([]); 
     }
 
-    // Random skip (ensure non-negative)
     const skip =
       count > limitNum ? Math.floor(Math.random() * (count - limitNum)) : 0;
 
-    // Fetch related products
     const relatedProducts = await prisma.product.findMany({
       where: {
         categories: { some: { name: { in: categoriesArray } } },
@@ -62,6 +56,7 @@ export default async function handler(
     });
 
     res.status(200).json(serializeProductVariant(relatedProducts));
+
   } catch (err) {
     console.error("Error fetching related products:", err);
     res.status(500).json({ error: "Failed to fetch related products" });

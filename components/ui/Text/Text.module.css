@@ -7,7 +7,7 @@
 }
 
 .heading {
-  @apply text-5xl pt-1 pb-2 font-semibold tracking-wide cursor-pointer mb-2;
+  @apply text-4xl pt-1 pb-2 font-semibold tracking-wide cursor-pointer mb-2;
 }
 
 .pageHeading {
@@ -76,4 +76,12 @@
 
 .body a:hover {
   @apply no-underline;
+}
+
+.subHeading {
+  @apply text-lg font-semibold tracking-wide;
+}
+
+.bold {
+  @apply font-bold;
 }

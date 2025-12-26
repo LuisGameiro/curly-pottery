@@ -3,8 +3,8 @@ import React, {
   JSXElementConstructor,
   CSSProperties,
 } from "react";
-import cn from "clsx";
 import s from "./Text.module.css";
+import { cn } from "@lib/utils";
 
 interface TextProps {
   variant?: Variant;
@@ -15,7 +15,7 @@ interface TextProps {
   onClick?: () => any;
 }
 
-type Variant = "heading" | "body" | "pageHeading" | "sectionHeading";
+type Variant = "heading" | "body" | "pageHeading" | "sectionHeading" | "subHeading" | "bold";
 
 const Text: FunctionComponent<TextProps> = ({
   style,
@@ -32,7 +32,9 @@ const Text: FunctionComponent<TextProps> = ({
     heading: "h1",
     pageHeading: "h1",
     sectionHeading: "h2",
-  };
+    subHeading: "h5",
+    bold: "strong",
+   };
 
   const Component:
     | JSXElementConstructor<any>
@@ -55,6 +57,8 @@ const Text: FunctionComponent<TextProps> = ({
           [s.heading]: variant === "heading",
           [s.pageHeading]: variant === "pageHeading",
           [s.sectionHeading]: variant === "sectionHeading",
+          [s.subHeading]: variant === "subHeading",
+          [s.bold]: variant === "bold",
         },
         className,
       )}

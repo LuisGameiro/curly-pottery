@@ -13,7 +13,7 @@ import { Product } from "@lib/types/product";
 import {
   serializeProduct,
   serializeProductVariant,
-} from "actions/product.actions";
+} from "actions/helpers";
 
 export interface ShopPageProps {
   products: Product[];
@@ -104,7 +104,7 @@ export default function Shop({
         return list.sort((a, b) => b.name.localeCompare(a.name));
       default: // 'newest'
         return list.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
     }
   }, [sortMethod, products]);
@@ -238,7 +238,7 @@ export default function Shop({
             </ul>
           </div>
         </aside>
-        
+
         <main className="lg:col-span-9">
           {products.length ? (
             <div className="grid grid-cols-2 sm:grid-cols-3  gap-2 sm:gap-6">
