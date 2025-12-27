@@ -30,7 +30,7 @@ const ProductSlider: React.FC<ProductSliderProps> = ({
     slides: { perView: 1 },
     created: () => setIsMounted(true),
     drag: true,
-rubberband: true, // Adds resistance at the end of loops
+    rubberband: true, // Adds resistance at the end of loops
     slideChanged(s) {
       const slideNumber = s.track.details.rel;
       setCurrentSlide(slideNumber);
@@ -40,8 +40,11 @@ rubberband: true, // Adds resistance at the end of loops
         if ($el) {
           // Improved smooth scrolling for thumbnails
           thumbsContainerRef.current.scrollTo({
-            left: $el.offsetLeft - (thumbsContainerRef.current.offsetWidth / 2) + ($el.offsetWidth / 2),
-            behavior: 'smooth'
+            left:
+              $el.offsetLeft -
+              thumbsContainerRef.current.offsetWidth / 2 +
+              $el.offsetWidth / 2,
+            behavior: "smooth",
           });
         }
       }
@@ -77,29 +80,28 @@ rubberband: true, // Adds resistance at the end of loops
       }
     };
   }, []);
-// useEffect(() => {
-//     const slider = sliderContainerRef.current;
-//     if (!slider) return;
+  // useEffect(() => {
+  //     const slider = sliderContainerRef.current;
+  //     if (!slider) return;
 
-//     const preventNavigation = (event: TouchEvent) => {
-//       const touchXPosition = event.touches[0].pageX;
-//       const touchXRadius = event.touches[0].radiusX || 0;
+  //     const preventNavigation = (event: TouchEvent) => {
+  //       const touchXPosition = event.touches[0].pageX;
+  //       const touchXRadius = event.touches[0].radiusX || 0;
 
-//       // Only prevent if very close to edges to allow browser "Back" gesture 
-//       // but keep the slider responsive
-//       if (
-//         touchXPosition - touchXRadius < 10 ||
-//         touchXPosition + touchXRadius > window.innerWidth - 10
-//       ) {
-//         event.preventDefault();
-//       }
-//     };
+  //       // Only prevent if very close to edges to allow browser "Back" gesture
+  //       // but keep the slider responsive
+  //       if (
+  //         touchXPosition - touchXRadius < 10 ||
+  //         touchXPosition + touchXRadius > window.innerWidth - 10
+  //       ) {
+  //         event.preventDefault();
+  //       }
+  //     };
 
-//     slider.addEventListener("touchstart", preventNavigation, { passive: false });
-//     return () => slider.removeEventListener("touchstart", preventNavigation);
-//   }, []);
+  //     slider.addEventListener("touchstart", preventNavigation, { passive: false });
+  //     return () => slider.removeEventListener("touchstart", preventNavigation);
+  //   }, []);
 
-  
   const onPrev = React.useCallback(() => slider.current?.prev(), [slider]);
   const onNext = React.useCallback(() => slider.current?.next(), [slider]);
 

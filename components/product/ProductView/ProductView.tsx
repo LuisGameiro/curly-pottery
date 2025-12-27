@@ -10,11 +10,14 @@ import { Product } from "@lib/types/product";
 import { ProductVariant } from "prisma/generated/prisma/client";
 import { cn } from "@lib/utils";
 
-export const getRelatedProducts = async (categories: string[], excludeId: number) => {
+export const getRelatedProducts = async (
+  categories: string[],
+  excludeId: number,
+) => {
   const params = new URLSearchParams({
-    categories: categories.join(','),
+    categories: categories.join(","),
     excludeId: excludeId.toString(),
-    limit: '4'
+    limit: "4",
   });
 
   const res = await fetch(`/api/related-products?${params}`);
@@ -32,17 +35,16 @@ const ProductView: FC<ProductViewProps> = ({ product }) => {
   useEffect(() => {
     const fetchRelated = async () => {
       try {
-        const res = await getRelatedProducts(product.categories, product.id, 3)
-        setRelatedProducts(res)
+        const res = await getRelatedProducts(product.categories, product.id, 3);
+        setRelatedProducts(res);
         console.log("related producs:", res);
-
       } catch (err) {
-        console.error('Failed to fetch related products', err)
+        console.error("Failed to fetch related products", err);
       }
-    }
+    };
 
-    fetchRelated()
-  }, [product])
+    fetchRelated();
+  }, [product]);
 
   return (
     <>
@@ -78,9 +80,7 @@ const ProductView: FC<ProductViewProps> = ({ product }) => {
 
         {relatedProducts.length > 0 && (
           <section className="py-12 px-6 mb-10 text-primary">
-            <Text variant="sectionHeading" >
-              Related Products
-            </Text>
+            <Text variant="sectionHeading">Related Products</Text>
             <div className={s.relatedProductsGrid}>
               {relatedProducts.map((p) => (
                 <div
@@ -103,7 +103,6 @@ const ProductView: FC<ProductViewProps> = ({ product }) => {
             </div>
           </section>
         )}
-
       </Container>
       <SEO
         title={product.name}

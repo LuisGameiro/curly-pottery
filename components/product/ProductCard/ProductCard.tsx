@@ -34,11 +34,17 @@ const ProductCard: FC<Props> = ({
     className,
   );
 
-  const { priceCalculated, priceDiscount, hasDiscount } = product?.variants ? calculatePrice(product.variants[0].price, product.variants[0].currency, product.variants[0].discounts) : { priceCalculated: '$0.00', priceDiscount: '$0.00', hasDiscount: false };
+  const { priceCalculated, priceDiscount, hasDiscount } = product?.variants
+    ? calculatePrice(
+        product.variants[0].price,
+        product.variants[0].currency,
+        product.variants[0].discounts,
+      )
+    : { priceCalculated: "$0.00", priceDiscount: "$0.00", hasDiscount: false };
 
   return (
     <Link
-      href={admin?`/admin/products/${product.slug}`:`/shop/${product.slug}`}
+      href={admin ? `/admin/products/${product.slug}` : `/shop/${product.slug}`}
       className={rootClassName}
       aria-label={product.name}
     >
@@ -91,7 +97,6 @@ const ProductCard: FC<Props> = ({
               ) : (
                 <span>{priceCalculated}</span>
               )}
-
             </div>
           </div>
         </>

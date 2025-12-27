@@ -85,12 +85,10 @@ const SidebarUI: React.FC<{ links: LinkProps[] }> = ({ links }) => {
   ) : null;
 };
 
-
-const navBarlinks=[
+const navBarlinks = [
   { label: "Shop", href: "/shop" },
   { label: "Contacts", href: "/contacts" },
-]
-
+];
 
 const Layout: React.FC<Props> = ({
   children,
@@ -98,10 +96,10 @@ const Layout: React.FC<Props> = ({
 }) => {
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies();
   const { locale = "en-US" } = useRouter();
-  const navBarlinks=[
+  const navBarlinks = [
     { label: "Shop", href: "/shop" },
     { label: "Contacts", href: "/contacts" },
-  ]
+  ];
 
   return (
     // <CommerceProvider locale={locale}>

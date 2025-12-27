@@ -1,4 +1,3 @@
-
 export const serializeProduct = (productsRaw: any[]) => {
   return productsRaw.map((product) => ({
     ...product,
@@ -32,8 +31,7 @@ export function exclude(obj: object, keys: string[]) {
   );
 }
 
-
-export const serializeOrders= (ordersRaw: any[]) => {
+export const serializeOrders = (ordersRaw: any[]) => {
   return ordersRaw.map((order) => ({
     ...order,
     createdAt: order.createdAt.toISOString(),
@@ -46,16 +44,15 @@ export const serializeOrders= (ordersRaw: any[]) => {
   }));
 };
 
-export const serializeCustomers= (customersRaw: any[]) => {
+export const serializeCustomers = (customersRaw: any[]) => {
   return customersRaw.map((customer) => ({
-    ...customer,    
+    ...customer,
     createdAt: customer.createdAt.toISOString(),
-    updatedAt: customer.updatedAt.toISOString(),  
+    updatedAt: customer.updatedAt.toISOString(),
     orders: customer.orders.map((order: any) => ({
       ...order,
       createdAt: order.createdAt.toISOString(),
       updatedAt: order.updatedAt.toISOString(),
-    })),    
+    })),
   }));
-  
-}
+};

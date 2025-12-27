@@ -38,7 +38,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
     productId: string;
     variantId: string;
   }) => {
-    new Promise(() => { });
+    new Promise(() => {});
   };
   const { openSidebar, setSidebarView } = useUI();
   const [loading, setLoading] = useState(false);
@@ -159,7 +159,6 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
               {variant?.availableForSale ? "Add To Cart" : "Not Available"}
             </Button>
           </div>
-
         )}
       </section>
 
@@ -171,7 +170,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
         product={product}
         setVariant={setVariant}
         variant={variant}
-      /> 
+      />
 
       <section>
         {variant?.details?.length > 0 && (

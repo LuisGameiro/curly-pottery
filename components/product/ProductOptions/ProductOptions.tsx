@@ -30,40 +30,45 @@ const ProductOptions: React.FC<ProductOptionsProps> = ({
   variant,
   setVariant,
 }) => {
+  // 1. Filter variants to find those that have a "size" option
+  // 2. Reduce them into a unique list based on the size name
+  const uniqueSizes: UniqueSize[] = product.variants.reduce(
+    (acc: UniqueSize[], variant) => {
+      const sizeName = variant.sizeName;
 
-// 1. Filter variants to find those that have a "size" option
-// 2. Reduce them into a unique list based on the size name
-const uniqueSizes: UniqueSize[] = product.variants.reduce((acc: UniqueSize[], variant) => {
-  const sizeName = variant.sizeName;
-  
-  if (sizeName && !acc.find((item) => item.name === sizeName)) {
-    acc.push({
-      name: sizeName,
-      id: variant.id, 
-      available: variant.availableForSale
-    });
-  }
-  return acc;
-}, []);
+      if (sizeName && !acc.find((item) => item.name === sizeName)) {
+        acc.push({
+          name: sizeName,
+          id: variant.id,
+          available: variant.availableForSale,
+        });
+      }
+      return acc;
+    },
+    [],
+  );
 
-const uniqueColors: uniqueColor[] = product.variants.reduce((acc: uniqueColor[], variant) => {
-  const colorName = variant.colorName;
-  
-  if (colorName && !acc.find((item) => item.name === colorName)) {
-    acc.push({
-      name: colorName,
-      id: variant.id, 
-      colorHex: variant.colorHex || '',
-      available: variant.availableForSale
-    });
-  }
-  return acc;
-}, []);
+  const uniqueColors: uniqueColor[] = product.variants.reduce(
+    (acc: uniqueColor[], variant) => {
+      const colorName = variant.colorName;
+
+      if (colorName && !acc.find((item) => item.name === colorName)) {
+        acc.push({
+          name: colorName,
+          id: variant.id,
+          colorHex: variant.colorHex || "",
+          available: variant.availableForSale,
+        });
+      }
+      return acc;
+    },
+    [],
+  );
 
   return (
     <div>
       {uniqueSizes.length > 1 && (
-        <div >
+        <div>
           <Text variant="sectionHeading">Size</Text>
           <div role="listbox" className="flex flex-row">
             {uniqueSizes.map((size) => (
@@ -80,7 +85,7 @@ const uniqueColors: uniqueColor[] = product.variants.reduce((acc: uniqueColor[],
           </div>
         </div>
       )}
-      {uniqueColors.length > 1&& (
+      {uniqueColors.length > 1 && (
         <div>
           <Text variant="sectionHeading">Color</Text>
           <div role="listbox" className="flex flex-row">

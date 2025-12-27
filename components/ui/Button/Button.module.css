@@ -39,10 +39,12 @@
 }
 
 .naked {
-  @apply bg-transparent font-semibold border-none shadow-none outline-none py-0 px-0;
+  @apply bg-transparent font-semibold border-none shadow-none outline-none p-2   rounded-lg transition;
 }
 
-.naked:hover,
+.naked:hover{
+  @apply text-on-secondary bg-secondary
+}
 .naked:focus {
   @apply bg-transparent border-none;
 }
@@ -57,4 +59,13 @@
 }
 
 .progress {
+}
+
+.secondary {
+  @apply bg-secondary text-accent-0 cursor-pointer inline-flex
+  px-5 py-5 leading-6 transition ease-in-out duration-150
+  shadow-sm text-center justify-center uppercase rounded-4xl
+  border border-transparent items-center text-sm font-semibold
+  tracking-wide hover:bg-secondary/60;
+  max-height: 64px;
 }

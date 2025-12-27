@@ -40,7 +40,7 @@ export default async function handler(
     });
 
     if (count === 0) {
-      return res.status(200).json([]); 
+      return res.status(200).json([]);
     }
 
     const skip =
@@ -56,7 +56,6 @@ export default async function handler(
     });
 
     res.status(200).json(serializeProductVariant(relatedProducts));
-
   } catch (err) {
     console.error("Error fetching related products:", err);
     res.status(500).json({ error: "Failed to fetch related products" });

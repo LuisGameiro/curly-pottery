@@ -1,5 +1,4 @@
-
-    "use server";
+"use server";
 
 import { prisma } from "prisma/prisma";
 import { serializeOrders, serializeProduct } from "./helpers";
@@ -8,7 +7,6 @@ import { revalidatePath } from "next/cache";
 
 // app/actions/orders.ts
 export async function updateOrderStatus(orderId: string, newStatus: string) {
-
   try {
     // 1. Validate the status against your Prisma Enum (Case-Sensitive!)
     // If your schema says "PAID", sending "Paid" will fail.
@@ -20,8 +18,8 @@ export async function updateOrderStatus(orderId: string, newStatus: string) {
     });
 
     // 2. Refresh the data on the page immediately
-    revalidatePath('/admin/orders');
-    
+    revalidatePath("/admin/orders");
+
     return { success: true };
   } catch (error) {
     console.error("Database Update Error:", error);
@@ -29,34 +27,32 @@ export async function updateOrderStatus(orderId: string, newStatus: string) {
   }
 }
 export async function getAllOrders() {
-    const ordersRaw = await prisma.order.findMany({
-        orderBy: {
-            createdAt: "desc",
-        },
-        include: {
-            customer
-                : true,
-        },
-    });
+  const ordersRaw = await prisma.order.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      customer: true,
+    },
+  });
 
-    return serializeOrders(ordersRaw);
+  return serializeOrders(ordersRaw);
 }
 
 export async function getOrderById(id: string) {
-    const orderRaw = await prisma.order.findUnique({
-        where: { id },
-        include: {
-            customer: true,
-        },
-    });
+  const orderRaw = await prisma.order.findUnique({
+    where: { id },
+    include: {
+      customer: true,
+    },
+  });
 
-    if (!orderRaw) {
-        throw new Error("Order not found");
-    }
+  if (!orderRaw) {
+    throw new Error("Order not found");
+  }
 
-    return serializeOrders([orderRaw])[0];
+  return serializeOrders([orderRaw])[0];
 }
-
 
 // export async function updateOrderStatus(id: string, status: OrderStatus) {
 //     const updatedOrder = await prisma.order.update({
@@ -66,7 +62,7 @@ export async function getOrderById(id: string) {
 
 //     // revalidatePath("/admin/orders");
 //   //  return serializeOrders([updatedOrder])[0];
-// }   
+// }
 
 // export async function createOrderFromCart(input: {
 //   cartId: string;

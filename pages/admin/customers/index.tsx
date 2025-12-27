@@ -1,7 +1,17 @@
-import { Container, Text, Skeleton, Input } from "@components/ui";
+import { Container, Text, Skeleton, Input, Button } from "@components/ui";
 import { GetStaticPropsContext, InferGetStaticPropsType } from "next";
 import Link from "next/link";
-import { User, Mail, Phone, ShoppingBag, Search, ExternalLink, MailCheck, MailX } from "lucide-react";
+import {
+  User,
+  Mail,
+  Phone,
+  ShoppingBag,
+  Search,
+  ExternalLink,
+  MailCheck,
+  MailX,
+  Eye,
+} from "lucide-react";
 import { useState, useMemo } from "react";
 import AdminLayout from "pages/admin/layout";
 import { getAllCustomers } from "actions/customer.actions";
@@ -14,121 +24,140 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
   };
 }
 
-export default function CustomersPage({ customers }: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function CustomersPage({
+  customers,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredCustomers = useMemo(() => {
-    return customers.filter(c => 
-      `${c.firstName} ${c.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.email.toLowerCase().includes(searchTerm.toLowerCase())
+    return customers.filter(
+      (c) =>
+        `${c.firstName} ${c.lastName}`
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        c.email.toLowerCase().includes(searchTerm.toLowerCase()),
     );
   }, [customers, searchTerm]);
 
   return (
-    <Container className="container mx-auto px-4 py-10">
-      <div className="flex flex-col gap-6">
-        
-        {/* Header & Search */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b pb-6">
-          <div>
-            <Text variant='heading'>Customers</Text>
-            <Text>View and manage your customer relationships.</Text>
-          </div>
-          <div className="relative w-full md:w-80">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
-            <Input 
-              placeholder="Search by name or email..." 
-              className="pl-10" 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+    <Container>
+      <header>
+        <div>
+          <Text variant="heading">Customers</Text>
+          <Text variant="subHeading">
+            View and manage your customer relationships.
+          </Text>
         </div>
 
-        <main>
-          {filteredCustomers.length > 0 ? (
-            <div className="bg-background border border-border rounded-xl overflow-hidden shadow-sm">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-muted/30 border-b border-border text-xs uppercase tracking-wider">
-                    <th className="px-6 py-4 font-semibold">Customer</th>
-                    <th className="px-6 py-4 font-semibold">Contact Info</th>
-                    <th className="px-6 py-4 font-semibold text-center">Orders</th>
-                    <th className="px-6 py-4 font-semibold">Total Spend</th>
-                    <th className="px-6 py-4 font-semibold text-center">Marketing</th>
-                    <th className="px-6 py-4 font-semibold text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {filteredCustomers.map((customer) => {
-                    const totalSpend = customer.orders?.reduce((sum: number, order: any) => sum + order.totalPrice, 0) || 0;
-                    const orderCount = customer.orders?.length || 0;
+        <div className="relative w-full md:w-80">
+          <Search
+            className="absolute left-1 top-1/2 -translate-y-1/2 text-muted-foreground"
+            size={18}
+          />
+          <Input
+            placeholder="Search by name or email..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e)}
+          />
+        </div>
+      </header>
 
-                    return (
-                      <tr key={customer.id} className="hover:bg-slate-50/50 transition-colors group">
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-secondary-foreground font-bold border">
-                              {customer.firstName[0]}{customer.lastName[0]}
-                            </div>
-                            <div>
-                              <Text className="font-bold text-sm">{customer.firstName} {customer.lastName}</Text>
-                              <Text className="text-[10px] text-muted-foreground uppercase font-mono tracking-tighter">ID: {customer.id.slice(-6)}</Text>
-                            </div>
+      <main>
+        {filteredCustomers.length > 0 ? (
+          <div className=" border-2 border-border rounded-xl overflow-scroll shadow-sm">
+            <table>
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Contacts</th>
+                  <th>Orders</th>
+                  <th>Total Spend</th>
+                  <th>Marketing</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border text-center">
+                {filteredCustomers.map((customer) => {
+                  const totalSpend =
+                    customer.orders?.reduce(
+                      (sum: number, order: any) => sum + order.totalPrice,
+                      0,
+                    ) || 0;
+                  const orderCount = customer.orders?.length || 0;
+
+                  return (
+                    <tr key={customer.id}>
+                      <td className="items-center gap-1">
+                        <Text>
+                          {customer.firstName} {customer.lastName}
+                        </Text>
+                        <Text>ID: {customer.id.slice(-6)}</Text>
+                      </td>
+                      <td>
+                        <div className="flex items-center gap-1.5 min-w-0 justify-center">
+                          <Mail size={12} className="shrink-0" />
+                          <span className="break-all whitespace-normal">
+                            {customer.email}
+                          </span>
+                        </div>
+
+                        {customer.phone && (
+                          <div className="flex items-center gap-1.5 ">
+                            <Phone size={12} className="shrink-0" />
+                            <span className="break-all whitespace-normal">
+                              {customer.email}
+                            </span>
                           </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex flex-col gap-1">
-                            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                              <Mail size={12} /> {customer.email}
-                            </div>
-                            {customer.phone && (
-                              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                                <Phone size={12} /> {customer.phone}
-                              </div>
-                            )}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          <div className="inline-flex items-center gap-1 bg-slate-100 px-2 py-1 rounded text-xs font-medium">
-                            <ShoppingBag size={12} /> {orderCount}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 font-semibold text-sm">
-                          GBP {totalSpend.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          {customer.acceptsMarketing ? (
-                            <div className="flex justify-center" title="Subscribed to Marketing">
-                              <MailCheck className="text-green-500" size={18} />
-                            </div>
-                          ) : (
-                            <div className="flex justify-center" title="Not Subscribed">
-                              <MailX className="text-slate-300" size={18} />
-                            </div>
-                          )}
-                        </td>
-                        <td className="px-6 py-4 text-right">
-                          <Link href={`/admin/customers/${customer.id}`}>
-                            <button className="p-2 hover:bg-secondary rounded-lg transition-colors border shadow-sm flex items-center gap-2 text-xs font-medium ml-auto">
-                              Details <ExternalLink size={14} />
-                            </button>
-                          </Link>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div className="text-center py-20 border-2 border-dashed rounded-xl">
-              <User className="mx-auto text-slate-300 mb-4" size={48} />
-              <Text className="font-medium text-slate-500">No customers found matching your search.</Text>
-            </div>
-          )}
-        </main>
-      </div>
+                        )}
+                      </td>
+                      <td>
+                        <div>{orderCount}</div>
+                      </td>
+                      <td>
+                        £
+                        {totalSpend.toLocaleString(undefined, {
+                          minimumFractionDigits: 0,
+                        })}
+                      </td>
+                      <td>
+                        <div
+                          className="flex justify-center"
+                          title={
+                            customer.acceptsMarketing
+                              ? "Subscribed to Marketing"
+                              : "Not Subscribed"
+                          }
+                        >
+                          <MailCheck
+                            className={
+                              customer.acceptsMarketing
+                                ? "text-green-500"
+                                : "text-accent-2"
+                            }
+                            size={18}
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <Link href={`/admin/customers/${customer.id}`}>
+                          <Button variant="naked" title="View">
+                            <Eye size={18} />
+                          </Button>
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="py-10 text-center">
+            <User className="mx-auto" size={48} />
+            <Text>No customers found matching your search.</Text>
+          </div>
+        )}
+      </main>
     </Container>
   );
 }

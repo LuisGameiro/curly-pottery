@@ -183,4 +183,3 @@ export async function getRelatedProducts(
   });
   return serializeProductVariant(relatedProducts);
 }
-

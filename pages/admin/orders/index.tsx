@@ -1,9 +1,16 @@
 import AdminLayout from "../layout";
-import { Container, Text, Skeleton } from "@components/ui";
+import { Container, Text, Skeleton, Button } from "@components/ui";
 import { GetStaticPropsContext, InferGetStaticPropsType } from "next";
 import { getAllOrders } from "actions/order.actions"; // You'll need to create this
 import Link from "next/link";
-import { Eye, Clock, CheckCircle2, Package, Truck, AlertCircle } from "lucide-react";
+import {
+  Eye,
+  Clock,
+  CheckCircle2,
+  Package,
+  Truck,
+  AlertCircle,
+} from "lucide-react";
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   const orders = await getAllOrders();
@@ -13,74 +20,84 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
   };
 }
 
-export default function OrdersPage({ orders }: InferGetStaticPropsType<typeof getStaticProps>) {
-  
-  // Separate orders by status
-  const pendingOrders = orders.filter(o => o.status === "PENDING");
-  const otherOrders = orders.filter(o => o.status !== "PENDING");
+export default function OrdersPage({
+  orders,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
+  const pendingOrders = orders.filter((o) => o.status === "PENDING");
+  const otherOrders = orders.filter((o) => o.status !== "PENDING");
 
-  const OrderTable = ({ data, title, icon: Icon }: { data: any[], title: string, icon: any }) => (
-    <div className="flex flex-col gap-4"> 
-      <div className="flex items-center gap-2 px-2">
-        <Icon className={title === "Pending Orders" ? "text-amber-500" : "text-slate-400"} size={20} />
-        <Text variant="heading" >{title} ({data.length})</Text>
+  const OrderTable = ({
+    data,
+    title,
+    icon: Icon,
+  }: {
+    data: any[];
+    title: string;
+    icon: any;
+  }) => (
+    <div>
+      <div className="flex items-center gap-3 w-full md:w-auto ">
+        <Icon
+          className={
+            title === "Pending Orders" ? "text-amber-500" : "text-accent-8"
+          }
+          size={24}
+        />
+        <Text variant="sectionHeading" className="mt-2">
+          {title} ({data.length})
+        </Text>
       </div>
-      
-      <div className="bg-background border border-border rounded-xl overflow-hidden shadow-sm">
-        <table className="w-full text-left border-collapse">
+
+      <div className=" border-2 border-border rounded-xl shadow-sm">
+        <table>
           <thead>
-            <tr className="bg-muted/30 border-b border-border text-xs uppercase tracking-wider">
-              <th className="px-6 py-4 font-semibold">Order ID</th>
-              <th className="px-6 py-4 font-semibold">Customer</th>
-              <th className="px-6 py-4 font-semibold">Items</th>
-              <th className="px-6 py-4 font-semibold">Total</th>
-              <th className="px-6 py-4 font-semibold">Status</th>
-              <th className="px-6 py-4 font-semibold">Date</th>
-              <th className="px-6 py-4 font-semibold text-right">View</th>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>View</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border">
+
+          <tbody>
             {data.map((order) => (
-              <tr key={order.id} className="hover:bg-slate-50/50 transition-colors">
-                <td className="px-6 py-4">
-                  <span className="font-mono text-xs font-bold text-slate-500">#{order.id.slice(-6).toUpperCase()}</span>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex flex-col">
-                    <span className="font-medium text-sm">{order.customer.firstName} {order.customer.lastName}</span>
-                    <span className="text-xs text-muted-foreground">{order.customer.email}</span>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="text-xs max-w-[200px] truncate">
-                    {/* Assuming lineItems is an array inside the JSON */}
-                    {order.lineItems.map((item: any) => item.quantity + 'x ' + item.sku).join(', ')}
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <span className="font-semibold text-sm">
-                    {order.currency} {order.totalPrice.toFixed(2)}
+              <tr key={order.id}>
+                <td>#{order.id.slice(-6).toUpperCase()}</td>
+                <td className="flex flex-col">
+                  <span className="font-medium">
+                    {order.customer.firstName} {order.customer.lastName}
+                  </span>
+                  <span className="text-sm text-muted-foreground">
+                    {order.customer.email}
                   </span>
                 </td>
-                <td className="px-6 py-4">
-                   <StatusBadge status={order.status} />
+                <td className=" max-w-[200px] truncate text-sm">
+                  {order.lineItems
+                    .map((item: any) => item.quantity + "x " + item.sku)
+                    .join(", ")}
                 </td>
-                <td className="px-6 py-4 text-xs text-muted-foreground">
-                  {new Date(order.createdAt).toLocaleDateString()}
+                <td>£{order.totalPrice.toFixed(0)}</td>
+                <td>
+                  <StatusBadge status={order.status} />
                 </td>
-                <td className="px-6 py-4 text-right">
+                <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                <td>
                   <Link href={`/admin/orders/${order.id}`}>
-                    <button className="p-2 hover:bg-secondary rounded-full transition">
+                    <Button variant="naked" title="View">
                       <Eye size={18} />
-                    </button>
+                    </Button>
                   </Link>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+
         {data.length === 0 && (
-          <div className="py-10 text-center text-muted-foreground text-sm">
+          <div className="py-10 text-center">
             No orders found in this category.
           </div>
         )}
@@ -89,27 +106,29 @@ export default function OrdersPage({ orders }: InferGetStaticPropsType<typeof ge
   );
 
   return (
-    <Container className="container mx-auto px-4 py-10">
-      <div className="flex flex-col gap-12">
-        <header>
+    <Container>
+      <header>
+        <div>
           <Text variant="heading">Order Management</Text>
-          <Text>Review and process your store transactions.</Text>
-        </header>
+          <Text variant="subHeading">
+            Review and process your store transactions.
+          </Text>
+        </div>
+      </header>
 
-        {/* Top Section: Pending */}
-        <OrderTable 
-            data={pendingOrders} 
-            title="Pending Orders" 
-            icon={AlertCircle} 
+      <main>
+        <OrderTable
+          data={pendingOrders}
+          title="Pending Orders"
+          icon={AlertCircle}
         />
 
-        {/* Bottom Section: Everything Else */}
-        <OrderTable 
-            data={otherOrders} 
-            title="Order History" 
-            icon={CheckCircle2} 
+        <OrderTable
+          data={otherOrders}
+          title="Order History"
+          icon={CheckCircle2}
         />
-      </div>
+      </main>
     </Container>
   );
 }
@@ -125,7 +144,9 @@ function StatusBadge({ status }: { status: string }) {
   };
 
   return (
-    <span className={`text-[10px] font-bold px-2 py-1 rounded-full border ${styles[status] || styles.PENDING}`}>
+    <span
+      className={`text-sm font-bold px-1 rounded-full border ${styles[status] || styles.PENDING}`}
+    >
       {status}
     </span>
   );

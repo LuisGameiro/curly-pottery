@@ -1,5 +1,5 @@
 "use server";
-import {prisma} from "prisma/prisma"; // Adjust based on your setup
+import { prisma } from "prisma/prisma"; // Adjust based on your setup
 
 export async function getDashboardStats() {
   const [
@@ -14,7 +14,7 @@ export async function getDashboardStats() {
     prisma.customer.count(),
     prisma.order.count({ where: { status: "PENDING" } }),
     prisma.productVariant.findMany({
-      select: { stock: true, availableForSale: true }
+      select: { stock: true, availableForSale: true },
     }),
   ]);
 
@@ -23,9 +23,9 @@ export async function getDashboardStats() {
   const productsWithStock = await prisma.product.count({
     where: {
       variants: {
-        some: { stock: { gt: 0 } }
-      }
-    }
+        some: { stock: { gt: 0 } },
+      },
+    },
   });
 
   const productsOutOfStock = totalProducts - productsWithStock;
@@ -33,7 +33,9 @@ export async function getDashboardStats() {
   // Aggregate variant-level data
   const totalInventoryUnits = variants.reduce((acc, v) => acc + v.stock, 0);
   const lowStockThreshold = 5;
-  const lowStockVariants = variants.filter(v => v.stock > 0 && v.stock <= lowStockThreshold).length;
+  const lowStockVariants = variants.filter(
+    (v) => v.stock > 0 && v.stock <= lowStockThreshold,
+  ).length;
 
   return {
     totalCategories,

@@ -5,28 +5,26 @@ import { revalidatePath } from "next/cache";
 import { serializeCustomers } from "./helpers";
 
 export async function getAllCustomers() {
-    const customersRaw = await prisma.customer.findMany({
-        orderBy: {
-            createdAt: "desc",
-        },
-        include: {
-            orders: true,
-        },
-    });
+  const customersRaw = await prisma.customer.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      orders: true,
+    },
+  });
 
-    return serializeCustomers(customersRaw);
+  return serializeCustomers(customersRaw);
 }
 
 export async function getCustomerById(id: string) {
-    const customerRaw = await prisma.customer.findUnique({
-        where: { id },
-        include: {
-            orders: true,
-        }
-
-    });
-    return serializeCustomers([customerRaw])[0];
-
+  const customerRaw = await prisma.customer.findUnique({
+    where: { id },
+    include: {
+      orders: true,
+    },
+  });
+  return serializeCustomers([customerRaw])[0];
 }
 // export async function createUser(formData: FormData) {
 //   await prisma.user.create({

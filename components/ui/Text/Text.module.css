@@ -7,7 +7,7 @@
 }
 
 .heading {
-  @apply text-4xl pt-1 pb-2 font-semibold tracking-wide cursor-pointer mb-2;
+  @apply text-4xl pt-1 pb-2 font-semibold tracking-wide  mb-2;
 }
 
 .pageHeading {
@@ -15,7 +15,7 @@
 }
 
 .sectionHeading {
-  @apply pt-1 pb-2 text-2xl font-bold tracking-wide cursor-pointer mb-2;
+  @apply pt-1 pb-2 text-2xl font-bold tracking-wide cursor-default mb-2;
 }
 
 /* Apply base font sizes and styles for typography markup (h2, h2, ul, p, etc.).

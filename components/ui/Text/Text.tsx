@@ -15,7 +15,13 @@ interface TextProps {
   onClick?: () => any;
 }
 
-type Variant = "heading" | "body" | "pageHeading" | "sectionHeading" | "subHeading" | "bold";
+type Variant =
+  | "heading"
+  | "body"
+  | "pageHeading"
+  | "sectionHeading"
+  | "subHeading"
+  | "bold";
 
 const Text: FunctionComponent<TextProps> = ({
   style,
@@ -34,7 +40,7 @@ const Text: FunctionComponent<TextProps> = ({
     sectionHeading: "h2",
     subHeading: "h5",
     bold: "strong",
-   };
+  };
 
   const Component:
     | JSXElementConstructor<any>

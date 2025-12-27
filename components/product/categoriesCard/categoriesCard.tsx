@@ -17,10 +17,13 @@ const placeholderImg = "/product-img-placeholder.svg";
 const CategoriesCard: FC<Props> = ({ cat, imgProps, admin }) => {
   if (!cat) return null;
 
-
   return (
     <Link
-      href={admin?`/admin/categories/${cat?.slug}` : `/shop/category?=${cat?.name}`}
+      href={
+        admin
+          ? `/admin/categories/${cat?.slug}`
+          : `/shop/category?=${cat?.name}`
+      }
       aria-label={cat?.name}
       className="relative block h-full w-full overflow-hidden"
     >

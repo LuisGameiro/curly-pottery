@@ -1,23 +1,33 @@
-
 import AdminLayout from "../layout";
 import { Container, Text, Button } from "@components/ui";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { ArrowLeft, Package, MapPin, CreditCard, Calendar, User } from "lucide-react";
+import {
+  ArrowLeft,
+  Package,
+  MapPin,
+  CreditCard,
+  Calendar,
+  User,
+} from "lucide-react";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { getOrderById, updateOrderStatus } from "actions/order.actions";
 import { OrderStatus } from "@lib/types/customer";
 
-export async function getServerSideProps({ params }: GetServerSidePropsContext) {
+export async function getServerSideProps({
+  params,
+}: GetServerSidePropsContext) {
   const order = await getOrderById(params?.id as string);
   if (!order) return { notFound: true };
 
   return { props: { order } };
 }
 
-export default function OrderDetailsPage({ order }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function OrderDetailsPage({
+  order,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const [updating, setUpdating] = useState(false);
 
@@ -52,23 +62,28 @@ export default function OrderDetailsPage({ order }: InferGetServerSidePropsType<
   const billing = order.billingAddress as any;
 
   return (
-    <Container className="container mx-auto px-4 py-10 max-w-5xl">
-      {/* Navigation & Header */}
+    <Container>
       <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex flex-col gap-2">
-          <Link href="/admin/orders" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition">
+          <Link
+            href="/admin/orders"
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition"
+          >
             <ArrowLeft size={16} /> Back to Orders
           </Link>
           <div className="flex items-center gap-3">
-            <Text variant="heading">Order #{order.id.slice(-6).toUpperCase()}</Text>
-            <span className="text-sm bg-slate-100 px-3 py-1 rounded-full font-mono">{order.id}</span>
+            <Text variant="heading">
+              Order #{order.id.slice(-6).toUpperCase()}
+            </Text>
+            <span className="text-sm bg-slate-100 px-3 py-1 rounded-full font-mono">
+              {order.id}
+            </span>
           </div>
         </div>
 
-        {/* Status Control */}
         <div className="flex items-center gap-3 bg-white p-3 rounded-xl border shadow-sm">
           <Text className="text-sm font-semibold">Status:</Text>
-          <select 
+          <select
             className="bg-secondary text-sm font-medium rounded-lg px-3 py-2 outline-none border-none cursor-pointer"
             value={order.status}
             disabled={updating}
@@ -80,13 +95,11 @@ export default function OrderDetailsPage({ order }: InferGetServerSidePropsType<
             <option value="DELIVERED">Delivered</option>
             <option value="CANCELLED">Cancelled</option>
             <option value="COMPLETED">Completed</option>
-
           </select>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
         {/* Left Column: Line Items */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white border rounded-xl overflow-hidden shadow-sm">
@@ -98,15 +111,26 @@ export default function OrderDetailsPage({ order }: InferGetServerSidePropsType<
               {lineItems.map((item, idx) => (
                 <div key={idx} className="p-4 flex items-center gap-4">
                   <div className="relative h-16 w-16 rounded-md overflow-hidden border flex-shrink-0">
-                    <Image src={item.image} alt={item.name} fill className="object-cover" />
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
                   <div className="flex-1">
                     <Text className="font-medium text-sm">{item.name}</Text>
-                    <Text className="text-xs text-muted-foreground font-mono">{item.sku}</Text>
+                    <Text className="text-xs text-muted-foreground font-mono">
+                      {item.sku}
+                    </Text>
                   </div>
                   <div className="text-right">
-                    <Text className="text-sm font-medium">{order.currency} {item.price.toFixed(2)}</Text>
-                    <Text className="text-xs text-muted-foreground">Qty: {item.quantity}</Text>
+                    <Text className="text-sm font-medium">
+                      {order.currency} {item.price.toFixed(2)}
+                    </Text>
+                    <Text className="text-xs text-muted-foreground">
+                      Qty: {item.quantity}
+                    </Text>
                   </div>
                 </div>
               ))}
@@ -114,15 +138,21 @@ export default function OrderDetailsPage({ order }: InferGetServerSidePropsType<
             <div className="p-6 bg-slate-50 space-y-2 border-t">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span>{order.currency} {order.subtotalPrice.toFixed(2)}</span>
+                <span>
+                  {order.currency} {order.subtotalPrice.toFixed(2)}
+                </span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Taxes {order.taxesIncluded && '(Included)'}</span>
+                <span className="text-muted-foreground">
+                  Taxes {order.taxesIncluded && "(Included)"}
+                </span>
                 <span>{order.currency} 0.00</span>
               </div>
               <div className="flex justify-between text-lg font-bold pt-2 border-t">
                 <span>Total</span>
-                <span>{order.currency} {order.totalPrice.toFixed(2)}</span>
+                <span>
+                  {order.currency} {order.totalPrice.toFixed(2)}
+                </span>
               </div>
             </div>
           </div>
@@ -137,8 +167,12 @@ export default function OrderDetailsPage({ order }: InferGetServerSidePropsType<
               <Text className="font-bold text-sm">Customer</Text>
             </div>
             <div>
-              <Text className="font-medium text-sm">{order.customer.firstName} {order.customer.lastName}</Text>
-              <Text className="text-sm text-muted-foreground">{order.customer.email}</Text>
+              <Text className="font-medium text-sm">
+                {order.customer.firstName} {order.customer.lastName}
+              </Text>
+              <Text className="text-sm text-muted-foreground">
+                {order.customer.email}
+              </Text>
             </div>
           </div>
 
@@ -150,13 +184,19 @@ export default function OrderDetailsPage({ order }: InferGetServerSidePropsType<
             </div>
             {shipping ? (
               <div className="text-sm space-y-1 text-muted-foreground">
-                <p className="text-foreground font-medium">{shipping.firstName} {shipping.lastName}</p>
+                <p className="text-foreground font-medium">
+                  {shipping.firstName} {shipping.lastName}
+                </p>
                 <p>{shipping.street}</p>
-                <p>{shipping.city}, {shipping.zipCode}</p>
+                <p>
+                  {shipping.city}, {shipping.zipCode}
+                </p>
                 <p>{shipping.country}</p>
               </div>
             ) : (
-              <Text className="text-sm italic text-muted-foreground">No shipping address provided.</Text>
+              <Text className="text-sm italic text-muted-foreground">
+                No shipping address provided.
+              </Text>
             )}
           </div>
 
@@ -167,12 +207,18 @@ export default function OrderDetailsPage({ order }: InferGetServerSidePropsType<
               <Text className="font-bold text-sm">Payment Info</Text>
             </div>
             <div className="flex justify-between items-center text-sm">
-              <span className="text-muted-foreground text-xs uppercase tracking-wider">Method</span>
+              <span className="text-muted-foreground text-xs uppercase tracking-wider">
+                Method
+              </span>
               <span className="font-medium">Card (Visa)</span>
             </div>
             <div className="flex justify-between items-center text-sm">
-              <span className="text-muted-foreground text-xs uppercase tracking-wider">Date</span>
-              <span className="font-medium">{new Date(order.createdAt).toLocaleDateString()}</span>
+              <span className="text-muted-foreground text-xs uppercase tracking-wider">
+                Date
+              </span>
+              <span className="font-medium">
+                {new Date(order.createdAt).toLocaleDateString()}
+              </span>
             </div>
           </div>
         </div>
@@ -182,4 +228,3 @@ export default function OrderDetailsPage({ order }: InferGetServerSidePropsType<
 }
 
 OrderDetailsPage.Layout = AdminLayout;
-

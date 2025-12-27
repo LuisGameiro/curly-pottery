@@ -23,7 +23,7 @@ const links = [
 const Footer: FC<Props> = ({ pages }) => {
   return (
     <footer className={s.root}>
-    <Container clean className="max-w-10/12 mx-auto">
+      <Container clean className="max-w-10/12 mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-start py-12 border-b border-border gap-10">
           <div className="shrink-0">
             <Link href="/" className="flex items-center font-bold">

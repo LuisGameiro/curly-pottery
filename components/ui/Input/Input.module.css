@@ -2,9 +2,21 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply bg-primary py-2 px-6 w-full appearance-none transition duration-150 ease-in-out pr-10 border border-accent-3 text-accent-6;
+  @apply bg-background/60 pl-6 pr-2 py-2 w-full appearance-none transition duration-150 ease-in-out border border-border ;
 }
 
 .root:focus {
   @apply outline-none shadow-outline-normal;
+}
+
+.container {
+  @apply flex flex-col gap-1.5 w-full
+}
+
+.error{
+  @apply border-red-500
+}
+
+.errorMessage{
+  @apply text-xs text-red-500 font-medium animate-in fade-in slide-in-from-top-1
 }

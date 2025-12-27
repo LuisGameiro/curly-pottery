@@ -10,10 +10,7 @@ import { Container, Skeleton } from "@components/ui";
 import { Layout } from "@components/common";
 import { Category } from "@lib/types/category";
 import { Product } from "@lib/types/product";
-import {
-  serializeProduct,
-  serializeProductVariant,
-} from "actions/helpers";
+import { serializeProduct, serializeProductVariant } from "actions/helpers";
 
 export interface ShopPageProps {
   products: Product[];
@@ -37,12 +34,12 @@ export const getServerSideProps: GetServerSideProps<ShopPageProps> = async ({
   const products = await prisma.product.findMany({
     where: categorySlug
       ? {
-        categories: {
-          some: {
-            slug: categorySlug,
+          categories: {
+            some: {
+              slug: categorySlug,
+            },
           },
-        },
-      }
+        }
       : undefined,
     include: {
       categories: true,
@@ -104,7 +101,8 @@ export default function Shop({
         return list.sort((a, b) => b.name.localeCompare(a.name));
       default: // 'newest'
         return list.sort(
-          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
     }
   }, [sortMethod, products]);
@@ -136,10 +134,7 @@ export default function Shop({
             >
               <span>{sortLabels[sortMethod]}</span>
               <svg
-                className={cn(
-                  "transition-transform",
-                  openSort && "rotate-180",
-                )}
+                className={cn("transition-transform", openSort && "rotate-180")}
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
