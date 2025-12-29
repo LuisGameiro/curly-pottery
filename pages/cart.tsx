@@ -1,4 +1,5 @@
 import { CartItem } from "@components/cart";
+import Layout from "@components/common/Layout";
 import { Container, Text, Button } from "@components/ui";
 import useCart from "@lib/hooks/useCart";
 
@@ -14,7 +15,6 @@ export default function CartPage() {
       <Container className="py-20 flex flex-col items-center justify-center">
         <ShoppingBag size={64} className="text-slate-200 mb-4" />
         <Text variant="heading">Your cart is empty</Text>
-        <Button href="/" className="mt-6">Continue Shopping</Button>
       </Container>
     );
   }
@@ -24,9 +24,9 @@ export default function CartPage() {
       <div className="lg:col-span-8">
         <Text variant="heading" className="mb-6">Shopping Cart</Text>
         <ul className="divide-y border-t border-b">
-          {data?.lineItems.map((item: any) => (
+          {/* {data?.lineItems.map((item: any) => (
             <CartItem key={item.id} item={item} currencyCode={data.currency} />
-          ))}
+          ))} */}
         </ul>
       </div>
 
@@ -51,3 +51,5 @@ export default function CartPage() {
     </Container>
   );
 }
+
+CartPage.Layout = Layout;

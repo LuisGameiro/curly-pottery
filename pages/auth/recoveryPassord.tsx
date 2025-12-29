@@ -2,6 +2,7 @@ import { Button, Text, Input } from "@components/ui";
 import { Container, Link, Mail } from "lucide-react";
 
 import { useState } from "react";
+import Layout from "@components/common/Layout";
 
 export default function RecoveryPage() {
     const [sent, setSent] = useState(false);
@@ -43,3 +44,5 @@ export default function RecoveryPage() {
         </Container>
     );
 }
+
+RecoveryPage.Layout = Layout;

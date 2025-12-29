@@ -1,5 +1,6 @@
 import Layout from "@components/common/Layout";
-import { Button } from "@components/ui";
+import { Container, Text, Button, Input } from '@components/ui';
+import InputTextArea from "@components/ui/Input/InputTextArea";
 import { GetStaticPropsContext } from "next";
 import React, { useState } from "react";
 
@@ -65,7 +66,7 @@ export default function Contacts() {
         setStatus("success");
         setMessage(
           data.message ||
-            "Thank you for your message! We will be in touch soon.",
+          "Thank you for your message! We will be in touch soon.",
         );
         // Clear the form after success
         setFormData({ name: "", email: "", message: "" });
@@ -73,7 +74,7 @@ export default function Contacts() {
         setStatus("error");
         setMessage(
           data.error ||
-            "There was an error sending your message. Please try again.",
+          "There was an error sending your message. Please try again.",
         );
       }
     } catch (error) {
@@ -84,22 +85,25 @@ export default function Contacts() {
   };
 
   return (
-    <main className="bg-gradient-to-r from-accent-4 to-accent-9">
-      <section className="pt-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-primary mb-4">Contact Us</h1>
-          <p className="text-lg  text-primary-2">
+    <Container >
+      <header>
+        <div className="max-w-lg mx-auto text-center">
+
+          <Text variant="heading">Contact Us</Text>
+
+          <Text>
             We'd love to hear from you! Please reach out using the information
             below or fill out the contact form.
-          </p>
+          </Text>
         </div>
-      </section>
+      </header>
 
-      <section className="sm:py-8 md:py-8 px-4 sm:px-6 lg:px-12">
-        <div className="max-w-3xl mx-auto space-y-6">
-          <h2 className="text-2xl font-bold text-primary my-2 mt-6">
-            Our Details
-          </h2>
+      <main className="sm:py-8 md:py-8 px-4 sm:px-6 mx-auto lg:px-12 w-full flex">
+        <section >
+          <Text variant='sectionHeading'>
+            Our Details            
+          </Text>
+
           <ul className="text-primary-2 space-y-2">
             <li>
               📧 Email:{" "}
@@ -118,77 +122,56 @@ export default function Contacts() {
             </li>
             <li>📍 Address: 123 Pottery Lane, Claytown, USA</li>
           </ul>
-        </div>
-      </section>
+        </section>
 
-      <section className="sm:py-8 md:py-8 px-4 sm:px-6 lg:px-12 ">
-        <div className="max-w-3xl mx-auto space-y-6">
-          <h2 className="text-2xl font-bold text-primary my-2 mt-6">
+        <section >
+          <Text variant='sectionHeading'>
             Contact Form
-          </h2>
+          </Text>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-primary-2 font-medium mb-1"
-              >
-                Full Name:
-              </label>
-              <input
-                className="w-full p-3 border border-gray-300 rounded-md bg-white text-gray-800 focus:ring-2 focus:ring-accent-5 focus:border-accent-5 transition duration-150 ease-in-out"
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-primary-2 font-medium mb-1"
-              >
-                Email Address:
-              </label>
-              <input
-                className="w-full p-3 border border-gray-300 rounded-md bg-white text-gray-800 focus:ring-2 focus:ring-accent-5 focus:border-accent-5 transition duration-150 ease-in-out"
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="message"
-                className="block text-primary-2 font-medium mb-1"
-              >
-                Your Message:
-              </label>
-              <textarea
-                className="w-full p-3 border border-gray-300 rounded-md bg-white text-gray-800 focus:ring-2 focus:ring-accent-5 focus:border-accent-5 transition duration-150 ease-in-out"
-                id="message"
-                name="message"
-                rows={5}
-                value={formData.message}
-                onChange={handleChange}
-                required
-              />
-            </div>
+            <Input
+              label="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              type="text"
+              id="name"
+              name="name"
+            />
+            <Input
+              label="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              type="text"
+              id="email"
+              name="email"
+            />
+            <InputTextArea
+              label="Your Message:"
+              value={formData.message}
+              onChange={handleChange}
+              required
+              id="message"
+              name="message"
+              rows={5}
+
+            />
+
+
             <Button
               type="submit"
+              variant="secondary"
               // Disable button while loading or on success/error to prevent double submission
               disabled={status === "loading" || status === "success"}
             >
               {status === "loading" ? "Sending..." : "Send Message"}
             </Button>
           </form>
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
+    </Container>
+
   );
 }
 
