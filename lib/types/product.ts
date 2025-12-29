@@ -1,4 +1,5 @@
 import { Category } from "./category";
+import { Discount } from "./customer";
 
 export const CurrencyCode = {
   USD: "USD",
@@ -18,6 +19,18 @@ export const SizeNames = {
   XXL: "XXL",
 } as const;
 export type SizeNames = (typeof SizeNames)[keyof typeof SizeNames];
+
+export const Detailtype = {
+  Materials: "Materials",
+  Size: "Size",
+  Finish: 'Finish',
+  Features: 'Features',
+  Capacity: 'Capacity',
+  Shape: 'Shape',
+  Glazes: 'Glazes'
+} as const;
+export type Detailtype = (typeof Detailtype)[keyof typeof Detailtype];
+
 
 export interface Product {
   id: string;
@@ -41,17 +54,19 @@ export type ProductVariant = {
   stock: number;
   availableForSale: boolean;
   sizeName: SizeNames;
-  widthCm: number;
-  heightCm: number;
-  depthCm: number;
-  glazes?: string[];
-  colorName?: string;
-  colorHex?: string;
+  details: Detail[]
+  discounts: Discount[]
   createdAt: Date;
   updatedAt: Date;
   productId: string;
   images: string[];
 };
+export type Detail = {
+  title: Detailtype | string 
+  description: string  
+}
+
+
 
 export type FullProduct = {
   id: string;

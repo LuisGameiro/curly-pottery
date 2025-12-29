@@ -13,6 +13,9 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
   className?: string;
   variant?: "flat" | "slim" | "ghost" | "naked" | "secondary";
+  // Added props
+  size?: "sm" | "md" | "lg";
+  color?: "primary" | "danger" | "success" | "warning";
   active?: boolean;
   type?: "submit" | "reset" | "button";
   Component?: string | JSXElementConstructor<any>;
@@ -26,6 +29,8 @@ const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
   const {
     className,
     variant = "flat",
+    size = "md",      // Default size
+    color = "primary", // Default color
     children,
     active,
     width,
@@ -35,6 +40,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
     Component = "button",
     ...rest
   } = props;
+  
   const ref = useRef<typeof Component>(null);
 
   const rootClassName = cn(
@@ -44,6 +50,13 @@ const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
       [s.slim]: variant === "slim",
       [s.naked]: variant === "naked",
       [s.secondary]: variant === "secondary",
+      // Map sizes
+      [s.sm]: size === "sm",
+      [s.lg]: size === "lg",
+      // Map colors
+      [s.danger]: color === "danger",
+      [s.success]: color === "success",
+      [s.warning]: color === "warning",
       [s.loading]: loading,
       [s.disabled]: disabled,
     },
@@ -54,6 +67,8 @@ const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
     <Component
       aria-pressed={active}
       data-variant={variant}
+      data-size={size}
+      data-color={color}
       ref={mergeRefs([ref, buttonRef])}
       className={rootClassName}
       disabled={disabled}

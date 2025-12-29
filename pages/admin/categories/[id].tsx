@@ -119,61 +119,62 @@ export default function CategoryFormPage() {
           {isEditMode ? "Save Changes" : "Create Category"}
         </Button>
       </header>
+      <main>
+        <form onSubmit={handleSubmit} className=" space-y-6 mx-auto md:w-8/12">
+          <Input
+            label="Category Name"
+            error={errors.name}
+            required
+            type="text"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            placeholder="e.g. Home Decor"
+          />
 
-      <form onSubmit={handleSubmit} className=" space-y-6 mx-auto md:w-8/12">
-        <Input
-          label="Category Name"
-          error={errors.name}
-          required
-          type="text"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          placeholder="e.g. Home Decor"
-        />
-
-        <div className="flex gap-2 ">
-          <span className="font-semibold">URL Slug:</span>
-          <span className="text-muted-foreground">
-            /{slugify(formData.name)}
-          </span>
-        </div>
-
-        <div>
-          <label className="block mb-2">Category Image</label>
-          <div className="flex gap-4 items-center">
-            <div className="w-24 h-24 bg-slate-100 rounded-lg flex items-center justify-center border border-dashed border-border overflow-hidden shrink-0">
-              {preview || formData.image ? (
-                <img
-                  src={preview || formData.image}
-                  alt="Preview"
-                  className="object-cover w-full h-full"
-                />
-              ) : (
-                <ImageIcon className="text-slate-400" />
-              )}
-            </div>
-
-            <div className="flex-1">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
-              />
-              <p className="text-xs text-slate-500 mt-2">
-                {preview
-                  ? "New file selected" + { preview }
-                  : formData.image
-                    ? "Currently using saved URL"
-                    : "No image selected"}
-              </p>
-            </div>
+          <div className="flex gap-2 ">
+            <span className="font-semibold">URL Slug:</span>
+            <span className="text-muted-foreground">
+              /{slugify(formData.name)}
+            </span>
           </div>
-          {errors.image && (
-            <p className="text-red-500 text-xs mt-1">{errors.image}</p>
-          )}
-        </div>
-      </form>
+
+          <div>
+            <label className="block mb-2">Category Image</label>
+            <div className="flex gap-4 items-center">
+              <div className="w-24 h-24 bg-slate-100 rounded-lg flex items-center justify-center border border-dashed border-border overflow-hidden shrink-0">
+                {preview || formData.image ? (
+                  <img
+                    src={preview || formData.image}
+                    alt="Preview"
+                    className="object-cover w-full h-full"
+                  />
+                ) : (
+                  <ImageIcon className="text-slate-400" />
+                )}
+              </div>
+
+              <div className="flex-1">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+                />
+                <p className="text-xs text-slate-500 mt-2">
+                  {preview
+                    ? "New file selected" + { preview }
+                    : formData.image
+                      ? "Currently using saved URL"
+                      : "No image selected"}
+                </p>
+              </div>
+            </div>
+            {errors.image && (
+              <p className="text-red-500 text-xs mt-1">{errors.image}</p>
+            )}
+          </div>
+        </form>
+      </main>
     </Container>
   );
 }

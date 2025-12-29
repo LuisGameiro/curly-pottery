@@ -10,6 +10,12 @@ export const OrderStatus = {
 } as const;
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];
 
+export const DiscountType = {
+"PERCENTAGE": "PERCENTAGE",
+"FIXED_AMOUNT": "FIXED_AMOUNT"
+} as const;
+export type DiscountType = (typeof DiscountType)[keyof typeof DiscountType];
+
 export type Customer = {
   id: string;
   firstName: string;
@@ -69,8 +75,9 @@ export type CartLineItem = {
 
 export type Discount = {
   code: string;
-  type: "PERCENTAGE" | "FIXED_AMOUNT";
+  type: DiscountType;
   value: number;
+  percentage :number
   amountSaved: number;
 };
 
