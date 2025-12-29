@@ -43,7 +43,7 @@
 }
 
 .naked:hover{
-  @apply text-on-secondary bg-secondary
+  @apply text-on-secondary bg-secondary/20
 }
 .naked:focus {
   @apply bg-transparent border-none;

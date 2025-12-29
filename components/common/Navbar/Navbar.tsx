@@ -2,8 +2,9 @@ import { FC } from "react";
 import Link from "next/link";
 import s from "./Navbar.module.css";
 import NavbarRoot from "./NavbarRoot";
-import { Logo, Container } from "@components/ui";
+import { Logo, Container, Button } from "@components/ui";
 import { Searchbar, UserNav } from "@components/common";
+import { signOut, signIn } from "next-auth/react";
 
 interface Link {
   href: string;
@@ -15,6 +16,7 @@ interface NavbarProps {
 }
 
 const Navbar: FC<NavbarProps> = ({ links }) => (
+  
   <NavbarRoot>
     <Container clean className="max-w-10/12 mx-auto">
       <div className={s.nav}>
@@ -38,15 +40,18 @@ const Navbar: FC<NavbarProps> = ({ links }) => (
             </nav>
           ) : null}
 
-          <div className="hidden lg:block lg:ml-8">
+          {/* <div className="hidden lg:block lg:ml-8">
             <Searchbar />
-          </div>
+          </div> */}
         </div>
 
         <div className="flex items-center justify-end flex-1 space-x-8">
           <UserNav />
         </div>
       </div>
+
+
+
       {/* {process.env.COMMERCE_SEARCH_ENABLED && (
           <div className="justify-center flex-1 hidden lg:flex">
             <Searchbar />

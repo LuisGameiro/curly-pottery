@@ -1,5 +1,3 @@
-import cn from "clsx";
-import Link from "next/link";
 import s from "./UserNav.module.css";
 import { Avatar } from "@components/common";
 // import useCart from '@framework/cart/use-cart'
@@ -15,12 +13,16 @@ import {
 } from "@components/ui";
 
 import type { LineItem } from "@lib/types/inspiration/cart";
+import { signIn, useSession } from "next-auth/react";
+import { cn } from "@lib/utils";
 
 const countItem = (count: number, item: LineItem) => count + item.quantity;
 
 const UserNav: React.FC<{
   className?: string;
 }> = ({ className }) => {
+    const { data: session, status } = useSession();
+
   // const { data } = useCart()
   // const { data: isCustomerLoggedIn } = useCustomer()
   const { closeSidebarIfPresent, openModal, setSidebarView, openSidebar } =
@@ -71,8 +73,26 @@ const UserNav: React.FC<{
             <CustomerMenuContent />
           </Dropdown>
         </li>
+                <div className="flex gap-4">
+          {status === "authenticated" ? (
+            <>
+              {/* Show Admin Link only if role is ADMIN */}
+              {session.user.role === "ADMIN" && (
+                <Button href="/admin" variant="ghost">Admin Panel</Button>
+              )}
+
+              <Button href="/profile" variant="naked">My Account</Button>
+
+              <Button color="danger" size="sm" onClick={() => signOut()}>
+                Logout
+              </Button>
+            </>
+          ) : (
+            <Button onClick={() => signIn()}>Login</Button>
+          )}
+        </div>
         <li className={s.mobileMenu}>
-          <Button
+          {/* <Button
             className={s.item}
             aria-label="Menu"
             variant="naked"
@@ -82,7 +102,7 @@ const UserNav: React.FC<{
             }}
           >
             <Menu />
-          </Button>
+          </Button> */}
         </li>
       </ul>
     </nav>
