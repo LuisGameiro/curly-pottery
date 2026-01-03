@@ -1,12 +1,15 @@
 import { Category } from "@lib/types/category";
-import { Customer, OrderStatus } from "@lib/types/customer";
-import { CurrencyCode, Product, SizeNames } from "@lib/types/product";
+import {  OrderStatus } from "@lib/types/customer";
+import { Detailtype } from "@lib/types/product";
+import { DEFAULT_RUNTIME_WEBPACK } from "next/dist/shared/lib/constants";
+import { title } from "node:process";
+import {  CurrencyCode, Customer, Product, SizeNames } from "prisma/generated/prisma/client";
+
 
 export const categories: Category[] = [
   {
     id: "cat-1",
     name: "Plates",
-    url: "/search?category=plates",
     image: "https://picsum.photos/600/600?random=201",
     slug: "plates",
   },
@@ -62,7 +65,6 @@ export const products: Product[] = [
     description: "A hand-thrown stoneware vase with a matte finish.",
     slug: "minimalist-ceramic-vase",
     images: ["https://picsum.photos/seed/vase1/600/600"],
-    categories: ["vases"],
     requiresShipping: true,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -75,21 +77,37 @@ export const products: Product[] = [
         stock: 12,
         availableForSale: true,
         sizeName: SizeNames.S,
-        widthCm: 10,
-        heightCm: 15,
-
         colorName: "Studio White",
         colorHex: "#FFFFFF",
         productId: "p1",
+
+        details:[
+          {
+            title: Detailtype.Capacity,
+            description: 'The capacity is 3l'
+          },
+          {
+              title: Detailtype.Glazes,
+            description: 'combination of temoco and uribe'
+          }
+        ],
+        discounts: [
+          {
+            code: "WELCOME10",
+            type: "PERCENTAGE",
+            value: 10,
+            amountSaved: 5.5,
+          },
+        ],
         createdAt: new Date(),
         updatedAt: new Date(),
-        depthCm: 0,
         images: [
           "https://picsum.photos/seed/vase11/600/600",
           "https://picsum.photos/seed/vase11/600/600",
           "https://picsum.photos/seed/vase13/600/600",
           "https://picsum.photos/seed/vase12/600/600",
         ],
+
       },
       {
         id: "v2",
@@ -99,15 +117,12 @@ export const products: Product[] = [
         stock: 8,
         availableForSale: true,
         sizeName: SizeNames.M,
-        widthCm: 15,
-        heightCm: 22,
         colorName: "Studio White",
         colorHex: "#FFFFFF",
         productId: "p1",
         createdAt: new Date(),
         updatedAt: new Date(),
         images: ["https://picsum.photos/seed/vasew/600/600"],
-        depthCm: 10,
       },
     ],
   },
@@ -304,6 +319,7 @@ export const products: Product[] = [
   },
 ];
 
+// Updated customers array with accounts
 export const customers: Customer[] = [
   // CUSTOMER 1: Frequent Buyer (Active Cart + Many Orders)
   {
@@ -314,6 +330,16 @@ export const customers: Customer[] = [
     acceptsMarketing: true,
     createdAt: new Date("2024-10-01"),
     updatedAt: new Date(),
+    // New: Account field
+    account: {
+      id: "acc_1",
+      type: "oauth",
+      provider: "google",
+      providerAccountId: "google_123456789",
+      admin: true, // First customer is admin
+      createdAt: new Date("2024-10-01"),
+      updatedAt: new Date(),
+    },
     addresses: [
       {
         id: "addr_1",
@@ -390,6 +416,16 @@ export const customers: Customer[] = [
     acceptsMarketing: false,
     createdAt: new Date("2024-11-15"),
     updatedAt: new Date(),
+    // New: Account field
+    account: {
+      id: "acc_2",
+      type: "credentials",
+      provider: "email",
+      providerAccountId: "ana.silva@example.pt",
+      admin: false,
+      createdAt: new Date("2024-11-15"),
+      updatedAt: new Date(),
+    },
     addresses: [],
     cart: {
       id: "cart_2",
@@ -473,6 +509,16 @@ export const customers: Customer[] = [
     acceptsMarketing: true,
     createdAt: new Date("2024-09-01"),
     updatedAt: new Date(),
+    // New: Account field
+    account: {
+      id: "acc_3",
+      type: "oauth",
+      provider: "google",
+      providerAccountId: "google_987654321",
+      admin: false,
+      createdAt: new Date("2024-09-01"),
+      updatedAt: new Date(),
+    },
     addresses: [],
     cart: {
       id: "cart_3",
@@ -522,6 +568,16 @@ export const customers: Customer[] = [
     acceptsMarketing: true,
     createdAt: new Date("2024-12-01"),
     updatedAt: new Date(),
+    // New: Account field
+    account: {
+      id: "acc_4",
+      type: "oauth",
+      provider: "github",
+      providerAccountId: "github_123456",
+      admin: false,
+      createdAt: new Date("2024-12-01"),
+      updatedAt: new Date(),
+    },
     addresses: [],
     cart: {
       id: "cart_4",
@@ -572,3 +628,273 @@ export const customers: Customer[] = [
     })),
   },
 ];
+
+// export const customers: Customer[] = [
+//   // CUSTOMER 1: Frequent Buyer (Active Cart + Many Orders)
+//   {
+//     id: "cust_1",
+//     firstName: "Luis",
+//     lastName: "Gaga",
+//     email: "l.gameiro@gmail.com",
+//     acceptsMarketing: true,
+//     createdAt: new Date("2024-10-01"),
+//     updatedAt: new Date(),
+//     addresses: [
+//       {
+//         id: "addr_1",
+//         type: "shipping",
+//         firstName: "Luis",
+//         lastName: "Gaga",
+//         company: "Creative Studio",
+//         streetNumber: "123",
+//         apartments: "Flat 4B",
+//         postalCode: "1000-001",
+//         city: "Lisbon",
+//         country: "Portugal",
+//         customerId: "cust_1",
+//         createdAt: new Date(),
+//       },
+//     ],
+//     cart: {
+//       id: "cart_1",
+//       customerId: "cust_1",
+//       taxesIncluded: true,
+//       lineItems: [
+//         {
+//           variantId: "v1",
+//           sku: "VASE-S-WHT",
+//           name: "Minimalist Vase",
+//           image: "https://picsum.photos/seed/v1/200",
+//           quantity: 1,
+//           price: 35.0,
+//           currency: "EUR",
+//           sizeName: "S",
+//           colorName: "White",
+//         },
+//       ],
+//       discounts: [],
+//       subtotalPrice: 35.0,
+//       lineItemsSubtotalPrice: 35.0,
+//       totalPrice: 35.0,
+//       currency: "EUR",
+//       createdAt: new Date(),
+//       updatedAt: new Date(),
+//     },
+//     orders: Array.from({ length: 8 }).map((_, i) => ({
+//       id: `ord_1_${i}`,
+//       customerId: "cust_1",
+//       status: i === 0 ? OrderStatus.PENDING : OrderStatus.COMPLETED,
+//       taxesIncluded: true,
+//       lineItems: [
+//         {
+//           variantId: "v3",
+//           sku: "MUG-BLU",
+//           name: "Artisan Mug",
+//           image: "https://picsum.photos/seed/v3/200",
+//           quantity: 2,
+//           price: 22.0,
+//           currency: "EUR",
+//         },
+//       ],
+//       discounts: [],
+//       subtotalPrice: 44.0,
+//       lineItemsSubtotalPrice: 44.0,
+//       totalPrice: 44.0,
+//       currency: "EUR",
+//       createdAt: new Date(2024, 10, i + 1),
+//       updatedAt: new Date(),
+//     })),
+//   },
+
+//   // CUSTOMER 2: New User (Empty Cart + 2 Orders)
+//   {
+//     id: "cust_2",
+//     firstName: "Ana",
+//     lastName: "Silva",
+//     email: "ana.silva@example.pt",
+//     acceptsMarketing: false,
+//     createdAt: new Date("2024-11-15"),
+//     updatedAt: new Date(),
+//     addresses: [],
+//     cart: {
+//       id: "cart_2",
+//       customerId: "cust_2",
+//       taxesIncluded: true,
+//       lineItems: [],
+//       discounts: [],
+//       subtotalPrice: 0,
+//       lineItemsSubtotalPrice: 0,
+//       totalPrice: 0,
+//       currency: "EUR",
+//       createdAt: new Date(),
+//       updatedAt: new Date(),
+//     },
+//     orders: [
+//       {
+//         id: "ord_2_1",
+//         customerId: "cust_2",
+//         status: OrderStatus.PAID,
+//         taxesIncluded: true,
+//         lineItems: [
+//           {
+//             variantId: "v5",
+//             sku: "BOWL-L",
+//             name: "Serving Bowl",
+//             image: "https://picsum.photos/seed/v5/200",
+//             quantity: 1,
+//             price: 55.0,
+//             currency: "EUR",
+//           },
+//         ],
+//         discounts: [
+//           {
+//             code: "WELCOME10",
+//             type: "PERCENTAGE",
+//             value: 10,
+//             amountSaved: 5.5,
+//             percentage: 0
+//           },
+//         ],
+//         subtotalPrice: 49.5,
+//         lineItemsSubtotalPrice: 55.0,
+//         totalPrice: 49.5,
+//         currency: "EUR",
+//         createdAt: new Date(),
+//         updatedAt: new Date(),
+//       },
+//       {
+//         id: "ord_2_2",
+//         customerId: "cust_2",
+//         status: OrderStatus.CANCELLED,
+//         taxesIncluded: true,
+//         lineItems: [
+//           {
+//             variantId: "v1",
+//             sku: "VASE-S-WHT",
+//             name: "Vase",
+//             image: "https://picsum.photos/seed/v1/200",
+//             quantity: 1,
+//             price: 35.0,
+//             currency: "EUR",
+//           },
+//         ],
+//         discounts: [],
+//         subtotalPrice: 35.0,
+//         lineItemsSubtotalPrice: 35.0,
+//         totalPrice: 35.0,
+//         currency: "EUR",
+//         createdAt: new Date(),
+//         updatedAt: new Date(),
+//       },
+//     ],
+//   },
+
+//   // CUSTOMER 3: Commercial Client (6 Bulk Orders)
+//   {
+//     id: "cust_3",
+//     firstName: "John",
+//     lastName: "Doe",
+//     company: "Hotel Grande",
+//     email: "john@hotelgrande.com",
+//     acceptsMarketing: true,
+//     createdAt: new Date("2024-09-01"),
+//     updatedAt: new Date(),
+//     addresses: [],
+//     cart: {
+//       id: "cart_3",
+//       customerId: "cust_3",
+//       taxesIncluded: true,
+//       lineItems: [],
+//       discounts: [],
+//       subtotalPrice: 0,
+//       lineItemsSubtotalPrice: 0,
+//       totalPrice: 0,
+//       currency: "EUR",
+//       createdAt: new Date(),
+//       updatedAt: new Date(),
+//     },
+//     orders: Array.from({ length: 6 }).map((_, i) => ({
+//       id: `ord_3_${i}`,
+//       customerId: "cust_3",
+//       status: OrderStatus.SHIPPED,
+//       taxesIncluded: true,
+//       lineItems: [
+//         {
+//           variantId: "v3",
+//           sku: "MUG-BLU",
+//           name: "Bulk Mugs",
+//           image: "https://picsum.photos/seed/v3/200",
+//           quantity: 20,
+//           price: 20.0,
+//           currency: "EUR",
+//         },
+//       ],
+//       discounts: [],
+//       subtotalPrice: 400.0,
+//       lineItemsSubtotalPrice: 400.0,
+//       totalPrice: 400.0,
+//       currency: "EUR",
+//       createdAt: new Date(2024, 8, i + 10),
+//       updatedAt: new Date(),
+//     })),
+//   },
+
+//   // CUSTOMER 4: The Window Shopper (Active Cart + 4 Pending/Mixed Orders)
+//   {
+//     id: "cust_4",
+//     firstName: "Maria",
+//     lastName: "Rossi",
+//     email: "m.rossi@italy.it",
+//     acceptsMarketing: true,
+//     createdAt: new Date("2024-12-01"),
+//     updatedAt: new Date(),
+//     addresses: [],
+//     cart: {
+//       id: "cart_4",
+//       customerId: "cust_4",
+//       taxesIncluded: true,
+//       lineItems: [
+//         {
+//           variantId: "v8",
+//           sku: "SOAP-DISH",
+//           name: "Soap Dish",
+//           image: "https://picsum.photos/seed/v8/200",
+//           quantity: 2,
+//           price: 14.0,
+//           currency: "EUR",
+//         },
+//       ],
+//       discounts: [],
+//       subtotalPrice: 28.0,
+//       lineItemsSubtotalPrice: 28.0,
+//       totalPrice: 28.0,
+//       currency: "EUR",
+//       createdAt: new Date(),
+//       updatedAt: new Date(),
+//     },
+//     orders: Array.from({ length: 4 }).map((_, i) => ({
+//       id: `ord_4_${i}`,
+//       customerId: "cust_4",
+//       status: i % 2 === 0 ? OrderStatus.PENDING : OrderStatus.PAID,
+//       taxesIncluded: true,
+//       lineItems: [
+//         {
+//           variantId: "v9",
+//           sku: "POT-TERRA",
+//           name: "Plant Pot",
+//           image: "https://picsum.photos/seed/v9/200",
+//           quantity: 1,
+//           price: 28.0,
+//           currency: "EUR",
+//         },
+//       ],
+//       discounts: [],
+//       subtotalPrice: 28.0,
+//       lineItemsSubtotalPrice: 28.0,
+//       totalPrice: 28.0,
+//       currency: "EUR",
+//       createdAt: new Date(),
+//       updatedAt: new Date(),
+//     })),
+//   },
+// ];

@@ -50,7 +50,7 @@ const InputCheck: React.FC<InputProps> = (props) => {
           aria-describedby={error ? errorId : undefined}
           {...rest}
         />
-        {label && <label htmlFor={inputId} className="text-text-base p-0 m-0">{label}</label>}
+        {label && <label htmlFor={inputId} className="text-text-base p-0 m-0 font-medium">{label}</label>}
       </div>
       {error && (
         <p id={errorId} className={s.errorMessage} role="alert">

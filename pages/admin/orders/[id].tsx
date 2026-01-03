@@ -31,22 +31,22 @@ export default function OrderDetailsPage({
   const router = useRouter();
   const [updating, setUpdating] = useState(false);
 
-  // const handleStatusChange = async (newStatus: string) => {
-  //   setUpdating(true);
-  //   try {
-  //     const result = await fetch(`/api/orders/${order.id}`, {
-  //       method: 'PUT',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({ status: newStatus }),
-  //     });
-  //     if (!result.ok) alert("Failed to update status");
-  //     router.replace(router.asPath); // Refresh data
-  //   } catch (error) {
-  //     console.error("Failed to update status", error);
-  //   } finally {
-  //     setUpdating(false);
-  //   }
-  // };
+  const handleStatusChange = async (newStatus: string) => {
+    setUpdating(true);
+    try {
+      const result = await fetch(`/api/orders/${order.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (!result.ok) alert("Failed to update status");
+      router.replace(router.asPath); // Refresh data
+    } catch (error) {
+      console.error("Failed to update status", error);
+    } finally {
+      setUpdating(false);
+    }
+  };
 
   // const handleStatusChange = async (newStatus:string) => {
   //   // No 'fetch' or 'axios' needed!
@@ -81,7 +81,7 @@ export default function OrderDetailsPage({
           </div>
         </div>
 
-        <div className="flex items-center gap-3 bg-white p-3 rounded-xl border shadow-sm">
+        <div className="flex items-center gap-3 bg-accent-2 p-3 rounded-xl border shadow-sm">
           <Text className="text-sm font-semibold">Status:</Text>
           <select
             className="bg-secondary text-sm font-medium rounded-lg px-3 py-2 outline-none border-none cursor-pointer"
@@ -102,9 +102,9 @@ export default function OrderDetailsPage({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column: Line Items */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white border rounded-xl overflow-hidden shadow-sm">
-            <div className="p-4 border-b bg-muted/20 flex items-center gap-2">
-              <Package size={18} className="text-slate-500" />
+          <div className="bg-accent-2 border rounded-xl overflow-hidden shadow-sm">
+            <div className="p-4 border-b bg-accent-2 flex items-center gap-2">
+              <Package size={18}  />
               <Text className="font-bold">Items Summary</Text>
             </div>
             <div className="divide-y">
@@ -135,7 +135,7 @@ export default function OrderDetailsPage({
                 </div>
               ))}
             </div>
-            <div className="p-6 bg-slate-50 space-y-2 border-t">
+            <div className="p-6 bg-accent-2 space-y-2 border-t">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Subtotal</span>
                 <span>
@@ -161,9 +161,9 @@ export default function OrderDetailsPage({
         {/* Right Column: Customer & Shipping Details */}
         <div className="space-y-6">
           {/* Customer Card */}
-          <div className="bg-white border rounded-xl p-5 shadow-sm space-y-4">
+          <div className="bg-accent-2 border rounded-xl p-5 shadow-sm space-y-4">
             <div className="flex items-center gap-2 border-b pb-3">
-              <User size={18} className="text-slate-500" />
+              <User size={18} />
               <Text className="font-bold text-sm">Customer</Text>
             </div>
             <div>
@@ -177,9 +177,9 @@ export default function OrderDetailsPage({
           </div>
 
           {/* Shipping Address */}
-          <div className="bg-white border rounded-xl p-5 shadow-sm space-y-4">
+          <div className="bg-accent-2 border rounded-xl p-5 shadow-sm space-y-4">
             <div className="flex items-center gap-2 border-b pb-3">
-              <MapPin size={18} className="text-slate-500" />
+              <MapPin size={18} />
               <Text className="font-bold text-sm">Shipping Address</Text>
             </div>
             {shipping ? (
@@ -201,9 +201,9 @@ export default function OrderDetailsPage({
           </div>
 
           {/* Payment Info */}
-          <div className="bg-white border rounded-xl p-5 shadow-sm space-y-4">
+          <div className="bg-accent-2 border rounded-xl p-5 shadow-sm space-y-4">
             <div className="flex items-center gap-2 border-b pb-3">
-              <CreditCard size={18} className="text-slate-500" />
+              <CreditCard size={18} />
               <Text className="font-bold text-sm">Payment Info</Text>
             </div>
             <div className="flex justify-between items-center text-sm">

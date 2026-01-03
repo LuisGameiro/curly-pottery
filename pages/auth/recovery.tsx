@@ -5,7 +5,7 @@ import { useState } from "react";
 import Layout from "@components/common/Layout";
 
 export default function RecoveryPage() {
-    const [sent, setSent] = useState(false);
+    const [sent, setSent] = useState(true);
 
     const handleRecovery = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -14,7 +14,7 @@ export default function RecoveryPage() {
     };
 
     return (
-        <Container className="max-w-md mx-auto min-h-[80vh] flex flex-col justify-center">
+    <Container >
             <div className="bg-white p-8 rounded-3xl border shadow-sm">
                 {!sent ? (
                     <>

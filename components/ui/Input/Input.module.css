@@ -33,3 +33,33 @@
 .options {
   @apply bg-background px-2 py-2 w-full appearance-none transition duration-150 ease-in-out border-2 border-border hover:bg-red-400;
 }
+
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+/* Ensure text doesn't go under the eye icon */
+.withIcon {
+  padding-right: 40px;
+}
+
+.toggleButton {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666; /* Adjust based on your theme */
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.toggleButton:hover {
+  color: #000;
+}

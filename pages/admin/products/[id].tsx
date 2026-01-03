@@ -137,13 +137,13 @@ export default function ProductForm({
     e.preventDefault();
     const payload = { ...product, variants };
 
+    console.log(payload)
     const endpoint = isEditing
-      ? `/api/products/${initialData.id}`
-      : "/api/products";
-    const method = isEditing ? "PUT" : "POST";
+      ? `/api/admin/products/${initialData.id}`
+      : "/api/admin/products";
 
     const res = await fetch(endpoint, {
-      method,
+      method:isEditing ? "PUT" : "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });

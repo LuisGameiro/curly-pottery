@@ -88,9 +88,7 @@ export default function Contacts() {
     <Container >
       <header>
         <div className="max-w-lg mx-auto text-center">
-
           <Text variant="heading">Contact Us</Text>
-
           <Text>
             We'd love to hear from you! Please reach out using the information
             below or fill out the contact form.
@@ -98,39 +96,39 @@ export default function Contacts() {
         </div>
       </header>
 
-      <main className="sm:py-8 md:py-8 px-4 sm:px-6 mx-auto lg:px-12 w-full flex">
-        <section >
+      <main className="py-8 px-4 sm:px-8 lg:px-16 mx-auto content-center md:flex space-y-8 gap-4 ">
+        <section className="w-full">
           <Text variant='sectionHeading'>
-            Our Details            
+            Our Details
           </Text>
 
-          <ul className="text-primary-2 space-y-2">
+          <ul className=" space-y-4">
             <li>
               📧 Email:{" "}
               <a
                 href="mailto:info@curlypottery.com"
-                className="hover:text-primary-5"
+                className="hover:text-secondary/60"
               >
                 info@curlypottery.com
               </a>
             </li>
             <li>
               📞 Phone:{" "}
-              <a href="tel:+1234567890" className="hover:text-primary-5">
+              <a href="tel:+1234567890" className="hover:text-secondary/60">
                 +1 (234) 567-890
               </a>
             </li>
-            <li>📍 Address: 123 Pottery Lane, Claytown, USA</li>
+            <li className="hover:text-secondary/60">📍 Address: 123 Pottery Lane, Claytown, USA</li>
           </ul>
         </section>
 
-        <section >
+        <section className="w-full">
           <Text variant='sectionHeading'>
             Contact Form
           </Text>
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
-              label="name"
+              label="Name"
               value={formData.name}
               onChange={handleChange}
               required
@@ -139,7 +137,7 @@ export default function Contacts() {
               name="name"
             />
             <Input
-              label="email"
+              label="Email"
               value={formData.email}
               onChange={handleChange}
               required
@@ -157,16 +155,16 @@ export default function Contacts() {
               rows={5}
 
             />
-
-
-            <Button
-              type="submit"
-              variant="secondary"
-              // Disable button while loading or on success/error to prevent double submission
-              disabled={status === "loading" || status === "success"}
-            >
-              {status === "loading" ? "Sending..." : "Send Message"}
-            </Button>
+            <div className="flex justify-end">
+              <Button
+                type="submit"
+                variant="secondary"
+                // Disable button while loading or on success/error to prevent double submission
+                disabled={status === "loading" || status === "success"}
+              >
+                {status === "loading" ? "Sending..." : "Send Message"}
+              </Button>
+            </div>
           </form>
         </section>
       </main>

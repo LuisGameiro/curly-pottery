@@ -48,9 +48,9 @@ enum SizeNames {
 
 model Category {
   id    String @id @default(cuid())
-  name  String
-  slug  String
-  url   String
+  name  String @unique
+  slug  String @unique
+  url   String?
   image String
 
   products  Product[]
@@ -63,9 +63,9 @@ model Category {
  */
 model Product {
   id          String @id @default(cuid())
-  name        String
-  description String
+  name        String @unique
   slug        String @unique
+  description String
 
   // Default images for the product
   images String[]
@@ -90,14 +90,16 @@ model ProductVariant {
   images           String[]
 
   // Size Fields
-  sizeName SizeNames??
+  sizeName String?
 
   // Color & Glaze Fields
   colorName String? // "Midnight Black"
   colorHex  String? // "#000000"
 
   //details
-  details json?
+  details Json?
+  discounts Json?
+
 
   productId String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
@@ -105,14 +107,13 @@ model ProductVariant {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  discounts json?
   // Ensure uniqueness across the product's attributes
   @@unique([productId, sizeName, colorName])
 }
 
 /**
  * -------------------- CUSTOMER --------------------
- */
+ *
 model Customer {
   id               String  @id @default(cuid())
   firstName        String
@@ -127,6 +128,9 @@ model Customer {
   addresses Address[]
   orders    Order[]
   cart      Cart? // Usually 1 active cart per customer
+  
+  account   Account  @relation(fields: [accountId], references: [id])
+  accountId String   @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -148,16 +152,16 @@ model Address {
   city         String
   country      String
 
-  customerId String
-  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  userId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 }
 
 model Cart {
   id                     String       @id @default(cuid())
-  customerId             String       @unique
-  customer               Customer     @relation(fields: [customerId], references: [id])
+  userId             String       @unique
+  user               User     @relation(fields: [userId], references: [id])
   currency               CurrencyCode @default(GBP)
   taxesIncluded          Boolean      @default(false)
   lineItems              Json
@@ -175,8 +179,8 @@ model Cart {
 
 model Order {
   id         String      @id @default(cuid())
-  customerId String
-  customer   Customer    @relation(fields: [customerId], references: [id])
+  userId String
+  user   User    @relation(fields: [userId], references: [id])
   status     OrderStatus @default(PENDING)
 
   lineItems     Json
@@ -195,23 +199,63 @@ model Order {
 
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String? @db.Text
-  access_token       String? @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String? @db.Text
-  session_state      String?
+    id                       String   @id @default(cuid())
+    createdAt                DateTime @default(now())
+    updatedAt                DateTime @updatedAt
+    userId                   String
+    type                     String
+    provider                 String
+    providerAccountId        String
+    refresh_token            String? @db.VarChar(500)
+    access_token             String? @db.VarChar(500)
+    refresh_token_expires_in Int?
+    expires_at               Int?
+    token_type               String?
+    scope                    String?
+    id_token                 String? @db.Text
+    session_state            String?
+    oauth_token_secret       String?
+    oauth_token              String?
 
-  admin             Boolean
-  
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  user Customer @relation(fields: [userId], references: [id], onDelete: Cascade)
+    @@unique([provider, providerAccountId])
+}
 
-  @@unique([provider, providerAccountId])
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique
+    expires      DateTime
+    user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId       String?
+}
+
+model User {
+    id            String    @id @default(cuid())
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime  @updatedAt
+    name          String?
+    email         String?   @unique
+    password      String?
+    emailVerified DateTime?
+    image         String?
+    role          String?   @default("user")
+    accounts      Account[]
+    sessions      Session[]
+    phone            String?
+    company          String?
+    notes            String?
+    acceptsMarketing Boolean @default(false)
+
+    addresses Address[]
+    orders    Order[]
+    cart      Cart? // Usually 1 active cart per customer
+}
+
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
 }

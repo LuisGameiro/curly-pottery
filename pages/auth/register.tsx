@@ -5,8 +5,27 @@ import Link from 'next/link';
 import { UserPlus, ArrowRight, CheckCircle } from 'lucide-react';
 import Layout from '@components/common/Layout';
 import InputCheck from '@components/ui/Input/InputCheck';
+import { useRouter } from 'next/router';
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    password2: "",
+    name: "",
+    phone: "",
+    acceptsMarketing: false,
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -24,6 +43,7 @@ export default function RegisterPage() {
       headers: { 'Content-Type': 'application/json' },
     });
 
+
     if (res.ok) {
       // Automatically log in after registration
       signIn('credentials', {
@@ -31,6 +51,8 @@ export default function RegisterPage() {
         password: data.password as string,
         callbackUrl: '/profile',
       });
+
+      router.push("/auth/login?registered=true");
     } else {
       const { message } = await res.json();
       setError(message || 'Something went wrong');
@@ -40,53 +62,66 @@ export default function RegisterPage() {
 
   return (
     <Container >
-      <div className="text-center mb-8">
-        <Text variant="heading">Create Account</Text>
-        <Text variant='subHeading'>Join us for a faster checkout experience</Text>
-      </div>
-
-      <form onSubmit={handleSubmit} className="w-full space-y-4 lg:max-w-lg">
-        <div className="grid grid-cols-2 gap-4">
-          <Input name="firstName" label="First Name" placeholder="Jane" required />
-          <Input name="lastName" label="Last Name" placeholder="Doe" required />
+      <header>
+        <div className='justify-center text-center mx-auto'>
+          <Text variant="heading">Create Account</Text>
+          <Text variant='subHeading'>Join us for a faster checkout experience</Text>
         </div>
+      </header>
+      <main className='space-y-5 xl:max-w-xl mx-auto'>
 
-        <Input name="email" label="Email Address" type="email" placeholder="jane@example.com" required />
-        <Input name="password" label="Password" type="password" placeholder="••••••••" required />
+        <form onSubmit={handleSubmit} className="w-full space-y-4">
+          <Input
+            name="name"
+            label="Name"
+            placeholder="Jane"
+            value={formData.name}
+            onChange={handleChange}
+            required />
 
+          <Input
+            name="email"
+            label="Email Address"
+            type="email"
+            placeholder="jane@example.com"
+            value={formData.email}
+            onChange={handleChange}
+            required />
 
-        <InputCheck
-          id="marketing"
-          name="acceptsMarketing"
+          <Input name="password" label="Password" type="password"
+            placeholder="••••••••" value={formData.password}
+            onChange={handleChange} required />
 
-          label='I’d like to receive updates on new collections, glaze drops, and special offers.'
-        />
-        <div className="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
-          <input
-            type="checkbox"
-            name="acceptsMarketing"
+          <Input name="password2" label="Confirm Password" type="password"
+            placeholder="••••••••" value={formData.password2}
+            onChange={handleChange} required />
+
+          <InputCheck
             id="marketing"
-            className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+            name="acceptsMarketing"
+            value={formData.acceptsMarketing}
+            onChange={handleChange}
+            label='I’d like to receive updates on new collections, glaze drops, and special offers.'
           />
-          <label htmlFor="marketing" className="text-xs text-slate-600 leading-tight">
-          </label>
+
+          <div className='h-12'>
+            {error && <Text className="text-red-500 text-xs text-center font-medium">{error}</Text>}
+          </div>
+          
+          <Button type="submit" width="100%" loading={loading} color="success">
+            Create Account <ArrowRight size={16} className="ml-2" />
+          </Button>
+        </form>
+
+        <div className="mt-6 pt-6 border-t text-center">
+          <Text className="text-sm">
+            Already have an account?{' '}
+            <Link href="/auth/login" className="font-bold text-primary hover:underline">
+              Log in
+            </Link>
+          </Text>
         </div>
-
-        {error && <Text className="text-red-500 text-xs text-center font-medium">{error}</Text>}
-
-        <Button type="submit" width="100%" loading={loading} color="success">
-          Create Account <ArrowRight size={16} className="ml-2" />
-        </Button>
-      </form>
-
-      <div className="mt-6 pt-6 border-t text-center">
-        <Text className="text-sm">
-          Already have an account?{' '}
-          <Link href="/auth/login" className="font-bold text-primary hover:underline">
-            Log in
-          </Link>
-        </Text>
-      </div>
+      </main>
 
     </Container>
   );

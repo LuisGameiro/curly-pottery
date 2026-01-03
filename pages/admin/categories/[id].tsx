@@ -18,6 +18,7 @@ export default function CategoryFormPage() {
   const id = params?.id;
   const isEditMode = !!id && id !== "new";
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     id: "",
     name: "",
@@ -28,13 +29,14 @@ export default function CategoryFormPage() {
   const [loadingData, setLoadingData] = useState(isEditMode);
   const [preview, setPreview] = useState<any>(null);
 
+const [loading, setLoading] = useState(false);
   useEffect(() => {
     // 2. ONLY fetch if we are actually in edit mode AND the slug exists
     if (isEditMode) {
       setLoadingData(true); // Ensure loader shows while re-fetching
       console.log("Fetched Category Data:");
 
-      fetch(`/api/categories/${id}`)
+      fetch(`/api/admin/categories/${id}`)
         .then((res) => res.json())
         .then((response) => {
           // Your API returns { data: category }, so we look for response.data
@@ -62,6 +64,7 @@ export default function CategoryFormPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // 1. Run your Zod validation
     const validation = CategorySchema.safeParse({
       ...formData,
       slug: slugify(formData.name),
@@ -73,29 +76,60 @@ export default function CategoryFormPage() {
         if (err.path[0]) fieldErrors[err.path[0].toString()] = err.message;
       });
       setErrors(fieldErrors);
-      return; // Stop submission
+      return;
     }
 
-    const response = await fetch(`/api/categories/${id}`, { method: "put" });
-    const result = await response.json();
-    console.log("Delete Result:", result);
-    if (result.success) {
-      router.replace("/admin/categories");
+    setLoading(true);
+
+    try {
+ 
+      // // 3. Send the request
+      // const response = await fetch(`/api/admin/categories/${id}`, {
+      //   method: isEditMode ? "PUT" : "POST",
+      //   body: data, // No JSON.stringify!
+      //   // DO NOT set Content-Type header here
+      // });
+
+    const response = await fetch(`/api/admin/categories/${id}`, {
+      method: isEditMode ? "PUT" : "POST",
+      headers: {
+        "Content-Type": "application/json", // Tell the server to expect JSON
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        slug: slugify(formData.name),
+        image: formData.image 
+      }),
+    });
+    
+      const result = await response.json();
+          console.log("Found result:", result);
+
+      if (result.success) {
+        router.replace("/admin/categories");
+        router.refresh(); // Ensure the list updates
+      } else {
+        setErrors({from:result.message || "Failed to save category"});
+      }
+    } catch (err) {
+      console.error("Submit error:", err);
+      setErrors({form: "An error occurred while saving."});
+    } finally {
+      setLoading(false);
     }
   };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Create a temporary local URL for the selected file
       const objectUrl = URL.createObjectURL(file);
       setPreview({ url: objectUrl, size: file.size / 1048576 });
-      console.log(file.size / 1048576 + "MB");
-      // Note: You would typically handle the upload to S3/Cloudinary/Neon
-      // here or during handleSubmit using FormData
+
+      setSelectedFile(file);
     }
   };
 
-  if (loadingData)
+  if (loadingData || loading)
     return (
       <div className="p-20 flex justify-center">
         <Loader2 className="animate-spin text-blue-600" />
@@ -169,6 +203,8 @@ export default function CategoryFormPage() {
                 </p>
               </div>
             </div>
+
+            
             {errors.image && (
               <p className="text-red-500 text-xs mt-1">{errors.image}</p>
             )}

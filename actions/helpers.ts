@@ -7,6 +7,7 @@ export const serializeProduct = (productsRaw: any[]) => {
 };
 
 export const serializeProductVariant = (productsRaw: any[]) => {
+
   return productsRaw.map((product) => ({
     ...product,
     createdAt: product.createdAt.toISOString(),

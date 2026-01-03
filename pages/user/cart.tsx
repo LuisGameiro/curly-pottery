@@ -70,7 +70,7 @@ export default function Cart() {
           </div>
         ) : error ? (
           <div className="flex-1 px-4 flex flex-col justify-center items-center">
-            <span className="border border-white rounded-full flex items-center justify-center w-16 h-16">
+            <span className="border border-border rounded-full flex items-center justify-center w-16 h-16">
               <Cross width={24} height={24} />
             </span>
             <h2 className="pt-6 text-xl font-light text-center">

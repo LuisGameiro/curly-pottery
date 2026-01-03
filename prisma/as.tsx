@@ -1,9 +1,8 @@
 import { categories, customers, products } from "../api/fakeapi/seedData";
 import { prisma } from "./prisma";
 
-// ✅ Add PrismaClient options if required
 async function main() {
-  // 1. Clean existing data (Optional, but good for fresh starts)
+  // 1. Clean existing data - IMPORTANT: Order matters due to foreign key constraints
   await prisma.productVariant.deleteMany();
   await prisma.product.deleteMany();
   await prisma.category.deleteMany();
@@ -11,10 +10,11 @@ async function main() {
   await prisma.order.deleteMany();
   await prisma.cart.deleteMany();
   await prisma.account.deleteMany(); // Add this
-  await prisma.user.deleteMany();
+  await prisma.customer.deleteMany(); // Customer depends on Account
 
   console.log("Cleaned database...");
 
+  // 2. Seed categories
   for (const cat of categories) {
     await prisma.category.create({
       data: {
@@ -28,15 +28,17 @@ async function main() {
   }
   console.log("✅ Seeding categories successful");
 
+  // 3. Seed products
   const categoryMap = await prisma.category
     .findMany()
     .then((categories) =>
       Object.fromEntries(categories.map((c) => [c.slug, c.id])),
     );
+  
   for (const item of products) {
     await prisma.product.upsert({
       where: { slug: item.slug },
-      update: {}, // If it exists, do nothing (or update fields if you prefer)
+      update: {},
       create: {
         id: item.id,
         name: item.name,
@@ -65,10 +67,11 @@ async function main() {
       },
     });
   }
-
   console.log("✅ Seeding products successful");
 
+  // 4. Seed customers with accounts
   for (const cust of customers) {
+    // First create the account
     const account = await prisma.account.create({
       data: {
         id: cust.account.id,
@@ -76,23 +79,28 @@ async function main() {
         provider: cust.account.provider,
         providerAccountId: cust.account.providerAccountId,
         admin: cust.account.admin,
-
+        createdAt: cust.account.createdAt,
+        updatedAt: cust.account.updatedAt,
       },
     });
 
-
-    await prisma.user.create({
+    // Then create the customer with the accountId
+    await prisma.customer.create({
       data: {
         id: cust.id,
-        name: cust.firstName,
+        firstName: cust.firstName,
+        lastName: cust.lastName,
         email: cust.email,
         company: cust.company,
         acceptsMarketing: cust.acceptsMarketing,
-        accountId: account.id,
-
+        createdAt: cust.createdAt,
+        updatedAt: cust.updatedAt,
+        accountId: account.id, // Link to the account
+        
         // Create addresses
         addresses: {
           create: cust.addresses.map((a) => ({
+            id: a.id,
             type: a.type,
             firstName: a.firstName,
             lastName: a.lastName,
@@ -101,13 +109,13 @@ async function main() {
             postalCode: a.postalCode,
             city: a.city,
             country: a.country,
+            createdAt: a.createdAt,
           })),
         },
         // Create Cart
         cart: {
           create: {
             id: cust.cart.id,
-
             taxesIncluded: cust.cart.taxesIncluded,
             lineItems: cust.cart.lineItems,
             totalPrice: cust.cart.totalPrice,
@@ -122,27 +130,27 @@ async function main() {
         orders: {
           create: cust.orders.map((o) => ({
             id: o.id,
-
             status: o.status,
-            // customerId: o.customerId,
-            // taxesIncluded: o?.taxesIncluded,
             totalPrice: o.totalPrice,
             subtotalPrice: o.subtotalPrice,
             currency: o.currency,
             lineItems: o.lineItems,
             discounts: o.discounts,
             taxesIncluded: o.taxesIncluded,
-
             shippingAddress: cust.addresses[0] || {},
             billingAddress: cust.addresses[0] || {},
             paymentCard: { mask: "4242" },
+            createdAt: o.createdAt,
+            updatedAt: o.updatedAt,
           })),
         },
       },
     });
   }
+  console.log("✅ Seeding customers with accounts successful");
   console.log("✅ Done!");
 }
+
 main()
   .catch((e) => {
     console.error(e);

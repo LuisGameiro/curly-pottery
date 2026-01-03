@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Container, Text, Button, Input } from "@components/ui";
-import { useUser } from "@hooks/useUser";
 import { MapPin, Package, Settings } from "lucide-react";
+import { useUser } from '@lib/hooks/useUser';
 
 export default function ProfilePage() {
   const { user } = useUser();

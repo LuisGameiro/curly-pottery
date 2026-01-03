@@ -44,7 +44,7 @@ export default function ProductsPage({
 
   const handleDelete = async (id: string, name: string) => {
     if (!confirm(`Delete "${name}"? This will remove all variants.`)) return;
-    const response = await fetch(`/api/products/${id}`, { method: "DELETE" });
+    const response = await fetch(`/api/admin/products/${id}`, { method: "DELETE" });
     const result = await response.json();
     if (result.success) router.reload();
   };
