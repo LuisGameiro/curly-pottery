@@ -3,7 +3,8 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "prisma/prisma";
-import bcrypt from "bcryptjs";
+import { verifyPassword } from "@lib/auth/password";
+import { JWT } from "next-auth/jwt";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -22,22 +23,22 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        const user = await prisma.customer.findUnique({
+        const user = await prisma.user.findUnique({
           where: { email: credentials.email }
         });
 
         if (!user || !user.password) return null;
 
-        const isValid = await bcrypt.compare(credentials.password, user.password);
+        const isValid = await verifyPassword(credentials.password, user.password);
         if (!isValid) return null;
 
-        return { id: user.id, email: user.email, name: user.firstName, role: user.role };
+        return { id: user.id, email: user.email, name: user.name, role: user.role };
       }
     })
   ],
   callbacks: {
     // 1. Save Role and ID into the JWT Token
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: JWT, user: any }) {
       if (user) {
         token.id = user.id;
         token.role = user.role; // Ensure your Prisma model has a 'role' field (ADMIN | USER)
@@ -45,7 +46,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     // 2. Pass Role and ID from Token to the Session (for the frontend)
-    async session({ session, token }) {
+    async session({ session, token }: { token: JWT, session: any }) {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;

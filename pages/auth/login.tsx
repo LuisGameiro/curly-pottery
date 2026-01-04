@@ -39,12 +39,12 @@ export default function LoginPage() {
         const target = e.currentTarget;
         const email = target.email.value;
         const password = target.password.value;
-
+        console.log(email,password)
         const result = await signIn('credentials', {
             email,
             password,
             redirect: true,
-            callbackUrl: '/profile',
+            callbackUrl: '/shop',
         });
 
         if (result?.error) {
@@ -54,7 +54,7 @@ export default function LoginPage() {
     };
 
     const handleGoogleLogin = () => {
-        signIn('google', { callbackUrl: '/profile' });
+        signIn('google', { callbackUrl: '/shop' });
     };
 
     return (

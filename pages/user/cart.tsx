@@ -5,6 +5,7 @@ import { Bag, Cross, Check, MapPin, CreditCard } from "@components/icons";
 import { CartItem } from "@components/cart";
 import { useUI } from "@components/ui/context";
 import { pagesData, productsData, siteInfo } from "api/fakeapi/data";
+import UserLayout from "./layout";
 
 export async function getStaticProps({
   preview,
@@ -195,4 +196,4 @@ export default function Cart() {
   );
 }
 
-Cart.Layout = Layout;
+Cart.Layout = UserLayout;

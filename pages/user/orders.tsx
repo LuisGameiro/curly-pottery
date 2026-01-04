@@ -1,8 +1,8 @@
 import type { GetStaticPropsContext } from "next";
 import { Bag } from "@components/icons";
-import { Layout } from "@components/common";
 import { Container, Text } from "@components/ui";
 import { pagesData, siteInfo } from "api/fakeapi/data";
+import UserLayout from "./layout";
 
 export async function getStaticProps({
   preview,
@@ -42,4 +42,5 @@ export default function Orders() {
   );
 }
 
-Orders.Layout = Layout;
+
+Orders.Layout = UserLayout;

@@ -49,7 +49,7 @@ export default function RegisterPage() {
       signIn('credentials', {
         email: data.email as string,
         password: data.password as string,
-        callbackUrl: '/profile',
+        callbackUrl: '/user/profile',
       });
 
       router.push("/auth/login?registered=true");
