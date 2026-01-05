@@ -1,29 +1,7 @@
-import type { GetStaticPropsContext } from "next";
-import { Layout } from "@components/common";
+
 import { Button, Text, Container } from "@components/ui";
 import { Bag, Cross, Check, MapPin, CreditCard } from "@components/icons";
-import { CartItem } from "@components/cart";
-import { useUI } from "@components/ui/context";
-import { pagesData, productsData, siteInfo } from "api/fakeapi/data";
-import UserLayout from "./layout";
 
-export async function getStaticProps({
-  preview,
-  locale,
-  locales,
-}: GetStaticPropsContext) {
-  const config = { locale, locales };
-  // const pagesPromise = commerce.getAllPages({ config, preview })
-  // const siteInfoPromise = commerce.getSiteInfo({ config, preview })
-  // const { pages } = await pagesPromise
-  // const { categories } = await siteInfoPromise
-
-  const { pages } = pagesData; // This contains the array of pages
-  const { categories, brands } = siteInfo; // These contain the categories and brands arrays
-  return {
-    props: { pages, categories },
-  };
-}
 
 export default function Cart() {
   const error = null;
@@ -33,7 +11,6 @@ export default function Cart() {
     isLoading: false,
     isEmpty: false,
   }; //useCart()
-  const { openSidebar, setSidebarView } = useUI();
 
   const { price: subTotal } = { price: 50 }; //usePrice(
   //   data && {
@@ -49,10 +26,10 @@ export default function Cart() {
   //   }
   // )
 
-  const goToCheckout = () => {
-    openSidebar();
-    setSidebarView("CHECKOUT_VIEW");
-  };
+  // const goToCheckout = () => {
+  //   openSidebar();
+  //   setSidebarView("CHECKOUT_VIEW");
+  // };
 
   return (
     <Container className="grid lg:grid-cols-12 pt-4 gap-20">
@@ -196,4 +173,3 @@ export default function Cart() {
   );
 }
 
-Cart.Layout = UserLayout;

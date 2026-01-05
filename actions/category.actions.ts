@@ -65,6 +65,16 @@ export async function getCategoryBySlug(slug: string) {
   return serializeProduct([caregoriesRaw])[0];
 }
 
+export async function getCategoryById(id: string) {
+  const caregoriesRaw = await prisma.category.findFirst({
+    where: {
+      id,
+    },
+  });
+
+  return ([caregoriesRaw])[0];
+}
+
 export async function upsertCategory(formData: {
   id?: string;
   name: string;
@@ -73,7 +83,6 @@ export async function upsertCategory(formData: {
 }) {
   try {
     if (formData.id) {
-      // Update
       await prisma.category.update({
         where: { id: formData.id },
         data: {
@@ -83,7 +92,6 @@ export async function upsertCategory(formData: {
         },
       });
     } else {
-      // Create
       await prisma.category.create({
         data: {
           name: formData.name,

@@ -91,7 +91,9 @@ export async function updateProduct(id: string, formData: FormData) {
   revalidatePath("/admin/products");
 }
 
-export async function getProductBySlug(slug: string) {
+export async function getProductBySlug(slug: string | null) {
+  if (!slug) return getAllProducts()
+
   const productsRaw = await prisma.product.findUnique({
     where: {
       slug,
@@ -102,7 +104,7 @@ export async function getProductBySlug(slug: string) {
     },
   });
 
-  return serializeProductVariant([productsRaw])[0];
+  return ([productsRaw])[0];
 }
 
 export async function getProductById(id: string) {
@@ -120,12 +122,18 @@ export async function getProductById(id: string) {
 }
 
 export async function deleteProduct(id: string) {
-  await prisma.product.delete({
-    where: { id },
-  });
-
-  revalidatePath("/admin/products");
+  try {
+    await prisma.product.delete({
+      where: { id },
+    });
+    revalidatePath("/admin/products");
+    return { success: true };
+  } catch (error) {
+    console.error("Delete Error:", error);
+    return { success: false, error: "Failed to delete category" };
+  }
 }
+
 
 export async function getRandomProducts(limit = 3) {
   const productsRaw = await prisma.product.findMany();
@@ -182,4 +190,52 @@ export async function getRelatedProducts(
     skip,
   });
   return (relatedProducts);
+}
+
+
+export async function getProductByCategorySlug(category: string | null) {
+  return prisma.product.findMany({
+    where: category
+      ? {
+        categories: {
+          some: { slug: category },
+        },
+      }
+      : undefined,
+    include: {
+      categories: true,
+      variants: true,
+    },
+  });
+}
+
+
+
+export async function upsertProduct(formData: {
+  id?: string;
+}) {
+  try {
+    if (formData.id) {
+      await prisma.product.update({
+        where: { id: formData.id },
+        data: {
+          ...formData
+        },
+      });
+    } else {
+      await prisma.product.create({
+        data: {
+          ...formData
+        },
+      });
+    }
+
+    revalidatePath("/admin/products");
+    return { success: true };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "Failed to save category",
+    };
+  }
 }

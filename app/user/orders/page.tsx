@@ -2,28 +2,9 @@ import type { GetStaticPropsContext } from "next";
 import { Bag } from "@components/icons";
 import { Container, Text } from "@components/ui";
 import { pagesData, siteInfo } from "api/fakeapi/data";
-import UserLayout from "./layout";
 
-export async function getStaticProps({
-  preview,
-  locale,
-  locales,
-}: GetStaticPropsContext) {
-  const config = { locale, locales };
-  // const pagesPromise = commerce.getAllPages({ config, preview })
-  // const siteInfoPromise = commerce.getSiteInfo({ config, preview })
-  // const { pages } = await pagesPromise
-  // const { categories } = await siteInfoPromise
 
-  const { pages } = pagesData; // This contains the array of pages
-  const { categories, brands } = siteInfo; // These contain the categories and brands arrays
-
-  return {
-    props: { pages, categories },
-  };
-}
-
-export default function Orders() {
+export default async function Orders() {
   return (
     <Container className="pt-4">
       <Text variant="pageHeading">My Orders</Text>
@@ -43,4 +24,3 @@ export default function Orders() {
 }
 
 
-Orders.Layout = UserLayout;

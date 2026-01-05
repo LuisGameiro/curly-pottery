@@ -1,7 +1,8 @@
+'use client'
+
 import { useState } from 'react';
 import { Container, Text, Button, Input } from '@components/ui';
-import { User, Mail, Phone, Building, Shield } from 'lucide-react';
-import UserLayout from './layout';
+import { User, Mail, Phone } from 'lucide-react';
 
 export default function ProfileForm({ user }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -21,9 +22,7 @@ export default function ProfileForm({ user }) {
   return (
     <Container >
       <div>
-        {/* Header Section */}
         <div className="flex w-full">
-
           <div className="flex w-full">
             <div className="h-16 w-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold">
               {formData.name?.charAt(0) || 'U'}
@@ -37,12 +36,8 @@ export default function ProfileForm({ user }) {
         </div>
       </div>
 
-
-      {/* Content Section */}
       <div className="p-8 space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-          {/* Email (Non-Editable for security) */}
           <div>
             <label className="text-xs font-bold text-gray-400 uppercase">Email</label>
             <div className="flex items-center mt-1 text-gray-600">
@@ -51,7 +46,6 @@ export default function ProfileForm({ user }) {
             </div>
           </div>
 
-          {/* Name */}
           <div>
             <label className="text-xs font-bold text-gray-400 uppercase">Full Name</label>
             {isEditing ? (
@@ -61,7 +55,6 @@ export default function ProfileForm({ user }) {
             )}
           </div>
 
-          {/* Phone */}
           <div>
             <label className="text-xs font-bold text-gray-400 uppercase">Phone</label>
             {isEditing ? (
@@ -70,11 +63,8 @@ export default function ProfileForm({ user }) {
               <div className="flex items-center mt-1"><Phone size={18} className="mr-2" /> {formData.phone || 'Not provided'}</div>
             )}
           </div>
-
-
         </div>
 
-        {/* Notes (Full Width) */}
         <div>
           <label className="text-xs font-bold text-gray-400 uppercase">Personal Notes</label>
           {isEditing ? (
@@ -97,4 +87,3 @@ export default function ProfileForm({ user }) {
   );
 }
 
-ProfileForm.Layout = UserLayout

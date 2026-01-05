@@ -1,10 +1,6 @@
-
 import ProductsCLient from './ProductsClient';
-
-import { Button, Container, Skeleton, Text, Input } from "@components/ui";
+import { Container} from "@components/ui";
 import { getAllProducts } from "actions/product.actions";
-
-
 
 export const metadata = {
   title: "Admin - Products",
@@ -15,9 +11,7 @@ export default async function ProductsPage() {
 
 
   return (
-    <Container>
       <ProductsCLient products={products}/>
-    </Container>
   );
 }
 

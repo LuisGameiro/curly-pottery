@@ -1,9 +1,6 @@
 'use client'
 
-import AdminLayout from "../layout";
 import { Button, Container, Skeleton, Text, Input } from "@components/ui";
-import { GetStaticPropsContext, InferGetStaticPropsType } from "next";
-import { getAllProducts } from "actions/product.actions"; // You'll need to create this
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -13,13 +10,15 @@ import {
   Search,
   ChevronDown,
   ChevronRight,
-  Package,
 } from "lucide-react";
 import { useState, useMemo } from "react";
-import { Product, ProductVariant } from "@lib/types/product";
+import { ProductVariant } from "@lib/types/product";
+import { Product } from "prisma/generated/prisma/client";
+import { deleteProduct } from "actions/product.actions";
+import { useRouter } from "next/navigation";
 
-// export const dynamic = "force-dynamic
-export default  function ProductsClient({ products } :{products:Product[]}) {
+export default function ProductsClient({ products }: { products: Product[] | ProductFull[] }) {
+  const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
@@ -31,6 +30,24 @@ export default  function ProductsClient({ products } :{products:Product[]}) {
   const toggleRow = (id: string) => {
     setExpandedRows((prev) => ({ ...prev, [id]: !prev[id] }));
   };
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
+
+  const handleDelete = async (id: string, name: string) => {
+    if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
+
+    setIsDeleting(id);
+    try {
+      const response = await deleteProduct(id);
+      if (response.success) {
+        router.refresh();
+      }
+    } catch (error) {
+      console.error("Delete failed", error);
+    } finally {
+      setIsDeleting(null);
+    }
+  };
+
 
   // const handleDelete = async (id: string, name: string) => {
   //   if (!confirm(`Delete "${name}"? This will remove all variants.`)) return;
@@ -182,10 +199,9 @@ export default  function ProductsClient({ products } :{products:Product[]}) {
                             <Button
                               variant="naked"
                               title="Delete"
-                              color="red"
+                              color="danger"
                               className="text-red"
-                              onClick={() =>
-                                {}//handleDelete(product.id, product.name)
+                              onClick={() =>handleDelete(product.id, product.name)
                               }
                             >
                               <Trash2 size={18} />

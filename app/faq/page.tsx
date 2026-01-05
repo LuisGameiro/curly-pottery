@@ -1,7 +1,8 @@
-"use client"; // Mandatory for hooks like useState
+"use client";
 
 import React, { useState } from "react";
 import { ChevronDown, Container } from "lucide-react";
+import { Text } from "@components/ui";
 
 interface FAQItem {
   question: string;
@@ -43,29 +44,24 @@ export default function FAQ() {
   };
 
   return (
-    <div className="bg-gradient-to-r from-accent-4 to-accent-9">
-      <section className="pt-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-primary mb-4">
-            Frequently Asked Questions
-          </h1>
-          <p className="text-lg text-primary-2">
-            Find answers to common questions about our pottery and services.
-          </p>
-        </div>
-      </section>
+    <main className="bg-gradient-to-r from-background to-accent-1 py-8 ">
+      <div className="px-2 sm:px-6 lg:px-12 max-w-3xl mx-auto space-y-8">
 
-      <section className="sm:py-8 md:py-16 px-4 sm:px-6 lg:px-12">
-        <div className="max-w-3xl mx-auto space-y-6">
+        <section className=" text-center">
+          <Text variant="heading">Frequently Asked Questions</Text>
+          <Text variant="body">Find answers to common questions about our pottery and services.</Text>
+        </section>
+
+        <section className="space-y-6 prose prose-lg">
           {faqData.map((item, index) => (
             <div key={index} className="bg-accent-0 rounded-lg shadow">
               <button
                 onClick={() => toggleAccordion(index)}
-                className="w-full px-6 py-4 flex items-center justify-between"
+                className="w-full px-6 pt-4 pb-2 flex items-center justify-between"
               >
-                <h3 className="text-lg font-semibold text-left">
+                <Text variant="sectionHeading">
                   {item.question}
-                </h3>
+                </Text>
                 <ChevronDown
                   className={`w-5 h-5 transition-transform ${openIndex === index ? "rotate-180" : ""
                     }`}
@@ -73,14 +69,14 @@ export default function FAQ() {
               </button>
 
               {openIndex === index && (
-                <div className="px-6 pb-4 border-t rounded-b-lg border-card bg-accent-0">
-                  <p className="text-primary">{item.answer}</p>
+                <div className="px-6 py-4 border-t rounded-b-lg border-border bg-accent-0">
+                  <Text variant="body">{item.answer}</Text>
                 </div>
               )}
             </div>
           ))}
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
+    </main>
   );
 }

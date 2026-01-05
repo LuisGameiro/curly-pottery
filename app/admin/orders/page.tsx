@@ -1,14 +1,9 @@
-import AdminLayout from "../layout";
-import { Container, Text, Skeleton, Button } from "@components/ui";
-import { GetStaticPropsContext, InferGetStaticPropsType } from "next";
-import { getAllOrders } from "actions/order.actions"; // You'll need to create this
+import { Container, Text, Button } from "@components/ui";
+import { getAllOrders } from "actions/order.actions"; 
 import Link from "next/link";
 import {
   Eye,
-  Clock,
   CheckCircle2,
-  Package,
-  Truck,
   AlertCircle,
 } from "lucide-react";
 

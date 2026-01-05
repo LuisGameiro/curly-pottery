@@ -8,7 +8,6 @@ import { Container, Skeleton } from "@components/ui";
 import { Product } from "@lib/types/product";
 import { Category } from "@lib/types/category";
 
-// Keep your sort labels outside the component
 const sortLabels = {
   newest: "Newest first",
   "price-asc": "Price: Low to High",
@@ -25,17 +24,15 @@ interface ShopClientProps {
 }
 
 export default function ShopClient({
-  initialProducts,
+  initialProducts=[],
   categories,
   activeCategory,
-  admin = false,
 }: ShopClientProps) {
   const router = useRouter();
   const [openFilter, setOpenFilter] = useState(false);
   const [openSort, setOpenSort] = useState(false);
   const [sortMethod, setSortMethod] = useState<keyof typeof sortLabels>("newest");
 
-  // Sorting logic stays the same
   const sortedProducts = useMemo(() => {
     const list = [...initialProducts];
     switch (sortMethod) {
@@ -54,7 +51,6 @@ export default function ShopClient({
 
   const handleCategoryClick = (slug?: string) => {
     setOpenFilter(false);
-    // In App Router, we use template literals for paths
     if (slug) {
       router.push(`/shop?category=${slug}`);
     } else {
@@ -177,7 +173,6 @@ export default function ShopClient({
           </div>
         </aside>
 
-        {/* MAIN - PRODUCT LIST */}
         <main className="lg:col-span-9">
           {sortedProducts.length ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-6">
@@ -185,7 +180,6 @@ export default function ShopClient({
                 <ProductCard
                   key={product.id}
                   product={product}
-                  admin={admin}
                   variant="simple"
                 />
               ))}

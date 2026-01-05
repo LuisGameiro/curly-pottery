@@ -3,37 +3,26 @@ import { serializeProduct, serializeProductVariant } from "actions/helpers";
 import { Product } from "@lib/types/product";
 import { Category } from "@lib/types/category";
 import ShopClient from "./ShopClient";
+import { getProductByCategorySlug } from "actions/product.actions";
+import { getAllCategories } from "actions/category.actions";
 
 export default async function ShopPage({
   searchParams,
 }: {
-  searchParams: { category?: string };
+  searchParams: Promise<{ category?: string }>;
 }) {
-  const categorySlug = searchParams.category || null;
 
-  // Data fetching happens directly in the Server Component
-  const categories = await prisma.category.findMany({
-    orderBy: { name: "asc" },
-  });
+  const { category } = await searchParams
+  const categorySlug = category || null;
 
-  const products = await prisma.product.findMany({
-    where: categorySlug
-      ? {
-          categories: {
-            some: { slug: categorySlug },
-          },
-        }
-      : undefined,
-    include: {
-      categories: true,
-      variants: true,
-    },
-  });
+  const categories = await getAllCategories()
+
+  const products = await getProductByCategorySlug(categorySlug)
 
   return (
     <ShopClient
-      initialProducts={serializeProductVariant(products) as Product[]}
-      categories={serializeProduct(categories) as Category[]}
+      initialProducts={(products) as Product[]}
+      categories={(categories) as Category[]}
       activeCategory={categorySlug}
     />
   );

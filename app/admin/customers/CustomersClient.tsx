@@ -1,34 +1,25 @@
 'use client'
 
-import { Container, Text, Skeleton, Input, Button } from "@components/ui";
-import { GetStaticPropsContext, InferGetStaticPropsType } from "next";
+import { Container, Text, Input, Button } from "@components/ui";
 import Link from "next/link";
 import {
-  User,
+  User as UserIcon,
   Mail,
   Phone,
-  ShoppingBag,
   Search,
-  ExternalLink,
   MailCheck,
-  MailX,
   Eye,
 } from "lucide-react";
 import { useState, useMemo } from "react";
-import AdminLayout from "pagesx/admin/layout";
-import { getAllCustomers } from "actions/customer.actions";
 
 
-
-export default async function CustomersClient({ customers }) {
-
-
+export default function CustomersClient({ customers }: { customers: any[] }) {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredCustomers = useMemo(() => {
     return customers.filter(
       (c) =>
-        `${c.firstName} ${c.lastName}`
+        `${c.name}`
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
         c.email.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -85,7 +76,7 @@ export default async function CustomersClient({ customers }) {
                     <tr key={customer.id}>
                       <td className="items-center gap-1">
                         <Text>
-                          {customer.firstName} {customer.lastName}
+                          {customer.name}
                         </Text>
                         <Text>ID: {customer.id.slice(-6)}</Text>
                       </td>
@@ -149,7 +140,7 @@ export default async function CustomersClient({ customers }) {
           </div>
         ) : (
           <div className="py-10 text-center">
-            <User className="mx-auto" size={48} />
+            <UserIcon className="mx-auto" size={48} />
             <Text>No customers found matching your search.</Text>
           </div>
         )}

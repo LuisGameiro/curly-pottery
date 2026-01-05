@@ -1,7 +1,6 @@
-import AdminLayout from "../layout";
 import { Container, Text, Button } from "@components/ui";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { useRouter, usePathname } from 'next/navigation'import Image from "next/image";
+
+import Image from "next/image";
 import {
   ArrowLeft,
   Package,
@@ -11,40 +10,28 @@ import {
   User,
 } from "lucide-react";
 import Link from "next/link";
-import { useState, useTransition } from "react";
 import { getOrderById, updateOrderStatus } from "actions/order.actions";
-import { OrderStatus } from "@lib/types/customer";
 
-export async function getServerSideProps({
-  params,
-}: GetServerSidePropsContext) {
-  const order = await getOrderById(params?.id as string);
-  if (!order) return { notFound: true };
+export default async function OrderDetailsPage({ params }) {
+  const { id } = await params;
 
-  return { props: { order } };
-}
-
-export default function OrderDetailsPage({
-  order,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const router = useRouter();
-  const [updating, setUpdating] = useState(false);
+  const order = await getOrderById(id);
 
   const handleStatusChange = async (newStatus: string) => {
-    setUpdating(true);
-    try {
-      const result = await fetch(`/api/orders/${order.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus }),
-      });
-      if (!result.ok) alert("Failed to update status");
-      router.replace(router.asPath); // Refresh data
-    } catch (error) {
-      console.error("Failed to update status", error);
-    } finally {
-      setUpdating(false);
-    }
+    // setUpdating(true);
+    // try {
+    //   const result = await fetch(`/api/orders/${order.id}`, {
+    //     method: 'PUT',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({ status: newStatus }),
+    //   });
+    //   if (!result.ok) alert("Failed to update status");
+    //   router.replace(router.asPath); // Refresh data
+    // } catch (error) {
+    //   console.error("Failed to update status", error);
+    // } finally {
+    //   setUpdating(false);
+    // }
   };
 
   // const handleStatusChange = async (newStatus:string) => {
@@ -54,7 +41,6 @@ export default function OrderDetailsPage({
   //   //   alert("Order updated!");
   //   // }
   // };
-  const [isPending, startTransition] = useTransition();
 
   const lineItems = order.lineItems as any[];
   const shipping = order.shippingAddress as any;
@@ -85,7 +71,7 @@ export default function OrderDetailsPage({
           <select
             className="bg-secondary text-sm font-medium rounded-lg px-3 py-2 outline-none border-none cursor-pointer"
             value={order.status}
-            disabled={updating}
+            // disabled={updating}
             onChange={(e) => handleStatusChange(e.target.value)}
           >
             <option value="PENDING">Pending</option>
@@ -103,7 +89,7 @@ export default function OrderDetailsPage({
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-accent-2 border rounded-xl overflow-hidden shadow-sm">
             <div className="p-4 border-b bg-accent-2 flex items-center gap-2">
-              <Package size={18}  />
+              <Package size={18} />
               <Text className="font-bold">Items Summary</Text>
             </div>
             <div className="divide-y">
@@ -225,5 +211,3 @@ export default function OrderDetailsPage({
     </Container>
   );
 }
-
-OrderDetailsPage.Layout = AdminLayout;

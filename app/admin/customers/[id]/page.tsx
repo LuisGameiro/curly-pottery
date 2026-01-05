@@ -1,7 +1,5 @@
-import AdminLayout from "../../layout";
 import { Container, Text, Button } from "@components/ui";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { getCustomerById } from "actions/customer.actions"; // Ensure this includes orders & addresses
+import { getCustomerById } from "actions/customer.actions";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -15,20 +13,20 @@ import {
   CheckCircle2,
   XCircle,
 } from "lucide-react";
+import notFound from "app/not-found";
 
-async function getServerSideProps({ params }: GetServerSidePropsContext) {
-  const customer = await getCustomerById(params?.id as string);
-  if (!customer) return { notFound: true };
+export default async function CustomerDetailsPage({ params }) {
+  const { id } = await params;
+  const customer = await getCustomerById(id);
+  if (!customer) {
+    notFound();
+  }
 
-  return { props: { customer } };
-}
-
-export default function CustomerDetailsPage({
-  customer,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  // ERROR FIX 2: Added safety check for orders array
+  const orders = customer.orders || [];
   const totalSpend = customer.orders.reduce(
     (acc: number, order: any) => acc + order.totalPrice,
-    0,
+    0
   );
 
   return (
@@ -43,12 +41,11 @@ export default function CustomerDetailsPage({
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="h-16 w-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary text-2xl font-bold border-2 border-primary/20">
-              {customer.firstName[0]}
-              {customer.lastName[0]}
+              {customer.name[0]}
             </div>
             <div>
               <Text variant="heading">
-                {customer.firstName} {customer.lastName}
+                {customer.name} 
               </Text>
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1">
@@ -204,13 +201,12 @@ export default function CustomerDetailsPage({
                       </td>
                       <td className="px-6 py-4">
                         <span
-                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
-                            order.status === "COMPLETED"
+                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${order.status === "COMPLETED"
                               ? "bg-green-50 text-green-700 border-green-100"
                               : order.status === "PENDING"
                                 ? "bg-amber-50 text-amber-700 border-amber-100"
                                 : "bg-slate-50 text-slate-700 border-slate-100"
-                          }`}
+                            }`}
                         >
                           {order.status}
                         </span>
@@ -247,5 +243,3 @@ export default function CustomerDetailsPage({
     </Container>
   );
 }
-
-CustomerDetailsPage.Layout = AdminLayout;

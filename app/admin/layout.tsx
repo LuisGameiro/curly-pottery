@@ -8,6 +8,9 @@ import {
   FolderTree,
   LayoutDashboard,
   ChevronDown,
+  Van,
+  Users,
+  ChartBarIcon,
 } from "lucide-react";
 import { Navbar, Footer } from "@components/common";
 import { Text } from "@components/ui";
@@ -24,9 +27,9 @@ export default function AdminLayout({
   const navItems = [
     { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
     { name: "Products", href: "/admin/products", icon: Package },
-    { name: "Categories", href: "/admin/categories", icon: FolderTree },
-    { name: "Orders", href: "/admin/orders", icon: FolderTree },
-    { name: "Customers", href: "/admin/customers", icon: FolderTree },
+    { name: "Categories", href: "/admin/categories", icon: ChartBarIcon },
+    { name: "Orders", href: "/admin/orders", icon: Van },
+    { name: "Customers", href: "/admin/customers", icon: Users },
   ];
 
   const currentItem =
@@ -39,7 +42,7 @@ export default function AdminLayout({
           variant="pageHeading"
           className="hidden lg:block font-bold text-xl text-secondary mb-6"
         >
-          StoreAdmin
+          Store Admin
         </Text>
 
         <div className="relative">
@@ -89,7 +92,7 @@ export default function AdminLayout({
       </aside>
 
       <main className="flex-1 py-4 sm:px-2 md:px-8">
-        <div className="max-w-6xl mx-auto">{children}</div>
+        {children}
       </main>
     </div>
   );

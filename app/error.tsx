@@ -1,13 +1,20 @@
-'use client'; 
-import { Text } from '@components/ui'
+'use client';
 
-export default function Error({ error, reset }) {
+import { Button, Text } from '@components/ui'
+
+interface ErrorProps {
+  error: Error & { digest?: string };
+  reset: () => void;
+}
+export default function Error({ error, reset }: ErrorProps) {
   return (
-    <div className="p-10 text-center bg-background">
+    <div className="space-y-10 text-center bg-background py-20">
       <Text variant='heading'>Something went wrong!</Text>
-      <button onClick={() => reset()} className="mt-4 bg-red-500 text-white p-2">
+      <Text>{JSON.stringify(error)}</Text>
+
+      <Button onClick={() => reset()} variant='secondary' >
         Try again
-      </button>
+      </Button>
     </div>
   );
 }

@@ -13,29 +13,24 @@ import {
   Package,
   ArrowLeft,
   Link,
-  Info,
-  Percent,
   UploadCloud,
 } from "lucide-react";
 import { Detailtype, SizeNames } from "@lib/types/product";
-import { getProductById } from "actions/product.actions";
-import { GetServerSidePropsContext } from "next";
 import { slugify } from "@lib/slugify";
-import { getAllCategories } from "actions/category.actions";
 import { skulify } from "@lib/skulify";
 import InputTextArea from "@components/ui/Input/InputTextArea";
 import InputSelect from "@components/ui/Input/InputSelect";
 import { DiscountType } from "@lib/types/customer";
+import { upsertProduct } from "actions/product.actions";
 
 interface ProductFormProps {
   initialData?: any;
   categories: any[];
 }
 
-export default function ProductClient({ initialData, categories = [] }) {
+export default function ProductClient({ initialData, categories = [] }:ProductFormProps) {
   const isEditing = !!initialData;
 
-  // Product State
   const [product, setProduct] = useState({
     name: initialData?.name || "",
     slug: initialData?.slug || "",
@@ -44,7 +39,6 @@ export default function ProductClient({ initialData, categories = [] }) {
     categoryIds: initialData?.categories?.map((c: any) => c.id) || [],
   });
 
-  // Variants State
   const [variants, setVariants] = useState<any[]>(
     initialData?.variants || [
       {
@@ -97,7 +91,7 @@ export default function ProductClient({ initialData, categories = [] }) {
     );
   };
 
-  // --- Details Handlers (Nested) ---
+
   const addDetail = (variantId: string) => {
     const variant = variants.find((v) => v.id === variantId);
     const newDetails = [
@@ -120,7 +114,6 @@ export default function ProductClient({ initialData, categories = [] }) {
     updateVariant(variantId, "details", newDetails);
   };
 
-  // --- Discount Handlers (Nested) ---
   const addDiscount = (variantId: string) => {
     const variant = variants.find((v) => v.id === variantId);
     const newDiscounts = [
@@ -131,19 +124,23 @@ export default function ProductClient({ initialData, categories = [] }) {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+        e.preventDefault();
+
     const payload = { ...product, variants };
 
-    console.log(payload);
-    const endpoint = isEditing
-      ? `/api/admin/products/${initialData.id}`
-      : "/api/admin/products";
 
-    const res = await fetch(endpoint, {
-      method: isEditing ? "PUT" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+
+    const result = await upsertProduct(payload)
+    // console.log(payload);
+    // const endpoint = isEditing
+    //   ? `/api/admin/products/${initialData.id}`
+    //   : "/api/admin/products";
+
+    // const res = await fetch(endpoint, {
+    //   method: isEditing ? "PUT" : "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(payload),
+    // });
 
     //if (res.ok) router.push("/admin/products");
   };

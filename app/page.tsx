@@ -1,15 +1,10 @@
-// app/page.js
 import { ProductCard } from "@components/product";
 import CategoriesCard from "@components/product/categoriesCard";
 import { Grid, Marquee, Hero } from "@components/ui";
 import { getAllCategories } from "actions/category.actions";
 import { getRandomProducts } from "actions/product.actions";
 
-// This replaces revalidate in getStaticProps
-export const revalidate = 300; 
-
 export default async function Home() {
-  // Fetch data directly in the Server Component
   const products = await getRandomProducts(6);
   const categories = await getAllCategories();
 

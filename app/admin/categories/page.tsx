@@ -1,40 +1,22 @@
-import AdminLayout from "../layout";
 import { Button, Container, Skeleton } from "@components/ui";
-import { GetStaticPropsContext, InferGetStaticPropsType } from "next";
-import { getAllCategories } from "actions/category.actions";
+import { deleteCategory, getAllCategories } from "actions/category.actions";
 import Link from "next/link";
 import Image from "next/image";
 import { Pencil, Trash2, Plus } from "lucide-react";
 import { Text } from "@components/ui";
+import CategoryTable from "./CategoriesTable";
 
-// export const dynamic = "force-dynamic";
+export default async function CategoriesPage() {
 
-// export async function getStaticProps({
-//   locale,
-//   locales,
-// }: GetStaticPropsContext) {
-//   return {
-//     props: { categories },
-//     revalidate: 300,
-//   };
-// }
-
-export default async function CategoriesPage(
-
-) {
-  // const router = useRouter();
-
-    const categories = await getAllCategories();
+  const categories = await getAllCategories();
 
   const handleDelete = async (id: string, name: string) => {
-  //   if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
+    if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
 
-  //   const response = await fetch(`/api/admin/categories/${id}`, { method: "DELETE" });
-  //   const result = await response.json();
-  //   console.log("Delete Result:", result);
-  //   if (result.success) {
-  //     router.reload();
-  //   }
+    //const response = await deleteCategory(id)
+
+    // console.log("Delete Result:", response);
+
   };
 
   return (
@@ -52,66 +34,7 @@ export default async function CategoriesPage(
         </Link>
       </header>
 
-      <main>
-        {categories && categories.length > 0 ? (
-          <div className=" border-2 border-border rounded-xl shadow-sm">
-            <table>
-              <thead>
-                <tr>
-                  <th>Image</th>
-                  <th>Name</th>
-                  <th>Slug</th>
-                  <th>Last Update</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {categories.map((cat) => (
-                  <tr key={cat.id}>
-                    <td className="flex">
-                      <Image
-                        src={cat.image || "/placeholder.png"} // Ensure your model has an image field
-                        alt={cat.name}
-                        width={48}
-                        height={48}
-                        className="object-cover rounded-lg overflow-hidden"
-                      />
-                    </td>
-                    <td>{cat.name}</td>
-                    <td>/{cat.slug}</td>
-                    <td>{new Date(cat.updatedAt).toLocaleDateString()}</td>
-                    <td>
-                      <div className="flex gap-2 justify-center">
-                        <Link href={`/admin/categories/${cat.id}`}>
-                          <Button variant="naked" title="Edit">
-                            <Pencil size={18} />
-                          </Button>
-                        </Link>
-                        <Button
-                          variant="naked"
-                          title="Delete"
-                          className="text-red"
-                          // onClick={() => handleDelete(cat.id, cat.name)}
-                        >
-                          <Trash2 size={18} />
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Skeleton key={i} className="w-full h-16 rounded-lg" />
-            ))}
-          </div>
-        )}
-      </main>
+      <CategoryTable categories={categories}/>
     </Container>
   );
 }
-
-CategoriesPage.Layout = AdminLayout;
