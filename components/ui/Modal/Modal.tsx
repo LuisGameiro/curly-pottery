@@ -1,3 +1,6 @@
+'use client'
+
+
 import { FC, useRef, useEffect, useCallback, ReactNode } from "react";
 import s from "./Modal.module.css";
 import FocusTrap from "@lib/focus-trap";

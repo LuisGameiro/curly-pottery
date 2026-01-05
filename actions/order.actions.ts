@@ -32,11 +32,11 @@ export async function getAllOrders() {
       createdAt: "desc",
     },
     include: {
-      customer: true,
+      user: true,
     },
   });
 
-  return serializeOrders(ordersRaw);
+  return (ordersRaw);
 }
 
 export async function getOrderById(id: string) {

@@ -1,8 +1,7 @@
 import cn from "clsx";
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/router";
-import { Layout } from "@components/common";
+import { useRouter, usePathname } from 'next/navigation'import { Layout } from "@components/common";
 import { ProductCard } from "@components/product";
 import { Container, Skeleton } from "@components/ui";
 import rangeMap from "@lib/range-map";

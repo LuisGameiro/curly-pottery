@@ -1,3 +1,5 @@
+'use client'
+
 import s from "./UserNav.module.css";
 import { Avatar } from "@components/common";
 // import useCart from '@framework/cart/use-cart'

@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { serializeCustomers } from "./helpers";
 
 export async function getAllCustomers() {
-  const customersRaw = await prisma.customer.findMany({
+  const customersRaw = await prisma.user.findMany({
     orderBy: {
       createdAt: "desc",
     },
@@ -18,7 +18,7 @@ export async function getAllCustomers() {
 }
 
 export async function getCustomerById(id: string) {
-  const customerRaw = await prisma.customer.findUnique({
+  const customerRaw = await prisma.user.findUnique({
     where: { id },
     include: {
       orders: true,

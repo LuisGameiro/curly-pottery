@@ -1,3 +1,6 @@
+'use client'
+
+
 import React, { FC, ReactNode, useCallback, useMemo } from "react";
 import { ThemeProvider } from "next-themes";
 

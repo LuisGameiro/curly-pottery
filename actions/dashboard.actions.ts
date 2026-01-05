@@ -11,7 +11,7 @@ export async function getDashboardStats() {
   ] = await Promise.all([
     prisma.category.count(),
     prisma.product.count(),
-    prisma.customer.count(),
+    prisma.user.count(),
     prisma.order.count({ where: { status: "PENDING" } }),
     prisma.productVariant.findMany({
       select: { stock: true, availableForSale: true },

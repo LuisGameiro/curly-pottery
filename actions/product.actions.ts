@@ -116,7 +116,7 @@ export async function getProductById(id: string) {
     },
   });
 
-  return serializeProductVariant([productsRaw])[0];
+  return ([productsRaw])[0];
 }
 
 export async function deleteProduct(id: string) {
@@ -143,7 +143,7 @@ export async function getAllProducts() {
       createdAt: "desc",
     },
   });
-  return serializeProductVariant(productsRaw);
+  return (productsRaw);
 }
 
 export async function getRelatedProducts(
@@ -181,5 +181,5 @@ export async function getRelatedProducts(
     take: limit,
     skip,
   });
-  return serializeProductVariant(relatedProducts);
+  return (relatedProducts);
 }

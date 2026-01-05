@@ -1,4 +1,7 @@
-import cn from "clsx";
+'use client'
+
+import { cn } from "@lib/utils";
+
 import s from "./Sidebar.module.css";
 import { useEffect, useRef } from "react";
 import { disableBodyScroll, clearAllBodyScrollLocks } from "body-scroll-lock";

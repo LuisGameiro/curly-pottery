@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import cn from "clsx";
+import { cn } from "@lib/utils";
 
 interface ErrorMessageProps {
   error: {

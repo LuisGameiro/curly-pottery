@@ -1,3 +1,5 @@
+'use client'
+
 import { FC, useRef, useEffect } from "react";
 import { useUserAvatar } from "@lib/hooks/useUserAvatar";
 

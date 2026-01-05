@@ -1,6 +1,9 @@
+'use client'
+
+
 import s from "./Layout.module.css";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
+import { useRouter, usePathname } from 'next/navigation'
 import { useUI } from "@components/ui/context";
 import { Navbar, Footer } from "@components/common";
 import { useAcceptCookies } from "@lib/hooks/useAcceptCookies";
@@ -10,6 +13,7 @@ import type { Page } from "@lib/types/inspiration/page";
 import type { Category } from "@lib/types/inspiration/site";
 import type { Link as LinkProps } from "../UserNav/MenuSidebarView";
 import { cn } from "@lib/utils";
+import { useUser } from "@lib/hooks/useUser";
 
 const Loading = () => (
   <div className="w-80 h-80 flex items-center text-center justify-center p-3">
@@ -95,19 +99,26 @@ const Layout: React.FC<Props> = ({
   pageProps: { categories = [], ...pageProps },
 }) => {
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies();
-  const { locale = "en-US" } = useRouter();
-  const navBarlinks = [
+  const {  isAuthenticated,
+    isAdmin, } = useUser()
+  // const { locale = "en-US" } = useRouter();
+  let navBarlinks = [
     { label: "Shop", href: "/shop" },
     { label: "Contacts", href: "/contacts" },
   ];
+
+  if (!isAuthenticated) navBarlinks =[ ...navBarlinks , { label: "Profile", href: "/user" }]
+
+  if (!isAdmin) navBarlinks =[ ...navBarlinks , { label: "Admin", href: "/admin" }]
+
 
   return (
     // <CommerceProvider locale={locale}>
     //       </CommerceProvider>
 
-    <div className={s.root}>
+    <div>
       <Navbar links={navBarlinks} />
-      <main className="fit">{children}</main>
+      <main className="bg-background w-full">{children}</main>
       <Footer pages={pageProps.pages} />
       <ModalUI />
       {/* <CheckoutProvider> */}

@@ -1,3 +1,5 @@
+'use client'
+
 import s from "./ProductSidebar.module.css";
 // import { useAddItem } from '@framework/cart'
 import { FC, useEffect, useState } from "react";

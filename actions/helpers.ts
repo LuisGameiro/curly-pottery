@@ -14,8 +14,8 @@ export const serializeProductVariant = (productsRaw: any[]) => {
     updatedAt: product.updatedAt.toISOString(),
     variants: product.variants.map((variant: any) => ({
       ...variant,
-      createdAt: variant.createdAt.toISOString(),
-      updatedAt: variant.updatedAt.toISOString(),
+  createdAt: variant?.createdAt ? new Date(variant.createdAt).toISOString() : new Date().toISOString(),
+    updatedAt: variant?.updatedAt ? new Date(variant.updatedAt).toISOString() : new Date().toISOString(),
     })),
     categories: product.categories.map((category: any) => ({
       ...category,

@@ -1,3 +1,5 @@
+'use client'
+
 import Image from "next/image";
 import s from "./ProductView.module.css";
 import { FC, useEffect, useState } from "react";

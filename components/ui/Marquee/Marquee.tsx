@@ -1,3 +1,5 @@
+'use client'
+
 import { cn } from "@lib/utils";
 import s from "./Marquee.module.css";
 import { FC, ReactNode, Component, Children } from "react";
