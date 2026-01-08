@@ -73,7 +73,7 @@ export default function CategoriesPage({
                         alt={cat.name}
                         width={48}
                         height={48}
-                        className="object-cover rounded-lg overflow-hidden"
+                        className="h-auto object-cover rounded-lg overflow-hidden"
                       />
                     </td>
                     <td>{cat.name}</td>

@@ -154,7 +154,7 @@ export default function ProductsPage({
                               alt={product.name}
                               width={48}
                               height={48}
-                              className="object-cover rounded-lg overflow-hidden justify-end"
+                              className= " h-auto object-cover rounded-lg overflow-hidden justify-end"
                             />
                             <div>
                               <div className="font-medium text-sm">

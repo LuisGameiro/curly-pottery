@@ -99,23 +99,21 @@ const Layout: React.FC<Props> = ({
   pageProps: { categories = [], ...pageProps },
 }) => {
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies();
-  const {  isAuthenticated,
-    isAdmin, } = useUser()
+  const { isAuthenticated, isAdmin, } = useUser()
+
   // const { locale = "en-US" } = useRouter();
+  
   let navBarlinks = [
     { label: "Shop", href: "/shop" },
     { label: "Contacts", href: "/contacts" },
   ];
 
-  if (!isAuthenticated) navBarlinks =[ ...navBarlinks , { label: "Profile", href: "/user" }]
+  if (!isAuthenticated) navBarlinks = [...navBarlinks, { label: "Profile", href: "/user" }]
 
-  if (!isAdmin) navBarlinks =[ ...navBarlinks , { label: "Admin", href: "/admin" }]
+  if (!isAdmin) navBarlinks = [...navBarlinks, { label: "Admin", href: "/admin" }]
 
 
   return (
-    // <CommerceProvider locale={locale}>
-    //       </CommerceProvider>
-
     <div>
       <Navbar links={navBarlinks} />
       <main className="bg-background w-full">{children}</main>

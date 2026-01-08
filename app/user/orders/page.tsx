@@ -1,7 +1,7 @@
 import type { GetStaticPropsContext } from "next";
 import { Bag } from "@components/icons";
 import { Container, Text } from "@components/ui";
-import { pagesData, siteInfo } from "api/fakeapi/data";
+import { pagesData, siteInfo } from "app/api/fakeapi/data";
 
 
 export default async function Orders() {

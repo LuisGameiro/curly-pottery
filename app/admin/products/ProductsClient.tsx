@@ -16,7 +16,7 @@ import { ProductVariant } from "@lib/types/product";
 import { Product } from "prisma/generated/prisma/client";
 import { deleteProduct } from "actions/product.actions";
 import { useRouter } from "next/navigation";
-
+import { Fragment } from 'react'; // 1. Add this import
 export default function ProductsClient({ products }: { products: Product[] | ProductFull[] }) {
   const router = useRouter();
 
@@ -138,9 +138,9 @@ export default function ProductsClient({ products }: { products: Product[] | Pro
                   const isExpanded = expandedRows[product.id];
 
                   return (
-                    <>
+                    <Fragment key={product.id}>
                       <tr
-                        key={product.id}
+
                         className="hover:bg-accent-2 transition-colors"
                       >
                         <td>
@@ -155,14 +155,14 @@ export default function ProductsClient({ products }: { products: Product[] | Pro
                             )}
                           </Button>
                         </td>
-                        <td className=" sm:px-4 w-4/12">
+                        <td className=" w-4/12">
                           <div className="flex items-center gap-3 mx-auto">
                             <Image
                               src={product.images[0] || "/placeholder.png"}
                               alt={product.name}
                               width={48}
                               height={48}
-                              className="object-cover rounded-lg overflow-hidden justify-end"
+                              className="h-auto object-cover rounded-lg overflow-hidden justify-end "
                             />
                             <div>
                               <div className="font-medium text-sm">
@@ -201,7 +201,7 @@ export default function ProductsClient({ products }: { products: Product[] | Pro
                               title="Delete"
                               color="danger"
                               className="text-red"
-                              onClick={() =>handleDelete(product.id, product.name)
+                              onClick={() => handleDelete(product.id, product.name)
                               }
                             >
                               <Trash2 size={18} />
@@ -265,7 +265,7 @@ export default function ProductsClient({ products }: { products: Product[] | Pro
                           </td>
                         </tr>
                       )}
-                    </>
+                    </Fragment>
                   );
                 })}
               </tbody>

@@ -28,7 +28,7 @@ interface ProductFormProps {
   categories: any[];
 }
 
-export default function ProductClient({ initialData, categories = [] }:ProductFormProps) {
+export default function ProductClient({ initialData, categories = [] }: ProductFormProps) {
   const isEditing = !!initialData;
 
   const [product, setProduct] = useState({
@@ -124,7 +124,7 @@ export default function ProductClient({ initialData, categories = [] }:ProductFo
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    e.preventDefault();
 
     const payload = { ...product, variants };
 
@@ -614,16 +614,15 @@ export default function ProductClient({ initialData, categories = [] }:ProductFo
                           onClick={() => {
                             const ids = product.categoryIds.includes(cat.id)
                               ? product.categoryIds.filter(
-                                  (id) => id !== cat.id
-                                )
+                                (id) => id !== cat.id
+                              )
                               : [...product.categoryIds, cat.id];
                             setProduct({ ...product, categoryIds: ids });
                           }}
-                          className={`px-3 py-1 rounded-full text-xs border transition ${
-                            product.categoryIds.includes(cat.id)
+                          className={`px-3 py-1 rounded-full text-xs border transition ${product.categoryIds.includes(cat.id)
                               ? "bg-primary text-white border-primary"
                               : "bg-white text-slate-600 hover:bg-slate-50"
-                          }`}
+                            }`}
                         >
                           {cat.name}
                         </button>

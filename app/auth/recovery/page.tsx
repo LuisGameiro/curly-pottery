@@ -1,3 +1,6 @@
+"use client";
+
+
 import { Button, Text, Input } from "@components/ui";
 import { Container, Link, Mail } from "lucide-react";
 
@@ -15,7 +18,7 @@ export default function RecoveryPage() {
 
     return (
     <Container >
-            <div className="bg-white p-8 rounded-3xl border shadow-sm">
+            <div className="mx-auto ">
                 {!sent ? (
                     <>
                         <div className="text-center mb-8">
@@ -45,4 +48,3 @@ export default function RecoveryPage() {
     );
 }
 
-RecoveryPage.Layout = Layout;

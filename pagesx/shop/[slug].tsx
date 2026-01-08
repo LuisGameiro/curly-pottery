@@ -1,7 +1,7 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter, usePathname } from 'next/navigation'import ProductView from "@components/product/ProductView/ProductView";
-import { productsData, getSingleProductData } from "api/fakeapi/data";
+import { productsData, getSingleProductData } from "app/api/fakeapi/data";
 import Layout from "@components/common/Layout/Layout";
 import { Product } from "@lib/types/product";
 import { getAllProducts, getProductBySlug } from "actions/product.actions";

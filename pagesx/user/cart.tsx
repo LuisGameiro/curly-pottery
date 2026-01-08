@@ -4,7 +4,7 @@ import { Button, Text, Container } from "@components/ui";
 import { Bag, Cross, Check, MapPin, CreditCard } from "@components/icons";
 import { CartItem } from "@components/cart";
 import { useUI } from "@components/ui/context";
-import { pagesData, productsData, siteInfo } from "api/fakeapi/data";
+import { pagesData, productsData, siteInfo } from "app/api/fakeapi/data";
 import UserLayout from "./layout";
 
 export async function getStaticProps({

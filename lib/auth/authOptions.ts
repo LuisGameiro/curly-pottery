@@ -32,6 +32,7 @@ export const authOptions: NextAuthOptions = {
         const isValid = await verifyPassword(credentials.password, user.password);
         if (!isValid) return null;
 
+        console.log({ id: user.id, email: user.email, name: user.name, role: user.role })
         return { id: user.id, email: user.email, name: user.name, role: user.role };
       }
     })
@@ -58,5 +59,3 @@ export const authOptions: NextAuthOptions = {
     signIn: '/auth/login',
   }
 };
-
-export default NextAuth(authOptions);

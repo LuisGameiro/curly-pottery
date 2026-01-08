@@ -1,14 +1,12 @@
-@reference "tailwindcss";
-@reference "../../../../globals.css";
-
+/* 
 .root {
   @apply flex flex-col py-4;
-}
+} */
 
-.root:first-child {
+/* .root:first-child {
   padding-top: 0;
-}
-
+} */
+/* 
 .quantity {
   appearance: textfield;
   @apply w-8 border-accent-2 border mx-3 rounded text-center text-sm text-black;
@@ -26,4 +24,4 @@
 .productName {
   @apply font-medium cursor-pointer pb-1;
   margin-top: -4px;
-}
+} */

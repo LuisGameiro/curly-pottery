@@ -1,3 +1,5 @@
+'use client'
+
 import { ChangeEvent, useEffect, useState } from "react";
 import cn from "clsx";
 import Image from "next/image";
@@ -9,6 +11,8 @@ import type { LineItem } from "@lib/types/inspiration/cart";
 // import useUpdateItem from '@framework/cart/use-update-item'
 // import useRemoveItem from '@framework/cart/use-remove-item'
 import Quantity from "@components/ui/Quantity";
+import useCart from "@lib/hooks/useCart";
+import { calculatePrice } from "@lib/calculate-price";
 
 type ItemOption = {
   name: string;
@@ -29,16 +33,12 @@ const CartItem = ({
   item: LineItem;
   currencyCode: string;
 }) => {
+  const { removeItem, updateItem } = useCart()
   const { closeSidebarIfPresent } = useUI();
   const [removing, setRemoving] = useState(false);
   const [quantity, setQuantity] = useState<number>(item.quantity);
-  const removeItem = (item: LineItem) => {
-    new Promise(() => {});
-  }; // useRemoveItem()
-  const updateItem = ({ quantity }: { quantity: number }) => {
-    new Promise(() => {});
-  }; // useUpdateItem({ item })
-  const { price } = { price: "$0.00" };
+
+  const price = calculatePrice(item.variant.price, 'GBP', item.variant.discounts)
   // const { price } = usePrice({
   //   amount: item.variant.price * item.quantity,
   //   baseAmount: item.variant.listPrice * item.quantity,
@@ -49,19 +49,19 @@ const CartItem = ({
     target: { value },
   }: ChangeEvent<HTMLInputElement>) => {
     setQuantity(Number(value));
-    await updateItem({ quantity: Number(value) });
+    // await updateItem({ quantity: Number(value) });
   };
 
   const increaseQuantity = async (n = 1) => {
     const val = Number(quantity) + n;
     setQuantity(val);
-    await updateItem({ quantity: val });
+    // await updateItem({ quantity: val });
   };
 
   const handleRemove = async () => {
     setRemoving(true);
     try {
-      await removeItem(item);
+      await removeItem(item.productId);
     } catch (error) {
       setRemoving(false);
     }
@@ -80,79 +80,90 @@ const CartItem = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [item.quantity]);
 
+
   return (
     <li
-      className={cn(s.root, {
+      className={cn(s.root, "border-b border-accent-2 last:border-b-0", {
         "opacity-50 pointer-events-none": removing,
       })}
       {...rest}
     >
-      <div className="flex flex-row space-x-4 py-4">
-        <div className="w-16 h-16 bg-violet relative overflow-hidden cursor-pointer">
-          <Link href={`/product/${item.path}`}>
+      <div className="flex flex-row py-6 gap-4">
+        {/* 1. PRODUCT IMAGE */}
+        <div className="relative w-20 h-20 sm:w-24 sm:h-24 bg-accent-1 rounded-md overflow-hidden border border-accent-2 flex-shrink-0">
+          <Link href={`/shop/${item.slug}`}>
             <Image
               onClick={() => closeSidebarIfPresent()}
-              className={s.productImage}
-              width={64}
-              height={64}
-              src={item.variant.image?.url || placeholderImg}
-              alt={item.variant.image?.alt || "Product Image"}
+              className="object-cover transition-transform hover:scale-105"
+              fill // Use fill for better responsive behavior in a fixed container
+              src={item.variant?.images?.[0] || placeholderImg}
+              alt={item.variant?.sku || "Product Image"}
             />
           </Link>
         </div>
-        <div className="flex-1 flex flex-col text-base">
-          <Link href={`/product/${item.path}`}>
-            <span
-              className={s.productName}
-              onClick={() => closeSidebarIfPresent()}
-            >
-              {item.name}
-            </span>
-          </Link>
-          {options && options.length > 0 && (
-            <div className="flex items-center pb-1">
-              {options.map((option: ItemOption, i: number) => (
-                <div
-                  key={`${item.id}-${option.name}`}
-                  className="text-sm font-semibold text-accent-7 inline-flex items-center justify-center"
+
+        {/* 2. PRODUCT INFO */}
+        <div className="flex flex-1 flex-col justify-between py-0.5">
+          <div>
+            <div className="flex justify-between items-start">
+              <Link href={`/shop/${item.slug}`}>
+                <span
+                  className="font-medium text-sm sm:text-base hover:text-secondary transition-colors cursor-pointer"
+                  onClick={() => closeSidebarIfPresent()}
                 >
-                  {option.name}
-                  {option.name === "Color" ? (
-                    <span
-                      className="mx-2 rounded-full bg-transparent border w-5 h-5 p-1 text-accent-9 inline-flex items-center justify-center overflow-hidden"
-                      style={{
-                        backgroundColor: `${option.value}`,
-                      }}
-                    ></span>
-                  ) : (
-                    <span className="mx-2 rounded-full bg-transparent border h-5 p-1 text-accent-9 inline-flex items-center justify-center overflow-hidden">
-                      {option.value}
-                    </span>
-                  )}
-                  {i === options.length - 1 ? "" : <span className="mr-3" />}
-                </div>
-              ))}
+                  {item.name}
+                </span>
+              </Link>
+              {/* Price moved here for better mobile visibility */}
+              <div>              
+                {price.hasDiscount && <span className="font-semibold text-sm ml-4 text-red-500 line-through">{price.priceCalculated}</span>}
+
+
+
+                <span className="font-semibold text-sm ml-4">{price.priceDiscount}</span>
+              </div>
+
             </div>
-          )}
-          {variant === "display" && (
-            <div className="text-sm tracking-wider">{quantity}x</div>
-          )}
-        </div>
-        <div className="flex flex-col justify-between space-y-2 text-sm">
-          <span>{price}</span>
+
+            {/* ATTRIBUTES BADGES */}
+            <div className="flex items-center gap-2 mt-1.5">
+              {item.variant?.colorName && (
+                <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-accent-1 border border-accent-2 text-accent-7">
+                  {item.variant.colorName}
+                </span>
+              )}
+              {item.variant?.sizeName && (
+                <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-accent-1 border border-accent-2 text-accent-7">
+                  {item.variant.sizeName}
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* 3. QUANTITY CONTROLS */}
+          <div className="flex items-end justify-between mt-2">
+            {variant === "default" ? (
+              <div className="flex items-center">
+                <Quantity
+                  value={quantity}
+                  handleRemove={handleRemove}
+                  handleChange={handleChange}
+                  increase={() => increaseQuantity(1)}
+                  decrease={() => increaseQuantity(-1)}
+                />
+              </div>
+            ) : (
+              <div className="text-xs text-accent-6 italic">
+                Qty: <span className="font-medium text-accent-9">{quantity}</span>
+              </div>
+            )}
+
+            {/* Optional: Add a small delete button separate from quantity if your design allows */}
+          </div>
         </div>
       </div>
-      {variant === "default" && (
-        <Quantity
-          value={quantity}
-          handleRemove={handleRemove}
-          handleChange={handleChange}
-          increase={() => increaseQuantity(1)}
-          decrease={() => increaseQuantity(-1)}
-        />
-      )}
     </li>
-  );
+  )
 };
 
 export default CartItem;

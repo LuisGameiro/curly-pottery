@@ -2,7 +2,6 @@ import { upsertCategory } from "actions/category.actions";
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "prisma/prisma";
 
-// This code ONLY runs on the server
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,

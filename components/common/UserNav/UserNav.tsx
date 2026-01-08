@@ -15,54 +15,55 @@ import {
 } from "@components/ui";
 
 import type { LineItem } from "@lib/types/inspiration/cart";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { cn } from "@lib/utils";
+import useCart from "@lib/hooks/useCart";
+import { Delete } from "lucide-react";
+import Link from "next/link";
 
 const countItem = (count: number, item: LineItem) => count + item.quantity;
 
 const UserNav: React.FC<{
   className?: string;
 }> = ({ className }) => {
-    const { data: session, status } = useSession();
+  const { data: session, status } = useSession();
 
-  // const { data } = useCart()
+  const { data, deleteAll } = useCart()
   // const { data: isCustomerLoggedIn } = useCustomer()
   const { closeSidebarIfPresent, openModal, setSidebarView, openSidebar } =
     useUI();
-  const isCustomerLoggedIn = false;
-  const itemsCount = 0; //  data?.lineItems?.reduce(countItem, 0) ?? 0
-  const DropdownTrigger = isCustomerLoggedIn
-    ? DropdownTriggerInst
-    : React.Fragment;
+  const itemsCount = data?.lineItems?.reduce(countItem, 0) ?? 0
+  // const DropdownTrigger = isCustomerLoggedIn
+  //   ? DropdownTriggerInst
+  //   : React.Fragment;
 
   return (
     <nav className={cn(s.root, className)}>
       <ul className={s.list}>
         <li className={s.item}>
+          <Link href='/cart'>
+
+            <Button
+              className={s.item}
+              variant="naked"
+              aria-label={`Cart items: ${itemsCount}`}
+            >
+              <Bag />
+              {itemsCount > 0 && <span className={s.bagCount}>{itemsCount}</span>}
+            </Button>
+          </Link>
           <Button
             className={s.item}
             variant="naked"
-            onClick={() => {
-              setSidebarView("CART_VIEW");
-              openSidebar();
-            }}
+            onClick={deleteAll}
             aria-label={`Cart items: ${itemsCount}`}
           >
-            <Bag />
+            <Delete />
             {itemsCount > 0 && <span className={s.bagCount}>{itemsCount}</span>}
           </Button>
         </li>
-        {/* {process.env.COMMERCE_WISHLIST_ENABLED && (
-          <li className={s.item}>
-            <Link href="/wishlist">
-              <button onClick={closeSidebarIfPresent} aria-label="Wishlist">
-                <Heart />
-              </button>
-            </Link>
-          </li>
-        )} */}
         <li className={s.item}>
-          <Dropdown>
+          {/* <Dropdown>
             <DropdownTrigger>
               <button
                 aria-label="Menu"
@@ -73,9 +74,9 @@ const UserNav: React.FC<{
               </button>
             </DropdownTrigger>
             <CustomerMenuContent />
-          </Dropdown>
+          </Dropdown> */}
         </li>
-                <div className="flex gap-4">
+        <div className="flex gap-4">
           {status === "authenticated" ? (
             <>
               {/* Show Admin Link only if role is ADMIN */}
@@ -90,11 +91,14 @@ const UserNav: React.FC<{
               </Button>
             </>
           ) : (
-            <Button onClick={() => signIn()}>Login</Button>
+            <Link href='/auth/login'>
+              <Button >Login</Button>
+            </Link>
           )}
         </div>
         <li className={s.mobileMenu}>
-          {/* <Button
+
+          <Button
             className={s.item}
             aria-label="Menu"
             variant="naked"
@@ -104,7 +108,7 @@ const UserNav: React.FC<{
             }}
           >
             <Menu />
-          </Button> */}
+          </Button>
         </li>
       </ul>
     </nav>
@@ -112,3 +116,4 @@ const UserNav: React.FC<{
 };
 
 export default UserNav;
+

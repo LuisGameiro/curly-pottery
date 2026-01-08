@@ -1,12 +1,19 @@
+'use client'
+
 import { CartItem } from "@components/cart";
 import Layout from "@components/common/Layout";
 import { Container, Text, Button } from "@components/ui";
 import useCart from "@lib/hooks/useCart";
 
 import { ShoppingBag } from "lucide-react";
+import { useEffect } from "react";
 
 export default function CartPage() {
   const { data, isLoading, isEmpty } = useCart();
+
+  useEffect(()=>{}
+  
+    ,[data])
 
   if (isLoading) return <Container className="py-20 text-center">Loading...</Container>;
 
@@ -24,9 +31,9 @@ export default function CartPage() {
       <div className="lg:col-span-8">
         <Text variant="heading" className="mb-6">Shopping Cart</Text>
         <ul className="divide-y border-t border-b">
-          {/* {data?.lineItems.map((item: any) => (
+          {data?.lineItems.map((item: any) => (
             <CartItem key={item.id} item={item} currencyCode={data.currency} />
-          ))} */}
+          ))}
         </ul>
       </div>
 
@@ -48,8 +55,9 @@ export default function CartPage() {
         </div>
         <Button href="/checkout" width="100%" size="lg">Checkout Now</Button>
       </div>
+
+      
     </Container>
   );
 }
 
-CartPage.Layout = Layout;

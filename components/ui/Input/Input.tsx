@@ -19,7 +19,7 @@ const Input: React.FC<InputProps> = (props) => {
   const inputId = id || generatedId;
   const errorId = `${inputId}-error`;
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
   const isPassword = type === "password";
   const rootClassName = cn(
     s.root,
@@ -55,7 +55,7 @@ const Input: React.FC<InputProps> = (props) => {
           autoCorrect="off"
           autoCapitalize="none"
           spellCheck="false"
-          type={!showPassword ? "text" : "password"}
+          type={showPassword ? "text" : "password"}
           // ARIA Rules
           aria-invalid={!!error}
           aria-describedby={error ? errorId : undefined}

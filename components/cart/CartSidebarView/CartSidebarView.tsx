@@ -6,26 +6,26 @@ import CartItem from "../CartItem";
 import { Button, Text } from "@components/ui";
 import { useUI } from "@components/ui/context";
 import { Bag, Cross, Check } from "@components/icons";
-import useCart from "@framework/cart/use-cart";
-import usePrice from "@framework/product/use-price";
+
 import SidebarLayout from "@components/common/SidebarLayout";
+import useCart from "@lib/hooks/useCart";
 
 const CartSidebarView: FC = () => {
   const { closeSidebar, setSidebarView } = useUI();
   const { data, isLoading, isEmpty } = useCart();
 
-  const { price: subTotal } = usePrice(
-    data && {
-      amount: Number(data.subtotalPrice),
-      currencyCode: data.currency.code,
-    },
-  );
-  const { price: total } = usePrice(
-    data && {
-      amount: Number(data.totalPrice),
-      currencyCode: data.currency.code,
-    },
-  );
+  // const { price: subTotal } = usePrice(
+  //   data && {
+  //     amount: Number(data.subtotalPrice),
+  //     currencyCode: data.currency.code,
+  //   },
+  // );
+  // const { price: total } = usePrice(
+  //   data && {
+  //     amount: Number(data.totalPrice),
+  //     currencyCode: data.currency.code,
+  //   },
+  // );
   const handleClose = () => closeSidebar();
   const goToCheckout = () => setSidebarView("CHECKOUT_VIEW");
 
@@ -93,7 +93,7 @@ const CartSidebarView: FC = () => {
             <ul className="pb-2">
               <li className="flex justify-between py-1">
                 <span>Subtotal</span>
-                <span>{subTotal}</span>
+                {/* <span>{subTotal}</span> */}
               </li>
               <li className="flex justify-between py-1">
                 <span>Taxes</span>
@@ -104,7 +104,7 @@ const CartSidebarView: FC = () => {
                 <span className="font-bold tracking-wide">FREE</span>
               </li>
             </ul>
-            <div className="flex justify-between border-t border-accent-2 py-3 font-bold mb-2">
+            {/* <div className="flex justify-between border-t border-accent-2 py-3 font-bold mb-2">
               <span>Total</span>
               <span>{total}</span>
             </div>
@@ -118,7 +118,7 @@ const CartSidebarView: FC = () => {
                   Proceed to Checkout
                 </Button>
               )}
-            </div>
+            </div> */}
           </div>
         </>
       )}

@@ -18,6 +18,7 @@ import ProductOptions from "../ProductOptions";
 import { Discount } from "@lib/types/customer";
 import { Locale } from "next/dist/compiled/@vercel/og/satori";
 import { calculatePrice } from "@lib/calculate-price";
+import useCart from "@lib/hooks/useCart";
 
 interface ProductSidebarProps {
   product: Product;
@@ -32,16 +33,9 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
   variant,
   setVariant,
 }: ProductSidebarProps) => {
-  // const addItem = useAddItem()
-  const addItem = async ({
-    productId,
-    variantId,
-  }: {
-    productId: string;
-    variantId: string;
-  }) => {
-    new Promise(() => {});
-  };
+
+  const { addItem } = useCart()
+
   const { openSidebar, setSidebarView } = useUI();
   const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
@@ -59,11 +53,13 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
     setError(null);
     try {
       await addItem({
-        productId: String(product.id),
-        variantId: String(variant ? variant.id : product.variants[0]?.id),
-      });
-      setSidebarView("CART_VIEW");
-      openSidebar();
+        ...product,
+        variant: {...variant},
+        productId:product.id,
+        variantId:variant.id,
+
+      }, quantity
+      );
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -77,9 +73,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
     }
   };
 
-  const price = calculatePrice(variant.price, variant.currency, [
-    { type: "FIXED_AMOUNT", value: 10 },
-  ]);
+  const price = calculatePrice(variant.price, variant.currency, variant.discounts);
 
   return (
     <div className={cn(className, "space-y-4")}>

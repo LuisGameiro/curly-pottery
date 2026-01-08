@@ -35,8 +35,6 @@ export async function deleteCategory(id: string) {
     await prisma.category.delete({
       where: { id },
     });
-
-    // This tells Next.js to refresh the data on the categories page
     revalidatePath("/admin/categories");
     return { success: true };
   } catch (error) {

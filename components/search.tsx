@@ -20,7 +20,7 @@ import {
   useSearchMeta,
 } from "@lib/search";
 import ErrorMessage from "./ui/ErrorMessage";
-import { categories as categoriesData, productsData } from "api/fakeapi/data";
+import { categories as categoriesData, productsData } from "app/api/fakeapi/data";
 
 export default function Shop() {
   const [activeFilter, setActiveFilter] = useState("");

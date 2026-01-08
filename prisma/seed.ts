@@ -1,4 +1,4 @@
-import { categories, customers, products } from "../api/fakeapi/seedData";
+import { categories, customers, products } from "../app/api/fakeapi/seedData";
 import { prisma } from "./prisma";
 
 // ✅ Add PrismaClient options if required
