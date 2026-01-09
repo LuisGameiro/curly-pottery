@@ -95,3 +95,29 @@ export async function getOrderById(id: string) {
 //   revalidatePath("/admin/orders");
 //   return order;
 // }
+
+export async function createOrder(input: {
+  cartId: string;
+  userId?: string;
+  shippingAddress: any;
+  billingAddress: any;
+  cart: any;
+}) {
+
+
+  const order = await prisma.order.create({
+    data: {
+      userId: input?.userId,      
+      lineItems: input.cart.lineItems,
+      discounts: input.cart.discounts,
+      subtotalPrice: input.cart.subtotalPrice,
+      totalPrice: input.cart.totalPrice,
+      currency: input.cart.currency,
+      shippingAddress: input.shippingAddress,
+      billingAddress: input.billingAddress,
+      status:'PENDING'
+    },
+  });
+
+  return order;
+}

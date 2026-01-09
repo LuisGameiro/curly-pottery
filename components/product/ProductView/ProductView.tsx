@@ -28,25 +28,11 @@ export const getRelatedProducts = async (
 
 interface ProductViewProps {
   product: Product;
+  relatedProducts: Product[]
 }
 
-const ProductView: FC<ProductViewProps> = ({ product }) => {
-  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+const ProductView: FC<ProductViewProps> = ({ product, relatedProducts=[] }) => {
   const [variant, setVariant] = useState<ProductVariant>(product.variants[0]);
-
-  useEffect(() => {
-    const fetchRelated = async () => {
-      try {
-        const res = await getRelatedProducts(product.categories, product.id, 3);
-        setRelatedProducts(res);
-        console.log("related producs:", res);
-      } catch (err) {
-        console.error("Failed to fetch related products", err);
-      }
-    };
-
-    fetchRelated();
-  }, [product]);
 
   return (
     <>

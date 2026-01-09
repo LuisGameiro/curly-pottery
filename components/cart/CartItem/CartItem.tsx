@@ -49,19 +49,19 @@ const CartItem = ({
     target: { value },
   }: ChangeEvent<HTMLInputElement>) => {
     setQuantity(Number(value));
-    // await updateItem({ quantity: Number(value) });
+     await updateItem(item.variantId,  Number(value) );
   };
 
   const increaseQuantity = async (n = 1) => {
     const val = Number(quantity) + n;
     setQuantity(val);
-    // await updateItem({ quantity: val });
-  };
+     await updateItem(item.variantId,  Number(val));
+  }
 
   const handleRemove = async () => {
     setRemoving(true);
     try {
-      await removeItem(item.productId);
+      await removeItem(item.variantId);
     } catch (error) {
       setRemoving(false);
     }
