@@ -10,6 +10,7 @@ import useCart from "@lib/hooks/useCart";
 import { createSumUpCheckout } from "actions/payment";
 import { createOrder } from "actions/order.actions";
 import { Address } from "@lib/types/customer";
+import { redirect } from "next/dist/server/api-utils";
 
 type FormData = {
     firstName: string,
@@ -30,6 +31,9 @@ export default function CheckoutPage() {
     const [loading, setLoading] = useState(false);
     const cartId = useId()
 
+    if (data.lineItems.length===0)
+        redirect('/cart')
+    
     const nextToShipping = (data: any) => {
         setFormData({ ...formData, ...data });
         setStep(2);

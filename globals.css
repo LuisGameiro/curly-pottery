@@ -13,35 +13,32 @@
   --breakpoint-2xl: 1536px;
 }
 
-@layer base{
-  th  {
-    @apply py-4 text-center justify-center items-center font-semibold
+@layer base {
+  th {
+    @apply py-4 text-center justify-center items-center font-semibold;
   }
-    td  {
-    @apply  py-3 text-center justify-center items-center content-center
+  td {
+    @apply py-3 text-center justify-center items-center content-center;
   }
-
   tr {
-    @apply hover:bg-accent-2 transition-colors
+    @apply hover:bg-accent-2 transition-colors;
   }
   thead {
-    @apply border-2 border-border
+    @apply border-2 border-border;
   }
   table {
-    @apply w-full border-collapse
+    @apply w-full border-collapse;
   }
   tbody {
-    @apply divide-y divide-border text-center
+    @apply divide-y divide-border text-center;
   }
   header {
-    @apply flex justify-between items-center border-b pb-4 mb-8
+    @apply flex justify-between items-center border-b pb-4 mb-8;
   }
-
   label {
-    @apply font-semibold mb-2
+    @apply font-semibold mb-2;
   }
 }
-
 
 @theme inline {
   --color-primary: var(--primary);
@@ -80,7 +77,9 @@
   --color-on-secondary: var(--on-secondary);
 
   --shadow-outline-normal: 0 0 0 2px var(--accent-2);
-  --shadow-magical: rgba(0, 0, 0, 0.02) 0px 30px 30px, rgba(0, 0, 0, 0.03) 0px 0px 8px, rgba(0, 0, 0, 0.05) 0px 1px 0px;
+  --shadow-magical:
+    rgba(0, 0, 0, 0.02) 0px 30px 30px, rgba(0, 0, 0, 0.03) 0px 0px 8px,
+    rgba(0, 0, 0, 0.05) 0px 1px 0px;
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -98,37 +97,38 @@
   --size-8xl: 1920px;
   --scale-120: 1.2;
 
-   --breakpoint-sm: 640px;
+  --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
   --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1536px;
 }
 
-:root, .light {
+:root,
+.light {
   --radius: 0.625rem;
-  
+
   /* Backgrounds & Text */
-  --background: #f1fbff;         /* Your light blue tint */
-  --foreground: #000000;         /* Your solid black */
+  --background: #f1fbff; /* Your light blue tint */
+  --foreground: #000000; /* Your solid black */
   --text-base: #000000;
-  --on-primary: #0440d8;       /* Your deep blue text */
-  --on-secondary: #64748b;     /* Muted blue-grey */
+  --on-primary: #0440d8; /* Your deep blue text */
+  --on-secondary: #64748b; /* Muted blue-grey */
 
   /* Primary (Yellow/Gold) */
-  --primary: #fde372;            /* Your signature yellow */
-  --primary-2: #e5cc65;          /* Slightly darker yellow for hover */
+  --primary: #fde372; /* Your signature yellow */
+  --primary-2: #e5cc65; /* Slightly darker yellow for hover */
   --primary-foreground: #000000;
 
   /* Secondary (Electric Blue) */
-  --secondary: #3b67d4;          /* Your vibrant blue */
-  --secondary-2: #2d52ab;        /* Deep blue hover */
+  --secondary: #3b67d4; /* Your vibrant blue */
+  --secondary-2: #2d52ab; /* Deep blue hover */
   --secondary-foreground: #ffffff;
 
   /* UI Elements */
-  --border: #d1e5f0;             /* Soft blue border */
+  --border: #d1e5f0; /* Soft blue border */
   --hover: #e6f4fa;
-  
+
   /* Accent Scale (Lightest to Darkest) 
      Based on your #f1fbff background */
   --accent-0: #f1fbff;
@@ -152,11 +152,11 @@
 }
 .dark {
   /* Backgrounds & Text */
-  --background: #05070a;         /* Near black, very subtle depth */
-  --foreground: #e1e7ef;         /* Slightly dimmed white to reduce eye strain */
+  --background: #05070a; /* Near black, very subtle depth */
+  --foreground: #e1e7ef; /* Slightly dimmed white to reduce eye strain */
   --text-base: #e1e7ef;
-  --on-primary: #1e3a8a; 
-  --on-secondary: #64748b;       /* Dimmer secondary text */
+  --on-primary: #1e3a8a;
+  --on-secondary: #64748b; /* Dimmer secondary text */
 
   /* Primary (Yellow/Gold) - Kept bright for pop */
   --primary: #fde372;
@@ -169,14 +169,14 @@
   --secondary-foreground: #ffffff;
 
   /* UI Elements - Much stealthier */
-  --border: #121820;             /* Subtle borders */
-  --hover: #0f172a;              /* Very dark hover state */
+  --border: #121820; /* Subtle borders */
+  --hover: #0f172a; /* Very dark hover state */
 
   /* Accent Scale (OLED to Steel) */
-  --accent-0: #05070a;           /* True depth */
+  --accent-0: #05070a; /* True depth */
   --accent-1: #0a0f16;
-  --accent-2: #111823;           /* Perfect for Card backgrounds */
-  --accent-3: #1a222e;           /* For elevated elements like Modals */
+  --accent-2: #111823; /* Perfect for Card backgrounds */
+  --accent-3: #1a222e; /* For elevated elements like Modals */
   --accent-4: #242e3d;
   --accent-5: #334155;
   --accent-6: #475569;
