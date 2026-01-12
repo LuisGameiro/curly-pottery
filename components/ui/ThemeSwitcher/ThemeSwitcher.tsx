@@ -28,7 +28,7 @@ const ThemeSwitcher = () => {
             <span className="flex shrink items-center">
               <ThemeIcon width={20} height={20} theme={theme} />
               <span
-                className={cn("capitalize leading-none ml-6 text-secondary")}
+                className={cn("capitalize leading-none ml-3 text-secondary")}
               >
                 {theme}
               </span>
@@ -42,23 +42,16 @@ const ThemeSwitcher = () => {
             </span>
           </button>
         </div>
-
-        <div className="absolute top-0 right-0">
+        
+        {/* Menu  */}
+        <div className="absolute top-0 right-0 ">
           {themes.length && display ? (
             <div
               className={
-                "fixed shadow-lg right-0 bottom-2 mt-2 origin-top-right  outline-hidden z-40 lg:absolute lg:border lg:border-accent-1 lg:shadow-lg lg:w-30 lg:h-auto bg-accent-5"
+                " shadow-lg right-0 bottom-2 py-2 origin-top-right  outline-hidden z-40 absolute border border-border w-[125px] h-auto bg-secondary"
               }
             >
-              <div className="flex flex-row justify-end px-6">
-                <button
-                  className="md:hidden"
-                  onClick={() => setDisplay(false)}
-                  aria-label="Close panel"
-                >
-                  <Cross className="h-6 w-6" />
-                </button>
-              </div>
+   
               <ul>
                 {themes.map((t: string) => (
                   <li key={t}>

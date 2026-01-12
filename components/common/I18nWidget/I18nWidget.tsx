@@ -8,6 +8,7 @@ import { Cross, ChevronRight } from "@components/icons";
 import ClickOutside from "@lib/click-outside";
 import Image from "next/image";
 import { cn } from "@lib/utils";
+
 interface LOCALE_DATA {
   name: string;
   img: {
@@ -24,10 +25,10 @@ const LOCALES_MAP: Record<string, LOCALE_DATA> = {
       alt: "Bandera española",
     },
   },
-  "en-US": {
+  "en-UK": {
     name: "English",
     img: {
-      filename: "flag-en-us.svg",
+      filename: "flag-en-uk.svg",
       alt: "Uk Flag",
     },
   },
@@ -38,7 +39,7 @@ const I18nWidget: FC = () => {
   const {
     locale,
     locales,
-    defaultLocale = "en-US",
+    defaultLocale = "en-UK",
     asPath: currentPath,
   } = useRouter();
 
@@ -56,7 +57,7 @@ const I18nWidget: FC = () => {
             <Image
               width="20"
               height="20"
-              className="block w-5"
+              className="block"
               src={`/${LOCALES_MAP[currentLocale].img.filename}`}
               alt={LOCALES_MAP[currentLocale].img.alt}
               unoptimized
@@ -68,6 +69,7 @@ const I18nWidget: FC = () => {
             )}
           </button>
         </div>
+        
         <div className="absolute top-0 right-0">
           {options?.length && display ? (
             <div className={s.dropdownMenu}>

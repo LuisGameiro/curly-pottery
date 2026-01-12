@@ -96,13 +96,12 @@ const navBarlinks = [
 
 const Layout: React.FC<Props> = ({
   children,
-  pageProps: { categories = [], ...pageProps },
 }) => {
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies();
   const { isAuthenticated, isAdmin, } = useUser()
 
   // const { locale = "en-US" } = useRouter();
-  
+
   let navBarlinks = [
     { label: "Shop", href: "/shop" },
     { label: "Contacts", href: "/contacts" },
@@ -117,11 +116,9 @@ const Layout: React.FC<Props> = ({
     <div>
       <Navbar links={navBarlinks} />
       <main className="bg-background w-full">{children}</main>
-      <Footer pages={pageProps.pages} />
+      <Footer />
       <ModalUI />
-      {/* <CheckoutProvider> */}
-      <SidebarUI links={navBarlinks} />
-      {/* </CheckoutProvider> */}
+      {/* <SidebarUI links={navBarlinks} /> */}
       <FeatureBar
         title="This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy."
         hide={acceptedCookies}

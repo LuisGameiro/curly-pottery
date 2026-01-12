@@ -14,10 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="loading bg-primary">
         <SessionProvider>
           <ManagedUIContext>
-            <Layout pageProps={{
-              pages: undefined,
-              categories: []
-            }}>
+            <Layout >
               {children}
             </Layout>
           </ManagedUIContext>
