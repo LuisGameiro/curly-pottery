@@ -35,10 +35,6 @@ const Modal = dynamic(() => import("@components/ui/Modal"), {
 });
 
 interface Props {
-  pageProps: {
-    pages?: Page[];
-    categories: Category[];
-  };
   children?: React.ReactNode;
 }
 

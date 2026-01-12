@@ -1,40 +1,29 @@
-import { Button, Container, Skeleton } from "@components/ui";
-import { deleteCategory, getAllCategories } from "actions/category.actions";
+import { Button, Container } from "@components/ui";
+import {  getAllCategories } from "actions/category.actions";
 import Link from "next/link";
-import Image from "next/image";
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Text } from "@components/ui";
-import CategoryTable from "./CategoriesTable";
+import CategoryTable from "@components/common/Tables/CategoryTable";
 
 export default async function CategoriesPage() {
-
   const categories = await getAllCategories();
-
-  const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
-
-    //const response = await deleteCategory(id)
-
-    // console.log("Delete Result:", response);
-
-  };
 
   return (
     <Container>
       <header>
-        <div>
+        <div className="w-full flex flex-row justify-between">
           <Text variant="heading">Categories</Text>
-          <Text variant="subHeading">Manage your store product groupings.</Text>
+          <Link href="/admin/categories/new" passHref >
+            <Button variant='slim'>
+              <span className="mr-1"><Plus size={18} /></span>
+              <span>New Category</span>
+            </Button>
+          </Link>
         </div>
-
-        <Link href="/admin/categories/new" passHref>
-          <Button variant="secondary">
-            <Plus size={18} /> New Category
-          </Button>
-        </Link>
+        <Text variant="subHeading">Manage your store product groupings.</Text>
       </header>
 
-      <CategoryTable categories={categories}/>
+      <CategoryTable categories={categories} />
     </Container>
   );
 }

@@ -33,7 +33,7 @@
     @apply divide-y divide-border text-center;
   }
   header {
-    @apply flex justify-between items-center border-b pb-4 mb-8;
+    @apply flex flex-col border-b pb-4 mb-8;
   }
   label {
     @apply font-semibold mb-2;

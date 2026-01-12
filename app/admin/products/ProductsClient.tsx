@@ -1,60 +1,21 @@
 'use client'
 
-import { Button, Container, Skeleton, Text, Input } from "@components/ui";
+import { Button, Container, Text } from "@components/ui";
 import Link from "next/link";
-import Image from "next/image";
-import {
-  Pencil,
-  Trash2,
-  Plus,
-  Search,
-  ChevronDown,
-  ChevronRight,
-} from "lucide-react";
 import { useState, useMemo } from "react";
 import { ProductVariant } from "@lib/types/product";
 import { Product } from "prisma/generated/prisma/client";
-import { deleteProduct } from "actions/product.actions";
-import { useRouter } from "next/navigation";
-import { Fragment } from 'react'; // 1. Add this import
-export default function ProductsClient({ products }: { products: Product[] | ProductFull[] }) {
-  const router = useRouter();
+import InputSearch from "@components/ui/Input/InputSearch";
+import ProductTable from "@components/common/Tables/ProductTable";
+import { Plus } from "lucide-react";
 
+export default function ProductsClient({ products }: { products: Product[] | ProductFull[] }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
   const [sortConfig, setSortConfig] = useState<{
     key: string;
     direction: "asc" | "desc";
   } | null>(null);
 
-  const toggleRow = (id: string) => {
-    setExpandedRows((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-  const [isDeleting, setIsDeleting] = useState<string | null>(null);
-
-  const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
-
-    setIsDeleting(id);
-    try {
-      const response = await deleteProduct(id);
-      if (response.success) {
-        router.refresh();
-      }
-    } catch (error) {
-      console.error("Delete failed", error);
-    } finally {
-      setIsDeleting(null);
-    }
-  };
-
-
-  // const handleDelete = async (id: string, name: string) => {
-  //   if (!confirm(`Delete "${name}"? This will remove all variants.`)) return;
-  //   const response = await fetch(`/api/admin/products/${id}`, { method: "DELETE" });
-  //   const result = await response.json();
-  //   if (result.success) router.reload();
-  // };
 
   const filteredProducts = useMemo(() => {
     let items = products.filter(
@@ -79,30 +40,26 @@ export default function ProductsClient({ products }: { products: Product[] | Pro
 
   return (
     <Container>
-      <header className="flex flex-col lg:flex-row  lg:justify-between">
-        <div className=" self-start">
-          <Text variant="heading">Products</Text>
-          <Text variant="subHeading">Manage your inventory and variants.</Text>
-        </div>
+      <header >
         <div className="flex items-center gap-3 w-full md:w-auto justify-between">
-          <Search
-            className="absolute left-1 top-1/2 -translate-y-1/2 text-muted-foreground"
-            size={18}
-          />
-          <Input
+          <Text className='w-full' variant="heading">Products</Text>
+          <InputSearch
             placeholder="Search name or SKU..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e)}
+            onValueChange={(e) => setSearchTerm(e)}
           />
           <Link href="/admin/products/new" passHref>
-            <Button variant="secondary">
-              <Plus size={18} /> New Product
+            <Button variant="slim" className="w-36">
+              <span className="mr-1"><Plus size={18} /></span>
+              <span>New Product</span>
             </Button>
           </Link>
         </div>
+        <Text variant="subHeading">Manage your inventory and variants.</Text>
+
       </header>
 
-      <main>
+      {/* <main>
         {filteredProducts.length > 0 ? (
           <div className=" border-2 border-border rounded-xl overflow-hidden shadow-sm">
             <table>
@@ -278,7 +235,10 @@ export default function ProductsClient({ products }: { products: Product[] | Pro
             ))}
           </div>
         )}
-      </main>
+      </main> */}
+
+      <ProductTable products={filteredProducts} />
+
     </Container>
   );
 }

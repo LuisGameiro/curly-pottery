@@ -3,7 +3,7 @@
 
 .root {
   @apply bg-primary text-on-primary cursor-pointer inline-flex
-  px-10 py-5 leading-6 transition ease-in-out duration-150
+  px-5 py-5 leading-6 transition ease-in-out duration-150
   shadow-sm text-center justify-center uppercase
   border border-transparent items-center text-sm font-semibold
   tracking-wide;
@@ -27,7 +27,7 @@
 }
 
 .slim {
-  @apply py-2 transform-none normal-case;
+  @apply  p-2 transform-none normal-case;
 }
 
 .ghost {
