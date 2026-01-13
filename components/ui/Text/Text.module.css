@@ -22,6 +22,10 @@
   @apply text-lg font-normal sm:font-semibold tracking-wide;
 }
 
+.boxTitle {
+  @apply  font-bold sm:font-semibold tracking-wide border-b pb-2 mb-4 block;
+}
+
 .bold {
   @apply font-bold;
 }

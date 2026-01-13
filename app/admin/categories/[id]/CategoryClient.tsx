@@ -8,20 +8,32 @@ import { Button, Container, Input, Text } from "@components/ui";
 import { CategorySchema } from "@lib/form-validator";
 import { useRouter } from "next/navigation";
 import { upsertCategory } from "actions/category.actions";
+import InputImage from "@components/ui/Input/InputImage";
+import { uploadImagesToBlob } from "@lib/uploadImages";
+import Loading from "app/loading";
 
-export default function CategoryClient({ category, isEditMode }) {
+export default function CategoryClient({
+  category,
+  isEditMode,
+}: {
+  category: any;
+  isEditMode: boolean;
+}) {
+  const router = useRouter();
+
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [gallery, setGallery] = useState<{ files: File[], previews: string[] }>({
+    files: [category.image],
+    previews: [category.image]
+  });
   const [formData, setFormData] = useState({
     id: category.id || "",
     name: category.name || "",
     slug: category.slug || "",
     image: category.image || "",
   });
-  const router = useRouter()
+  const [loading, setLoading] = useState(false)
 
-  const [preview, setPreview] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,17 +55,17 @@ export default function CategoryClient({ category, isEditMode }) {
     setLoading(true);
 
     try {
+      const url = await uploadImagesToBlob(gallery.files) //TODO better
       const result = await upsertCategory({
         id: formData.id,
         name: formData.name,
         slug: formData.slug,
-        image: formData.image,
+        image: url ? url[0] : formData.image,
       });
 
       if (result.success) {
         router.replace("/admin/categories");
         router.refresh();
-
       } else {
         setErrors({ from: result?.message || "Failed to save category" });
       }
@@ -65,42 +77,32 @@ export default function CategoryClient({ category, isEditMode }) {
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const objectUrl = URL.createObjectURL(file);
-      setPreview({ url: objectUrl, size: file.size / 1048576 });
-
-      setSelectedFile(file);
-    }
-  };
-
   if (loading)
-    return (
-      <div className="p-20 flex justify-center">
-        <Loader2 className="animate-spin text-blue-600" />
-      </div>
-    );
+    return Loading()
 
   return (
     <Container>
       <header>
-        <div className="flex items-center gap-4">
-          <Link href="/admin/categories">
-            <Button variant="naked">
-              <ArrowLeft size={32} />
-            </Button>
-          </Link>
+        <Link
+          href="/admin/categories"
+          className="flex items-center gap-2 text-muted-foreground hover:text-accent-6 mb-4 transition"
+        >
+          <ArrowLeft size={16} /> Back to Categories
+        </Link>
+
+        <div className="flex items-center justify-between">
           <Text variant="heading">
             {isEditMode ? "Edit Category" : "New Category"}
           </Text>
+          <Button onClick={handleSubmit} type="submit" variant="slim"
+            disabled={loading}>
+            {isEditMode ? "Save Category" : "Create Category"}
+          </Button>
         </div>
-        <Button onClick={handleSubmit} type="submit" variant="secondary">
-          {isEditMode ? "Save Changes" : "Create Category"}
-        </Button>
       </header>
+
       <main>
-        <form onSubmit={handleSubmit} className=" space-y-6 mx-auto md:w-8/12">
+        <form onSubmit={handleSubmit} className=" space-y-6 ">
           <Input
             label="Category Name"
             error={errors.name}
@@ -117,43 +119,15 @@ export default function CategoryClient({ category, isEditMode }) {
               /{slugify(formData.name)}
             </span>
           </div>
+          <InputImage
+            label="Category Image"
+            multiple={false}
+            images={gallery.files}
+            previews={gallery.previews}
+            onImagesChange={setGallery}
+            error={errors.images}
+          />
 
-          <div>
-            <label className="block mb-2">Category Image</label>
-            <div className="flex gap-4 items-center">
-              <div className="w-24 h-24 bg-slate-100 rounded-lg flex items-center justify-center border border-dashed border-border overflow-hidden shrink-0">
-                {preview || formData.image ? (
-                  <img
-                    src={preview || formData.image}
-                    alt="Preview"
-                    className="object-cover w-full h-full"
-                  />
-                ) : (
-                  <ImageIcon className="text-slate-400" />
-                )}
-              </div>
-
-              <div className="flex-1">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
-                />
-                <p className="text-xs text-slate-500 mt-2">
-                  {preview
-                    ? "New file selected" + { preview }
-                    : formData.image
-                      ? "Currently using saved URL"
-                      : "No image selected"}
-                </p>
-              </div>
-            </div>
-
-            {errors.image && (
-              <p className="text-red-500 text-xs mt-1">{errors.image}</p>
-            )}
-          </div>
         </form>
       </main>
     </Container>

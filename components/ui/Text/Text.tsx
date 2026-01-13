@@ -21,7 +21,9 @@ type Variant =
   | "pageHeading"
   | "sectionHeading"
   | "subHeading"
-  | "bold";
+  | "bold"
+  | "boxTitle";
+
 
 const Text: FunctionComponent<TextProps> = ({
   style,
@@ -38,6 +40,7 @@ const Text: FunctionComponent<TextProps> = ({
     heading: "h1",
     pageHeading: "h1",
     sectionHeading: "h2",
+    boxTitle: "h3",
     subHeading: "h5",
     bold: "strong",
   };
@@ -64,6 +67,7 @@ const Text: FunctionComponent<TextProps> = ({
           [s.pageHeading]: variant === "pageHeading",
           [s.sectionHeading]: variant === "sectionHeading",
           [s.subHeading]: variant === "subHeading",
+          [s.boxTitle]: variant === "boxTitle",
           [s.bold]: variant === "bold",
         },
         className,

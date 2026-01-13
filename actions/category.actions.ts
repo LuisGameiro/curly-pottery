@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "prisma/prisma";
 import { serializeProduct, serializeProductVariant } from "./helpers";
+import { redirect } from "next/navigation";
 
 export async function createCategory(formData: FormData) {
   await prisma.category.create({

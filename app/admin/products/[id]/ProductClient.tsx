@@ -22,13 +22,19 @@ import InputTextArea from "@components/ui/Input/InputTextArea";
 import InputSelect from "@components/ui/Input/InputSelect";
 import { DiscountType } from "@lib/types/customer";
 import { upsertProduct } from "actions/product.actions";
+import InputImage from "@components/ui/Input/InputImage";
+import Loading from "app/loading";
+import InputCheck from "@components/ui/Input/InputCheck";
 
 interface ProductFormProps {
   initialData?: any;
   categories: any[];
 }
 
-export default function ProductClient({ initialData, categories = [] }: ProductFormProps) {
+export default function ProductClient({
+  initialData,
+  categories = [],
+}: ProductFormProps) {
   const isEditing = !!initialData;
 
   const [product, setProduct] = useState({
@@ -54,6 +60,13 @@ export default function ProductClient({ initialData, categories = [] }: ProductF
     ]
   );
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [gallery, setGallery] = useState<{ files: File[]; previews: string[] }>(
+    {
+      files: [initialData.image],
+      previews: [initialData.image],
+    }
+  );
+  const [loading, setLoading] = useState(false);
 
   const addVariant = () => {
     setVariants([
@@ -63,6 +76,8 @@ export default function ProductClient({ initialData, categories = [] }: ProductF
         sku: "",
         price: 0,
         stock: 0,
+        images: [],
+        previews: [],
         sizeName: "M",
         colorName: "",
         availableForSale: true,
@@ -90,7 +105,6 @@ export default function ProductClient({ initialData, categories = [] }: ProductF
       variants.map((v) => (v.id === id ? { ...v, [field]: value } : v))
     );
   };
-
 
   const addDetail = (variantId: string) => {
     const variant = variants.find((v) => v.id === variantId);
@@ -128,9 +142,7 @@ export default function ProductClient({ initialData, categories = [] }: ProductF
 
     const payload = { ...product, variants };
 
-
-
-    const result = await upsertProduct(payload)
+    const result = await upsertProduct(payload);
     // console.log(payload);
     // const endpoint = isEditing
     //   ? `/api/admin/products/${initialData.id}`
@@ -145,33 +157,34 @@ export default function ProductClient({ initialData, categories = [] }: ProductF
     //if (res.ok) router.push("/admin/products");
   };
 
+  if (loading) return Loading();
+
   return (
     <Container>
       <header>
-        <div>
-          <div className="flex items-center gap-4">
-            <Link href="/admin/categories">
-              <Button variant="naked">
-                <ArrowLeft size={32} />
-              </Button>
-            </Link>
-            <Text variant="heading">
-              {isEditing ? "Edit Product" : "New Product"}
-            </Text>
-          </div>
-          <Text>Fill in the basic information and manage stock variants.</Text>
+        <Link
+          href="/admin/products"
+          className="flex items-center gap-2 text-muted-foreground hover:text-accent-6 mb-4 transition"
+        >
+          <ArrowLeft size={16} /> Back to products
+        </Link>
+
+        <div className="flex items-center justify-between">
+          <Text variant="heading">
+            {isEditing ? "Edit Product" : "New Product"}
+          </Text>
+          <Button type="submit" variant="slim" disabled={loading}>
+            {isEditing ? "Update Product" : "Create Product"}
+          </Button>
         </div>
-        <Button type="submit" variant="secondary">
-          <Save size={18} /> {isEditing ? "Update Product" : "Create Product"}
-        </Button>
       </header>
 
       <main>
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-6">
-              <div className="bg-accent-1 border rounded-xl p-6 shadow-sm space-y-4">
-                <Text variant="subHeading">General Information</Text>
+            <Container variant="box" className="lg:col-span-2 space-y-">
+              <Text variant="boxTitle">General Information</Text>
+              <div className="space-y-4">
                 <Input
                   label="Product Name"
                   error={errors.name}
@@ -191,6 +204,7 @@ export default function ProductClient({ initialData, categories = [] }: ProductF
 
                 <InputTextArea
                   label="Description"
+                  className="flex h-40"
                   error={errors.description}
                   required
                   value={product.description}
@@ -200,412 +214,25 @@ export default function ProductClient({ initialData, categories = [] }: ProductF
                   placeholder="e.g. Home Decor"
                 />
               </div>
+            </Container>
 
-              <div className="space-y-4">
-                <div className="flex  items-center justify-between">
-                  <Text variant="sectionHeading">
-                    Variants ({variants.length})
-                  </Text>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={addVariant}
-                    className="gap-2"
-                  >
-                    <Plus size={16} /> Add Variant
-                  </Button>
-                </div>
-
-                {variants.map((variant, index) => (
-                  <div
-                    key={variant.id}
-                    className="bg-accent-1 border rounded-xl overflow-hidden shadow-sm"
-                  >
-                    <div
-                      className="p-4 flex items-center justify-between cursor-pointer bg-secondary/20"
-                      onClick={() => toggleVariant(variant.id)}
-                    >
-                      <div className="flex items-center gap-4">
-                        <Package size={16} />
-
-                        <Text className="font-bold">
-                          {skulify(product, variant) || "New Variant"}
-                        </Text>
-                        {/* <Text className="text-[10px] text-muted-foreground uppercase">
-                            {variant.sizeName}{" "}
-                            {variant.colorName && `• ${variant.colorName}`}
-                          </Text> */}
-                      </div>
-
-                      <div className="flex items-center gap-3">
-                        <Text className="text-sm font-medium">
-                          £{variant.price}
-                        </Text>
-                        <Button
-                          variant="naked"
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            removeVariant(variant.id);
-                          }}
-                          className="text-red-400 hover:text-red-600 p-1"
-                        >
-                          <Trash2 size={16} />
-                        </Button>
-                        {variant.isExpanded ? (
-                          <ChevronUp size={18} />
-                        ) : (
-                          <ChevronDown size={18} />
-                        )}
-                      </div>
-                    </div>
-
-                    {variant.isExpanded && (
-                      <div className="p-6 border-t space-y-2">
-                        <div className=" grid grid-cols-1 md:grid-cols-2 gap-6">
-                          <Input
-                            type="number"
-                            label="Price (£)"
-                            value={variant.price}
-                            onChange={(e) =>
-                              updateVariant(
-                                variant.id,
-                                "price",
-                                parseFloat(e.target.value)
-                              )
-                            }
-                          />
-
-                          <Input
-                            label="Inventory Stock"
-                            type="number"
-                            value={variant.stock}
-                            onChange={(e) =>
-                              updateVariant(
-                                variant.id,
-                                "stock",
-                                parseInt(e.target.value)
-                              )
-                            }
-                          />
-                        </div>
-
-                        <>
-                          <Text variant="subHeading">Size Variant</Text>
-                          <div className=" grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <InputSelect
-                              value={variant.sizeName}
-                              options={Object.values(SizeNames)}
-                              onChange={(e) =>
-                                updateVariant(
-                                  variant.id,
-                                  "sizeName",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                        </>
-
-                        <>
-                          <Text variant="subHeading">Color Variant</Text>
-
-                          <div className=" grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <Input
-                              label="Name"
-                              value={variant.colorName}
-                              onChange={(e) =>
-                                updateVariant(
-                                  variant.id,
-                                  "colorName",
-                                  e.target.value
-                                )
-                              }
-                            />
-
-                            <Input
-                              label="Hex"
-                              type="color"
-                              className=" h-10 [&::-webkit-color-swatch-wrapper]:p-0 "
-                              value={variant.colorName}
-                              onChange={(e) =>
-                                updateVariant(
-                                  variant.id,
-                                  "colorName",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                        </>
-
-                        <div className="flex items-center justify-center gap-2 ">
-                          <input
-                            type="checkbox"
-                            checked={variant.availableForSale}
-                            className="h-6 w-6"
-                            onChange={(e) =>
-                              updateVariant(
-                                variant.id,
-                                "availableForSale",
-                                e.target.checked
-                              )
-                            }
-                          />
-                          <label className="font-semibold">
-                            Available for Sale
-                          </label>
-                        </div>
-
-                        {/* Details Sub-Section */}
-                        <div className="space-y-4 bg-slate-50 p-4 rounded-lg">
-                          <div className="flex justify-between items-center">
-                            <Text variant="subHeading"> Technical Details</Text>
-                            <Button
-                              variant="naked"
-                              size="sm"
-                              onClick={() => addDetail(variant.id)}
-                            >
-                              <Plus size={14} /> Add Detail
-                            </Button>
-                          </div>
-                          {variant.details?.map((detail: any, dIdx: number) => (
-                            <div key={dIdx} className="flex gap-2 items-start">
-                              <InputSelect
-                                className="w-1/3"
-                                value={detail.title}
-                                options={Object.values(Detailtype)}
-                                onChange={(e) =>
-                                  updateDetail(
-                                    variant.id,
-                                    dIdx,
-                                    "title",
-                                    e.target.value
-                                  )
-                                }
-                              />
-                              <Input
-                                className="flex-1"
-                                placeholder="Value (e.g. 100% Stoneware)"
-                                value={detail.description}
-                                onChange={(e) =>
-                                  updateDetail(
-                                    variant.id,
-                                    dIdx,
-                                    "description",
-                                    e.target.value
-                                  )
-                                }
-                              />
-                              <Button
-                                variant="naked"
-                                color="danger"
-                                onClick={() => {
-                                  const newDetails = variant.details.filter(
-                                    (_: any, i: number) => i !== dIdx
-                                  );
-                                  updateVariant(
-                                    variant.id,
-                                    "details",
-                                    newDetails
-                                  );
-                                }}
-                              >
-                                <Trash2 size={16} />
-                              </Button>
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* Discounts Sub-Section */}
-                        <div className="space-y-4 bg-green-50/50 p-4 rounded-lg ">
-                          <div className="flex justify-between items-center">
-                            <Text variant="subHeading">Discounts & Promos</Text>
-
-                            <Button
-                              type="button"
-                              variant="naked"
-                              size="sm"
-                              onClick={() => addDiscount(variant.id)}
-                              className="text-green-700"
-                            >
-                              <Plus size={14} /> Add Promo
-                            </Button>
-                          </div>
-                          {variant.discounts?.map(
-                            (disc: any, discIdx: number) => (
-                              <div
-                                key={discIdx}
-                                className="grid grid-cols-4 gap-2 items-end"
-                              >
-                                <Input
-                                  label="Code"
-                                  value={disc.code}
-                                  onChange={(e) => {
-                                    const newD = [...variant.discounts];
-                                    newD[discIdx].code = e.target.value;
-                                    updateVariant(
-                                      variant.id,
-                                      "discounts",
-                                      newD
-                                    );
-                                  }}
-                                />
-                                <InputSelect
-                                  label="Type"
-                                  value={disc.type}
-                                  options={Object.values(DiscountType)}
-                                  onChange={(e) => {
-                                    const newD = [...variant.discounts];
-                                    newD[discIdx].type = e.target.value;
-                                    updateVariant(
-                                      variant.id,
-                                      "discounts",
-                                      newD
-                                    );
-                                  }}
-                                />
-                                {disc.type === DiscountType.PERCENTAGE ? (
-                                  <Input
-                                    label="%"
-                                    type="number"
-                                    value={disc.percentage}
-                                    onChange={(e) => {
-                                      const newD = [...variant.discounts];
-                                      newD[discIdx].percentage = parseFloat(
-                                        e.target.value
-                                      );
-                                      updateVariant(
-                                        variant.id,
-                                        "discounts",
-                                        newD
-                                      );
-                                    }}
-                                  />
-                                ) : (
-                                  <Input
-                                    label="Fixed Off"
-                                    type="number"
-                                    value={disc.value}
-                                    onChange={(e) => {
-                                      const newD = [...variant.discounts];
-                                      newD[discIdx].value = parseFloat(
-                                        e.target.value
-                                      );
-                                      updateVariant(
-                                        variant.id,
-                                        "discounts",
-                                        newD
-                                      );
-                                    }}
-                                  />
-                                )}
-                                <Button
-                                  variant="naked"
-                                  className="text-red-500 mb-1"
-                                  onClick={() => {
-                                    const newD = variant.discounts.filter(
-                                      (_: any, i: number) => i !== discIdx
-                                    );
-                                    updateVariant(
-                                      variant.id,
-                                      "discounts",
-                                      newD
-                                    );
-                                  }}
-                                >
-                                  <Trash2 size={16} />
-                                </Button>
-                              </div>
-                            )
-                          )}
-                        </div>
-
-                        {/* Image */}
-                        <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
-                          {variant.images && variant.images.length > 0 && (
-                            <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
-                              {variant.images.map((img: string, i: number) => (
-                                <div
-                                  key={i}
-                                  className="relative aspect-square group border rounded-lg overflow-hidden bg-slate-100"
-                                >
-                                  <img
-                                    src={img}
-                                    alt={`Variant ${i}`}
-                                    className="w-full h-full object-cover"
-                                  />
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      const newImages = variant.images.filter(
-                                        (_: any, index: number) => index !== i
-                                      );
-                                      updateVariant(
-                                        variant.id,
-                                        "images",
-                                        newImages
-                                      );
-                                    }}
-                                    className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                                  >
-                                    <X size={12} />
-                                  </button>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                          <div
-                            className="border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center bg-slate-50 hover:bg-slate-100 transition cursor-pointer"
-                            onClick={() => {
-                              const url = prompt("Enter image URL:");
-                              if (url)
-                                updateVariant(variant.id, "images", [url]);
-                            }}
-                          >
-                            <UploadCloud
-                              className="text-slate-300 mb-2"
-                              size={32}
-                            />
-                            <Text className="text-[10px] font-bold uppercase text-slate-400">
-                              No images for this variant
-                            </Text>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-            {/* <div className="space-y-1">
-                          <label className="text-[10px] font-bold uppercase text-slate-400">SKU</label>
-                          <Input value={variant.sku? variant.sku : skulify(product)} onChange={(e) => updateVariant(variant.id, 'sku', e.target.value)} />
-                        </div> */}
             <div className="space-y-6">
-              <div className="bg-accent-1 border rounded-xl p-6 shadow-sm">
-                <Text className="font-bold border-b pb-2 mb-4 block">
-                  Organization
-                </Text>
+              <Container variant="box">
+                <Text variant="boxTitle">Organization</Text>
                 <div className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={product.requiresShipping}
-                      onChange={(e) =>
-                        setProduct({
-                          ...product,
-                          requiresShipping: e.target.checked,
-                        })
-                      }
-                    />
-                    <label className="text-sm">Requires Shipping</label>
-                  </div>
-
+                  <InputCheck
+                    label="Requires Shipping"
+                    checked={product.requiresShipping}
+                    onChange={(e) =>
+                      setProduct({
+                        ...product,
+                        requiresShipping: e.target.checked,
+                      })
+                    }
+                  />
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase text-slate-500">
-                      Categories
-                    </label>
+                    {/* <InputSelect options={categories}></InputSelect>    */}
+                    <label>Categories</label>
                     <div className="flex flex-wrap gap-2">
                       {categories.map((cat) => (
                         <button
@@ -614,15 +241,16 @@ export default function ProductClient({ initialData, categories = [] }: ProductF
                           onClick={() => {
                             const ids = product.categoryIds.includes(cat.id)
                               ? product.categoryIds.filter(
-                                (id) => id !== cat.id
-                              )
+                                  (id) => id !== cat.id
+                                )
                               : [...product.categoryIds, cat.id];
                             setProduct({ ...product, categoryIds: ids });
                           }}
-                          className={`px-3 py-1 rounded-full text-xs border transition ${product.categoryIds.includes(cat.id)
+                          className={`px-3 py-1 rounded-full text-xs border transition ${
+                            product.categoryIds.includes(cat.id)
                               ? "bg-primary text-white border-primary"
                               : "bg-white text-slate-600 hover:bg-slate-50"
-                            }`}
+                          }`}
                         >
                           {cat.name}
                         </button>
@@ -630,20 +258,313 @@ export default function ProductClient({ initialData, categories = [] }: ProductF
                     </div>
                   </div>
                 </div>
-              </div>
+              </Container>
 
-              <div className="bg-white border rounded-xl p-6 shadow-sm">
-                <Text className="font-bold border-b pb-2 mb-4 block">
-                  Product Images
-                </Text>
-                <div className="aspect-square border-2 border-dashed rounded-lg flex flex-col items-center justify-center text-slate-400 hover:border-primary hover:text-primary transition cursor-pointer">
-                  <Plus size={24} />
-                  <span className="text-[10px] font-bold uppercase mt-2">
-                    Upload Image
-                  </span>
-                </div>
-              </div>
+              <Container variant="box">
+                <Text variant="boxTitle">Product Image</Text>
+                <InputImage
+                  multiple={false}
+                  images={gallery.files}
+                  previews={gallery.previews}
+                  onImagesChange={setGallery}
+                  error={errors.images}
+                />
+              </Container>
             </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Text variant="sectionHeading">Variants ({variants.length})</Text>
+              <Button
+                type="button"
+                variant="slim"
+                onClick={addVariant}
+                className="gap-2"
+              >
+                <Plus size={16} /> Add Variant
+              </Button>
+            </div>
+
+            {variants.map((variant, index) => (
+              <Container variant="box" key={variant.id} className="p-0">
+                <div
+                  className="p-4 flex items-center justify-between cursor-pointer bg-secondary/20 rounded-xl"
+                  onClick={() => toggleVariant(variant.id)}
+                >
+                  <div className="flex items-center gap-4">
+                    <Package size={16} />
+
+                    <Text className="font-bold">
+                      {skulify(product, variant) || "New Variant"}
+                    </Text>
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <Text className="text-sm font-medium">
+                      £{variant.price}
+                    </Text>
+                    <Button
+                      variant="naked"
+                      type="button"
+                      color="danger"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeVariant(variant.id);
+                      }}
+                      className="text-red-400 hover:text-red-600 p-1"
+                    >
+                      <Trash2 size={16} />
+                    </Button>
+                    {variant.isExpanded ? (
+                      <ChevronUp size={18} />
+                    ) : (
+                      <ChevronDown size={18} />
+                    )}
+                  </div>
+                </div>
+
+                {variant.isExpanded && (
+                  <div className="p-6 space-y-4">
+                    <div className=" grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <Input
+                        type="number"
+                        label="Price (£)"
+                        value={variant.price}
+                        onChange={(e) =>
+                          updateVariant(
+                            variant.id,
+                            "price",
+                            parseFloat(e.target.value)
+                          )
+                        }
+                      />
+
+                      <Input
+                        label="Inventory Stock"
+                        type="number"
+                        value={variant.stock}
+                        onChange={(e) =>
+                          updateVariant(
+                            variant.id,
+                            "stock",
+                            parseInt(e.target.value)
+                          )
+                        }
+                      />
+                    </div>
+
+                    <div>
+                      <Text variant="subHeading">Size Variant</Text>
+                      <div className=" grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <InputSelect
+                          value={variant.sizeName}
+                          options={Object.values(SizeNames)}
+                          onChange={(e) =>
+                            updateVariant(
+                              variant.id,
+                              "sizeName",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <Text variant="subHeading">Color Variant</Text>
+
+                      <div className=" grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <Input
+                          label="Name"
+                          value={variant.colorName}
+                          onChange={(e) =>
+                            updateVariant(
+                              variant.id,
+                              "colorName",
+                              e.target.value
+                            )
+                          }
+                        />
+
+                        <Input
+                          label="Hex"
+                          type="color"
+                          className=" h-10 [&::-webkit-color-swatch-wrapper]:p-0 "
+                          value={variant.colorName}
+                          onChange={(e) =>
+                            updateVariant(
+                              variant.id,
+                              "colorName",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <InputCheck
+                      label="Available for Sale"
+                      checked={variant.availableForSale}
+                      className="h-6 w-6"
+                      onChange={(e) =>
+                        updateVariant(
+                          variant.id,
+                          "availableForSale",
+                          e.target.checked
+                        )
+                      }
+                    />
+
+                    {/* details */}
+                    <div className="space-y-4 bg-primary/90 p-4 rounded-lg">
+                      <div className="flex justify-between items-center">
+                        <Text variant="subHeading"> Technical Details</Text>
+                        <Button
+                          variant="naked"
+                          size="sm"
+                          onClick={() => addDetail(variant.id)}
+                          color="success"
+                        >
+                          <Plus size={14} /> Add Detail
+                        </Button>
+                      </div>
+
+                      {variant.details?.map((detail: any, dIdx: number) => (
+                        <div key={dIdx} className="flex gap-2 items-center">
+                          <InputSelect
+                            className="w-1/3"
+                            value={detail.title}
+                            options={Object.values(Detailtype)}
+                            onChange={(e) =>
+                              updateDetail(
+                                variant.id,
+                                dIdx,
+                                "title",
+                                e.target.value
+                              )
+                            }
+                          />
+                          <Input
+                            className="flex-1"
+                            placeholder="Value (e.g. 100% Stoneware)"
+                            value={detail.description}
+                            onChange={(e) =>
+                              updateDetail(
+                                variant.id,
+                                dIdx,
+                                "description",
+                                e.target.value
+                              )
+                            }
+                          />
+                          <Button
+                            variant="naked"
+                            color="danger"
+                            onClick={() => {
+                              const newDetails = variant.details.filter(
+                                (_: any, i: number) => i !== dIdx
+                              );
+                              updateVariant(variant.id, "details", newDetails);
+                            }}
+                          >
+                            <Trash2 size={16} />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* discounts */}
+                    <div className="space-y-4 bg-green-50/50 p-4 rounded-lg ">
+                      <div className="flex justify-between items-center">
+                        <Text variant="subHeading">Discounts & Promos</Text>
+
+                        <Button
+                          variant="naked"
+                          size="sm"
+                          onClick={() => addDiscount(variant.id)}
+                          color="success"
+                        >
+                          <Plus size={14} /> Add Discount
+                        </Button>
+                      </div>
+                      {variant.discounts?.map((disc: any, discIdx: number) => (
+                        <div className="flex gap-2 items-center" key={discIdx}>
+                            <Input
+                              label="Code"
+                              placeholder="Discount aplly without code"
+                              value={disc.code}
+                              onChange={(e) => {
+                                const newD = [...variant.discounts];
+                                newD[discIdx].code = e.target.value;
+                                updateVariant(variant.id, "discounts", newD);
+                              }}
+                            />
+                            <InputSelect
+                              label="Type"
+                              value={disc.type}
+                              options={Object.values(DiscountType)}
+                              onChange={(e) => {
+                                const newD = [...variant.discounts];
+                                newD[discIdx].type = e.target.value;
+                                updateVariant(variant.id, "discounts", newD);
+                              }}
+                            />
+                            {disc.type === DiscountType.PERCENTAGE ? (
+                              <Input
+                                label="%"
+                                type="number"
+                                value={disc.percentage}
+                                onChange={(e) => {
+                                  const newD = [...variant.discounts];
+                                  newD[discIdx].percentage = parseFloat(
+                                    e.target.value
+                                  );
+                                  updateVariant(variant.id, "discounts", newD);
+                                }}
+                              />
+                            ) : (
+                              <Input
+                                label="Fixed Off"
+                                type="number"
+                                value={disc.value}
+                                onChange={(e) => {
+                                  const newD = [...variant.discounts];
+                                  newD[discIdx].value = parseFloat(
+                                    e.target.value
+                                  );
+                                  updateVariant(variant.id, "discounts", newD);
+                                }}
+                              />
+                            )}
+                          <Button
+                            variant="naked"
+                            color='danger'
+                            onClick={() => {
+                              const newD = variant.discounts.filter(
+                                (_: any, i: number) => i !== discIdx
+                              );
+                              updateVariant(variant.id, "discounts", newD);
+                            }}
+                          >
+                            <Trash2 size={16} />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+
+                    <InputImage
+                      label="Variant Images"
+                      multiple={true}
+                      images={gallery.files}
+                      previews={gallery.previews}
+                      onImagesChange={setGallery}
+                      error={errors.images}
+                    />
+                  </div>
+                )}
+              </Container>
+            ))}
           </div>
         </form>
       </main>
