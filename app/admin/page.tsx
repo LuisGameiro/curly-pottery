@@ -10,24 +10,26 @@ import {
   CheckCircle2,
   ShoppingBag,
   ArrowRight,
+  TabletsIcon,
+  Tablets,
+  TouchpadOffIcon,
+  TouchpadIcon,
 } from "lucide-react";
 import Link from "next/link";
 
-
 export default async function DashboardPage() {
-    const stats = await getDashboardStats();
+  const stats = await getDashboardStats();
 
   return (
     <Container>
       <header>
-        <div>
-          <Text variant="heading">Store Dashboard</Text>
-          <Text variant="subHeading">
-            Overview of your store's performance and inventory health.
-          </Text>
-        </div>
+        <Text variant="heading">Store Dashboard</Text>
+        <Text variant="subHeading">
+          Overview of your store's performance and inventory health.
+        </Text>
       </header>
-      <main className="space-y-8">
+
+      <section className="space-y-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           <StatCard
             label="Total Customers"
@@ -54,20 +56,16 @@ export default async function DashboardPage() {
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 bg-accent-2 border rounded-2xl p-4 gap-4 shadow-sm">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-2">
-                <Layers className="text-slate-400" size={20} />
-                <Text variant="bold">Inventory Health</Text>
-              </div>
+          <Container variant="box" className="col-span-2">
+            <div className="flex items-center gap-4 mb-4">
+              <Layers className="text-accent-8" size={20} />
+              <Text variant="bold">Inventory Health</Text>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-              <div className="sspace-y-4">
-                <div className="flex justify-between items-end">
-                  <div className="text-sm text-muted-foreground font-semibold tracking-wider">
-                    Stock Availability
-                  </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-4">
+                <div className="flex justify-between items-end text-sm text-muted-foreground font-semibold tracking-wider">
+                  Stock Availability
                 </div>
                 <div className="flex h-4 w-full rounded-full overflow-hidden bg-slate-100">
                   <div
@@ -96,28 +94,30 @@ export default async function DashboardPage() {
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 rounded-xl border border-red-100 bg-red-50/50">
+                <div className="p-4 rounded-xl border border-border bg-red-50/50">
                   <Text className=" text-red-700 font-bold block mb-1">
                     {"Low Stock (<5)"}
                   </Text>
-                  <Text className=" font-black text-red-900">
+                  <Text className=" text-red-700">
                     {stats.lowStockVariants + " Variants"}
                   </Text>
                 </div>
-                <div className="p-4 rounded-xl border border-slate-100 bg-slate-50/50">
-                  <Text className=" text-slate-500 font-bold block mb-1">
+                <div className="p-4 rounded-xl border border-border bg-green-50/50">
+                  <Text className=" text-accent-8 font-bold block mb-1">
                     Active Categories
                   </Text>
-                  <Text className="font-black text-slate-900">
-                    {stats.totalCategories}
-                  </Text>
+                  <Text className="text-accent-8">{stats.totalCategories}</Text>
                 </div>
               </div>
             </div>
-          </div>
+          </Container>
 
-          <div className="bg-accent-2 border rounded-2xl p-4 shadow-sm">
-            <Text className="font-bold mb-4 block">Quick Tasks</Text>
+          <Container variant="box" className="col-span-2 xl:col-span-1">
+            <div className="flex items-center gap-4 mb-4">
+              <TouchpadIcon className="text-accent-8" size={20} />
+              <Text variant="bold">Quick Tasks</Text>
+            </div>
+
             <div className="space-y-3">
               {stats.pendingOrders > 0 ? (
                 <Link
@@ -136,7 +136,7 @@ export default async function DashboardPage() {
                   </div>
                 </Link>
               ) : (
-                <div className="flex items-start gap-3 p-3 rounded-lg border border-green-200 bg-green-50">
+                <div className="flex items-center gap-3 p-3 rounded-lg border border-green-200 bg-green-50">
                   <CheckCircle2 className="text-green-600 shrink-0" size={18} />
                   <Text className=" font-bold text-green-900">
                     All orders processed
@@ -144,21 +144,22 @@ export default async function DashboardPage() {
                 </div>
               )}
             </div>
-          </div>
+          </Container>
         </div>
-      </main>
+      </section>
     </Container>
   );
 }
 
 function StatCard({ label, value, icon, trend, isCritical }: any) {
   return (
-    <div
-      className={`bg-accent-2 border p-4 rounded-2xl shadow-sm space-y-2 ${isCritical ? "border-red-200 " : ""}`}
+    <Container
+      variant="box"
+      className={` ${isCritical ? "border-red-200 " : ""}`}
     >
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <div className="p-2 rounded-lg">{icon}</div>
+      <div className="flex items-center justify-between ">
+        <div className="flex items-center gap-4 mb-4 ">
+          <div className="rounded-lg">{icon}</div>
           <Text variant="bold">{label}</Text>
         </div>
         {trend && (
@@ -173,7 +174,6 @@ function StatCard({ label, value, icon, trend, isCritical }: any) {
       <div className="flex justify-end items-center">
         <Text className="subHeanding">{value}</Text>
       </div>
-    </div>
+    </Container>
   );
 }
-

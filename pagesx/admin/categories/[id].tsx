@@ -1,11 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useTransition } from "react";
-import { ArrowLeft, Save, Loader2, ImageIcon } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { ArrowLeft, Loader2, ImageIcon } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { upsertCategory } from "actions/category.actions";
-import { json } from "node:stream/consumers";
 import getSlug from "@lib/get-slug";
 import { slugify } from "@lib/slugify";
 import { Button, Container, Input, Text } from "@components/ui";
@@ -30,8 +28,8 @@ export default function CategoryFormPage() {
   const [preview, setPreview] = useState<any>(null);
 
 const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    // 2. ONLY fetch if we are actually in edit mode AND the slug exists
     if (isEditMode) {
       setLoadingData(true); // Ensure loader shows while re-fetching
       console.log("Fetched Category Data:");
@@ -39,7 +37,6 @@ const [loading, setLoading] = useState(false);
       fetch(`/api/admin/categories/${id}`)
         .then((res) => res.json())
         .then((response) => {
-          // Your API returns { data: category }, so we look for response.data
           const categoryData = response.data;
 
           console.log("Found Category:", categoryData);
@@ -56,7 +53,6 @@ const [loading, setLoading] = useState(false);
         .catch((err) => console.error("Fetch error:", err))
         .finally(() => setLoadingData(false));
     } else {
-      // If not edit mode, we aren't loading anything
       setLoadingData(false);
     }
   }, [isEditMode, id]);
@@ -64,7 +60,6 @@ const [loading, setLoading] = useState(false);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 1. Run your Zod validation
     const validation = CategorySchema.safeParse({
       ...formData,
       slug: slugify(formData.name),
@@ -82,13 +77,6 @@ const [loading, setLoading] = useState(false);
     setLoading(true);
 
     try {
- 
-      // // 3. Send the request
-      // const response = await fetch(`/api/admin/categories/${id}`, {
-      //   method: isEditMode ? "PUT" : "POST",
-      //   body: data, // No JSON.stringify!
-      //   // DO NOT set Content-Type header here
-      // });
 
     const response = await fetch(`/api/admin/categories/${id}`, {
       method: isEditMode ? "PUT" : "POST",
