@@ -61,29 +61,28 @@ export default function RegisterPage() {
   };
 
   return (
-    <Container>
-      <header>
-        <div className="justify-center text-center mx-auto">
+    <Container className='p-10'>
+      <header className="justify-center text-center mx-auto mb-4">
           <Text variant="heading">Create Account</Text>
           <Text variant="subHeading">
             Join us for a faster checkout experience
           </Text>
-        </div>
       </header>
-      <main className="space-y-5 xl:max-w-xl mx-auto">
-        <form onSubmit={handleSubmit} className="w-full space-y-4">
-          <Input
+
+      <main className='space-y-5 md:max-w-lg mx-auto'>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* <Input
             name="name"
             label="Name"
             placeholder="Jane"
             value={formData.name}
             onChange={handleChange}
             required
-          />
+          /> */}
 
           <Input
             name="email"
-            label="Email Address"
+            label="Email"
             type="email"
             placeholder="jane@example.com"
             value={formData.email}
@@ -114,12 +113,12 @@ export default function RegisterPage() {
           <InputCheck
             id="marketing"
             name="acceptsMarketing"
-            value={formData.acceptsMarketing}
+            checked={formData.acceptsMarketing}
             onChange={handleChange}
             label="I’d like to receive updates on new collections, glaze drops, and special offers."
           />
 
-          <div className="h-12">
+          <div className="h-8">
             {error && (
               <Text className="text-red-500 text-xs text-center font-medium">
                 {error}
@@ -132,12 +131,12 @@ export default function RegisterPage() {
           </Button>
         </form>
 
-        <div className="mt-6 pt-6 border-t text-center">
+        <div className="mt-6 text-center">
           <Text className="text-sm">
             Already have an account?{" "}
             <Link
               href="/auth/login"
-              className="font-bold text-primary hover:underline"
+              className="font-bold text-secondary hover:underline"
             >
               Log in
             </Link>

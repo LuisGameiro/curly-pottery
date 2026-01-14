@@ -1,7 +1,7 @@
 'use client'
 
 import Layout from "@components/common/Layout";
-import { Text, Button, Input } from '@components/ui';
+import { Text, Button, Input, Container } from '@components/ui';
 import InputTextArea from "@components/ui/Input/InputTextArea";
 import React, { useState } from "react";
 
@@ -70,17 +70,17 @@ export default function Contacts() {
   };
 
   return (
-    <main className="bg-gradient-to-r from-background to-accent-1 py-8 ">
-      <div className="px-2 sm:px-6 lg:px-12 max-w-4xl mx-auto space-y-8">
-        <section className=" text-center">
+    <Container className='p-10'>
+            <header className="justify-center text-center mx-auto mb-4">
+
           <Text variant="heading">Contact Us</Text>
           <Text>
             We'd love to hear from you! Please reach out using the information
             below or fill out the contact form.
           </Text>
-        </section>
+        </header>
 
-        <section className="px-4 sm:px-8 content-center md:flex space-y-8 gap-4 ">
+        <section className=" lg:max-w-4xl mx-auto px-4 sm:px-8  md:flex ">
           <section className="w-full">
             <Text variant='sectionHeading'>
               Our Details
@@ -102,7 +102,7 @@ export default function Contacts() {
                   +1 (234) 567-890
                 </a>
               </li>
-              <li className="hover:text-secondary/60">📍 Address: 123 Pottery Lane, Claytown, USA</li>
+              <li className="hover:text-secondary/60">📍 Address: London, UK</li>
             </ul>
           </section>
 
@@ -151,8 +151,7 @@ export default function Contacts() {
             </form>
           </section>
         </section>
-      </div>
-    </main>
+    </Container>
   );
 }
 

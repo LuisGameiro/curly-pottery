@@ -60,7 +60,7 @@ export default function ShopClient({
   };
 
   return (
-    <Container className="container mx-auto px-4 py-10">
+    <main className="bg-gradient-to-r from-background to-accent-1 py-8 px-4">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <aside className="gap-2 lg:col-span-3 flex flex-col sm:flex-row lg:flex-col ">
           <div className="relative w-full z-30">
@@ -199,6 +199,6 @@ export default function ShopClient({
           )}
         </main>
       </div>
-    </Container>
+    </main>
   );
 }

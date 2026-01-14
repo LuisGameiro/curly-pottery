@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { ChevronDown, Container } from "lucide-react";
-import { Text } from "@components/ui";
+import { ChevronDown } from "lucide-react";
+import { Container, Text } from "@components/ui";
 
 interface FAQItem {
   question: string;
@@ -44,39 +44,36 @@ export default function FAQ() {
   };
 
   return (
-    <main className="bg-gradient-to-r from-background to-accent-1 py-8 ">
-      <div className="px-2 sm:px-6 lg:px-12 max-w-3xl mx-auto space-y-8">
+    <Container className='p-10'>
+      <header className="justify-center text-center mx-auto mb-4">
+        <Text variant="heading">Frequently Asked Questions</Text>
+        <Text variant="body">Find answers to common questions about our pottery and services.</Text>
+      </header>
 
-        <section className=" text-center">
-          <Text variant="heading">Frequently Asked Questions</Text>
-          <Text variant="body">Find answers to common questions about our pottery and services.</Text>
-        </section>
+      <section className='space-y-5 md:max-w-lg mx-auto'>
+        {faqData.map((item, index) => (
+          <Container key={index} variant="box">
+            <button
+              onClick={() => toggleAccordion(index)}
+              className="w-full  flex items-center justify-between"
+            >
+              <Text variant='bold'>
+                {item.question}
+              </Text>
+              <ChevronDown
+                className={`w-5 h-5 transition-transform ${openIndex === index ? "rotate-180" : ""
+                  }`}
+              />
+            </button>
 
-        <section className="space-y-6 prose prose-lg">
-          {faqData.map((item, index) => (
-            <div key={index} className="bg-accent-0 rounded-lg shadow">
-              <button
-                onClick={() => toggleAccordion(index)}
-                className="w-full px-6 pt-4 pb-2 flex items-center justify-between"
-              >
-                <Text variant="sectionHeading">
-                  {item.question}
-                </Text>
-                <ChevronDown
-                  className={`w-5 h-5 transition-transform ${openIndex === index ? "rotate-180" : ""
-                    }`}
-                />
-              </button>
-
-              {openIndex === index && (
-                <div className="px-6 py-4 border-t rounded-b-lg border-border bg-accent-0">
-                  <Text variant="body">{item.answer}</Text>
-                </div>
-              )}
-            </div>
-          ))}
-        </section>
-      </div>
-    </main>
+            {openIndex === index && (
+              <div className="pt-4 ">
+                <Text variant="body">{item.answer}</Text>
+              </div>
+            )}
+          </Container>
+        ))}
+      </section>
+    </Container>
   );
 }

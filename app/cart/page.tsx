@@ -19,8 +19,8 @@ export default function CartPage() {
 
   if (isEmpty) {
     return (
-      <Container className="py-20 flex flex-col items-center justify-center">
-        <ShoppingBag size={64} className="text-slate-200 mb-4" />
+      <Container className="py-20 flex  flex-col items-center justify-center ">
+        <ShoppingBag size={64} className="text-accent-4 mb-4" />
         <Text variant="heading">Your cart is empty</Text>
       </Container>
     );

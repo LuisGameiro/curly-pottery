@@ -62,7 +62,7 @@ function LoginForm() {
     };
 
     return (
-        <Container>
+        <Container className='p-10'>
             {success && (
                 <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center">
                     Registration successful! Please log in.
@@ -70,13 +70,13 @@ function LoginForm() {
             )}
 
             <header>
-                <div className='justify-center text-center mx-auto mb-8'>
+                <div className='justify-center text-center mx-auto mb-4'>
                     <Text variant="heading">Welcome Back</Text>
                     <Text variant='subHeading'>Log in to manage your orders</Text>
                 </div>
             </header>
 
-            <main className='space-y-5 xl:max-w-xl mx-auto'>
+            <main className='space-y-5 md:max-w-lg mx-auto'>
                 <Button
                     variant="ghost"
                     width="100%"
@@ -86,10 +86,8 @@ function LoginForm() {
                     Continue with Google
                 </Button>
 
-                <div className="my-5">
-                    <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-white px-2 text-slate-400">Or email</span>
-                    </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                    <span className=" px-2 text-accent-6">Or email</span>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -108,13 +106,13 @@ function LoginForm() {
                         required
                     />
 
-                    <div className="flex justify-end">
-                        <Link href="/auth/recovery" className="text-sm font-bold text-secondary hover:underline">
-                            Forgot Password?
-                        </Link>
-                    </div>
+                    <Link href="/auth/recovery" className="text-sm font-bold text-secondary hover:underline flex justify-end">
+                        Forgot Password?
+                    </Link>
 
-                    {error && <Text className="text-red-500 text-xs text-center">{error}</Text>}
+                    <div className="h-8">
+                        {error && <Text className="text-red-500 text-xs text-center">{error}</Text>}
+                    </div>
 
                     <Button type="submit" width="100%" loading={loading}>
                         Sign In <ArrowRight size={16} className="ml-2" />

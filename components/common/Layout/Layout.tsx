@@ -111,10 +111,10 @@ const Layout: React.FC<Props> = ({
   return (
     <div>
       <Navbar links={navBarlinks} />
-      <main className="bg-background w-full">{children}</main>
+      <main className="bg-background w-full h-full min-h-[calc(100vh-310px)]">{children}</main>
       <Footer />
       <ModalUI />
-      {/* <SidebarUI links={navBarlinks} /> */}
+      <SidebarUI links={navBarlinks} />
       <FeatureBar
         title="This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy."
         hide={acceptedCookies}

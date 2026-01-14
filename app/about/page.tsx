@@ -1,17 +1,16 @@
-import { Text } from "@components/ui";
+import { Container, Text } from "@components/ui";
 
 export default function About() {
   return (
-    <main className="bg-gradient-to-r from-background to-accent-1 py-8 ">
-      <div className="px-2 sm:px-6 lg:px-12 max-w-3xl mx-auto space-y-8">
-        <section className=" text-center">
+    <Container className='p-10'>
+      <header className="justify-center text-center mx-auto mb-4">
           <Text variant="heading">About Curly Pottery</Text>
           <Text variant="body">
             Handcrafted ceramic pieces made with passion and creativity
           </Text>
-        </section>
+        </header>
 
-        <section className="space-y-6 prose prose-lg">
+      <section className='space-y-5 md:max-w-lg mx-auto'>
           <Text variant="sectionHeading">Our Story </Text>
           <Text variant="body">
             At Curly Pottery, we believe in creating beautiful, functional
@@ -43,8 +42,7 @@ export default function About() {
             </li>
           </ul>
         </section>
-      </div>
-    </main>
+    </Container>
   );
 }
 

@@ -17,7 +17,7 @@ const Container: FC<ContainerProps> = ({
   clean = false,
 }) => {
   const rootClassName = cn( {
-    "mx-auto max-w-7xl px-6 w-full my-4 flex-col justify-center": !clean && variant === 'default',
+    "mx-auto px-6 w-full flex-col justify-center": !clean && variant === 'default',
     "bg-accent-1 border rounded-xl p-6 shadow-sm": !clean && variant === 'box',
     
   }, className);

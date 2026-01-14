@@ -31,10 +31,9 @@ const Input: React.FC<InputProps> = (props) => {
   );
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value; // Extract the string value
+    const newValue = e.target.value; 
 
     if (onValueChange) {
-      // onValueChange expects a string, so we pass newValue
       onValueChange(newValue);
     }
     if (props.onChange) {
@@ -59,7 +58,6 @@ const Input: React.FC<InputProps> = (props) => {
           autoCapitalize="none"
           spellCheck="false"
           type={showPassword ? "text" : "password"}
-          // ARIA Rules
           aria-invalid={!!error}
           aria-describedby={error ? errorId : undefined}
           {...rest}
