@@ -63,7 +63,7 @@ const InputImage: React.FC<ImageInputProps> = ({
   };
 
   return (
-    <div className={s.container}>
+    <div className={cn(s.container)}>
       {/* Label styled same as your Input component */}
       {label && (
         <label htmlFor={generatedId}>
@@ -77,10 +77,10 @@ const InputImage: React.FC<ImageInputProps> = ({
             key={index} 
             className={cn(
               "relative w-24 h-24 rounded-lg border overflow-hidden bg-slate-50 shrink-0 transition-all",
-              error ? "border-red-500" : "border-slate-200"
+              error ? "border-red-500" : "border-slate-200",className
             )}
           >
-            <img src={src} alt="Preview" className="object-cover w-full h-full" />
+            <img src={src} alt="Preview"  className={cn("object-cover w-full h-full")} />
             <button
               type="button"
               onClick={() => removeImage(index)}

@@ -21,7 +21,7 @@ export default async function ProfilePage() {
   // if (!user) return <div>User not found</div>;
 
   return (
-          <ProfileForm user={null} />
+    <ProfileForm user={null} />
 
   );
 }

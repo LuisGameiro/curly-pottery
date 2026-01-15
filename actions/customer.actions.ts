@@ -14,7 +14,7 @@ export async function getAllCustomers() {
     },
   });
 
-  return serializeCustomers(customersRaw);
+  return (customersRaw);
 }
 
 export async function getCustomerById(id: string) {
@@ -24,7 +24,15 @@ export async function getCustomerById(id: string) {
       orders: true,
     },
   });
-  return serializeCustomers([customerRaw])[0];
+  return customerRaw;
+}
+
+export async function updateNotes(id: string,notes:string) {
+  const customerRaw = await prisma.user.update({
+    where: { id },
+    data: {notes}
+  });
+  return ([customerRaw])[0];
 }
 // export async function createUser(formData: FormData) {
 //   await prisma.user.create({

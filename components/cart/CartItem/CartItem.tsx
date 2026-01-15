@@ -8,8 +8,10 @@ import s from "./CartItem.module.css";
 import { useUI } from "@components/ui/context";
 import Quantity from "@components/ui/Quantity";
 import useCart from "@lib/hooks/useCart";
-import { calculatePrice } from "@lib/calculate-price";
+import { calculateDiscount, calculatePrice } from "@lib/calculate-price";
 import { LineItem } from "@lib/types/inspiration/cart";
+import { Trash } from "lucide-react";
+import { Button, Text } from "@components/ui";
 
 const placeholderImg = "/product-img-placeholder.svg";
 
@@ -28,11 +30,7 @@ const CartItem = ({
   const [removing, setRemoving] = useState(false);
   const [quantity, setQuantity] = useState<number>(item.quantity);
 
-  const price = calculatePrice(
-    item.variant.price,
-    "GBP",
-    item.variant.discounts
-  );
+  const price = calculateDiscount(item.variant.price, item.variant.discounts);
 
   const handleChange = async ({
     target: { value },
@@ -69,7 +67,7 @@ const CartItem = ({
       })}
       {...rest}
     >
-      <div className="flex flex-row py-6 gap-4">
+      <div className="flex flex-row gap-4">
         <div className="relative w-20 h-20 sm:w-24 sm:h-24 bg-accent-1 rounded-md overflow-hidden border border-accent-2 flex-shrink-0">
           <Link href={`/shop/${item.slug}`}>
             <Image
@@ -83,60 +81,68 @@ const CartItem = ({
         </div>
 
         <div className="flex flex-1 flex-col justify-between py-0.5">
-          <div>
-            <div className="flex justify-between items-start">
+          <div className="md:flex justify-between items-center ">
+            <div>
               <Link href={`/shop/${item.slug}`}>
-                <span
-                  className="font-medium text-sm sm:text-base hover:text-secondary transition-colors cursor-pointer"
-                  onClick={() => closeSidebarIfPresent()}
-                >
+                <Text variant="bold" onClick={() => closeSidebarIfPresent()}>
                   {item.name}
-                </span>
+                </Text>
               </Link>
-              <div>
-                {price.hasDiscount && (
-                  <span className="font-semibold text-sm ml-4 text-red-500 line-through">
-                    {price.priceCalculated}
-                  </span>
+              <div className="flex items-center gap-2 mt-1.5">
+                {item.variant?.colorName && (
+                  <Text
+                    variant="bold"
+                    className="uppercase tracking-wider px-2 py-0.5 rounded-md bg-accent-1 border border-accent-2 text-accent-7"
+                  >
+                    {item.variant.colorName}
+                  </Text>
                 )}
-
-                <span className="font-semibold text-sm ml-4">
-                  {price.priceDiscount}
-                </span>
+                {item.variant?.sizeName && (
+                  <Text
+                    variant="bold" className=" uppercase tracking-wider px-2 py-0.5 rounded-md bg-accent-1 border border-accent-2 text-accent-7">
+                    {item.variant.sizeName}
+                  </Text>
+                )}
               </div>
             </div>
+            <div className="flex items-center">
+              {variant === "default" ? (
+                <div className="flex items-center">
+                  <Quantity
+                    value={quantity}
+                    handleRemove={handleRemove}
+                    handleChange={handleChange}
+                    increase={() => increaseQuantity(1)}
+                    decrease={() => increaseQuantity(-1)}
+                    max={item.variant.stock}
+                  />
+                </div>
+              ) : (
+                <div className="text-xs text-accent-6 italic">
+                  Qty:{" "}
+                  <span className="font-medium text-accent-9">{quantity}</span>
+                </div>
+              )}
 
-            <div className="flex items-center gap-2 mt-1.5">
-              {item.variant?.colorName && (
-                <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-accent-1 border border-accent-2 text-accent-7">
-                  {item.variant.colorName}
+              {price.hasDiscount && (
+                <span className="font-semibold text-sm ml-4 text-red-500 line-through">
+                  x {price.price} £
                 </span>
               )}
-              {item.variant?.sizeName && (
-                <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-accent-1 border border-accent-2 text-accent-7">
-                  {item.variant.sizeName}
-                </span>
-              )}
+
+              <span className="font-semibold text-sm mx-4">
+                x {price.finalPrice} £ = {quantity * price.finalPrice} £
+              </span>
+              <Button
+                type="button"
+                onClick={handleRemove}
+                color="danger"
+                title="Remove item"
+                variant="naked"
+              >
+                <Trash width={18} height={18} />
+              </Button>
             </div>
-          </div>
-
-          <div className="flex items-end justify-between mt-2">
-            {variant === "default" ? (
-              <div className="flex items-center">
-                <Quantity
-                  value={quantity}
-                  handleRemove={handleRemove}
-                  handleChange={handleChange}
-                  increase={() => increaseQuantity(1)}
-                  decrease={() => increaseQuantity(-1)}
-                />
-              </div>
-            ) : (
-              <div className="text-xs text-accent-6 italic">
-                Qty:{" "}
-                <span className="font-medium text-accent-9">{quantity}</span>
-              </div>
-            )}
           </div>
         </div>
       </div>

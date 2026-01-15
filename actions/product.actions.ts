@@ -92,7 +92,7 @@ export async function updateProduct(id: string, formData: FormData) {
 }
 
 export async function getProductBySlug(slug: string | null) {
-  if (!slug) return getAllProducts()
+  if (!slug) return getAllProducts();
 
   const productsRaw = await prisma.product.findUnique({
     where: {
@@ -104,7 +104,7 @@ export async function getProductBySlug(slug: string | null) {
     },
   });
 
-  return ([productsRaw])[0];
+  return [productsRaw][0];
 }
 
 export async function getProductById(id: string) {
@@ -118,7 +118,7 @@ export async function getProductById(id: string) {
     },
   });
 
-  return ([productsRaw])[0];
+  return [productsRaw][0];
 }
 
 export async function deleteProduct(id: string) {
@@ -133,7 +133,6 @@ export async function deleteProduct(id: string) {
     return { success: false, error: "Failed to delete category" };
   }
 }
-
 
 export async function getRandomProducts(limit = 3) {
   const productsRaw = await prisma.product.findMany();
@@ -151,13 +150,13 @@ export async function getAllProducts() {
       createdAt: "desc",
     },
   });
-  return (productsRaw);
+  return productsRaw;
 }
 
 export async function getRelatedProducts(
   categories: string[],
   excludeId?: string,
-  limit: number = 3,
+  limit: number = 3
 ) {
   if (!categories.length) return [];
 
@@ -189,9 +188,8 @@ export async function getRelatedProducts(
     take: limit,
     skip,
   });
-  return (relatedProducts);
+  return relatedProducts;
 }
-
 
 export async function getProductByCategorySlug(category: string | null) {
   return prisma.product.findMany({
@@ -208,34 +206,42 @@ export async function getProductByCategorySlug(category: string | null) {
     },
   });
 }
+export async function upsertProduct(payload: any) {
+  const { categoryIds, variants, id, previews, files, ...productData } = payload;
+  // 1. Transform categoryIds
+const categoriesForUpdate = {
+    set: categoryIds.map((catId: string) => ({ id: catId }))
+  };
 
+  // 2. Prepare data for the Create block
+  const categoriesForCreate = {
+    connect: categoryIds.map((catId: string) => ({ id: catId }))
+  };
 
-
-export async function upsertProduct(formData: {
-  id?: string;
-}) {
-  try {
-    if (formData.id) {
-      await prisma.product.update({
-        where: { id: formData.id },
-        data: {
-          ...formData
-        },
-      });
-    } else {
-      await prisma.product.create({
-        data: {
-          ...formData
-        },
-      });
+  // 2. Prepare variants for Upsert
+const prepareVariant = (v: any) => {
+    const { id: variantId, isExpanded, files, previews, productId, ...dbData } = v;
+    return { ...dbData };
+  };
+return await prisma.product.upsert({
+    where: { id: id || 'new-id' },
+    update: {
+      ...productData,
+      categories: categoriesForUpdate, // 'set' is allowed here
+      variants: {
+        upsert: variants.map((v: any) => ({
+          where: { id: v.id.startsWith('temp-') ? '0' : v.id },
+          update: prepareVariant(v),
+          create: prepareVariant(v),
+        }))
+      }
+    },
+    create: {
+      ...productData,
+      categories: categoriesForCreate, // Use 'connect' here, NOT 'set'
+      variants: {
+        create: variants.map((v: any) => prepareVariant(v))
+      }
     }
-
-    revalidatePath("/admin/products");
-    return { success: true };
-  } catch (error: any) {
-    return {
-      success: false,
-      error: error.message || "Failed to save category",
-    };
-  }
+  });
 }

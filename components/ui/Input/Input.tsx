@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { cn } from "@lib/utils";
 import s from "./Input.module.css";
@@ -27,11 +27,11 @@ const Input: React.FC<InputProps> = (props) => {
       [s.error]: !!error,
       [s.withIcon]: isPassword,
     },
-    className,
+    className
   );
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value; 
+    const newValue = e.target.value;
 
     if (onValueChange) {
       onValueChange(newValue);
@@ -57,7 +57,9 @@ const Input: React.FC<InputProps> = (props) => {
           autoCorrect="off"
           autoCapitalize="none"
           spellCheck="false"
-          type={showPassword ? "text" : "password"}
+          type={
+            type === "password" ? (showPassword ? "text" : "password") : type
+          }
           aria-invalid={!!error}
           aria-describedby={error ? errorId : undefined}
           {...rest}

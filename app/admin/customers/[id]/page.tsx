@@ -1,5 +1,5 @@
 import { Container, Text, Button, Input } from "@components/ui";
-import { getCustomerById } from "actions/customer.actions";
+import { getCustomerById, updateNotes } from "actions/customer.actions";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -8,20 +8,19 @@ import {
   MapPin,
   ShoppingBag,
   Calendar,
-  CreditCard,
   User,
   CheckCircle2,
   XCircle,
-  NotebookIcon,
   Notebook,
 } from "lucide-react";
 import notFound from "app/not-found";
 import OrderTable from "@components/common/Tables/OrderTable";
+import CustomerNotes from "./CostumerNotes";
 
 export default async function CustomerDetailsPage({ params }: { params: any }) {
   const { id } = await params;
   const customer = await getCustomerById(id);
-  if (!customer) {
+  if (!customer || customer === null) {
     notFound();
   }
   const totalSpend = customer.orders.reduce(
@@ -30,14 +29,15 @@ export default async function CustomerDetailsPage({ params }: { params: any }) {
   );
 
   return (
-    <Container >
-      <header >
+    <Container>
+      <header>
         <Link
           href="/admin/customers"
           className="flex items-center gap-2 text-muted-foreground hover:text-accent-6 mb-4 transition"
         >
           <ArrowLeft size={16} /> Back to Customers
         </Link>
+
         <div>
           <Text variant="heading">
             {customer.name}
@@ -50,39 +50,32 @@ export default async function CustomerDetailsPage({ params }: { params: any }) {
               {new Date(customer.createdAt).toLocaleDateString()}
             </span>
             <span>•</span>
-            <span className="font-mono uppercase ">
-              ID: {customer.id}
-            </span>
+            <span className="font-mono uppercase ">ID: {customer.id}</span>
           </div>
         </div>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="space-y-6">
-          <div className="bg-accent-0 border rounded-2xl p-6 shadow-sm grid grid-cols-2 gap-4">
+          <Container variant="box" className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
               <Text className="uppercase font-bold tracking-tighter">
                 Orders
               </Text>
-              <Text >
-                {customer.orders.length}
-              </Text>
+              <Text>{customer.orders.length}</Text>
             </div>
             <div className="space-y-1 ">
               <Text className="uppercase font-bold tracking-tighter">
                 Total Spend
               </Text>
-              <Text >
-                GBP {totalSpend.toFixed(2)}
-              </Text>
+              <Text>GBP {totalSpend.toFixed(2)}</Text>
             </div>
+          </Container>
 
-          </div>
-
-          <div className="bg-accent-0 border rounded-2xl p-6 shadow-sm space-y-4">
-            <div className="flex items-center gap-2 border-b pb-3">
+          <Container variant="box" className="space-y-4">
+            <div className="flex items-center gap-2 border-b pb-2">
               <User size={18} className="text-accent-6" />
-              <Text className="font-bold text-sm">Contact Details</Text>
+              <Text variant="bold">Contact Details</Text>
             </div>
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-sm">
@@ -97,7 +90,7 @@ export default async function CustomerDetailsPage({ params }: { params: any }) {
                 {customer.acceptsMarketing ? (
                   <CheckCircle2 size={16} className="text-green-500" />
                 ) : (
-                  <XCircle size={16} className="text-slate-300" />
+                  <XCircle size={16} className="text-accent-3" />
                 )}
                 <span
                   className={
@@ -112,12 +105,12 @@ export default async function CustomerDetailsPage({ params }: { params: any }) {
                 </span>
               </div>
             </div>
-          </div>
+          </Container>
 
-          <div className="bg-accent-0 border rounded-2xl p-6 shadow-sm space-y-4">
-            <div className="flex items-center gap-2 border-b pb-3">
-              <MapPin size={18} className="text-slate-400" />
-              <Text className="font-bold text-sm">Saved Addresses</Text>
+          <Container variant="box" className="space-y-4">
+            <div className="flex items-center gap-2 border-b pb-2">
+              <MapPin size={18} className="text-accent-6" />
+              <Text variant="bold">Saved Addresses</Text>
             </div>
             <div className="space-y-4">
               {!customer?.addresses ? (
@@ -128,10 +121,10 @@ export default async function CustomerDetailsPage({ params }: { params: any }) {
                 customer.addresses.map((addr: any) => (
                   <div
                     key={addr.id}
-                    className="text-sm p-3 bg-slate-50 rounded-lg border border-slate-100"
+                    className="text-sm p-3 rounded-lg border border-border"
                   >
                     <div className="flex justify-between mb-1">
-                      <span className="text-[10px] uppercase font-bold text-slate-400">
+                      <span className="text-[10px] uppercase font-bold text-accent-4">
                         {addr.type}
                       </span>
                     </div>
@@ -149,30 +142,28 @@ export default async function CustomerDetailsPage({ params }: { params: any }) {
                 ))
               )}
             </div>
-          </div>
+          </Container>
         </div>
 
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-accent-0 border rounded-2xl p-6 shadow-sm space-y-4">
-            <div className="flex items-center gap-2  pb-3">
-
-              <ShoppingBag size={18} className="text-slate-500" />
-              <Text className="font-bold">Order History</Text>
+          <Container variant="box" className="space-y-4">
+            <div className="flex items-center gap-2 border-b pb-2">
+              <ShoppingBag size={18} className="text-accent-6" />
+              <Text variant="bold">Order History</Text>
             </div>
             <OrderTable orders={customer.orders} />
+          </Container>
 
-          </div>
-
-          <div className="bg-accent-0 border rounded-2xl p-6 shadow-sm space-y-4">
-            <div className="flex items-center gap-2 border-b pb-3">
+          <Container variant="box" className="space-y-4">
+            <div className="flex items-center gap-2 border-b pb-2">
               <Notebook size={18} className="text-accent-6" />
-              <Text className="font-bold mb-3 block text-sm">Internal Notes</Text>
+              <Text variant="bold">Internal Notes</Text>
             </div>
-            <div className="p-4 rounded-xl text-sm italic">
+            {/* <div className="p-4 rounded-xl text-sm italic">
               {customer.notes || "No internal notes for this customer."}
-            </div>
-            <Input placeholder="No internal notes for this customer" value={customer.notes ?? ''} />
-          </div>
+            </div> */}
+            <CustomerNotes initialNotes={customer.notes} customerId={id} />
+          </Container>
         </div>
       </div>
     </Container>

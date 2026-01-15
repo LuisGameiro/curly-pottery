@@ -31,16 +31,16 @@ export default function UserLayout({
     navItems.find((item) => item.href === pathname) || navItems[0];
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen container mx-auto">
-      <aside className="w-full lg:w-2/12 bg-background border-b md:border-r border-border p-4 ">
+    <div className="flex flex-col lg:flex-row container mx-auto">
+      <aside className="w-full lg:w-2/12 bg-background lg:border-r border-border px-4 py-2 ">
         <Text
           variant="pageHeading"
-          className="hidden lg:block font-bold text-xl text-secondary mb-6"
+          className="hidden lg:block font-bold text-xl text-secondary mt-6 pt-6"
         >
           Profile
         </Text>
 
-        <div className="relative">
+        <div className="relative w-full z-30">
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="w-full lg:hidden flex items-center justify-between px-4 py-3 bg-accent-2 border-2 border-border rounded-lg font-semibold text-secondary"
@@ -55,13 +55,12 @@ export default function UserLayout({
             />
           </button>
 
-          <nav
-            className={cn(
-              "absolute md:relative left-0 right-0 top-full mt-2 md:mt-0 z-50 md:z-auto",
-              "bg-background md:bg-transparent border-2 md:border-0 border-border rounded-xl md:rounded-none shadow-xl md:shadow-none",
-              "flex flex-col gap-1 p-2 md:p-0 transition-all",
-              !isOpen && "hidden lg:flex",
-            )}
+          <ul
+               className={cn(
+                "space-y-1 mt-2 p-2 bg-accent-2 border-2 border-border rounded-xl shadow-xl lg:shadow-none lg:border-0 lg:bg-transparent lg:p-0 lg:mt-0 lg:block transition-all",
+                "absolute left-0 right-0 top-full lg:static z-50", // This line prevents the push-down
+                { hidden: !isOpen },
+              )}
           >
             {navItems.map((item) => {
               const isActive = pathname === item.href;
@@ -82,7 +81,7 @@ export default function UserLayout({
                 </Link>
               );
             })}
-          </nav>
+          </ul>
         </div>
       </aside>
 

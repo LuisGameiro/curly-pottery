@@ -8,9 +8,11 @@ import {
   CreditCard,
   Calendar,
   User,
+  BellIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { getOrderById, updateOrderStatus } from "actions/order.actions";
+import OrderStatusUpdate from "./orderStatusUpdate";
 
 export default async function OrderDetailsPage({ params }) {
   const { id } = await params;
@@ -66,31 +68,16 @@ export default async function OrderDetailsPage({ params }) {
           </div>
         </div>
 
-        <div className="flex items-center gap-3 bg-accent-2 p-3 rounded-xl border shadow-sm">
-          <Text className="text-sm font-semibold">Status:</Text>
-          <select
-            className="bg-secondary text-sm font-medium rounded-lg px-3 py-2 outline-none border-none cursor-pointer"
-            value={order.status}
-            // disabled={updating}
-            onChange={(e) => handleStatusChange(e.target.value)}
-          >
-            <option value="PENDING">Pending</option>
-            <option value="PAID">Paid</option>
-            <option value="SHIPPED">Shipped</option>
-            <option value="DELIVERED">Delivered</option>
-            <option value="CANCELLED">Cancelled</option>
-            <option value="COMPLETED">Completed</option>
-          </select>
-        </div>
+        <OrderStatusUpdate orderId={order.id} currentStatus={order.status} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column: Line Items */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-accent-2 border rounded-xl overflow-hidden shadow-sm">
-            <div className="p-4 border-b bg-accent-2 flex items-center gap-2">
-              <Package size={18} />
-              <Text className="font-bold">Items Summary</Text>
+          <Container variant="box" className="space-y-4">
+            <div className="flex items-center gap-2 border-b pb-2">
+              <Package size={18} className="text-accent-6" />
+              <Text variant="bold">Items Summary</Text>
             </div>
             <div className="divide-y">
               {lineItems.map((item, idx) => (
@@ -140,16 +127,15 @@ export default async function OrderDetailsPage({ params }) {
                 </span>
               </div>
             </div>
-          </div>
+          </Container>
         </div>
 
         {/* Right Column: Customer & Shipping Details */}
         <div className="space-y-6">
-          {/* Customer Card */}
-          <div className="bg-accent-2 border rounded-xl p-5 shadow-sm space-y-4">
-            <div className="flex items-center gap-2 border-b pb-3">
-              <User size={18} />
-              <Text className="font-bold text-sm">Customer</Text>
+          <Container variant="box" className="space-y-4">
+            <div className="flex items-center gap-2 border-b pb-2">
+              <User size={18} className="text-accent-6" />
+              <Text variant="bold">Customer</Text>
             </div>
             <div>
               <Text className="font-medium text-sm">
@@ -159,13 +145,13 @@ export default async function OrderDetailsPage({ params }) {
                 {order.customer.email}
               </Text>
             </div>
-          </div>
+          </Container>
 
           {/* Shipping Address */}
-          <div className="bg-accent-2 border rounded-xl p-5 shadow-sm space-y-4">
-            <div className="flex items-center gap-2 border-b pb-3">
-              <MapPin size={18} />
-              <Text className="font-bold text-sm">Shipping Address</Text>
+          <Container variant="box" className="space-y-4">
+            <div className="flex items-center gap-2 border-b pb-2">
+              <MapPin size={18} className="text-accent-6" />
+              <Text variant="bold">Shipping Address</Text>
             </div>
             {shipping ? (
               <div className="text-sm space-y-1 text-muted-foreground">
@@ -183,13 +169,12 @@ export default async function OrderDetailsPage({ params }) {
                 No shipping address provided.
               </Text>
             )}
-          </div>
+          </Container>
 
-          {/* Payment Info */}
-          <div className="bg-accent-2 border rounded-xl p-5 shadow-sm space-y-4">
-            <div className="flex items-center gap-2 border-b pb-3">
-              <CreditCard size={18} />
-              <Text className="font-bold text-sm">Payment Info</Text>
+          <Container variant="box" className="space-y-4">
+            <div className="flex items-center gap-2 border-b pb-2">
+              <CreditCard size={18} className="text-accent-6" />
+              <Text variant="bold">Payment Info</Text>
             </div>
             <div className="flex justify-between items-center text-sm">
               <span className="text-muted-foreground text-xs uppercase tracking-wider">
@@ -205,7 +190,7 @@ export default async function OrderDetailsPage({ params }) {
                 {new Date(order.createdAt).toLocaleDateString()}
               </span>
             </div>
-          </div>
+          </Container>
         </div>
       </div>
     </Container>

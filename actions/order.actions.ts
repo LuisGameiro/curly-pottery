@@ -36,7 +36,7 @@ export async function getAllOrders() {
     },
   });
 
-  return (ordersRaw);
+  return ordersRaw;
 }
 
 export async function getOrderById(id: string) {
@@ -51,7 +51,20 @@ export async function getOrderById(id: string) {
     throw new Error("Order not found");
   }
 
-  return serializeOrders([orderRaw])[0];
+  return orderRaw;
+}
+
+export async function OrderUpdateStatus(id: string, status: OrderStatus) {
+  const orderRaw = await prisma.order.update({
+    where: { id },
+    data: { status },
+  });
+
+  if (!orderRaw) {
+    throw new Error("Order not found");
+  }
+
+  return orderRaw;
 }
 
 // export async function updateOrderStatus(id: string, status: OrderStatus) {
@@ -103,11 +116,9 @@ export async function createOrder(input: {
   billingAddress: any;
   cart: any;
 }) {
-
-
   const order = await prisma.order.create({
     data: {
-      userId: input?.userId,      
+      userId: input?.userId,
       lineItems: input.cart.lineItems,
       discounts: input.cart.discounts,
       subtotalPrice: input.cart.subtotalPrice,
@@ -115,7 +126,7 @@ export async function createOrder(input: {
       currency: input.cart.currency,
       shippingAddress: input.shippingAddress,
       billingAddress: input.billingAddress,
-      status:'PENDING'
+      status: "PENDING",
     },
   });
 

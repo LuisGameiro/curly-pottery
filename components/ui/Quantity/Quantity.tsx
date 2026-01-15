@@ -16,7 +16,6 @@ const Quantity: FC<QuantityProps> = ({
   increase,
   decrease,
   handleChange,
-  handleRemove,
   max = 6,
 }) => {
   return (
@@ -54,16 +53,6 @@ const Quantity: FC<QuantityProps> = ({
           <Plus width={14} height={14} />
         </button>
       </div>
-
-      {/* REMOVE BUTTON - Separated for safety */}
-      <button
-        type="button"
-        onClick={handleRemove}
-        className="flex items-center justify-center text-accent-5 hover:text-red-500 transition-colors p-1"
-        title="Remove item"
-      >
-        <Cross width={18} height={18} />
-      </button>
     </div>
   );
 };

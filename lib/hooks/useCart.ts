@@ -103,7 +103,7 @@ export default function useCart() {
       lineItems: store.cartItems,
       subtotalPrice: subtotal,
       totalPrice: subtotal,
-      currency: { code: 'GBP' }
+      currency: 'GBP'
     },
     isLoading: store.isLoading,
     isEmpty: store.cartItems.length === 0,

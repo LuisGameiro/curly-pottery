@@ -12,7 +12,7 @@ import { useEffect } from "react";
 export default function CartPage() {
   const { data, isLoading, isEmpty } = useCart();
 
-  useEffect(() => {}, [data]);
+  useEffect(() => { }, [data]);
 
   if (isLoading)
     return <Container className="py-20 text-center">Loading...</Container>;
@@ -27,15 +27,15 @@ export default function CartPage() {
   }
 
   return (
-    <Container className="p-10">
-      <header className="justify-center text-center mx-auto mb-4">
-        <Text variant="heading" className="mb-6">
+    <Container className="p-10" >
+      <header>
+        <Text variant="heading">
           Shopping Cart
         </Text>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10@">
-        <div className="lg:col-span-8">
+        <div className="lg:col-span-8 lg:pr-10">
           <ul className="divide-y border-b">
             {data?.lineItems.map((item: any) => (
               <CartItem
