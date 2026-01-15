@@ -3,7 +3,7 @@
 
 
 .body {
-  @apply text-base leading-7 max-w-6xl mx-auto;
+  @apply text-base leading-7 max-w-6xl;
 }
 
 .heading {
@@ -23,7 +23,7 @@
 }
 
 .boxTitle {
-  @apply  font-bold sm:font-semibold tracking-wide border-b pb-2 mb-4 block;
+  @apply  font-bold sm:font-semibold text-lg  tracking-wide border-b pb-2 mb-4 block;
 }
 
 .bold {

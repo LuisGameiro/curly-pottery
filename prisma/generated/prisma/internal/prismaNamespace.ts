@@ -1246,8 +1246,7 @@ export const AddressScalarFieldEnum = {
   firstName: 'firstName',
   lastName: 'lastName',
   company: 'company',
-  streetNumber: 'streetNumber',
-  apartments: 'apartments',
+  address: 'address',
   postalCode: 'postalCode',
   city: 'city',
   country: 'country',
@@ -1277,6 +1276,8 @@ export type CartScalarFieldEnum = (typeof CartScalarFieldEnum)[keyof typeof Cart
 
 export const OrderScalarFieldEnum = {
   id: 'id',
+  email: 'email',
+  phone: 'phone',
   userId: 'userId',
   status: 'status',
   lineItems: 'lineItems',
@@ -1284,9 +1285,9 @@ export const OrderScalarFieldEnum = {
   taxesIncluded: 'taxesIncluded',
   shippingAddress: 'shippingAddress',
   billingAddress: 'billingAddress',
-  paymentCard: 'paymentCard',
   subtotalPrice: 'subtotalPrice',
   totalPrice: 'totalPrice',
+  shipping: 'shipping',
   currency: 'currency',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1330,18 +1331,18 @@ export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeo
 
 export const UserScalarFieldEnum = {
   id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  name: 'name',
   email: 'email',
   password: 'password',
   emailVerified: 'emailVerified',
-  image: 'image',
+  firstName: 'firstName',
+  lastName: 'lastName',
   role: 'role',
   phone: 'phone',
   company: 'company',
   notes: 'notes',
-  acceptsMarketing: 'acceptsMarketing'
+  acceptsMarketing: 'acceptsMarketing',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]

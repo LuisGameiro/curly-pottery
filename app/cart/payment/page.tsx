@@ -2,6 +2,7 @@
 
 import Script from "next/script";
 import { useEffect, useState } from "react";
+import { Button, Text } from "@components/ui";
 
 interface SumUpProps {
   checkoutId: string; // This comes from your Backend API
@@ -28,12 +29,11 @@ export default function SumUpPayment({ checkoutId }: SumUpProps) {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-6 bg-white rounded-xl shadow-sm border border-accent-2">
-      <h3 className="text-lg font-semibold mb-4">Payment Details</h3>
-      
-      {/* Script must load before we can use SumUpCard */}
-      <Script 
-        src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js" 
+    <div className="space-y-8">
+      <Text variant="sectionHeading">Payment Details</Text>
+
+      <Script
+        src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js"
         onLoad={mountWidget}
       />
 

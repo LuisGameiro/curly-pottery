@@ -19,7 +19,8 @@ export * as $Enums from './enums.js'
 export * from './enums.js';
 /**
  * Model Category
- * 
+ * *
+ *  * -------------------- CATEGORY --------------------
  */
 export type Category = Prisma.CategoryModel
 /**
@@ -35,7 +36,8 @@ export type Product = Prisma.ProductModel
 export type ProductVariant = Prisma.ProductVariantModel
 /**
  * Model Address
- * 
+ * *
+ *  * -------------------- ADDRESS --------------------
  */
 export type Address = Prisma.AddressModel
 /**
@@ -45,7 +47,8 @@ export type Address = Prisma.AddressModel
 export type Cart = Prisma.CartModel
 /**
  * Model Order
- * 
+ * *
+ *  * -------------------- ORDER --------------------
  */
 export type Order = Prisma.OrderModel
 /**

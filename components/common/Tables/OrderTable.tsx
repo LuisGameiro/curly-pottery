@@ -19,8 +19,8 @@ export default function OrderTable({ orders }: { orders: any[] }) {
             header: "Customer",
             render: (o: any) => (
                 <div className="flex flex-col">
-                    <span className="font-medium">{o.customer.firstName} {o.customer.lastName}</span>
-                    <span className="text-xs opacity-70">{o.customer.email}</span>
+                    <span className="font-medium">{o?.user?.firstName || o?.shippingAddress?.firstName} {o?.user?.lastName || o?.shippingAddress?.lastName}</span>
+                    <span className="text-xs opacity-70">{o.email}</span>
                 </div>
             ),
         },
@@ -41,7 +41,7 @@ export default function OrderTable({ orders }: { orders: any[] }) {
         },
     ];
 
-    return <DataTable data={orders} columns={orderColumns} emptyMessage="No orders found"  />;
+    return <DataTable data={orders} columns={orderColumns} emptyMessage="No orders found" />;
 }
 
 function StatusBadge({ status }: { status: string }) {

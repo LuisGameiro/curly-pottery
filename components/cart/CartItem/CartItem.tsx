@@ -62,13 +62,14 @@ const CartItem = ({
 
   return (
     <li
-      className={cn(s.root, "border-b border-accent-2 last:border-b-0", {
+      className={cn(s.root, "border-b border-accent-2 last:border-b-0 sm:flex justify-between py-2", {
         "opacity-50 pointer-events-none": removing,
       })}
       {...rest}
     >
-      <div className="flex flex-row gap-4">
-        <div className="relative w-20 h-20 sm:w-24 sm:h-24 bg-accent-1 rounded-md overflow-hidden border border-accent-2 flex-shrink-0">
+
+      <div className="flex ">
+        <div className="relative w-20 h-20 sm:w-24 sm:h-24 bg-accent-1 rounded-md overflow-hidden border border-accent-2  mr-2">
           <Link href={`/shop/${item.slug}`}>
             <Image
               onClick={() => closeSidebarIfPresent()}
@@ -80,71 +81,70 @@ const CartItem = ({
           </Link>
         </div>
 
-        <div className="flex flex-1 flex-col justify-between py-0.5">
-          <div className="md:flex justify-between items-center ">
-            <div>
-              <Link href={`/shop/${item.slug}`}>
-                <Text variant="bold" onClick={() => closeSidebarIfPresent()}>
-                  {item.name}
-                </Text>
-              </Link>
-              <div className="flex items-center gap-2 mt-1.5">
-                {item.variant?.colorName && (
-                  <Text
-                    variant="bold"
-                    className="uppercase tracking-wider px-2 py-0.5 rounded-md bg-accent-1 border border-accent-2 text-accent-7"
-                  >
-                    {item.variant.colorName}
-                  </Text>
-                )}
-                {item.variant?.sizeName && (
-                  <Text
-                    variant="bold" className=" uppercase tracking-wider px-2 py-0.5 rounded-md bg-accent-1 border border-accent-2 text-accent-7">
-                    {item.variant.sizeName}
-                  </Text>
-                )}
-              </div>
-            </div>
-            <div className="flex items-center">
-              {variant === "default" ? (
-                <div className="flex items-center">
-                  <Quantity
-                    value={quantity}
-                    handleRemove={handleRemove}
-                    handleChange={handleChange}
-                    increase={() => increaseQuantity(1)}
-                    decrease={() => increaseQuantity(-1)}
-                    max={item.variant.stock}
-                  />
-                </div>
-              ) : (
-                <div className="text-xs text-accent-6 italic">
-                  Qty:{" "}
-                  <span className="font-medium text-accent-9">{quantity}</span>
-                </div>
-              )}
-
-              {price.hasDiscount && (
-                <span className="font-semibold text-sm ml-4 text-red-500 line-through">
-                  x {price.price} £
-                </span>
-              )}
-
-              <span className="font-semibold text-sm mx-4">
-                x {price.finalPrice} £ = {quantity * price.finalPrice} £
-              </span>
-              <Button
-                type="button"
-                onClick={handleRemove}
-                color="danger"
-                title="Remove item"
-                variant="naked"
+        <div>
+          <Link href={`/shop/${item.slug}`}>
+            <Text variant="bold" onClick={() => closeSidebarIfPresent()}>
+              {item.name}
+            </Text>
+          </Link>
+          <div className="flex items-center gap-2 mt-1.5">
+            {item.variant?.colorName && (
+              <Text
+                variant="bold"
+                className="uppercase tracking-wider px-3 py-1 rounded-md bg-accent-1 border border-accent-2 text-accent-7"
               >
-                <Trash width={18} height={18} />
-              </Button>
-            </div>
+                {item.variant.colorName}
+              </Text>
+            )}
+            {item.variant?.sizeName && (
+              <Text
+                variant="bold"
+                className="text-sm uppercase tracking-wider px-3 py-1 rounded-md bg-accent-1 border border-accent-2 text-accent-7"
+              >
+                {item.variant.sizeName}
+              </Text>
+            )}
           </div>
         </div>
+      </div>
+
+      <div className="flex items-center justify-end py-2">
+        {variant === "default" ? (
+          <div className="flex items-center">
+            <Quantity
+              value={quantity}
+              handleRemove={handleRemove}
+              handleChange={handleChange}
+              increase={() => increaseQuantity(1)}
+              decrease={() => increaseQuantity(-1)}
+              max={item.variant.stock}
+            />
+          </div>
+        ) : (
+          <div className="text-xs text-accent-6 italic">
+            Qty:{" "}
+            <span className="font-medium text-accent-9">{quantity}</span>
+          </div>
+        )}
+
+        {price.hasDiscount && (
+          <span className="font-semibold text-sm ml-4 text-red-500 line-through">
+            x {price.price} £
+          </span>
+        )}
+
+        <span className="font-semibold text-sm mx-4">
+          x {price.finalPrice} £ = {quantity * price.finalPrice} £
+        </span>
+        <Button
+          type="button"
+          onClick={handleRemove}
+          color="danger"
+          title="Remove item"
+          variant="naked"
+        >
+          <Trash width={18} height={18} />
+        </Button>
       </div>
     </li>
   );

@@ -17,7 +17,6 @@ datasource db {
 /**
  * -------------------- ENUMS --------------------
  */
-
 enum CurrencyCode {
   USD
   EUR
@@ -45,14 +44,12 @@ enum SizeNames {
 /**
  * -------------------- CATEGORY --------------------
  */
-
 model Category {
-  id    String @id @default(cuid())
-  name  String @unique
-  slug  String @unique
-  url   String?
-  image String
-
+  id        String @id @default(cuid())
+  name      String @unique
+  slug      String @unique
+  url       String?
+  image     String
   products  Product[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -66,18 +63,13 @@ model Product {
   name        String @unique
   slug        String @unique
   description String
-
-  // Default images for the product
-  images String[]
-
-  // Relations
-  variants   ProductVariant[]
-  categories Category[]
-
+  images      String[]
+  variants    ProductVariant[]
+  categories  Category[]
   requiresShipping Boolean @default(true)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model ProductVariant {
@@ -89,86 +81,52 @@ model ProductVariant {
   availableForSale Boolean      @default(true)
   images           String[]
 
-  // Size Fields
-  sizeName String?
+  sizeName         String?
+  colorName        String? 
+  colorHex         String? 
+  details          Json?
+  discounts        Json?
+  productId        String
+  product          Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  // Color & Glaze Fields
-  colorName String? // "Midnight Black"
-  colorHex  String? // "#000000"
-
-  //details
-  details Json?
-  discounts Json?
-
-
-  productId String
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Ensure uniqueness across the product's attributes
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
   @@unique([productId, sizeName, colorName])
 }
 
-/**
- * -------------------- CUSTOMER --------------------
- *
-model Customer {
-  id               String  @id @default(cuid())
-  firstName        String
-  lastName         String
-  email            String  @unique
-  phone            String?
-  company          String?
-  notes            String?
-  acceptsMarketing Boolean @default(false)
 
-  // One Customer can have many addresses/cards
-  addresses Address[]
-  orders    Order[]
-  cart      Cart? // Usually 1 active cart per customer
-  
-  account   Account  @relation(fields: [accountId], references: [id])
-  accountId String   @unique
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
 
 /**
  * -------------------- ADDRESS --------------------
  */
-
 model Address {
   id           String  @id @default(cuid())
-  type         String // billing | shipping
+  type         String? // billing | shipping
   firstName    String
   lastName     String
   company      String?
-  streetNumber String
-  apartments   String
+  address      String
   postalCode   String
   city         String
   country      String
 
-  userId String
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String?
+  user         User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
+  createdAt    DateTime @default(now())
 }
 
 model Cart {
   id                     String       @id @default(cuid())
-  userId             String       @unique
-  user               User     @relation(fields: [userId], references: [id])
+  userId                 String       @unique
+  user                   User         @relation(fields: [userId], references: [id])
   currency               CurrencyCode @default(GBP)
   taxesIncluded          Boolean      @default(false)
   lineItems              Json
   discounts              Json?
-  lineItemsSubtotalPrice Float //sum of item price
-  subtotalPrice          Float // include discounts before taxes and shipping
-  totalPrice             Float // includes taxes and shipping
+  lineItemsSubtotalPrice Float 
+  subtotalPrice          Float
+  totalPrice             Float
   createdAt              DateTime     @default(now())
   updatedAt              DateTime     @updatedAt
 }
@@ -176,22 +134,21 @@ model Cart {
 /**
  * -------------------- ORDER --------------------
  */
-
 model Order {
-  id         String      @id @default(cuid())
-  userId String
-  user   User    @relation(fields: [userId], references: [id])
-  status     OrderStatus @default(PENDING)
-
-  lineItems     Json
-  discounts     Json?
-  taxesIncluded Boolean @default(false)
-
+  id              String      @id @default(cuid())
+  email           String?
+  phone           String?
+  userId          String?
+  user            User?       @relation(fields: [userId], references: [id])
+  status          OrderStatus @default(PENDING)
+  lineItems       Json
+  discounts       Json?
+  taxesIncluded   Boolean     @default(false)
   shippingAddress Json?
   billingAddress  Json
-  paymentCard     Json?
   subtotalPrice   Float
   totalPrice      Float
+  shipping        Json?
   currency        CurrencyCode @default(GBP)
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
@@ -199,26 +156,25 @@ model Order {
 
 
 model Account {
-    id                       String   @id @default(cuid())
-    createdAt                DateTime @default(now())
-    updatedAt                DateTime @updatedAt
+    id                       String @id @default(cuid())
+    createdAt                DateTime   @default(now())
+    updatedAt                DateTime   @updatedAt
     userId                   String
     type                     String
     provider                 String
     providerAccountId        String
-    refresh_token            String? @db.VarChar(500)
-    access_token             String? @db.VarChar(500)
+    refresh_token            String?    @db.VarChar(500)
+    access_token             String?    @db.VarChar(500)
     refresh_token_expires_in Int?
     expires_at               Int?
     token_type               String?
     scope                    String?
-    id_token                 String? @db.Text
+    id_token                 String?    @db.Text
     session_state            String?
     oauth_token_secret       String?
     oauth_token              String?
 
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
     @@unique([provider, providerAccountId])
 }
 
@@ -229,33 +185,56 @@ model Session {
     user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId       String?
 }
+/**
+ * -------------------- CUSTOMER --------------------
+
+model Customer {
+  id               String   @id @default(cuid())
+  firstName        String
+  lastName         String
+  email            String   @unique
+  phone            String?
+  company          String?
+  notes            String?
+  acceptsMarketing Boolean  @default(false)
+
+  addresses        Address[]
+  orders           Order[]
+  cart             Cart?
+  account          Account  @relation(fields: [accountId], references: [id])
+  accountId        String   @unique
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+ */
 
 model User {
-    id            String    @id @default(cuid())
-    createdAt     DateTime  @default(now())
-    updatedAt     DateTime  @updatedAt
-    name          String?
-    email         String?   @unique
-    password      String?
-    emailVerified DateTime?
-    image         String?
-    role          String?   @default("user")
-    accounts      Account[]
-    sessions      Session[]
-    phone            String?
-    company          String?
-    notes            String?
+    id              String    @id @default(cuid())
+    email           String?   @unique
+    password        String?
+    emailVerified   DateTime?
+    firstName       String
+    lastName        String
+    role            String?   @default("user")
+    phone           String?
+    company         String?
+    notes           String?
     acceptsMarketing Boolean @default(false)
 
-    addresses Address[]
-    orders    Order[]
-    cart      Cart? // Usually 1 active cart per customer
+    accounts        Account[]
+    sessions        Session[]
+    addresses       Address[]
+    orders          Order[]
+    cart            Cart? 
+
+    createdAt       DateTime  @default(now())
+    updatedAt       DateTime  @updatedAt
 }
 
 model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
-
+    identifier      String
+    token           String   @unique
+    expires         DateTime
     @@unique([identifier, token])
 }

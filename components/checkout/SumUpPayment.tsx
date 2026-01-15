@@ -1,4 +1,5 @@
 import Script from "next/script";
+import { Button, Text } from "@components/ui";
 
 export default function SumUpPayment({ checkoutId }: { checkoutId: string }) {
   const mountSumUp = () => {
@@ -15,9 +16,10 @@ export default function SumUpPayment({ checkoutId }: { checkoutId: string }) {
   };
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-bold">Finalize Payment</h2>
+    <div className="space-y-8">
+      <Text variant="sectionHeading">Finalize Payment</Text>
       <Script 
+        className="bg-background"
         src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js" 
         onLoad={mountSumUp}
       />

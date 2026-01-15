@@ -45,7 +45,7 @@ const OrderStatusUpdate: React.FC<OrderStatusProps> = ({
 
       <select
         className={cn(
-          "w-full bg-secondary text-sm font-medium rounded-lg px-3 py-2 outline-none border-none cursor-pointer transition-opacity",
+          "w-full border-border text-sm font-medium rounded-lg px-3 py-2 outline-none border-none cursor-pointer transition-opacity",
           isPending && "opacity-50 pointer-events-none"
         )}
         value={localStatus}
@@ -60,9 +60,9 @@ const OrderStatusUpdate: React.FC<OrderStatusProps> = ({
         <option value="COMPLETED">Completed</option>
       </select>
       
-      {isPending && (
+      {/* {isPending && (
         <p className="text-[10px] text-slate-400 animate-pulse">Updating database...</p>
-      )}
+      )} */}
     </Container>
   )
 }

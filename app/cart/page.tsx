@@ -1,18 +1,13 @@
 "use client";
 
 import { CartItem } from "@components/cart";
-import Layout from "@components/common/Layout";
 import { Container, Text, Button } from "@components/ui";
 import useCart from "@lib/hooks/useCart";
-
 import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
-import { useEffect } from "react";
 
 export default function CartPage() {
   const { data, isLoading, isEmpty } = useCart();
-
-  useEffect(() => { }, [data]);
 
   if (isLoading)
     return <Container className="py-20 text-center">Loading...</Container>;
@@ -34,8 +29,9 @@ export default function CartPage() {
         </Text>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10@">
-        <div className="lg:col-span-8 lg:pr-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+
+        <div className="lg:col-span-8">
           <ul className="divide-y border-b">
             {data?.lineItems.map((item: any) => (
               <CartItem
@@ -47,32 +43,32 @@ export default function CartPage() {
           </ul>
         </div>
 
-        <div className="lg:col-span-4 bg-slate-50 p-8 rounded-3xl h-fit sticky top-24">
-          <Text variant="sectionHeading" className="mb-4">
+        <Container variant="box" className="lg:col-span-4">
+          <Text variant="boxTitle">
             Order Summary
           </Text>
-          <div className="space-y-2 pb-4 border-b">
+          <div className="space-y-1 pb-4 border-b">
             <div className="flex justify-between">
-              <span className="text-slate-500">Subtotal</span>
-              <span>£{data?.subtotalPrice.toFixed(2)}</span>
+              <Text className="text-accent-8">Subtotal</Text>
+              <Text>£{data?.subtotalPrice.toFixed(2)}</Text>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Shipping</span>
-              <span className="text-green-600 font-bold">
-                Calculated at next step
-              </span>
+              <Text className="text-accent-8">Shipping</Text>
+              <Text className="text-green-600">
+                next step
+              </Text>
             </div>
           </div>
-          <div className="flex justify-between py-4 text-xl font-bold">
-            <span>Total</span>
-            <span>£{data?.totalPrice.toFixed(2)}</span>
+          <div className="text-lg flex justify-between py-2">
+            <Text variant="bold">Total</Text>
+            <Text variant="bold">£{data?.totalPrice.toFixed(2)}</Text>
           </div>
           <Link href="/checkout">
-            <Button >
+            <Button variant="slim">
               Checkout Now
             </Button>
           </Link>
-        </div>
+        </Container>
       </div>
     </Container>
   );

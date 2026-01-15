@@ -68,12 +68,11 @@ export default async function OrderDetailsPage({ params }) {
           </div>
         </div>
 
-        <OrderStatusUpdate orderId={order.id} currentStatus={order.status} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column: Line Items */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-2">
           <Container variant="box" className="space-y-4">
             <div className="flex items-center gap-2 border-b pb-2">
               <Package size={18} className="text-accent-6" />
@@ -98,7 +97,7 @@ export default async function OrderDetailsPage({ params }) {
                   </div>
                   <div className="text-right">
                     <Text className="text-sm font-medium">
-                      {order.currency} {item.price.toFixed(2)}
+                      {order.currency} {Number(item.price).toFixed(2)}
                     </Text>
                     <Text className="text-xs text-muted-foreground">
                       Qty: {item.quantity}
@@ -107,7 +106,7 @@ export default async function OrderDetailsPage({ params }) {
                 </div>
               ))}
             </div>
-            <div className="p-6 bg-accent-2 space-y-2 border-t">
+            <div className="p-6 space-y-2 border-t">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Subtotal</span>
                 <span>
@@ -116,9 +115,9 @@ export default async function OrderDetailsPage({ params }) {
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">
-                  Taxes {order.taxesIncluded && "(Included)"}
+                  Shipping {order.taxesIncluded && "(Included)"}
                 </span>
-                <span>{order.currency} 0.00</span>
+                <span>{order.currency} {order.shipping.price.toFixed(2) || 0.00}</span>
               </div>
               <div className="flex justify-between text-lg font-bold pt-2 border-t">
                 <span>Total</span>
@@ -132,6 +131,8 @@ export default async function OrderDetailsPage({ params }) {
 
         {/* Right Column: Customer & Shipping Details */}
         <div className="space-y-6">
+          <OrderStatusUpdate orderId={order.id} currentStatus={order.status} />
+
           <Container variant="box" className="space-y-4">
             <div className="flex items-center gap-2 border-b pb-2">
               <User size={18} className="text-accent-6" />
@@ -139,10 +140,10 @@ export default async function OrderDetailsPage({ params }) {
             </div>
             <div>
               <Text className="font-medium text-sm">
-                {order.customer.firstName} {order.customer.lastName}
+                {order?.user?.firstName || order?.shippingAddress?.firstName} {order?.user?.lastName || order?.shippingAddress?.lastName}
               </Text>
               <Text className="text-sm text-muted-foreground">
-                {order.customer.email}
+                {order.email}
               </Text>
             </div>
           </Container>
@@ -171,7 +172,7 @@ export default async function OrderDetailsPage({ params }) {
             )}
           </Container>
 
-          <Container variant="box" className="space-y-4">
+          {/* <Container variant="box" className="space-y-4">
             <div className="flex items-center gap-2 border-b pb-2">
               <CreditCard size={18} className="text-accent-6" />
               <Text variant="bold">Payment Info</Text>
@@ -190,7 +191,7 @@ export default async function OrderDetailsPage({ params }) {
                 {new Date(order.createdAt).toLocaleDateString()}
               </span>
             </div>
-          </Container>
+          </Container> */}
         </div>
       </div>
     </Container>

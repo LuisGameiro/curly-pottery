@@ -1,24 +1,44 @@
-import { Text } from "@components/ui";
+import { Button, Text } from "@components/ui";
+import { cn } from "@lib/utils";
+
+const shippingOptions = [
+  {
+    method: "standard",
+    conditions: "Standard Delivery (3-5 days)",
+    price: 0,
+  },
+  {
+    method: "express",
+    conditions: "Next Day Delivery",
+    price: 5.99,
+  },
+];
 
 export default function ShippingMethod({ onComplete }: any) {
   return (
-    <div className="space-y-4">
-      <h2 className="text-xl font-bold mb-4">Select Shipping</h2>
-      <button 
-        onClick={() => onComplete({shipping:{ method: "express", price: 5.99 }})}
-        className="w-full p-4 border rounded-lg flex justify-between hover:border-black"
-      >
-        <span>Standard Delivery (3-5 days)</span>
-        <span className="font-bold text-green-600">FREE</span>
-      </button>
-      <button 
-        onClick={() => onComplete({shipping:{ method: "express", price: 5.99 }})}
-        className="w-full p-4 border rounded-lg flex justify-between hover:border-black"
-      >
-        <span>Next Day Delivery</span>
-        <span className="font-bold">£5.99</span>
-      </button>
-      <Text>Currently we only ship for uk, if you are outside the uk please contact us directly for us to try to help you how to send you the required products.</Text>
+    <div className="space-y-8">
+      <Text variant="sectionHeading">Select Shipping</Text>
+
+      {shippingOptions.map((o) => (
+        <Button 
+        key={o.method}
+          variant="secondary"
+          className="w-full"
+          type='button'
+          onClick={() =>
+            onComplete({ shipping: { price: o.price, method: o.method } })
+          }
+        >
+          <div className="w-full flex justify-between gap-4">
+            <Text>{o.conditions}</Text>
+            <Text
+              className={cn("font-bold ", o.price === 0 && "text-green-600")}
+            >
+              {o.price === 0 ? "FREE" : o.price}
+            </Text>
+          </div>
+        </Button>
+      ))}
     </div>
   );
 }
