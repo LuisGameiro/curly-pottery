@@ -4,28 +4,36 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { Text } from "@components/ui";
 import CategoryTable from "@components/common/Tables/CategoryTable";
+import Loading from "app/loading";
+import { Suspense } from "react";
 
 export default async function CategoriesPage() {
-  const categories = await getAllCategories();
+  const response = await getAllCategories();
+
+  if (!response.success) {
+    throw new Error(response.message);
+  }
 
   return (
-    <Container>
-      <header>
-        <div className="w-full flex flex-row justify-between">
-          <Text variant="heading">Categories</Text>
-          <Link href="/admin/categories/new" passHref>
-            <Button variant="slim">
-              <span className="mr-1">
-                <Plus size={18} />
-              </span>
-              <span>New Category</span>
-            </Button>
-          </Link>
-        </div>
-        <Text variant="subHeading">Manage your store product groupings.</Text>
-      </header>
+    <Suspense fallback={<Loading />}>
+      <Container>
+        <header>
+          <div className="w-full flex flex-row justify-between">
+            <Text variant="heading">Categories</Text>
+            <Link href="/admin/categories/new" passHref>
+              <Button variant="slim">
+                <span className="mr-1">
+                  <Plus size={18} />
+                </span>
+                <span>New Category</span>
+              </Button>
+            </Link>
+          </div>
+          <Text variant="subHeading">Manage your store product groupings.</Text>
+        </header>
 
-      <CategoryTable categories={categories} />
-    </Container>
+        <CategoryTable categories={response.data ?? []} />
+      </Container>
+    </Suspense>
   );
 }

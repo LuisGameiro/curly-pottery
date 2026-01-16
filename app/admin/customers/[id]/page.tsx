@@ -1,4 +1,4 @@
-import { Container, Text, Button, Input } from "@components/ui";
+import { Container, Text } from "@components/ui";
 import { getUserById } from "actions/customer.actions";
 import Link from "next/link";
 import {
@@ -23,14 +23,18 @@ export default async function CustomerDetailsPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-
   const { id } = await params;
-  const user = await getUserById(id);
-  
-  if (!user || user === null) {
+  const response = await getUserById(id);
+
+  if (!response.success) {
+    throw new Error(response.message);
+  }
+
+  if (!response.data) {
     notFound();
   }
-  
+  const user = response.data;
+
   const totalSpend = user!.orders.reduce(
     (acc: number, order: any) => acc + order.totalPrice,
     0
@@ -168,7 +172,7 @@ export default async function CustomerDetailsPage({
               <Notebook size={18} className="text-accent-6" />
               <Text variant="bold">Internal Notes</Text>
             </div>
-            <CustomerNotes initialNotes={user.notes || ''} customerId={id} />
+            <CustomerNotes initialNotes={user.notes || ""} customerId={id} />
           </Container>
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useId, useRef } from "react";
+import React, { useId } from "react";
 import { ImageIcon, X, Plus, Upload } from "lucide-react";
 import { cn } from "@lib/utils";
 import s from "./Input.module.css";
@@ -8,9 +8,9 @@ import s from "./Input.module.css";
 interface ImageInputProps {
   label?: string;
   multiple?: boolean;
-  images: File[]; // Array of raw files
-  previews: string[]; // Array of blob URLs or existing image URLs
-  onImagesChange: (data: { files: File[]; previews: string[] }) => void;
+  images: File[] | string[]; 
+  previews: string[];
+  onImagesChange: (data: { files: File[]| string[]; previews: string[] }) => void;
   error?: string;
   className?: string;
 }
@@ -18,7 +18,7 @@ interface ImageInputProps {
 const InputImage: React.FC<ImageInputProps> = ({
   label,
   multiple = false,
-  images = [],
+  files = [],
   previews = [],
   onImagesChange,
   error,
@@ -35,26 +35,23 @@ const InputImage: React.FC<ImageInputProps> = ({
 
     if (multiple) {
       onImagesChange({
-        files: [...images, ...selectedFiles],
+        files: [...files, ...selectedFiles],
         previews: [...previews, ...newPreviews],
       });
     } else {
-      // Cleanup previous preview if single mode
       if (previews[0]) URL.revokeObjectURL(previews[0]);
       onImagesChange({
         files: [selectedFiles[0]],
         previews: [newPreviews[0]],
       });
     }
-    // Clear input so same file can be uploaded if deleted
     e.target.value = "";
   };
 
   const removeImage = (index: number) => {
-    const updatedFiles = images.filter((_, i) => i !== index);
+    const updatedFiles = files.filter((_, i) => i !== index);
     const updatedPreviews = previews.filter((_, i) => i !== index);
 
-    // Revoke URL to avoid memory leaks
     if (previews[index].startsWith("blob:")) {
       URL.revokeObjectURL(previews[index]);
     }
@@ -64,7 +61,6 @@ const InputImage: React.FC<ImageInputProps> = ({
 
   return (
     <div className={cn(s.container)}>
-      {/* Label styled same as your Input component */}
       {label && <label htmlFor={generatedId}>{label}</label>}
 
       <div className="flex flex-wrap gap-3">
@@ -73,7 +69,7 @@ const InputImage: React.FC<ImageInputProps> = ({
             key={index}
             className={cn(
               "relative w-24 h-24 rounded-lg border overflow-hidden bg-slate-50 shrink-0 transition-all",
-              error ? "border-red-500" : "border-slate-200",
+              error ? "border-red-500" : "border-border",
               className,
             )}
           >
@@ -98,7 +94,7 @@ const InputImage: React.FC<ImageInputProps> = ({
               "w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer transition-all shrink-0 bg-slate-50",
               error
                 ? "border-red-300 bg-red-50 text-red-500 hover:bg-red-100"
-                : "border-slate-300 text-slate-400 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-500",
+                : "border-border text-slate-400 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-500",
             )}
           >
             {multiple ? <Plus size={24} /> : <Upload size={24} />}

@@ -1,16 +1,15 @@
+import { Address } from "@lib/types/customer";
 import { categories, customers, products } from "../app/api/fakeapi/seedData";
 import { prisma } from "./prisma";
 
-// ✅ Add PrismaClient options if required
 async function main() {
-  // 1. Clean existing data (Optional, but good for fresh starts)
   await prisma.productVariant.deleteMany();
   await prisma.product.deleteMany();
   await prisma.category.deleteMany();
   await prisma.address.deleteMany();
   await prisma.order.deleteMany();
   await prisma.cart.deleteMany();
-  await prisma.account.deleteMany(); // Add this
+  await prisma.account.deleteMany();
   await prisma.user.deleteMany();
 
   console.log("Cleaned database...");
@@ -36,7 +35,7 @@ async function main() {
   for (const item of products) {
     await prisma.product.upsert({
       where: { slug: item.slug },
-      update: {}, // If it exists, do nothing (or update fields if you prefer)
+      update: {}, 
       create: {
         id: item.id,
         name: item.name,
@@ -82,20 +81,17 @@ async function main() {
     await prisma.user.create({
       data: {
         id: cust.id,
-        name: cust.firstName,
+        firstName: cust.firstName,
+        lastName: cust.lastName,
         email: cust.email,
         company: cust.company,
         acceptsMarketing: cust.acceptsMarketing,
-        accountId: account.id,
-
-        // Create addresses
         addresses: {
-          create: cust.addresses.map((a) => ({
+          create: cust.addresses.map((a:Address) => ({
             type: a.type,
             firstName: a.firstName,
             lastName: a.lastName,
-            streetNumber: a.streetNumber,
-            apartments: a.apartments,
+            address:  a.address,
             postalCode: a.postalCode,
             city: a.city,
             country: a.country,

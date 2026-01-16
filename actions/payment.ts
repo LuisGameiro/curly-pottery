@@ -1,15 +1,14 @@
 "use server";
 
 import { authOptions } from "@lib/auth/authOptions";
+import { ActionResponse } from "@lib/types/utils";
 import { getServerSession } from "next-auth";
 
-export async function createSumUpCheckout(amount: number, cartId: string) {
-  const session = await getServerSession(authOptions);
-
-  // Use user email from session, or fallback for guest
-  const userEmail = session?.user?.email || "guest@example.com";
-
+export async function createSumUpCheckout(amount: number, cartId: string): Promise<ActionResponse<string | null>> {
   try {
+    const session = await getServerSession(authOptions);
+    const userEmail = session?.user?.email
+
     const response = await fetch("https://api.sumup.com/v0.1/checkouts", {
       method: "POST",
       headers: {
@@ -31,9 +30,18 @@ export async function createSumUpCheckout(amount: number, cartId: string) {
       throw new Error(data.message || "SumUp API error");
     }
 
-    return { checkoutId: data.id };
+    return {
+      success: true,
+      message: "Fecthed Category successfully",
+      data: data.id,
+    };
   } catch (error) {
-    console.error("SumUp Action Error:", error);
-    return { error: "Could not initialize payment" };
+    console.error("getCategoryById_ERROR:", error);
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "A database error occurred",
+      errors: error,
+    };
   }
 }

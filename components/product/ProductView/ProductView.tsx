@@ -8,8 +8,7 @@ import { ProductSlider, ProductCard } from "@components/product";
 import { Container, Text } from "@components/ui";
 import { SEO } from "@components/common";
 import ProductSidebar from "../ProductSidebar";
-import { Product } from "@lib/types/product";
-import { ProductVariant } from "prisma/generated/prisma/client";
+import { Product, ProductBasicInfo, ProductFull, ProductVariant } from "@lib/types/product";
 import { cn } from "@lib/utils";
 
 export const getRelatedProducts = async (
@@ -27,8 +26,8 @@ export const getRelatedProducts = async (
 };
 
 interface ProductViewProps {
-  product: Product;
-  relatedProducts: Product[];
+  product: ProductFull;
+  relatedProducts: ProductBasicInfo[];
 }
 
 const ProductView: FC<ProductViewProps> = ({

@@ -15,15 +15,24 @@ const CustomerNotes: React.FC<CustomerNotesProps> = ({
 }) => {
   const [notes, setNotes] = useState(initialNotes);
   const [isSaving, setIsSaving] = useState(false);
+const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
+    setErrorMessage(null); 
 
     try {
-      await updateNotes(customerId, notes);
+      const result = await updateNotes(customerId, notes);
+
+      if (!result.success) {
+        setErrorMessage(result.message);
+        toast.error(result.message); 
+      } else {
+        toast.success("Notes saved");
+      }
     } catch (error) {
-      console.error("Failed to update notes", error);
+      setErrorMessage("A connection error occurred. Please try again.");
     } finally {
       setIsSaving(false);
     }

@@ -2,13 +2,13 @@
 
 import React from "react";
 import { Plus } from "lucide-react";
-import { Text, Button } from "@components/ui";
-import { ProductVariant } from "./ProductVariant";
+import { Text } from "@components/ui";
+import { Product, ProductVariant } from "@lib/types/product";
 
 interface VariantManagerProps {
-  product: any;
-  variants: any[];
-  setVariants: React.Dispatch<React.SetStateAction<any[]>>;
+  product: Product;
+  variants: ProductVariant[];
+  setVariants: React.Dispatch<React.SetStateAction<ProductVariant[]>>;
 }
 
 export const VariantManager: React.FC<VariantManagerProps> = ({

@@ -51,15 +51,14 @@ export default function Contacts() {
         setStatus("success");
         setMessage(
           data.message ||
-            "Thank you for your message! We will be in touch soon.",
+          "Thank you for your message! We will be in touch soon.",
         );
-        // Clear the form after success
         setFormData({ name: "", email: "", message: "" });
       } else {
         setStatus("error");
         setMessage(
           data.error ||
-            "There was an error sending your message. Please try again.",
+          "There was an error sending your message. Please try again.",
         );
       }
     } catch (error) {
@@ -91,6 +90,17 @@ export default function Contacts() {
                 className="hover:text-secondary/60"
               >
                 info@curlypottery.com
+              </a>
+            </li>
+            <li>
+              📸 instagram:{" "}
+              <a
+                href="https://www.instagram.com/curlypottery"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-secondary/60"
+              >
+                @curlypottery
               </a>
             </li>
             <li>

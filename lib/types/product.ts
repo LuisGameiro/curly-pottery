@@ -1,3 +1,4 @@
+import { Prisma } from "prisma/generated/prisma/client";
 import { Category } from "./category";
 import { Discount } from "./customer";
 
@@ -45,21 +46,31 @@ export interface Product {
   updatedAt: Date;
 }
 
-export type ProductVariant = {
+export interface ProductVariant {
   id: string;
   sku: string;
   price: number;
   currency: CurrencyCode;
   stock: number;
   availableForSale: boolean;
-  sizeName: SizeNames;
-  details: Detail[];
-  discounts: Discount[];
+  sizeName: string | null;
+  colorName: string | null;
+  colorHex: string | null;
+  details: Detail[] | Prisma.JsonValue;
+  discounts: Discount[] | Prisma.JsonValue;
   createdAt: Date;
   updatedAt: Date;
   productId: string;
   images: string[];
 };
+
+export type ProductBasicInfo = Omit<Product, 'categories' | 'variants'>;
+
+export interface ProductFull extends Product {
+  variants: ProductVariant[]
+}
+
+
 export type Detail = {
   title: Detailtype | string;
   description: string;

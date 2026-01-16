@@ -1,13 +1,9 @@
 import { memo } from "react";
-import { Swatch } from "@components/product";
-import type { ProductOption } from "@lib/types/inspiration/product";
-import { SelectedOptions } from "../helpers";
-import { Product, ProductVariant } from "prisma/generated/prisma/client";
-import { FullProduct } from "@lib/types/product";
 import { Text } from "@components/ui";
+import { Product, ProductVariant } from "@lib/types/product";
 
 interface ProductOptionsProps {
-  product: FullProduct;
+  product: Product;
   variant: ProductVariant;
   setVariant: (variant: ProductVariant) => void;
 }

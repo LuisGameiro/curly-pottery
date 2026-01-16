@@ -2,10 +2,10 @@
 
 import React, { useState, useTransition } from "react";
 import { BellIcon, Loader2 } from "lucide-react";
-import { Text, Container } from "@components/ui"; // Adjust paths as needed
+import { Text, Container } from "@components/ui";
 import { cn } from "@lib/utils";
-import { OrderUpdateStatus } from "actions/order.actions";
 import { OrderStatus } from "@lib/types/customer";
+import { updateOrderStatus } from "actions/order.actions";
 
 interface OrderStatusProps {
   orderId: string;
@@ -24,7 +24,7 @@ const OrderStatusUpdate: React.FC<OrderStatusProps> = ({
 
     startTransition(async () => {
       try {
-        await OrderUpdateStatus(orderId, newStatus);
+        await updateOrderStatus(orderId, newStatus);
       } catch (error) {
         setLocalStatus(currentStatus);
         console.error("Failed to update status", error);
@@ -36,7 +36,7 @@ const OrderStatusUpdate: React.FC<OrderStatusProps> = ({
     <Container variant="box" className="space-y-3">
       <div className="flex items-center gap-2 border-b pb-2">
         {isPending ? (
-          <Loader2 size={18} className="text-blue-500 animate-spin" />
+          <Loader2 size={18} className="text-secondary animate-spin" />
         ) : (
           <BellIcon size={18} className="text-accent-6" />
         )}
@@ -58,10 +58,6 @@ const OrderStatusUpdate: React.FC<OrderStatusProps> = ({
         <option value="CANCELLED">Cancelled</option>
         <option value="COMPLETED">Completed</option>
       </select>
-
-      {/* {isPending && (
-        <p className="text-[10px] text-slate-400 animate-pulse">Updating database...</p>
-      )} */}
     </Container>
   );
 };

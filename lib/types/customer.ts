@@ -1,5 +1,5 @@
-import { PaymentCard } from "inspiration/packages/kibocommerce/schema";
 import { CurrencyCode } from "./product";
+import { Prisma } from "prisma/generated/prisma/client";
 
 export const OrderStatus = {
   PENDING: "PENDING",
@@ -18,21 +18,27 @@ export const DiscountType = {
 
 export type DiscountType = (typeof DiscountType)[keyof typeof DiscountType];
 
-export type User = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone?: string;
-  company?: string;
-  notes?: string;
-  acceptsMarketing: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  addresses: Address[];
-  orders: Order[];
-  cart: Cart;
-};
+export type UserWithOrders = Prisma.UserGetPayload<{
+  include: { orders: true };
+}>;
+
+export type User = Prisma.UserGetPayload<{}>;
+
+// export type User = {
+//   id: string;
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   phone?: string;
+//   company?: string;
+//   notes?: string;
+//   acceptsMarketing: boolean;
+//   createdAt: Date;
+//   updatedAt: Date;
+//   addresses: Address[];
+//   // orders: Order[];
+//   cart: Cart;
+// };
 
 export type Address = {
   id: string;
@@ -81,22 +87,28 @@ export type Discount = {
   amountSaved: number;
 };
 
-export type Order = {
-  id: string;
-  userId: string | null;
-  user: User;
-  email: string;
-  phone: string;
-  status: OrderStatus;
-  taxesIncluded: boolean;
-  lineItems: CartLineItem[];
-  discounts: Discount[];
-  subtotalPrice: number;
-  totalPrice: number;
-  currency: CurrencyCode;
-  shipping: { price: number; method: string };
-  shippingAddress: Address;
-  billingAddress: Address;
-  createdAt: Date;
-  updatedAt: Date;
-};
+// export type Order = {
+//   id: string;
+//   userId: string | null;
+//   email: string;
+//   phone: string;
+//   status: OrderStatus;
+//   taxesIncluded: boolean;
+//   lineItems: CartLineItem[];
+//   discounts: Discount[];
+//   subtotalPrice: number;
+//   totalPrice: number;
+//   currency: CurrencyCode;
+//   shipping: { price: number; method: string };
+//   shippingAddress: Address;
+//   billingAddress: Address;
+//   createdAt: Date;
+//   updatedAt: Date;
+// };
+
+
+export type OrderWithUser = Prisma.OrderGetPayload<{
+  include: { user: true };
+}>;
+
+export type Order = Prisma.OrderGetPayload<{}>;

@@ -1,9 +1,8 @@
-import { prisma } from "prisma/prisma";
-import { serializeProduct, serializeProductVariant } from "actions/helpers";
+
 import { Product } from "@lib/types/product";
 import { Category } from "@lib/types/category";
 import ShopClient from "./ShopClient";
-import { getProductByCategorySlug } from "actions/product.actions";
+import { getProductsByCategorySlug } from "actions/product.actions";
 import { getAllCategories } from "actions/category.actions";
 
 export default async function ShopPage({
@@ -16,12 +15,12 @@ export default async function ShopPage({
 
   const categories = await getAllCategories();
 
-  const products = await getProductByCategorySlug(categorySlug);
+  const products = await getProductsByCategorySlug(categorySlug);
 
   return (
     <ShopClient
-      initialProducts={products as Product[]}
-      categories={categories as Category[]}
+      initialProducts={products.data as Product[]}
+      categories={categories.data as Category[]}
       activeCategory={categorySlug}
     />
   );

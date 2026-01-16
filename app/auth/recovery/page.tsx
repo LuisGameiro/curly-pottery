@@ -2,16 +2,13 @@
 
 import { Button, Text, Input } from "@components/ui";
 import { Container, Link, Mail } from "lucide-react";
-
 import { useState } from "react";
-import Layout from "@components/common/Layout";
 
 export default function RecoveryPage() {
   const [sent, setSent] = useState(true);
 
   const handleRecovery = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Call your API route to send reset email here
     setSent(true);
   };
 

@@ -1,71 +1,153 @@
 "use server";
 
 import { prisma } from "prisma/prisma";
-import { serializeOrders, serializeProduct } from "./helpers";
-import { Order, OrderStatus } from "@lib/types/customer";
+import { Order, OrderStatus, OrderWithUser } from "@lib/types/customer";
 import { revalidatePath } from "next/cache";
+import { ActionResponse } from "@lib/types/utils";
 
-// app/actions/orders.ts
-export async function updateOrderStatus(orderId: string, newStatus: string) {
+export async function getAllOrders(): Promise<
+  ActionResponse<OrderWithUser[] | null>
+> {
   try {
-    // 1. Validate the status against your Prisma Enum (Case-Sensitive!)
-    // If your schema says "PAID", sending "Paid" will fail.
-    const status = newStatus.toUpperCase() as OrderStatus;
-
-    await prisma.order.update({
-      where: { id: orderId },
-      data: { status: status },
+    const order = await prisma.order.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        user: true,
+      },
     });
 
-    // 2. Refresh the data on the page immediately
-    revalidatePath("/admin/orders");
-
-    return { success: true };
+    return {
+      success: true,
+      message: "Fetched all orders successfully",
+      data: order,
+    };
   } catch (error) {
-    console.error("Database Update Error:", error);
-    return { success: false, error: "Failed to update order" };
+    console.error("getAllOrders_ERROR:", error);
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "A database error occurred",
+      errors: error,
+    };
   }
 }
-export async function getAllOrders() {
-  const ordersRaw = await prisma.order.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      user: true,
-    },
-  });
 
-  return ordersRaw;
-}
+export async function getOrderById(
+  id: string
+): Promise<ActionResponse<OrderWithUser | null>> {
+  try {
+    const order = await prisma.order.findUnique({
+      where: { id },
+      include: {
+        user: true,
+      },
+    });
 
-export async function getOrderById(id: string): Promise<Order>  {
-  const orderRaw = await prisma.order.findUnique({
-    where: { id },
-    include: {
-      user: true,
-    },
-  });
-
-  if (!orderRaw) {
-    throw new Error("Order not found");
+    return {
+      success: true,
+      message: "Fetched order successfully",
+      data: order,
+    };
+  } catch (error) {
+    console.error("getOrderById_ERROR:", error);
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "A database error occurred",
+      errors: error,
+    };
   }
-
-  return orderRaw;
 }
 
-export async function OrderUpdateStatus(id: string, status: OrderStatus) {
-  const orderRaw = await prisma.order.update({
-    where: { id },
-    data: { status },
-  });
+export async function createOrder(input: {
+  cartId: string;
+  userId?: string;
+  shippingAddress: any;
+  billingAddress: any;
+  cart: any;
+  shipping: any;
+}): Promise<ActionResponse<Order | null>> {
+  try { 
+  console.log(input);
 
-  if (!orderRaw) {
-    throw new Error("Order not found");
+    const order = await prisma.order.create({
+      data: {
+        lineItems: input.cart.lineItems || [],
+        discounts: input.cart.discounts || [],
+        subtotalPrice: Number(input.cart.subtotalPrice) || 0,
+        totalPrice: Number(input.cart.totalPrice) || 0,
+        currency: input.cart.currency || "GBP",
+        shippingAddress: input.shippingAddress || {},
+        billingAddress: input.billingAddress || {},
+        status: "PENDING",
+        shipping: input.shipping,
+        ...(input.userId && {
+          user: {
+            connect: { id: input.userId },
+          },
+        }),
+      },
+    });
+
+    return {
+      success: true,
+      message: "Order created successfully",
+      data: order,
+    };
+  } catch (error) {
+    console.error("createOrder", error);
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "A database error occurred",
+      errors: error,
+    };
   }
-
-  return orderRaw;
 }
+
+export async function updateOrderStatus(
+  orderId: string,
+  newStatus: string
+): Promise<ActionResponse<Order | null>> {
+  try {
+    const status = newStatus.toUpperCase() as OrderStatus;
+
+    const order = await prisma.order.update({
+      where: { id: orderId },
+      data: { status },
+    });
+
+    revalidatePath("/admin/orders");
+    return {
+      success: true,
+      message: "Updated order status successfully",
+      data: order,
+    };
+  } catch (error) {
+    console.error("updateOrderStatus_ERROR:", error);
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "A database error occurred",
+      errors: error,
+    };
+  }
+}
+
+// export async function OrderUpdateStatus(id: string, status: OrderStatus) {
+//   const orderRaw = await prisma.order.update({
+//     where: { id },
+//     data: { status },
+//   });
+
+//   if (!orderRaw) {
+//     throw new Error("Order not found");
+//   }
+
+//   return orderRaw;
+// }
 
 // export async function updateOrderStatus(id: string, status: OrderStatus) {
 //     const updatedOrder = await prisma.order.update({
@@ -108,42 +190,3 @@ export async function OrderUpdateStatus(id: string, status: OrderStatus) {
 //   revalidatePath("/admin/orders");
 //   return order;
 // }
-
-export async function createOrder(input: {
-  cartId: string;
-  userId?: string;
-  shippingAddress: any;
-  billingAddress: any;
-  cart: any;
-  shipping: any;
-}) {
-  console.log(input);
-
-  try {
-    const order = await prisma.order.create({
-      data: {
-        lineItems: input.cart.lineItems || [],
-        discounts: input.cart.discounts || [],
-        subtotalPrice: Number(input.cart.subtotalPrice) || 0,
-        totalPrice: Number(input.cart.totalPrice) || 0,
-        currency: input.cart.currency || "GBP",
-        shippingAddress: input.shippingAddress || {},
-        billingAddress: input.billingAddress || {},
-        status: "PENDING",
-        shipping: input.shipping,
-        ...(input.userId && {
-          user: {
-            connect: { id: input.userId },
-          },
-        }),
-      },
-    });
-
-    return order;
-  } catch (error) {
-    console.error("Error creating order:", error);
-    throw new Error(
-      `Could not process order. Please try again.${JSON.stringify(error)}`,
-    );
-  }
-}

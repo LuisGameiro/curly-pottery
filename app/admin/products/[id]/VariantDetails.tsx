@@ -2,12 +2,12 @@
 
 import { Plus, Trash2 } from "lucide-react";
 import { Text, Button, Input } from "@components/ui";
-import { Detailtype } from "@lib/types/product";
+import { Detail, Detailtype } from "@lib/types/product";
 import InputSelect from "@components/ui/Input/InputSelect";
 
 interface Props {
   details: any[];
-  onChange: (details: any[]) => void;
+  onChange: (details: Detail[]) => void;
 }
 
 export const VariantDetails = ({ details = [], onChange }: Props) => {

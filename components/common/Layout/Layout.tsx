@@ -8,8 +8,7 @@ import { Navbar, Footer } from "@components/common";
 import { useAcceptCookies } from "@lib/hooks/useAcceptCookies";
 import { Sidebar, Button, LoadingDots } from "@components/ui";
 import { MenuSidebarView } from "@components/common/UserNav";
-import type { Page } from "@lib/types/inspiration/page";
-import type { Category } from "@lib/types/inspiration/site";
+import { Toaster } from 'sonner';
 import type { Link as LinkProps } from "../UserNav/MenuSidebarView";
 import { cn } from "@lib/utils";
 import { useUser } from "@lib/hooks/useUser";
@@ -115,6 +114,7 @@ const Layout: React.FC<Props> = ({ children }) => {
       <Footer />
       <ModalUI />
       <SidebarUI links={navBarlinks} />
+      <Toaster position="top-right" richColors />
       <FeatureBar
         title="This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy."
         hide={acceptedCookies}

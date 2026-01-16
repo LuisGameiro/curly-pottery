@@ -1,13 +1,24 @@
+import { Suspense } from "react";
 import ProductsCLient from "./ProductsClient";
-import { Container } from "@components/ui";
 import { getAllProducts } from "actions/product.actions";
+import Loading from "app/loading";
 
 export const metadata = {
   title: "Admin - Products",
 };
 
 export default async function ProductsPage() {
-  const products = await getAllProducts(); // Ensure this includes the 'variants' relation
+  const response = await getAllProducts();
 
-  return <ProductsCLient products={products} />;
+  if (!response.success) {
+    throw new Error(response.message);
+  }
+
+  const products = response.data;
+
+  return (
+    <Suspense fallback={<Loading />}>
+      <ProductsCLient products={products} />;
+    </Suspense>
+  );
 }

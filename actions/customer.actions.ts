@@ -1,40 +1,90 @@
 "use server";
 
 import { prisma } from "prisma/prisma";
-import { revalidatePath } from "next/cache";
-import { serializeCustomers } from "./helpers";
-import { User } from "@lib/types/customer";
+import { ActionResponse } from "@lib/types/utils";
+import { User } from "prisma/generated/prisma/client";
+import { UserWithOrders } from "@lib/types/customer";
 
-export async function getAllCustomers() {
-  const customersRaw = await prisma.user.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      orders: true,
-    },
-  });
+export async function getAllCustomers(): Promise<
+  ActionResponse<UserWithOrders[]>
+> {
+  try {
+    const user = await prisma.user.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        orders: true,
+      },
+    });
 
-  return customersRaw;
+    return {
+      success: true,
+      message: "Fecthed all user successfully",
+      data: user,
+    };
+  } catch (error) {
+    console.error("getAllCustomers_ERROR:", error);
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "A database error occurred",
+      errors: error,
+    };
+  }
 }
 
-export async function getUserById(id: string): Promise<User > {
-  const customerRaw = await prisma.user.findUnique({
-    where: { id },
-    include: {
-      orders: true,
-    },
-  });
-  return customerRaw;
+export async function getUserById(
+  id: string
+): Promise<ActionResponse<UserWithOrders | null>> {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id },
+      include: {
+        orders: true,
+      },
+    });
+    return {
+      success: true,
+      message: "Fecthed user successfully",
+      data: user,
+    };
+  } catch (error) {
+    console.error("getUserById:", error);
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "A database error occurred",
+      errors: error,
+    };
+  }
 }
 
-export async function updateNotes(id: string, notes: string) {
-  const customerRaw = await prisma.user.update({
-    where: { id },
-    data: { notes },
-  });
-  return [customerRaw][0];
+export async function updateNotes(
+  id: string,
+  notes: string
+): Promise<ActionResponse<User | null>> {
+  try {
+    const user = await prisma.user.update({
+      where: { id },
+      data: { notes },
+    });
+    return {
+      success: true,
+      message: "User note updated successfully",
+      data: user,
+    };
+  } catch (error) {
+    console.error("updateNotes_ERROR:", error);
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "A database error occurred",
+      errors: error,
+    };
+  }
 }
+
 // export async function createUser(formData: FormData) {
 //   await prisma.user.create({
 //     data: {

@@ -1,9 +1,8 @@
-import { Container, Text, Button } from "@components/ui";
-
+import { Container, Text } from "@components/ui";
 import Image from "next/image";
 import { ArrowLeft, Package, MapPin, User } from "lucide-react";
 import Link from "next/link";
-import { getOrderById, updateOrderStatus } from "actions/order.actions";
+import { getOrderById } from "actions/order.actions";
 import OrderStatusUpdate from "./orderStatusUpdate";
 import { showCurrency } from "@lib/calculate-price";
 import { Order } from "@lib/types/customer";
@@ -32,7 +31,7 @@ export default async function OrderDetailsPage({ params }: any) {
             <Text variant="heading">
               Order #{order.id.slice(-6).toUpperCase()}
             </Text>
-            <span className="text-sm bg-slate-100 px-3 py-1 rounded-full font-mono">
+            <span className="text-sm bg-accent-1 px-3 py-1 rounded-full font-mono">
               {order.id}
             </span>
           </div>
@@ -40,7 +39,6 @@ export default async function OrderDetailsPage({ params }: any) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column: Line Items */}
         <div className="lg:col-span-2 space-y-2">
           <Container variant="box" className="space-y-4">
             <div className="flex items-center gap-2 border-b pb-2">
@@ -50,7 +48,7 @@ export default async function OrderDetailsPage({ params }: any) {
             <div className="divide-y">
               {lineItems.map((item, idx) => (
                 <div key={idx} className="p-4 flex items-center gap-4">
-                  <div className="relative h-16 w-16 rounded-md overflow-hidden border flex-shrink-0">
+                  <div className="relative h-16 w-16 rounded-md overflow-hidden border shrink-0">
                     <Image
                       src={item.images[0]}
                       alt={item.name}
@@ -122,7 +120,6 @@ export default async function OrderDetailsPage({ params }: any) {
             </div>
           </Container>
 
-          {/* Shipping Address */}
           <Container variant="box" className="space-y-4">
             <div className="flex items-center gap-2 border-b pb-2">
               <MapPin size={18} className="text-accent-6" />

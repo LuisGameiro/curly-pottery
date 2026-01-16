@@ -4,8 +4,9 @@ import { Container, Text } from "@components/ui";
 import { useState, useMemo } from "react";
 import InputSearch from "@components/ui/Input/InputSearch";
 import CustomerTable from "@components/common/Tables/CustomerTable";
+import { User } from "@lib/types/customer";
 
-export default function CustomersClient({ customers }: { customers: any[] }) {
+export default function CustomersClient({ customers }: { customers: User[] }) {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredCustomers = useMemo(() => {

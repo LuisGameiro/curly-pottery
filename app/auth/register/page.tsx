@@ -45,7 +45,6 @@ export default function RegisterPage() {
     });
 
     if (res.ok) {
-      // Automatically log in after registration
       signIn("credentials", {
         email: data.email as string,
         password: data.password as string,
@@ -71,15 +70,6 @@ export default function RegisterPage() {
 
       <main className="space-y-5 md:max-w-lg mx-auto">
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* <Input
-            name="name"
-            label="Name"
-            placeholder="Jane"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          /> */}
-
           <Input
             name="email"
             label="Email"

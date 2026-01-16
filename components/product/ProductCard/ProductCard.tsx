@@ -1,13 +1,10 @@
 import Link from "next/link";
-import type { FullProduct, Product } from "@lib/types/product";
 import s from "./ProductCard.module.css";
 import Image, { ImageProps } from "next/image";
-// import WishlistButton from '@components/wishlist/WishlistButton'
-// import usePrice from '@framework/product/use-price'
-import ProductTag from "../ProductTag";
 import { cn } from "@lib/utils";
 import { FC } from "react";
 import { calculatePrice } from "@lib/calculate-price";
+import { Product } from "@lib/types/product";
 
 interface Props {
   className?: string;

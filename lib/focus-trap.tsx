@@ -1,24 +1,22 @@
-import React, { useEffect, RefObject } from "react";
+import React, { useEffect, RefObject, createElement, ReactNode, useRef } from "react";
 import { tabbable } from "tabbable";
 
 interface Props {
-  children: React.ReactNode | any;
+  children: ReactNode | any;
   focusFirst?: boolean;
 }
 
 export default function FocusTrap({ children, focusFirst = false }: Props) {
-  const root: RefObject<any> = React.useRef();
-  const anchor: RefObject<any> = React.useRef(document.activeElement);
+  const root: RefObject<any> = useRef(null);
+  const anchor: RefObject<any> = useRef(document.activeElement);
 
   const returnFocus = () => {
-    // Returns focus to the last focused element prior to trap.
     if (anchor) {
       anchor.current.focus();
     }
   };
 
   const trapFocus = () => {
-    // Focus the container element
     if (root.current) {
       root.current.focus();
       if (focusFirst) {
@@ -56,7 +54,7 @@ export default function FocusTrap({ children, focusFirst = false }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [root, children]);
 
-  return React.createElement(
+  return createElement(
     "div",
     {
       ref: root,

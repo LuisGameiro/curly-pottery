@@ -45,7 +45,7 @@ export default function CartPage() {
           <div className="space-y-1 pb-4 border-b">
             <div className="flex justify-between">
               <Text className="text-accent-8">Subtotal</Text>
-              <Text>£{data?.subtotalPrice.toFixed(2)}</Text>
+              <Text>£ {data?.subtotalPrice.toFixed(2)}</Text>
             </div>
             <div className="flex justify-between">
               <Text className="text-accent-8">Shipping</Text>
@@ -54,7 +54,7 @@ export default function CartPage() {
           </div>
           <div className="text-lg flex justify-between py-2">
             <Text variant="bold">Total</Text>
-            <Text variant="bold">£{data?.totalPrice.toFixed(2)}</Text>
+            <Text variant="bold">£ {data?.totalPrice.toFixed(2)}</Text>
           </div>
           <Link href="/checkout">
             <Button variant="slim">Checkout Now</Button>

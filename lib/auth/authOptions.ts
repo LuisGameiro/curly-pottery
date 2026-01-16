@@ -1,4 +1,4 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
@@ -8,7 +8,7 @@ import { JWT } from "next-auth/jwt";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
-  session: { strategy: "jwt" }, // Using JWT for faster session lookups and easier role management
+  session: { strategy: "jwt" },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -35,31 +35,23 @@ export const authOptions: NextAuthOptions = {
         );
         if (!isValid) return null;
 
-        console.log({
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-        });
         return {
           id: user.id,
           email: user.email,
-          name: user.name,
+          name: user.firstName + ' ' + user.lastName,
           role: user.role,
         };
       },
     }),
   ],
   callbacks: {
-    // 1. Save Role and ID into the JWT Token
     async jwt({ token, user }: { token: JWT; user: any }) {
       if (user) {
         token.id = user.id;
-        token.role = user.role; // Ensure your Prisma model has a 'role' field (ADMIN | USER)
+        token.role = user.role;
       }
       return token;
     },
-    // 2. Pass Role and ID from Token to the Session (for the frontend)
     async session({ session, token }: { token: JWT; session: any }) {
       if (session.user) {
         session.user.id = token.id as string;

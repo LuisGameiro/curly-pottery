@@ -7,6 +7,7 @@ export function calculatePrice(
   discounts: Discount[] | null = null,
   locale: CurrencyCode = "GBP",
 ) {
+  
   const symbolConvert: Record<CurrencyCode, string> = {
     USD: "$",
     GBP: "£",

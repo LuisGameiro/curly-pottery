@@ -1,24 +1,16 @@
 "use client";
 
 import s from "./ProductSidebar.module.css";
-// import { useAddItem } from '@framework/cart'
 import { FC, useEffect, useState } from "react";
-import type { CurrencyCode } from "@lib/types/product";
-import { Button, Text, Rating, Collapse, useUI } from "@components/ui";
-import {
-  getProductVariant,
-  selectDefaultOptionFromProduct,
-  SelectedOptions,
-} from "../helpers";
+import { Button, Text, useUI } from "@components/ui";
+import { selectDefaultOptionFromProduct, SelectedOptions } from "../helpers";
 import ErrorMessage from "@components/ui/ErrorMessage";
 import Link from "next/link";
 import { cn } from "@lib/utils";
-import { Product, ProductVariant } from "prisma/generated/prisma/client";
 import ProductOptions from "../ProductOptions";
-import { Discount } from "@lib/types/customer";
-import { Locale } from "next/dist/compiled/@vercel/og/satori";
 import { calculatePrice } from "@lib/calculate-price";
 import useCart from "@lib/hooks/useCart";
+import { Product, ProductVariant } from "@lib/types/product";
 
 interface ProductSidebarProps {
   product: Product;
@@ -35,7 +27,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
 }: ProductSidebarProps) => {
   const { addItem } = useCart();
 
-  const { openSidebar, setSidebarView } = useUI();
+  // const { openSidebar, setSidebarView } = useUI();
   const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState<null | Error>(null);
@@ -58,7 +50,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
           productId: product.id,
           variantId: variant.id,
         },
-        quantity,
+        quantity
       );
       setLoading(false);
     } catch (err) {
@@ -76,7 +68,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
   const price = calculatePrice(
     variant.price,
     variant.currency,
-    variant.discounts,
+    variant.discounts
   );
 
   return (
@@ -119,10 +111,10 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
         {!forSale ? (
           <div
             className="bg-red text-accent-0 cursor-pointer 
-  px-10 py-3 leading-6 transition ease-in-out duration-150
-  shadow-sm text-center justify-center 
-  border border-transparent items-center text-sm font-semibold
-  tracking-wide"
+                      px-10 py-3 leading-6 transition ease-in-out duration-150
+                      shadow-sm text-center justify-center 
+                      border border-transparent items-center text-sm font-semibold
+                      tracking-wide"
           >
             <h3 className={s.button}>OUT OF STOCK</h3>
             <Link href="/contacts">

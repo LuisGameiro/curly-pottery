@@ -49,6 +49,7 @@
     "react-hook-form": "^7.68.0",
     "react-merge-refs": "^3.0.2",
     "react-use-measure": "^2.1.7",
+    "sonner": "^2.0.7",
     "tabbable": "^6.3.0",
     "tailwind-merge": "^3.4.0",
     "zod": "^4.2.1",

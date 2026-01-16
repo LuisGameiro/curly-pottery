@@ -1,9 +1,9 @@
 import { FullProduct, Product, ProductVariant } from "./types/product";
 
-export const skulify = (product: Product, variant: ProductVariant) => {
+export const skulify = (product: Product, variant: ProductVariant):string => {
   const namePart = product.name
     .split(" ")
-    .map((word) => word.slice(0, 3)) // Take first 3 letters of each word
+    .map((word) => word.slice(0, 3))
     .join("-")
     .toLowerCase()
     .replace(/[^\w-]+/g, "") // Remove non-word chars

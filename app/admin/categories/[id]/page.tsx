@@ -9,7 +9,7 @@ export default async function CategoryPage({
   const { id } = await params;
   const isEditMode = !!id && id !== "new";
 
-  const category = isEditMode ? await getCategoryById(id) : {};
+  const category = isEditMode ? (await getCategoryById(id)).data : {};
 
   return <CategoryClient category={category} isEditMode={isEditMode} />;
 }

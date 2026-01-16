@@ -1,14 +1,20 @@
 "use client";
 
 import Script from "next/script";
-import { useEffect, useState } from "react";
-import { Button, Text } from "@components/ui";
+import { useState } from "react";
+import { Text } from "@components/ui";
 
-interface SumUpProps {
-  checkoutId: string; // This comes from your Backend API
+declare global {
+  interface Window {
+    SumUpCard: {
+      mount: (options: any) => void;
+    };
+  }
 }
 
-export default function SumUpPayment({ checkoutId }: SumUpProps) {
+export default function SumUpPayment({ checkoutId }: {
+  checkoutId: string;
+}) {
   const [loading, setLoading] = useState(true);
 
   const mountWidget = () => {
@@ -19,7 +25,6 @@ export default function SumUpPayment({ checkoutId }: SumUpProps) {
         onResponse: function (type: string, body: any) {
           console.log("SumUp Response:", type, body);
           if (type === "success") {
-            // Redirect to /success or update DB
             window.location.href = "/checkout/success";
           }
         },

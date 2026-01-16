@@ -2,12 +2,12 @@
 
 import { Plus, Trash2 } from "lucide-react";
 import { Text, Button, Input } from "@components/ui";
-import { DiscountType } from "@lib/types/customer";
+import { Discount, DiscountType } from "@lib/types/customer";
 import InputSelect from "@components/ui/Input/InputSelect";
 
 interface Props {
   discounts: any[];
-  onChange: (discounts: any[]) => void;
+  onChange: (discounts: Discount[]) => void;
 }
 
 export const VariantDiscounts = ({ discounts = [], onChange }: Props) => {

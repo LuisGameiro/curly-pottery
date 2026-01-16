@@ -52,7 +52,7 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "lib/click-outside/has-parent.js"  ],
   "exclude": [
     "node_modules"
   ]

@@ -11,18 +11,19 @@ import { upsertCategory } from "actions/category.actions";
 import InputImage from "@components/ui/Input/InputImage";
 import { uploadImagesToBlob } from "@lib/uploadImages";
 import Loading from "app/loading";
+import { Category } from "@lib/types/category";
 
 export default function CategoryClient({
   category,
   isEditMode,
 }: {
-  category: any;
+  category: Category;
   isEditMode: boolean;
 }) {
   const router = useRouter();
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [gallery, setGallery] = useState<{ files: File[]; previews: string[] }>(
+  const [gallery, setGallery] = useState<{ files: File[] | string[]; previews: string[] }>(
     {
       files: [category.image],
       previews: [category.image],
@@ -56,7 +57,7 @@ export default function CategoryClient({
     setLoading(true);
 
     try {
-      const url = await uploadImagesToBlob(gallery.files); //TODO better
+      const url = await uploadImagesToBlob(gallery.files);
       const result = await upsertCategory({
         id: formData.id,
         name: formData.name,

@@ -3,12 +3,8 @@
 import { Container, Text, Button, Input } from "@components/ui";
 import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
-import { Detailtype, SizeNames } from "@lib/types/product";
 import { slugify } from "@lib/slugify";
-import { skulify } from "@lib/skulify";
 import InputTextArea from "@components/ui/Input/InputTextArea";
-import InputSelect from "@components/ui/Input/InputSelect";
-import { DiscountType } from "@lib/types/customer";
 import { upsertProduct } from "actions/product.actions";
 import InputImage from "@components/ui/Input/InputImage";
 import Loading from "app/loading";
@@ -16,10 +12,12 @@ import InputCheck from "@components/ui/Input/InputCheck";
 import { VariantManager } from "./VariantManager";
 import Link from "next/link";
 import { syncImagesWithBlob } from "@lib/uploadImages";
+import { Category } from "@lib/types/category";
+import { Product } from "@lib/types/product";
 
 interface ProductFormProps {
-  initialData?: any;
-  categories: any[];
+  initialData?: Product;
+  categories: Category[];
 }
 
 export default function ProductClient({
@@ -72,13 +70,10 @@ export default function ProductClient({
     try {
       const updatedVariants = await Promise.all(
         variants.map(async (variant) => {
-          // Find the 'original' version of this variant to see its previous images
           const originalVariant = initialData?.variants?.find(
             (v: any) => v.id === variant.id,
           );
           const oldImages = originalVariant?.images || [];
-
-          // Sync: Deletes removed ones, uploads new ones
           const imageUrls = await syncImagesWithBlob(
             variant.files || [],
             oldImages,
@@ -201,11 +196,10 @@ export default function ProductClient({
                           key={cat.id}
                           type="button"
                           onClick={() => updateCategoriesIds(cat.id)}
-                          className={`px-3 py-1 rounded-full text-xs border transition ${
-                            product.categoryIds.includes(cat.id)
+                          className={`px-3 py-1 rounded-full text-xs border transition ${product.categoryIds.includes(cat.id)
                               ? "bg-primary text-accent-6 border-primary  hover:bg-primary/60"
                               : "bg-accent-8 text-accent-0 hover:bg-accent-6"
-                          }`}
+                            }`}
                         >
                           {cat.name}
                         </button>

@@ -1,20 +1,18 @@
 "use client";
 
-import { MouseEvent, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Package,
-  FolderTree,
   LayoutDashboard,
   ChevronDown,
   Van,
   Users,
   ChartBarIcon,
 } from "lucide-react";
-import { Navbar, Footer } from "@components/common";
 import { Text } from "@components/ui";
-import { cn } from "@lib/utils"; // Assuming you have a cn helper for tailwind classes
+import { cn } from "@lib/utils";
 import ClickOutside from "@lib/click-outside";
 
 export default function AdminLayout({
@@ -64,8 +62,8 @@ export default function AdminLayout({
             <ul
               className={cn(
                 "space-y-1 mt-2 p-2 bg-accent-2 border-2 border-border rounded-xl shadow-xl lg:shadow-none lg:border-0 lg:bg-transparent lg:p-0 lg:mt-0 lg:block transition-all",
-                "absolute left-0 right-0 top-full lg:static z-50", // This line prevents the push-down
-                { hidden: !isOpen },
+                "absolute left-0 right-0 top-full lg:static z-50",
+                { hidden: !isOpen }
               )}
             >
               {navItems.map((item) => {
@@ -79,7 +77,7 @@ export default function AdminLayout({
                       "flex items-center gap-3 px-4 py-2 rounded-lg transition-colors font-medium",
                       isActive
                         ? "bg-secondary text-white"
-                        : "text-secondary hover:bg-blue-50",
+                        : "text-secondary hover:bg-blue-50"
                     )}
                   >
                     <item.icon size={20} />

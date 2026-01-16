@@ -1,11 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ProductView from "@components/product/ProductView/ProductView";
-import { getAllProducts, getProductBySlug } from "actions/product.actions";
-
-interface Props {
-  params: { slug: string };
-}
+import { getAllProducts, getProductBySlug, getRelatedProducts } from "actions/product.actions";
 
 export async function generateStaticParams() {
   const products = await getAllProducts();
@@ -15,7 +11,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
 
@@ -29,15 +25,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductPage({
   params,
-}: Promise<{ params: string }>) {
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
+  const relatedProducts = await getRelatedProducts(product.categories || [], product.id || '');
+
 
   if (!product) {
     notFound();
   }
 
-  return <ProductView product={product} />;
+  return <ProductView product={product} relatedProducts={relatedProducts} />;
 }
 
 export const revalidate = 3000;

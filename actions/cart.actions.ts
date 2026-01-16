@@ -23,9 +23,8 @@ export async function getCartFromDbAction() {
 
 export async function syncCartAction(items: any[]) {
   const session = await getServerSession(authOptions);
-  if (!session?.user) return; // Silent return if guest
+  if (!session?.user) return;
 
-  // Upsert logic: Update the user's cart in Prisma
   await prisma.cart.upsert({
     where: { userId: session.user.id },
     update: { lineItems: JSON.stringify(items) },

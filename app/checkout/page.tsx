@@ -21,12 +21,12 @@ type FormData = {
   city: string;
   shipping: any;
   email: string;
-  name: string;
+  phone: string;
 };
 
 export default function CheckoutPage() {
   const { data } = useCart();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({});
   const [checkoutId, setCheckoutId] = useState("");
