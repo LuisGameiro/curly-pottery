@@ -44,25 +44,26 @@ export default function FAQ() {
   };
 
   return (
-    <Container className='p-10'>
+    <Container className="p-10">
       <header className="justify-center text-center mx-auto mb-4">
         <Text variant="heading">Frequently Asked Questions</Text>
-        <Text variant="body">Find answers to common questions about our pottery and services.</Text>
+        <Text variant="body">
+          Find answers to common questions about our pottery and services.
+        </Text>
       </header>
 
-      <section className='space-y-5 md:max-w-lg mx-auto'>
+      <section className="space-y-5 md:max-w-lg mx-auto">
         {faqData.map((item, index) => (
           <Container key={index} variant="box">
             <button
               onClick={() => toggleAccordion(index)}
               className="w-full  flex items-center justify-between"
             >
-              <Text variant='bold'>
-                {item.question}
-              </Text>
+              <Text variant="bold">{item.question}</Text>
               <ChevronDown
-                className={`w-5 h-5 transition-transform ${openIndex === index ? "rotate-180" : ""
-                  }`}
+                className={`w-5 h-5 transition-transform ${
+                  openIndex === index ? "rotate-180" : ""
+                }`}
               />
             </button>
 

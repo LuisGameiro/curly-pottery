@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import { Text } from '@components/ui'
+import Link from "next/link";
+import { Text } from "@components/ui";
 
 export default function NotFound() {
   return (
@@ -8,7 +8,9 @@ export default function NotFound() {
       <Text variant="body">
         The requested page doesn't exist or you don't have access to it.
       </Text>
-      <Link href="/" className="text-blue-500">Return Home</Link>
+      <Link href="/" className="text-secondary">
+        Return Home
+      </Link>
     </div>
   );
 }

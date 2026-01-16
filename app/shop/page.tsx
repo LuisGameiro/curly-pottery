@@ -11,18 +11,17 @@ export default async function ShopPage({
 }: {
   searchParams: Promise<{ category?: string }>;
 }) {
-
-  const { category } = await searchParams
+  const { category } = await searchParams;
   const categorySlug = category || null;
 
-  const categories = await getAllCategories()
+  const categories = await getAllCategories();
 
-  const products = await getProductByCategorySlug(categorySlug)
+  const products = await getProductByCategorySlug(categorySlug);
 
   return (
     <ShopClient
-      initialProducts={(products) as Product[]}
-      categories={(categories) as Category[]}
+      initialProducts={products as Product[]}
+      categories={categories as Category[]}
       activeCategory={categorySlug}
     />
   );

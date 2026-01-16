@@ -38,7 +38,9 @@ export default function SumUpPayment({ checkoutId }: SumUpProps) {
       />
 
       <div id="sumup-card" className="min-h-[200px]">
-        {loading && <div className="animate-pulse bg-accent-1 h-40 rounded-lg" />}
+        {loading && (
+          <div className="animate-pulse bg-accent-1 h-40 rounded-lg" />
+        )}
       </div>
     </div>
   );

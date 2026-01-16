@@ -12,7 +12,8 @@ interface InputProps extends SelectHTMLAttributes<HTMLSelectElement> {
 }
 
 const Input: React.FC<InputProps> = (props) => {
-  const { className, label, error, onValueChange, id,options, ...rest } = props;
+  const { className, label, error, onValueChange, id, options, ...rest } =
+    props;
 
   const generatedId = useId();
   const inputId = id || generatedId;
@@ -40,14 +41,13 @@ const Input: React.FC<InputProps> = (props) => {
       {label && <label htmlFor={inputId}>{label}</label>}
       <select
         id={inputId}
-                className={rootClassName}
+        className={rootClassName}
         onChange={handleOnChange}
-
         aria-invalid={!!error}
         aria-describedby={error ? errorId : undefined}
         {...rest}
       >
-        {options .map((o) => (
+        {options.map((o) => (
           <option className={s.options} key={o} value={o}>
             {o}
           </option>

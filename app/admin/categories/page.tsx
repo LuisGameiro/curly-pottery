@@ -1,5 +1,5 @@
 import { Button, Container } from "@components/ui";
-import {  getAllCategories } from "actions/category.actions";
+import { getAllCategories } from "actions/category.actions";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { Text } from "@components/ui";
@@ -13,9 +13,11 @@ export default async function CategoriesPage() {
       <header>
         <div className="w-full flex flex-row justify-between">
           <Text variant="heading">Categories</Text>
-          <Link href="/admin/categories/new" passHref >
-            <Button variant='slim'>
-              <span className="mr-1"><Plus size={18} /></span>
+          <Link href="/admin/categories/new" passHref>
+            <Button variant="slim">
+              <span className="mr-1">
+                <Plus size={18} />
+              </span>
               <span>New Category</span>
             </Button>
           </Link>

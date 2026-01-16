@@ -59,7 +59,7 @@ async function main() {
             colorName: v.colorName,
             colorHex: v.colorHex,
             images: v.images,
-            details: v.details
+            details: v.details,
           })),
         },
       },
@@ -76,10 +76,8 @@ async function main() {
         provider: cust.account.provider,
         providerAccountId: cust.account.providerAccountId,
         admin: cust.account.admin,
-
       },
     });
-
 
     await prisma.user.create({
       data: {

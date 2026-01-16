@@ -1,5 +1,4 @@
-'use client'
-
+"use client";
 
 import { FC, useState, useEffect, ReactNode, useRef } from "react";
 import throttle from "lodash.throttle";

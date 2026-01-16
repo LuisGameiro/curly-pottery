@@ -15,18 +15,18 @@ export default withAuth(
     callbacks: {
       // Logic: If this returns true, the middleware function above runs.
       // If it returns false, the user is redirected to the sign-in page.
-      authorized: ({ token }) => !!token, 
+      authorized: ({ token }) => !!token,
     },
-  }
+  },
 );
 
 // IMPORTANT: Ensure you are NOT matching /api/auth paths
-export const config = { 
+export const config = {
   matcher: [
-    "/admin/:path*", 
+    "/admin/:path*",
     "/profile/:path*",
     // Use a negative lookahead to ensure we don't accidentally intercept auth APIs
     // or static files which can cause the "Unexpected Character" error
-    "/((?!api/auth|_next/static|_next/image|favicon.ico).*)", 
-  ] 
+    "/((?!api/auth|_next/static|_next/image|favicon.ico).*)",
+  ],
 };

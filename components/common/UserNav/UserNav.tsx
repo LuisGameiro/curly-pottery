@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import s from "./UserNav.module.css";
 import { Avatar } from "@components/common";
@@ -28,11 +28,11 @@ const UserNav: React.FC<{
 }> = ({ className }) => {
   const { data: session, status } = useSession();
 
-  const { data, deleteAll } = useCart()
+  const { data, deleteAll } = useCart();
   // const { data: isCustomerLoggedIn } = useCustomer()
   const { closeSidebarIfPresent, openModal, setSidebarView, openSidebar } =
     useUI();
-  const itemsCount = data?.lineItems?.reduce(countItem, 0) ?? 0
+  const itemsCount = data?.lineItems?.reduce(countItem, 0) ?? 0;
   // const DropdownTrigger = isCustomerLoggedIn
   //   ? DropdownTriggerInst
   //   : React.Fragment;
@@ -41,15 +41,16 @@ const UserNav: React.FC<{
     <nav className={cn(s.root, className)}>
       <ul className={s.list}>
         <li className={s.item}>
-          <Link href='/cart'>
-
+          <Link href="/cart">
             <Button
               className={s.item}
               variant="naked"
               aria-label={`Cart items: ${itemsCount}`}
             >
               <Bag />
-              {itemsCount > 0 && <span className={s.bagCount}>{itemsCount}</span>}
+              {itemsCount > 0 && (
+                <span className={s.bagCount}>{itemsCount}</span>
+              )}
             </Button>
           </Link>
           <Button
@@ -81,23 +82,26 @@ const UserNav: React.FC<{
             <>
               {/* Show Admin Link only if role is ADMIN */}
               {session.user.role === "ADMIN" && (
-                <Button href="/admin" variant="ghost">Admin Panel</Button>
+                <Button href="/admin" variant="ghost">
+                  Admin Panel
+                </Button>
               )}
 
-              <Button href="/profile" variant="naked">My Account</Button>
+              <Button href="/profile" variant="naked">
+                My Account
+              </Button>
 
               <Button color="danger" size="sm" onClick={() => signOut()}>
                 Logout
               </Button>
             </>
           ) : (
-            <Link href='/auth/login'>
-              <Button >Login</Button>
+            <Link href="/auth/login">
+              <Button>Login</Button>
             </Link>
           )}
         </div>
         <li className={s.mobileMenu}>
-
           <Button
             className={s.item}
             aria-label="Menu"
@@ -116,4 +120,3 @@ const UserNav: React.FC<{
 };
 
 export default UserNav;
-

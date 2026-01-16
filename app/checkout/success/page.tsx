@@ -7,10 +7,13 @@ export default function SuccessPage() {
       <CheckCircle size={80} className="text-green-500 mb-6" />
       <h1 className="text-3xl font-bold mb-2">Order Confirmed!</h1>
       <p className="text-accent-6 mb-8 max-w-md">
-        Thank you for your purchase. We've sent a confirmation email to your inbox.
-        Your order is being processed and will be shipped soon.
+        Thank you for your purchase. We've sent a confirmation email to your
+        inbox. Your order is being processed and will be shipped soon.
       </p>
-      <Link href="/shop" className="bg-black text-white px-8 py-3 rounded-full font-bold">
+      <Link
+        href="/shop"
+        className="bg-black text-white px-8 py-3 rounded-full font-bold"
+      >
         Continue Shopping
       </Link>
     </div>

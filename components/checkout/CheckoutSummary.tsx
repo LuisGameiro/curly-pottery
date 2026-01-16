@@ -40,7 +40,6 @@ export function CheckoutSummary({
             {shipping === 0 ? "FREE" : `£${shipping}`}
           </Text>
         </div>
-
       </div>
       <div className="text-lg flex justify-between pt-2">
         <Text variant="bold">Total</Text>

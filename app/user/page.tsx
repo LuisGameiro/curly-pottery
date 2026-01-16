@@ -6,7 +6,6 @@ import ProfileForm from "./profileForm";
 import { authOptions } from "pagesx/api/auth/[...nextauth]";
 import { PrismaClient } from "prisma/generated/prisma/client";
 
-// const prisma = new PrismaClient();
 export default async function ProfilePage() {
   // const session = await getServerSession(authOptions);
 
@@ -20,8 +19,5 @@ export default async function ProfilePage() {
 
   // if (!user) return <div>User not found</div>;
 
-  return (
-    <ProfileForm user={null} />
-
-  );
+  return <ProfileForm user={null} />;
 }

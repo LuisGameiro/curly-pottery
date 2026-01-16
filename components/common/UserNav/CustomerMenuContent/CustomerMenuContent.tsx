@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
 import cn from "clsx";
 import { useTheme } from "next-themes";
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter, usePathname } from "next/navigation";
 import { Moon, Sun } from "@components/icons";
 import s from "./CustomerMenuContent.module.css";
 // import useLogout from '@framework/auth/use-logout'

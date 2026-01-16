@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import React from 'react';
+import React from "react";
 import { Plus } from "lucide-react";
 import { Text, Button } from "@components/ui";
 import { ProductVariant } from "./ProductVariant";
@@ -11,12 +11,11 @@ interface VariantManagerProps {
   setVariants: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
-export const VariantManager: React.FC<VariantManagerProps> = ({ 
-  product, 
-  variants, 
-  setVariants 
+export const VariantManager: React.FC<VariantManagerProps> = ({
+  product,
+  variants,
+  setVariants,
 }) => {
-  
   const addVariant = () => {
     setVariants([
       ...variants,
@@ -39,28 +38,35 @@ export const VariantManager: React.FC<VariantManagerProps> = ({
   };
 
   const removeVariant = (id: string) => {
-    if (variants.length === 1) return alert("Product must have at least one variant.");
+    if (variants.length === 1)
+      return alert("Product must have at least one variant.");
     setVariants(variants.filter((v) => v.id !== id));
   };
 
   const toggleVariant = (id: string) => {
-    setVariants(variants.map((v) => 
-      v.id === id ? { ...v, isExpanded: !v.isExpanded } : v
-    ));
+    setVariants(
+      variants.map((v) =>
+        v.id === id ? { ...v, isExpanded: !v.isExpanded } : v,
+      ),
+    );
   };
 
   const updateVariant = (id: string, field: string, value: any) => {
-    setVariants(variants.map((v) => 
-      v.id === id ? { ...v, [field]: value } : v
-    ));
+    setVariants(
+      variants.map((v) => (v.id === id ? { ...v, [field]: value } : v)),
+    );
   };
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-           <h2 className='text-3xl font-bold tracking-wide cursor-default'>Variants</h2>
-           <Text className="text-muted-foreground text-sm">({variants.length})</Text>
+          <h2 className="text-3xl font-bold tracking-wide cursor-default">
+            Variants
+          </h2>
+          <Text className="text-muted-foreground text-sm">
+            ({variants.length})
+          </Text>
         </div>
         <button
           type="button"
@@ -79,7 +85,9 @@ export const VariantManager: React.FC<VariantManagerProps> = ({
             product={product}
             onToggle={() => toggleVariant(variant.id)}
             onRemove={() => removeVariant(variant.id)}
-            onUpdate={(field: string, value: any) => updateVariant(variant.id, field, value)}
+            onUpdate={(field: string, value: any) =>
+              updateVariant(variant.id, field, value)
+            }
           />
         ))}
       </div>

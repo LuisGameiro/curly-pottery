@@ -1,5 +1,4 @@
-'use client'
-
+"use client";
 
 import { useState } from "react";
 import { ChevronRight, Cross } from "@components/icons";
@@ -42,7 +41,7 @@ const ThemeSwitcher = () => {
             </span>
           </button>
         </div>
-        
+
         {/* Menu  */}
         <div className="absolute top-0 right-0 ">
           {themes.length && display ? (
@@ -51,7 +50,6 @@ const ThemeSwitcher = () => {
                 " shadow-lg right-0 bottom-2 py-2 origin-top-right  outline-hidden z-40 absolute border border-border w-[125px] h-auto bg-secondary"
               }
             >
-   
               <ul>
                 {themes.map((t: string) => (
                   <li key={t}>

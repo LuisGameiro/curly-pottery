@@ -1,8 +1,10 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { prisma } from 'prisma/prisma';
+import { NextApiRequest, NextApiResponse } from "next";
+import { prisma } from "prisma/prisma";
 
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   const { id } = req.query;
 
   switch (req.method) {
@@ -10,7 +12,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     case "GET":
       try {
         if (id) {
-          const category = await prisma.category.findUnique({ where: { id: String(id) } });
+          const category = await prisma.category.findUnique({
+            where: { id: String(id) },
+          });
           return res.status(200).json(category);
         }
         const categories = await prisma.category.findMany();
@@ -41,7 +45,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
         return res.status(200).json({ success: true, data: updatedCategory });
       } catch (error) {
-        return res.status(500).json({ error: "Update failed. Ensure ID exists." });
+        return res
+          .status(500)
+          .json({ error: "Update failed. Ensure ID exists." });
       }
 
     // 4. DELETE: Remove a category
@@ -50,9 +56,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await prisma.category.delete({
           where: { id: String(id) },
         });
-        return res.status(200).json({ success: true, message: "Deleted successfully" });
+        return res
+          .status(200)
+          .json({ success: true, message: "Deleted successfully" });
       } catch (error) {
-        return res.status(500).json({ error: "Delete failed. Ensure ID exists." });
+        return res
+          .status(500)
+          .json({ error: "Delete failed. Ensure ID exists." });
       }
 
     default:

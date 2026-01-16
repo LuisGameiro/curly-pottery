@@ -1,10 +1,14 @@
 import { Category } from "@lib/types/category";
-import {  OrderStatus } from "@lib/types/customer";
+import { OrderStatus } from "@lib/types/customer";
 import { Detailtype } from "@lib/types/product";
 import { DEFAULT_RUNTIME_WEBPACK } from "next/dist/shared/lib/constants";
 import { title } from "node:process";
-import {  CurrencyCode, Customer, Product, SizeNames } from "prisma/generated/prisma/client";
-
+import {
+  CurrencyCode,
+  Customer,
+  Product,
+  SizeNames,
+} from "prisma/generated/prisma/client";
 
 export const categories: Category[] = [
   {
@@ -81,15 +85,15 @@ export const products: Product[] = [
         colorHex: "#FFFFFF",
         productId: "p1",
 
-        details:[
+        details: [
           {
             title: Detailtype.Capacity,
-            description: 'The capacity is 3l'
+            description: "The capacity is 3l",
           },
           {
-              title: Detailtype.Glazes,
-            description: 'combination of temoco and uribe'
-          }
+            title: Detailtype.Glazes,
+            description: "combination of temoco and uribe",
+          },
         ],
         discounts: [
           {
@@ -107,7 +111,6 @@ export const products: Product[] = [
           "https://picsum.photos/seed/vase13/600/600",
           "https://picsum.photos/seed/vase12/600/600",
         ],
-
       },
       {
         id: "v2",

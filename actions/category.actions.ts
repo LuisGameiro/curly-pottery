@@ -71,7 +71,7 @@ export async function getCategoryById(id: string) {
     },
   });
 
-  return ([caregoriesRaw])[0];
+  return [caregoriesRaw][0];
 }
 
 export async function upsertCategory(formData: {

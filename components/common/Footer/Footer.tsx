@@ -39,10 +39,7 @@ const Footer: FC<Props> = () => {
         <div className={s.menu}>
           <nav className={s.navlist}>
             {links.map((item) => (
-              <Link
-                key={item.name}
-                href={item.url}
-              >
+              <Link key={item.name} href={item.url}>
                 {item.name}
               </Link>
             ))}

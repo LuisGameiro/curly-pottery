@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import "../globals.css";
 import "@assets/chrome-bug.css";
@@ -8,15 +8,17 @@ import { ManagedUIContext } from "@components/ui/context";
 import { Layout } from "@components/common";
 import { SessionProvider } from "next-auth/react";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="loading bg-primary">
         <SessionProvider>
           <ManagedUIContext>
-            <Layout >
-              {children}
-            </Layout>
+            <Layout>{children}</Layout>
           </ManagedUIContext>
         </SessionProvider>
       </body>

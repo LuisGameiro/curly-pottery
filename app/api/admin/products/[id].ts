@@ -1,7 +1,10 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { prisma } from 'prisma/prisma';
+import { NextApiRequest, NextApiResponse } from "next";
+import { prisma } from "prisma/prisma";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   const { id } = req.query;
 
   switch (req.method) {
@@ -9,7 +12,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     case "GET":
       try {
         if (id) {
-          const product = await prisma.product.findUnique({ where: { id: String(id) } });
+          const product = await prisma.product.findUnique({
+            where: { id: String(id) },
+          });
           return res.status(200).json(product);
         }
         const categories = await prisma.product.findMany();
@@ -38,10 +43,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           where: { id: String(id) },
           data: req.body,
         });
-        console.log()
+        console.log();
         return res.status(200).json({ success: true, data: updatedProduct });
       } catch (error) {
-        return res.status(500).json({ error: "Update failed. Ensure ID exists." });
+        return res
+          .status(500)
+          .json({ error: "Update failed. Ensure ID exists." });
       }
 
     // 4. DELETE: Remove a product
@@ -50,9 +57,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await prisma.product.delete({
           where: { id: String(id) },
         });
-        return res.status(200).json({ success: true, message: "Deleted successfully" });
+        return res
+          .status(200)
+          .json({ success: true, message: "Deleted successfully" });
       } catch (error) {
-        return res.status(500).json({ error: "Delete failed. Ensure ID exists." });
+        return res
+          .status(500)
+          .json({ error: "Delete failed. Ensure ID exists." });
       }
 
     default:
@@ -60,7 +71,3 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
-
-
-
-

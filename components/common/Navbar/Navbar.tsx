@@ -16,7 +16,6 @@ interface NavbarProps {
 }
 
 const Navbar: FC<NavbarProps> = ({ links }) => (
-  
   <NavbarRoot>
     <Container clean className="max-w-10/12 mx-auto">
       <div className={s.nav}>
@@ -49,8 +48,6 @@ const Navbar: FC<NavbarProps> = ({ links }) => (
           <UserNav />
         </div>
       </div>
-
-
 
       {/* {process.env.COMMERCE_SEARCH_ENABLED && (
           <div className="justify-center flex-1 hidden lg:flex">

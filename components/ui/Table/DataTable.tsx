@@ -25,7 +25,7 @@ export default function DataTable<T extends { id: string }>({
   emptyMessage = "No data found.",
   renderExpansion,
 }: DataTableProps<T>) {
-  const [expandedRows, setExpandedRows] = useState<string|null>(null);
+  const [expandedRows, setExpandedRows] = useState<string | null>(null);
 
   const toggleRow = (id: string) => {
     setExpandedRows((prev) => (prev === id ? null : id));
@@ -41,7 +41,9 @@ export default function DataTable<T extends { id: string }>({
   }
 
   if (data.length === 0) {
-    return <div className="p-8 text-center border rounded-xl">{emptyMessage}</div>;
+    return (
+      <div className="p-8 text-center border rounded-xl">{emptyMessage}</div>
+    );
   }
 
   return (
@@ -64,32 +66,42 @@ export default function DataTable<T extends { id: string }>({
                 <tr className="hover:bg-accent-2 transition-colors">
                   {renderExpansion && (
                     <td className="px-4">
-                      <Button variant="naked" onClick={() => toggleRow(item.id)}>
-                        {expandedRows===item.id ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+                      <Button
+                        variant="naked"
+                        onClick={() => toggleRow(item.id)}
+                      >
+                        {expandedRows === item.id ? (
+                          <ChevronDown size={20} />
+                        ) : (
+                          <ChevronRight size={20} />
+                        )}
                       </Button>
                     </td>
                   )}
                   {columns.map((col, i) => (
-                    <td key={i} className={cn("px-6 py-4 text-sm", "text-center"
-                    )}>
+                    <td
+                      key={i}
+                      className={cn("px-6 py-4 text-sm", "text-center")}
+                    >
                       {col.render(item)}
                     </td>
                   ))}
                 </tr>
-                {expandedRows===item.id && renderExpansion && (
+                {expandedRows === item.id && renderExpansion && (
                   <tr>
-                    <td colSpan={columns.length + 1} className="bg-accent-1 p-0">
+                    <td
+                      colSpan={columns.length + 1}
+                      className="bg-accent-1 p-0"
+                    >
                       {renderExpansion(item)}
                     </td>
                   </tr>
                 )}
               </Fragment>
             ))}
-
           </tbody>
         </table>
       </div>
     </div>
   );
 }
-

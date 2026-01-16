@@ -62,12 +62,15 @@ const CartItem = ({
 
   return (
     <li
-      className={cn(s.root, "border-b border-accent-2 last:border-b-0 sm:flex justify-between py-2", {
-        "opacity-50 pointer-events-none": removing,
-      })}
+      className={cn(
+        s.root,
+        "border-b border-accent-2 last:border-b-0 sm:flex justify-between py-2",
+        {
+          "opacity-50 pointer-events-none": removing,
+        },
+      )}
       {...rest}
     >
-
       <div className="flex ">
         <div className="relative w-20 h-20 sm:w-24 sm:h-24 bg-accent-1 rounded-md overflow-hidden border border-accent-2  mr-2">
           <Link href={`/shop/${item.slug}`}>
@@ -122,8 +125,7 @@ const CartItem = ({
           </div>
         ) : (
           <div className="text-xs text-accent-6 italic">
-            Qty:{" "}
-            <span className="font-medium text-accent-9">{quantity}</span>
+            Qty: <span className="font-medium text-accent-9">{quantity}</span>
           </div>
         )}
 

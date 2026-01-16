@@ -1,6 +1,4 @@
-
-'use client'
-
+"use client";
 
 import { cn } from "@lib/utils";
 import React, { FC, ReactNode, useState } from "react";

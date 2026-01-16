@@ -1,9 +1,8 @@
-'use client'
-
+"use client";
 
 import s from "./Layout.module.css";
 import dynamic from "next/dynamic";
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter, usePathname } from "next/navigation";
 import { useUI } from "@components/ui/context";
 import { Navbar, Footer } from "@components/common";
 import { useAcceptCookies } from "@lib/hooks/useAcceptCookies";
@@ -90,11 +89,9 @@ const navBarlinks = [
   { label: "Contacts", href: "/contacts" },
 ];
 
-const Layout: React.FC<Props> = ({
-  children,
-}) => {
+const Layout: React.FC<Props> = ({ children }) => {
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies();
-  const { isAuthenticated, isAdmin, } = useUser()
+  const { isAuthenticated, isAdmin } = useUser();
 
   // const { locale = "en-US" } = useRouter();
 
@@ -103,15 +100,18 @@ const Layout: React.FC<Props> = ({
     { label: "Contacts", href: "/contacts" },
   ];
 
-  if (!isAuthenticated) navBarlinks = [...navBarlinks, { label: "Profile", href: "/user" }]
+  if (!isAuthenticated)
+    navBarlinks = [...navBarlinks, { label: "Profile", href: "/user" }];
 
-  if (!isAdmin) navBarlinks = [...navBarlinks, { label: "Admin", href: "/admin" }]
-
+  if (!isAdmin)
+    navBarlinks = [...navBarlinks, { label: "Admin", href: "/admin" }];
 
   return (
     <div>
       <Navbar links={navBarlinks} />
-      <main className="bg-background w-full h-full min-h-[calc(100vh-310px)]">{children}</main>
+      <main className="bg-background w-full h-full min-h-[calc(100vh-310px)]">
+        {children}
+      </main>
       <Footer />
       <ModalUI />
       <SidebarUI links={navBarlinks} />

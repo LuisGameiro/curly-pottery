@@ -8,15 +8,17 @@ export const OrderStatus = {
   COMPLETED: "COMPLETED",
   CANCELLED: "CANCELLED",
 } as const;
+
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];
 
 export const DiscountType = {
-"PERCENTAGE": "PERCENTAGE",
-"FIXED_AMOUNT": "FIXED_AMOUNT"
+  PERCENTAGE: "PERCENTAGE",
+  FIXED_AMOUNT: "FIXED_AMOUNT",
 } as const;
+
 export type DiscountType = (typeof DiscountType)[keyof typeof DiscountType];
 
-export type Customer = {
+export type User = {
   id: string;
   firstName: string;
   lastName: string;
@@ -34,17 +36,16 @@ export type Customer = {
 
 export type Address = {
   id: string;
-  type: string;
+  type?: string;
   firstName: string;
   lastName: string;
-  company: string;
-  streetNumber: string;
-  apartments: string;
+  company?: string;
+  address: string;
   postalCode: string;
   city: string;
   country: string;
-  customerId: string;
-  createdAt: Date;
+  customerId?: string;
+  createdAt?: Date;
 };
 
 export type Cart = {
@@ -54,7 +55,6 @@ export type Cart = {
   lineItems: CartLineItem[];
   discounts: Discount[];
   subtotalPrice: number;
-  lineItemsSubtotalPrice: number;
   totalPrice: number;
   currency: CurrencyCode;
   createdAt: Date;
@@ -62,37 +62,41 @@ export type Cart = {
 };
 
 export type CartLineItem = {
-  variantId: string; // The ID of the ProductVariant
-  sku: string; // Useful for quick display
+  sku: string;
   name: string;
-  image: string;
+  images: string;
   quantity: number;
-  price: number; // Price at the time of adding to cart
+  price: number;
   currency: CurrencyCode;
   colorName?: string;
   sizeName?: string;
+  variant: { price: number };
 };
 
 export type Discount = {
   code: string;
   type: DiscountType;
   value: number;
-  percentage :number
+  percentage: number;
   amountSaved: number;
 };
 
 export type Order = {
   id: string;
-  customerId: string;
+  userId: string | null;
+  user: User;
+  email: string;
+  phone: string;
   status: OrderStatus;
   taxesIncluded: boolean;
   lineItems: CartLineItem[];
   discounts: Discount[];
   subtotalPrice: number;
-  lineItemsSubtotalPrice: number;
   totalPrice: number;
   currency: CurrencyCode;
+  shipping: { price: number; method: string };
+  shippingAddress: Address;
+  billingAddress: Address;
   createdAt: Date;
   updatedAt: Date;
-  paymentCard?: any;
 };

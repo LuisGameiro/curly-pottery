@@ -24,7 +24,6 @@ type Variant =
   | "bold"
   | "boxTitle";
 
-
 const Text: FunctionComponent<TextProps> = ({
   style,
   className = "",

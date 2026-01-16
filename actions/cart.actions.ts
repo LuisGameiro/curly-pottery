@@ -1,4 +1,4 @@
-'use server'
+"use server";
 
 import { authOptions } from "@lib/auth/authOptions";
 import { auth } from "app/api/auth/[...nextauth]/route";
@@ -7,9 +7,9 @@ import { useSession } from "next-auth/react";
 import { prisma } from "prisma/prisma";
 
 export async function getCartFromDbAction() {
-const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
 
-if (!session?.user?.id) return null;
+  if (!session?.user?.id) return null;
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
@@ -22,7 +22,7 @@ if (!session?.user?.id) return null;
 }
 
 export async function syncCartAction(items: any[]) {
-const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
   if (!session?.user) return; // Silent return if guest
 
   // Upsert logic: Update the user's cart in Prisma

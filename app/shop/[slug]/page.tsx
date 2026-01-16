@@ -1,5 +1,5 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import ProductView from "@components/product/ProductView/ProductView";
 import { getAllProducts, getProductBySlug } from "actions/product.actions";
 
@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
 
-  if (!product) return { title: 'Product Not Found' };
+  if (!product) return { title: "Product Not Found" };
 
   return {
     title: `${product.name} | Curly Pottery`,
@@ -27,7 +27,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function ProductPage({ params }: Promise<{ params: string }>) {
+export default async function ProductPage({
+  params,
+}: Promise<{ params: string }>) {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
 

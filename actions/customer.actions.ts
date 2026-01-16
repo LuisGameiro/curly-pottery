@@ -3,6 +3,7 @@
 import { prisma } from "prisma/prisma";
 import { revalidatePath } from "next/cache";
 import { serializeCustomers } from "./helpers";
+import { User } from "@lib/types/customer";
 
 export async function getAllCustomers() {
   const customersRaw = await prisma.user.findMany({
@@ -14,10 +15,10 @@ export async function getAllCustomers() {
     },
   });
 
-  return (customersRaw);
+  return customersRaw;
 }
 
-export async function getCustomerById(id: string) {
+export async function getUserById(id: string): Promise<User > {
   const customerRaw = await prisma.user.findUnique({
     where: { id },
     include: {
@@ -27,12 +28,12 @@ export async function getCustomerById(id: string) {
   return customerRaw;
 }
 
-export async function updateNotes(id: string,notes:string) {
+export async function updateNotes(id: string, notes: string) {
   const customerRaw = await prisma.user.update({
     where: { id },
-    data: {notes}
+    data: { notes },
   });
-  return ([customerRaw])[0];
+  return [customerRaw][0];
 }
 // export async function createUser(formData: FormData) {
 //   await prisma.user.create({

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { Plus, Trash2 } from "lucide-react";
 import { Text, Button, Input } from "@components/ui";
@@ -16,7 +16,9 @@ export const VariantDetails = ({ details = [], onChange }: Props) => {
   };
 
   const updateDetail = (index: number, field: string, value: string) => {
-    const newDetails = details.map((d, i) => (i === index ? { ...d, [field]: value } : d));
+    const newDetails = details.map((d, i) =>
+      i === index ? { ...d, [field]: value } : d,
+    );
     onChange(newDetails);
   };
 
@@ -28,7 +30,13 @@ export const VariantDetails = ({ details = [], onChange }: Props) => {
     <div className="space-y-4 bg-primary/10 p-4 rounded-lg">
       <div className="flex justify-between items-center">
         <Text variant="subHeading">Technical Details</Text>
-        <Button variant="naked" size="sm" onClick={addDetail} type='button' color="success">
+        <Button
+          variant="naked"
+          size="sm"
+          onClick={addDetail}
+          type="button"
+          color="success"
+        >
           <Plus size={14} /> Add Detail
         </Button>
       </div>
@@ -42,12 +50,16 @@ export const VariantDetails = ({ details = [], onChange }: Props) => {
           />
           <Input
             className="flex-1"
-          
             placeholder="e.g. 100% Stoneware"
             value={detail.description}
             onChange={(e) => updateDetail(index, "description", e.target.value)}
           />
-          <Button variant="naked" color="danger" type='button' onClick={() => removeDetail(index)}>
+          <Button
+            variant="naked"
+            color="danger"
+            type="button"
+            onClick={() => removeDetail(index)}
+          >
             <Trash2 size={16} />
           </Button>
         </div>

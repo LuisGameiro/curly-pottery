@@ -27,7 +27,7 @@ const Input: React.FC<InputProps> = (props) => {
       [s.error]: !!error,
       [s.withIcon]: isPassword,
     },
-    className
+    className,
   );
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {

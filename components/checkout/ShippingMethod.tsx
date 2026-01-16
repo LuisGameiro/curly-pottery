@@ -20,11 +20,11 @@ export default function ShippingMethod({ onComplete }: any) {
       <Text variant="sectionHeading">Select Shipping</Text>
 
       {shippingOptions.map((o) => (
-        <Button 
-        key={o.method}
+        <Button
+          key={o.method}
           variant="secondary"
           className="w-full"
-          type='button'
+          type="button"
           onClick={() =>
             onComplete({ shipping: { price: o.price, method: o.method } })
           }

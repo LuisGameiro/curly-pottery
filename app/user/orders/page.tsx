@@ -1,9 +1,5 @@
-import type { GetStaticPropsContext } from "next";
-import { Bag } from "@components/icons";
 import { Container, Text } from "@components/ui";
-import { pagesData, siteInfo } from "app/api/fakeapi/data";
-import { CarFront, ListOrderedIcon, ShoppingBag } from "lucide-react";
-
+import { CarFront } from "lucide-react";
 
 export default async function Orders() {
   return (
@@ -13,5 +9,3 @@ export default async function Orders() {
     </Container>
   );
 }
-
-

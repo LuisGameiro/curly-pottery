@@ -1,4 +1,3 @@
-
 import NextAuth from "next-auth";
 import { authOptions } from "@lib/auth/authOptions"; // Move your authOptions to a shared lib file
 

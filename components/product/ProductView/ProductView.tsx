@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import Image from "next/image";
 import s from "./ProductView.module.css";
@@ -28,10 +28,13 @@ export const getRelatedProducts = async (
 
 interface ProductViewProps {
   product: Product;
-  relatedProducts: Product[]
+  relatedProducts: Product[];
 }
 
-const ProductView: FC<ProductViewProps> = ({ product, relatedProducts=[] }) => {
+const ProductView: FC<ProductViewProps> = ({
+  product,
+  relatedProducts = [],
+}) => {
   const [variant, setVariant] = useState<ProductVariant>(product.variants[0]);
 
   return (

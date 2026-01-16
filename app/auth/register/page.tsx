@@ -61,15 +61,15 @@ export default function RegisterPage() {
   };
 
   return (
-    <Container className='p-10'>
+    <Container className="p-10">
       <header className="justify-center text-center mx-auto mb-4">
-          <Text variant="heading">Create Account</Text>
-          <Text variant="subHeading">
-            Join us for a faster checkout experience
-          </Text>
+        <Text variant="heading">Create Account</Text>
+        <Text variant="subHeading">
+          Join us for a faster checkout experience
+        </Text>
       </header>
 
-      <main className='space-y-5 md:max-w-lg mx-auto'>
+      <main className="space-y-5 md:max-w-lg mx-auto">
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* <Input
             name="name"

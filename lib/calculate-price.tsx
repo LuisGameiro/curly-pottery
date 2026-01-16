@@ -46,13 +46,11 @@ export function calculatePrice(
   };
 }
 
-
-
 export function calculateDiscount(
   price: number = 0,
   discounts: Discount[] | null = null,
 ) {
-  let finalPrice = price
+  let finalPrice = price;
 
   if (discounts && discounts.length > 0) {
     discounts.forEach((discount) => {
@@ -65,8 +63,14 @@ export function calculateDiscount(
   }
 
   return {
-    price: price ,
-    finalPrice: finalPrice ,
+    price: price,
+    finalPrice: finalPrice,
     hasDiscount: finalPrice < price,
   };
 }
+
+export const showCurrency = {
+  GBP: "£",
+  EUR: "$",
+  USD: "$",
+};

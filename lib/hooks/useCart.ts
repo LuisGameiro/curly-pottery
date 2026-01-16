@@ -42,7 +42,7 @@
 //   const addItem = (item: any,quantity:number) => {
 //     const existing = cartItems.find((i) => i.variantId === item.variantId);
 //     if (existing) {
-//       updateCartState(cartItems.map(i => 
+//       updateCartState(cartItems.map(i =>
 //         i.variantId === item.variantId ? { ...i, quantity: i.quantity + quantity } : i
 //       ));
 //     } else {
@@ -56,8 +56,8 @@
 
 //   const deleteAll = ()=>updateCartState([])
 
-//   const subtotal = useMemo(() => 
-//     cartItems.reduce((acc, item) => acc + (calculateDiscount(item.variant.price,item.variant.discounts).finalPrice) * item.quantity, 0), 
+//   const subtotal = useMemo(() =>
+//     cartItems.reduce((acc, item) => acc + (calculateDiscount(item.variant.price,item.variant.discounts).finalPrice) * item.quantity, 0),
 //   [cartItems]);
 
 //   return {
@@ -78,11 +78,10 @@
 //   };
 // }
 
-
-import { useEffect, useMemo } from 'react';
-import { useUser } from './useUser';
-import { calculateDiscount } from '@lib/calculate-price';
-import { useCartStore } from '@lib/zustand/cart';
+import { useEffect, useMemo } from "react";
+import { useUser } from "./useUser";
+import { calculateDiscount } from "@lib/calculate-price";
+import { useCartStore } from "@lib/zustand/cart";
 
 export default function useCart() {
   const { isAuthenticated } = useUser();
@@ -93,23 +92,31 @@ export default function useCart() {
     store.syncWithDatabase();
   }, [isAuthenticated]);
 
-  const subtotal = useMemo(() => 
-    store.cartItems.reduce((acc, item) => 
-      acc + (calculateDiscount(item.variant.price, item.variant.discounts).finalPrice) * item.quantity, 0
-    ), [store.cartItems]);
+  const subtotal = useMemo(
+    () =>
+      store.cartItems.reduce(
+        (acc, item) =>
+          acc +
+          calculateDiscount(item.variant.price, item.variant.discounts)
+            .finalPrice *
+            item.quantity,
+        0,
+      ),
+    [store.cartItems],
+  );
 
   return {
     data: {
       lineItems: store.cartItems,
       subtotalPrice: subtotal,
       totalPrice: subtotal,
-      currency: 'GBP'
+      currency: "GBP",
     },
     isLoading: store.isLoading,
     isEmpty: store.cartItems.length === 0,
     addItem: store.addItem,
     removeItem: store.removeItem,
     updateItem: store.updateItem,
-    deleteAll: store.deleteAll
+    deleteAll: store.deleteAll,
   };
 }

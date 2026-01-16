@@ -1,7 +1,6 @@
-import { Container, Text, Button } from "@components/ui";
+import { Container, Text } from "@components/ui";
 import { getAllOrders } from "actions/order.actions";
-import Link from "next/link";
-import { Eye, CheckCircle2, AlertCircle } from "lucide-react";
+import { CheckCircle2, AlertCircle } from "lucide-react";
 import OrderTable from "@components/common/Tables/OrderTable";
 
 export default async function OrdersPage() {
@@ -12,10 +11,10 @@ export default async function OrdersPage() {
   return (
     <Container>
       <header>
-          <Text variant="heading">Order Management</Text>
-          <Text variant="subHeading">
-            Review and process your store transactions.
-          </Text>
+        <Text variant="heading">Order Management</Text>
+        <Text variant="subHeading">
+          Review and process your store transactions.
+        </Text>
       </header>
 
       <main>

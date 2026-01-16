@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { cn } from "@lib/utils";
 import s from "./Input.module.css";
@@ -29,17 +29,16 @@ const InputSearch: React.FC<InputProps> = (props) => {
   );
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-const newValue = e.target.value; // Extract the string value
+    const newValue = e.target.value; // Extract the string value
 
-  if (onValueChange) {
-    // onValueChange expects a string, so we pass newValue
-    onValueChange(newValue); 
-  }
+    if (onValueChange) {
+      // onValueChange expects a string, so we pass newValue
+      onValueChange(newValue);
+    }
     if (props.onChange) {
       props.onChange(e);
     }
   };
-
 
   return (
     <div className={s.container}>
@@ -59,9 +58,7 @@ const newValue = e.target.value; // Extract the string value
           aria-describedby={error ? errorId : undefined}
           {...rest}
         />
-        <Search size={20} className={s.toggleButton}
-        />
-
+        <Search size={20} className={s.toggleButton} />
       </div>
       {error && (
         <p id={errorId} className={s.errorMessage} role="alert">

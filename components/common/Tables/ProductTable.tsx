@@ -59,7 +59,7 @@ export default function ProductTable({ products }: { products: any[] }) {
       render: (p: any) => {
         const stock = p.variants.reduce(
           (acc: number, v: any) => acc + v.stock,
-          0
+          0,
         );
         return (
           <span
@@ -67,7 +67,7 @@ export default function ProductTable({ products }: { products: any[] }) {
               "px-2 py-1 rounded text-xs font-bold",
               stock <= 2
                 ? "bg-red-100 text-red-700"
-                : "bg-green-100 text-green-700"
+                : "bg-green-100 text-green-700",
             )}
           >
             {stock}
@@ -83,7 +83,7 @@ export default function ProductTable({ products }: { products: any[] }) {
         const maxPrice = Math.max(...prices);
         const stock = p.variants.reduce(
           (acc: number, v: any) => acc + v.stock,
-          0
+          0,
         );
         return (
           <span>
@@ -99,7 +99,7 @@ export default function ProductTable({ products }: { products: any[] }) {
       render: (p: any) => {
         const stock = p.variants.reduce(
           (acc: number, v: any) => acc + v.stock,
-          0
+          0,
         );
         return <span> {new Date(p.updatedAt).toLocaleDateString()}</span>;
       },

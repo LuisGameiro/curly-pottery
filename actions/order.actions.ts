@@ -2,7 +2,7 @@
 
 import { prisma } from "prisma/prisma";
 import { serializeOrders, serializeProduct } from "./helpers";
-import { OrderStatus } from "@lib/types/customer";
+import { Order, OrderStatus } from "@lib/types/customer";
 import { revalidatePath } from "next/cache";
 
 // app/actions/orders.ts
@@ -39,7 +39,7 @@ export async function getAllOrders() {
   return ordersRaw;
 }
 
-export async function getOrderById(id: string) {
+export async function getOrderById(id: string): Promise<Order>  {
   const orderRaw = await prisma.order.findUnique({
     where: { id },
     include: {
@@ -115,33 +115,35 @@ export async function createOrder(input: {
   shippingAddress: any;
   billingAddress: any;
   cart: any;
-  shipping:any;
+  shipping: any;
 }) {
-  console.log(input)
+  console.log(input);
 
   try {
     const order = await prisma.order.create({
       data: {
-        lineItems: input.cart.lineItems || [], 
+        lineItems: input.cart.lineItems || [],
         discounts: input.cart.discounts || [],
-        subtotalPrice: Number(input.cart.subtotalPrice)||0,
-        totalPrice: Number(input.cart.totalPrice)||0,
+        subtotalPrice: Number(input.cart.subtotalPrice) || 0,
+        totalPrice: Number(input.cart.totalPrice) || 0,
         currency: input.cart.currency || "GBP",
-        shippingAddress: input.shippingAddress||{},
-        billingAddress: input.billingAddress ||{},
+        shippingAddress: input.shippingAddress || {},
+        billingAddress: input.billingAddress || {},
         status: "PENDING",
         shipping: input.shipping,
         ...(input.userId && {
           user: {
-            connect: { id: input.userId }
-          }
-        })
+            connect: { id: input.userId },
+          },
+        }),
       },
     });
 
     return order;
   } catch (error) {
     console.error("Error creating order:", error);
-    throw new Error(`Could not process order. Please try again.${JSON.stringify(error)}`);
+    throw new Error(
+      `Could not process order. Please try again.${JSON.stringify(error)}`,
+    );
   }
 }

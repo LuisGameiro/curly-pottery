@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React, {
   forwardRef,
@@ -31,7 +31,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
   const {
     className,
     variant = "flat",
-    size = "md",      // Default size
+    size = "md", // Default size
     color = "primary", // Default color
     children,
     active,
@@ -42,7 +42,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
     Component = "button",
     ...rest
   } = props;
-  
+
   const ref = useRef<typeof Component>(null);
 
   const rootClassName = cn(

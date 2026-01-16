@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
 import Link from "next/link";
 import { FC, useState } from "react";
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter, usePathname } from "next/navigation";
 import s from "./I18nWidget.module.css";
 import { Cross, ChevronRight } from "@components/icons";
 import ClickOutside from "@lib/click-outside";
@@ -69,7 +69,7 @@ const I18nWidget: FC = () => {
             )}
           </button>
         </div>
-        
+
         <div className="absolute top-0 right-0">
           {options?.length && display ? (
             <div className={s.dropdownMenu}>

@@ -34,7 +34,7 @@ async function main() {
     .then((categories) =>
       Object.fromEntries(categories.map((c) => [c.slug, c.id])),
     );
-  
+
   for (const item of products) {
     await prisma.product.upsert({
       where: { slug: item.slug },
@@ -61,7 +61,7 @@ async function main() {
             colorName: v.colorName,
             colorHex: v.colorHex,
             images: v.images,
-            details: v.details
+            details: v.details,
           })),
         },
       },
@@ -96,7 +96,7 @@ async function main() {
         createdAt: cust.createdAt,
         updatedAt: cust.updatedAt,
         accountId: account.id, // Link to the account
-        
+
         // Create addresses
         addresses: {
           create: cust.addresses.map((a) => ({

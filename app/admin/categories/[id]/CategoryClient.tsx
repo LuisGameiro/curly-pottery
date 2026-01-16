@@ -22,18 +22,19 @@ export default function CategoryClient({
   const router = useRouter();
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [gallery, setGallery] = useState<{ files: File[], previews: string[] }>({
-    files: [category.image],
-    previews: [category.image]
-  });
+  const [gallery, setGallery] = useState<{ files: File[]; previews: string[] }>(
+    {
+      files: [category.image],
+      previews: [category.image],
+    },
+  );
   const [formData, setFormData] = useState({
     id: category.id || "",
     name: category.name || "",
     slug: category.slug || "",
     image: category.image || "",
   });
-  const [loading, setLoading] = useState(false)
-
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,7 +56,7 @@ export default function CategoryClient({
     setLoading(true);
 
     try {
-      const url = await uploadImagesToBlob(gallery.files) //TODO better
+      const url = await uploadImagesToBlob(gallery.files); //TODO better
       const result = await upsertCategory({
         id: formData.id,
         name: formData.name,
@@ -67,7 +68,7 @@ export default function CategoryClient({
         router.replace("/admin/categories");
         router.refresh();
       } else {
-        setErrors({ from: result?.message || "Failed to save category" });
+        setErrors({ from: result?.error.message || "Failed to save category" });
       }
     } catch (err) {
       console.error("Submit error:", err);
@@ -77,8 +78,7 @@ export default function CategoryClient({
     }
   };
 
-  if (loading)
-    return Loading()
+  if (loading) return Loading();
 
   return (
     <Container>
@@ -94,8 +94,12 @@ export default function CategoryClient({
           <Text variant="heading">
             {isEditMode ? "Edit Category" : "New Category"}
           </Text>
-          <Button onClick={handleSubmit} type="submit" variant="slim"
-            disabled={loading}>
+          <Button
+            onClick={handleSubmit}
+            type="submit"
+            variant="slim"
+            disabled={loading}
+          >
             {isEditMode ? "Save Category" : "Create Category"}
           </Button>
         </div>
@@ -127,7 +131,6 @@ export default function CategoryClient({
             onImagesChange={setGallery}
             error={errors.images}
           />
-
         </form>
       </main>
     </Container>

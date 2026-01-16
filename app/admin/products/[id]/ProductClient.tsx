@@ -60,7 +60,7 @@ export default function ProductClient({
         availableForSale: true,
         isExpanded: true,
       },
-    ]
+    ],
   );
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -74,14 +74,14 @@ export default function ProductClient({
         variants.map(async (variant) => {
           // Find the 'original' version of this variant to see its previous images
           const originalVariant = initialData?.variants?.find(
-            (v: any) => v.id === variant.id
+            (v: any) => v.id === variant.id,
           );
           const oldImages = originalVariant?.images || [];
 
           // Sync: Deletes removed ones, uploads new ones
           const imageUrls = await syncImagesWithBlob(
             variant.files || [],
-            oldImages
+            oldImages,
           );
 
           return {
@@ -90,7 +90,7 @@ export default function ProductClient({
             files: [],
             previews: [],
           };
-        })
+        }),
       );
       const payload = {
         ...product,

@@ -6,21 +6,25 @@ interface ContainerProps {
   children?: any;
   el?: HTMLElement;
   clean?: boolean;
-  variant?: 'default' | 'box'
+  variant?: "default" | "box";
 }
 
 const Container: FC<ContainerProps> = ({
   children,
   className,
   el = "div",
-  variant = 'default',
+  variant = "default",
   clean = false,
 }) => {
-  const rootClassName = cn( {
-    "mx-auto px-6 w-full flex-col justify-center": !clean && variant === 'default',
-    "bg-accent-1 border rounded-xl p-6 shadow-sm": !clean && variant === 'box',
-    
-  }, className);
+  const rootClassName = cn(
+    {
+      "mx-auto px-6 w-full flex-col justify-center":
+        !clean && variant === "default",
+      "bg-accent-1 border rounded-xl p-6 shadow-sm":
+        !clean && variant === "box",
+    },
+    className,
+  );
 
   let Component: React.ComponentType<React.HTMLAttributes<HTMLDivElement>> =
     el as any;

@@ -1,11 +1,11 @@
-"use server"
+"use server";
 
 import { authOptions } from "@lib/auth/authOptions";
 import { getServerSession } from "next-auth";
 
 export async function createSumUpCheckout(amount: number, cartId: string) {
   const session = await getServerSession(authOptions);
-  
+
   // Use user email from session, or fallback for guest
   const userEmail = session?.user?.email || "guest@example.com";
 
@@ -13,7 +13,7 @@ export async function createSumUpCheckout(amount: number, cartId: string) {
     const response = await fetch("https://api.sumup.com/v0.1/checkouts", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.SUMUP_API}`,
+        Authorization: `Bearer ${process.env.SUMUP_API}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

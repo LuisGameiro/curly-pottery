@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import s from "./ProductSidebar.module.css";
 // import { useAddItem } from '@framework/cart'
@@ -33,8 +33,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
   variant,
   setVariant,
 }: ProductSidebarProps) => {
-
-  const { addItem } = useCart()
+  const { addItem } = useCart();
 
   const { openSidebar, setSidebarView } = useUI();
   const [loading, setLoading] = useState(false);
@@ -52,13 +51,14 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
     setLoading(true);
     setError(null);
     try {
-      await addItem({
-        ...product,
-        variant: {...variant},
-        productId:product.id,
-        variantId:variant.id,
-
-      }, quantity
+      await addItem(
+        {
+          ...product,
+          variant: { ...variant },
+          productId: product.id,
+          variantId: variant.id,
+        },
+        quantity,
       );
       setLoading(false);
     } catch (err) {
@@ -73,7 +73,11 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
     }
   };
 
-  const price = calculatePrice(variant.price, variant.currency, variant.discounts);
+  const price = calculatePrice(
+    variant.price,
+    variant.currency,
+    variant.discounts,
+  );
 
   return (
     <div className={cn(className, "space-y-4")}>

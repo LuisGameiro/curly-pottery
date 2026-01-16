@@ -1,5 +1,5 @@
 import { Container, Text, Button, Input } from "@components/ui";
-import { getCustomerById, updateNotes } from "actions/customer.actions";
+import { getUserById } from "actions/customer.actions";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -16,14 +16,22 @@ import {
 import notFound from "app/not-found";
 import OrderTable from "@components/common/Tables/OrderTable";
 import CustomerNotes from "./CostumerNotes";
+import { showCurrency } from "@lib/calculate-price";
 
-export default async function CustomerDetailsPage({ params }: { params: any }) {
+export default async function CustomerDetailsPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+
   const { id } = await params;
-  const customer = await getCustomerById(id);
-  if (!customer || customer === null) {
+  const user = await getUserById(id);
+  
+  if (!user || user === null) {
     notFound();
   }
-  const totalSpend = customer.orders.reduce(
+  
+  const totalSpend = user!.orders.reduce(
     (acc: number, order: any) => acc + order.totalPrice,
     0
   );
@@ -40,17 +48,16 @@ export default async function CustomerDetailsPage({ params }: { params: any }) {
 
         <div>
           <Text variant="heading">
-            {customer.name}
-            {customer.fistName}
-            {customer.lastName}
+            {user.firstName}
+            {user.lastName}
           </Text>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <span className="flex items-center gap-1">
               <Calendar size={14} /> Joined{" "}
-              {new Date(customer.createdAt).toLocaleDateString()}
+              {new Date(user.createdAt).toLocaleDateString()}
             </span>
             <span>•</span>
-            <span className="font-mono uppercase ">ID: {customer.id}</span>
+            <span className="font-mono uppercase ">ID: {user.id}</span>
           </div>
         </div>
       </header>
@@ -62,13 +69,15 @@ export default async function CustomerDetailsPage({ params }: { params: any }) {
               <Text className="uppercase font-bold tracking-tighter">
                 Orders
               </Text>
-              <Text>{customer.orders.length}</Text>
+              <Text>{user.orders.length}</Text>
             </div>
             <div className="space-y-1 ">
               <Text className="uppercase font-bold tracking-tighter">
                 Total Spend
               </Text>
-              <Text>GBP {totalSpend.toFixed(2)}</Text>
+              <Text>
+                {showCurrency["GBP"]} {totalSpend.toFixed(2)}
+              </Text>
             </div>
           </Container>
 
@@ -80,26 +89,26 @@ export default async function CustomerDetailsPage({ params }: { params: any }) {
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-sm">
                 <Mail size={16} className="text-muted-foreground" />
-                <span className="truncate">{customer.email}</span>
+                <span className="truncate">{user.email}</span>
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <Phone size={16} className="text-muted-foreground" />
-                <span>{customer.phone || "No phone provided"}</span>
+                <span>{user.phone || "No phone provided"}</span>
               </div>
               <div className="flex items-center gap-3 text-sm">
-                {customer.acceptsMarketing ? (
+                {user.acceptsMarketing ? (
                   <CheckCircle2 size={16} className="text-green-500" />
                 ) : (
                   <XCircle size={16} className="text-accent-3" />
                 )}
                 <span
                   className={
-                    customer.acceptsMarketing
+                    user.acceptsMarketing
                       ? "text-green-700 font-medium"
                       : "text-muted-foreground"
                   }
                 >
-                  {customer.acceptsMarketing
+                  {user.acceptsMarketing
                     ? "Subscribed to Marketing"
                     : "No Marketing"}
                 </span>
@@ -113,12 +122,12 @@ export default async function CustomerDetailsPage({ params }: { params: any }) {
               <Text variant="bold">Saved Addresses</Text>
             </div>
             <div className="space-y-4">
-              {!customer?.addresses ? (
+              {!user?.addresses ? (
                 <Text className="text-sm italic text-muted-foreground">
-                  No saved addresses for this customer.
+                  No saved addresses for this user.
                 </Text>
               ) : (
-                customer.addresses.map((addr: any) => (
+                user.addresses.map((addr: any) => (
                   <div
                     key={addr.id}
                     className="text-sm p-3 rounded-lg border border-border"
@@ -151,7 +160,7 @@ export default async function CustomerDetailsPage({ params }: { params: any }) {
               <ShoppingBag size={18} className="text-accent-6" />
               <Text variant="bold">Order History</Text>
             </div>
-            <OrderTable orders={customer.orders} />
+            <OrderTable orders={user.orders} />
           </Container>
 
           <Container variant="box" className="space-y-4">
@@ -159,10 +168,7 @@ export default async function CustomerDetailsPage({ params }: { params: any }) {
               <Notebook size={18} className="text-accent-6" />
               <Text variant="bold">Internal Notes</Text>
             </div>
-            {/* <div className="p-4 rounded-xl text-sm italic">
-              {customer.notes || "No internal notes for this customer."}
-            </div> */}
-            <CustomerNotes initialNotes={customer.notes} customerId={id} />
+            <CustomerNotes initialNotes={user.notes || ''} customerId={id} />
           </Container>
         </div>
       </div>

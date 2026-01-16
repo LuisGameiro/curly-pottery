@@ -23,14 +23,13 @@ export type SizeNames = (typeof SizeNames)[keyof typeof SizeNames];
 export const Detailtype = {
   Materials: "Materials",
   Size: "Size",
-  Finish: 'Finish',
-  Features: 'Features',
-  Capacity: 'Capacity',
-  Shape: 'Shape',
-  Glazes: 'Glazes'
+  Finish: "Finish",
+  Features: "Features",
+  Capacity: "Capacity",
+  Shape: "Shape",
+  Glazes: "Glazes",
 } as const;
 export type Detailtype = (typeof Detailtype)[keyof typeof Detailtype];
-
 
 export interface Product {
   id: string;
@@ -54,19 +53,17 @@ export type ProductVariant = {
   stock: number;
   availableForSale: boolean;
   sizeName: SizeNames;
-  details: Detail[]
-  discounts: Discount[]
+  details: Detail[];
+  discounts: Discount[];
   createdAt: Date;
   updatedAt: Date;
   productId: string;
   images: string[];
 };
 export type Detail = {
-  title: Detailtype | string 
-  description: string  
-}
-
-
+  title: Detailtype | string;
+  description: string;
+};
 
 export type FullProduct = {
   id: string;
