@@ -1,13 +1,13 @@
 import cn from "clsx";
-import React from "react";
+import React, { ReactNode } from "react";
 import s from "./Swatch.module.css";
-import { Check } from "@components/icons";
 import Button, { ButtonProps } from "@components/ui/Button";
 import { isDark } from "@lib/colors";
+import { Check } from "lucide-react";
 
 interface SwatchProps {
   active?: boolean;
-  children?: any;
+  children?: ReactNode;
   className?: string;
   variant?: "size" | "color" | string;
   color?: string;

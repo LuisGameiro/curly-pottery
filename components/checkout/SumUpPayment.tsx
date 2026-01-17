@@ -1,9 +1,9 @@
 import Script from "next/script";
-import { Button, Text } from "@components/ui";
+import { Text } from "@components/ui";
 
 export default function SumUpPayment({ checkoutId }: { checkoutId: string }) {
   const mountSumUp = () => {
-    // @ts-ignore
+    // @@ts-expect-error
     window.SumUpCard.mount({
       id: "sumup-card",
       checkoutId: checkoutId,

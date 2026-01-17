@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { FC, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import s from "./I18nWidget.module.css";
-import { Cross, ChevronRight } from "@components/icons";
 import ClickOutside from "@lib/click-outside";
 import Image from "next/image";
 import { cn } from "@lib/utils";
+import { ChevronRight, Cross } from "lucide-react";
 
 interface LOCALE_DATA {
   name: string;
@@ -83,7 +83,7 @@ const I18nWidget: FC = () => {
                 </button>
               </div>
               <ul>
-                {options.map((locale) => (
+                {options.map((locale:string) => (
                   <li key={locale}>
                     <Link
                       href={currentPath}

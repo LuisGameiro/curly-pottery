@@ -62,7 +62,7 @@ type MODAL_VIEWS =
 
 type SIDEBAR_VIEWS = "CART_VIEW" | "CHECKOUT_VIEW" | "PAYMENT_METHOD_VIEW";
 
-export const UIContext = React.createContext<State | any>(initialState);
+export const UIContext = React.createContext<State>(initialState);
 
 UIContext.displayName = "UIContext";
 

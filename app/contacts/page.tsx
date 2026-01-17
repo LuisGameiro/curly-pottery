@@ -8,6 +8,13 @@ import { sendEmail } from "actions/email.actions";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
+const contacts = {
+  email: 'curly.pottery@gmail.com',
+  instagram: 'curly_pottery',
+  address: 'london, uk'
+}
+
+
 interface FormData {
   name: string;
   email: string;
@@ -62,9 +69,9 @@ export default function Contacts() {
 
   return (
     <Container className="p-10">
-      <header className="justify-center text-center mx-auto mb-4">
+      <header className="justify-center text-center mx-auto mb-10">
         <Text variant="heading">Contact Us</Text>
-        <Text>
+        <Text className="mx-auto">
           We'd love to hear from you! Please reach out using the information
           below or fill out the contact form.
         </Text>
@@ -78,30 +85,30 @@ export default function Contacts() {
             <li>
               📧 Email:{" "}
               <a
-                href="mailto:info@curlypottery.com"
+                href={`mailto:${contacts.email}`}
                 className="hover:text-secondary/60"
               >
-                info@curlypottery.com
+                {contacts.email}
               </a>
             </li>
             <li>
               📸 instagram:{" "}
               <a
-                href="https://www.instagram.com/curlypottery"
+                href={`https://www.instagram.com/${contacts.instagram}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-secondary/60"
               >
-                @curlypottery
+                @{contacts.instagram}
               </a>
             </li>
-            <li>
+            {/* <li>
               📞 Phone:{" "}
               <a href="tel:+1234567890" className="hover:text-secondary/60">
                 +1 (234) 567-890
               </a>
-            </li>
-            <li className="hover:text-secondary/60">📍 Address: London, UK</li>
+            </li> */}
+            <li className="hover:text-secondary/60">📍 Address: {contacts.address}</li>
           </ul>
         </section>
 

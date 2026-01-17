@@ -3,7 +3,7 @@ import s from "./ProductCard.module.css";
 import Image, { ImageProps } from "next/image";
 import { cn } from "@lib/utils";
 import { FC } from "react";
-import { calculatePrice } from "@lib/calculate-price";
+import { calculateDiscount } from "@lib/calculate-price";
 import { Product } from "@lib/types/types";
 
 interface Props {
@@ -31,13 +31,12 @@ const ProductCard: FC<Props> = ({
     className,
   );
 
-  const { priceCalculated, priceDiscount, hasDiscount } = product?.variants
-    ? calculatePrice(
+  const { finalPrice, price, hasDiscount } = product?.variants
+    ? calculateDiscount(
         product.variants[0].price,
-        product.variants[0].currency,
         product.variants[0].discounts,
       )
-    : { priceCalculated: "$0.00", priceDiscount: "$0.00", hasDiscount: false };
+    : { price: "$0.00", finalPrice: "$0.00", hasDiscount: false };
 
   return (
     <Link

@@ -8,12 +8,15 @@
 // const adapter = new PrismaNeon({ connectionString })
 // export const prisma = new PrismaClient({ adapter })
 
-import { PrismaNeon } from "@prisma/adapter-neon";
-import { PrismaClient } from "./generated/prisma/client";
-
 // const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL });
 // export const prisma = new PrismaClient({ adapter });
 // // ✅ Add PrismaClient options if required
+
+import { PrismaNeon } from "@prisma/adapter-neon";
+import { PrismaClient } from "./generated/prisma/client";
+import { Pool } from 'pg';
+
+new Pool({ connectionString: process.env.DATABASE_URL });
 
 const globalForPrisma = global as unknown as {
   prisma: PrismaClient;

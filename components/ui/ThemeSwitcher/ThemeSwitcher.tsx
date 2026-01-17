@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronRight } from "@components/icons";
 import { useToggleTheme } from "@lib/hooks/useToggleTheme";
 import ClickOutside from "@lib/click-outside";
 import ThemeIcon from "./ThemeIcon";
 import { cn } from "@lib/utils";
+import { ChevronRight } from "lucide-react";
 
 const ThemeSwitcher = () => {
   const [display, setDisplay] = useState(false);

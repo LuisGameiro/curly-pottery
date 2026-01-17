@@ -1,10 +1,10 @@
 import React, { FC } from "react";
 import { Container } from "@components/ui";
-import { ArrowRight } from "@components/icons";
 import { Text } from "@components/ui";
 
 import s from "./Hero.module.css";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 interface HeroProps {
   className?: string;
   headline: string;

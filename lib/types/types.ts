@@ -73,15 +73,19 @@ export type DiscountType = (typeof DiscountType)[keyof typeof DiscountType];
 
 export type CartLineItem = {
   id: string;
+  variantId: string;
+  slug: string;
   sku: string;
   name: string;
   images: string;
   quantity: number;
+  stock: number;
   price: number;
   currency: CurrencyCode;
   colorName?: string;
   sizeName?: string;
-  variant: { price: number };
+  discounts: Discount[]
+
 };
 
 export type Discount = {

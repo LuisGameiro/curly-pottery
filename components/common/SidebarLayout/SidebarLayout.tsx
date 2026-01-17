@@ -1,8 +1,8 @@
 import React, { FC, ReactNode } from "react";
-import { Cross, ChevronLeft } from "@components/icons";
 import { UserNav } from "@components/common";
 import cn from "clsx";
 import s from "./SidebarLayout.module.css";
+import { ChevronLeft, Cross } from "lucide-react";
 
 type ComponentProps = { className?: string; children?: ReactNode } & (
   | { handleClose: () => any; handleBack?: never }

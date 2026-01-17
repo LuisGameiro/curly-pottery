@@ -6,14 +6,13 @@ import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@components/ui";
 import { useState } from "react";
 import DataTable from "@components/ui/Table/DataTable";
-import { deleteCategory } from "actions/category.actions";
 import { useRouter } from "next/navigation";
 import { cn } from "@lib/utils";
 import { deleteProduct } from "actions/product.actions";
-import { Variant } from "@lib/types/types";
+import { ProductWithVariantsCategories, Variant } from "@lib/types/types";
 import VariantTable from "./VariantTable";
 
-export default function ProductTable({ products }: { products: any[] }) {
+export default function ProductTable({ products }: { products: ProductWithVariantsCategories[] }) {
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const router = useRouter();
 
@@ -36,7 +35,7 @@ export default function ProductTable({ products }: { products: any[] }) {
   const productColumns = [
     {
       header: "Product",
-      render: (p: any) => (
+      render: (p: ProductWithVariantsCategories) => (
         <div className="flex items-center gap-3 justify-center">
           <Image
             src={p.images[0] || "/placeholder.png"}
@@ -56,9 +55,9 @@ export default function ProductTable({ products }: { products: any[] }) {
     },
     {
       header: "Stock",
-      render: (p: any) => {
+      render: (p: ProductWithVariantsCategories) => {
         const stock = p.variants.reduce(
-          (acc: number, v: any) => acc + v.stock,
+          (acc: number, v: Variant) => acc + v.stock,
           0,
         );
         return (
@@ -77,12 +76,12 @@ export default function ProductTable({ products }: { products: any[] }) {
     },
     {
       header: "Price Range",
-      render: (p: any) => {
+      render: (p: ProductWithVariantsCategories) => {
         const prices = p.variants.map((v: Variant) => v.price);
         const minPrice = Math.min(...prices);
         const maxPrice = Math.max(...prices);
         const stock = p.variants.reduce(
-          (acc: number, v: any) => acc + v.stock,
+          (acc: number, v: Variant) => acc + v.stock,
           0,
         );
         return (
@@ -96,9 +95,9 @@ export default function ProductTable({ products }: { products: any[] }) {
     },
     {
       header: "Last Update",
-      render: (p: any) => {
+      render: (p: ProductWithVariantsCategories) => {
         const stock = p.variants.reduce(
-          (acc: number, v: any) => acc + v.stock,
+          (acc: number, v: Variant) => acc + v.stock,
           0,
         );
         return <span> {new Date(p.updatedAt).toLocaleDateString()}</span>;
@@ -106,7 +105,7 @@ export default function ProductTable({ products }: { products: any[] }) {
     },
     {
       header: "Actions",
-      render: (p: any) => (
+      render: (p: ProductWithVariantsCategories) => (
         <div className="flex gap-2 justify-center">
           <Link href={`/admin/products/${p.id}`}>
             <Button variant="naked">

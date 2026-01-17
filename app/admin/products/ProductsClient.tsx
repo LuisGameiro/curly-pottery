@@ -3,7 +3,7 @@
 import { Button, Container, Text } from "@components/ui";
 import Link from "next/link";
 import { useState, useMemo } from "react";
-import { ProductFull, Variant } from "@lib/types/types";
+import { Product, Variant } from "@lib/types/types";
 import InputSearch from "@components/ui/Input/InputSearch";
 import ProductTable from "@components/common/Tables/ProductTable";
 import { Plus } from "lucide-react";
@@ -11,7 +11,7 @@ import { Plus } from "lucide-react";
 export default function ProductsClient({
   products,
 }: {
-  products: ProductFull[];
+  products: Product[];
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState<{
@@ -31,13 +31,13 @@ export default function ProductsClient({
     if (sortConfig) {
       items.sort((a, b) => {
         if (
-          a[sortConfig.key as keyof ProductFull] <
-          b[sortConfig.key as keyof ProductFull]
+          a[sortConfig.key as keyof Product] <
+          b[sortConfig.key as keyof Product]
         )
           return sortConfig.direction === "asc" ? -1 : 1;
         if (
-          a[sortConfig.key as keyof ProductFull] >
-          b[sortConfig.key as keyof ProductFull]
+          a[sortConfig.key as keyof Product] >
+          b[sortConfig.key as keyof Product]
         )
           return sortConfig.direction === "asc" ? 1 : -1;
         return 0;

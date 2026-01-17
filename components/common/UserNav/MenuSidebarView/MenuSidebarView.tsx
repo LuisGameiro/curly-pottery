@@ -1,7 +1,7 @@
 import Link from "next/link";
 import s from "./MenuSidebarView.module.css";
 import { useUI } from "@components/ui/context";
-import SidebarLayout from "@components/common/UserNav/SidebarLayout";
+import SidebarLayout from "@components/common/SidebarLayout";
 import type { Link as LinkProps } from "./index";
 
 export default function MenuSidebarView({
@@ -19,7 +19,7 @@ export default function MenuSidebarView({
             <li className={s.item} onClick={() => closeSidebar()}>
               <Link href="/search">All</Link>
             </li>
-            {links.map((l: any) => (
+            {links.map((l: LinkProps) => (
               <li
                 key={l.href}
                 className={s.item}
@@ -35,4 +35,3 @@ export default function MenuSidebarView({
   );
 }
 
-MenuSidebarView;

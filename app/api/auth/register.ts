@@ -1,14 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "prisma/prisma";
-import bcrypt from "bcryptjs";
 import { z } from "zod";
-import { request } from "http";
 import { NextApiRequest, NextApiResponse } from "next";
 import { hashPassword } from "@lib/auth/password";
 
-// Validation schema
 const registerSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   password2: z.string().min(6, "Password must be at least 6 characters"),
 

@@ -3,9 +3,9 @@
 import { cn } from "@lib/utils";
 import React, { FC, ReactNode, useState } from "react";
 import s from "./Collapse.module.css";
-import { ChevronRight } from "@components/icons";
 import { useSpring, a } from "@react-spring/web";
 import useMeasure from "react-use-measure";
+import { ChevronRight } from "lucide-react";
 
 export interface CollapseProps {
   title: string;

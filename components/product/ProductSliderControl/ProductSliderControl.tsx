@@ -1,7 +1,7 @@
 import { FC, MouseEventHandler, memo } from "react";
 import cn from "clsx";
 import s from "./ProductSliderControl.module.css";
-import { ArrowLeft, ArrowRight } from "@components/icons";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 interface ProductSliderControl {
   onPrev: MouseEventHandler<HTMLButtonElement>;

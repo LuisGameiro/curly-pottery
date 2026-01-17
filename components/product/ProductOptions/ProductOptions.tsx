@@ -23,13 +23,13 @@ type uniqueColor = {
 
 const ProductOptions: React.FC<ProductOptionsProps> = ({
   product,
-  variant,
-  setVariant,
+  // variant,
+  // setVariant,
 }) => {
   // 1. Filter variants to find those that have a "size" option
   // 2. Reduce them into a unique list based on the size name
   const uniqueSizes: UniqueSize[] = product.variants.reduce(
-    (acc: UniqueSize[], variant) => {
+    (acc: UniqueSize[], variant:Variant) => {
       const sizeName = variant.sizeName;
 
       if (sizeName && !acc.find((item) => item.name === sizeName)) {
@@ -45,7 +45,7 @@ const ProductOptions: React.FC<ProductOptionsProps> = ({
   );
 
   const uniqueColors: uniqueColor[] = product.variants.reduce(
-    (acc: uniqueColor[], variant) => {
+    (acc: uniqueColor[], variant:Variant) => {
       const colorName = variant.colorName;
 
       if (colorName && !acc.find((item) => item.name === colorName)) {

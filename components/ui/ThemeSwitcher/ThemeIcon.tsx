@@ -1,4 +1,4 @@
-import { Moon, Sun, System } from "@components/icons";
+import { Computer, Moon, Sun } from "lucide-react";
 
 interface ThemeIconProps {
   theme?: string;
@@ -15,7 +15,7 @@ const ThemeIcon = ({ theme, ...props }: ThemeIconProps) => {
       return <Moon {...props} />;
 
     default:
-      return <System {...props} />;
+      return <Computer {...props} />;
   }
 };
 

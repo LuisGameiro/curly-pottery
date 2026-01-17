@@ -25,34 +25,34 @@ const FeatureBar = dynamic(() => import("@components/common/FeatureBar"), {
   ...dynamicProps,
 });
 
-const Modal = dynamic(() => import("@components/ui/Modal"), {
-  ...dynamicProps,
-  ssr: false,
-});
+// const Modal = dynamic(() => import("@components/ui/Modal"), {
+//   ...dynamicProps,
+//   ssr: false,
+// });
 
 interface Props {
   children?: React.ReactNode;
 }
 
-const ModalView: React.FC<{ modalView: string; closeModal(): any }> = ({
-  modalView,
-  closeModal,
-}) => {
-  return (
-    <Modal onClose={closeModal}>
-      {/* {modalView === 'LOGIN_VIEW' && <LoginView />} */}
-      {/* {modalView === 'SIGNUP_VIEW' && <SignUpView />}
-      {modalView === 'FORGOT_VIEW' && <ForgotPassword />} */}
-    </Modal>
-  );
-};
+// const ModalView: React.FC<{ modalView: string; closeModal(): any }> = ({
+//   modalView,
+//   closeModal,
+// }) => {
+//   return (
+//     <Modal onClose={closeModal}>
+//       {/* {modalView === 'LOGIN_VIEW' && <LoginView />} */}
+//       {/* {modalView === 'SIGNUP_VIEW' && <SignUpView />}
+//       {modalView === 'FORGOT_VIEW' && <ForgotPassword />} */}
+//     </Modal>
+//   );
+// };
 
-const ModalUI: React.FC = () => {
-  const { displayModal, closeModal, modalView } = useUI();
-  return displayModal ? (
-    <ModalView modalView={modalView} closeModal={closeModal} />
-  ) : null;
-};
+// const ModalUI: React.FC = () => {
+//   const { displayModal, closeModal, modalView } = useUI();
+//   return displayModal ? (
+//     <ModalView modalView={modalView} closeModal={closeModal} />
+//   ) : null;
+// };
 
 const SidebarView: React.FC<{
   sidebarView: string;
@@ -110,7 +110,7 @@ const Layout: React.FC<Props> = ({ children }) => {
         {children}
       </main>
       <Footer />
-      <ModalUI />
+      {/* <ModalUI /> */}
       <SidebarUI links={navBarlinks} />
       <Toaster position="top-right" richColors />
       <FeatureBar

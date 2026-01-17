@@ -1,27 +1,14 @@
 "use client";
 
 import s from "./UserNav.module.css";
-import { Avatar } from "@components/common";
-// import useCart from '@framework/cart/use-cart'
 import { useUI } from "@components/ui/context";
-import { Heart, Bag, Menu } from "@components/icons";
-import CustomerMenuContent from "./CustomerMenuContent";
-// import useCustomer from '@framework/customer/use-customer'
 import React from "react";
-import {
-  Dropdown,
-  DropdownTrigger as DropdownTriggerInst,
-  Button,
-} from "@components/ui";
-
-import type { LineItem } from "@lib/types/inspiration/cart";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { Button } from "@components/ui";
+import { signOut, useSession } from "next-auth/react";
 import { cn } from "@lib/utils";
 import useCart from "@lib/hooks/useCart";
-import { Delete } from "lucide-react";
+import { Delete, Menu, ShoppingBasket } from "lucide-react";
 import Link from "next/link";
-
-const countItem = (count: number, item: LineItem) => count + item.quantity;
 
 const UserNav: React.FC<{
   className?: string;
@@ -30,9 +17,8 @@ const UserNav: React.FC<{
 
   const { data, deleteAll } = useCart();
   // const { data: isCustomerLoggedIn } = useCustomer()
-  const { closeSidebarIfPresent, openModal, setSidebarView, openSidebar } =
-    useUI();
-  const itemsCount = data?.lineItems?.reduce(countItem, 0) ?? 0;
+  const { setSidebarView, openSidebar } = useUI();
+  const itemsCount = data?.lineItems.length ?? 0;
   // const DropdownTrigger = isCustomerLoggedIn
   //   ? DropdownTriggerInst
   //   : React.Fragment;
@@ -47,7 +33,7 @@ const UserNav: React.FC<{
               variant="naked"
               aria-label={`Cart items: ${itemsCount}`}
             >
-              <Bag />
+              <ShoppingBasket />
               {itemsCount > 0 && (
                 <span className={s.bagCount}>{itemsCount}</span>
               )}

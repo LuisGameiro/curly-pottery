@@ -17,7 +17,7 @@ import notFound from "app/not-found";
 import OrderTable from "@components/common/Tables/OrderTable";
 import CustomerNotes from "./CostumerNotes";
 import { showCurrency } from "@lib/calculate-price";
-import { Address } from "@lib/types/types";
+import { Address, Order } from "@lib/types/types";
 
 export default async function CustomerDetailsPage({
   params,
@@ -37,7 +37,7 @@ export default async function CustomerDetailsPage({
   const user = response.data;
 
   const totalSpend = user!.orders.reduce(
-    (acc: number, order: any) => acc + order.totalPrice,
+    (acc: number, order: Order) => acc + order.totalPrice,
     0,
   );
 

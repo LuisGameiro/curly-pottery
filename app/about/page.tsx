@@ -3,16 +3,16 @@ import { Container, Text } from "@components/ui";
 export default function About() {
   return (
     <Container className="p-10">
-      <header className="justify-center text-center mx-auto mb-4">
+      <header className="justify-center text-center mx-auto mb-10">
         <Text variant="heading">About Curly Pottery</Text>
-        <Text variant="body">
+        <Text variant="body" className="mx-auto">
           Handcrafted ceramic pieces made with passion and creativity
         </Text>
       </header>
 
       <section className="space-y-5 md:max-w-lg mx-auto">
         <Text variant="sectionHeading">Our Story </Text>
-        <Text variant="body">
+        <Text variant="body" className="text-justify">
           At Curly Pottery, we believe in creating beautiful, functional
           ceramics that bring joy to everyday life. Each piece is carefully
           handcrafted with attention to detail and quality.
@@ -20,7 +20,7 @@ export default function About() {
         <Text variant="sectionHeading">Our Mission </Text>
 
         <Text variant="body">
-          We're dedicated to producing sustainable, artisanal pottery that
+          We are dedicated to producing sustainable, artisanal pottery that
           celebrates the beauty of natural materials and traditional
           craftsmanship.
         </Text>

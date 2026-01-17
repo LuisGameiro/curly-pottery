@@ -29,7 +29,7 @@ const CustomerNotes: React.FC<CustomerNotesProps> = ({
       } else {
         toast.success("Notes saved");
       }
-    } catch (error) {
+    } catch {
       toast.error("A connection error occurred. Please try again.");
     } finally {
       setIsSaving(false);

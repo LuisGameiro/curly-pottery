@@ -8,10 +8,10 @@ import s from "./CartItem.module.css";
 import { useUI } from "@components/ui/context";
 import Quantity from "@components/ui/Quantity";
 import useCart from "@lib/hooks/useCart";
-import { calculateDiscount, calculatePrice } from "@lib/calculate-price";
-import { LineItem } from "@lib/types/inspiration/cart";
+import { calculateDiscount } from "@lib/calculate-price";
 import { Trash } from "lucide-react";
 import { Button, Text } from "@components/ui";
+import { CartLineItem } from "@lib/types/types";
 
 const placeholderImg = "/product-img-placeholder.svg";
 
@@ -22,7 +22,7 @@ const CartItem = ({
   ...rest
 }: {
   variant?: "default" | "display";
-  item: LineItem;
+  item: CartLineItem;
   currencyCode: string;
 }) => {
   const { removeItem, updateItem } = useCart();
@@ -30,7 +30,7 @@ const CartItem = ({
   const [removing, setRemoving] = useState(false);
   const [quantity, setQuantity] = useState<number>(item.quantity);
 
-  const price = calculateDiscount(item.variant.price, item.variant.discounts);
+  const price = calculateDiscount(item.price, item.discounts);
 
   const handleChange = async ({
     target: { value },
@@ -78,8 +78,8 @@ const CartItem = ({
               onClick={() => closeSidebarIfPresent()}
               className="object-cover transition-transform hover:scale-105"
               fill
-              src={item.variant?.images?.[0] || placeholderImg}
-              alt={item.variant?.sku || "Product Image"}
+              src={item.images?.[0] || placeholderImg}
+              alt={item.sku || "Product Image"}
             />
           </Link>
         </div>
@@ -91,20 +91,20 @@ const CartItem = ({
             </Text>
           </Link>
           <div className="flex items-center gap-2 mt-1.5">
-            {item.variant?.colorName && (
+            {item.colorName && (
               <Text
                 variant="bold"
                 className="uppercase tracking-wider px-3 py-1 rounded-md bg-accent-1 border border-accent-2 text-accent-7"
               >
-                {item.variant.colorName}
+                {item.colorName}
               </Text>
             )}
-            {item.variant?.sizeName && (
+            {item.sizeName && (
               <Text
                 variant="bold"
                 className="text-sm uppercase tracking-wider px-3 py-1 rounded-md bg-accent-1 border border-accent-2 text-accent-7"
               >
-                {item.variant.sizeName}
+                {item.sizeName}
               </Text>
             )}
           </div>
@@ -120,7 +120,7 @@ const CartItem = ({
               handleChange={handleChange}
               increase={() => increaseQuantity(1)}
               decrease={() => increaseQuantity(-1)}
-              max={item.variant.stock}
+              max={item.stock}
             />
           </div>
         ) : (

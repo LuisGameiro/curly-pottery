@@ -1,11 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { Eye, Trash2 } from "lucide-react";
+import { Eye } from "lucide-react";
 import { Button } from "@components/ui";
 import DataTable from "@components/ui/Table/DataTable";
-import { useRouter } from "next/navigation";
 import { Order } from "@lib/types/types";
 
 export default function OrderTable({ orders }: { orders: Order[] }) {
@@ -31,16 +29,16 @@ export default function OrderTable({ orders }: { orders: Order[] }) {
       header: "Items",
       render: (o: Order) => (
         <div className="max-w-[150px] truncate">
-          {o.lineItems.map((i: any) => `${i.quantity}x ${i.sku}`).join(", ")}
+          {o.lineItems.map((i: Order) => `${i.quantity}x ${i.sku}`).join(", ")}
         </div>
       ),
     },
-    { header: "Total", render: (o: any) => `£${o.totalPrice.toFixed(2)}` },
-    { header: "Status", render: (o: any) => <StatusBadge status={o.status} /> },
+    { header: "Total", render: (o: Order) => `£${o.totalPrice.toFixed(2)}` },
+    { header: "Status", render: (o: Order) => <StatusBadge status={o.status} /> },
     {
       header: "View",
       align: "center" as const,
-      render: (o: any) => (
+      render: (o: Order) => (
         <Link href={`/admin/orders/${o.id}`}>
           <Button variant="naked">
             <Eye size={18} />

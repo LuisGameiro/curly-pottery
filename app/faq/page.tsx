@@ -11,30 +11,62 @@ interface FAQItem {
 
 const faqData: FAQItem[] = [
   {
-    question: "What shipping methods do you offer?",
+    question: "How is my order shipped?",
     answer:
-      "We offer standard and express shipping options. Orders typically ship within 2-3 business days. You can track your order using the tracking number provided via email.",
+      "We ship via Royal Mail and tracking numbers should always be sent when your order is mailed. \
+      If you didn’t get a tracking number, feel free to reach out! Orders ship within 3-5 business days of purchase.",
   },
   {
-    question: "Do you offer returns or exchanges?",
+    question: "What is the return policy?",
     answer:
-      "Yes, we accept returns within 30 days of purchase. Items must be in original condition. Please contact our support team to initiate a return.",
+      "We are unable to offer refund or return for purchased goods. However, if you have any problems with your order \
+      please get in touch within 3 days and we will do our best to help. ",
   },
   {
-    question: "Are your products handmade?",
+    question: "What if my item arrives broken during shipping?",
     answer:
-      "All our pottery pieces are handcrafted by curly artisans. Each piece is unique and may vary slightly in color and texture.",
+      "Every piece is packed with care so that it arrives in good condition to you. However, if your order arrived damaged, \
+      please take clear photos of the piece and packaging and contact us within 3 days from delivery at curly.pottery@gmail.com.\
+       We’ll do our best to help.",
   },
   {
     question: "How should I care for my pottery?",
     answer:
-      "Hand wash your pottery with mild soap and warm water. Avoid sudden temperature changes and dishwashers. Apply food-safe glaze sealant periodically for longevity.",
+      "All Curly Pottery is handmade and hand painted with the most care and passion. Treat ceramics the same as any glass object.\
+       They can break if dropped or knocked against any hard surface, avoid exposing your pottery to extreme  or sudden temperature\
+        changes and avoid abrasive materials like metal or harsh sponges. ",
   },
   {
-    question: "Do you offer custom orders?",
+    question: "Are the items microwave and dishwasher safe?",
     answer:
-      "Yes! We accept custom pottery orders. Please email us with your specifications and we'll provide a quote and timeline.",
+      "Yes, our pottery is microwave and dishwasher safe (unless stated otherwise in listings) but to give them a long life avoid\
+       putting them in the microwave and use a gentle dishwasher program. ",
   },
+  {
+    question: "Can I put the ceramics in the oven?",
+    answer:
+      "No, Curly Pottery is not oven safe. Do not place the pottery in an oven nor over a flame or on a hob as the item will crack\
+       and break. ​",
+  },
+  {
+    question: "Can I fix a broken ceramic item?​",
+    answer:
+      "Yes, you can repair an item if broken but only to be used as a decorative piece as it will impact the safety of the\
+       product. The pottery will lose its functionality and durability, and you won’t be able to use it in contact with food.",
+  },
+  {
+    question: "Will my handmade piece look exactly like the picture online?",
+    answer:
+      "All our pottery is handcrafted from beginning to end. Each piece is unique and may vary slightly in color,\
+       shape and size due to the inherent unpredictability of firing and glazing, natural properties of clay and the subtle\
+        differences that appear in the handmade crafting process. These slight variations are not flaws, but rather the unique\
+         characteristics that give handmade pottery its value and charm.​",
+  },
+  //    {
+  //   question: "?",
+  //   answer:
+  //     ""
+  // },
 ];
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -45,34 +77,35 @@ export default function FAQ() {
 
   return (
     <Container className="p-10">
-      <header className="justify-center text-center mx-auto mb-4">
+      <header className="justify-center text-center mx-auto mb-10">
         <Text variant="heading">Frequently Asked Questions</Text>
-        <Text variant="body">
+        <Text variant="body" className="mx-auto">
           Find answers to common questions about our pottery and services.
         </Text>
       </header>
 
-      <section className="space-y-5 md:max-w-lg mx-auto">
+      <section className="space-y-5 md:max-w-4xl mx-auto">
         {faqData.map((item, index) => (
-          <Container key={index} variant="box">
-            <button
-              onClick={() => toggleAccordion(index)}
-              className="w-full  flex items-center justify-between"
-            >
-              <Text variant="bold">{item.question}</Text>
-              <ChevronDown
-                className={`w-5 h-5 transition-transform ${
-                  openIndex === index ? "rotate-180" : ""
-                }`}
-              />
-            </button>
-
-            {openIndex === index && (
-              <div className="pt-4 ">
-                <Text variant="body">{item.answer}</Text>
+          <button
+            key={index}
+            onClick={() => toggleAccordion(index)}
+            className="w-full"
+          >
+            <Container variant="box">
+              <div className="w-full  flex items-center justify-between">
+                <Text variant="bold">{item.question}</Text>
+                <ChevronDown
+                  className={`w-5 h-5 transition-transform ${
+                    openIndex === index ? "rotate-180" : ""
+                  }`}
+                />
               </div>
-            )}
-          </Container>
+
+              {openIndex === index && (
+                <Text className="pt-4  text-justify  text-">{item.answer}</Text>
+              )}
+            </Container>
+          </button>
         ))}
       </section>
     </Container>

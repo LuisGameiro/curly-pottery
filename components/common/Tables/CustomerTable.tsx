@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Eye, Mail, Phone } from "lucide-react";
 import { Button } from "@components/ui";
 import DataTable from "@components/ui/Table/DataTable";
-import { User, UserWithOrdersAddress } from "@lib/types/types";
+import { Order, UserWithOrdersAddress } from "@lib/types/types";
 
 export default function CustomerTable({ customers }: { customers: UserWithOrdersAddress[] }) {
   const customerColumns = [
@@ -43,7 +43,7 @@ export default function CustomerTable({ customers }: { customers: UserWithOrders
       header: "Total Spend",
       render: (user: UserWithOrdersAddress) => {
         const total =
-          user.orders?.reduce((sum: number, o: any) => sum + o.totalPrice, 0) ||
+          user.orders?.reduce((sum: number, o: Order) => sum + o.totalPrice, 0) ||
           0;
         return `£${total.toLocaleString()}`;
       },

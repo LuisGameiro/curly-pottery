@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 interface InformationFormProps {
-  onComplete: (formData: any) => void
+  onComplete: (formData: unknown) => void
   initialData: User,
   isLoggedIn: boolean,
 

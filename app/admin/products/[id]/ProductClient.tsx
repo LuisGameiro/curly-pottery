@@ -16,7 +16,7 @@ import { Product, ProductFull, Variant } from "@lib/types/types";
 import { syncImages } from "actions/images.actions";
 
 interface ProductFormProps {
-  initialData: ProductFull | null;
+  initialData: Product ;
   categories: Category[];
 }
 
@@ -53,7 +53,7 @@ export default function ProductClient({
     requiresShipping: initialData?.requiresShipping ?? true,
     files: initialData?.images ?? [],
     previews: initialData?.images ?? [],
-    categoryIds: initialData?.categories?.map((c: any) => c.id) || [],
+    categoryIds: initialData?.categories?.map((c: Category) => c.id) || [],
   });
 
   const initialVariants = initialData?.variants.map((v: Variant) => ({

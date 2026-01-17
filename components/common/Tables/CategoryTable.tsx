@@ -32,7 +32,7 @@ export default function CategoryTable({ categories }: { categories: Category[] }
   const columns = [
     {
       header: "Image",
-      render: (cat: any) => (
+      render: (cat: Category) => (
         <div className="flex justify-center items-center w-full">
           <Image
             src={cat.image || "/placeholder.png"}

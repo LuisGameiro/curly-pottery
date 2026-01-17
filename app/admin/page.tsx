@@ -1,7 +1,6 @@
 import { Container, Text } from "@components/ui";
 import { getDashboardStats } from "actions/dashboard.actions";
 import Loading from "app/loading";
-import notFound from "app/not-found";
 import {
   Users,
   Package,
@@ -13,7 +12,7 @@ import {
   TouchpadIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { Suspense } from "react";
+import { ReactNode, Suspense } from "react";
 
 export default async function DashboardPage() {
   const response = await getDashboardStats();
@@ -30,7 +29,7 @@ export default async function DashboardPage() {
         <header>
           <Text variant="heading">Store Dashboard</Text>
           <Text variant="subHeading">
-            Overview of your store's performance and inventory health.
+            Overview of your store performance and inventory health.
           </Text>
         </header>
 
@@ -162,7 +161,15 @@ export default async function DashboardPage() {
   );
 }
 
-function StatCard({ label, value, icon, trend, isCritical }: any) {
+interface StatCardProp {
+  label: string;
+  value: number;
+  icon: ReactNode;
+  trend?: string;
+  isCritical?: boolean;
+}
+
+function StatCard({ label, value, icon, trend, isCritical }: StatCardProp) {
   return (
     <Container
       variant="box"

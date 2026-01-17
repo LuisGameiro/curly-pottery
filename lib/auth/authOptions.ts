@@ -4,9 +4,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "prisma/prisma";
 import { verifyPassword } from "@lib/auth/password";
-import { JWT } from "next-auth/jwt";
-import { User } from "@lib/types/types";
-import { Session } from "node:inspector";
 
 declare module "next-auth" {
   interface User {
@@ -71,8 +68,8 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.role;
-        ((token.name = user.firstName + " " + user.lastName),
-          (token.email = user.email));
+        token.name = user.firstName + " " + user.lastName,
+        token.email = user.email;
       }
       return token;
     },

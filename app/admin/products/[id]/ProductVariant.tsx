@@ -4,12 +4,7 @@ import { Package, Trash2, ChevronUp, ChevronDown } from "lucide-react";
 import { Container, Text, Button, Input } from "@components/ui";
 import InputCheck from "@components/ui/Input/InputCheck";
 import InputImage from "@components/ui/Input/InputImage";
-import {
-  ProductFull,
-  Variant as Variant,
-  SizeNames,
-  Detail,
-} from "@lib/types/types";
+import { SizeNames, Detail } from "@lib/types/types";
 import { skulify } from "@lib/skulify";
 import { VariantDetails } from "./VariantDetails";
 import { VariantDiscounts } from "./VariantDiscounts";
@@ -20,7 +15,7 @@ import { Discount } from "@lib/types/types";
 interface PorductVariantProps {
   variant: EditVariant;
   product: EditProduct;
-  onUpdate: (field: string, value: any) => void;
+  onUpdate: (field: string, value: unknown) => void;
   onRemove: () => void;
   onToggle: () => void;
 }

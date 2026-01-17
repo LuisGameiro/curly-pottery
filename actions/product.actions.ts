@@ -1,8 +1,9 @@
 "use server";
 
-import { Product, ProductFull, ActionResponse, ProductWithVariantsCategories } from "@lib/types/types";
+import { Product, ActionResponse, ProductWithVariantsCategories } from "@lib/types/types";
 import { prisma } from "prisma/prisma";
 import { Category } from "prisma/generated/prisma/client";
+import { EditProduct } from "app/admin/products/[id]/ProductClient";
 
 export async function getProductBySlug(
   slug: string | null,
@@ -241,7 +242,7 @@ export async function getProductsByCategorySlug(
   }
 }
 export async function upsertProduct(
-  payload: any,
+  payload: EditProduct,
 ): Promise<ActionResponse<Product| null>> {
   try {
     const { categoryIds, variants, id, previews, files, ...productData } =
@@ -256,10 +257,6 @@ export async function upsertProduct(
     const prepareVariant = (v: any) => {
       const {
         id: variantId,
-        isExpanded,
-        files,
-        previews,
-        productId,
         ...dbData
       } = v;
       return { ...dbData };

@@ -89,7 +89,7 @@ export const VariantManager: React.FC<VariantManagerProps> = ({
             product={product}
             onToggle={() => toggleVariant(variant.id)}
             onRemove={() => removeVariant(variant.id)}
-            onUpdate={(field: string, value: any) =>
+            onUpdate={(field: string, value: unknown) =>
               updateVariant(variant.id, field, value)
             }
           />

@@ -2,16 +2,15 @@
 
 import s from "./ProductSidebar.module.css";
 import { FC, useEffect, useState } from "react";
-import { Button, Text, useUI } from "@components/ui";
+import { Button, Text } from "@components/ui";
 import { selectDefaultOptionFromProduct, SelectedOptions } from "../helpers";
 import ErrorMessage from "@components/ui/ErrorMessage";
 import Link from "next/link";
 import { cn } from "@lib/utils";
 import ProductOptions from "../ProductOptions";
-import { calculatePrice } from "@lib/calculate-price";
+import { calculateDiscount } from "@lib/calculate-price";
 import useCart from "@lib/hooks/useCart";
-import { Detail, Product, ProductWithVariantsCategories, Variant } from "@lib/types/types";
-import { Category } from "prisma/generated/prisma/client";
+import { Detail, Category, ProductWithVariantsCategories, Variant } from "@lib/types/types";
 
 interface ProductSidebarProps {
   product: ProductWithVariantsCategories;
@@ -66,9 +65,8 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
     }
   };
 
-  const price = calculatePrice(
+  const price = calculateDiscount(
     variant.price,
-    variant.currency,
     variant.discounts,
   );
 
@@ -88,16 +86,16 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
           {price.hasDiscount ? (
             <>
               <span className="line-through opacity-40">
-                {price.priceCalculated}
+                {price.price}
               </span>
-              <span>{price.priceDiscount}</span>
+              <span>{price.finalPrice}</span>
 
               <span className=" bg-red-500 p-1 px-2 border-2 border-accent-9 bg-center">
                 SALE
               </span>
             </>
           ) : (
-            <span>{price.priceCalculated}</span>
+            <span>{price.finalPrice}</span>
           )}
         </p>
 

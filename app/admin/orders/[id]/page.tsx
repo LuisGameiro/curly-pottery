@@ -5,7 +5,7 @@ import Link from "next/link";
 import { getOrderById } from "actions/order.actions";
 import OrderStatusUpdate from "./orderStatusUpdate";
 import { showCurrency } from "@lib/calculate-price";
-import { CartLineItem, Order } from "@lib/types/types";
+import { CartLineItem } from "@lib/types/types";
 import notFound from "app/not-found";
 import Loading from "app/loading";
 import { Suspense } from "react";

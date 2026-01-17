@@ -1,11 +1,10 @@
-import { Category } from "@lib/types/types";
+import { Category, User } from "@lib/types/types";
 import { OrderStatus } from "@lib/types/types";
 import { Detailtype } from "@lib/types/types";
-import { DEFAULT_RUNTIME_WEBPACK } from "next/dist/shared/lib/constants";
-import { title } from "node:process";
+
 import {
   CurrencyCode,
-  Customer,
+  
   Product,
   SizeNames,
 } from "prisma/generated/prisma/client";
@@ -323,7 +322,7 @@ export const products: Product[] = [
 ];
 
 // Updated customers array with accounts
-export const customers: Customer[] = [
+export const customers: User[] = [
   // CUSTOMER 1: Frequent Buyer (Active Cart + Many Orders)
   {
     id: "cust_1",
