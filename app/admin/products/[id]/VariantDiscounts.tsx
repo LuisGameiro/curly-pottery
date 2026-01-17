@@ -2,11 +2,11 @@
 
 import { Plus, Trash2 } from "lucide-react";
 import { Text, Button, Input } from "@components/ui";
-import { Discount, DiscountType } from "@lib/types/customer";
+import { Discount, DiscountType } from "@lib/types/types";
 import InputSelect from "@components/ui/Input/InputSelect";
 
 interface Props {
-  discounts: any[];
+  discounts: Discount[];
   onChange: (discounts: Discount[]) => void;
 }
 
@@ -14,7 +14,13 @@ export const VariantDiscounts = ({ discounts = [], onChange }: Props) => {
   const addDiscount = () => {
     onChange([
       ...discounts,
-      { code: "", type: "PERCENTAGE", value: 0, percentage: 0 },
+      {
+        code: "",
+        type: "PERCENTAGE",
+        value: 0,
+        percentage: 0,
+        amountSaved: 0,
+      },
     ]);
   };
 
@@ -50,7 +56,7 @@ export const VariantDiscounts = ({ discounts = [], onChange }: Props) => {
             options={Object.values(DiscountType)}
             onChange={(e) => {
               const newD = [...discounts];
-              newD[index].type = e.target.value;
+              newD[index].type = e.target.value as DiscountType;
               onChange(newD);
             }}
           />

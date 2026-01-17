@@ -2,15 +2,13 @@
 
 import s from "./Layout.module.css";
 import dynamic from "next/dynamic";
-import { useRouter, usePathname } from "next/navigation";
 import { useUI } from "@components/ui/context";
 import { Navbar, Footer } from "@components/common";
 import { useAcceptCookies } from "@lib/hooks/useAcceptCookies";
 import { Sidebar, Button, LoadingDots } from "@components/ui";
 import { MenuSidebarView } from "@components/common/UserNav";
-import { Toaster } from 'sonner';
+import { Toaster } from "sonner";
 import type { Link as LinkProps } from "../UserNav/MenuSidebarView";
-import { cn } from "@lib/utils";
 import { useUser } from "@lib/hooks/useUser";
 
 const Loading = () => (

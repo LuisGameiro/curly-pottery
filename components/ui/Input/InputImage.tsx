@@ -1,16 +1,20 @@
 "use client";
 
 import React, { useId } from "react";
-import { ImageIcon, X, Plus, Upload } from "lucide-react";
+import { X, Plus, Upload } from "lucide-react";
 import { cn } from "@lib/utils";
 import s from "./Input.module.css";
+import Image from "next/image";
 
 interface ImageInputProps {
   label?: string;
   multiple?: boolean;
-  images: File[] | string[]; 
+  files: (File | string)[];
   previews: string[];
-  onImagesChange: (data: { files: File[]| string[]; previews: string[] }) => void;
+  onImagesChange: (data: {
+    files: (File | string)[];
+    previews: string[];
+  }) => void;
   error?: string;
   className?: string;
 }
@@ -73,7 +77,7 @@ const InputImage: React.FC<ImageInputProps> = ({
               className,
             )}
           >
-            <img
+            <Image
               src={src}
               alt="Preview"
               className={cn("object-cover w-full h-full")}

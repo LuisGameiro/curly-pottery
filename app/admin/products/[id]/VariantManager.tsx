@@ -3,12 +3,14 @@
 import React from "react";
 import { Plus } from "lucide-react";
 import { Text } from "@components/ui";
-import { Product, ProductVariant } from "@lib/types/product";
+import { Product, Variant as Variant } from "@lib/types/types";
+import { ProductVariant } from "./ProductVariant";
+import { EditProduct, EditVariant } from "./ProductClient";
 
 interface VariantManagerProps {
-  product: Product;
-  variants: ProductVariant[];
-  setVariants: React.Dispatch<React.SetStateAction<ProductVariant[]>>;
+  product: EditProduct;
+  variants: EditVariant[];
+  setVariants: React.Dispatch<React.SetStateAction<EditVariant[]>>;
 }
 
 export const VariantManager: React.FC<VariantManagerProps> = ({
@@ -26,13 +28,15 @@ export const VariantManager: React.FC<VariantManagerProps> = ({
         stock: 0,
         details: [],
         discounts: [],
-        images: [],
-        preview: [],
-
+        files: [],
+        previews: [],
         sizeName: "M",
         colorName: "",
         availableForSale: true,
         isExpanded: true,
+        currency: "USD",
+        colorHex: "FFFFFF",
+        productId: product.id,
       },
     ]);
   };

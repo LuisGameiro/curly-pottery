@@ -13,7 +13,9 @@ export interface DashboardStats {
   lowStockVariants: number;
 }
 
-export async function getDashboardStats(): Promise<ActionResponse<DashboardStats>> {
+export async function getDashboardStats(): Promise<
+  ActionResponse<DashboardStats>
+> {
   try {
     const [
       totalCategories,
@@ -59,7 +61,7 @@ export async function getDashboardStats(): Promise<ActionResponse<DashboardStats
         productsOutOfStock,
         totalInventoryUnits,
         lowStockVariants,
-      }
+      },
     };
   } catch (error) {
     console.error("getDashboardStats_ERROR:", error);

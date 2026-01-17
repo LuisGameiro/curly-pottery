@@ -21,7 +21,7 @@ export default async function DashboardPage() {
   if (!response.success) {
     throw new Error(response.message);
   }
-  
+
   const stats = response.data;
 
   return (

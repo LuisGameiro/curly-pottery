@@ -1,7 +1,6 @@
 import { cn } from "@lib/utils";
 import s from "./Input.module.css";
 import React, {
-  InputHTMLAttributes,
   TextareaHTMLAttributes,
   useId,
 } from "react";

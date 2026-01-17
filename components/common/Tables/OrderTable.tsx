@@ -4,23 +4,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { Eye, Trash2 } from "lucide-react";
 import { Button } from "@components/ui";
-import { useState } from "react";
 import DataTable from "@components/ui/Table/DataTable";
-import { deleteCategory } from "actions/category.actions";
 import { useRouter } from "next/navigation";
+import { Order } from "@lib/types/types";
 
-export default function OrderTable({ orders }: { orders: any[] }) {
-  const [isDeleting, setIsDeleting] = useState<string | null>(null);
-  const router = useRouter();
+export default function OrderTable({ orders }: { orders: Order[] }) {
 
   const orderColumns = [
     {
       header: "Order ID",
-      render: (o: any) => `#${o.id.slice(-6).toUpperCase()}`,
+      render: (o: Order) => `#${o.id.slice(-6).toUpperCase()}`,
     },
     {
       header: "Customer",
-      render: (o: any) => (
+      render: (o: Order) => (
         <div className="flex flex-col">
           <span className="font-medium">
             {o?.user?.firstName || o?.shippingAddress?.firstName}{" "}
@@ -32,7 +29,7 @@ export default function OrderTable({ orders }: { orders: any[] }) {
     },
     {
       header: "Items",
-      render: (o: any) => (
+      render: (o: Order) => (
         <div className="max-w-[150px] truncate">
           {o.lineItems.map((i: any) => `${i.quantity}x ${i.sku}`).join(", ")}
         </div>

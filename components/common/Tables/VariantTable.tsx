@@ -10,7 +10,7 @@ import { deleteCategory } from "actions/category.actions";
 import { useRouter } from "next/navigation";
 import { cn } from "@lib/utils";
 import { deleteProduct } from "actions/product.actions";
-import { ProductVariant } from "@lib/types/product";
+import { Variant } from "@lib/types/types";
 
 export default function VariantTable({ variants }: { variants: any[] }) {
   const variantColumns = [

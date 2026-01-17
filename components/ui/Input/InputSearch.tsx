@@ -2,8 +2,8 @@
 
 import { cn } from "@lib/utils";
 import s from "./Input.module.css";
-import React, { InputHTMLAttributes, useId, useState } from "react";
-import { EyeOff, Eye, Search } from "lucide-react";
+import React, { InputHTMLAttributes, useId } from "react";
+import { Search } from "lucide-react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
@@ -13,7 +13,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const InputSearch: React.FC<InputProps> = (props) => {
-  const { className, label, error, onValueChange, id, type, ...rest } = props;
+  const { className, label, error, onValueChange, id, ...rest } = props;
 
   const generatedId = useId();
   const inputId = id || generatedId;
@@ -29,10 +29,9 @@ const InputSearch: React.FC<InputProps> = (props) => {
   );
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value; // Extract the string value
+    const newValue = e.target.value;
 
     if (onValueChange) {
-      // onValueChange expects a string, so we pass newValue
       onValueChange(newValue);
     }
     if (props.onChange) {
@@ -53,7 +52,6 @@ const InputSearch: React.FC<InputProps> = (props) => {
           autoCapitalize="none"
           spellCheck="false"
           type={"text"}
-          // ARIA Rules
           aria-invalid={!!error}
           aria-describedby={error ? errorId : undefined}
           {...rest}

@@ -10,7 +10,7 @@ import Loading from "app/loading";
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<Loading/>}>
+    <Suspense fallback={<Loading />}>
       <LoginForm />
     </Suspense>
   );

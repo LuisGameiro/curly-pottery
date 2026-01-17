@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, ReactNode, Component } from "react";
+import { FC, ReactNode } from "react";
 import s from "./Grid.module.css";
 import { cn } from "@lib/utils";
 

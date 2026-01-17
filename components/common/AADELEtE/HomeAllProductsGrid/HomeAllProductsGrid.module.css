@@ -1,4 +1,4 @@
-@reference "tailwindcss";
+/* @reference "tailwindcss";
 @reference "../../../globals.css";
 
 .root {
@@ -23,4 +23,4 @@
       @apply mb-0 block sticky top-32;
     }
   }
-}
+} */

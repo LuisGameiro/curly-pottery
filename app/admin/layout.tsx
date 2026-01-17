@@ -63,7 +63,7 @@ export default function AdminLayout({
               className={cn(
                 "space-y-1 mt-2 p-2 bg-accent-2 border-2 border-border rounded-xl shadow-xl lg:shadow-none lg:border-0 lg:bg-transparent lg:p-0 lg:mt-0 lg:block transition-all",
                 "absolute left-0 right-0 top-full lg:static z-50",
-                { hidden: !isOpen }
+                { hidden: !isOpen },
               )}
             >
               {navItems.map((item) => {
@@ -77,7 +77,7 @@ export default function AdminLayout({
                       "flex items-center gap-3 px-4 py-2 rounded-lg transition-colors font-medium",
                       isActive
                         ? "bg-secondary text-white"
-                        : "text-secondary hover:bg-blue-50"
+                        : "text-secondary hover:bg-blue-50",
                     )}
                   >
                     <item.icon size={20} />

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Package, ChevronDown, User, Van } from "lucide-react";
 import { Text } from "@components/ui";
-import { cn } from "@lib/utils"; 
+import { cn } from "@lib/utils";
 
 export default function UserLayout({
   children,
@@ -51,7 +51,7 @@ export default function UserLayout({
 
           <ul
             className={cn(
-              "space-y-1 mt-2 p-2 bg-accent-2 border-2 border-border rounded-xl shadow-xl absolute left-0 right-0 top-full z-50", 
+              "space-y-1 mt-2 p-2 bg-accent-2 border-2 border-border rounded-xl shadow-xl absolute left-0 right-0 top-full z-50",
               "lg:shadow-none lg:border-0 lg:bg-transparent lg:p-0 lg:mt-0 lg:block  lg:static transition-all",
               { hidden: !isOpen },
             )}

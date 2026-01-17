@@ -2,13 +2,12 @@
 
 import Image from "next/image";
 import s from "./ProductView.module.css";
-import { FC, useEffect, useState } from "react";
-
+import { FC, useState } from "react";
 import { ProductSlider, ProductCard } from "@components/product";
 import { Container, Text } from "@components/ui";
 import { SEO } from "@components/common";
 import ProductSidebar from "../ProductSidebar";
-import { Product, ProductBasicInfo, ProductFull, ProductVariant } from "@lib/types/product";
+import { Product, ProductFull, Variant } from "@lib/types/types";
 import { cn } from "@lib/utils";
 
 export const getRelatedProducts = async (
@@ -27,14 +26,14 @@ export const getRelatedProducts = async (
 
 interface ProductViewProps {
   product: ProductFull;
-  relatedProducts: ProductBasicInfo[];
+  relatedProducts: Product[];
 }
 
 const ProductView: FC<ProductViewProps> = ({
   product,
   relatedProducts = [],
 }) => {
-  const [variant, setVariant] = useState<ProductVariant>(product.variants[0]);
+  const [variant, setVariant] = useState<Variant>(product.variants[0]);
 
   return (
     <>

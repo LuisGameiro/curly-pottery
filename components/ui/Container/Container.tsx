@@ -1,9 +1,9 @@
 import { cn } from "@lib/utils";
-import React, { FC } from "react";
+import { ElementType, FC, HTMLAttributes, ReactNode } from "react";
 
 interface ContainerProps {
   className?: string;
-  children?: any;
+  children?: ReactNode;
   el?: HTMLElement;
   clean?: boolean;
   variant?: "default" | "box";
@@ -25,9 +25,7 @@ const Container: FC<ContainerProps> = ({
     },
     className,
   );
-
-  let Component: React.ComponentType<React.HTMLAttributes<HTMLDivElement>> =
-    el as any;
+  const Component = el as ElementType<HTMLAttributes<HTMLElement>>;
 
   return <Component className={rootClassName}>{children}</Component>;
 };

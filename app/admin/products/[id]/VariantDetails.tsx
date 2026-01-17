@@ -2,15 +2,18 @@
 
 import { Plus, Trash2 } from "lucide-react";
 import { Text, Button, Input } from "@components/ui";
-import { Detail, Detailtype } from "@lib/types/product";
+import { Detail, Detailtype } from "@lib/types/types";
 import InputSelect from "@components/ui/Input/InputSelect";
 
-interface Props {
-  details: any[];
+interface VariantDetailsProps {
+  details: Detail[];
   onChange: (details: Detail[]) => void;
 }
 
-export const VariantDetails = ({ details = [], onChange }: Props) => {
+export const VariantDetails = ({
+  details = [],
+  onChange,
+}: VariantDetailsProps) => {
   const addDetail = () => {
     onChange([...details, { title: Detailtype.Materials, description: "" }]);
   };

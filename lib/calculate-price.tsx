@@ -1,5 +1,5 @@
-import { Discount } from "./types/customer";
-import { CurrencyCode } from "./types/product";
+import { Discount } from "./types/types";
+import { CurrencyCode } from "./types/types";
 
 export function calculatePrice(
   price: number = 0,
@@ -7,7 +7,6 @@ export function calculatePrice(
   discounts: Discount[] | null = null,
   locale: CurrencyCode = "GBP",
 ) {
-  
   const symbolConvert: Record<CurrencyCode, string> = {
     USD: "$",
     GBP: "£",
@@ -21,7 +20,7 @@ export function calculatePrice(
   };
 
   // 1. Convert the base price to the locale currency
-  let priceCalculated = price * conversionRate[locale];
+  const priceCalculated = price * conversionRate[locale];
   let finalPrice = priceCalculated;
 
   // 2. Apply all discounts in the array

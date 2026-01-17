@@ -1,13 +1,21 @@
-import React, { useEffect, RefObject, createElement, ReactNode, useRef } from "react";
+import {
+  useEffect,
+  RefObject,
+  createElement,
+  ReactNode,
+  useRef,
+} from "react";
 import { tabbable } from "tabbable";
 
 interface Props {
-  children: ReactNode | any;
+  children: ReactNode;
   focusFirst?: boolean;
 }
 
 export default function FocusTrap({ children, focusFirst = false }: Props) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const root: RefObject<any> = useRef(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const anchor: RefObject<any> = useRef(document.activeElement);
 
   const returnFocus = () => {
@@ -29,7 +37,7 @@ export default function FocusTrap({ children, focusFirst = false }: Props) {
     // Try to find focusable elements, if match then focus
     // Up to 6 seconds of load time threshold
     let match = false;
-    let end = 60; // Try to find match at least n times
+    const end = 60; // Try to find match at least n times
     let i = 0;
     const timer = setInterval(() => {
       if (!match !== i > end) {

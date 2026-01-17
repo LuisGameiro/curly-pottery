@@ -9,7 +9,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const InputCheck: React.FC<InputProps> = (props) => {
-  const { className, label, error, id, ...rest } = props;
+  const { label, error, id, ...rest } = props;
 
   const generatedId = useId();
   const inputId = id || generatedId;

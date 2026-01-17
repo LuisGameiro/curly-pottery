@@ -1,9 +1,8 @@
 "use server";
 
 import { authOptions } from "@lib/auth/authOptions";
-import { auth } from "app/api/auth/[...nextauth]/route";
+import { CartLineItem } from "@lib/types/types";
 import { getServerSession } from "next-auth";
-import { useSession } from "next-auth/react";
 import { prisma } from "prisma/prisma";
 
 export async function getCartFromDbAction() {
@@ -21,7 +20,7 @@ export async function getCartFromDbAction() {
   return user?.cart ? user.cart : [];
 }
 
-export async function syncCartAction(items: any[]) {
+export async function syncCartAction(items: CartLineItem[]) {
   const session = await getServerSession(authOptions);
   if (!session?.user) return;
 

@@ -12,9 +12,7 @@ declare global {
   }
 }
 
-export default function SumUpPayment({ checkoutId }: {
-  checkoutId: string;
-}) {
+export default function SumUpPayment({ checkoutId }: { checkoutId: string }) {
   const [loading, setLoading] = useState(true);
 
   const mountWidget = () => {

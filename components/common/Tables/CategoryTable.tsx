@@ -8,8 +8,9 @@ import { useState } from "react";
 import DataTable from "@components/ui/Table/DataTable";
 import { deleteCategory } from "actions/category.actions";
 import { useRouter } from "next/navigation";
+import { Category } from "@lib/types/types";
 
-export default function CategoryTable({ categories }: { categories: any[] }) {
+export default function CategoryTable({ categories }: { categories: Category[] }) {
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const router = useRouter();
 
@@ -45,15 +46,15 @@ export default function CategoryTable({ categories }: { categories: any[] }) {
     },
     {
       header: "Name",
-      render: (cat: any) => <span className="font-medium">{cat.name}</span>,
+      render: (cat: Category) => <span className="font-medium">{cat.name}</span>,
     },
     {
       header: "Slug",
-      render: (cat: any) => <span className="text-xs">/{cat.slug}</span>,
+      render: (cat: Category) => <span className="text-xs">/{cat.slug}</span>,
     },
     {
       header: "Actions",
-      render: (cat: any) => (
+      render: (cat: Category) => (
         <div className="flex gap-2 sm:gap-4 justify-center">
           <Link href={`/admin/categories/${cat.id}`}>
             <Button variant="naked">

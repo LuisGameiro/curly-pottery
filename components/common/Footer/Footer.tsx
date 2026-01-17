@@ -1,14 +1,18 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import Link from "next/link";
-import type { Page } from "@lib/types/inspiration/page";
 import { Logo } from "@components/ui";
 import { I18nWidget } from "@components/common";
 import ThemeSwitcher from "@components/ui/ThemeSwitcher";
 import s from "./Footer.module.css";
 
+type Page = {
+  name: string;
+  url: string;
+};
+
 interface Props {
   className?: string;
-  children?: any;
+  children?: ReactNode;
   pages?: Page[];
 }
 

@@ -1,12 +1,20 @@
 import { Button, Input, Text } from "@components/ui";
+import { Cart, User } from "@lib/types/types";
 import Link from "next/link";
 import { useState } from "react";
+
+interface InformationFormProps {
+  onComplete: (formData: any) => void
+  initialData: User,
+  isLoggedIn: boolean,
+
+}
 
 export default function InformationForm({
   onComplete,
   initialData,
   isLoggedIn,
-}: any) {
+}: InformationFormProps) {
   const [continueAsGuest, setContinueAsGuest] = useState(false);
 
   if (!isLoggedIn && !continueAsGuest) {
@@ -59,7 +67,7 @@ export default function InformationForm({
             type="email"
             name="email"
             placeholder="Email Address"
-            defaultValue={initialData?.email}
+            defaultValue={initialData?.email || ''}
             required
           />
           <Input
@@ -67,7 +75,7 @@ export default function InformationForm({
             type="phone"
             name="phone"
             placeholder="Phone"
-            defaultValue={initialData?.email}
+            defaultValue={initialData?.phone || ''}
             required
           />
         </div>

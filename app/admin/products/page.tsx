@@ -14,11 +14,9 @@ export default async function ProductsPage() {
     throw new Error(response.message);
   }
 
-  const products = response.data;
-
   return (
     <Suspense fallback={<Loading />}>
-      <ProductsCLient products={products} />;
+      <ProductsCLient products={response.data || []} />;
     </Suspense>
   );
 }

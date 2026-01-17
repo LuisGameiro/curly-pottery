@@ -4,7 +4,7 @@ import { Container, Text } from "@components/ui";
 import { useState, useMemo } from "react";
 import InputSearch from "@components/ui/Input/InputSearch";
 import CustomerTable from "@components/common/Tables/CustomerTable";
-import { User } from "@lib/types/customer";
+import { User } from "@lib/types/types";
 
 export default function CustomersClient({ customers }: { customers: User[] }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -12,7 +12,9 @@ export default function CustomersClient({ customers }: { customers: User[] }) {
   const filteredCustomers = useMemo(() => {
     return customers.filter(
       (c) =>
-        `${c.name}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        `${c.firstName} ${c.lastName}`
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
         c.email.toLowerCase().includes(searchTerm.toLowerCase()),
     );
   }, [customers, searchTerm]);

@@ -1,6 +1,5 @@
-
-import { Product } from "@lib/types/product";
-import { Category } from "@lib/types/category";
+import { Product } from "@lib/types/types";
+import { Category } from "@lib/types/types";
 import ShopClient from "./ShopClient";
 import { getProductsByCategorySlug } from "actions/product.actions";
 import { getAllCategories } from "actions/category.actions";

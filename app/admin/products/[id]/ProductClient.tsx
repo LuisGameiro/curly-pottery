@@ -11,13 +11,32 @@ import Loading from "app/loading";
 import InputCheck from "@components/ui/Input/InputCheck";
 import { VariantManager } from "./VariantManager";
 import Link from "next/link";
-import { syncImagesWithBlob } from "@lib/uploadImages";
-import { Category } from "@lib/types/category";
-import { Product } from "@lib/types/product";
+import { Category } from "@lib/types/types";
+import { Product, ProductFull, Variant } from "@lib/types/types";
+import { syncImages } from "actions/images.actions";
 
 interface ProductFormProps {
-  initialData?: Product;
+  initialData: ProductFull | null;
   categories: Category[];
+}
+
+export interface EditVariant extends Omit<
+  Variant,
+  "images" | "createdAt" | "updatedAt"
+> {
+  files: (File | string)[];
+  previews: string[];
+  isExpanded: boolean;
+}
+
+export interface EditProduct extends Omit<
+  Product,
+  "images" | "categories" | "variants" | "createdAt" | "updatedAt"
+> {
+  categoryIds: string[];
+
+  files: (File | string)[];
+  previews: string[];
 }
 
 export default function ProductClient({
@@ -26,7 +45,8 @@ export default function ProductClient({
 }: ProductFormProps) {
   const isEditing = !!initialData;
 
-  const [product, setProduct] = useState({
+  const [product, setProduct] = useState<EditProduct>({
+    id: initialData?.id ?? "",
     name: initialData?.name ?? "",
     slug: initialData?.slug ?? "",
     description: initialData?.description ?? "",
@@ -34,26 +54,30 @@ export default function ProductClient({
     files: initialData?.images ?? [],
     previews: initialData?.images ?? [],
     categoryIds: initialData?.categories?.map((c: any) => c.id) || [],
-    ...initialData,
   });
 
-  const initialVariants = initialData?.variants.map((v: any) => ({
+  const initialVariants = initialData?.variants.map((v: Variant) => ({
     ...v,
     files: v.images ?? [],
     previews: v.images ?? [],
     isExpanded: false,
   }));
 
-  const [variants, setVariants] = useState<any[]>(
+  const [variants, setVariants] = useState<EditVariant[]>(
     initialVariants || [
       {
         id: `temp-${Date.now()}`,
+        productId: initialData?.id ?? "",
         sku: "",
         price: 0,
+        currency: "GBP",
         stock: 0,
         sizeName: "M",
         colorName: "",
-        detais: [],
+        colorHex: "#FFFFFF",
+        files: [],
+        previews: [],
+        details: [],
         discounts: [],
         availableForSale: true,
         isExpanded: true,
@@ -69,19 +93,16 @@ export default function ProductClient({
     setLoading(true);
     try {
       const updatedVariants = await Promise.all(
-        variants.map(async (variant) => {
+        variants.map(async (variant: EditVariant) => {
           const originalVariant = initialData?.variants?.find(
-            (v: any) => v.id === variant.id,
+            (v: Variant) => v.id === variant.id,
           );
           const oldImages = originalVariant?.images || [];
-          const imageUrls = await syncImagesWithBlob(
-            variant.files || [],
-            oldImages,
-          );
+          const imageUrls = await syncImages(variant.files || [], oldImages);
 
           return {
             ...variant,
-            images: imageUrls,
+            images: imageUrls.data,
             files: [],
             previews: [],
           };
@@ -90,13 +111,14 @@ export default function ProductClient({
       const payload = {
         ...product,
         variants: updatedVariants,
-        images: await syncImagesWithBlob(product.files || [], product.image),
+        images: (
+          await syncImages(product.files || [], initialData?.images ?? [])
+        ).data,
         files: [],
         previews: [],
       };
       await upsertProduct(payload);
     } catch (error) {
-      // setError(error)
       console.error("Failed to update status", error);
     } finally {
       setLoading(false);
@@ -196,10 +218,11 @@ export default function ProductClient({
                           key={cat.id}
                           type="button"
                           onClick={() => updateCategoriesIds(cat.id)}
-                          className={`px-3 py-1 rounded-full text-xs border transition ${product.categoryIds.includes(cat.id)
+                          className={`px-3 py-1 rounded-full text-xs border transition ${
+                            product.categoryIds.includes(cat.id)
                               ? "bg-primary text-accent-6 border-primary  hover:bg-primary/60"
                               : "bg-accent-8 text-accent-0 hover:bg-accent-6"
-                            }`}
+                          }`}
                         >
                           {cat.name}
                         </button>
@@ -213,7 +236,7 @@ export default function ProductClient({
                 <Text variant="boxTitle">Product Image</Text>
                 <InputImage
                   multiple={false}
-                  images={product.files}
+                  files={product.files}
                   previews={product.previews}
                   onImagesChange={({ files, previews }) =>
                     setProduct({

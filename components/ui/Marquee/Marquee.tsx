@@ -2,7 +2,15 @@
 
 import { cn } from "@lib/utils";
 import s from "./Marquee.module.css";
-import { FC, ReactNode, Component, Children } from "react";
+import {
+  FC,
+  ReactNode,
+  Component,
+  Children,
+  cloneElement,
+  ReactElement,
+  isValidElement,
+} from "react";
 import { default as FastMarquee } from "react-fast-marquee";
 
 interface MarqueeProps {
@@ -27,13 +35,23 @@ const Marquee: FC<MarqueeProps> = ({
 
   return (
     <FastMarquee gradient={false} className={rootClassName} autoFill={true}>
-      {Children.map(children, (child: Children) => ({
+      {/* {Children.map(children, (child: any) => ({
         ...child,
         props: {
           ...child.props,
           className: cn(child.props.className, `${variant}`),
         },
-      }))}
+      }))} */}
+      {Children.map(children, (child: ReactNode) => {
+        if (!isValidElement(child)) 
+          return child;
+        
+        const element = child as ReactElement<{ className?: string }>;
+
+        return cloneElement(element, {
+          className: cn(element.props.className, variant),
+        });
+      })}
     </FastMarquee>
   );
 };

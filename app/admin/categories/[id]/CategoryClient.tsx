@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { ArrowLeft, Loader2, ImageIcon } from "lucide-react";
+import React, { useState } from "react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { slugify } from "@lib/slugify";
 import { Button, Container, Input, Text } from "@components/ui";
@@ -9,36 +9,39 @@ import { CategorySchema } from "@lib/form-validator";
 import { useRouter } from "next/navigation";
 import { upsertCategory } from "actions/category.actions";
 import InputImage from "@components/ui/Input/InputImage";
-import { uploadImagesToBlob } from "@lib/uploadImages";
 import Loading from "app/loading";
-import { Category } from "@lib/types/category";
+import { Category } from "@lib/types/types";
+import { toast } from "sonner";
+import { syncImages } from "actions/images.actions";
 
 export default function CategoryClient({
   category,
   isEditMode,
 }: {
-  category: Category;
+  category: Category | null;
   isEditMode: boolean;
 }) {
   const router = useRouter();
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [gallery, setGallery] = useState<{ files: File[] | string[]; previews: string[] }>(
-    {
-      files: [category.image],
-      previews: [category.image],
-    },
-  );
+  const [gallery, setGallery] = useState<{
+    files: (File | string)[];
+    previews: string[];
+  }>({
+    files: [category?.image || ""],
+    previews: [category?.image || ""],
+  });
   const [formData, setFormData] = useState({
-    id: category.id || "",
-    name: category.name || "",
-    slug: category.slug || "",
-    image: category.image || "",
+    id: category?.id || "",
+    name: category?.name || "",
+    slug: category?.slug || "",
+    image: category?.image || "",
   });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     const validation = CategorySchema.safeParse({
       ...formData,
@@ -54,26 +57,32 @@ export default function CategoryClient({
       return;
     }
 
-    setLoading(true);
-
     try {
-      const url = await uploadImagesToBlob(gallery.files);
-      const result = await upsertCategory({
+      const ResponsEmail = await syncImages(gallery.files, [
+        category?.image || "",
+      ]);
+      if (!ResponsEmail.success) {
+        return toast(ResponsEmail.message);
+      }
+
+      const response = await upsertCategory({
         id: formData.id,
         name: formData.name,
         slug: formData.slug,
-        image: url ? url[0] : formData.image,
+        image: ResponsEmail.data ? ResponsEmail.data[0] : formData.image,
       });
 
-      if (result.success) {
+      if (response.success) {
         router.replace("/admin/categories");
         router.refresh();
       } else {
-        setErrors({ from: result?.error.message || "Failed to save category" });
+        setErrors({ from: response?.message || "Failed to save category" });
+        return toast(ResponsEmail.message);
       }
     } catch (err) {
       console.error("Submit error:", err);
       setErrors({ form: "An error occurred while saving." });
+      toast("An error occurred while saving.");
     } finally {
       setLoading(false);
     }
@@ -124,10 +133,11 @@ export default function CategoryClient({
               /{slugify(formData.name)}
             </span>
           </div>
+
           <InputImage
             label="Category Image"
             multiple={false}
-            images={gallery.files}
+            files={gallery.files}
             previews={gallery.previews}
             onImagesChange={setGallery}
             error={errors.images}

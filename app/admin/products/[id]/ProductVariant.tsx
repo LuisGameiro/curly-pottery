@@ -4,11 +4,26 @@ import { Package, Trash2, ChevronUp, ChevronDown } from "lucide-react";
 import { Container, Text, Button, Input } from "@components/ui";
 import InputCheck from "@components/ui/Input/InputCheck";
 import InputImage from "@components/ui/Input/InputImage";
-import { SizeNames } from "@lib/types/product";
+import {
+  ProductFull,
+  Variant as Variant,
+  SizeNames,
+  Detail,
+} from "@lib/types/types";
 import { skulify } from "@lib/skulify";
 import { VariantDetails } from "./VariantDetails";
 import { VariantDiscounts } from "./VariantDiscounts";
 import InputSelect from "@components/ui/Input/InputSelect";
+import { EditProduct, EditVariant } from "./ProductClient";
+import { Discount } from "@lib/types/types";
+
+interface PorductVariantProps {
+  variant: EditVariant;
+  product: EditProduct;
+  onUpdate: (field: string, value: any) => void;
+  onRemove: () => void;
+  onToggle: () => void;
+}
 
 export const ProductVariant = ({
   variant,
@@ -16,7 +31,7 @@ export const ProductVariant = ({
   onUpdate,
   onRemove,
   onToggle,
-}: any) => {
+}: PorductVariantProps) => {
   return (
     <Container variant="box" className="p-0 overflow-hidden">
       <div
@@ -105,19 +120,19 @@ export const ProductVariant = ({
           />
 
           <VariantDetails
-            details={variant.details ?? []}
+            details={(variant.details ?? []) as Detail[]}
             onChange={(val) => onUpdate("details", val)}
           />
 
           <VariantDiscounts
-            discounts={variant.discounts ?? []}
+            discounts={(variant.discounts ?? []) as Discount[]}
             onChange={(val) => onUpdate("discounts", val)}
           />
 
           <InputImage
             label="Variant Images"
-            multiple={variant}
-            images={variant.files}
+            multiple={true}
+            files={variant.files}
             previews={variant.previews}
             onImagesChange={({ files, previews }) => {
               onUpdate("files", files);

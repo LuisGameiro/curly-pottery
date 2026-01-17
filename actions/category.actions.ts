@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "prisma/prisma";
-import { Category } from "@lib/types/category";
+import { Category } from "@lib/types/types";
 import { ActionResponse } from "@lib/types/utils";
 
 export async function getAllCategories(): Promise<ActionResponse<Category[]>> {
@@ -30,7 +30,7 @@ export async function getAllCategories(): Promise<ActionResponse<Category[]>> {
 }
 
 export async function getCategoryById(
-  id: string
+  id: string,
 ): Promise<ActionResponse<Category | null>> {
   try {
     const category = await prisma.category.findFirst({

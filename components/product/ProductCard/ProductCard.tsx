@@ -4,7 +4,7 @@ import Image, { ImageProps } from "next/image";
 import { cn } from "@lib/utils";
 import { FC } from "react";
 import { calculatePrice } from "@lib/calculate-price";
-import { Product } from "@lib/types/product";
+import { Product } from "@lib/types/types";
 
 interface Props {
   className?: string;

@@ -3,7 +3,10 @@
 import Layout from "@components/common/Layout";
 import { Text, Button, Input, Container } from "@components/ui";
 import InputTextArea from "@components/ui/Input/InputTextArea";
+import { ContactFormEmail } from "@lib/emails/ContactFormEmail";
+import { sendEmail } from "actions/email.actions";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 interface FormData {
   name: string;
@@ -20,7 +23,6 @@ export default function Contacts() {
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
-  const [message, setMessage] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -33,38 +35,28 @@ export default function Contacts() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatus("loading");
-    setMessage("");
-
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      setStatus("loading");
 
-      const data = await response.json();
+      const response = await sendEmail(
+        "curlypottery@gmail.com",
+        "New Message",
+        ContactFormEmail(formData),
+      );
 
-      if (response.ok) {
+      if (response.data) {
         setStatus("success");
-        setMessage(
-          data.message ||
-          "Thank you for your message! We will be in touch soon.",
-        );
+        toast("Thank you for your message! We will be in touch soon.");
         setFormData({ name: "", email: "", message: "" });
       } else {
         setStatus("error");
-        setMessage(
-          data.error ||
-          "There was an error sending your message. Please try again.",
-        );
+        toast("There was an error sending your message. Please try again.");
       }
     } catch (error) {
       console.error("Submission error:", error);
       setStatus("error");
-      setMessage("An unexpected error occurred. Please check your connection.");
+
+      toast("An unexpected error occurred. Please check your connection.");
     }
   };
 

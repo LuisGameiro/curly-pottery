@@ -1,5 +1,9 @@
-import { Address } from "@lib/types/customer";
-import { categories, customers, products } from "../app/api/fakeapi/seedData";
+import { Address } from "@lib/types/types";
+import {
+  categories,
+  customers,
+  products,
+} from "../app/api/admin/fakeapi/seedData";
 import { prisma } from "./prisma";
 
 async function main() {
@@ -35,7 +39,7 @@ async function main() {
   for (const item of products) {
     await prisma.product.upsert({
       where: { slug: item.slug },
-      update: {}, 
+      update: {},
       create: {
         id: item.id,
         name: item.name,
@@ -68,15 +72,15 @@ async function main() {
   console.log("✅ Seeding products successful");
 
   for (const cust of customers) {
-    const account = await prisma.account.create({
-      data: {
-        id: cust.account.id,
-        type: cust.account.type,
-        provider: cust.account.provider,
-        providerAccountId: cust.account.providerAccountId,
-        admin: cust.account.admin,
-      },
-    });
+    // const account = await prisma.account.create({
+    //   data: {
+    //     id: cust.account.id,
+    //     type: cust.account.type,
+    //     provider: cust.account.provider,
+    //     providerAccountId: cust.account.providerAccountId,
+    //     admin: cust.account.admin,
+    //   },
+    // });
 
     await prisma.user.create({
       data: {
@@ -87,11 +91,11 @@ async function main() {
         company: cust.company,
         acceptsMarketing: cust.acceptsMarketing,
         addresses: {
-          create: cust.addresses.map((a:Address) => ({
+          create: cust.addresses.map((a: Address) => ({
             type: a.type,
             firstName: a.firstName,
             lastName: a.lastName,
-            address:  a.address,
+            address: a.address,
             postalCode: a.postalCode,
             city: a.city,
             country: a.country,

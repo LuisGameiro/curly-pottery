@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { Product } from "prisma/generated/prisma/client";
-import { syncCartAction, getCartFromDbAction } from "actions/cart.actions";
+import { syncCartAction } from "actions/cart.actions";
 
 export interface CartItem extends Product {
   quantity: number;

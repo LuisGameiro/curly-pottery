@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronRight, Cross } from "@components/icons";
+import { ChevronRight } from "@components/icons";
 import { useToggleTheme } from "@lib/hooks/useToggleTheme";
 import ClickOutside from "@lib/click-outside";
 import ThemeIcon from "./ThemeIcon";

@@ -3,18 +3,16 @@
 import Link from "next/link";
 import { Eye, Mail, Phone } from "lucide-react";
 import { Button } from "@components/ui";
-import { useState } from "react";
 import DataTable from "@components/ui/Table/DataTable";
-import { deleteCategory } from "actions/category.actions";
-import { useRouter } from "next/navigation";
+import { User, UserWithOrdersAddress } from "@lib/types/types";
 
-export default function CustomerTable({ customers }: { customers: any[] }) {
+export default function CustomerTable({ customers }: { customers: UserWithOrdersAddress[] }) {
   const customerColumns = [
     {
       header: "Customer",
-      render: (user: any) => (
+      render: (user: UserWithOrdersAddress) => (
         <div>
-          <div className="font-medium">{user.name}</div>
+          <div className="font-medium">{user.firstName} {user.lastName}</div>
           <div className="text-xs text-muted-foreground">
             ID: {user.id.slice(-6)}
           </div>
@@ -23,7 +21,7 @@ export default function CustomerTable({ customers }: { customers: any[] }) {
     },
     {
       header: "Contacts",
-      render: (user: any) => (
+      render: (user: UserWithOrdersAddress) => (
         <div className="flex flex-col gap-1 items-center">
           <div className="flex items-center gap-1.5">
             <Mail size={12} /> {user.email}
@@ -39,11 +37,11 @@ export default function CustomerTable({ customers }: { customers: any[] }) {
     {
       header: "Orders",
       align: "center" as const,
-      render: (user: any) => user.orders?.length || 0,
+      render: (user: UserWithOrdersAddress) => user.orders?.length || 0,
     },
     {
       header: "Total Spend",
-      render: (user: any) => {
+      render: (user: UserWithOrdersAddress) => {
         const total =
           user.orders?.reduce((sum: number, o: any) => sum + o.totalPrice, 0) ||
           0;
@@ -53,7 +51,7 @@ export default function CustomerTable({ customers }: { customers: any[] }) {
     {
       header: "Actions",
       align: "center" as const,
-      render: (user: any) => (
+      render: (user: UserWithOrdersAddress) => (
         <Link href={`/admin/customers/${user.id}`}>
           <Button variant="naked">
             <Eye size={20} />

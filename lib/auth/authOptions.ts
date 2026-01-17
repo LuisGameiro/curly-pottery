@@ -1,10 +1,31 @@
-import { NextAuthOptions } from "next-auth";
+import { DefaultSession, NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "prisma/prisma";
 import { verifyPassword } from "@lib/auth/password";
 import { JWT } from "next-auth/jwt";
+import { User } from "@lib/types/types";
+import { Session } from "node:inspector";
+
+declare module "next-auth" {
+  interface User {
+    id: string;
+    role: string | null;
+    firstName: string;
+    lastName: string;
+    phone?: string | null;
+  }
+
+  interface Session {
+    user: {
+      id: string;
+      role: string | null;
+      firstName: string;
+      lastName: string;
+    } & DefaultSession["user"];
+  }
+}
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -38,21 +59,24 @@ export const authOptions: NextAuthOptions = {
         return {
           id: user.id,
           email: user.email,
-          name: user.firstName + ' ' + user.lastName,
+          firstName: user.firstName,
+          lastName: user.lastName,
           role: user.role,
         };
       },
     }),
   ],
   callbacks: {
-    async jwt({ token, user }: { token: JWT; user: any }) {
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        ((token.name = user.firstName + " " + user.lastName),
+          (token.email = user.email));
       }
       return token;
     },
-    async session({ session, token }: { token: JWT; session: any }) {
+    async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;

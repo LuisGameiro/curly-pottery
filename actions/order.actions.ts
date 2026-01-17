@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "prisma/prisma";
-import { Order, OrderStatus, OrderWithUser } from "@lib/types/customer";
+import { Address, Order, OrderStatus, OrderWithUser } from "@lib/types/types";
 import { revalidatePath } from "next/cache";
 import { ActionResponse } from "@lib/types/utils";
 
@@ -35,7 +35,7 @@ export async function getAllOrders(): Promise<
 }
 
 export async function getOrderById(
-  id: string
+  id: string,
 ): Promise<ActionResponse<OrderWithUser | null>> {
   try {
     const order = await prisma.order.findUnique({
@@ -64,14 +64,11 @@ export async function getOrderById(
 export async function createOrder(input: {
   cartId: string;
   userId?: string;
-  shippingAddress: any;
-  billingAddress: any;
-  cart: any;
-  shipping: any;
+  shippingAddress: Address;
+  billingAddress: Address;
+  cart: Order;
 }): Promise<ActionResponse<Order | null>> {
-  try { 
-  console.log(input);
-
+  try {
     const order = await prisma.order.create({
       data: {
         lineItems: input.cart.lineItems || [],
@@ -82,7 +79,8 @@ export async function createOrder(input: {
         shippingAddress: input.shippingAddress || {},
         billingAddress: input.billingAddress || {},
         status: "PENDING",
-        shipping: input.shipping,
+        shippingPrice: input.shippingPrice,
+        shippingMethod:input.shippingMethod,
         ...(input.userId && {
           user: {
             connect: { id: input.userId },
@@ -109,7 +107,7 @@ export async function createOrder(input: {
 
 export async function updateOrderStatus(
   orderId: string,
-  newStatus: string
+  newStatus: string,
 ): Promise<ActionResponse<Order | null>> {
   try {
     const status = newStatus.toUpperCase() as OrderStatus;

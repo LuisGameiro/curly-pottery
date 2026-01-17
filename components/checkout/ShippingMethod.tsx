@@ -14,7 +14,12 @@ const shippingOptions = [
   },
 ];
 
-export default function ShippingMethod({ onComplete }: any) {
+interface ShippingMethodProps {
+  onComplete: (formData: any) => void
+
+}
+
+export default function ShippingMethod({ onComplete }: ShippingMethodProps) {
   return (
     <div className="space-y-8">
       <Text variant="sectionHeading">Select Shipping</Text>

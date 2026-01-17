@@ -1,4 +1,4 @@
-export default function rangeMap(n: number, fn: (i: number) => any) {
+export default function rangeMap(n: number, fn: (i: number) => unknown) {
   const arr = [];
   while (n > arr.length) {
     arr.push(fn(arr.length));

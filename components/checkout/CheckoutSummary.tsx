@@ -1,13 +1,21 @@
 "use client";
 
 import { Container, Text } from "@components/ui";
+import { CartLineItem } from "@lib/types/types";
+
+interface CheckoutSummaryProps {
+  items: CartLineItem[],
+  total: number
+  tax: number,
+  shipping: number,
+}
 
 export function CheckoutSummary({
   items = [],
   total,
   tax = 0,
   shipping = 0,
-}: any) {
+}: CheckoutSummaryProps) {
   return (
     <Container variant="box" className="lg:col-span-4">
       <Text variant="boxTitle">Order Summary</Text>

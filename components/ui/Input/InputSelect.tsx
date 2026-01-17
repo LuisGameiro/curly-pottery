@@ -1,6 +1,6 @@
 import { cn } from "@lib/utils";
 import s from "./Input.module.css";
-import React, { InputHTMLAttributes, SelectHTMLAttributes, useId } from "react";
+import React, {  SelectHTMLAttributes, useId } from "react";
 
 interface InputProps extends SelectHTMLAttributes<HTMLSelectElement> {
   className?: string;

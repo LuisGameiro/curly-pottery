@@ -18,7 +18,7 @@ export default async function ProductCLient({
   const relatedProducts = await getRelatedProducts(
     product.categories,
     product.id,
-    3
+    3,
   );
 
   return <ProductView product={product} relatedProducts={relatedProducts} />;

@@ -1,16 +1,12 @@
 "use server";
 
-import { Product, ProductBasicInfo, ProductFull } from "@lib/types/product";
-import { revalidatePath } from "next/cache";
+import { Product, ProductFull, ActionResponse, ProductWithVariantsCategories } from "@lib/types/types";
 import { prisma } from "prisma/prisma";
-import { ca } from "zod/v4/locales";
-import { serializeProductVariant, serializeProduct } from "./helpers";
 import { Category } from "prisma/generated/prisma/client";
-import { ActionResponse } from "@lib/types/utils";
 
 export async function getProductBySlug(
-  slug: string | null
-): Promise<ActionResponse<ProductFull | null>> {
+  slug: string | null,
+): Promise<ActionResponse<ProductWithVariantsCategories | null>> {
   if (!slug)
     return {
       success: false,
@@ -45,8 +41,8 @@ export async function getProductBySlug(
 }
 
 export async function getProductById(
-  id: string
-): Promise<ActionResponse<ProductFull | null>> {
+  id: string,
+): Promise<ActionResponse<ProductWithVariantsCategories | null>> {
   if (!id)
     return {
       success: false,
@@ -81,7 +77,7 @@ export async function getProductById(
 }
 
 export async function deleteProduct(
-  id: string
+  id: string,
 ): Promise<ActionResponse<Product | null>> {
   try {
     const product = await prisma.product.delete({
@@ -105,7 +101,7 @@ export async function deleteProduct(
 }
 
 export async function getAllProducts(): Promise<
-  ActionResponse<ProductFull[] | null>
+  ActionResponse<ProductWithVariantsCategories[] | null>
 > {
   try {
     const products = await prisma.product.findMany({
@@ -133,11 +129,31 @@ export async function getAllProducts(): Promise<
     };
   }
 }
+export async function getRandomProducts(
+  limit = 3,
+): Promise<ActionResponse<Product[] | null>> {
+  try {
+    const products = await prisma.product.findMany();
 
+    return {
+      success: true,
+      message: "Fecthed random products successfully",
+      data: products.sort(() => 0.5 - Math.random()).slice(0, limit),
+    };
+  } catch (error) {
+    console.error("getRandomProducts_ERROR:", error);
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "A database error occurred",
+      errors: error,
+    };
+  }
+}
 export async function getRelatedProducts(
   categories: Category[],
   excludeId?: string,
-  limit: number = 3
+  limit: number = 3,
 ): Promise<ActionResponse<Product[] | null>> {
   try {
     if (!categories.length)
@@ -196,29 +212,26 @@ export async function getRelatedProducts(
 }
 
 export async function getProductsByCategorySlug(
-  category: string | null
-): Promise<ActionResponse<ProductFull[] | null>> {
+  category: string | null,
+): Promise<ActionResponse<Product[] | null>> {
   try {
     const products = prisma.product.findMany({
       where: category
         ? {
-            categories: {
-              some: { slug: category },
-            },
-          }
+          categories: {
+            some: { slug: category },
+          },
+        }
         : undefined,
-      include: {
-        categories: true,
-        variants: true,
-      },
     });
+
     return {
       success: true,
       message: "Fetched products successfully",
       data: products,
     };
   } catch (error) {
-    console.error("getCategoryById_ERROR:", error);
+    console.error("getRelatedProducts_ERROR:", error);
     return {
       success: false,
       message:
@@ -228,8 +241,8 @@ export async function getProductsByCategorySlug(
   }
 }
 export async function upsertProduct(
-  payload: any
-): Promise<ActionResponse<Category | null>> {
+  payload: any,
+): Promise<ActionResponse<Product| null>> {
   try {
     const { categoryIds, variants, id, previews, files, ...productData } =
       payload;
@@ -279,7 +292,7 @@ export async function upsertProduct(
       data: product,
     };
   } catch (error) {
-    console.error("getCategoryById_ERROR:", error);
+    console.error("upsertProduct_ERROR:", error);
     return {
       success: false,
       message:
@@ -288,12 +301,6 @@ export async function upsertProduct(
     };
   }
 }
-
-// export async function getRandomProducts(limit = 3) {
-//   const productsRaw = await prisma.product.findMany();
-//   const products = serializeProduct(productsRaw);
-//   return products.sort(() => 0.5 - Math.random()).slice(0, limit);
-// }
 
 // export async function createProduct(formData: FormData) {
 //   const categories = formData.getAll("categories") as string[];

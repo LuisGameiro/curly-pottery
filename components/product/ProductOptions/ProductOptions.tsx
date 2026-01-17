@@ -1,11 +1,11 @@
 import { memo } from "react";
 import { Text } from "@components/ui";
-import { Product, ProductVariant } from "@lib/types/product";
+import { Product, Variant } from "@lib/types/types";
 
 interface ProductOptionsProps {
   product: Product;
-  variant: ProductVariant;
-  setVariant: (variant: ProductVariant) => void;
+  variant: Variant;
+  setVariant: (variant: Variant) => void;
 }
 
 type UniqueSize = {

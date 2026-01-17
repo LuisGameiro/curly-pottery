@@ -1,11 +1,10 @@
 import React, { FC } from "react";
-import { Cross, Plus, Minus } from "@components/icons";
-import cn from "clsx";
+import { Plus, Minus } from "@components/icons";
 
 export interface QuantityProps {
   value: number;
-  increase: () => any;
-  decrease: () => any;
+  increase: () => void;
+  decrease: () => void;
   handleRemove: React.MouseEventHandler<HTMLButtonElement>;
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
   max?: number;

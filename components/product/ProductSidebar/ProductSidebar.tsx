@@ -10,12 +10,13 @@ import { cn } from "@lib/utils";
 import ProductOptions from "../ProductOptions";
 import { calculatePrice } from "@lib/calculate-price";
 import useCart from "@lib/hooks/useCart";
-import { Product, ProductVariant } from "@lib/types/product";
+import { Detail, Product, ProductWithVariantsCategories, Variant } from "@lib/types/types";
+import { Category } from "prisma/generated/prisma/client";
 
 interface ProductSidebarProps {
-  product: Product;
-  variant: ProductVariant;
-  setVariant: (variant: ProductVariant) => void;
+  product: ProductWithVariantsCategories;
+  variant: Variant;
+  setVariant: (variant: Variant) => void;
   className?: string;
 }
 
@@ -50,7 +51,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
           productId: product.id,
           variantId: variant.id,
         },
-        quantity
+        quantity,
       );
       setLoading(false);
     } catch (err) {
@@ -68,14 +69,14 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
   const price = calculatePrice(
     variant.price,
     variant.currency,
-    variant.discounts
+    variant.discounts,
   );
 
   return (
     <div className={cn(className, "space-y-4")}>
       <section>
         <h1 className="text-3xl font-semibold ">{product.name}</h1>
-        {product.categories.map((category) => (
+        {product.categories.map((category:Category) => (
           <span key={category.id} className={"text-xl mr-2"}>
             {category.name}
           </span>
@@ -165,13 +166,13 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
       />
 
       <section>
-        {variant?.details?.length > 0 && (
+        {variant?.details && (
           <div>
             <h2 className="text 2xl font-semibold">Product details:</h2>
 
             <div className="ml-10 space-y-4">
-              {variant.details.map((detail) => (
-                <div>
+              {variant.details.map((detail:Detail) => (
+                <div key={detail.title}>
                   <span className="font-semibold">{detail.title}: </span>
                   <span>{detail.description}</span>
                 </div>

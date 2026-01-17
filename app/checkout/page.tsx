@@ -7,7 +7,7 @@ import ShippingMethod from "@components/checkout/ShippingMethod";
 import SumUpPayment from "@components/checkout/SumUpPayment";
 import { CheckoutSummary } from "@components/checkout/CheckoutSummary";
 import useCart from "@lib/hooks/useCart";
-import { createSumUpCheckout } from "actions/payment";
+import { createSumUpCheckout } from "actions/sumUpPayment.actions";
 import { createOrder } from "actions/order.actions";
 import { useRouter } from "next/navigation";
 import { Container } from "@components/ui";

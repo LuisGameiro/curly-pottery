@@ -1,8 +1,7 @@
 import { FC } from "react";
 import Link from "next/link";
 import Image, { ImageProps } from "next/image";
-import { Category } from "@lib/types/category";
-import { deleteCategory } from "actions/category.actions";
+import { Category } from "@lib/types/types";
 
 interface Props {
   className?: string;

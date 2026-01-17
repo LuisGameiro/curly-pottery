@@ -1,7 +1,7 @@
-import React, {
+import {
   FunctionComponent,
-  JSXElementConstructor,
   CSSProperties,
+  ElementType,
 } from "react";
 import s from "./Text.module.css";
 import { cn } from "@lib/utils";
@@ -32,9 +32,7 @@ const Text: FunctionComponent<TextProps> = ({
   html,
   onClick,
 }) => {
-  const componentsMap: {
-    [P in Variant]: React.ComponentType<any> | string;
-  } = {
+  const componentsMap: Record<Variant, ElementType> = {
     body: "div",
     heading: "h1",
     pageHeading: "h1",
@@ -44,31 +42,19 @@ const Text: FunctionComponent<TextProps> = ({
     bold: "strong",
   };
 
-  const Component:
-    | JSXElementConstructor<any>
-    | React.ReactElement<any>
-    | React.ComponentType<any>
-    | string = componentsMap![variant!];
+  const Component = componentsMap[variant];
 
   const htmlContentProps = html
     ? {
-        dangerouslySetInnerHTML: { __html: html },
-      }
+      dangerouslySetInnerHTML: { __html: html },
+    }
     : {};
 
   return (
     <Component
       className={cn(
         s.root,
-        {
-          [s.body]: variant === "body",
-          [s.heading]: variant === "heading",
-          [s.pageHeading]: variant === "pageHeading",
-          [s.sectionHeading]: variant === "sectionHeading",
-          [s.subHeading]: variant === "subHeading",
-          [s.boxTitle]: variant === "boxTitle",
-          [s.bold]: variant === "bold",
-        },
+        s[variant],
         className,
       )}
       onClick={onClick}

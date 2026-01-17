@@ -17,6 +17,7 @@ import notFound from "app/not-found";
 import OrderTable from "@components/common/Tables/OrderTable";
 import CustomerNotes from "./CostumerNotes";
 import { showCurrency } from "@lib/calculate-price";
+import { Address } from "@lib/types/types";
 
 export default async function CustomerDetailsPage({
   params,
@@ -31,13 +32,13 @@ export default async function CustomerDetailsPage({
   }
 
   if (!response.data) {
-    notFound();
+    return notFound();
   }
   const user = response.data;
 
   const totalSpend = user!.orders.reduce(
     (acc: number, order: any) => acc + order.totalPrice,
-    0
+    0,
   );
 
   return (
@@ -131,25 +132,25 @@ export default async function CustomerDetailsPage({
                   No saved addresses for this user.
                 </Text>
               ) : (
-                user.addresses.map((addr: any) => (
+                user.addresses.map((address: Address, i: number) => (
                   <div
-                    key={addr.id}
+                    key={address.id || i}
                     className="text-sm p-3 rounded-lg border border-border"
                   >
                     <div className="flex justify-between mb-1">
                       <span className="text-[10px] uppercase font-bold text-accent-4">
-                        {addr.type}
+                        {address.type}
                       </span>
                     </div>
                     <p className="font-medium">
-                      {addr.firstName} {addr.lastName}
+                      {address.firstName} {address.lastName}
                     </p>
                     <p className="text-muted-foreground text-xs leading-relaxed">
-                      {addr.street}
+                      {address.address}
                       <br />
-                      {addr.city}, {addr.postalCode}
+                      {address.city}, {address.postalCode}
                       <br />
-                      {addr.country}
+                      {address.country}
                     </p>
                   </div>
                 ))

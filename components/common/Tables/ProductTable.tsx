@@ -10,7 +10,7 @@ import { deleteCategory } from "actions/category.actions";
 import { useRouter } from "next/navigation";
 import { cn } from "@lib/utils";
 import { deleteProduct } from "actions/product.actions";
-import { ProductVariant } from "@lib/types/product";
+import { Variant } from "@lib/types/types";
 import VariantTable from "./VariantTable";
 
 export default function ProductTable({ products }: { products: any[] }) {
@@ -78,7 +78,7 @@ export default function ProductTable({ products }: { products: any[] }) {
     {
       header: "Price Range",
       render: (p: any) => {
-        const prices = p.variants.map((v: ProductVariant) => v.price);
+        const prices = p.variants.map((v: Variant) => v.price);
         const minPrice = Math.min(...prices);
         const maxPrice = Math.max(...prices);
         const stock = p.variants.reduce(

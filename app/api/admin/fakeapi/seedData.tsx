@@ -1,6 +1,6 @@
-import { Category } from "@lib/types/category";
-import { OrderStatus } from "@lib/types/customer";
-import { Detailtype } from "@lib/types/product";
+import { Category } from "@lib/types/types";
+import { OrderStatus } from "@lib/types/types";
+import { Detailtype } from "@lib/types/types";
 import { DEFAULT_RUNTIME_WEBPACK } from "next/dist/shared/lib/constants";
 import { title } from "node:process";
 import {

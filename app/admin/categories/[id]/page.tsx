@@ -1,5 +1,6 @@
 import { getCategoryById } from "actions/category.actions";
 import CategoryClient from "./CategoryClient";
+import notFound from "app/not-found";
 
 export default async function CategoryPage({
   params,
@@ -7,9 +8,20 @@ export default async function CategoryPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const isEditMode = !!id && id !== "new";
+  const isEditMode = id !== "new";
 
-  const category = isEditMode ? (await getCategoryById(id)).data : {};
+  let categoryData = null;
 
-  return <CategoryClient category={category} isEditMode={isEditMode} />;
+  if (isEditMode) {
+    const response = await getCategoryById(id);
+    if (!response.success) {
+      throw new Error(response.message);
+    }
+    if (!response.data) {
+      return notFound();
+    }
+    categoryData = response.data;
+  }
+
+  return <CategoryClient category={categoryData} isEditMode={isEditMode} />;
 }

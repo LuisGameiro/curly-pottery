@@ -1,9 +1,12 @@
 "use server";
 
 import { prisma } from "prisma/prisma";
-import { ActionResponse } from "@lib/types/utils";
 import { User } from "prisma/generated/prisma/client";
-import { UserWithOrders } from "@lib/types/customer";
+import {
+  UserWithOrders,
+  UserWithOrdersAddress,
+  ActionResponse,
+} from "@lib/types/types";
 
 export async function getAllCustomers(): Promise<
   ActionResponse<UserWithOrders[]>
@@ -35,13 +38,14 @@ export async function getAllCustomers(): Promise<
 }
 
 export async function getUserById(
-  id: string
-): Promise<ActionResponse<UserWithOrders | null>> {
+  id: string,
+): Promise<ActionResponse<UserWithOrdersAddress | null>> {
   try {
     const user = await prisma.user.findUnique({
       where: { id },
       include: {
         orders: true,
+        addresses: true,
       },
     });
     return {
@@ -62,7 +66,7 @@ export async function getUserById(
 
 export async function updateNotes(
   id: string,
-  notes: string
+  notes: string,
 ): Promise<ActionResponse<User | null>> {
   try {
     const user = await prisma.user.update({

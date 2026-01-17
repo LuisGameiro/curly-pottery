@@ -3,7 +3,7 @@
 import { Button, Container, Text } from "@components/ui";
 import Link from "next/link";
 import { useState, useMemo } from "react";
-import { ProductFull, ProductVariant } from "@lib/types/product";
+import { ProductFull, Variant } from "@lib/types/types";
 import InputSearch from "@components/ui/Input/InputSearch";
 import ProductTable from "@components/common/Tables/ProductTable";
 import { Plus } from "lucide-react";
@@ -11,7 +11,7 @@ import { Plus } from "lucide-react";
 export default function ProductsClient({
   products,
 }: {
-  products:  ProductFull[];
+  products: ProductFull[];
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState<{
@@ -20,19 +20,25 @@ export default function ProductsClient({
   } | null>(null);
 
   const filteredProducts = useMemo(() => {
-    let items = products.filter(
+    const items = products.filter(
       (p) =>
         p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.variants.some((v: ProductVariant) =>
+        p.variants.some((v: Variant) =>
           v.sku.toLowerCase().includes(searchTerm.toLowerCase()),
         ),
     );
 
     if (sortConfig) {
       items.sort((a, b) => {
-        if (a[sortConfig.key as keyof ProductFull] < b[sortConfig.key as keyof ProductFull])
+        if (
+          a[sortConfig.key as keyof ProductFull] <
+          b[sortConfig.key as keyof ProductFull]
+        )
           return sortConfig.direction === "asc" ? -1 : 1;
-        if (a[sortConfig.key as keyof ProductFull] > b[sortConfig.key as keyof ProductFull])
+        if (
+          a[sortConfig.key as keyof ProductFull] >
+          b[sortConfig.key as keyof ProductFull]
+        )
           return sortConfig.direction === "asc" ? 1 : -1;
         return 0;
       });
