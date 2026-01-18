@@ -4,14 +4,13 @@ import { ChangeEvent, useEffect, useState } from "react";
 import cn from "clsx";
 import Image from "next/image";
 import Link from "next/link";
-import s from "./CartItem.module.css";
-import { useUI } from "@components/ui/context";
+
 import Quantity from "@components/ui/Quantity";
 import useCart from "@lib/hooks/useCart";
 import { calculateDiscount } from "@lib/calculate-price";
 import { Trash } from "lucide-react";
 import { Button, Text } from "@components/ui";
-import { CartLineItem } from "@lib/types/types";
+import { CartLineItem, CurrencyCode } from "@lib/types/types";
 
 const placeholderImg = "/product-img-placeholder.svg";
 
@@ -22,7 +21,7 @@ const CartItem = ({
 }: {
   variant?: "default" | "display";
   item: CartLineItem;
-  currencyCode: string;
+  // currencyCode: CurrencyCode;
 }) => {
   const { removeItem, updateItem } = useCart();
   // const { closeSidebarIfPresent } = useUI();
@@ -62,7 +61,7 @@ const CartItem = ({
   return (
     <li
       className={cn(
-        s.root,
+        // s.root,
         "border-b border-accent-2 last:border-b-0 sm:flex justify-between py-2",
         {
           "opacity-50 pointer-events-none": removing,

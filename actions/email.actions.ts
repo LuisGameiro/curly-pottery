@@ -15,7 +15,7 @@ export async function sendEmail(
   try {
     const { data, error } = await resend.emails.send({
       from: fromEmail,
-      to: [toEmail],
+      to: toEmail,
       subject: subject,
       react: body,
     });

@@ -5,36 +5,36 @@ import { useCartStore } from "@lib/zustand/cart";
 
 export default function useCart() {
   const { isAuthenticated } = useUser();
-  const store = useCartStore();
+  const {syncWithDatabase, cartItems , isLoading, addItem, removeItem, updateItem, deleteAll} = useCartStore();
 
   useEffect(() => {
-    store.syncWithDatabase();
-  }, [isAuthenticated, store]);
+    syncWithDatabase();
+  }, [isAuthenticated, syncWithDatabase, cartItems]);
 
   const subtotal = useMemo(
     () =>
-      store.cartItems.reduce(
+      cartItems.reduce(
         (acc, item) =>
           acc +
           calculateDiscount(item.price, item.discounts).finalPrice *
             item.quantity,
         0,
       ),
-    [store.cartItems],
+    [cartItems],
   );
 
   return {
     data: {
-      lineItems: store.cartItems,
+      lineItems: cartItems,
       subtotalPrice: subtotal,
       totalPrice: subtotal,
       currency: "GBP",
     },
-    isLoading: store.isLoading,
-    isEmpty: store.cartItems.length === 0,
-    addItem: store.addItem,
-    removeItem: store.removeItem,
-    updateItem: store.updateItem,
-    deleteAll: store.deleteAll,
+    isLoading: isLoading,
+    isEmpty: cartItems.length === 0,
+    addItem: addItem,
+    removeItem: removeItem,
+    updateItem: updateItem,
+    deleteAll: deleteAll,
   };
 }

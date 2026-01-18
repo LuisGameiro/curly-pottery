@@ -73,6 +73,7 @@ export const useCartStore = create<CartStore>()(
       },
 
       syncWithDatabase: async () => {
+        if (get().isLoading) return;
         set({ isLoading: true });
         try {
           // const dbItems = await getCartFromDbAction();

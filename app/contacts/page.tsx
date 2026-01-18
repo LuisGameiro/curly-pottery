@@ -45,10 +45,11 @@ export default function Contacts() {
       setStatus("loading");
 
       const response = await sendEmail(
-        "curlypottery@gmail.com",
+        "curly.pottery@gmail.com",
         "New Message",
         ContactFormEmail(formData),
       );
+      console.log(response)
 
       if (response.data) {
         setStatus("success");
@@ -93,7 +94,7 @@ export default function Contacts() {
             <li>
               📸 instagram:{" "}
               <a
-                href={`https://www.instagram.com/${contacts.instagram}`}
+                href={new URL(`https://www.instagram.com/${contacts.instagram}`).href}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-secondary/60"
@@ -130,7 +131,7 @@ export default function Contacts() {
               value={formData.email}
               onChange={handleChange}
               required
-              type="text"
+              type="email"
               id="email"
               name="email"
             />
