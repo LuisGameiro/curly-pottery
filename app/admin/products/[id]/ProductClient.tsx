@@ -11,32 +11,19 @@ import Loading from "app/loading";
 import InputCheck from "@components/ui/Input/InputCheck";
 import { VariantManager } from "./VariantManager";
 import Link from "next/link";
-import { Category } from "@lib/types/types";
-import { Product, ProductFull, Variant } from "@lib/types/types";
+import {
+  Category,
+  CreateProduct,
+  EditProduct,
+  EditVariant,
+  ProductWithVariantsCategories,
+} from "@lib/types/types";
+import { Variant } from "@lib/types/types";
 import { syncImages } from "actions/images.actions";
 
 interface ProductFormProps {
-  initialData: Product ;
+  initialData: ProductWithVariantsCategories;
   categories: Category[];
-}
-
-export interface EditVariant extends Omit<
-  Variant,
-  "images" | "createdAt" | "updatedAt"
-> {
-  files: (File | string)[];
-  previews: string[];
-  isExpanded: boolean;
-}
-
-export interface EditProduct extends Omit<
-  Product,
-  "images" | "categories" | "variants" | "createdAt" | "updatedAt"
-> {
-  categoryIds: string[];
-
-  files: (File | string)[];
-  previews: string[];
 }
 
 export default function ProductClient({
@@ -54,6 +41,7 @@ export default function ProductClient({
     files: initialData?.images ?? [],
     previews: initialData?.images ?? [],
     categoryIds: initialData?.categories?.map((c: Category) => c.id) || [],
+    images: initialData?.images ?? [],
   });
 
   const initialVariants = initialData?.variants.map((v: Variant) => ({
@@ -97,8 +85,10 @@ export default function ProductClient({
           const originalVariant = initialData?.variants?.find(
             (v: Variant) => v.id === variant.id,
           );
-          const oldImages = originalVariant?.images || [];
-          const imageUrls = await syncImages(variant.files || [], oldImages);
+          const oldImages = originalVariant?.images ?? [];
+          const imageUrls = await syncImages(variant.files, oldImages);
+
+          if (!imageUrls.success) throw new Error(imageUrls.message);
 
           return {
             ...variant,
@@ -108,12 +98,16 @@ export default function ProductClient({
           };
         }),
       );
-      const payload = {
+      const imageUrls = await syncImages(
+        product.files || [],
+        initialData?.images ?? [],
+      );
+      if (!imageUrls.success) throw new Error(imageUrls.message);
+
+      const payload: CreateProduct = {
         ...product,
         variants: updatedVariants,
-        images: (
-          await syncImages(product.files || [], initialData?.images ?? [])
-        ).data,
+        images: imageUrls.data,
         files: [],
         previews: [],
       };

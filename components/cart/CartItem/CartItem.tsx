@@ -18,7 +18,6 @@ const placeholderImg = "/product-img-placeholder.svg";
 const CartItem = ({
   item,
   variant = "default",
-  currencyCode,
   ...rest
 }: {
   variant?: "default" | "display";
@@ -49,7 +48,7 @@ const CartItem = ({
     setRemoving(true);
     try {
       await removeItem(item.variantId);
-    } catch (error) {
+    } catch {
       setRemoving(false);
     }
   };
@@ -58,7 +57,7 @@ const CartItem = ({
     if (item.quantity !== Number(quantity)) {
       setQuantity(item.quantity);
     }
-  }, [item.quantity]);
+  }, [item.quantity, quantity]);
 
   return (
     <li

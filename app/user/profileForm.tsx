@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import { Container, Text, Button, Input } from "@components/ui";
-import { User, Mail, Phone } from "lucide-react";
+import { Mail, Phone, UserIcon } from "lucide-react";
+import { User } from "@lib/types/types";
 
-export default function ProfileForm({ user }: { user: any }) {
+export default function ProfileForm({ user }: { user: User }) {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    name: user?.name || "",
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+
     phone: user?.phone || "",
     company: user?.company || "",
     notes: user?.notes || "",
@@ -22,7 +25,7 @@ export default function ProfileForm({ user }: { user: any }) {
     <Container>
       <header>
         <div className="w-full flex flex-row justify-between">
-          <Text variant="heading">Welcome, {formData.name}!</Text>
+          <Text variant="heading">Welcome, {formData.firstName}!</Text>
 
           <Button variant="slim" onClick={() => setIsEditing(!isEditing)}>
             {isEditing ? "Cancel" : "Edit Profile"}
@@ -44,15 +47,24 @@ export default function ProfileForm({ user }: { user: any }) {
         <div>
           <label>Full Name</label>
           {isEditing ? (
-            <Input
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-            />
+            <>
+              <Input
+                value={formData.firstName}
+                onChange={(e) =>
+                  setFormData({ ...formData, firstName: e.target.value })
+                }
+              />
+              <Input
+                value={formData.lastName}
+                onChange={(e) =>
+                  setFormData({ ...formData, lastName: e.target.value })
+                }
+              />
+            </>
           ) : (
             <div className="flex items-center my-4">
-              <User size={18} className="mr-2" /> {formData.name}
+              <UserIcon size={18} className="mr-2" /> {formData.firstName}{" "}
+              {formData.lastName}
             </div>
           )}
         </div>

@@ -3,6 +3,7 @@
 import { CartItem } from "@components/cart";
 import { Container, Text, Button } from "@components/ui";
 import useCart from "@lib/hooks/useCart";
+import { CartLineItem } from "@lib/types/types";
 import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
 
@@ -30,7 +31,7 @@ export default function CartPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         <div className="lg:col-span-8">
           <ul className="divide-y border-b">
-            {data?.lineItems.map((item: any) => (
+            {data?.lineItems.map((item: CartLineItem) => (
               <CartItem
                 key={item.id}
                 item={item}

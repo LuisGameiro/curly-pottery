@@ -4,7 +4,6 @@ import { Detailtype } from "@lib/types/types";
 
 import {
   CurrencyCode,
-  
   Product,
   SizeNames,
 } from "prisma/generated/prisma/client";

@@ -5,8 +5,8 @@ import s from "./SidebarLayout.module.css";
 import { ChevronLeft, Cross } from "lucide-react";
 
 type ComponentProps = { className?: string; children?: ReactNode } & (
-  | { handleClose: () => any; handleBack?: never }
-  | { handleBack: () => any; handleClose?: never }
+  | { handleClose: () => void; handleBack?: never }
+  | { handleBack: () => void; handleClose?: never }
 );
 
 const SidebarLayout: FC<ComponentProps> = ({

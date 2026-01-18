@@ -1,11 +1,32 @@
+import { JsonValue } from "@prisma/client/runtime/client";
 import { Prisma } from "prisma/generated/prisma/client";
+
+export interface EditVariant extends Omit<Variant, "createdAt" | "updatedAt"> {
+  files: (File | string)[];
+  previews: string[];
+  isExpanded: boolean;
+}
+
+export interface EditProduct extends Omit<
+  Product,
+  "categories" | "variants" | "createdAt" | "updatedAt"
+> {
+  categoryIds: string[];
+  files: (File | string)[];
+  previews: string[];
+}
+
+export interface CreateProduct extends EditProduct {
+  variants: EditVariant[];
+}
 
 export type Product = Prisma.ProductGetPayload<null>;
 
- type PrismaVariant = Prisma.ProductVariantGetPayload<null>;
-export type Variant = Omit<PrismaVariant, 'details'| 'discounts'> & {
-  details: Detail[]
-  discounts: Discount[]
+type PrismaVariant = Prisma.ProductVariantGetPayload<null>;
+
+export type Variant = Omit<PrismaVariant, "details" | "discounts"> & {
+  details: Detail[] | JsonValue;
+  discounts: Discount[] | JsonValue;
 };
 
 export type ProductWithVariantsCategories = Prisma.ProductGetPayload<{
@@ -84,8 +105,7 @@ export type CartLineItem = {
   currency: CurrencyCode;
   colorName?: string;
   sizeName?: string;
-  discounts: Discount[]
-
+  discounts: Discount[];
 };
 
 export type Discount = {
@@ -127,7 +147,7 @@ export type ActionResponse<T> =
   | {
       success: false;
       message: string;
-      data?: T;
+      data?: never;
       errors?: unknown;
     };
 

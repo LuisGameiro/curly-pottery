@@ -4,10 +4,10 @@ import { Container, Text } from "@components/ui";
 import { CartLineItem } from "@lib/types/types";
 
 interface CheckoutSummaryProps {
-  items: CartLineItem[],
-  total: number
-  tax: number,
-  shipping: number,
+  items: CartLineItem[];
+  total: number;
+  tax: number;
+  shipping: number;
 }
 
 export function CheckoutSummary({
@@ -20,14 +20,12 @@ export function CheckoutSummary({
     <Container variant="box" className="lg:col-span-4">
       <Text variant="boxTitle">Order Summary</Text>
       <div className="space-y-2 pb-4 border-b">
-        {items.map((item: any) => (
+        {items.map((item: CartLineItem) => (
           <div key={item.id} className="flex justify-between text-sm">
             <Text className="text-accent-8">
               {item.quantity}x {item.name}
             </Text>
-            <Text className="font-medium">
-              £{item.variant.price * item.quantity}
-            </Text>
+            <Text className="font-medium">£{item.price * item.quantity}</Text>
           </div>
         ))}
       </div>

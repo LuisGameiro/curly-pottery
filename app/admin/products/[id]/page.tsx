@@ -17,7 +17,7 @@ export default async function ProductForm({
   }
 
   if (!responseProduct.data && !responseCategories.data) {
-    return  notFound();
+    return notFound();
   }
 
   return (

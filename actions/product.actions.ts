@@ -1,9 +1,15 @@
 "use server";
 
-import { Product, ActionResponse, ProductWithVariantsCategories } from "@lib/types/types";
+import {
+  Product,
+  ActionResponse,
+  ProductWithVariantsCategories,
+  Category,
+  CreateProduct,
+  EditVariant,
+  Variant,
+} from "@lib/types/types";
 import { prisma } from "prisma/prisma";
-import { Category } from "prisma/generated/prisma/client";
-import { EditProduct } from "app/admin/products/[id]/ProductClient";
 
 export async function getProductBySlug(
   slug: string | null,
@@ -214,16 +220,20 @@ export async function getRelatedProducts(
 
 export async function getProductsByCategorySlug(
   category: string | null,
-): Promise<ActionResponse<Product[] | null>> {
+): Promise<ActionResponse<ProductWithVariantsCategories[] | null>> {
   try {
-    const products = prisma.product.findMany({
+    const products = await prisma.product.findMany({
       where: category
         ? {
-          categories: {
-            some: { slug: category },
-          },
-        }
+            categories: {
+              some: { slug: category },
+            },
+          }
         : undefined,
+      include: {
+        variants: true,
+        categories: true,
+      },
     });
 
     return {
@@ -242,11 +252,10 @@ export async function getProductsByCategorySlug(
   }
 }
 export async function upsertProduct(
-  payload: EditProduct,
-): Promise<ActionResponse<Product| null>> {
+  payload: CreateProduct,
+): Promise<ActionResponse<Product | null>> {
   try {
-    const { categoryIds, variants, id, previews, files, ...productData } =
-      payload;
+    const { categoryIds, variants, id, ...productData } = payload;
     const categoriesForUpdate = {
       set: categoryIds.map((catId: string) => ({ id: catId })),
     };
@@ -254,12 +263,15 @@ export async function upsertProduct(
     const categoriesForCreate = {
       connect: categoryIds.map((catId: string) => ({ id: catId })),
     };
-    const prepareVariant = (v: any) => {
+    const prepareVariant = (v: EditVariant): Variant => {
+      // ts-ignore
       const {
-        id: variantId,
-        ...dbData
+        files, // UI state
+        previews, // UI state
+        isExpanded, // UI state
+        ...variantData // This spread now contains only valid Variant fields
       } = v;
-      return { ...dbData };
+      return variantData as Variant;
     };
     const product = await prisma.product.upsert({
       where: { id: id || "new-id" },
@@ -267,7 +279,7 @@ export async function upsertProduct(
         ...productData,
         categories: categoriesForUpdate,
         variants: {
-          upsert: variants.map((v: any) => ({
+          upsert: variants.map((v: EditVariant) => ({
             where: { id: v.id.startsWith("temp-") ? "0" : v.id },
             update: prepareVariant(v),
             create: prepareVariant(v),
@@ -278,7 +290,7 @@ export async function upsertProduct(
         ...productData,
         categories: categoriesForCreate,
         variants: {
-          create: variants.map((v: any) => prepareVariant(v)),
+          create: variants.map((v: EditVariant) => prepareVariant(v)),
         },
       },
     });

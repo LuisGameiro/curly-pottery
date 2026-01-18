@@ -7,6 +7,7 @@ import React, {
   useState,
   useRef,
   useEffect,
+  useCallback,
 } from "react";
 import { a } from "@react-spring/web";
 import s from "./ProductSlider.module.css";
@@ -104,9 +105,11 @@ const ProductSlider: React.FC<ProductSliderProps> = ({
   //     return () => slider.removeEventListener("touchstart", preventNavigation);
   //   }, []);
 
-  const onPrev = React.useCallback(() => slider.current?.prev(), [slider]);
-  const onNext = React.useCallback(() => slider.current?.next(), [slider]);
+  // const onPrev = React.useCallback(() => slider.current?.prev(), [slider]);
+  // const onNext = React.useCallback(() => slider.current?.next(), [slider]);
 
+  const onPrev = useCallback(() => slider.current?.prev(), []);
+  const onNext = useCallback(() => slider.current?.next(), []);
   return (
     <div className={cn(s.root, className)} ref={sliderContainerRef}>
       <div

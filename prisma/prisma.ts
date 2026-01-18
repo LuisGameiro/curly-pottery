@@ -14,7 +14,7 @@
 
 import { PrismaNeon } from "@prisma/adapter-neon";
 import { PrismaClient } from "./generated/prisma/client";
-import { Pool } from 'pg';
+import { Pool } from "pg";
 
 new Pool({ connectionString: process.env.DATABASE_URL });
 

@@ -2,20 +2,19 @@
 
 import { Suspense, useMemo, useState } from "react";
 import { ProductCard } from "@components/product";
-import { Product } from "@lib/types/types";
-import { Category } from "@lib/types/types";
+import { ProductWithVariantsCategories, Category } from "@lib/types/types";
 import MenuProducts, { sortLabels } from "./MenuProducts";
 import ProductsLoading from "./ProductsLoading";
 
 interface ShopClientProps {
-  initialProducts: Product[];
+  products: ProductWithVariantsCategories[];
   categories: Category[];
   activeCategory: string | null;
   admin?: boolean;
 }
 
 export default function ShopClient({
-  initialProducts = [],
+  products = [],
   categories,
   activeCategory,
 }: ShopClientProps) {
@@ -23,31 +22,31 @@ export default function ShopClient({
     useState<keyof typeof sortLabels>("newest");
 
   const sortedProducts = useMemo(() => {
-    const list = [...initialProducts];
+    if (!Array.isArray(products)) return [];
     switch (sortMethod) {
       case "price-asc":
-        return list.sort(
+        return products.sort(
           (a, b) =>
             Math.min(...a.variants.map((v) => v.price)) -
             Math.min(...b.variants.map((v) => v.price)),
         );
       case "price-desc":
-        return list.sort(
+        return products.sort(
           (a, b) =>
             Math.max(...b.variants.map((v) => v.price)) -
             Math.max(...a.variants.map((v) => v.price)),
         );
       case "name-asc":
-        return list.sort((a, b) => a.name.localeCompare(b.name));
+        return products.sort((a, b) => a.name.localeCompare(b.name));
       case "name-desc":
-        return list.sort((a, b) => b.name.localeCompare(a.name));
+        return products.sort((a, b) => b.name.localeCompare(a.name));
       default:
-        return list.sort(
+        return products.sort(
           (a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
     }
-  }, [sortMethod, initialProducts]);
+  }, [sortMethod, products]);
 
   return (
     <main className="bg-gradient-to-r from-background to-accent-1 py-8 px-4">

@@ -1,5 +1,3 @@
-import { Product } from "@lib/types/types";
-import { Category } from "@lib/types/types";
 import ShopClient from "./ShopClient";
 import { getProductsByCategorySlug } from "actions/product.actions";
 import { getAllCategories } from "actions/category.actions";
@@ -16,10 +14,13 @@ export default async function ShopPage({
 
   const products = await getProductsByCategorySlug(categorySlug);
 
+  if (!products.success || !categories.success)
+    throw new Error(products.message + categories.message);
+
   return (
     <ShopClient
-      initialProducts={products.data as Product[]}
-      categories={categories.data as Category[]}
+      products={products.data || []}
+      categories={categories.data || []}
       activeCategory={categorySlug}
     />
   );

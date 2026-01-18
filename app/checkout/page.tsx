@@ -11,6 +11,8 @@ import { createSumUpCheckout } from "actions/sumUpPayment.actions";
 import { createOrder } from "actions/order.actions";
 import { useRouter } from "next/navigation";
 import { Container } from "@components/ui";
+import { toast } from "sonner";
+import { Address } from "@lib/types/types";
 
 type FormData = {
   firstName: string;
@@ -19,7 +21,8 @@ type FormData = {
   country: string;
   postcode: string;
   city: string;
-  shipping: any;
+  shippingPrice: number;
+  shippingMethod: string;
   email: string;
   phone: string;
 };
@@ -36,45 +39,66 @@ export default function CheckoutPage() {
 
   if (data.lineItems.length === 0) router.replace("/cart");
 
-  const nextToShipping = (data: any) => {
+  const nextToShipping = (data: FormData) => {
     setFormData({ ...formData, ...data });
     setStep(2);
   };
 
-  const nextToPayment = async (shippingData: any) => {
+  const nextToPayment = async (
+    shippingPrice: number,
+    shippingMethod: string,
+  ) => {
     setLoading(true);
-    setFormData({ ...formData, shipping: shippingData });
-    const address = {
+    setFormData({ ...formData, shippingPrice, shippingMethod });
+    const address: Address = {
       firstName: formData.firstName,
       lastName: formData.lastName,
       address: formData.address,
       postalCode: formData.postcode,
       city: formData.city,
       country: formData.country || "United Kingdom",
+      id: "",
+      createdAt: null,
+      type: null,
+      company: null,
+      userId: null,
     };
     try {
-      const result = await createSumUpCheckout(
-        data.subtotalPrice + shippingData.shipping?.price,
+      const response = await createSumUpCheckout(
+        data.subtotalPrice + shippingPrice,
         cartId,
       );
 
-      if (result.error) {
-        alert(result.error);
+      if (!response.success && !response.data) {
         setLoading(false);
-        return;
-      }
-      setCheckoutId(result.checkoutId);
+        return toast(response.message);
+      } else setCheckoutId(response.data ?? "");
 
-      const result2 = await createOrder({
-        cartId,
+      await createOrder({
         userId: session?.user?.id,
-        email: formData.email,
-        phone: formData.phone,
+
         shippingAddress: address,
         billingAddress: address,
-        cart: data,
-        ...shippingData,
+
+        cart: {
+          email: formData.email,
+          phone: formData.phone,
+          shippingPrice,
+          shippingMethod,
+          ...data,
+          id: "",
+          userId: null,
+          createdAt: undefined,
+          status: "PENDING",
+          discounts: null,
+          taxesIncluded: false,
+          shippingAddress: null,
+          billingAddress: null,
+          taxes: 0,
+          updatedAt: undefined,
+        },
       });
+
       setStep(3);
     } catch (error) {
       console.log(error);
@@ -92,38 +116,41 @@ export default function CheckoutPage() {
     <Container className="lg:max-w-5xl mx-auto p-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
       <div className="lg:col-span-8">
         <div className="flex items-center gap-4 mb-8 text-sm font-medium">
-          <span
+          <button
             className={
               step >= 1
                 ? "text-secondary hover:text-secondary/60 cursor-pointer"
                 : "text-accent-4"
             }
             onClick={() => goBack(1)}
+            disabled={loading}
           >
             Info
-          </span>
+          </button>
           <div className="h-px w-8 bg-accent-2" />
-          <span
+          <button
             className={
               step >= 2
                 ? "text-secondary hover:text-secondary/60 cursor-pointer"
                 : "text-accent-4"
             }
             onClick={() => goBack(2)}
+            disabled={loading}
           >
             Shipping
-          </span>
+          </button>
           <div className="h-px w-8 bg-accent-2" />
-          <span
+          <button
             className={
               step >= 3
                 ? "text-secondary hover:text-secondary/60 cursor-pointer"
                 : "text-accent-4"
             }
             onClick={() => goBack(3)}
+            disabled={loading}
           >
             Payment
-          </span>
+          </button>
         </div>
 
         {step === 1 && (

@@ -3,7 +3,7 @@
 import { Button, Container, Text } from "@components/ui";
 import Link from "next/link";
 import { useState, useMemo } from "react";
-import { Product, Variant } from "@lib/types/types";
+import { ProductWithVariantsCategories, Variant } from "@lib/types/types";
 import InputSearch from "@components/ui/Input/InputSearch";
 import ProductTable from "@components/common/Tables/ProductTable";
 import { Plus } from "lucide-react";
@@ -11,13 +11,13 @@ import { Plus } from "lucide-react";
 export default function ProductsClient({
   products,
 }: {
-  products: Product[];
+  products: ProductWithVariantsCategories[];
 }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortConfig, setSortConfig] = useState<{
-    key: string;
-    direction: "asc" | "desc";
-  } | null>(null);
+  // const [sortConfig, _] = useState<{
+  //   key: string;
+  //   direction: "asc" | "desc";
+  // } | null>(null);
 
   const filteredProducts = useMemo(() => {
     const items = products.filter(
@@ -28,23 +28,23 @@ export default function ProductsClient({
         ),
     );
 
-    if (sortConfig) {
-      items.sort((a, b) => {
-        if (
-          a[sortConfig.key as keyof Product] <
-          b[sortConfig.key as keyof Product]
-        )
-          return sortConfig.direction === "asc" ? -1 : 1;
-        if (
-          a[sortConfig.key as keyof Product] >
-          b[sortConfig.key as keyof Product]
-        )
-          return sortConfig.direction === "asc" ? 1 : -1;
-        return 0;
-      });
-    }
+    // if (sortConfig) {
+    //   items.sort((a, b) => {
+    //     if (
+    //       a[sortConfig.key as keyof Product] <
+    //       b[sortConfig.key as keyof Product]
+    //     )
+    //       return sortConfig.direction === "asc" ? -1 : 1;
+    //     if (
+    //       a[sortConfig.key as keyof Product] >
+    //       b[sortConfig.key as keyof Product]
+    //     )
+    //       return sortConfig.direction === "asc" ? 1 : -1;
+    //     return 0;
+    //   });
+    // }
     return items;
-  }, [products, searchTerm, sortConfig]);
+  }, [products, searchTerm]);
 
   return (
     <Container>

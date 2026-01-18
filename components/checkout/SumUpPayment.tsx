@@ -1,13 +1,21 @@
 import Script from "next/script";
 import { Text } from "@components/ui";
 
+interface SumUpResponse {
+  status: "PAID" | "PENDING" | "FAILED" | "EXPIRED";
+  id: string;
+  transaction_code?: string;
+  amount: number;
+  currency: string;
+}
+
 export default function SumUpPayment({ checkoutId }: { checkoutId: string }) {
   const mountSumUp = () => {
     // @@ts-expect-error
     window.SumUpCard.mount({
       id: "sumup-card",
       checkoutId: checkoutId,
-      onResponse: function (type: string, body: any) {
+      onResponse: function (type: string, body: SumUpResponse) {
         if (type === "success" || body.status === "PAID") {
           window.location.href = "/checkout/success";
         }

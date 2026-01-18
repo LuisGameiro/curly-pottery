@@ -115,11 +115,11 @@ const generateRandomImages = (amount: number, width = 600, height = 400) => {
 export async function syncImages(
   currentItems: (File | string)[],
   existingUrls: string[],
-): Promise<ActionResponse<string[] | null>> {
+): Promise<ActionResponse<string[]>> {
   return {
     success: true,
     message: "Upload images successfully",
-    data: generateRandomImages(currentItems.length),
+    data: generateRandomImages(currentItems.length) ?? [],
   };
 
   try {

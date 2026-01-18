@@ -14,7 +14,7 @@ import hasParent from "./has-parent";
 interface ClickOutsideProps {
   active: boolean;
   onClick: (e?: MouseEvent) => void;
-  ref?: Ref<any>;
+  ref?: Ref<unknown>;
   children?: ReactNode;
 }
 
@@ -22,6 +22,7 @@ const ClickOutside: FC<ClickOutsideProps> = forwardRef(
   ({ active = true, onClick, children }, forwardedRef) => {
     const innerRef = useRef(null);
 
+    // @ts-ignore
     const child = children ? (React.Children.only(children) as any) : undefined;
 
     if (!child || child.type === React.Fragment) {
@@ -31,7 +32,11 @@ const ClickOutside: FC<ClickOutsideProps> = forwardRef(
     if (typeof onClick != "function") {
       throw new Error("onClick must be a valid function");
     }
-
+    const handleClick = (event: any) => {
+      if (!hasParent(event.target, innerRef?.current)) {
+        onClick(event);
+      }
+    };
     useEffect(() => {
       if (active) {
         document.addEventListener("mousedown", handleClick);
@@ -43,13 +48,7 @@ const ClickOutside: FC<ClickOutsideProps> = forwardRef(
           document.removeEventListener("touchstart", handleClick);
         }
       };
-    });
-
-    const handleClick = (event: any) => {
-      if (!hasParent(event.target, innerRef?.current)) {
-        onClick(event);
-      }
-    };
+    }, [handleClick]);
 
     const composedRefCallback = (element: ReactElement) => {
       if (typeof child.ref === "function") {

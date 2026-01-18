@@ -10,7 +10,7 @@ export default function SuccessPage() {
         Order Confirmed!
       </Text>
       <Text className="text-accent-6 mb-8 max-w-md">
-        Thank you for your purchase. We've sent a confirmation email to your
+        Thank you for your purchase. We have sent a confirmation email to your
         inbox. Your order is being processed and will be shipped soon.
       </Text>
       <Link

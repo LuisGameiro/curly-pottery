@@ -1,16 +1,17 @@
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 export const useToggleTheme = () => {
   const { theme, themes, setTheme } = useTheme();
-  const [themeValue, setThemeValue] = useState<string>(theme ?? "system");
+  // const [themeValue, setThemeValue] = useState<string>(theme ?? "light");
 
-  useEffect(() => {
-    setThemeValue((current) => {
-      const next = theme ?? 'system';
-      return current === next ? current : next;
-    });
-  }, [theme]);
+  // useLayoutEffect(() => {
+  //   setThemeValue((current) => {
+  //     const next = theme ?? 'light';
+  //     return current === next ? current : next;
+  //   });
+  // }, [theme]);
 
-  return { theme: themeValue, setTheme, themes };
+  const currentTheme = theme ?? "light";
+  return { theme: currentTheme, setTheme, themes };
 };

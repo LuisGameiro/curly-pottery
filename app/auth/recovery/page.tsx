@@ -20,7 +20,7 @@ export default function RecoveryPage() {
             <div className="text-center mb-8">
               <Text variant="heading">Recover Password</Text>
               <Text className="text-muted-foreground">
-                We'll send a reset link to your email
+                We will send a reset link to your email
               </Text>
             </div>
             <form onSubmit={handleRecovery} className="space-y-6">

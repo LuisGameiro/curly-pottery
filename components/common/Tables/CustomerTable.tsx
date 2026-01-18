@@ -6,13 +6,19 @@ import { Button } from "@components/ui";
 import DataTable from "@components/ui/Table/DataTable";
 import { Order, UserWithOrdersAddress } from "@lib/types/types";
 
-export default function CustomerTable({ customers }: { customers: UserWithOrdersAddress[] }) {
+export default function CustomerTable({
+  customers,
+}: {
+  customers: UserWithOrdersAddress[];
+}) {
   const customerColumns = [
     {
       header: "Customer",
       render: (user: UserWithOrdersAddress) => (
         <div>
-          <div className="font-medium">{user.firstName} {user.lastName}</div>
+          <div className="font-medium">
+            {user.firstName} {user.lastName}
+          </div>
           <div className="text-xs text-muted-foreground">
             ID: {user.id.slice(-6)}
           </div>
@@ -43,8 +49,10 @@ export default function CustomerTable({ customers }: { customers: UserWithOrders
       header: "Total Spend",
       render: (user: UserWithOrdersAddress) => {
         const total =
-          user.orders?.reduce((sum: number, o: Order) => sum + o.totalPrice, 0) ||
-          0;
+          user.orders?.reduce(
+            (sum: number, o: Order) => sum + o.totalPrice,
+            0,
+          ) || 0;
         return `£${total.toLocaleString()}`;
       },
     },

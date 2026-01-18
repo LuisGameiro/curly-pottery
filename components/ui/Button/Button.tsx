@@ -15,24 +15,23 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
   className?: string;
   variant?: "flat" | "slim" | "ghost" | "naked" | "secondary";
-  // Added props
   size?: "sm" | "md" | "lg";
   color?: "primary" | "danger" | "success" | "warning";
   active?: boolean;
   type?: "submit" | "reset" | "button";
+  // @ts-ignore
   Component?: string | JSXElementConstructor<any>;
   width?: string | number;
   loading?: boolean;
   disabled?: boolean;
 }
 
-// eslint-disable-next-line react/display-name
 const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
   const {
     className,
     variant = "flat",
-    size = "md", // Default size
-    color = "primary", // Default color
+    size = "md", 
+    color = "primary", 
     children,
     active,
     width,

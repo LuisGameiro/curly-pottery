@@ -10,7 +10,11 @@ import { deleteCategory } from "actions/category.actions";
 import { useRouter } from "next/navigation";
 import { Category } from "@lib/types/types";
 
-export default function CategoryTable({ categories }: { categories: Category[] }) {
+export default function CategoryTable({
+  categories,
+}: {
+  categories: Category[];
+}) {
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const router = useRouter();
 
@@ -46,7 +50,9 @@ export default function CategoryTable({ categories }: { categories: Category[] }
     },
     {
       header: "Name",
-      render: (cat: Category) => <span className="font-medium">{cat.name}</span>,
+      render: (cat: Category) => (
+        <span className="font-medium">{cat.name}</span>
+      ),
     },
     {
       header: "Slug",

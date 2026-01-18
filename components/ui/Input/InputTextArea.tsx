@@ -1,9 +1,6 @@
 import { cn } from "@lib/utils";
 import s from "./Input.module.css";
-import React, {
-  TextareaHTMLAttributes,
-  useId,
-} from "react";
+import React, { TextareaHTMLAttributes, useId } from "react";
 
 interface InputProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   className?: string;

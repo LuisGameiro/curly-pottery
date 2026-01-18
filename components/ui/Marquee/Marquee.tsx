@@ -15,7 +15,7 @@ import { default as FastMarquee } from "react-fast-marquee";
 
 interface MarqueeProps {
   className?: string;
-  children?: ReactNode[] | Component[] ;
+  children?: ReactNode[] | Component[];
   variant?: "primary" | "secondary";
 }
 
@@ -43,9 +43,8 @@ const Marquee: FC<MarqueeProps> = ({
         },
       }))} */}
       {Children.map(children, (child: ReactNode) => {
-        if (!isValidElement(child)) 
-          return child;
-        
+        if (!isValidElement(child)) return child;
+
         const element = child as ReactElement<{ className?: string }>;
 
         return cloneElement(element, {

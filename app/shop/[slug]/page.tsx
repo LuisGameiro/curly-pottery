@@ -81,7 +81,7 @@ export default async function ProductPage({
   return (
     <ProductView
       product={product}
-      relatedProducts={relatedResponse.data || []}
+      relatedProducts={relatedResponse.data ?? []}
     />
   );
 }

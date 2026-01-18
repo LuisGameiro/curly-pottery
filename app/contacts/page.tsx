@@ -9,11 +9,10 @@ import React, { useState } from "react";
 import { toast } from "sonner";
 
 const contacts = {
-  email: 'curly.pottery@gmail.com',
-  instagram: 'curly_pottery',
-  address: 'london, uk'
-}
-
+  email: "curly.pottery@gmail.com",
+  instagram: "curly_pottery",
+  address: "london, uk",
+};
 
 interface FormData {
   name: string;
@@ -72,7 +71,7 @@ export default function Contacts() {
       <header className="justify-center text-center mx-auto mb-10">
         <Text variant="heading">Contact Us</Text>
         <Text className="mx-auto">
-          We'd love to hear from you! Please reach out using the information
+          We would love to hear from you! Please reach out using the information
           below or fill out the contact form.
         </Text>
       </header>
@@ -108,7 +107,9 @@ export default function Contacts() {
                 +1 (234) 567-890
               </a>
             </li> */}
-            <li className="hover:text-secondary/60">📍 Address: {contacts.address}</li>
+            <li className="hover:text-secondary/60">
+              📍 Address: {contacts.address}
+            </li>
           </ul>
         </section>
 

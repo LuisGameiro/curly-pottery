@@ -9,15 +9,14 @@ export default function useCart() {
 
   useEffect(() => {
     store.syncWithDatabase();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, store]);
 
   const subtotal = useMemo(
     () =>
       store.cartItems.reduce(
         (acc, item) =>
           acc +
-          calculateDiscount(item.variant.price, item.variant.discounts)
-            .finalPrice *
+          calculateDiscount(item.price, item.discounts).finalPrice *
             item.quantity,
         0,
       ),

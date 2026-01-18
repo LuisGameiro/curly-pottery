@@ -15,8 +15,7 @@ const shippingOptions = [
 ];
 
 interface ShippingMethodProps {
-  onComplete: (formData: any) => void
-
+  onComplete: (shippingPrice: number, shippingMethod: string) => void;
 }
 
 export default function ShippingMethod({ onComplete }: ShippingMethodProps) {
@@ -30,9 +29,7 @@ export default function ShippingMethod({ onComplete }: ShippingMethodProps) {
           variant="secondary"
           className="w-full"
           type="button"
-          onClick={() =>
-            onComplete({ shipping: { price: o.price, method: o.method } })
-          }
+          onClick={() => onComplete(o.price, o.method)}
         >
           <div className="w-full flex justify-between gap-4">
             <Text>{o.conditions}</Text>

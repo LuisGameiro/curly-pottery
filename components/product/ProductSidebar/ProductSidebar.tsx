@@ -10,7 +10,12 @@ import { cn } from "@lib/utils";
 import ProductOptions from "../ProductOptions";
 import { calculateDiscount } from "@lib/calculate-price";
 import useCart from "@lib/hooks/useCart";
-import { Detail, Category, ProductWithVariantsCategories, Variant } from "@lib/types/types";
+import {
+  Detail,
+  Category,
+  ProductWithVariantsCategories,
+  Variant,
+} from "@lib/types/types";
 
 interface ProductSidebarProps {
   product: ProductWithVariantsCategories;
@@ -65,16 +70,13 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
     }
   };
 
-  const price = calculateDiscount(
-    variant.price,
-    variant.discounts,
-  );
+  const price = calculateDiscount(variant.price, variant.discounts);
 
   return (
     <div className={cn(className, "space-y-4")}>
       <section>
         <h1 className="text-3xl font-semibold ">{product.name}</h1>
-        {product.categories.map((category:Category) => (
+        {product.categories.map((category: Category) => (
           <span key={category.id} className={"text-xl mr-2"}>
             {category.name}
           </span>
@@ -85,9 +87,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
         <p className="text-lg font-medium  space-x-2 my-2">
           {price.hasDiscount ? (
             <>
-              <span className="line-through opacity-40">
-                {price.price}
-              </span>
+              <span className="line-through opacity-40">{price.price}</span>
               <span>{price.finalPrice}</span>
 
               <span className=" bg-red-500 p-1 px-2 border-2 border-accent-9 bg-center">
@@ -169,7 +169,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
             <h2 className="text 2xl font-semibold">Product details:</h2>
 
             <div className="ml-10 space-y-4">
-              {variant.details.map((detail:Detail) => (
+              {variant.details.map((detail: Detail) => (
                 <div key={detail.title}>
                   <span className="font-semibold">{detail.title}: </span>
                   <span>{detail.description}</span>
@@ -190,8 +190,8 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
         <h2 className="text 2xl font-semibold">Care Instructions</h2>
         <p>
           Gently rinse with warm water and mild soap after use. Avoid soaking
-          for long periods to preserve the bamboo's natural beauty. Dry
-          thoroughly before storing.
+          for long periods to preserve the bamboo natural beauty. Dry thoroughly
+          before storing.
         </p>
       </section>
 

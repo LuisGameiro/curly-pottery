@@ -83,7 +83,7 @@ const I18nWidget: FC = () => {
                 </button>
               </div>
               <ul>
-                {options.map((locale:string) => (
+                {options.map((locale: string) => (
                   <li key={locale}>
                     <Link
                       href={currentPath}

@@ -1,9 +1,14 @@
 "use server";
 
 import { prisma } from "prisma/prisma";
-import { Address, Order, OrderStatus, OrderWithUser } from "@lib/types/types";
+import {
+  Address,
+  Order,
+  OrderStatus,
+  OrderWithUser,
+  ActionResponse,
+} from "@lib/types/types";
 import { revalidatePath } from "next/cache";
-import { ActionResponse } from "@lib/types/utils";
 
 export async function getAllOrders(): Promise<
   ActionResponse<OrderWithUser[] | null>
@@ -80,7 +85,7 @@ export async function createOrder(input: {
         billingAddress: input.billingAddress || {},
         status: "PENDING",
         shippingPrice: input.shippingPrice,
-        shippingMethod:input.shippingMethod,
+        shippingMethod: input.shippingMethod,
         ...(input.userId && {
           user: {
             connect: { id: input.userId },

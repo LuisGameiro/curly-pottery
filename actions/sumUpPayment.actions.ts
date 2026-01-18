@@ -1,7 +1,7 @@
 "use server";
 
 import { authOptions } from "@lib/auth/authOptions";
-import { ActionResponse } from "@lib/types/utils";
+import { ActionResponse } from "@lib/types/types";
 import { getServerSession } from "next-auth";
 
 export async function createSumUpCheckout(

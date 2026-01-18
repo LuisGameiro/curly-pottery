@@ -2,8 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "prisma/prisma";
-import { Category } from "@lib/types/types";
-import { ActionResponse } from "@lib/types/utils";
+import { Category, ActionResponse } from "@lib/types/types";
 
 export async function getAllCategories(): Promise<ActionResponse<Category[]>> {
   try {

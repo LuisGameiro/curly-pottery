@@ -2,13 +2,12 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { Product } from "prisma/generated/prisma/client";
 import { syncCartAction } from "actions/cart.actions";
-import { CartLineItem } from "@lib/types/types";
-
+import { CartLineItem, ProductWithVariantsCategories } from "@lib/types/types";
 
 interface CartStore {
   cartItems: CartLineItem[];
   isLoading: boolean;
-  addItem: (item: Product, quantity: number) => void;
+  addItem: (item: ProductWithVariantsCategories, quantity: number) => void;
   removeItem: (id: string) => void;
   updateItem: (id: string, q: number) => void;
   deleteAll: () => void;
@@ -21,16 +20,16 @@ export const useCartStore = create<CartStore>()(
       cartItems: [],
       isLoading: false,
 
-      addItem: async (item: CartLineItem, quantity: number) => {
+      addItem: async (item: ProductWithVariantsCategories, quantity: number) => {
         const { cartItems } = get();
         const existing = cartItems.find(
-          (i: CartLineItem) => i.variantId === item.variantId,
+          (i: CartLineItem) => i.variantId === item.variants.id,
         );
         let newItems: CartLineItem[];
 
         if (existing) {
           newItems = cartItems.map((i: CartLineItem) =>
-            i.variantId === item.variantId
+            i.variantId === item.variants.id
               ? { ...i, quantity: i.quantity + quantity }
               : i,
           );

@@ -58,17 +58,17 @@ model Category {
  * -------------------- PRODUCT --------------------
  */
 model Product {
-  id          String @id @default(cuid())
-  name        String @unique
-  slug        String @unique
-  description String
-  images      String[]
-  variants    ProductVariant[]
-  categories  Category[]
-  requiresShipping Boolean @default(true)
+  id                String      @id @default(cuid())
+  name              String      @unique
+  slug              String      @unique
+  description       String
+  images            String[]
+  variants          ProductVariant[] @default([])
+  categories        Category[]
+  requiresShipping  Boolean     @default(true)
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
 }
 
 model ProductVariant {
@@ -78,7 +78,7 @@ model ProductVariant {
   currency         CurrencyCode @default(GBP)
   stock            Int          @default(0)
   availableForSale Boolean      @default(true)
-  images           String[]
+  images           String[]     @default([])
 
   sizeName         String?
   colorName        String? 

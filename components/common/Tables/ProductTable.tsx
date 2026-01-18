@@ -12,7 +12,11 @@ import { deleteProduct } from "actions/product.actions";
 import { ProductWithVariantsCategories, Variant } from "@lib/types/types";
 import VariantTable from "./VariantTable";
 
-export default function ProductTable({ products }: { products: ProductWithVariantsCategories[] }) {
+export default function ProductTable({
+  products,
+}: {
+  products: ProductWithVariantsCategories[];
+}) {
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const router = useRouter();
 
@@ -80,10 +84,7 @@ export default function ProductTable({ products }: { products: ProductWithVarian
         const prices = p.variants.map((v: Variant) => v.price);
         const minPrice = Math.min(...prices);
         const maxPrice = Math.max(...prices);
-        const stock = p.variants.reduce(
-          (acc: number, v: Variant) => acc + v.stock,
-          0,
-        );
+
         return (
           <span>
             {minPrice === maxPrice
@@ -96,10 +97,6 @@ export default function ProductTable({ products }: { products: ProductWithVarian
     {
       header: "Last Update",
       render: (p: ProductWithVariantsCategories) => {
-        const stock = p.variants.reduce(
-          (acc: number, v: Variant) => acc + v.stock,
-          0,
-        );
         return <span> {new Date(p.updatedAt).toLocaleDateString()}</span>;
       },
     },

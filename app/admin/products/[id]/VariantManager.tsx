@@ -3,9 +3,8 @@
 import React from "react";
 import { Plus } from "lucide-react";
 import { Text } from "@components/ui";
-import { Product, Variant as Variant } from "@lib/types/types";
+import { EditProduct, EditVariant } from "@lib/types/types";
 import { ProductVariant } from "./ProductVariant";
-import { EditProduct, EditVariant } from "./ProductClient";
 
 interface VariantManagerProps {
   product: EditProduct;
@@ -37,6 +36,7 @@ export const VariantManager: React.FC<VariantManagerProps> = ({
         currency: "USD",
         colorHex: "FFFFFF",
         productId: product.id,
+        images: [],
       },
     ]);
   };
@@ -55,7 +55,7 @@ export const VariantManager: React.FC<VariantManagerProps> = ({
     );
   };
 
-  const updateVariant = (id: string, field: string, value: any) => {
+  const updateVariant = (id: string, field: string, value: unknown) => {
     setVariants(
       variants.map((v) => (v.id === id ? { ...v, [field]: value } : v)),
     );

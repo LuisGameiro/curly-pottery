@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { cn } from "@lib/utils";
 import ClickOutside from "@lib/click-outside";
 import { ChevronDown } from "lucide-react";
+import { Category } from "@lib/types/types";
 
 export const sortLabels: Record<string, string> = {
   newest: "Newest first",
@@ -11,12 +12,22 @@ export const sortLabels: Record<string, string> = {
   "name-asc": "Alphabetically: A-Z",
   "name-desc": "Alphabetically: Z-A",
 };
+
+type SortLabels = keyof typeof sortLabels;
+
+interface MenuProductsProps {
+  setSortMethod: (key: SortLabels) => void;
+  sortMethod: string;
+  categories: Category[];
+  activeCategory: string;
+}
+
 export default function MenuProducts({
   setSortMethod,
   sortMethod,
   categories,
   activeCategory,
-}: any) {
+}: MenuProductsProps) {
   const router = useRouter();
 
   const [openFilter, setOpenFilter] = useState(false);
@@ -68,7 +79,7 @@ export default function MenuProducts({
                       : "hover:bg-accent-1 text-text-secondary hover:text-text-base font-medium",
                   )}
                   onClick={() => {
-                    setSortMethod(key as keyof typeof sortLabels);
+                    setSortMethod(key);
                     setOpenSort(false);
                   }}
                 >
@@ -119,7 +130,7 @@ export default function MenuProducts({
                 All Products
               </li>
 
-              {categories.map((cat: any) => (
+              {categories.map((cat: Category) => (
                 <li
                   key={cat.id}
                   className={cn(

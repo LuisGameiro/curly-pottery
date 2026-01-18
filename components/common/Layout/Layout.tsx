@@ -1,6 +1,5 @@
 "use client";
 
-import s from "./Layout.module.css";
 import dynamic from "next/dynamic";
 import { useUI } from "@components/ui/context";
 import { Navbar, Footer } from "@components/common";
@@ -56,7 +55,7 @@ interface Props {
 
 const SidebarView: React.FC<{
   sidebarView: string;
-  closeSidebar(): any;
+  closeSidebar(): () => void;
   links: LinkProps[];
 }> = ({ sidebarView, closeSidebar, links }) => {
   return (
@@ -80,11 +79,6 @@ const SidebarUI: React.FC<{ links: LinkProps[] }> = ({ links }) => {
     />
   ) : null;
 };
-
-const navBarlinks = [
-  { label: "Shop", href: "/shop" },
-  { label: "Contacts", href: "/contacts" },
-];
 
 const Layout: React.FC<Props> = ({ children }) => {
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies();

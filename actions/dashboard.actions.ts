@@ -1,5 +1,5 @@
 "use server";
-import { ActionResponse } from "@lib/types/utils";
+import { ActionResponse } from "@lib/types/types";
 import { prisma } from "prisma/prisma";
 
 export interface DashboardStats {

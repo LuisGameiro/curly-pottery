@@ -4,11 +4,11 @@ import Image, { ImageProps } from "next/image";
 import { cn } from "@lib/utils";
 import { FC } from "react";
 import { calculateDiscount } from "@lib/calculate-price";
-import { Product } from "@lib/types/types";
+import { Discount, ProductWithVariantsCategories } from "@lib/types/types";
 
 interface Props {
   className?: string;
-  product: Product;
+  product: ProductWithVariantsCategories;
   noNameTag?: boolean;
   imgProps?: Omit<ImageProps, "src" | "layout" | "placeholder" | "blurDataURL">;
   variant?: "default" | "slim" | "simple";
@@ -34,7 +34,7 @@ const ProductCard: FC<Props> = ({
   const { finalPrice, price, hasDiscount } = product?.variants
     ? calculateDiscount(
         product.variants[0].price,
-        product.variants[0].discounts,
+        product.variants[0].discounts as Discount[],
       )
     : { price: "$0.00", finalPrice: "$0.00", hasDiscount: false };
 
@@ -85,13 +85,11 @@ const ProductCard: FC<Props> = ({
             <div className="absolute bottom-2 right-2 z-20 rounded-md bg-background/30  px-2 py-1 text-sm font-medium text-foreground backdrop-blur">
               {hasDiscount ? (
                 <>
-                  <span className="line-through opacity-40 mr-1">
-                    {priceCalculated}
-                  </span>
-                  <span>{priceDiscount}</span>
+                  <span className="line-through opacity-40 mr-1">{price}</span>
+                  <span>{finalPrice}</span>
                 </>
               ) : (
-                <span>{priceCalculated}</span>
+                <span>{price}</span>
               )}
             </div>
           </div>

@@ -69,7 +69,7 @@ export function calculateDiscount(
   };
 }
 
-export const showCurrency:Record<CurrencyCode,string> = {
+export const showCurrency: Record<CurrencyCode, string> = {
   GBP: "£",
   EUR: "$",
   USD: "$",

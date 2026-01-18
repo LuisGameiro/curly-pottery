@@ -1,13 +1,12 @@
 import { Button, Input, Text } from "@components/ui";
-import { Cart, User } from "@lib/types/types";
+import { User } from "@lib/types/types";
 import Link from "next/link";
 import { useState } from "react";
 
 interface InformationFormProps {
-  onComplete: (formData: unknown) => void
-  initialData: User,
-  isLoggedIn: boolean,
-
+  onComplete: (formData: unknown) => void;
+  initialData: User;
+  isLoggedIn: boolean;
 }
 
 export default function InformationForm({
@@ -67,7 +66,7 @@ export default function InformationForm({
             type="email"
             name="email"
             placeholder="Email Address"
-            defaultValue={initialData?.email || ''}
+            defaultValue={initialData?.email || ""}
             required
           />
           <Input
@@ -75,7 +74,7 @@ export default function InformationForm({
             type="phone"
             name="phone"
             placeholder="Phone"
-            defaultValue={initialData?.phone || ''}
+            defaultValue={initialData?.phone || ""}
             required
           />
         </div>

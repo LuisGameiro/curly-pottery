@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  RefObject,
-  createElement,
-  ReactNode,
-  useRef,
-} from "react";
+import { useEffect, RefObject, createElement, ReactNode, useRef } from "react";
 import { tabbable } from "tabbable";
 
 interface Props {

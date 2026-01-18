@@ -7,7 +7,6 @@ import DataTable from "@components/ui/Table/DataTable";
 import { Order } from "@lib/types/types";
 
 export default function OrderTable({ orders }: { orders: Order[] }) {
-
   const orderColumns = [
     {
       header: "Order ID",
@@ -34,7 +33,10 @@ export default function OrderTable({ orders }: { orders: Order[] }) {
       ),
     },
     { header: "Total", render: (o: Order) => `£${o.totalPrice.toFixed(2)}` },
-    { header: "Status", render: (o: Order) => <StatusBadge status={o.status} /> },
+    {
+      header: "Status",
+      render: (o: Order) => <StatusBadge status={o.status} />,
+    },
     {
       header: "View",
       align: "center" as const,

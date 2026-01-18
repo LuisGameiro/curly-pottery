@@ -10,7 +10,11 @@ import notFound from "app/not-found";
 import Loading from "app/loading";
 import { Suspense } from "react";
 
-export default async function OrderDetailsPage({ params }: any) {
+export default async function OrderDetailsPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
 
   const response = await getOrderById(id);
@@ -78,7 +82,7 @@ export default async function OrderDetailsPage({ params }: any) {
                     <div className="text-right">
                       <Text className="text-sm font-medium">
                         {showCurrency[order.currency]}{" "}
-                        {Number(item.variant.price).toFixed(2)}
+                        {Number(item.price).toFixed(2)}
                       </Text>
                       <Text className="text-xs text-muted-foreground">
                         Qty: {item.quantity}

@@ -1,8 +1,4 @@
-import {
-  FunctionComponent,
-  CSSProperties,
-  ElementType,
-} from "react";
+import { FunctionComponent, CSSProperties, ElementType } from "react";
 import s from "./Text.module.css";
 import { cn } from "@lib/utils";
 
@@ -46,17 +42,13 @@ const Text: FunctionComponent<TextProps> = ({
 
   const htmlContentProps = html
     ? {
-      dangerouslySetInnerHTML: { __html: html },
-    }
+        dangerouslySetInnerHTML: { __html: html },
+      }
     : {};
 
   return (
     <Component
-      className={cn(
-        s.root,
-        s[variant],
-        className,
-      )}
+      className={cn(s.root, s[variant], className)}
       onClick={onClick}
       style={style}
       {...htmlContentProps}
