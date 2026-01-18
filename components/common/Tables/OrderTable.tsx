@@ -20,8 +20,8 @@ export default function OrderTable({ orders }: { orders: OrderWithUser[] }) {
       render: (o: OrderWithUser) => (
         <div className="flex flex-col">
           <span className="font-medium">
-            {o?.user?.firstName || o?.shippingAddress?.firstName}{" "}
-            {o?.user?.lastName || o?.shippingAddress?.lastName}
+            {o.firstName}{" "}
+            {o.lastName}
           </span>
           <span className="text-xs opacity-70">{o.email}</span>
         </div>
@@ -31,7 +31,7 @@ export default function OrderTable({ orders }: { orders: OrderWithUser[] }) {
       header: "Items",
       render: (o: Order) => (
         <div className="max-w-[150px] truncate">
-          {(o.lineItems ?? []).map((i: CartLineItem) => `${i.quantity}x ${i.sku}`).join(", ")}
+          {(o.lineItems).map((i: CartLineItem) => `${i.quantity}x ${i.sku}`).join(", ")}
         </div>
       ),
     },

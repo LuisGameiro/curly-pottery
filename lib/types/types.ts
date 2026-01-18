@@ -108,6 +108,8 @@ export type CartLineItem = {
   discounts: Discount[];
 };
 
+
+
 export type Discount = {
   code: string;
   type: DiscountType;
@@ -116,28 +118,45 @@ export type Discount = {
   amountSaved: number;
 };
 
- export type CreateOrder ={
+export type CreateOrder = {
   userId?: string;
   address: Address;
   lineItems: CartLineItem[];
-  discounts: any[];
+  discounts: Discount[];
   subtotalPrice: number;
   totalPrice: number;
   taxes: number;
+  firstname: string;
+  lastname: string;
+  email: string;
+  phone: string;
   currency: CurrencyCode;
   shippingPrice: number;
   shippingMethod: string;
 }
 
-export type OrderWithUser = Prisma.OrderGetPayload<{
+type PrismaOrderWithUser = Prisma.OrderGetPayload<{
   include: { user: true };
 }>;
+export type OrderWithUser = Omit<PrismaOrderWithUser, "lineItems"> & {
+  lineItems: CartLineItem[] | JsonValue;
+}
 
-export type Order = Prisma.OrderGetPayload<null>;
+type PrismaOrder = Prisma.OrderGetPayload<null>;
+export type Order = Omit<PrismaOrder, "lineItems"> & {
+  lineItems: CartLineItem[] | JsonValue;
+}
+
+type PrismaCart = Prisma.CartGetPayload<null>;
+
+export type Cart = Omit<PrismaCart, "lineItems"> & {
+  lineItems: CartLineItem[] | JsonValue;
+}
 
 export type Address = Prisma.AddressGetPayload<null>;
 
-export type Cart = Prisma.CartGetPayload<null>;
+export type InputAddress = Omit<PrismaCart, "id" | "createdAt"> ;
+
 
 export type User = Prisma.UserGetPayload<null>;
 
@@ -152,17 +171,17 @@ export type UserWithOrdersAddress = Prisma.UserGetPayload<{
 
 export type ActionResponse<T> =
   | {
-      success: true;
-      message: string;
-      data: T;
-      errors?: never;
-    }
+    success: true;
+    message: string;
+    data: T;
+    errors?: never;
+  }
   | {
-      success: false;
-      message: string;
-      data?: never;
-      errors?: unknown;
-    };
+    success: false;
+    message: string;
+    data?: never;
+    errors?: unknown;
+  };
 
 // export type Order = {
 //   id: string;

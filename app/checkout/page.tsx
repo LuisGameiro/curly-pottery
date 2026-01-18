@@ -12,7 +12,7 @@ import { createOrder } from "actions/order.actions";
 import { useRouter } from "next/navigation";
 import { Container } from "@components/ui";
 import { toast } from "sonner";
-import { Address } from "@lib/types/types";
+import { Address, InputAddress } from "@lib/types/types";
 
 type FormData = {
   firstName: string;
@@ -25,6 +25,7 @@ type FormData = {
   shippingMethod: string;
   email: string;
   phone: string;
+  taxes?: number;
 };
 
 export default function CheckoutPage() {
@@ -47,21 +48,16 @@ export default function CheckoutPage() {
   const nextToPayment = async (
     shippingPrice: number,
     shippingMethod: string,
+    taxes: number=0
   ) => {
     setLoading(true);
-    setFormData({ ...formData, shippingPrice, shippingMethod });
-    const address: Address = {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
+    setFormData({ ...formData, shippingPrice, shippingMethod ,taxes});
+    const address: InputAddress = {
       address: formData.address,
       postalCode: formData.postcode,
       city: formData.city,
       country: formData.country || "United Kingdom",
-      id: "",
-      createdAt: null,
-      type: null,
-      company: null,
-      userId: null,
+      userId: session?.user?.id || "",
     };
     try {
       const response = await createSumUpCheckout(
@@ -77,14 +73,21 @@ export default function CheckoutPage() {
       await createOrder({
         userId: session?.user?.id,
 
+        email: formData.email,
+        phone: formData.phone,
+        lastname: formData.lastName,
+        firstname: formData.firstName,
         address,
+
+        lineItems: data.lineItems,
+        discounts: [],
+        subtotalPrice: data.subtotalPrice,
+        totalPrice: data.subtotalPrice + shippingPrice + taxes,
+        currency: "GBP",
 
         shippingPrice,
         shippingMethod,
         taxes: 0,
-        email: formData.email,
-        phone: formData.phone,
-
       });
 
       setStep(3);

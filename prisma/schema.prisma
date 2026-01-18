@@ -101,8 +101,6 @@ model ProductVariant {
 model Address {
   id           String  @id @default(cuid())
   type         String? // billing | shipping
-  firstName    String
-  lastName     String
   company      String?
   address      String
   postalCode   String
@@ -138,6 +136,8 @@ model Order {
   email           String?
   phone           String?
   userId          String?
+  firstName       String
+  lastName        String
   user            User?       @relation(fields: [userId], references: [id])
   status          OrderStatus @default(PENDING)
   lineItems       Json

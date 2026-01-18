@@ -15,6 +15,7 @@ import {
   Category,
   ProductWithVariantsCategories,
   Variant,
+  Discount
 } from "@lib/types/types";
 
 interface ProductSidebarProps {
@@ -68,7 +69,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
     }
   };
 
-  const price = calculateDiscount(variant.price, variant.discounts);
+  const price = calculateDiscount(variant.price, variant.discounts as Discount[]);
 
   return (
     <div className={cn(className, "space-y-4")}>
@@ -102,7 +103,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
           checkout for U.S. customers Shipping calculated at checkout.{" "}
         </p>
         <p className="py-2">
-          {error && <ErrorMessage message={error.message} />}
+          {error && <ErrorMessage message={error} />}
         </p>
 
         {!forSale ? (

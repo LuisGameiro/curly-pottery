@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useUI } from "@components/ui/context";
 import { Navbar, Footer } from "@components/common";
 import { useAcceptCookies } from "@lib/hooks/useAcceptCookies";
-import { Sidebar, Button, LoadingDots } from "@components/ui";
+import {  Button, LoadingDots } from "@components/ui";
 import { MenuSidebarView } from "@components/common/UserNav";
 import { Toaster } from "sonner";
 import type { Link as LinkProps } from "../UserNav/MenuSidebarView";
