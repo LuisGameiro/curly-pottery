@@ -1,8 +1,5 @@
-import {
-  EditProduct,
-  EditVariant,
-} from "app/admin/products/[id]/ProductClient";
-import { Product, Variant } from "./types/types";
+
+import { EditProduct, EditVariant, Product, Variant } from "./types/types";
 
 export const skulify = (
   product: Product | EditProduct,

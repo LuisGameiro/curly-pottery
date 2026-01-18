@@ -23,18 +23,28 @@ export const useCartStore = create<CartStore>()(
       addItem: async (item: ProductWithVariantsCategories, quantity: number) => {
         const { cartItems } = get();
         const existing = cartItems.find(
-          (i: CartLineItem) => i.variantId === item.variants.id,
+          (i: CartLineItem) => i.variantId === item.variants[0].id,
         );
         let newItems: CartLineItem[];
 
         if (existing) {
           newItems = cartItems.map((i: CartLineItem) =>
-            i.variantId === item.variants.id
+            i.variantId === item.variants[0].id
               ? { ...i, quantity: i.quantity + quantity }
               : i,
           );
         } else {
-          newItems = [...cartItems, { ...item, quantity }];
+          newItems = [...cartItems, {
+            ...item, 
+            quantity,
+            images: item.images[0] || "",
+            variantId: item.variants[0].id,
+            sku: item.variants[0].sku || "",
+            stock: item.variants[0].stock || 0,
+            price: item.variants[0].price || 0,
+            currency: "USD",
+            discounts: []
+          }];
         }
 
         set({ cartItems: newItems });

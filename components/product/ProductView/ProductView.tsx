@@ -7,7 +7,7 @@ import { ProductSlider, ProductCard } from "@components/product";
 import { Container, Text } from "@components/ui";
 import { SEO } from "@components/common";
 import ProductSidebar from "../ProductSidebar";
-import { Product, ProductFull, Variant } from "@lib/types/types";
+import { Product, ProductFull, ProductWithVariantsCategories, Variant } from "@lib/types/types";
 import { cn } from "@lib/utils";
 
 export const getRelatedProducts = async (
@@ -25,7 +25,7 @@ export const getRelatedProducts = async (
 };
 
 interface ProductViewProps {
-  product: ProductFull;
+  product: ProductWithVariantsCategories;
   relatedProducts: Product[];
 }
 

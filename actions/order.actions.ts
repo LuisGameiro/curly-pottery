@@ -7,6 +7,9 @@ import {
   OrderStatus,
   OrderWithUser,
   ActionResponse,
+  CartLineItem,
+  CurrencyCode,
+  CreateOrder,
 } from "@lib/types/types";
 import { revalidatePath } from "next/cache";
 
@@ -66,29 +69,35 @@ export async function getOrderById(
   }
 }
 
-export async function createOrder(input: {
-  cartId: string;
-  userId?: string;
-  shippingAddress: Address;
-  billingAddress: Address;
-  cart: Order;
-}): Promise<ActionResponse<Order | null>> {
+export async function createOrder({
+  userId,
+  address,
+  lineItems,
+  discounts,
+  subtotalPrice,
+  totalPrice,
+  taxes,
+  currency,
+  shippingPrice,
+  shippingMethod,
+}:CreateOrder): Promise<ActionResponse<Order | null>> {
   try {
     const order = await prisma.order.create({
       data: {
-        lineItems: input.cart.lineItems || [],
-        discounts: input.cart.discounts || [],
-        subtotalPrice: Number(input.cart.subtotalPrice) || 0,
-        totalPrice: Number(input.cart.totalPrice) || 0,
-        currency: input.cart.currency || "GBP",
-        shippingAddress: input.shippingAddress || {},
-        billingAddress: input.billingAddress || {},
+        lineItems,
+        discounts: discounts || [],
+        currency: currency || "GBP",
+        shippingAddress: address || {},
+        billingAddress: address || {},
         status: "PENDING",
-        shippingPrice: input.shippingPrice,
-        shippingMethod: input.shippingMethod,
-        ...(input.userId && {
+        taxes,
+        shippingPrice: shippingPrice,
+        subtotalPrice: Number(subtotalPrice) || 0,
+        totalPrice: Number(totalPrice) || 0,
+        shippingMethod: shippingMethod,
+        ...(userId && {
           user: {
-            connect: { id: input.userId },
+            connect: { id: userId },
           },
         }),
       },

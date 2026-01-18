@@ -26,7 +26,7 @@ const Hero: FC<HeroProps> = ({ headline, description }) => {
               className="flex items-center pt-3 font-bold hover:underline cursor-pointer w-max-content content-center"
             >
               Read it here
-              <ArrowRight width="20" heigh="20" className="ml-1" />
+              <ArrowRight slope="20"  className="ml-1" />
             </Link>
           </div>
         </div>

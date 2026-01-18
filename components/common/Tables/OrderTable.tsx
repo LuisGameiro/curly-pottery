@@ -4,17 +4,20 @@ import Link from "next/link";
 import { Eye } from "lucide-react";
 import { Button } from "@components/ui";
 import DataTable from "@components/ui/Table/DataTable";
-import { Order } from "@lib/types/types";
+import { CartLineItem, Order, OrderWithUser } from "@lib/types/types";
 
-export default function OrderTable({ orders }: { orders: Order[] }) {
+export default function OrderTable({ orders }: { orders: OrderWithUser[] }) {
+
+
   const orderColumns = [
+
     {
       header: "Order ID",
       render: (o: Order) => `#${o.id.slice(-6).toUpperCase()}`,
     },
     {
       header: "Customer",
-      render: (o: Order) => (
+      render: (o: OrderWithUser) => (
         <div className="flex flex-col">
           <span className="font-medium">
             {o?.user?.firstName || o?.shippingAddress?.firstName}{" "}
@@ -28,7 +31,7 @@ export default function OrderTable({ orders }: { orders: Order[] }) {
       header: "Items",
       render: (o: Order) => (
         <div className="max-w-[150px] truncate">
-          {o.lineItems.map((i: Order) => `${i.quantity}x ${i.sku}`).join(", ")}
+          {(o.lineItems ?? []).map((i: CartLineItem) => `${i.quantity}x ${i.sku}`).join(", ")}
         </div>
       ),
     },

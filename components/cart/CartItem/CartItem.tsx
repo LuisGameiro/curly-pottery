@@ -25,7 +25,7 @@ const CartItem = ({
   currencyCode: string;
 }) => {
   const { removeItem, updateItem } = useCart();
-  const { closeSidebarIfPresent } = useUI();
+  // const { closeSidebarIfPresent } = useUI();
   const [removing, setRemoving] = useState(false);
   const [quantity, setQuantity] = useState<number>(item.quantity);
 
@@ -74,7 +74,7 @@ const CartItem = ({
         <div className="relative w-20 h-20 sm:w-24 sm:h-24 bg-accent-1 rounded-md overflow-hidden border border-accent-2  mr-2">
           <Link href={`/shop/${item.slug}`}>
             <Image
-              onClick={() => closeSidebarIfPresent()}
+              // onClick={() => closeSidebarIfPresent()}
               className="object-cover transition-transform hover:scale-105"
               fill
               src={item.images?.[0] || placeholderImg}
@@ -85,7 +85,9 @@ const CartItem = ({
 
         <div>
           <Link href={`/shop/${item.slug}`}>
-            <Text variant="bold" onClick={() => closeSidebarIfPresent()}>
+            <Text variant="bold" 
+            // onClick={() => closeSidebarIfPresent()}
+              >
               {item.name}
             </Text>
           </Link>

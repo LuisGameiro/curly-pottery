@@ -15,7 +15,7 @@ import { default as FastMarquee } from "react-fast-marquee";
 
 interface MarqueeProps {
   className?: string;
-  children?: ReactNode[] | Component[];
+  children?: ReactNode;
   variant?: "primary" | "secondary";
 }
 

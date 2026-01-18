@@ -4,12 +4,11 @@ import { Package, Trash2, ChevronUp, ChevronDown } from "lucide-react";
 import { Container, Text, Button, Input } from "@components/ui";
 import InputCheck from "@components/ui/Input/InputCheck";
 import InputImage from "@components/ui/Input/InputImage";
-import { SizeNames, Detail } from "@lib/types/types";
+import { SizeNames, Detail, EditProduct, EditVariant } from "@lib/types/types";
 import { skulify } from "@lib/skulify";
 import { VariantDetails } from "./VariantDetails";
 import { VariantDiscounts } from "./VariantDiscounts";
 import InputSelect from "@components/ui/Input/InputSelect";
-import { EditProduct, EditVariant } from "./ProductClient";
 import { Discount } from "@lib/types/types";
 
 interface PorductVariantProps {

@@ -116,6 +116,19 @@ export type Discount = {
   amountSaved: number;
 };
 
+ export type CreateOrder ={
+  userId?: string;
+  address: Address;
+  lineItems: CartLineItem[];
+  discounts: any[];
+  subtotalPrice: number;
+  totalPrice: number;
+  taxes: number;
+  currency: CurrencyCode;
+  shippingPrice: number;
+  shippingMethod: string;
+}
+
 export type OrderWithUser = Prisma.OrderGetPayload<{
   include: { user: true };
 }>;

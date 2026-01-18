@@ -48,12 +48,10 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
     setLoading(true);
     setError(null);
     try {
-      await addItem(
+       addItem(
         {
           ...product,
-          variant: { ...variant },
-          productId: product.id,
-          variantId: variant.id,
+          variants: [variant] ,
         },
         quantity,
       );

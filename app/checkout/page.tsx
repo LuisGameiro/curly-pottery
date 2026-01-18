@@ -77,26 +77,14 @@ export default function CheckoutPage() {
       await createOrder({
         userId: session?.user?.id,
 
-        shippingAddress: address,
-        billingAddress: address,
+        address,
 
-        cart: {
-          email: formData.email,
-          phone: formData.phone,
-          shippingPrice,
-          shippingMethod,
-          ...data,
-          id: "",
-          userId: null,
-          createdAt: undefined,
-          status: "PENDING",
-          discounts: null,
-          taxesIncluded: false,
-          shippingAddress: null,
-          billingAddress: null,
-          taxes: 0,
-          updatedAt: undefined,
-        },
+        shippingPrice,
+        shippingMethod,
+        taxes: 0,
+        email: formData.email,
+        phone: formData.phone,
+
       });
 
       setStep(3);

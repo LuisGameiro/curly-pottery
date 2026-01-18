@@ -5,7 +5,7 @@ import Link from "next/link";
 import { getOrderById } from "actions/order.actions";
 import OrderStatusUpdate from "./orderStatusUpdate";
 import { showCurrency } from "@lib/calculate-price";
-import { CartLineItem } from "@lib/types/types";
+import { Address, CartLineItem, Order, OrderWithUser } from "@lib/types/types";
 import notFound from "app/not-found";
 import Loading from "app/loading";
 import { Suspense } from "react";
@@ -23,15 +23,14 @@ export default async function OrderDetailsPage({
   }
 
   if (!response.data) {
-    notFound();
+    return notFound();
   }
 
-  const {
-    lineItems,
-    shippingAddress: address,
-    shipping,
-    ...order
-  } = response.data;
+  const lineItems = response.data.lineItems as CartLineItem[];
+  const address = response.data.shippingAddress as unknown as Address;
+  const user = response.data.user
+
+  const order = response.data as Order;
 
   return (
     <Suspense fallback={<Loading />}>
@@ -105,7 +104,7 @@ export default async function OrderDetailsPage({
                   </span>
                   <span>
                     {showCurrency[order.currency]}{" "}
-                    {Number(shipping?.price).toFixed(2) || 0.0}
+                    {Number(order.shippingPrice).toFixed(2) || 0.0}
                   </span>
                 </div>
                 <div className="flex justify-between text-lg font-bold pt-2 border-t">
@@ -132,8 +131,8 @@ export default async function OrderDetailsPage({
               </div>
               <div>
                 <Text>
-                  {order?.user?.firstName || address?.firstName}{" "}
-                  {order?.user?.lastName || address?.lastName}
+                  {user?.firstName || address?.firstName}{" "}
+                  {user?.lastName || address?.lastName}
                 </Text>
                 <Text>{order.email}</Text>
                 <Text>{order.phone}</Text>

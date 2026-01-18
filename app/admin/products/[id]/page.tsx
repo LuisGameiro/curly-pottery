@@ -22,7 +22,7 @@ export default async function ProductForm({
 
   return (
     <ProductClient
-      initialData={responseProduct.data}
+      initialData={responseProduct.data ?? []}
       categories={responseCategories.data || []}
     />
   );
