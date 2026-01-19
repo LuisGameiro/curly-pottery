@@ -3,7 +3,6 @@
 import { cn } from "@lib/utils";
 import s from "./Marquee.module.css";
 import {
-  FC,
   ReactNode,
   Children,
   cloneElement,

@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@lib/utils";
-import React, { FC, ReactNode, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import s from "./Collapse.module.css";
 import { useSpring, a } from "@react-spring/web";
 import useMeasure from "react-use-measure";

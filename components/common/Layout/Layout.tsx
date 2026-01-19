@@ -15,6 +15,7 @@ const Loading = () => (
 
 const dynamicProps = {
   loading: Loading,
+   ssr: false 
 };
 
 const FeatureBar = dynamic(() => import("@components/common/FeatureBar"), {

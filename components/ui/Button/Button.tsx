@@ -5,6 +5,7 @@ import React, {
   ButtonHTMLAttributes,
   JSXElementConstructor,
   useRef,
+  ElementType,
 } from "react";
 import { mergeRefs } from "react-merge-refs";
 import s from "./Button.module.css";
@@ -19,8 +20,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   color?: "primary" | "danger" | "success" | "warning";
   active?: boolean;
   type?: "submit" | "reset" | "button";
-  // @ts-ignore
-  Component?: string | JSXElementConstructor<any>;
+  Component?: ElementType;
   width?: string | number;
   loading?: boolean;
   disabled?: boolean;
@@ -88,5 +88,7 @@ const Button = forwardRef((props: ButtonProps, buttonRef) => {
     </Component>
   );
 });
+
+Button.displayName = "Button";
 
 export default Button;

@@ -2,7 +2,6 @@ import Link from "next/link";
 import s from "./ProductCard.module.css";
 import Image, { ImageProps } from "next/image";
 import { cn } from "@lib/utils";
-import { FC } from "react";
 import { calculateDiscount } from "@lib/calculate-price";
 import {
   Discount,

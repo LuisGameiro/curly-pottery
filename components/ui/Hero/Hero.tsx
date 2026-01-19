@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 import { Container } from "@components/ui";
 import { Text } from "@components/ui";
 

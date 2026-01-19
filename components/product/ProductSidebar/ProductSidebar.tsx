@@ -1,7 +1,7 @@
 "use client";
 
 import s from "./ProductSidebar.module.css";
-import { FC, useState } from "react";
+import { useState } from "react";
 import { Button, Text } from "@components/ui";
 import Link from "next/link";
 import { cn } from "@lib/utils";

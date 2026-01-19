@@ -4,7 +4,6 @@ import "../globals.css";
 import "@assets/chrome-bug.css";
 import "keen-slider/keen-slider.min.css";
 
-import { ManagedUIContext } from "@components/ui/context";
 import { Layout } from "@components/common";
 import { SessionProvider } from "next-auth/react";
 
@@ -18,9 +17,7 @@ export default function RootLayout({
       <head />
       <body className="loading bg-primary">
         <SessionProvider>
-          <ManagedUIContext>
             <Layout>{children}</Layout>
-          </ManagedUIContext>
         </SessionProvider>
       </body>
     </html>

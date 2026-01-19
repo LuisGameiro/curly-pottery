@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { UserNav } from "@components/common";
 import cn from "clsx";
 import s from "./SidebarLayout.module.css";

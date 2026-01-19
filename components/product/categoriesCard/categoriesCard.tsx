@@ -1,4 +1,3 @@
-import { FC } from "react";
 import Link from "next/link";
 import Image, { ImageProps } from "next/image";
 import { Category } from "@lib/types/types";

@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 import Link from "next/link";
 import { Logo } from "@components/ui";
 import { I18nWidget } from "@components/common";

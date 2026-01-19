@@ -1,6 +1,6 @@
 "use client";
 
-import {Layout} from "@components/common";
+import { Layout } from "@components/common";
 import { Text, Button, Input, Container } from "@components/ui";
 import InputTextArea from "@components/ui/Input/InputTextArea";
 import { ContactFormEmail } from "@lib/emails/ContactFormEmail";
@@ -69,7 +69,7 @@ export default function Contacts() {
 
   return (
     <Container className="p-10">
-      <header className="justify-center text-center mx-auto mb-10">
+      <header className="justify-center text-center mx-auto mb-8">
         <Text variant="heading">Contact Us</Text>
         <Text className="mx-auto">
           We would love to hear from you! Please reach out using the information
@@ -77,11 +77,11 @@ export default function Contacts() {
         </Text>
       </header>
 
-      <section className=" lg:max-w-4xl mx-auto px-4 sm:px-8  md:flex ">
+      <section className="grid gap-8 mx-auto px-4 sm:px-8 md:flex lg:max-w-4xl">
         <section className="w-full">
           <Text variant="sectionHeading">Our Details</Text>
 
-          <ul className=" space-y-4">
+          <ul className="space-y-4">
             <li>
               📧 Email:{" "}
               <a

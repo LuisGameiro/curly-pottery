@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { useState } from "react";
 import { useParams } from "next/navigation";
 import s from "./I18nWidget.module.css";
 import ClickOutside from "@lib/click-outside";

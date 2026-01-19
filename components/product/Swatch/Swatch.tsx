@@ -10,7 +10,7 @@ interface SwatchProps {
   children?: ReactNode;
   className?: string;
   variant?: "size" | "color" | string;
-  color?: string;
+  color?: "success" | "danger" | "primary" | "warning";
   label?: string | null;
 }
 
@@ -18,7 +18,7 @@ const Swatch = (
   {
     active,
     className,
-    color = "",
+    color = "primary",
     label = null,
     variant = "size",
     ...props

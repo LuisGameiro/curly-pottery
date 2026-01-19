@@ -1,5 +1,5 @@
 import { cn } from "@lib/utils";
-import { ElementType, FC, HTMLAttributes, ReactNode } from "react";
+import { ElementType, HTMLAttributes, ReactNode } from "react";
 
 interface ContainerProps {
   className?: string;

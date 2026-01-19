@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import s from "./ProductView.module.css";
-import { FC, useState } from "react";
+import { useState } from "react";
 import { ProductSlider, ProductCard } from "@components/product";
 import { Container, Text } from "@components/ui";
 import { SEO } from "@components/common";

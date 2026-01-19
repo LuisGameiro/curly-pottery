@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState, useEffect, ReactNode, useRef } from "react";
+import { useState, useEffect, ReactNode, useRef } from "react";
 import throttle from "lodash.throttle";
 import s from "./Navbar.module.css";
 import { cn } from "@lib/utils";

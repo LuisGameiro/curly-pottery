@@ -1,4 +1,4 @@
-import { FunctionComponent, CSSProperties, ElementType } from "react";
+import { CSSProperties, ElementType } from "react";
 import s from "./Text.module.css";
 import { cn } from "@lib/utils";
 

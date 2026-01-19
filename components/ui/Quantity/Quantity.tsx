@@ -1,5 +1,5 @@
 import { Minus, Plus } from "lucide-react";
-import React, { FC } from "react";
+import React from "react";
 
 export interface QuantityProps {
   value: number;
