@@ -9,12 +9,14 @@ type ComponentProps = { className?: string; children?: ReactNode } & (
   | { handleBack: () => void; handleClose?: never }
 );
 
-const SidebarLayout: FC<ComponentProps> = ({
-  children,
-  className,
-  handleBack,
-  handleClose,
-}) => {
+const SidebarLayout = (
+  {
+    children,
+    className,
+    handleBack,
+    handleClose
+  }: ComponentProps
+) => {
   return (
     <div className={cn(s.root, className)}>
       <header className={s.header}>

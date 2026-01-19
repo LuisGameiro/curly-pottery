@@ -13,7 +13,13 @@ interface Props {
 
 const placeholderImg = "/product-img-placeholder.svg";
 
-const CategoriesCard: FC<Props> = ({ cat, imgProps, admin }) => {
+const CategoriesCard = (
+  {
+    cat,
+    imgProps,
+    admin
+  }: Props
+) => {
   if (!cat) return null;
 
   return (

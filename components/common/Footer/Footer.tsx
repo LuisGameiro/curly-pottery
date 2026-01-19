@@ -39,7 +39,7 @@ const links = [
   },
 ];
 
-const Footer: FC<Props> = () => {
+const Footer = () => {
   return (
     <footer className={s.root}>
       <div className={s.menuContainer}>

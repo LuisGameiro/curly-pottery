@@ -38,7 +38,7 @@ export const i18n = {
   locales: ["en", "de", "fr", "es"],
 } as const;
 type Locale = (typeof i18n)["locales"][number];
-const I18nWidget: FC = () => {
+const I18nWidget = () => {
   const [display, setDisplay] = useState(false);
   const params = useParams();
   const locale = params.locale as Locale;

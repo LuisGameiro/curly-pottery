@@ -19,15 +19,17 @@ interface ImageInputProps {
   className?: string;
 }
 
-const InputImage: React.FC<ImageInputProps> = ({
-  label,
-  multiple = false,
-  files = [],
-  previews = [],
-  onImagesChange,
-  error,
-  className,
-}) => {
+const InputImage = (
+  {
+    label,
+    multiple = false,
+    files = [],
+    previews = [],
+    onImagesChange,
+    error,
+    className
+  }: ImageInputProps
+) => {
   const generatedId = useId();
   const errorId = `${generatedId}-error`;
 

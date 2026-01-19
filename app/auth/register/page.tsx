@@ -5,7 +5,7 @@ import { signIn } from "next-auth/react";
 import { Container, Text, Button, Input } from "@components/ui";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import InputCheck from "@components/ui/Input/InputCheck";
+import InputCheckbox from "@components/ui/Input/InputCheckbox";
 import { useRouter } from "next/navigation";
 import { registerUser } from "actions/auth.actions";
 
@@ -121,7 +121,7 @@ export default function RegisterPage() {
             required
           />
 
-          <InputCheck
+          <InputCheckbox
             id="marketing"
             name="acceptsMarketing"
             checked={formData.acceptsMarketing}

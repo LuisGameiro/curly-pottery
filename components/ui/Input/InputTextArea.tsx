@@ -9,7 +9,7 @@ interface InputProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   onValueChange?: (value: string) => void;
 }
 
-const InputTextArea: React.FC<InputProps> = (props) => {
+const InputTextArea = (props: InputProps) => {
   const { className, label, error, onValueChange, id, ...rest } = props;
 
   const generatedId = useId();

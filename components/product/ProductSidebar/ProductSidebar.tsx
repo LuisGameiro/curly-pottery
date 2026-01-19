@@ -23,12 +23,14 @@ interface ProductSidebarProps {
   className?: string;
 }
 
-const ProductSidebar: FC<ProductSidebarProps> = ({
-  product,
-  className,
-  variant,
-  setVariant,
-}: ProductSidebarProps) => {
+const ProductSidebar = (
+  {
+    product,
+    className,
+    variant,
+    setVariant
+  }: ProductSidebarProps
+) => {
   const { addItem } = useCart();
 
   const [loading, setLoading] = useState(false);

@@ -8,7 +8,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
 
-const InputCheck: React.FC<InputProps> = (props) => {
+const InputCheckbox = (props: InputProps) => {
   const { label, error, id, ...rest } = props;
 
   const generatedId = useId();
@@ -56,4 +56,4 @@ const InputCheck: React.FC<InputProps> = (props) => {
   );
 };
 
-export default InputCheck;
+export default InputCheckbox;

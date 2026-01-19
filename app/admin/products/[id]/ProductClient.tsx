@@ -8,7 +8,7 @@ import InputTextArea from "@components/ui/Input/InputTextArea";
 import { upsertProduct } from "actions/product.actions";
 import InputImage from "@components/ui/Input/InputImage";
 import Loading from "app/loading";
-import InputCheck from "@components/ui/Input/InputCheck";
+import InputCheckbox from "@components/ui/Input/InputCheckbox";
 import { VariantManager } from "./VariantManager";
 import Link from "next/link";
 import {
@@ -194,7 +194,7 @@ export default function ProductClient({
               <Container variant="box">
                 <Text variant="boxTitle">Organization</Text>
                 <div className="space-y-4">
-                  <InputCheck
+                  <InputCheckbox
                     label="Requires Shipping"
                     checked={product.requiresShipping}
                     onChange={(e) =>

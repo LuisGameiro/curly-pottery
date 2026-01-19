@@ -33,10 +33,12 @@ interface ProductViewProps {
   relatedProducts: Product[];
 }
 
-const ProductView: FC<ProductViewProps> = ({
-  product,
-  relatedProducts = [],
-}) => {
+const ProductView = (
+  {
+    product,
+    relatedProducts = []
+  }: ProductViewProps
+) => {
   const [variant, setVariant] = useState<Variant>(product.variants[0]);
 
   return (

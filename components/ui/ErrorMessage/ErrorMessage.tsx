@@ -12,7 +12,12 @@ interface ErrorMessageProps {
   className?: string;
 }
 
-const ErrorMessages: FC<ErrorMessageProps> = ({ error, className }) => {
+const ErrorMessages = (
+  {
+    error,
+    className
+  }: ErrorMessageProps
+) => {
   return (
     <div
       className={cn(

@@ -5,7 +5,13 @@ import throttle from "lodash.throttle";
 import s from "./Navbar.module.css";
 import { cn } from "@lib/utils";
 
-const NavbarRoot: FC<{ children?: ReactNode }> = ({ children }) => {
+const NavbarRoot = (
+  {
+    children
+  }: {
+    children?: ReactNode;
+  }
+) => {
   const [hasScrolled, setHasScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const lastScrollTop = useRef(0);

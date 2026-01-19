@@ -11,7 +11,7 @@ interface InputProps extends SelectHTMLAttributes<HTMLSelectElement> {
   onValueChange?: (value: string) => void;
 }
 
-const Input: React.FC<InputProps> = (props) => {
+const Input = (props: InputProps) => {
   const { className, label, error, onValueChange, id, options, ...rest } =
     props;
 

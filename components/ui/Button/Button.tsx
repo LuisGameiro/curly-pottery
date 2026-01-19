@@ -26,7 +26,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   disabled?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
+const Button = forwardRef((props: ButtonProps, buttonRef) => {
   const {
     className,
     variant = "flat",

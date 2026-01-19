@@ -58,13 +58,15 @@ const ogImage = ({ url, width, height, alt }: OgImage, index: number) => {
   );
 };
 
-const SEO: FC<Props> = ({
-  title,
-  description,
-  openGraph,
-  robots,
-  children,
-}) => {
+const SEO = (
+  {
+    title,
+    description,
+    openGraph,
+    robots,
+    children
+  }: Props
+) => {
   /**
    * @see https://nextjs.org/docs/api-reference/next/head
    *

@@ -10,10 +10,12 @@ interface ProductOptionsProps {
   setVariant: (variant: Variant) => void;
 }
 
-const ProductOptions: React.FC<ProductOptionsProps> = ({
-  product,
-  setVariant,
-}) => {
+const ProductOptions = (
+  {
+    product,
+    setVariant
+  }: ProductOptionsProps
+) => {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
 

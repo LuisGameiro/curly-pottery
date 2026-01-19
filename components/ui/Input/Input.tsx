@@ -12,7 +12,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   onValueChange?: (value: string) => void;
 }
 
-const Input: React.FC<InputProps> = (props) => {
+const Input = (props: InputProps) => {
   const { className, label, error, onValueChange, id, type, ...rest } = props;
 
   const generatedId = useId();

@@ -11,7 +11,12 @@ interface HeroProps {
   description: string;
 }
 
-const Hero: FC<HeroProps> = ({ headline, description }) => {
+const Hero = (
+  {
+    headline,
+    description
+  }: HeroProps
+) => {
   return (
     <div className="bg-secondary border-b border-t border-border">
       <Container>

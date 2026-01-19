@@ -2,7 +2,7 @@
 
 import { Package, Trash2, ChevronUp, ChevronDown } from "lucide-react";
 import { Container, Text, Button, Input } from "@components/ui";
-import InputCheck from "@components/ui/Input/InputCheck";
+import InputCheckbox from "@components/ui/Input/InputCheckbox";
 import InputImage from "@components/ui/Input/InputImage";
 import { SizeNames, Detail, EditProduct, EditVariant } from "@lib/types/types";
 import { skulify } from "@lib/skulify";
@@ -107,7 +107,7 @@ export const ProductVariant = ({
             </div>
           </div>
 
-          <InputCheck
+          <InputCheckbox
             label="Available for Sale"
             checked={variant.availableForSale}
             onChange={(e) => onUpdate("availableForSale", e.target.checked)}

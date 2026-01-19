@@ -14,14 +14,16 @@ interface SwatchProps {
   label?: string | null;
 }
 
-const Swatch: React.FC<Omit<ButtonProps, "variant"> & SwatchProps> = ({
-  active,
-  className,
-  color = "",
-  label = null,
-  variant = "size",
-  ...props
-}) => {
+const Swatch = (
+  {
+    active,
+    className,
+    color = "",
+    label = null,
+    variant = "size",
+    ...props
+  }: Omit<ButtonProps, "variant"> & SwatchProps
+) => {
   variant = variant?.toLowerCase();
 
   if (label) {

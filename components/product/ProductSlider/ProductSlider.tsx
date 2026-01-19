@@ -19,10 +19,12 @@ interface ProductSliderProps {
   className?: string;
 }
 
-const ProductSlider: React.FC<ProductSliderProps> = ({
-  children,
-  className = "",
-}) => {
+const ProductSlider = (
+  {
+    children,
+    className = ""
+  }: ProductSliderProps
+) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
   const sliderContainerRef = useRef<HTMLDivElement>(null);

@@ -9,13 +9,15 @@ interface ContainerProps {
   variant?: "default" | "box";
 }
 
-const Container: FC<ContainerProps> = ({
-  children,
-  className,
-  el = "div",
-  variant = "default",
-  clean = false,
-}) => {
+const Container = (
+  {
+    children,
+    className,
+    el = "div",
+    variant = "default",
+    clean = false
+  }: ContainerProps
+) => {
   const rootClassName = cn(
     {
       "mx-auto px-6 w-full flex-col justify-center":

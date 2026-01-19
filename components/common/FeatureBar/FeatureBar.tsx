@@ -9,13 +9,15 @@ interface FeatureBarProps {
   action?: React.ReactNode;
 }
 
-const FeatureBar: React.FC<FeatureBarProps> = ({
-  title,
-  description,
-  className,
-  action,
-  hide,
-}) => {
+const FeatureBar = (
+  {
+    title,
+    description,
+    className,
+    action,
+    hide
+  }: FeatureBarProps
+) => {
   const rootClassName = cn(
     s.root,
     {

@@ -18,51 +18,56 @@ interface ClickOutsideProps {
   children?: ReactNode;
 }
 
-const ClickOutside: FC<ClickOutsideProps> = forwardRef(
-  ({ active = true, onClick, children }, forwardedRef) => {
-    const innerRef = useRef(null);
+const ClickOutside = forwardRef((
+  {
+    active = true,
+    onClick,
+    children
+  }: ClickOutsideProps,
+  forwardedRef
+) => {
+  const innerRef = useRef(null);
 
-    // @ts-ignore
-    const child = children ? (React.Children.only(children) as any) : undefined;
+  // @ts-ignore
+  const child = children ? (React.Children.only(children) as any) : undefined;
 
-    if (!child || child.type === React.Fragment) {
-      throw new Error("A valid non Fragment React Children should be provided");
+  if (!child || child.type === React.Fragment) {
+    throw new Error("A valid non Fragment React Children should be provided");
+  }
+
+  if (typeof onClick != "function") {
+    throw new Error("onClick must be a valid function");
+  }
+  const handleClick = (event: any) => {
+    if (!hasParent(event.target, innerRef?.current)) {
+      onClick(event);
     }
-
-    if (typeof onClick != "function") {
-      throw new Error("onClick must be a valid function");
+  };
+  useEffect(() => {
+    if (active) {
+      document.addEventListener("mousedown", handleClick);
+      document.addEventListener("touchstart", handleClick);
     }
-    const handleClick = (event: any) => {
-      if (!hasParent(event.target, innerRef?.current)) {
-        onClick(event);
-      }
-    };
-    useEffect(() => {
+    return () => {
       if (active) {
-        document.addEventListener("mousedown", handleClick);
-        document.addEventListener("touchstart", handleClick);
-      }
-      return () => {
-        if (active) {
-          document.removeEventListener("mousedown", handleClick);
-          document.removeEventListener("touchstart", handleClick);
-        }
-      };
-    }, [handleClick]);
-
-    const composedRefCallback = (element: ReactElement) => {
-      if (typeof child.ref === "function") {
-        child.ref(element);
-      } else if (child.ref) {
-        child.ref.current = element;
+        document.removeEventListener("mousedown", handleClick);
+        document.removeEventListener("touchstart", handleClick);
       }
     };
+  }, [handleClick]);
 
-    return React.cloneElement(child, {
-      ref: mergeRefs([composedRefCallback, innerRef, forwardedRef]),
-    });
-  },
-);
+  const composedRefCallback = (element: ReactElement) => {
+    if (typeof child.ref === "function") {
+      child.ref(element);
+    } else if (child.ref) {
+      child.ref.current = element;
+    }
+  };
+
+  return React.cloneElement(child, {
+    ref: mergeRefs([composedRefCallback, innerRef, forwardedRef]),
+  });
+});
 
 ClickOutside.displayName = "ClickOutside";
 

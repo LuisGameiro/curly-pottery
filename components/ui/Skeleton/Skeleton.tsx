@@ -14,15 +14,17 @@ interface SkeletonProps {
   children?: React.ReactNode;
 }
 
-const Skeleton: React.FC<SkeletonProps> = ({
-  style,
-  width,
-  height,
-  children,
-  className,
-  show = true,
-  boxHeight = height,
-}) => {
+const Skeleton = (
+  {
+    style,
+    width,
+    height,
+    children,
+    className,
+    show = true,
+    boxHeight = height
+  }: SkeletonProps
+) => {
   // Automatically calculate the size if there are children
   // and no fixed sizes are specified
   const shouldAutoSize = !!children && !(width || height);
