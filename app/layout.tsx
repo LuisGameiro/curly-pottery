@@ -21,8 +21,11 @@ export default function RootLayout({
             attribute="class"
             defaultTheme="system"
             enableSystem
-            themes={['light', 'dark',]}
-          >          <Layout>{children}</Layout></ThemeProvider>
+            themes={["light", "dark"]}
+          >
+            {" "}
+            <Layout>{children}</Layout>
+          </ThemeProvider>
         </SessionProvider>
       </body>
     </html>

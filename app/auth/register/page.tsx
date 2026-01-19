@@ -8,7 +8,6 @@ export const metadata = {
 };
 
 export default function RegisterPage() {
-
   return (
     <Container className="p-10">
       <header className="justify-center text-center mx-auto mb-4">

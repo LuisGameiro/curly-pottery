@@ -24,7 +24,7 @@ declare module "next-auth" {
   }
 }
 
-export const  authOptions: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   providers: [
@@ -37,7 +37,8 @@ export const  authOptions: NextAuthOptions = {
           email: profile.email,
           // Extract first name from the profile or split the name string
           firstName: profile.given_name || profile.name.split(" ")[0],
-          lastName: profile.family_name || profile.name.split(" ").slice(1).join(" "),
+          lastName:
+            profile.family_name || profile.name.split(" ").slice(1).join(" "),
           role: "USER",
         };
       },

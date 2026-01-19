@@ -7,7 +7,7 @@ import { User } from "@lib/types/types";
 import { useUser } from "@lib/hooks/useUser";
 
 export default function ProfileForm({ user }: { user: User }) {
-  const { isAdmin, user: u}  = useUser();
+  const { isAdmin, user: u } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     firstName: user?.firstName || "",
@@ -36,7 +36,9 @@ export default function ProfileForm({ user }: { user: User }) {
       </header>
 
       <p>
-        {isAdmin ? "As an admin, you have full access to manage the platform." : "Manage your personal information and settings below."}
+        {isAdmin
+          ? "As an admin, you have full access to manage the platform."
+          : "Manage your personal information and settings below."}
         {u?.role}
       </p>
 

@@ -2,14 +2,12 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { Container, Text, Button, Input } from "@components/ui";
+import { Text, Button, Input } from "@components/ui";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import InputCheckbox from "@components/ui/Input/InputCheckbox";
 import { useRouter } from "next/navigation";
 import { registerUser } from "actions/auth.actions";
-
-
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -64,91 +62,89 @@ export default function RegisterForm() {
   };
 
   return (
-    
+    <section className="space-y-5 md:max-w-lg mx-auto">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Input
+          name="firstName"
+          label="First Name"
+          type="text"
+          placeholder="Jane"
+          value={formData.firstName}
+          onChange={handleChange}
+          required
+        />
 
-      <section className="space-y-5 md:max-w-lg mx-auto">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            name="firstName"
-            label="First Name"
-            type="text"
-            placeholder="Jane"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-          />
+        <Input
+          name="lastName"
+          label="Last Name"
+          type="text"
+          placeholder="Doe"
+          value={formData.lastName}
+          onChange={handleChange}
+          required
+        />
+        <Input
+          name="email"
+          label="Email"
+          type="email"
+          placeholder="jane@example.com"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
 
-          <Input
-            name="lastName"
-            label="Last Name"
-            type="text"
-            placeholder="Doe"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-          />
-          <Input
-            name="email"
-            label="Email"
-            type="email"
-            placeholder="jane@example.com"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
+        <Input
+          name="password"
+          label="Password"
+          type="password"
+          placeholder="••••••••"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
 
-          <Input
-            name="password"
-            label="Password"
-            type="password"
-            placeholder="••••••••"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
+        <Input
+          name="password2"
+          label="Confirm Password"
+          type="password"
+          placeholder="••••••••"
+          value={formData.password2}
+          onChange={handleChange}
+          required
+        />
 
-          <Input
-            name="password2"
-            label="Confirm Password"
-            type="password"
-            placeholder="••••••••"
-            value={formData.password2}
-            onChange={handleChange}
-            required
-          />
+        <InputCheckbox
+          id="marketing"
+          name="acceptsMarketing"
+          checked={formData.acceptsMarketing}
+          onChange={handleChange}
+          label="I’d like to receive updates on new collections, glaze drops, and special offers."
+        />
 
-          <InputCheckbox
-            id="marketing"
-            name="acceptsMarketing"
-            checked={formData.acceptsMarketing}
-            onChange={handleChange}
-            label="I’d like to receive updates on new collections, glaze drops, and special offers."
-          />
-
-          <div className="h-8">
-            {error && (
-              <Text className="text-red-500 text-xs text-center font-medium">
-                {error}
-              </Text>
-            )}
-          </div>
-
-          <Button type="submit" width="100%" loading={loading} color="success">
-            Create Account <ArrowRight size={16} className="ml-2" />
-          </Button>
-        </form>
-
-        <div className="mt-6 text-center">
-          <Text className="text-sm">
-            Already have an account?{" "}
-            <Link
-              href="/auth/login"
-              className="font-bold text-secondary hover:underline"
-            >
-              Log in
-            </Link>
-          </Text>
+        <div className="h-8">
+          {error && (
+            <Text className="text-red-500 text-xs text-center font-medium">
+              {error}
+            </Text>
+          )}
         </div>
-      </section>
+
+        <Button type="submit" width="100%" loading={loading} color="success">
+          Create Account <ArrowRight size={16} className="ml-2" />
+        </Button>
+      </form>
+
+      <div className="mt-6 text-center">
+        <Text className="text-sm">
+          Already have an account?{" "}
+          <Link
+            href="/auth/login"
+            className="font-bold text-secondary hover:underline"
+          >
+            Log in
+          </Link>
+        </Text>
+      </div>
+    </section>
   );
 }
