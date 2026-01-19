@@ -24,13 +24,23 @@ declare module "next-auth" {
   }
 }
 
-export const authOptions: NextAuthOptions = {
+export const  authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      async profile(profile) {
+        return {
+          id: profile.sub,
+          email: profile.email,
+          // Extract first name from the profile or split the name string
+          firstName: profile.given_name || profile.name.split(" ")[0],
+          lastName: profile.family_name || profile.name.split(" ").slice(1).join(" "),
+          role: "USER",
+        };
+      },
     }),
     CredentialsProvider({
       name: "Credentials",

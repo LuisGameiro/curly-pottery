@@ -24,7 +24,7 @@
 }
 
 .link:hover {
-  @apply bg-accent-1 outline-none;
+  @apply bg-accent-1 outline-none rounded-md;
 }
 
 .link.active {

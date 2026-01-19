@@ -37,7 +37,7 @@
 .icon.active {
   transform: rotate(90deg);
 }
-
+/* 
 @screen lg {
   .dropdownMenu {
     @apply absolute border border-accent-1 shadow-lg w-56 h-auto;
@@ -48,4 +48,4 @@
   .closeButton {
     @apply hidden;
   }
-}
+} */

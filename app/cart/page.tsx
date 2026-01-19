@@ -1,5 +1,3 @@
-"use client";
-
 import CartClient from "./CartClient";
 
 export const metadata = {

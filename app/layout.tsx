@@ -1,10 +1,11 @@
 "use client";
 
 import "../globals.css";
-import "@assets/chrome-bug.css";
 import "keen-slider/keen-slider.min.css";
+
 import { Layout } from "@components/common";
 import { SessionProvider } from "next-auth/react";
+import { ThemeProvider } from "next-themes";
 
 export default function RootLayout({
   children,
@@ -16,7 +17,12 @@ export default function RootLayout({
       <head />
       <body className="loading bg-primary">
         <SessionProvider>
-          <Layout>{children}</Layout>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            themes={['light', 'dark',]}
+          >          <Layout>{children}</Layout></ThemeProvider>
         </SessionProvider>
       </body>
     </html>

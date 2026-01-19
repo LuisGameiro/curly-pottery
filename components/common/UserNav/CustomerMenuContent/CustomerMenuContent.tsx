@@ -78,7 +78,7 @@ export default function CustomerMenuContent() {
       <DropdownMenuItem>
         {isAuthenticated ? (
           <div
-            className={cn(s.link, "border-t border-secondary mt-4 flex-col")}
+            className={cn( "border-t border-secondary mt-2 pt-2 flex-col")}
           >
             {isAdmin && (
               <a

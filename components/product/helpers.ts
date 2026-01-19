@@ -41,27 +41,52 @@ import { Variant } from "@lib/types/types";
 //   updater((prev) => ({ ...prev, ...defaultChoices }));
 // }
 
-type VariantData = { variantId: string; colorHex: string };
-// Structure: { [size]: { [color]: { variantId, colorHex } } }
+type VariantData = {
+  variantId: string;
+  colorHex: string;
+  isAvailable: boolean;
+};
 type VariantMatrix = Record<string, Record<string, VariantData>>;
 
 export function createVariantMatrix(variants: Variant[]): VariantMatrix {
-  return variants.reduce((matrix, variant) => {
-    const size = variant((o: any) => o.displayName === "Size")?.values[0]
-      ?.label;
-    const color = variant.sizeName.find((o: any) => o.displayName === "Color")
-      ?.values[0]?.label;
-    const colorHex = variant.sizeName.find(
-      (o: any) => o.displayName === "Color",
-    )?.values[0]?.hex;
+  // First, gather all unique sizes and colors
+  const sizes = Array.from(new Set(variants.map((v) => v.sizeName))).filter(
+    (v) => v !== null,
+  );
+  const colors = Array.from(new Set(variants.map((v) => v.colorName))).filter(
+    (v) => v !== null,
+  );
 
-    if (size && color) {
-      if (!matrix[size]) matrix[size] = {};
+  if (sizes.length === 0 || colors.length === 0) {
+    return {};
+  }
+
+  // Initialize the matrix with empty objects for each size and color
+  const matrix: VariantMatrix = {};
+
+  for (const size of sizes) {
+    for (const color of colors) {
       matrix[size][color] = {
-        variantId: variant.id,
-        colorHex: colorHex || "#000",
+        variantId: "",
+        colorHex: "",
+        isAvailable: false,
       };
     }
-    return matrix;
-  }, {} as VariantMatrix);
+  }
+
+  // Populate the matrix with actual variant data
+
+  variants.forEach((variant) => {
+    const size = variant.sizeName;
+    const color = variant.colorName;
+    if (size && color) {
+      matrix[size][color] = {
+        variantId: variant.id,
+        colorHex: variant.colorHex || "#000",
+        isAvailable: true,
+      };
+    }
+  });
+
+  return matrix;
 }

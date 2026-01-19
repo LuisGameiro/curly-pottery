@@ -4,8 +4,10 @@ import { useState } from "react";
 import { Container, Text, Button, Input } from "@components/ui";
 import { Mail, Phone, UserIcon } from "lucide-react";
 import { User } from "@lib/types/types";
+import { useUser } from "@lib/hooks/useUser";
 
 export default function ProfileForm({ user }: { user: User }) {
+  const { isAdmin, user: u}  = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     firstName: user?.firstName || "",
@@ -32,6 +34,11 @@ export default function ProfileForm({ user }: { user: User }) {
           </Button>
         </div>
       </header>
+
+      <p>
+        {isAdmin ? "As an admin, you have full access to manage the platform." : "Manage your personal information and settings below."}
+        {u?.role}
+      </p>
 
       <section className=" space-y-6">
         <div>
