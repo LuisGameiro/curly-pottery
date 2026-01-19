@@ -36,8 +36,7 @@ const links = [
   {
     name: "Privacy Policy",
     url: "/privacy",
-  }
-
+  },
 ];
 
 const Footer: FC<Props> = () => {

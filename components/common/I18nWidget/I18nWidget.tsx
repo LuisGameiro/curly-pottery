@@ -1,13 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { FC, useState } from "react";
 import { useParams } from "next/navigation";
 import s from "./I18nWidget.module.css";
 import ClickOutside from "@lib/click-outside";
 import Image from "next/image";
 import { cn } from "@lib/utils";
-import { ChevronRight, Cross } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 interface LOCALE_DATA {
   name: string;
@@ -48,8 +47,8 @@ const I18nWidget: FC = () => {
   const defaultLocale = i18n.defaultLocale;
   const currentPath =
     typeof window !== "undefined" ? window.location.pathname : "/";
-  const currentLocale = "en-UK"//locale || defaultLocale;
-  const options = null //locales.filter((val) => val !== currentLocale);
+  const currentLocale = "en-UK"; //locale || defaultLocale;
+  const options = null; //locales.filter((val) => val !== currentLocale);
 
   return (
     <ClickOutside active={display} onClick={() => setDisplay(false)}>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useId, useState } from "react";
-import { useSession } from "next-auth/react";
 import InformationForm from "@components/checkout/InformationForm";
 import ShippingMethod from "@components/checkout/ShippingMethod";
 import SumUpPayment from "@components/checkout/SumUpPayment";
@@ -9,7 +8,6 @@ import { CheckoutSummary } from "@components/checkout/CheckoutSummary";
 import useCart from "@lib/hooks/useCart";
 import { createSumUpCheckout } from "actions/sumUpPayment.actions";
 import { createOrder } from "actions/order.actions";
-import { useRouter } from "next/navigation";
 import { Container } from "@components/ui";
 import { toast } from "sonner";
 import { InputAddress } from "@lib/types/types";
@@ -32,7 +30,7 @@ export type FormDataCheckout = {
 
 export default function CheckoutPage() {
   const { data } = useCart();
-  const { user, isAuthenticated} = useUser();
+  const { user, isAuthenticated } = useUser();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormDataCheckout>({
     firstName: "",

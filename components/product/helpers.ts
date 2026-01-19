@@ -1,4 +1,3 @@
-
 // export type SelectedOptions = Record<string, string | null>;
 
 import { Variant } from "@lib/types/types";
@@ -48,8 +47,8 @@ type VariantMatrix = Record<string, Record<string, VariantData>>;
 
 export function createVariantMatrix(variants: Variant[]): VariantMatrix {
   return variants.reduce((matrix, variant) => {
-    const size = variant((o: any) => o.displayName === "Size")
-      ?.values[0]?.label;
+    const size = variant((o: any) => o.displayName === "Size")?.values[0]
+      ?.label;
     const color = variant.sizeName.find((o: any) => o.displayName === "Color")
       ?.values[0]?.label;
     const colorHex = variant.sizeName.find(

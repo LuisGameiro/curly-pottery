@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { memo, useState } from "react";
 import { Text } from "@components/ui";
@@ -71,15 +71,15 @@ const ProductOptions: React.FC<ProductOptionsProps> = ({
                   }`}
                   disabled={isDisabled}
                   onClick={() => {
-                  // setVariant(
-                  //   product.variants.find(
-                  //     (v: Variant) =>
-                  //       v.id ===
-                  //       matrix[selectedSize][color]?.variantId,
-                  //   )!,
-                  // );
-                  setSelectedColor(color === selectedColor ? null : color);
-                }}
+                    // setVariant(
+                    //   product.variants.find(
+                    //     (v: Variant) =>
+                    //       v.id ===
+                    //       matrix[selectedSize][color]?.variantId,
+                    //   )!,
+                    // );
+                    setSelectedColor(color === selectedColor ? null : color);
+                  }}
                 >
                   {color}
                 </button>

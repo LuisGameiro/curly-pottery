@@ -9,25 +9,24 @@ import {
   DropdownMenuItem,
 } from "@components/ui/Dropdown/Dropdown";
 import { Moon, Sun } from "lucide-react";
+import { useUser } from "@lib/hooks/useUser";
 
 const LINKS = [
   {
-    name: "My Orders",
-    href: "/orders",
+    name: "Shop",
+    href: "/shop",
   },
   {
-    name: "My Profile",
-    href: "/profile",
-  },
-  {
-    name: "My Cart",
-    href: "/cart",
+    name: "Contact Us",
+    href: "/contacts",
   },
 ];
 
 export default function CustomerMenuContent() {
   const params = useParams();
   const router = useRouter();
+  const { isAdmin, isAuthenticated } = useUser();
+
   const pathname = params?.slug ? `/${params.slug}` : "/";
   const { theme, setTheme } = useTheme();
 
@@ -35,8 +34,16 @@ export default function CustomerMenuContent() {
     router.push(href);
   }
 
+  function logout(): void {
+    throw new Error("Function not implemented.");
+  }
+
   return (
-    <DropdownContent sideOffset={10} id="CustomerMenuContent">
+    <DropdownContent
+      sideOffset={10}
+      id="CustomerMenuContent"
+      className="border-2 border-secondary rounded-md shadow-2xl"
+    >
       {LINKS.map(({ name, href }) => (
         <DropdownMenuItem key={href}>
           <a
@@ -69,12 +76,37 @@ export default function CustomerMenuContent() {
         </a>
       </DropdownMenuItem>
       <DropdownMenuItem>
-        <a
-          className={cn(s.link, "border-t border-accent-2 mt-4")}
-          // onClick={() => logout()}
-        >
-          Logout
-        </a>
+        {isAuthenticated ? (
+          <div
+            className={cn(s.link, "border-t border-secondary mt-4 flex-col")}
+          >
+            {isAdmin && (
+              <a
+                className={s.link}
+                onClick={() => handleClick(event as any, "/admin")}
+              >
+                Admin
+              </a>
+            )}
+            <a
+              className={s.link}
+              onClick={() => handleClick(event as any, "/user")}
+            >
+              My Account
+            </a>
+
+            <a className={s.link} onClick={() => logout()}>
+              Logout
+            </a>
+          </div>
+        ) : (
+          <a
+            className={cn(s.link, "border-t border-accent-2 mt-4")}
+            onClick={() => handleClick(event as any, "/auth/login")}
+          >
+            Login
+          </a>
+        )}
       </DropdownMenuItem>
     </DropdownContent>
   );

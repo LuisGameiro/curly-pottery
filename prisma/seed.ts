@@ -1,4 +1,4 @@
-import { Address } from "@lib/types/types";
+import { Address, Order, Variant } from "@lib/types/types";
 import {
   categories,
   customers,
@@ -51,7 +51,7 @@ async function main() {
         images: item.images,
         requiresShipping: item.requiresShipping,
         variants: {
-          create: item.variants.map((v) => ({
+          create: item.variants.map((v:Variant) => ({
             id: v.id,
             sku: v.sku,
             price: v.price,
@@ -93,8 +93,6 @@ async function main() {
         addresses: {
           create: cust.addresses.map((a: Address) => ({
             type: a.type,
-            firstName: a.firstName,
-            lastName: a.lastName,
             address: a.address,
             postalCode: a.postalCode,
             city: a.city,
@@ -106,11 +104,10 @@ async function main() {
           create: {
             id: cust.cart.id,
 
-            taxesIncluded: cust.cart.taxesIncluded,
+            taxes: cust.cart.taxesIncluded,
             lineItems: cust.cart.lineItems,
             totalPrice: cust.cart.totalPrice,
             subtotalPrice: cust.cart.subtotalPrice,
-            lineItemsSubtotalPrice: cust.cart.lineItemsSubtotalPrice,
             currency: cust.cart.currency,
             createdAt: cust.cart.createdAt,
             updatedAt: cust.cart.updatedAt,
@@ -118,7 +115,7 @@ async function main() {
         },
         // Create Orders
         orders: {
-          create: cust.orders.map((o) => ({
+          create: cust.orders.map((o:Order) => ({
             id: o.id,
 
             status: o.status,

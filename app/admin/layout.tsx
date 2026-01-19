@@ -21,7 +21,7 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-   const { isAuthenticated, isAdmin } = useUser();
+  const { isAuthenticated, isAdmin } = useUser();
   if (!isAuthenticated && !isAdmin) {
     redirect("/auth/login");
   }

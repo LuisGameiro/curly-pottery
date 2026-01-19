@@ -22,13 +22,13 @@ const Navbar: FC<NavbarProps> = ({ links }) => (
           <Link href="/" className={s.logo} aria-label="Logo">
             <div className="flex items-center flex-row">
               <Logo />
-              <h1 className="font-display ml-4 mr-8 text-on-primary hidden sm:block">
+              <h1 className="ml-4 mr-8 text-on-primary hidden lg:block">
                 Curly Pottery
               </h1>
             </div>
           </Link>
 
-          {links ? (
+          {links && (
             <nav className={s.navMenu}>
               {links.map((link) => (
                 <Link key={link.href} href={link.href} className={s.link}>
@@ -36,28 +36,13 @@ const Navbar: FC<NavbarProps> = ({ links }) => (
                 </Link>
               ))}
             </nav>
-          ) : null}
-
-          {/* <div className="hidden lg:block lg:ml-8">
-            <Searchbar />
-          </div> */}
+          )}
         </div>
 
         <div className="flex items-center justify-end flex-1 space-x-8">
           <UserNav />
         </div>
       </div>
-
-      {/* {process.env.COMMERCE_SEARCH_ENABLED && (
-          <div className="justify-center flex-1 hidden lg:flex">
-            <Searchbar />
-          </div>
-        )}*/}
-      {/* {process.env.COMMERCE_SEARCH_ENABLED && (
-        <div className="flex pb-4 lg:px-6 lg:hidden">
-          <Searchbar id="mobile-search" />
-        </div>
-      )} */}
     </Container>
   </NavbarRoot>
 );

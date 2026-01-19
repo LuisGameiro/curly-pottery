@@ -1,7 +1,6 @@
 import { Button, Input, Text } from "@components/ui";
 import { UserWithOrdersAddress } from "@lib/types/types";
 import { getUserById } from "actions/customer.actions";
-import { User } from "next-auth";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 

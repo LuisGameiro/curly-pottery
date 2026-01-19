@@ -1,12 +1,12 @@
 // middleware.ts
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 import { withAuth } from "next-auth/middleware";
 
 export function proxy(request: NextRequest) {
   // 1. Generate a random nonce
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
-  const isDev = process.env.NODE_ENV === 'development';
+  const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
+  const isDev = process.env.NODE_ENV === "development";
   // 2. Define the CSP policy
   // We include 'unsafe-inline' as a fallback for older browsers
   const cspHeader = `
@@ -21,11 +21,7 @@ export function proxy(request: NextRequest) {
     frame-ancestors 'none';
     upgrade-insecure-requests;
   `;
-
 }
-
-
-
 
 export default withAuth(
   function proxy(req) {

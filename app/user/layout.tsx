@@ -13,8 +13,8 @@ export default function UserLayout({
 }: {
   children: React.ReactNode;
 }) {
-    const { isAuthenticated } = useUser();
-  
+  const { isAuthenticated } = useUser();
+
   if (!isAuthenticated) {
     redirect("/auth/login");
   }

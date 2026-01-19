@@ -16,7 +16,7 @@ const registerSchema = z.object({
 export async function registerUser(formData: FormData) {
   // Convert FormData to object
   const rawData = Object.fromEntries(formData.entries());
-  
+
   // Validate data
   const validation = registerSchema.safeParse({
     ...rawData,
@@ -28,7 +28,8 @@ export async function registerUser(formData: FormData) {
   }
 
   try {
-    const { email, password, firstName, lastName, phone, acceptsMarketing } = validation.data;
+    const { email, password, firstName, lastName, phone, acceptsMarketing } =
+      validation.data;
 
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
