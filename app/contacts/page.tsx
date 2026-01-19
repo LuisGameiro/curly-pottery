@@ -1,6 +1,6 @@
 "use client";
 
-import Layout from "@components/common/Layout";
+import {Layout} from "@components/common";
 import { Text, Button, Input, Container } from "@components/ui";
 import InputTextArea from "@components/ui/Input/InputTextArea";
 import { ContactFormEmail } from "@lib/emails/ContactFormEmail";

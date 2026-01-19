@@ -26,7 +26,7 @@ interface Props {
   children?: React.ReactNode;
 }
 
-const Layout: React.FC<Props> = ({ children }) => {
+export default function Layout ({ children }: Props) {
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies();
 
   const navBarlinks = [

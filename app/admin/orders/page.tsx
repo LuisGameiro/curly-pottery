@@ -1,7 +1,7 @@
 import { Container, Text } from "@components/ui";
 import { getAllOrders } from "actions/order.actions";
 import { CheckCircle2, AlertCircle } from "lucide-react";
-import OrderTable from "@components/common/Tables/OrderTable";
+import OrderTable from "@components/tables/OrderTable";
 import Loading from "app/loading";
 import { Suspense } from "react";
 

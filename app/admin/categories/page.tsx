@@ -3,7 +3,7 @@ import { getAllCategories } from "actions/category.actions";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { Text } from "@components/ui";
-import CategoryTable from "@components/common/Tables/CategoryTable";
+import CategoryTable from "@components/tables/CategoryTable";
 import Loading from "app/loading";
 import { Suspense } from "react";
 

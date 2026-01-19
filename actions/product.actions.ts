@@ -266,10 +266,10 @@ export async function upsertProduct(
     const prepareVariant = (v: EditVariant) => {
       // ts-ignore
       const {
-        files, // UI state
-        previews, // UI state
-        isExpanded, // UI state
-        ...variantData // This spread now contains only valid Variant fields
+        files,
+        previews, 
+        isExpanded, 
+        ...variantData 
       } = v;
       return {
         ...variantData,

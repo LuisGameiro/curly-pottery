@@ -14,7 +14,7 @@ type UserNavProps = {
   className?: string;
 }
 
-export const UserNav = ({ className }: UserNavProps) => {
+export default function UserNav({ className }: UserNavProps) {
   const { isAdmin, isAuthenticated } = useUser();
 
   const { data, deleteAll } = useCart();

@@ -21,7 +21,7 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+  // const [success, setSuccess] = useState(false);
   const isRegistered = searchParams.get("registered") === "true";
 
   // useEffect(() => {
@@ -132,7 +132,7 @@ function LoginForm() {
 
         <div className="mt-6 text-center">
           <Text className="text-sm">
-            Don't have an account?{" "}
+            Don&apost have an account?{" "}
             <Link
               href="/auth/register"
               className="font-bold text-secondary hover:underline"

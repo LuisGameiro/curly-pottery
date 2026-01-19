@@ -14,7 +14,7 @@ import {
   Notebook,
 } from "lucide-react";
 import notFound from "app/not-found";
-import OrderTable from "@components/common/Tables/OrderTable";
+import OrderTable from "@components/tables/OrderTable";
 import CustomerNotes from "./CostumerNotes";
 import { showCurrency } from "@lib/calculate-price";
 import { Address, Order } from "@lib/types/types";

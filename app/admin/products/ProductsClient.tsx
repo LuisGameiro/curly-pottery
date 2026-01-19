@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState, useMemo } from "react";
 import { ProductWithVariantsCategories, Variant } from "@lib/types/types";
 import InputSearch from "@components/ui/Input/InputSearch";
-import ProductTable from "@components/common/Tables/ProductTable";
+import ProductTable from "@components/tables/ProductTable";
 import { Plus } from "lucide-react";
 
 export default function ProductsClient({
