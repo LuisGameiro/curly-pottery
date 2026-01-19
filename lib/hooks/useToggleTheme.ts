@@ -1,5 +1,4 @@
 import { useTheme } from "next-themes";
-import { useLayoutEffect, useState } from "react";
 
 export const useToggleTheme = () => {
   const { theme, themes, setTheme } = useTheme();

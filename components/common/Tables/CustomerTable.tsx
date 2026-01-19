@@ -4,17 +4,17 @@ import Link from "next/link";
 import { Eye, Mail, Phone } from "lucide-react";
 import { Button } from "@components/ui";
 import DataTable from "@components/ui/Table/DataTable";
-import { Order, UserWithOrdersAddress } from "@lib/types/types";
+import { Order, UserWithOrders } from "@lib/types/types";
 
 export default function CustomerTable({
   customers,
 }: {
-  customers: UserWithOrdersAddress[];
+  customers: UserWithOrders[];
 }) {
   const customerColumns = [
     {
       header: "Customer",
-      render: (user: UserWithOrdersAddress) => (
+      render: (user: UserWithOrders) => (
         <div>
           <div className="font-medium">
             {user.firstName} {user.lastName}
@@ -27,7 +27,7 @@ export default function CustomerTable({
     },
     {
       header: "Contacts",
-      render: (user: UserWithOrdersAddress) => (
+      render: (user: UserWithOrders) => (
         <div className="flex flex-col gap-1 items-center">
           <div className="flex items-center gap-1.5">
             <Mail size={12} /> {user.email}
@@ -43,11 +43,11 @@ export default function CustomerTable({
     {
       header: "Orders",
       align: "center" as const,
-      render: (user: UserWithOrdersAddress) => user.orders?.length || 0,
+      render: (user: UserWithOrders) => user.orders?.length || 0,
     },
     {
       header: "Total Spend",
-      render: (user: UserWithOrdersAddress) => {
+      render: (user: UserWithOrders) => {
         const total =
           user.orders?.reduce(
             (sum: number, o: Order) => sum + o.totalPrice,
@@ -59,7 +59,7 @@ export default function CustomerTable({
     {
       header: "Actions",
       align: "center" as const,
-      render: (user: UserWithOrdersAddress) => (
+      render: (user: UserWithOrders) => (
         <Link href={`/admin/customers/${user.id}`}>
           <Button variant="naked">
             <Eye size={20} />

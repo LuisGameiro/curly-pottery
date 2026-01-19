@@ -2,16 +2,22 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { Package, ChevronDown, User, Van } from "lucide-react";
 import { Text } from "@components/ui";
 import { cn } from "@lib/utils";
+import { useUser } from "@lib/hooks/useUser";
 
 export default function UserLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+    const { isAuthenticated } = useUser();
+  
+  if (!isAuthenticated) {
+    redirect("/auth/login");
+  }
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 

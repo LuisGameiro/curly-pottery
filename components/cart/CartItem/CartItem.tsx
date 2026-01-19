@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import cn from "clsx";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,7 +10,7 @@ import useCart from "@lib/hooks/useCart";
 import { calculateDiscount } from "@lib/calculate-price";
 import { Trash } from "lucide-react";
 import { Button, Text } from "@components/ui";
-import { CartLineItem, CurrencyCode } from "@lib/types/types";
+import { CartLineItem } from "@lib/types/types";
 
 const placeholderImg = "/product-img-placeholder.svg";
 
@@ -52,11 +52,11 @@ const CartItem = ({
     }
   };
 
-  useEffect(() => {
-    if (item.quantity !== Number(quantity)) {
-      setQuantity(item.quantity);
-    }
-  }, [item.quantity, quantity]);
+  // useEffect(() => {
+  //   if (item.quantity !== Number(quantity)) {
+  //     setQuantity(item.quantity);
+  //   }
+  // }, [item.quantity, quantity,setQuantity]);
 
   return (
     <li
@@ -84,9 +84,10 @@ const CartItem = ({
 
         <div>
           <Link href={`/shop/${item.slug}`}>
-            <Text variant="bold" 
-            // onClick={() => closeSidebarIfPresent()}
-              >
+            <Text
+              variant="bold"
+              // onClick={() => closeSidebarIfPresent()}
+            >
               {item.name}
             </Text>
           </Link>

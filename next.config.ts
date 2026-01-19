@@ -50,6 +50,6 @@ export default withSentryConfig(nextConfig, {
     },
   },
 
-  tunnelRoute: "/monitoring-sentry", 
+  tunnelRoute: "/monitoring-sentry",
   // hideSourceMaps: true,
 });

@@ -22,17 +22,26 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const isRegistered = searchParams.get("registered") === "true";
 
-  useEffect(() => {
-    if (searchParams.get("registered") === "true") {
-      setSuccess(true);
-      const timer = setTimeout(() => {
-        setSuccess(false);
-        router.replace("/auth/login");
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [searchParams, router]);
+  // useEffect(() => {
+  //   if (isRegistered) {
+  //     const timer = setTimeout(() => {
+  //       router.replace("/auth/login");
+  //     }, 5000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [isRegistered, router]);
+  // useEffect(() => {
+  //   if (searchParams.get("registered") === "true") {
+  //     setSuccess(true);
+  //     const timer = setTimeout(() => {
+  //       setSuccess(false);
+  //       router.replace("/auth/login");
+  //     }, 5000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [searchParams, router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -64,7 +73,7 @@ function LoginForm() {
 
   return (
     <Container className="p-10">
-      {success && (
+      {isRegistered && (
         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center">
           Registration successful! Please log in.
         </div>

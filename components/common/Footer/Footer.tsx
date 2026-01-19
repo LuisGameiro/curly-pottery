@@ -29,6 +29,15 @@ const links = [
     name: "About",
     url: "/about",
   },
+  {
+    name: "Terms of Service",
+    url: "/terms",
+  },
+  {
+    name: "Privacy Policy",
+    url: "/privacy",
+  }
+
 ];
 
 const Footer: FC<Props> = () => {

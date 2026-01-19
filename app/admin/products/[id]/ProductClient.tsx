@@ -33,18 +33,18 @@ export default function ProductClient({
   const isEditing = !!initialData;
 
   const [product, setProduct] = useState<EditProduct>({
-    id: initialData?.id ?? "",
-    name: initialData?.name ?? "",
-    slug: initialData?.slug ?? "",
-    description: initialData?.description ?? "",
-    requiresShipping: initialData?.requiresShipping ?? true,
-    files: initialData?.images ?? [],
-    previews: initialData?.images ?? [],
-    categoryIds: initialData?.categories?.map((c: Category) => c.id) || [],
-    images: initialData?.images ?? [],
+    id: initialData.id ?? "",
+    name: initialData.name ?? "",
+    slug: initialData.slug ?? "",
+    description: initialData.description ?? "",
+    requiresShipping: initialData.requiresShipping ?? true,
+    files: initialData.images ?? [],
+    previews: initialData.images ?? [],
+    categoryIds: initialData.categories.map((c: Category) => c.id) || [],
+    images: initialData.images ?? [],
   });
 
-  const initialVariants = initialData?.variants.map((v: Variant) => ({
+  const initialVariants = initialData.variants.map((v: Variant) => ({
     ...v,
     files: v.images ?? [],
     previews: v.images ?? [],
@@ -55,7 +55,7 @@ export default function ProductClient({
     initialVariants || [
       {
         id: `temp-${Date.now()}`,
-        productId: initialData?.id ?? "",
+        productId: initialData.id ?? "",
         sku: "",
         price: 0,
         currency: "GBP",
@@ -82,8 +82,8 @@ export default function ProductClient({
     try {
       const updatedVariants = await Promise.all(
         variants.map(async (variant: EditVariant) => {
-          const originalVariant = initialData?.variants?.find(
-            (v: Variant) => v.id === variant.id,
+          const originalVariant = initialVariants.find(
+            (v: EditVariant) => v.id === variant.id,
           );
           const oldImages = originalVariant?.images ?? [];
           const imageUrls = await syncImages(variant.files, oldImages);
@@ -100,7 +100,7 @@ export default function ProductClient({
       );
       const imageUrls = await syncImages(
         product.files || [],
-        initialData?.images ?? [],
+        initialData.images ?? [],
       );
       if (!imageUrls.success) throw new Error(imageUrls.message);
 

@@ -8,10 +8,13 @@ interface SumUpResponse {
   amount: number;
   currency: string;
 }
-
+declare global {
+  interface Window {
+    SumUpCard: { mount: (options: { id: string; checkoutId: string; onResponse: (type: string, body: SumUpResponse) => void }) => void };
+  }
+}
 export default function SumUpPayment({ checkoutId }: { checkoutId: string }) {
   const mountSumUp = () => {
-    // @@ts-expect-error
     window.SumUpCard.mount({
       id: "sumup-card",
       checkoutId: checkoutId,

@@ -1,4 +1,3 @@
-
 import { EditProduct, EditVariant, Product, Variant } from "./types/types";
 
 export const skulify = (

@@ -49,7 +49,7 @@ export default function Contacts() {
         "New Message",
         ContactFormEmail(formData),
       );
-      console.log(response)
+      console.log(response);
 
       if (response.data) {
         setStatus("success");
@@ -94,7 +94,10 @@ export default function Contacts() {
             <li>
               📸 instagram:{" "}
               <a
-                href={new URL(`https://www.instagram.com/${contacts.instagram}`).href}
+                href={
+                  new URL(`https://www.instagram.com/${contacts.instagram}`)
+                    .href
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-secondary/60"

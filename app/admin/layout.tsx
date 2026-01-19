@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import {
   Package,
   LayoutDashboard,
@@ -14,12 +14,18 @@ import {
 import { Text } from "@components/ui";
 import { cn } from "@lib/utils";
 import ClickOutside from "@lib/click-outside";
+import { useUser } from "@lib/hooks/useUser";
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+   const { isAuthenticated, isAdmin } = useUser();
+  if (!isAuthenticated && !isAdmin) {
+    redirect("/auth/login");
+  }
+
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 

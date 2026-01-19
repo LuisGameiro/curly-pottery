@@ -4,11 +4,15 @@ import Image, { ImageProps } from "next/image";
 import { cn } from "@lib/utils";
 import { FC } from "react";
 import { calculateDiscount } from "@lib/calculate-price";
-import { Discount, ProductWithVariantsCategories } from "@lib/types/types";
+import {
+  Discount,
+  Product,
+  ProductWithVariantsCategories,
+} from "@lib/types/types";
 
 interface Props {
   className?: string;
-  product: ProductWithVariantsCategories;
+  product: ProductWithVariantsCategories | Product;
   noNameTag?: boolean;
   imgProps?: Omit<ImageProps, "src" | "layout" | "placeholder" | "blurDataURL">;
   variant?: "default" | "slim" | "simple";
@@ -31,12 +35,13 @@ const ProductCard: FC<Props> = ({
     className,
   );
 
-  const { finalPrice, price, hasDiscount } = product?.variants
-    ? calculateDiscount(
-        product.variants[0].price,
-        product.variants[0].discounts as Discount[],
-      )
-    : { price: "$0.00", finalPrice: "$0.00", hasDiscount: false };
+  const { finalPrice, price, hasDiscount } =
+    product && "variants" in product && product.variants.length > 0
+      ? calculateDiscount(
+          product.variants[0].price,
+          product.variants[0].discounts as Discount[],
+        )
+      : { price: "$0.00", finalPrice: "$0.00", hasDiscount: false };
 
   return (
     <Link
@@ -47,7 +52,13 @@ const ProductCard: FC<Props> = ({
       {variant === "slim" && (
         <>
           <div className="absolute top-0 bg-transparent left-0 z-20">
-            <span>{product.categories[0].name}</span>
+            <span>
+              {product &&
+              "categories" in product &&
+              product.categories.length > 0
+                ? product.categories[0].name
+                : ""}
+            </span>
           </div>
 
           {product?.images && (

@@ -9,11 +9,12 @@ import { cn } from "@lib/utils";
 import useCart from "@lib/hooks/useCart";
 import { Delete, Menu, ShoppingBasket } from "lucide-react";
 import Link from "next/link";
+import { useUser } from "@lib/hooks/useUser";
 
 const UserNav: React.FC<{
   className?: string;
 }> = ({ className }) => {
-  const { data: session, status } = useSession();
+  const { isAdmin, isAuthenticated } = useUser();
 
   const { data, deleteAll } = useCart();
   // const { data: isCustomerLoggedIn } = useCustomer()
@@ -33,13 +34,13 @@ const UserNav: React.FC<{
               variant="naked"
               aria-label={`Cart items: ${itemsCount}`}
             >
-              <ShoppingBasket />
+              <ShoppingBasket size={28} />
               {itemsCount > 0 && (
                 <span className={s.bagCount}>{itemsCount}</span>
               )}
             </Button>
           </Link>
-          <Button
+          {/* <Button
             className={s.item}
             variant="naked"
             onClick={deleteAll}
@@ -47,7 +48,7 @@ const UserNav: React.FC<{
           >
             <Delete />
             {itemsCount > 0 && <span className={s.bagCount}>{itemsCount}</span>}
-          </Button>
+          </Button> */}
         </li>
         <li className={s.item}>
           {/* <Dropdown>
@@ -64,20 +65,21 @@ const UserNav: React.FC<{
           </Dropdown> */}
         </li>
         <div className="flex gap-4">
-          {status === "authenticated" ? (
+          {isAuthenticated ? (
             <>
-              {/* Show Admin Link only if role is ADMIN */}
-              {session.user.role === "ADMIN" && (
-                <Button href="/admin" variant="ghost">
-                  Admin Panel
+              <Link href="/admin">
+                {isAdmin && (
+                  <Button href="/admin" variant="naked">
+                    Admin Panel
+                  </Button>
+                )}</Link>
+              <Link href="/profile">
+
+                <Button href="/profile" variant="naked">
+                  My Account
                 </Button>
-              )}
-
-              <Button href="/profile" variant="naked">
-                My Account
-              </Button>
-
-              <Button color="danger" size="sm" onClick={() => signOut()}>
+              </Link>
+              <Button color="danger" variant="naked" onClick={() => signOut()}>
                 Logout
               </Button>
             </>

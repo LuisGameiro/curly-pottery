@@ -1,8 +1,9 @@
 "use server";
 
 import { authOptions } from "@lib/auth/authOptions";
-import { CartLineItem } from "@lib/types/types";
+import { CartLineItem, Cart } from "@lib/types/types";
 import { getServerSession } from "next-auth";
+import { Prisma } from "prisma/generated/prisma/client";
 import { prisma } from "prisma/prisma";
 
 export async function getCartFromDbAction() {
@@ -24,10 +25,15 @@ export async function syncCartAction(items: CartLineItem[]) {
   const session = await getServerSession(authOptions);
   if (!session?.user) return;
 
+  const cart = {
+    lineItems: items ?? ([] as Prisma.InputJsonValue),
+    userId: session.user.id,
+  } as Cart;
+
   await prisma.cart.upsert({
     where: { userId: session.user.id },
-    update: { lineItems: JSON.stringify(items) },
-    create: { lineItems: JSON.stringify(items) },
+    update: { lineItems: items },
+    create: cart,
   });
 }
 

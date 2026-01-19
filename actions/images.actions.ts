@@ -165,11 +165,12 @@ export async function syncImages(
       message: "Upload images successfully",
       data: finalUrls,
     };
-  } catch (error: any) {
+  } catch (error) {
     console.error("uploadImages_ERROR:", error);
     return {
       success: false,
-      message: error instanceof Error ? error.message : "A database error occurred", 
+      message:
+        error instanceof Error ? error.message : "A database error occurred",
       errors: error,
     };
   }

@@ -1,20 +1,34 @@
 import { Button, Input, Text } from "@components/ui";
-import { User } from "@lib/types/types";
+import { UserWithOrdersAddress } from "@lib/types/types";
+import { getUserById } from "actions/customer.actions";
+import { User } from "next-auth";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface InformationFormProps {
-  onComplete: (formData: unknown) => void;
-  initialData: User;
+  onComplete: (formData: FormData) => void;
+  userId?: string;
   isLoggedIn: boolean;
 }
 
 export default function InformationForm({
   onComplete,
-  initialData,
+  userId,
   isLoggedIn,
 }: InformationFormProps) {
   const [continueAsGuest, setContinueAsGuest] = useState(false);
+
+  const [initialData, setInitialData] = useState<UserWithOrdersAddress>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isLoggedIn && userId) {
+        const response = await getUserById(userId);
+        if (response.data) setInitialData(response.data);
+      }
+    };
+    fetchData();
+  }, [isLoggedIn, userId]);
 
   if (!isLoggedIn && !continueAsGuest) {
     return (
@@ -55,7 +69,7 @@ export default function InformationForm({
       onSubmit={(e) => {
         e.preventDefault();
         const data = new FormData(e.currentTarget);
-        onComplete(Object.fromEntries(data));
+        onComplete(data as unknown as FormData);
       }}
     >
       <section>
@@ -85,19 +99,45 @@ export default function InformationForm({
           Shipping Address
         </Text>
         <div className="grid grid-cols-2 gap-4">
-          <Input name="firstName" placeholder="First Name" required />
-          <Input name="lastName" placeholder="Last Name" required />
+          <Input
+            name="firstName"
+            placeholder="First Name"
+            defaultValue={initialData?.firstName || ""}
+            required
+          />
+          <Input
+            name="lastName"
+            placeholder="Last Name"
+            defaultValue={initialData?.lastName || ""}
+            required
+          />
           <div className="col-span-2">
-            <Input name="address" placeholder="Address" required />
+            <Input
+              name="address"
+              placeholder="Address"
+              defaultValue={initialData?.addresses[0]?.address || ""}
+              required
+            />
           </div>
 
-          <Input name="city" placeholder="City" required />
-          <Input name="postcode" placeholder="Postcode" required />
+          <Input
+            name="city"
+            placeholder="City"
+            defaultValue={initialData?.addresses[0]?.city || ""}
+            required
+          />
+          <Input
+            name="postcode"
+            placeholder="Postcode"
+            defaultValue={initialData?.addresses[0]?.postalCode || ""}
+            required
+          />
           <Input
             name="country"
             placeholder="Country"
             disabled
             required
+            defaultValue={initialData?.addresses[0]?.country || ""}
             value={"United Kingdown"}
           />
         </div>

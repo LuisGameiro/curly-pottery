@@ -15,7 +15,9 @@ export default async function ProfilePage() {
     where: { email: session.user.email as string },
   });
 
-  if (!user) return <div>User not found</div>;
+  if (!user) {
+    redirect("/auth/login");
+  }
 
   return <ProfileForm user={user} />;
 }

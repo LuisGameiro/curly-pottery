@@ -8,7 +8,7 @@ interface ErrorMessageProps {
     errors?: {
       message: string;
     }[];
-  } ;
+  };
   className?: string;
 }
 

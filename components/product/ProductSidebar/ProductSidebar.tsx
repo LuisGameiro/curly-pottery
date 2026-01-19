@@ -1,10 +1,8 @@
 "use client";
 
 import s from "./ProductSidebar.module.css";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { Button, Text } from "@components/ui";
-import { selectDefaultOptionFromProduct, SelectedOptions } from "../helpers";
-import ErrorMessage from "@components/ui/ErrorMessage";
 import Link from "next/link";
 import { cn } from "@lib/utils";
 import ProductOptions from "../ProductOptions";
@@ -15,7 +13,7 @@ import {
   Category,
   ProductWithVariantsCategories,
   Variant,
-  Discount
+  Discount,
 } from "@lib/types/types";
 
 interface ProductSidebarProps {
@@ -33,15 +31,9 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
 }: ProductSidebarProps) => {
   const { addItem } = useCart();
 
-  // const { openSidebar, setSidebarView } = useUI();
   const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState<null | Error>(null);
-  const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({});
-
-  useEffect(() => {
-    selectDefaultOptionFromProduct(product, setSelectedOptions);
-  }, [product]);
 
   const forSale = variant?.stock !== 0 || variant?.availableForSale;
 
@@ -49,10 +41,16 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
     setLoading(true);
     setError(null);
     try {
-       addItem(
+      addItem(
         {
           ...product,
-          variants: [variant] ,
+          variants: [
+            {
+              ...variant,
+              details: variant.details as Detail[],
+              discounts: variant.discounts as Discount[],
+            },
+          ],
         },
         quantity,
       );
@@ -69,7 +67,10 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
     }
   };
 
-  const price = calculateDiscount(variant.price, variant.discounts as Discount[]);
+  const price = calculateDiscount(
+    variant.price,
+    variant.discounts as Discount[],
+  );
 
   return (
     <div className={cn(className, "space-y-4")}>
@@ -102,9 +103,9 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
           VAT included for EU orders. Duties and import taxes are calculated at
           checkout for U.S. customers Shipping calculated at checkout.{" "}
         </p>
-        <p className="py-2">
+        {/* <p className="py-2">
           {error && <ErrorMessage message={error} />}
-        </p>
+        </p> */}
 
         {!forSale ? (
           <div
@@ -156,19 +157,15 @@ const ProductSidebar: FC<ProductSidebarProps> = ({
         className="wrap-break-word w-full max-w-xl "
         html={product.description}
       />
-      <ProductOptions
-        product={product}
-        setVariant={setVariant}
-        variant={variant}
-      />
+      <ProductOptions product={product} setVariant={setVariant} />
 
       <section>
-        {variant?.details && (
+        {!!variant.details && (
           <div>
             <h2 className="text 2xl font-semibold">Product details:</h2>
 
             <div className="ml-10 space-y-4">
-              {variant.details.map((detail: Detail) => (
+              {(variant.details as Detail[]).map((detail: Detail) => (
                 <div key={detail.title}>
                   <span className="font-semibold">{detail.title}: </span>
                   <span>{detail.description}</span>

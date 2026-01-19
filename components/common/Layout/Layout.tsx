@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useUI } from "@components/ui/context";
 import { Navbar, Footer } from "@components/common";
 import { useAcceptCookies } from "@lib/hooks/useAcceptCookies";
-import {  Button, LoadingDots } from "@components/ui";
+import { Button, LoadingDots } from "@components/ui";
 import { MenuSidebarView } from "@components/common/UserNav";
 import { Toaster } from "sonner";
 import type { Link as LinkProps } from "../UserNav/MenuSidebarView";
@@ -82,22 +82,16 @@ const SidebarUI: React.FC<{ links: LinkProps[] }> = ({ links }) => {
 
 const Layout: React.FC<Props> = ({ children }) => {
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies();
-  const { isAuthenticated, isAdmin } = useUser();
 
-  // const { locale = "en-US" } = useRouter();
 
   let navBarlinks = [
     { label: "Shop", href: "/shop" },
     { label: "Contacts", href: "/contacts" },
+
   ];
 
-  if (!isAuthenticated)
-    navBarlinks = [...navBarlinks, { label: "Profile", href: "/user" }];
-
-  if (!isAdmin)
-    navBarlinks = [...navBarlinks, { label: "Admin", href: "/admin" }];
-
   return (
+
     <div>
       <Navbar links={navBarlinks} />
       <main className="bg-background w-full h-full min-h-[calc(100vh-310px)]">

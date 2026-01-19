@@ -16,13 +16,13 @@ export default async function ProductForm({
     throw new Error(responseProduct.message + responseCategories.success);
   }
 
-  if (!responseProduct.data && !responseCategories.data) {
+  if (!responseProduct.data) {
     return notFound();
   }
 
   return (
     <ProductClient
-      initialData={responseProduct.data ?? []}
+      initialData={responseProduct.data}
       categories={responseCategories.data || []}
     />
   );

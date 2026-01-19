@@ -1,101 +1,90 @@
-import { memo } from "react";
+'use client'
+
+import { memo, useState } from "react";
 import { Text } from "@components/ui";
-import { Product, Variant } from "@lib/types/types";
+import { ProductWithVariantsCategories, Variant } from "@lib/types/types";
+import { createVariantMatrix } from "../helpers";
 
 interface ProductOptionsProps {
-  product: Product;
-  variant: Variant;
+  product: ProductWithVariantsCategories;
   setVariant: (variant: Variant) => void;
 }
 
-type UniqueSize = {
-  name: string;
-  id: string;
-  available: boolean;
-};
-
-type uniqueColor = {
-  name: string;
-  id: string;
-  colorHex: string;
-  available: boolean;
-};
-
 const ProductOptions: React.FC<ProductOptionsProps> = ({
   product,
-  // variant,
-  // setVariant,
+  setVariant,
 }) => {
-  // 1. Filter variants to find those that have a "size" option
-  // 2. Reduce them into a unique list based on the size name
-  const uniqueSizes: UniqueSize[] = product.variants.reduce(
-    (acc: UniqueSize[], variant: Variant) => {
-      const sizeName = variant.sizeName;
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
 
-      if (sizeName && !acc.find((item) => item.name === sizeName)) {
-        acc.push({
-          name: sizeName,
-          id: variant.id,
-          available: variant.availableForSale,
-        });
-      }
-      return acc;
-    },
-    [],
-  );
-
-  const uniqueColors: uniqueColor[] = product.variants.reduce(
-    (acc: uniqueColor[], variant: Variant) => {
-      const colorName = variant.colorName;
-
-      if (colorName && !acc.find((item) => item.name === colorName)) {
-        acc.push({
-          name: colorName,
-          id: variant.id,
-          colorHex: variant.colorHex || "",
-          available: variant.availableForSale,
-        });
-      }
-      return acc;
-    },
-    [],
-  );
+  const matrix = createVariantMatrix(product.variants);
+  const allSizes = Object.keys(matrix);
+  const allColors = Array.from(
+    new Set(product.variants.flatMap((v: Variant) => v.colorName)),
+  ) as string[];
 
   return (
     <div>
-      {uniqueSizes.length > 1 && (
+      {allSizes.length > 1 && (
         <div>
           <Text variant="sectionHeading">Size</Text>
           <div role="listbox" className="flex flex-row">
-            {uniqueSizes.map((size) => (
+            {allSizes.map((size) => (
               <button
-                key={size.id}
+                key={size}
                 className={`px-4 py-2 mr-2 border rounded-md ${
-                  size.available ? "border-green-300" : "border-red-500"
+                  selectedSize === size ? "border-green-300" : "border-red-500"
                 }`}
-                // disabled={!size.available}
+                onClick={() => {
+                  setVariant(
+                    product.variants.find(
+                      (v: Variant) =>
+                        v.id ===
+                        matrix[size][selectedColor || allColors[0]]?.variantId,
+                    )!,
+                  );
+                  setSelectedSize(size === selectedSize ? null : size);
+                }}
               >
-                {size.name}
+                {size}
               </button>
             ))}
           </div>
         </div>
       )}
-      {uniqueColors.length > 1 && (
+      {allColors.length > 1 && (
         <div>
           <Text variant="sectionHeading">Color</Text>
           <div role="listbox" className="flex flex-row">
-            {uniqueColors.map((color) => (
-              <button
-                key={color.id}
-                className={`px-4 py-2 mr-2 border rounded-md bg-${color.colorHex} ${
-                  color.available ? "border-green-300" : "border-red-500"
-                }`}
-                // disabled={!color.available}
-              >
-                {/* {color.name} */}
-              </button>
-            ))}
+            {allColors.map((color) => {
+              const isDisabled = selectedSize
+                ? !matrix[selectedSize]?.[color]
+                : false;
+              const colorData = matrix[selectedSize || allSizes[0]]?.[color];
+              return (
+                <button
+                  key={color}
+                  className={`px-4 py-2 mr-2 border rounded-md bg-${colorData.colorHex} ${
+                    selectedColor === color
+                      ? "border-green-300"
+                      : "border-red-500"
+                  }`}
+                  disabled={isDisabled}
+                  onClick={() => {
+                  // setVariant(
+                  //   product.variants.find(
+                  //     (v: Variant) =>
+                  //       v.id ===
+                  //       matrix[selectedSize][color]?.variantId,
+                  //   )!,
+                  // );
+                  setSelectedColor(color === selectedColor ? null : color);
+                }}
+                >
+                  {color}
+                </button>
+              );
+            })}
           </div>
         </div>
       )}

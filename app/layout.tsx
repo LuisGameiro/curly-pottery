@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import "../globals.css";
 import "@assets/chrome-bug.css";
@@ -15,6 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head />
       <body className="loading bg-primary">
         <SessionProvider>
           <ManagedUIContext>

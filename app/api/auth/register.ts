@@ -8,7 +8,9 @@ const registerSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
   password2: z.string().min(6, "Password must be at least 6 characters"),
 
-  name: z.string().min(1, "name is required"),
+  firstName: z.string().min(1, "name is required"),
+  lastName: z.string().min(1, "name is required"),
+
   phone: z.string().optional(),
   acceptsMarketing: z.boolean().default(false),
 });
@@ -33,7 +35,8 @@ export default async function handler(
       });
     }
 
-    const { email, password, name, phone, acceptsMarketing } = validation.data;
+    const { email, password, firstName, lastName, phone, acceptsMarketing } =
+      validation.data;
 
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
@@ -44,7 +47,8 @@ export default async function handler(
       data: {
         email,
         password: await hashPassword(password),
-        name,
+        firstName,
+        lastName,
         phone,
         acceptsMarketing: !!acceptsMarketing,
         emailVerified: new Date(),

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { getOrderById } from "actions/order.actions";
 import OrderStatusUpdate from "./orderStatusUpdate";
 import { showCurrency } from "@lib/calculate-price";
-import { Address, CartLineItem, Order, OrderWithUser } from "@lib/types/types";
+import { Address, CartLineItem, Order } from "@lib/types/types";
 import notFound from "app/not-found";
 import Loading from "app/loading";
 import { Suspense } from "react";
@@ -28,7 +28,7 @@ export default async function OrderDetailsPage({
 
   const lineItems = response.data.lineItems as CartLineItem[];
   const address = response.data.shippingAddress as unknown as Address;
-  const user = response.data.user
+  const user = response.data.user;
 
   const order = response.data as Order;
 
@@ -131,8 +131,8 @@ export default async function OrderDetailsPage({
               </div>
               <div>
                 <Text>
-                  {user?.firstName || address?.firstName}{" "}
-                  {user?.lastName || address?.lastName}
+                  {user?.firstName || order?.firstName}{" "}
+                  {user?.lastName || order?.lastName}
                 </Text>
                 <Text>{order.email}</Text>
                 <Text>{order.phone}</Text>

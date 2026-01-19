@@ -32,11 +32,7 @@ export default function CartPage() {
         <div className="lg:col-span-8">
           <ul className="divide-y border-b">
             {data?.lineItems.map((item: CartLineItem) => (
-              <CartItem
-                key={item.id}
-                item={item}
-                currencyCode={data.currency}
-              />
+              <CartItem key={item.id} item={item} />
             ))}
           </ul>
         </div>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FC, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import s from "./I18nWidget.module.css";
 import ClickOutside from "@lib/click-outside";
 import Image from "next/image";
@@ -34,17 +34,22 @@ const LOCALES_MAP: Record<string, LOCALE_DATA> = {
   },
 };
 
+export const i18n = {
+  defaultLocale: "en",
+  locales: ["en", "de", "fr", "es"],
+} as const;
+type Locale = (typeof i18n)["locales"][number];
 const I18nWidget: FC = () => {
   const [display, setDisplay] = useState(false);
-  const {
-    locale,
-    locales,
-    defaultLocale = "en-UK",
-    asPath: currentPath,
-  } = useRouter();
+  const params = useParams();
+  const locale = params.locale as Locale;
 
-  const options = locales?.filter((val) => val !== locale);
-  const currentLocale = locale || defaultLocale;
+  const locales = i18n.locales;
+  const defaultLocale = i18n.defaultLocale;
+  const currentPath =
+    typeof window !== "undefined" ? window.location.pathname : "/";
+  const currentLocale = "en-UK"//locale || defaultLocale;
+  const options = null //locales.filter((val) => val !== currentLocale);
 
   return (
     <ClickOutside active={display} onClick={() => setDisplay(false)}>
@@ -70,8 +75,8 @@ const I18nWidget: FC = () => {
           </button>
         </div>
 
-        <div className="absolute top-0 right-0">
-          {options?.length && display ? (
+        {/* <div className="absolute top-0 right-0">
+          {!!options && display ? (
             <div className={s.dropdownMenu}>
               <div className="flex flex-row justify-end px-6">
                 <button
@@ -98,7 +103,7 @@ const I18nWidget: FC = () => {
               </ul>
             </div>
           ) : null}
-        </div>
+        </div> */}
       </nav>
     </ClickOutside>
   );

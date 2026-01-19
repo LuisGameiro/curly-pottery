@@ -30,8 +30,8 @@ const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
   const {
     className,
     variant = "flat",
-    size = "md", 
-    color = "primary", 
+    size = "md",
+    color = "primary",
     children,
     active,
     width,

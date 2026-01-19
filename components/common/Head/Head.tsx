@@ -1,7 +1,6 @@
-import type { VFC } from "react";
 import { SEO } from "@components/common";
 
-const Head: VFC = () => {
+const Head = () => {
   return (
     <SEO>
       <meta

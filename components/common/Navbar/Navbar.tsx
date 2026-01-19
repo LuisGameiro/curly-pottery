@@ -22,7 +22,7 @@ const Navbar: FC<NavbarProps> = ({ links }) => (
           <Link href="/" className={s.logo} aria-label="Logo">
             <div className="flex items-center flex-row">
               <Logo />
-              <h1 className="ml-4 mr-8 text-on-primary hidden sm:block">
+              <h1 className="font-display ml-4 mr-8 text-on-primary hidden sm:block">
                 Curly Pottery
               </h1>
             </div>

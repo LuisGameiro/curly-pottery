@@ -19,7 +19,7 @@ interface MenuProductsProps {
   setSortMethod: (key: SortLabels) => void;
   sortMethod: string;
   categories: Category[];
-  activeCategory: string;
+  activeCategory: string | null;
 }
 
 export default function MenuProducts({

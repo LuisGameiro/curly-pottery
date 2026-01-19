@@ -7,14 +7,18 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import InputCheck from "@components/ui/Input/InputCheck";
 import { useRouter } from "next/navigation";
+import { registerUser } from "actions/auth.actions";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     password2: "",
-    name: "",
+    firstName: "",
+    lastName: "",
     phone: "",
     acceptsMarketing: false,
   });
@@ -27,8 +31,6 @@ export default function RegisterPage() {
     }));
   };
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,26 +38,27 @@ export default function RegisterPage() {
     setError("");
 
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData);
+    const result = await registerUser(formData);
 
-    const res = await fetch("/api/auth/register", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" },
-    });
+    if (result.error) {
+      setError(result.error);
+      setLoading(false);
+    } else {
+      // Logic for auto-login after registration
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
 
-    if (res.ok) {
-      signIn("credentials", {
-        email: data.email as string,
-        password: data.password as string,
-        callbackUrl: "/user/profile",
+      const signInResult = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
       });
 
-      router.push("/auth/login?registered=true");
-    } else {
-      const { message } = await res.json();
-      setError(message || "Something went wrong");
-      setLoading(false);
+      if (signInResult?.error) {
+        router.push("/auth/login?registered=true");
+      } else {
+        router.push("/user");
+      }
     }
   };
 
@@ -70,6 +73,25 @@ export default function RegisterPage() {
 
       <main className="space-y-5 md:max-w-lg mx-auto">
         <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
+            name="firstName"
+            label="First Name"
+            type="text"
+            placeholder="Jane"
+            value={formData.firstName}
+            onChange={handleChange}
+            required
+          />
+
+          <Input
+            name="lastName"
+            label="Last Name"
+            type="text"
+            placeholder="Doe"
+            value={formData.lastName}
+            onChange={handleChange}
+            required
+          />
           <Input
             name="email"
             label="Email"

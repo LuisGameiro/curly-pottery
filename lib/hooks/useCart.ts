@@ -5,7 +5,15 @@ import { useCartStore } from "@lib/zustand/cart";
 
 export default function useCart() {
   const { isAuthenticated } = useUser();
-  const {syncWithDatabase, cartItems , isLoading, addItem, removeItem, updateItem, deleteAll} = useCartStore();
+  const {
+    syncWithDatabase,
+    cartItems,
+    isLoading,
+    addItem,
+    removeItem,
+    updateItem,
+    deleteAll,
+  } = useCartStore();
 
   useEffect(() => {
     syncWithDatabase();

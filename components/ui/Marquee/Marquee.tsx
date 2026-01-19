@@ -5,7 +5,6 @@ import s from "./Marquee.module.css";
 import {
   FC,
   ReactNode,
-  Component,
   Children,
   cloneElement,
   ReactElement,

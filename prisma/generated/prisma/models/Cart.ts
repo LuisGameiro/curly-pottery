@@ -27,25 +27,24 @@ export type AggregateCart = {
 };
 
 export type CartAvgAggregateOutputType = {
-  lineItemsSubtotalPrice: number | null;
   subtotalPrice: number | null;
   totalPrice: number | null;
+  taxes: number | null;
 };
 
 export type CartSumAggregateOutputType = {
-  lineItemsSubtotalPrice: number | null;
   subtotalPrice: number | null;
   totalPrice: number | null;
+  taxes: number | null;
 };
 
 export type CartMinAggregateOutputType = {
   id: string | null;
   userId: string | null;
   currency: $Enums.CurrencyCode | null;
-  taxesIncluded: boolean | null;
-  lineItemsSubtotalPrice: number | null;
   subtotalPrice: number | null;
   totalPrice: number | null;
+  taxes: number | null;
   createdAt: Date | null;
   updatedAt: Date | null;
 };
@@ -54,10 +53,9 @@ export type CartMaxAggregateOutputType = {
   id: string | null;
   userId: string | null;
   currency: $Enums.CurrencyCode | null;
-  taxesIncluded: boolean | null;
-  lineItemsSubtotalPrice: number | null;
   subtotalPrice: number | null;
   totalPrice: number | null;
+  taxes: number | null;
   createdAt: Date | null;
   updatedAt: Date | null;
 };
@@ -66,37 +64,35 @@ export type CartCountAggregateOutputType = {
   id: number;
   userId: number;
   currency: number;
-  taxesIncluded: number;
   lineItems: number;
   discounts: number;
-  lineItemsSubtotalPrice: number;
   subtotalPrice: number;
   totalPrice: number;
+  taxes: number;
   createdAt: number;
   updatedAt: number;
   _all: number;
 };
 
 export type CartAvgAggregateInputType = {
-  lineItemsSubtotalPrice?: true;
   subtotalPrice?: true;
   totalPrice?: true;
+  taxes?: true;
 };
 
 export type CartSumAggregateInputType = {
-  lineItemsSubtotalPrice?: true;
   subtotalPrice?: true;
   totalPrice?: true;
+  taxes?: true;
 };
 
 export type CartMinAggregateInputType = {
   id?: true;
   userId?: true;
   currency?: true;
-  taxesIncluded?: true;
-  lineItemsSubtotalPrice?: true;
   subtotalPrice?: true;
   totalPrice?: true;
+  taxes?: true;
   createdAt?: true;
   updatedAt?: true;
 };
@@ -105,10 +101,9 @@ export type CartMaxAggregateInputType = {
   id?: true;
   userId?: true;
   currency?: true;
-  taxesIncluded?: true;
-  lineItemsSubtotalPrice?: true;
   subtotalPrice?: true;
   totalPrice?: true;
+  taxes?: true;
   createdAt?: true;
   updatedAt?: true;
 };
@@ -117,12 +112,11 @@ export type CartCountAggregateInputType = {
   id?: true;
   userId?: true;
   currency?: true;
-  taxesIncluded?: true;
   lineItems?: true;
   discounts?: true;
-  lineItemsSubtotalPrice?: true;
   subtotalPrice?: true;
   totalPrice?: true;
+  taxes?: true;
   createdAt?: true;
   updatedAt?: true;
   _all?: true;
@@ -225,12 +219,11 @@ export type CartGroupByOutputType = {
   id: string;
   userId: string;
   currency: $Enums.CurrencyCode;
-  taxesIncluded: boolean;
   lineItems: runtime.JsonValue;
   discounts: runtime.JsonValue | null;
-  lineItemsSubtotalPrice: number;
   subtotalPrice: number;
   totalPrice: number;
+  taxes: number;
   createdAt: Date;
   updatedAt: Date;
   _count: CartCountAggregateOutputType | null;
@@ -259,12 +252,11 @@ export type CartWhereInput = {
   id?: Prisma.StringFilter<"Cart"> | string;
   userId?: Prisma.StringFilter<"Cart"> | string;
   currency?: Prisma.EnumCurrencyCodeFilter<"Cart"> | $Enums.CurrencyCode;
-  taxesIncluded?: Prisma.BoolFilter<"Cart"> | boolean;
   lineItems?: Prisma.JsonFilter<"Cart">;
   discounts?: Prisma.JsonNullableFilter<"Cart">;
-  lineItemsSubtotalPrice?: Prisma.FloatFilter<"Cart"> | number;
   subtotalPrice?: Prisma.FloatFilter<"Cart"> | number;
   totalPrice?: Prisma.FloatFilter<"Cart"> | number;
+  taxes?: Prisma.FloatFilter<"Cart"> | number;
   createdAt?: Prisma.DateTimeFilter<"Cart"> | Date | string;
   updatedAt?: Prisma.DateTimeFilter<"Cart"> | Date | string;
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
@@ -274,12 +266,11 @@ export type CartOrderByWithRelationInput = {
   id?: Prisma.SortOrder;
   userId?: Prisma.SortOrder;
   currency?: Prisma.SortOrder;
-  taxesIncluded?: Prisma.SortOrder;
   lineItems?: Prisma.SortOrder;
   discounts?: Prisma.SortOrderInput | Prisma.SortOrder;
-  lineItemsSubtotalPrice?: Prisma.SortOrder;
   subtotalPrice?: Prisma.SortOrder;
   totalPrice?: Prisma.SortOrder;
+  taxes?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
   user?: Prisma.UserOrderByWithRelationInput;
@@ -293,12 +284,11 @@ export type CartWhereUniqueInput = Prisma.AtLeast<
     OR?: Prisma.CartWhereInput[];
     NOT?: Prisma.CartWhereInput | Prisma.CartWhereInput[];
     currency?: Prisma.EnumCurrencyCodeFilter<"Cart"> | $Enums.CurrencyCode;
-    taxesIncluded?: Prisma.BoolFilter<"Cart"> | boolean;
     lineItems?: Prisma.JsonFilter<"Cart">;
     discounts?: Prisma.JsonNullableFilter<"Cart">;
-    lineItemsSubtotalPrice?: Prisma.FloatFilter<"Cart"> | number;
     subtotalPrice?: Prisma.FloatFilter<"Cart"> | number;
     totalPrice?: Prisma.FloatFilter<"Cart"> | number;
+    taxes?: Prisma.FloatFilter<"Cart"> | number;
     createdAt?: Prisma.DateTimeFilter<"Cart"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"Cart"> | Date | string;
     user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
@@ -310,12 +300,11 @@ export type CartOrderByWithAggregationInput = {
   id?: Prisma.SortOrder;
   userId?: Prisma.SortOrder;
   currency?: Prisma.SortOrder;
-  taxesIncluded?: Prisma.SortOrder;
   lineItems?: Prisma.SortOrder;
   discounts?: Prisma.SortOrderInput | Prisma.SortOrder;
-  lineItemsSubtotalPrice?: Prisma.SortOrder;
   subtotalPrice?: Prisma.SortOrder;
   totalPrice?: Prisma.SortOrder;
+  taxes?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
   _count?: Prisma.CartCountOrderByAggregateInput;
@@ -338,12 +327,11 @@ export type CartScalarWhereWithAggregatesInput = {
   currency?:
     | Prisma.EnumCurrencyCodeWithAggregatesFilter<"Cart">
     | $Enums.CurrencyCode;
-  taxesIncluded?: Prisma.BoolWithAggregatesFilter<"Cart"> | boolean;
   lineItems?: Prisma.JsonWithAggregatesFilter<"Cart">;
   discounts?: Prisma.JsonNullableWithAggregatesFilter<"Cart">;
-  lineItemsSubtotalPrice?: Prisma.FloatWithAggregatesFilter<"Cart"> | number;
   subtotalPrice?: Prisma.FloatWithAggregatesFilter<"Cart"> | number;
   totalPrice?: Prisma.FloatWithAggregatesFilter<"Cart"> | number;
+  taxes?: Prisma.FloatWithAggregatesFilter<"Cart"> | number;
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Cart"> | Date | string;
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Cart"> | Date | string;
 };
@@ -351,12 +339,11 @@ export type CartScalarWhereWithAggregatesInput = {
 export type CartCreateInput = {
   id?: string;
   currency?: $Enums.CurrencyCode;
-  taxesIncluded?: boolean;
   lineItems: Prisma.JsonNullValueInput | runtime.InputJsonValue;
   discounts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-  lineItemsSubtotalPrice: number;
-  subtotalPrice: number;
-  totalPrice: number;
+  subtotalPrice?: number;
+  totalPrice?: number;
+  taxes?: number;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   user: Prisma.UserCreateNestedOneWithoutCartInput;
@@ -366,12 +353,11 @@ export type CartUncheckedCreateInput = {
   id?: string;
   userId: string;
   currency?: $Enums.CurrencyCode;
-  taxesIncluded?: boolean;
   lineItems: Prisma.JsonNullValueInput | runtime.InputJsonValue;
   discounts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-  lineItemsSubtotalPrice: number;
-  subtotalPrice: number;
-  totalPrice: number;
+  subtotalPrice?: number;
+  totalPrice?: number;
+  taxes?: number;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 };
@@ -381,12 +367,11 @@ export type CartUpdateInput = {
   currency?:
     | Prisma.EnumCurrencyCodeFieldUpdateOperationsInput
     | $Enums.CurrencyCode;
-  taxesIncluded?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   lineItems?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
   discounts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-  lineItemsSubtotalPrice?: Prisma.FloatFieldUpdateOperationsInput | number;
   subtotalPrice?: Prisma.FloatFieldUpdateOperationsInput | number;
   totalPrice?: Prisma.FloatFieldUpdateOperationsInput | number;
+  taxes?: Prisma.FloatFieldUpdateOperationsInput | number;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   user?: Prisma.UserUpdateOneRequiredWithoutCartNestedInput;
@@ -398,12 +383,11 @@ export type CartUncheckedUpdateInput = {
   currency?:
     | Prisma.EnumCurrencyCodeFieldUpdateOperationsInput
     | $Enums.CurrencyCode;
-  taxesIncluded?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   lineItems?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
   discounts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-  lineItemsSubtotalPrice?: Prisma.FloatFieldUpdateOperationsInput | number;
   subtotalPrice?: Prisma.FloatFieldUpdateOperationsInput | number;
   totalPrice?: Prisma.FloatFieldUpdateOperationsInput | number;
+  taxes?: Prisma.FloatFieldUpdateOperationsInput | number;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -412,12 +396,11 @@ export type CartCreateManyInput = {
   id?: string;
   userId: string;
   currency?: $Enums.CurrencyCode;
-  taxesIncluded?: boolean;
   lineItems: Prisma.JsonNullValueInput | runtime.InputJsonValue;
   discounts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-  lineItemsSubtotalPrice: number;
-  subtotalPrice: number;
-  totalPrice: number;
+  subtotalPrice?: number;
+  totalPrice?: number;
+  taxes?: number;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 };
@@ -427,12 +410,11 @@ export type CartUpdateManyMutationInput = {
   currency?:
     | Prisma.EnumCurrencyCodeFieldUpdateOperationsInput
     | $Enums.CurrencyCode;
-  taxesIncluded?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   lineItems?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
   discounts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-  lineItemsSubtotalPrice?: Prisma.FloatFieldUpdateOperationsInput | number;
   subtotalPrice?: Prisma.FloatFieldUpdateOperationsInput | number;
   totalPrice?: Prisma.FloatFieldUpdateOperationsInput | number;
+  taxes?: Prisma.FloatFieldUpdateOperationsInput | number;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -443,12 +425,11 @@ export type CartUncheckedUpdateManyInput = {
   currency?:
     | Prisma.EnumCurrencyCodeFieldUpdateOperationsInput
     | $Enums.CurrencyCode;
-  taxesIncluded?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   lineItems?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
   discounts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-  lineItemsSubtotalPrice?: Prisma.FloatFieldUpdateOperationsInput | number;
   subtotalPrice?: Prisma.FloatFieldUpdateOperationsInput | number;
   totalPrice?: Prisma.FloatFieldUpdateOperationsInput | number;
+  taxes?: Prisma.FloatFieldUpdateOperationsInput | number;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -457,30 +438,28 @@ export type CartCountOrderByAggregateInput = {
   id?: Prisma.SortOrder;
   userId?: Prisma.SortOrder;
   currency?: Prisma.SortOrder;
-  taxesIncluded?: Prisma.SortOrder;
   lineItems?: Prisma.SortOrder;
   discounts?: Prisma.SortOrder;
-  lineItemsSubtotalPrice?: Prisma.SortOrder;
   subtotalPrice?: Prisma.SortOrder;
   totalPrice?: Prisma.SortOrder;
+  taxes?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
 };
 
 export type CartAvgOrderByAggregateInput = {
-  lineItemsSubtotalPrice?: Prisma.SortOrder;
   subtotalPrice?: Prisma.SortOrder;
   totalPrice?: Prisma.SortOrder;
+  taxes?: Prisma.SortOrder;
 };
 
 export type CartMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder;
   userId?: Prisma.SortOrder;
   currency?: Prisma.SortOrder;
-  taxesIncluded?: Prisma.SortOrder;
-  lineItemsSubtotalPrice?: Prisma.SortOrder;
   subtotalPrice?: Prisma.SortOrder;
   totalPrice?: Prisma.SortOrder;
+  taxes?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
 };
@@ -489,18 +468,17 @@ export type CartMinOrderByAggregateInput = {
   id?: Prisma.SortOrder;
   userId?: Prisma.SortOrder;
   currency?: Prisma.SortOrder;
-  taxesIncluded?: Prisma.SortOrder;
-  lineItemsSubtotalPrice?: Prisma.SortOrder;
   subtotalPrice?: Prisma.SortOrder;
   totalPrice?: Prisma.SortOrder;
+  taxes?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
 };
 
 export type CartSumOrderByAggregateInput = {
-  lineItemsSubtotalPrice?: Prisma.SortOrder;
   subtotalPrice?: Prisma.SortOrder;
   totalPrice?: Prisma.SortOrder;
+  taxes?: Prisma.SortOrder;
 };
 
 export type CartNullableScalarRelationFilter = {
@@ -567,12 +545,11 @@ export type CartUncheckedUpdateOneWithoutUserNestedInput = {
 export type CartCreateWithoutUserInput = {
   id?: string;
   currency?: $Enums.CurrencyCode;
-  taxesIncluded?: boolean;
   lineItems: Prisma.JsonNullValueInput | runtime.InputJsonValue;
   discounts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-  lineItemsSubtotalPrice: number;
-  subtotalPrice: number;
-  totalPrice: number;
+  subtotalPrice?: number;
+  totalPrice?: number;
+  taxes?: number;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 };
@@ -580,12 +557,11 @@ export type CartCreateWithoutUserInput = {
 export type CartUncheckedCreateWithoutUserInput = {
   id?: string;
   currency?: $Enums.CurrencyCode;
-  taxesIncluded?: boolean;
   lineItems: Prisma.JsonNullValueInput | runtime.InputJsonValue;
   discounts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-  lineItemsSubtotalPrice: number;
-  subtotalPrice: number;
-  totalPrice: number;
+  subtotalPrice?: number;
+  totalPrice?: number;
+  taxes?: number;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 };
@@ -623,12 +599,11 @@ export type CartUpdateWithoutUserInput = {
   currency?:
     | Prisma.EnumCurrencyCodeFieldUpdateOperationsInput
     | $Enums.CurrencyCode;
-  taxesIncluded?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   lineItems?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
   discounts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-  lineItemsSubtotalPrice?: Prisma.FloatFieldUpdateOperationsInput | number;
   subtotalPrice?: Prisma.FloatFieldUpdateOperationsInput | number;
   totalPrice?: Prisma.FloatFieldUpdateOperationsInput | number;
+  taxes?: Prisma.FloatFieldUpdateOperationsInput | number;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -638,12 +613,11 @@ export type CartUncheckedUpdateWithoutUserInput = {
   currency?:
     | Prisma.EnumCurrencyCodeFieldUpdateOperationsInput
     | $Enums.CurrencyCode;
-  taxesIncluded?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   lineItems?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
   discounts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-  lineItemsSubtotalPrice?: Prisma.FloatFieldUpdateOperationsInput | number;
   subtotalPrice?: Prisma.FloatFieldUpdateOperationsInput | number;
   totalPrice?: Prisma.FloatFieldUpdateOperationsInput | number;
+  taxes?: Prisma.FloatFieldUpdateOperationsInput | number;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -656,12 +630,11 @@ export type CartSelect<
     id?: boolean;
     userId?: boolean;
     currency?: boolean;
-    taxesIncluded?: boolean;
     lineItems?: boolean;
     discounts?: boolean;
-    lineItemsSubtotalPrice?: boolean;
     subtotalPrice?: boolean;
     totalPrice?: boolean;
+    taxes?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
@@ -677,12 +650,11 @@ export type CartSelectCreateManyAndReturn<
     id?: boolean;
     userId?: boolean;
     currency?: boolean;
-    taxesIncluded?: boolean;
     lineItems?: boolean;
     discounts?: boolean;
-    lineItemsSubtotalPrice?: boolean;
     subtotalPrice?: boolean;
     totalPrice?: boolean;
+    taxes?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
@@ -698,12 +670,11 @@ export type CartSelectUpdateManyAndReturn<
     id?: boolean;
     userId?: boolean;
     currency?: boolean;
-    taxesIncluded?: boolean;
     lineItems?: boolean;
     discounts?: boolean;
-    lineItemsSubtotalPrice?: boolean;
     subtotalPrice?: boolean;
     totalPrice?: boolean;
+    taxes?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
@@ -715,12 +686,11 @@ export type CartSelectScalar = {
   id?: boolean;
   userId?: boolean;
   currency?: boolean;
-  taxesIncluded?: boolean;
   lineItems?: boolean;
   discounts?: boolean;
-  lineItemsSubtotalPrice?: boolean;
   subtotalPrice?: boolean;
   totalPrice?: boolean;
+  taxes?: boolean;
   createdAt?: boolean;
   updatedAt?: boolean;
 };
@@ -732,12 +702,11 @@ export type CartOmit<
   | "id"
   | "userId"
   | "currency"
-  | "taxesIncluded"
   | "lineItems"
   | "discounts"
-  | "lineItemsSubtotalPrice"
   | "subtotalPrice"
   | "totalPrice"
+  | "taxes"
   | "createdAt"
   | "updatedAt",
   ExtArgs["result"]["cart"]
@@ -774,12 +743,11 @@ export type $CartPayload<
       id: string;
       userId: string;
       currency: $Enums.CurrencyCode;
-      taxesIncluded: boolean;
       lineItems: runtime.JsonValue;
       discounts: runtime.JsonValue | null;
-      lineItemsSubtotalPrice: number;
       subtotalPrice: number;
       totalPrice: number;
+      taxes: number;
       createdAt: Date;
       updatedAt: Date;
     },
@@ -1391,12 +1359,11 @@ export interface CartFieldRefs {
   readonly id: Prisma.FieldRef<"Cart", "String">;
   readonly userId: Prisma.FieldRef<"Cart", "String">;
   readonly currency: Prisma.FieldRef<"Cart", "CurrencyCode">;
-  readonly taxesIncluded: Prisma.FieldRef<"Cart", "Boolean">;
   readonly lineItems: Prisma.FieldRef<"Cart", "Json">;
   readonly discounts: Prisma.FieldRef<"Cart", "Json">;
-  readonly lineItemsSubtotalPrice: Prisma.FieldRef<"Cart", "Float">;
   readonly subtotalPrice: Prisma.FieldRef<"Cart", "Float">;
   readonly totalPrice: Prisma.FieldRef<"Cart", "Float">;
+  readonly taxes: Prisma.FieldRef<"Cart", "Float">;
   readonly createdAt: Prisma.FieldRef<"Cart", "DateTime">;
   readonly updatedAt: Prisma.FieldRef<"Cart", "DateTime">;
 }

@@ -19,8 +19,8 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
     <div className="space-y-10 text-center bg-background py-20">
       <Text variant="heading">Something went wrong!</Text>
       <p className="text-muted-foreground">
-        The application encountered a fatal error and could not recover.
-        We have been notified and are looking into it.
+        The application encountered a fatal error and could not recover. We have
+        been notified and are looking into it.
       </p>
 
       {error.digest && (

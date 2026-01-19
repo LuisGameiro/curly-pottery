@@ -46,6 +46,8 @@ export type OrderMinAggregateOutputType = {
   email: string | null;
   phone: string | null;
   userId: string | null;
+  firstName: string | null;
+  lastName: string | null;
   status: $Enums.OrderStatus | null;
   taxesIncluded: boolean | null;
   subtotalPrice: number | null;
@@ -63,6 +65,8 @@ export type OrderMaxAggregateOutputType = {
   email: string | null;
   phone: string | null;
   userId: string | null;
+  firstName: string | null;
+  lastName: string | null;
   status: $Enums.OrderStatus | null;
   taxesIncluded: boolean | null;
   subtotalPrice: number | null;
@@ -80,6 +84,8 @@ export type OrderCountAggregateOutputType = {
   email: number;
   phone: number;
   userId: number;
+  firstName: number;
+  lastName: number;
   status: number;
   lineItems: number;
   discounts: number;
@@ -116,6 +122,8 @@ export type OrderMinAggregateInputType = {
   email?: true;
   phone?: true;
   userId?: true;
+  firstName?: true;
+  lastName?: true;
   status?: true;
   taxesIncluded?: true;
   subtotalPrice?: true;
@@ -133,6 +141,8 @@ export type OrderMaxAggregateInputType = {
   email?: true;
   phone?: true;
   userId?: true;
+  firstName?: true;
+  lastName?: true;
   status?: true;
   taxesIncluded?: true;
   subtotalPrice?: true;
@@ -150,6 +160,8 @@ export type OrderCountAggregateInputType = {
   email?: true;
   phone?: true;
   userId?: true;
+  firstName?: true;
+  lastName?: true;
   status?: true;
   lineItems?: true;
   discounts?: true;
@@ -265,6 +277,8 @@ export type OrderGroupByOutputType = {
   email: string | null;
   phone: string | null;
   userId: string | null;
+  firstName: string;
+  lastName: string;
   status: $Enums.OrderStatus;
   lineItems: runtime.JsonValue;
   discounts: runtime.JsonValue | null;
@@ -306,6 +320,8 @@ export type OrderWhereInput = {
   email?: Prisma.StringNullableFilter<"Order"> | string | null;
   phone?: Prisma.StringNullableFilter<"Order"> | string | null;
   userId?: Prisma.StringNullableFilter<"Order"> | string | null;
+  firstName?: Prisma.StringFilter<"Order"> | string;
+  lastName?: Prisma.StringFilter<"Order"> | string;
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus;
   lineItems?: Prisma.JsonFilter<"Order">;
   discounts?: Prisma.JsonNullableFilter<"Order">;
@@ -331,6 +347,8 @@ export type OrderOrderByWithRelationInput = {
   email?: Prisma.SortOrderInput | Prisma.SortOrder;
   phone?: Prisma.SortOrderInput | Prisma.SortOrder;
   userId?: Prisma.SortOrderInput | Prisma.SortOrder;
+  firstName?: Prisma.SortOrder;
+  lastName?: Prisma.SortOrder;
   status?: Prisma.SortOrder;
   lineItems?: Prisma.SortOrder;
   discounts?: Prisma.SortOrderInput | Prisma.SortOrder;
@@ -357,6 +375,8 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<
     email?: Prisma.StringNullableFilter<"Order"> | string | null;
     phone?: Prisma.StringNullableFilter<"Order"> | string | null;
     userId?: Prisma.StringNullableFilter<"Order"> | string | null;
+    firstName?: Prisma.StringFilter<"Order"> | string;
+    lastName?: Prisma.StringFilter<"Order"> | string;
     status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus;
     lineItems?: Prisma.JsonFilter<"Order">;
     discounts?: Prisma.JsonNullableFilter<"Order">;
@@ -384,6 +404,8 @@ export type OrderOrderByWithAggregationInput = {
   email?: Prisma.SortOrderInput | Prisma.SortOrder;
   phone?: Prisma.SortOrderInput | Prisma.SortOrder;
   userId?: Prisma.SortOrderInput | Prisma.SortOrder;
+  firstName?: Prisma.SortOrder;
+  lastName?: Prisma.SortOrder;
   status?: Prisma.SortOrder;
   lineItems?: Prisma.SortOrder;
   discounts?: Prisma.SortOrderInput | Prisma.SortOrder;
@@ -417,6 +439,8 @@ export type OrderScalarWhereWithAggregatesInput = {
   email?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null;
   phone?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null;
   userId?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null;
+  firstName?: Prisma.StringWithAggregatesFilter<"Order"> | string;
+  lastName?: Prisma.StringWithAggregatesFilter<"Order"> | string;
   status?:
     | Prisma.EnumOrderStatusWithAggregatesFilter<"Order">
     | $Enums.OrderStatus;
@@ -441,6 +465,8 @@ export type OrderCreateInput = {
   id?: string;
   email?: string | null;
   phone?: string | null;
+  firstName: string;
+  lastName: string;
   status?: $Enums.OrderStatus;
   lineItems: Prisma.JsonNullValueInput | runtime.InputJsonValue;
   discounts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
@@ -463,6 +489,8 @@ export type OrderUncheckedCreateInput = {
   email?: string | null;
   phone?: string | null;
   userId?: string | null;
+  firstName: string;
+  lastName: string;
   status?: $Enums.OrderStatus;
   lineItems: Prisma.JsonNullValueInput | runtime.InputJsonValue;
   discounts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
@@ -483,6 +511,8 @@ export type OrderUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string;
   status?:
     | Prisma.EnumOrderStatusFieldUpdateOperationsInput
     | $Enums.OrderStatus;
@@ -509,6 +539,8 @@ export type OrderUncheckedUpdateInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string;
   status?:
     | Prisma.EnumOrderStatusFieldUpdateOperationsInput
     | $Enums.OrderStatus;
@@ -534,6 +566,8 @@ export type OrderCreateManyInput = {
   email?: string | null;
   phone?: string | null;
   userId?: string | null;
+  firstName: string;
+  lastName: string;
   status?: $Enums.OrderStatus;
   lineItems: Prisma.JsonNullValueInput | runtime.InputJsonValue;
   discounts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
@@ -554,6 +588,8 @@ export type OrderUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string;
   status?:
     | Prisma.EnumOrderStatusFieldUpdateOperationsInput
     | $Enums.OrderStatus;
@@ -579,6 +615,8 @@ export type OrderUncheckedUpdateManyInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string;
   status?:
     | Prisma.EnumOrderStatusFieldUpdateOperationsInput
     | $Enums.OrderStatus;
@@ -604,6 +642,8 @@ export type OrderCountOrderByAggregateInput = {
   email?: Prisma.SortOrder;
   phone?: Prisma.SortOrder;
   userId?: Prisma.SortOrder;
+  firstName?: Prisma.SortOrder;
+  lastName?: Prisma.SortOrder;
   status?: Prisma.SortOrder;
   lineItems?: Prisma.SortOrder;
   discounts?: Prisma.SortOrder;
@@ -632,6 +672,8 @@ export type OrderMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder;
   phone?: Prisma.SortOrder;
   userId?: Prisma.SortOrder;
+  firstName?: Prisma.SortOrder;
+  lastName?: Prisma.SortOrder;
   status?: Prisma.SortOrder;
   taxesIncluded?: Prisma.SortOrder;
   subtotalPrice?: Prisma.SortOrder;
@@ -649,6 +691,8 @@ export type OrderMinOrderByAggregateInput = {
   email?: Prisma.SortOrder;
   phone?: Prisma.SortOrder;
   userId?: Prisma.SortOrder;
+  firstName?: Prisma.SortOrder;
+  lastName?: Prisma.SortOrder;
   status?: Prisma.SortOrder;
   taxesIncluded?: Prisma.SortOrder;
   subtotalPrice?: Prisma.SortOrder;
@@ -772,6 +816,8 @@ export type OrderCreateWithoutUserInput = {
   id?: string;
   email?: string | null;
   phone?: string | null;
+  firstName: string;
+  lastName: string;
   status?: $Enums.OrderStatus;
   lineItems: Prisma.JsonNullValueInput | runtime.InputJsonValue;
   discounts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
@@ -792,6 +838,8 @@ export type OrderUncheckedCreateWithoutUserInput = {
   id?: string;
   email?: string | null;
   phone?: string | null;
+  firstName: string;
+  lastName: string;
   status?: $Enums.OrderStatus;
   lineItems: Prisma.JsonNullValueInput | runtime.InputJsonValue;
   discounts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
@@ -857,6 +905,8 @@ export type OrderScalarWhereInput = {
   email?: Prisma.StringNullableFilter<"Order"> | string | null;
   phone?: Prisma.StringNullableFilter<"Order"> | string | null;
   userId?: Prisma.StringNullableFilter<"Order"> | string | null;
+  firstName?: Prisma.StringFilter<"Order"> | string;
+  lastName?: Prisma.StringFilter<"Order"> | string;
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus;
   lineItems?: Prisma.JsonFilter<"Order">;
   discounts?: Prisma.JsonNullableFilter<"Order">;
@@ -877,6 +927,8 @@ export type OrderCreateManyUserInput = {
   id?: string;
   email?: string | null;
   phone?: string | null;
+  firstName: string;
+  lastName: string;
   status?: $Enums.OrderStatus;
   lineItems: Prisma.JsonNullValueInput | runtime.InputJsonValue;
   discounts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
@@ -897,6 +949,8 @@ export type OrderUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string;
   status?:
     | Prisma.EnumOrderStatusFieldUpdateOperationsInput
     | $Enums.OrderStatus;
@@ -921,6 +975,8 @@ export type OrderUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string;
   status?:
     | Prisma.EnumOrderStatusFieldUpdateOperationsInput
     | $Enums.OrderStatus;
@@ -945,6 +1001,8 @@ export type OrderUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string;
   status?:
     | Prisma.EnumOrderStatusFieldUpdateOperationsInput
     | $Enums.OrderStatus;
@@ -974,6 +1032,8 @@ export type OrderSelect<
     email?: boolean;
     phone?: boolean;
     userId?: boolean;
+    firstName?: boolean;
+    lastName?: boolean;
     status?: boolean;
     lineItems?: boolean;
     discounts?: boolean;
@@ -1002,6 +1062,8 @@ export type OrderSelectCreateManyAndReturn<
     email?: boolean;
     phone?: boolean;
     userId?: boolean;
+    firstName?: boolean;
+    lastName?: boolean;
     status?: boolean;
     lineItems?: boolean;
     discounts?: boolean;
@@ -1030,6 +1092,8 @@ export type OrderSelectUpdateManyAndReturn<
     email?: boolean;
     phone?: boolean;
     userId?: boolean;
+    firstName?: boolean;
+    lastName?: boolean;
     status?: boolean;
     lineItems?: boolean;
     discounts?: boolean;
@@ -1054,6 +1118,8 @@ export type OrderSelectScalar = {
   email?: boolean;
   phone?: boolean;
   userId?: boolean;
+  firstName?: boolean;
+  lastName?: boolean;
   status?: boolean;
   lineItems?: boolean;
   discounts?: boolean;
@@ -1078,6 +1144,8 @@ export type OrderOmit<
   | "email"
   | "phone"
   | "userId"
+  | "firstName"
+  | "lastName"
   | "status"
   | "lineItems"
   | "discounts"
@@ -1127,6 +1195,8 @@ export type $OrderPayload<
       email: string | null;
       phone: string | null;
       userId: string | null;
+      firstName: string;
+      lastName: string;
       status: $Enums.OrderStatus;
       lineItems: runtime.JsonValue;
       discounts: runtime.JsonValue | null;
@@ -1750,6 +1820,8 @@ export interface OrderFieldRefs {
   readonly email: Prisma.FieldRef<"Order", "String">;
   readonly phone: Prisma.FieldRef<"Order", "String">;
   readonly userId: Prisma.FieldRef<"Order", "String">;
+  readonly firstName: Prisma.FieldRef<"Order", "String">;
+  readonly lastName: Prisma.FieldRef<"Order", "String">;
   readonly status: Prisma.FieldRef<"Order", "OrderStatus">;
   readonly lineItems: Prisma.FieldRef<"Order", "Json">;
   readonly discounts: Prisma.FieldRef<"Order", "Json">;

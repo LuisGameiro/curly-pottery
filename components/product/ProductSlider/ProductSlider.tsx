@@ -8,7 +8,6 @@ import React, {
   useRef,
   useEffect,
   useCallback,
-  ReactNode,
 } from "react";
 import { a } from "@react-spring/web";
 import s from "./ProductSlider.module.css";
@@ -109,7 +108,6 @@ const ProductSlider: React.FC<ProductSliderProps> = ({
   // const onPrev = React.useCallback(() => slider.current?.prev(), [slider]);
   // const onNext = React.useCallback(() => slider.current?.next(), [slider]);
 
-
   const onPrev = useCallback(() => slider.current?.prev(), []);
   const onNext = useCallback(() => slider.current?.next(), []);
   return (
@@ -121,13 +119,14 @@ const ProductSlider: React.FC<ProductSliderProps> = ({
         {slider && <ProductSliderControl onPrev={onPrev} onNext={onNext} />}
         {Children.map(children, (child) => {
           // Add the keen-slider__slide className to children
-          if (isValidElement(child)) {
+          if (isValidElement<HTMLElement>(child)) {
             return {
               ...child,
               props: {
                 ...child.props,
-                className: `${child.props.className ? `${child.props.className} ` : ""
-                  }keen-slider__slide`,
+                className: `${
+                  child.props.className ? `${child.props.className} ` : ""
+                }keen-slider__slide`,
               },
             };
           }
@@ -137,8 +136,8 @@ const ProductSlider: React.FC<ProductSliderProps> = ({
 
       <a.div className={s.album} ref={thumbsContainerRef}>
         {slider &&
-          Children.map(children, (child:ReactNode, idx) => {
-            if (isValidElement(child)) {
+          Children.map(children, (child, idx) => {
+            if (isValidElement<HTMLElement>(child)) {
               return {
                 ...child,
                 props: {

@@ -63,7 +63,7 @@ model Product {
   slug              String      @unique
   description       String
   images            String[]
-  variants          ProductVariant[] @default([])
+  variants          ProductVariant[] 
   categories        Category[]
   requiresShipping  Boolean     @default(true)
 
@@ -118,12 +118,12 @@ model Cart {
   userId                 String       @unique
   user                   User         @relation(fields: [userId], references: [id])
   currency               CurrencyCode @default(GBP)
-  taxesIncluded          Boolean      @default(false)
   lineItems              Json
   discounts              Json?
-  lineItemsSubtotalPrice Float 
-  subtotalPrice          Float
-  totalPrice             Float
+  subtotalPrice          Float        @default(0)
+  totalPrice             Float        @default(0)
+  taxes                  Float        @default(0)
+
   createdAt              DateTime     @default(now())
   updatedAt              DateTime     @updatedAt
 }

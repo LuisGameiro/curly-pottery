@@ -1,11 +1,28 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-
+/* @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap"); */
 /* @import url("https://cdn.jsdelivr.net/fontsource/fonts/crimson-pro:vf@latest/latin-wght-normal.woff2"); */
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant light (&:where(.light, .light *));
 
+@font-face {
+  font-family: "Aptos";
+  src: url("/Aptos.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Arial Rounded MT Bold";
+  src: url("/arialroundedmtbold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 @theme {
+  --font-header:"Arial Rounded MT Bold", sans-serif;
+  --font-body: 'Aptos', sans-serif;
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
@@ -37,6 +54,19 @@
   }
   label {
     @apply font-semibold mb-2;
+  }
+
+  h1, h2, h3, h4, h5, h6{
+    @apply font-header;
+  }
+
+  p,
+  span,
+  a,
+  li,
+  div,
+  label {
+    @apply font-body;
   }
 }
 

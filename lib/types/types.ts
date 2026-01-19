@@ -25,8 +25,8 @@ export type Product = Prisma.ProductGetPayload<null>;
 type PrismaVariant = Prisma.ProductVariantGetPayload<null>;
 
 export type Variant = Omit<PrismaVariant, "details" | "discounts"> & {
-  details: Detail[] | JsonValue;
-  discounts: Discount[] | JsonValue;
+  details: Detail[] | Prisma.InputJsonValue | JsonValue;
+  discounts: Discount[] | Prisma.InputJsonValue | JsonValue;
 };
 
 export type ProductWithVariantsCategories = Prisma.ProductGetPayload<{
@@ -108,8 +108,6 @@ export type CartLineItem = {
   discounts: Discount[];
 };
 
-
-
 export type Discount = {
   code: string;
   type: DiscountType;
@@ -120,43 +118,46 @@ export type Discount = {
 
 export type CreateOrder = {
   userId?: string;
-  address: Address;
+  address: InputAddress;
   lineItems: CartLineItem[];
   discounts: Discount[];
   subtotalPrice: number;
   totalPrice: number;
   taxes: number;
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   currency: CurrencyCode;
   shippingPrice: number;
   shippingMethod: string;
-}
+};
 
 type PrismaOrderWithUser = Prisma.OrderGetPayload<{
   include: { user: true };
 }>;
 export type OrderWithUser = Omit<PrismaOrderWithUser, "lineItems"> & {
-  lineItems: CartLineItem[] | JsonValue;
-}
+  lineItems: CartLineItem[] | JsonValue | Prisma.InputJsonValue;
+};
 
 type PrismaOrder = Prisma.OrderGetPayload<null>;
 export type Order = Omit<PrismaOrder, "lineItems"> & {
-  lineItems: CartLineItem[] | JsonValue;
-}
+  lineItems: CartLineItem[] | JsonValue | Prisma.InputJsonValue;
+};
 
 type PrismaCart = Prisma.CartGetPayload<null>;
 
-export type Cart = Omit<PrismaCart, "lineItems"> & {
-  lineItems: CartLineItem[] | JsonValue;
-}
+export type Cart = Omit<PrismaCart, "lineItems" | "discounts"> & {
+  lineItems: CartLineItem[] | Prisma.InputJsonValue;
+  discounts: Discount[] | Prisma.InputJsonValue;
+};
 
 export type Address = Prisma.AddressGetPayload<null>;
 
-export type InputAddress = Omit<PrismaCart, "id" | "createdAt"> ;
-
+export type InputAddress = Omit<
+  Address,
+  "id" | "createdAt" | "type" | "company"
+>;
 
 export type User = Prisma.UserGetPayload<null>;
 
@@ -171,17 +172,17 @@ export type UserWithOrdersAddress = Prisma.UserGetPayload<{
 
 export type ActionResponse<T> =
   | {
-    success: true;
-    message: string;
-    data: T;
-    errors?: never;
-  }
+      success: true;
+      message: string;
+      data: T;
+      errors?: never;
+    }
   | {
-    success: false;
-    message: string;
-    data?: never;
-    errors?: unknown;
-  };
+      success: false;
+      message: string;
+      data?: never;
+      errors?: unknown;
+    };
 
 // export type Order = {
 //   id: string;

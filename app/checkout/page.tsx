@@ -12,9 +12,11 @@ import { createOrder } from "actions/order.actions";
 import { useRouter } from "next/navigation";
 import { Container } from "@components/ui";
 import { toast } from "sonner";
-import { Address, InputAddress } from "@lib/types/types";
+import { InputAddress } from "@lib/types/types";
+import { useUser } from "@lib/hooks/useUser";
+import { redirect } from "next/navigation";
 
-type FormData = {
+export type FormDataCheckout = {
   firstName: string;
   lastName: string;
   address: string;
@@ -30,15 +32,26 @@ type FormData = {
 
 export default function CheckoutPage() {
   const { data } = useCart();
-  const { data: session } = useSession();
+  const { user, isAuthenticated} = useUser();
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<FormData>({});
+  const [formData, setFormData] = useState<FormDataCheckout>({
+    firstName: "",
+    lastName: "",
+    address: "",
+    country: "",
+    postcode: "",
+    city: "",
+    email: "",
+    phone: "",
+    shippingPrice: 0,
+    shippingMethod: "",
+    taxes: 0,
+  });
   const [checkoutId, setCheckoutId] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
   const cartId = useId();
 
-  if (data.lineItems.length === 0) router.replace("/cart");
+  if (data.lineItems.length === 0) redirect("/cart");
 
   const nextToShipping = (data: FormData) => {
     setFormData({ ...formData, ...data });
@@ -48,17 +61,19 @@ export default function CheckoutPage() {
   const nextToPayment = async (
     shippingPrice: number,
     shippingMethod: string,
-    taxes: number=0
+    taxes: number = 0,
   ) => {
     setLoading(true);
-    setFormData({ ...formData, shippingPrice, shippingMethod ,taxes});
+    setFormData((prev) => ({ ...prev, shippingPrice, shippingMethod, taxes }));
+
     const address: InputAddress = {
       address: formData.address,
       postalCode: formData.postcode,
       city: formData.city,
       country: formData.country || "United Kingdom",
-      userId: session?.user?.id || "",
+      userId: user?.id || "",
     };
+
     try {
       const response = await createSumUpCheckout(
         data.subtotalPrice + shippingPrice,
@@ -71,12 +86,12 @@ export default function CheckoutPage() {
       } else setCheckoutId(response.data ?? "");
 
       await createOrder({
-        userId: session?.user?.id,
+        userId: user?.id,
 
         email: formData.email,
         phone: formData.phone,
-        lastname: formData.lastName,
-        firstname: formData.firstName,
+        lastName: formData.lastName,
+        firstName: formData.firstName,
         address,
 
         lineItems: data.lineItems,
@@ -146,9 +161,9 @@ export default function CheckoutPage() {
 
         {step === 1 && (
           <InformationForm
-            initialData={session?.user}
+            userId={user?.id}
             onComplete={nextToShipping}
-            isLoggedIn={session?.user}
+            isLoggedIn={isAuthenticated}
           />
         )}
         {step === 2 && <ShippingMethod onComplete={nextToPayment} />}
@@ -160,7 +175,7 @@ export default function CheckoutPage() {
           items={data.lineItems}
           total={data.subtotalPrice}
           tax={0}
-          shipping={formData?.shipping?.price}
+          shipping={formData?.shippingPrice}
         />
       </div>
     </Container>

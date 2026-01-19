@@ -4,24 +4,20 @@ import Link from "next/link";
 import { Eye } from "lucide-react";
 import { Button } from "@components/ui";
 import DataTable from "@components/ui/Table/DataTable";
-import { CartLineItem, Order, OrderWithUser } from "@lib/types/types";
+import { CartLineItem, Order } from "@lib/types/types";
 
-export default function OrderTable({ orders }: { orders: OrderWithUser[] }) {
-
-
+export default function OrderTable({ orders }: { orders: Order[] }) {
   const orderColumns = [
-
     {
       header: "Order ID",
       render: (o: Order) => `#${o.id.slice(-6).toUpperCase()}`,
     },
     {
       header: "Customer",
-      render: (o: OrderWithUser) => (
+      render: (o: Order) => (
         <div className="flex flex-col">
           <span className="font-medium">
-            {o.firstName}{" "}
-            {o.lastName}
+            {o.firstName} {o.lastName}
           </span>
           <span className="text-xs opacity-70">{o.email}</span>
         </div>
@@ -29,11 +25,15 @@ export default function OrderTable({ orders }: { orders: OrderWithUser[] }) {
     },
     {
       header: "Items",
-      render: (o: Order) => (
-        <div className="max-w-[150px] truncate">
-          {(o.lineItems).map((i: CartLineItem) => `${i.quantity}x ${i.sku}`).join(", ")}
-        </div>
-      ),
+      render: (o: Order) => {
+        return (
+          <div className="max-w-[150px] truncate">
+            {((o?.lineItems as CartLineItem[]) || [])
+              .map((i: CartLineItem) => `${i.quantity}x ${i.sku}`)
+              .join(", ")}
+          </div>
+        );
+      },
     },
     { header: "Total", render: (o: Order) => `£${o.totalPrice.toFixed(2)}` },
     {

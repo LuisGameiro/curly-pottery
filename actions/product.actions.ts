@@ -7,8 +7,8 @@ import {
   Category,
   CreateProduct,
   EditVariant,
-  Variant,
 } from "@lib/types/types";
+import { Prisma } from "prisma/generated/prisma/client";
 import { prisma } from "prisma/prisma";
 
 export async function getProductBySlug(
@@ -263,7 +263,7 @@ export async function upsertProduct(
     const categoriesForCreate = {
       connect: categoryIds.map((catId: string) => ({ id: catId })),
     };
-    const prepareVariant = (v: EditVariant): Variant => {
+    const prepareVariant = (v: EditVariant) => {
       // ts-ignore
       const {
         files, // UI state
@@ -271,7 +271,11 @@ export async function upsertProduct(
         isExpanded, // UI state
         ...variantData // This spread now contains only valid Variant fields
       } = v;
-      return variantData as Variant;
+      return {
+        ...variantData,
+        details: v.details ? v.details : Prisma.DbNull,
+        discounts: v.discounts ? v.discounts : Prisma.DbNull,
+      };
     };
     const product = await prisma.product.upsert({
       where: { id: id || "new-id" },

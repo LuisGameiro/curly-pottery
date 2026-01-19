@@ -2,13 +2,10 @@
 
 import { prisma } from "prisma/prisma";
 import {
-  Address,
   Order,
   OrderStatus,
   OrderWithUser,
   ActionResponse,
-  CartLineItem,
-  CurrencyCode,
   CreateOrder,
 } from "@lib/types/types";
 import { revalidatePath } from "next/cache";
@@ -72,6 +69,10 @@ export async function getOrderById(
 export async function createOrder({
   userId,
   address,
+  firstName,
+  lastName,
+  phone,
+  email,
   lineItems,
   discounts,
   subtotalPrice,
@@ -80,11 +81,16 @@ export async function createOrder({
   currency,
   shippingPrice,
   shippingMethod,
-}:CreateOrder): Promise<ActionResponse<Order | null>> {
+}: CreateOrder): Promise<ActionResponse<Order | null>> {
   try {
     const order = await prisma.order.create({
       data: {
         lineItems,
+        lastName,
+        firstName,
+        email,
+        phone,
+
         discounts: discounts || [],
         currency: currency || "GBP",
         shippingAddress: address || {},
