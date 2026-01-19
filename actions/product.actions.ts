@@ -265,12 +265,7 @@ export async function upsertProduct(
     };
     const prepareVariant = (v: EditVariant) => {
       // ts-ignore
-      const {
-        files,
-        previews, 
-        isExpanded, 
-        ...variantData 
-      } = v;
+      const { files, previews, isExpanded, ...variantData } = v;
       return {
         ...variantData,
         details: v.details ? v.details : Prisma.DbNull,

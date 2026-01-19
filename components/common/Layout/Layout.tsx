@@ -15,19 +15,18 @@ const Loading = () => (
 
 const dynamicProps = {
   loading: Loading,
-   ssr: false 
+  ssr: false,
 };
 
 const FeatureBar = dynamic(() => import("@components/common/FeatureBar"), {
   ...dynamicProps,
 });
 
-
 interface Props {
   children?: React.ReactNode;
 }
 
-export default function Layout ({ children }: Props) {
+export default function Layout({ children }: Props) {
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies();
 
   const navBarlinks = [
@@ -56,17 +55,12 @@ export default function Layout ({ children }: Props) {
       />
     </div>
   );
-};
-
-
-
+}
 
 // const Modal = dynamic(() => import("@components/ui/Modal"), {
 //   ...dynamicProps,
 //   ssr: false,
 // });
-
-
 
 // const ModalView: React.FC<{ modalView: string; closeModal(): any }> = ({
 //   modalView,

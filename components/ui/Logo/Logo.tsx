@@ -1,12 +1,13 @@
 import Image from "next/image";
 
-const Logo = (props: React.ComponentPropsWithoutRef<typeof Image>) => (
+const Logo = ({ className = "", ...props }) => (
   <Image
+    src="/Logo.png"
+    alt="Logo"
     width={64}
     height={64}
+    className={className}
     {...props}
-    src='/Logo.png'
-    alt="Curly Logo"
   />
 );
 

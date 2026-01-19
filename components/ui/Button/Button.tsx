@@ -3,7 +3,6 @@
 import React, {
   forwardRef,
   ButtonHTMLAttributes,
-  JSXElementConstructor,
   useRef,
   ElementType,
 } from "react";

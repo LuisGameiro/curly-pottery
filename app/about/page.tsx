@@ -1,8 +1,9 @@
 import { Container, Text } from "@components/ui";
 
 export const metadata = {
-  title: 'About - Curly Pottery',
-  description: 'Learn about Curly Pottery, our story, mission, and why we are passionate about handcrafted ceramics.',
+  title: "About - Curly Pottery",
+  description:
+    "Learn about Curly Pottery, our story, mission, and why we are passionate about handcrafted ceramics.",
 };
 
 export default function About() {

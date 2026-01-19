@@ -19,12 +19,7 @@ interface ProductSliderProps {
   className?: string;
 }
 
-const ProductSlider = (
-  {
-    children,
-    className = ""
-  }: ProductSliderProps
-) => {
+const ProductSlider = ({ children, className = "" }: ProductSliderProps) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
   const sliderContainerRef = useRef<HTMLDivElement>(null);

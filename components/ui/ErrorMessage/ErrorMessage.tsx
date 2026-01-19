@@ -11,12 +11,7 @@ interface ErrorMessageProps {
   className?: string;
 }
 
-const ErrorMessages = (
-  {
-    error,
-    className
-  }: ErrorMessageProps
-) => {
+const ErrorMessages = ({ error, className }: ErrorMessageProps) => {
   return (
     <div
       className={cn(

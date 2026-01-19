@@ -10,12 +10,7 @@ interface CustomerNotesProps {
   customerId: string;
 }
 
-const CustomerNotes = (
-  {
-    initialNotes,
-    customerId
-  }: CustomerNotesProps
-) => {
+const CustomerNotes = ({ initialNotes, customerId }: CustomerNotesProps) => {
   const [notes, setNotes] = useState(initialNotes);
   const [isSaving, setIsSaving] = useState(false);
 

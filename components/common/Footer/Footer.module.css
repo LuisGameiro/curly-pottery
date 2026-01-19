@@ -36,7 +36,7 @@
 }
 
 .navlist a {
-  @apply text-on-secondary font-semibold hover:text-accent-4 transition-colors duration-150
+  @apply text-on-primary font-semibold hover:text-accent-4 transition-colors duration-150
 
 }
 

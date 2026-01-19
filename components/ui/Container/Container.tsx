@@ -4,20 +4,18 @@ import { ElementType, HTMLAttributes, ReactNode } from "react";
 interface ContainerProps {
   className?: string;
   children?: ReactNode;
-  el?: HTMLElement;
+  el?: React.ElementType;
   clean?: boolean;
   variant?: "default" | "box";
 }
 
-const Container = (
-  {
-    children,
-    className,
-    el = "div",
-    variant = "default",
-    clean = false
-  }: ContainerProps
-) => {
+const Container = ({
+  children,
+  className,
+  el = "div",
+  variant = "default",
+  clean = false,
+}: ContainerProps) => {
   const rootClassName = cn(
     {
       "mx-auto px-6 w-full flex-col justify-center":

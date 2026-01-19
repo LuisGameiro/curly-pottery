@@ -51,7 +51,7 @@ async function main() {
         images: item.images,
         requiresShipping: item.requiresShipping,
         variants: {
-          create: item.variants.map((v:Variant) => ({
+          create: item.variants.map((v: Variant) => ({
             id: v.id,
             sku: v.sku,
             price: v.price,
@@ -115,7 +115,7 @@ async function main() {
         },
         // Create Orders
         orders: {
-          create: cust.orders.map((o:Order) => ({
+          create: cust.orders.map((o: Order) => ({
             id: o.id,
 
             status: o.status,

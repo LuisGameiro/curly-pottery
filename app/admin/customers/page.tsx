@@ -4,10 +4,9 @@ import { Suspense } from "react";
 import Loading from "app/loading";
 
 export const metadata = {
-  title: 'Customers - Curly Pottery',
-  description: 'Manage your store customers at Curly Pottery.',
+  title: "Customers - Curly Pottery",
+  description: "Manage your store customers at Curly Pottery.",
 };
-
 
 export default async function CustomersPage() {
   const response = await getAllCustomers();

@@ -11,8 +11,8 @@ import Loading from "app/loading";
 import { Suspense } from "react";
 
 export const metadata = {
-  title: 'Order - Curly Pottery',
-  description: 'Manage your store order at Curly Pottery.',
+  title: "Order - Curly Pottery",
+  description: "Manage your store order at Curly Pottery.",
 };
 
 export default async function OrderDetailsPage({

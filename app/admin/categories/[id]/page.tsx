@@ -3,8 +3,8 @@ import CategoryClient from "./CategoryClient";
 import notFound from "app/not-found";
 
 export const metadata = {
-  title: 'Category - Curly Pottery',
-  description: 'Manage your store category at Curly Pottery.',
+  title: "Category - Curly Pottery",
+  description: "Manage your store category at Curly Pottery.",
 };
 
 export default async function CategoryPage({

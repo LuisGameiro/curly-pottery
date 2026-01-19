@@ -15,10 +15,10 @@ import Link from "next/link";
 import { ReactNode, Suspense } from "react";
 
 export const metadata = {
-  title: 'Admin Dashboard - Curly Pottery',
-  description: 'Overview of your store performance and inventory health at Curly Pottery.',
+  title: "Admin Dashboard - Curly Pottery",
+  description:
+    "Overview of your store performance and inventory health at Curly Pottery.",
 };
-
 
 export default async function DashboardPage() {
   const response = await getDashboardStats();

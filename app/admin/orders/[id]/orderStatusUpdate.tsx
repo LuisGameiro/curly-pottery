@@ -12,12 +12,7 @@ interface OrderStatusProps {
   currentStatus: OrderStatus;
 }
 
-const OrderStatusUpdate = (
-  {
-    orderId,
-    currentStatus
-  }: OrderStatusProps
-) => {
+const OrderStatusUpdate = ({ orderId, currentStatus }: OrderStatusProps) => {
   const [isPending, startTransition] = useTransition();
   const [localStatus, setLocalStatus] = useState(currentStatus);
 

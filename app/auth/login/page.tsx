@@ -9,10 +9,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Loading from "app/loading";
 
 export const metadata = {
-  title: 'Login - Curly Pottery',
-  description: 'Log in to your Curly Pottery account to manage your orders, track shipments, and access exclusive member benefits. Enjoy a seamless shopping experience with us.',  
+  title: "Login - Curly Pottery",
+  description:
+    "Log in to your Curly Pottery account to manage your orders, track shipments, and access exclusive member benefits. Enjoy a seamless shopping experience with us.",
 };
-
 
 export default function LoginPage() {
   return (

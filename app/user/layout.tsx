@@ -40,10 +40,7 @@ export default function UserLayout({
         >
           Profile
         </Text>
-        <ClickOutside
-          active={isOpen}
-          onClick={() => setIsOpen(!isOpen)}
-        >
+        <ClickOutside active={isOpen} onClick={() => setIsOpen(!isOpen)}>
           <div className="relative w-full z-30">
             <button
               onClick={() => setIsOpen((s) => !s)}

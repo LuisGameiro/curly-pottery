@@ -20,16 +20,14 @@ interface Props {
 
 const placeholderImg = "/product-img-placeholder.svg";
 
-const ProductCard = (
-  {
-    product,
-    imgProps,
-    className,
-    noNameTag = false,
-    variant = "default",
-    admin = false
-  }: Props
-) => {
+const ProductCard = ({
+  product,
+  imgProps,
+  className,
+  noNameTag = false,
+  variant = "default",
+  admin = false,
+}: Props) => {
   const rootClassName = cn(
     s.root,
     { [s.slim]: variant === "slim", [s.simple]: variant === "simple" },

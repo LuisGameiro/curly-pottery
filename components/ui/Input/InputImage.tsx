@@ -19,17 +19,15 @@ interface ImageInputProps {
   className?: string;
 }
 
-const InputImage = (
-  {
-    label,
-    multiple = false,
-    files = [],
-    previews = [],
-    onImagesChange,
-    error,
-    className
-  }: ImageInputProps
-) => {
+const InputImage = ({
+  label,
+  multiple = false,
+  files = [],
+  previews = [],
+  onImagesChange,
+  error,
+  className,
+}: ImageInputProps) => {
   const generatedId = useId();
   const errorId = `${generatedId}-error`;
 

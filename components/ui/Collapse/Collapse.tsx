@@ -12,12 +12,7 @@ export interface CollapseProps {
   children?: ReactNode;
 }
 
-const Collapse = (
-  {
-    title,
-    children
-  }: CollapseProps
-) => {
+const Collapse = ({ title, children }: CollapseProps) => {
   const [isActive, setActive] = useState(false);
   const [ref, { height: viewHeight }] = useMeasure();
 

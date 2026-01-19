@@ -20,16 +20,14 @@ type Variant =
   | "bold"
   | "boxTitle";
 
-const Text = (
-  {
-    style,
-    className = "",
-    variant = "body",
-    children,
-    html,
-    onClick
-  }: TextProps
-) => {
+const Text = ({
+  style,
+  className = "",
+  variant = "body",
+  children,
+  html,
+  onClick,
+}: TextProps) => {
   const componentsMap: Record<Variant, ElementType> = {
     body: "div",
     heading: "h1",

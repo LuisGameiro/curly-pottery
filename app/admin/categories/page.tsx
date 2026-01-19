@@ -8,8 +8,8 @@ import Loading from "app/loading";
 import { Suspense } from "react";
 
 export const metadata = {
-  title: 'Categories - Curly Pottery',
-  description: 'Manage your store product groupings at Curly Pottery.',
+  title: "Categories - Curly Pottery",
+  description: "Manage your store product groupings at Curly Pottery.",
 };
 
 export default async function CategoriesPage() {

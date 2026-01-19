@@ -17,13 +17,11 @@ interface MarqueeProps {
   variant?: "primary" | "secondary";
 }
 
-const Marquee = (
-  {
-    children = [],
-    className = "",
-    variant = "primary"
-  }: MarqueeProps
-) => {
+const Marquee = ({
+  children = [],
+  className = "",
+  variant = "primary",
+}: MarqueeProps) => {
   const rootClassName = cn(
     s.root,
     {

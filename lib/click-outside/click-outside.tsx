@@ -9,9 +9,9 @@ import { mergeRefs } from "react-merge-refs";
 import hasParent from "./has-parent";
 
 interface ClickOutsideProps {
-  active?: boolean; 
+  active?: boolean;
   onClick: (e: MouseEvent | TouchEvent) => void;
-  children: ReactElement; 
+  children: ReactElement;
 }
 
 const ClickOutside = forwardRef<HTMLElement, ClickOutsideProps>(
@@ -21,17 +21,22 @@ const ClickOutside = forwardRef<HTMLElement, ClickOutsideProps>(
     const child = React.Children.only(children);
 
     if (!child || child.type === React.Fragment) {
-      throw new Error("ClickOutside: A valid non-Fragment React element must be provided.");
+      throw new Error(
+        "ClickOutside: A valid non-Fragment React element must be provided.",
+      );
     }
 
     // 4. Memoize handleClick to prevent useEffect from re-running on every render
     const handleClick = useCallback(
       (event: MouseEvent | TouchEvent) => {
-        if (innerRef.current && !hasParent(event.target as Node, innerRef.current)) {
+        if (
+          innerRef.current &&
+          !hasParent(event.target as Node, innerRef.current)
+        ) {
           onClick(event);
         }
       },
-      [onClick, innerRef]
+      [onClick, innerRef],
     );
 
     useEffect(() => {
@@ -48,7 +53,7 @@ const ClickOutside = forwardRef<HTMLElement, ClickOutsideProps>(
 
     // 5. Simplify Ref Merging
     const composedRefs = mergeRefs([
-      (child as any).ref, 
+      (child as any).ref,
       innerRef,
       forwardedRef,
     ]);
@@ -56,7 +61,7 @@ const ClickOutside = forwardRef<HTMLElement, ClickOutsideProps>(
     return React.cloneElement(child, {
       ref: composedRefs,
     });
-  }
+  },
 );
 
 ClickOutside.displayName = "ClickOutside";

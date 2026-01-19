@@ -11,12 +11,7 @@ interface HeroProps {
   description: string;
 }
 
-const Hero = (
-  {
-    headline,
-    description
-  }: HeroProps
-) => {
+const Hero = ({ headline, description }: HeroProps) => {
   return (
     <div className="bg-secondary border-b border-t border-border">
       <Container>

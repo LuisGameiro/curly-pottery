@@ -10,15 +10,13 @@ export interface QuantityProps {
   max?: number;
 }
 
-const Quantity = (
-  {
-    value,
-    increase,
-    decrease,
-    handleChange,
-    max = 6
-  }: QuantityProps
-) => {
+const Quantity = ({
+  value,
+  increase,
+  decrease,
+  handleChange,
+  max = 6,
+}: QuantityProps) => {
   return (
     <div className="flex items-center gap-3">
       {/* QUANTITY SELECTOR GROUP */}

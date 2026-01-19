@@ -12,13 +12,11 @@ interface VariantManagerProps {
   setVariants: React.Dispatch<React.SetStateAction<EditVariant[]>>;
 }
 
-export const VariantManager = (
-  {
-    product,
-    variants,
-    setVariants
-  }: VariantManagerProps
-) => {
+export const VariantManager = ({
+  product,
+  variants,
+  setVariants,
+}: VariantManagerProps) => {
   const addVariant = () => {
     setVariants([
       ...variants,

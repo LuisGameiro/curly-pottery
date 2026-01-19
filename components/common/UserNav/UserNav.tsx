@@ -12,7 +12,7 @@ import CustomerMenuContent from "./CustomerMenuContent";
 
 type UserNavProps = {
   className?: string;
-}
+};
 
 export default function UserNav({ className }: UserNavProps) {
   const { isAdmin, isAuthenticated } = useUser();
@@ -59,7 +59,10 @@ export default function UserNav({ className }: UserNavProps) {
 
         <li className={s.mobileMenu}>
           <Dropdown>
-            <DropdownTrigger id='user-nav-mobile-trigger'>
+            <DropdownTrigger
+              id="user-nav-mobile-trigger"
+              aria-label="Open Navigation Menu"
+            >
               <Menu size={28} />
             </DropdownTrigger>
             <CustomerMenuContent />
@@ -68,6 +71,6 @@ export default function UserNav({ className }: UserNavProps) {
       </ul>
     </nav>
   );
-};
+}
 
-UserNav.displayName="UserNav";
+UserNav.displayName = "UserNav";

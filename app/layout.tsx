@@ -16,7 +16,7 @@ export default function RootLayout({
       <head />
       <body className="loading bg-primary">
         <SessionProvider>
-            <Layout>{children}</Layout>
+          <Layout>{children}</Layout>
         </SessionProvider>
       </body>
     </html>

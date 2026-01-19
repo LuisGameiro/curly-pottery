@@ -8,14 +8,12 @@ interface ProductTagProps {
   fontSize?: number;
 }
 
-const ProductTag = (
-  {
-    name,
-    price,
-    className = "",
-    fontSize = 32
-  }: ProductTagProps
-) => {
+const ProductTag = ({
+  name,
+  price,
+  className = "",
+  fontSize = 32,
+}: ProductTagProps) => {
   return (
     <div className={cn(s.root, className)}>
       <h3 className={s.name}>

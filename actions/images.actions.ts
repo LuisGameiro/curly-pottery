@@ -170,7 +170,9 @@ export async function syncImages(
     return {
       success: false,
       message:
-        error instanceof Error ? JSON.stringify(error) : "A database error occurred",
+        error instanceof Error
+          ? JSON.stringify(error)
+          : "A database error occurred",
       errors: error,
     };
   }

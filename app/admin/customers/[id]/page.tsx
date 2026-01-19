@@ -20,10 +20,9 @@ import { showCurrency } from "@lib/calculate-price";
 import { Address, Order } from "@lib/types/types";
 
 export const metadata = {
-  title: 'Customer - Curly Pottery',
-  description: 'Manage your store customer at Curly Pottery.',
+  title: "Customer - Curly Pottery",
+  description: "Manage your store customer at Curly Pottery.",
 };
-
 
 export default async function CustomerDetailsPage({
   params,

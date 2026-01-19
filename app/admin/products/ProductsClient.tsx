@@ -14,11 +14,6 @@ export default function ProductsClient({
   products: ProductWithVariantsCategories[];
 }) {
   const [searchTerm, setSearchTerm] = useState("");
-  // const [sortConfig, _] = useState<{
-  //   key: string;
-  //   direction: "asc" | "desc";
-  // } | null>(null);
-
   const filteredProducts = useMemo(() => {
     const items = products.filter(
       (p) =>
@@ -28,21 +23,6 @@ export default function ProductsClient({
         ),
     );
 
-    // if (sortConfig) {
-    //   items.sort((a, b) => {
-    //     if (
-    //       a[sortConfig.key as keyof Product] <
-    //       b[sortConfig.key as keyof Product]
-    //     )
-    //       return sortConfig.direction === "asc" ? -1 : 1;
-    //     if (
-    //       a[sortConfig.key as keyof Product] >
-    //       b[sortConfig.key as keyof Product]
-    //     )
-    //       return sortConfig.direction === "asc" ? 1 : -1;
-    //     return 0;
-    //   });
-    // }
     return items;
   }, [products, searchTerm]);
 

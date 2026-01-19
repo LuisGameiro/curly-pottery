@@ -1,8 +1,9 @@
 import { Container, Text } from "@components/ui";
 
 export const metadata = {
-  title: 'Privacy Policy - Curly Pottery',
-  description: 'Learn about Curly Pottery’s commitment to protecting your personal data and privacy. Read our comprehensive Privacy Policy to understand how we handle your information in compliance with GDPR regulations.',
+  title: "Privacy Policy - Curly Pottery",
+  description:
+    "Learn about Curly Pottery’s commitment to protecting your personal data and privacy. Read our comprehensive Privacy Policy to understand how we handle your information in compliance with GDPR regulations.",
 };
 
 export default function PrivacyPolicy() {
@@ -15,7 +16,7 @@ export default function PrivacyPolicy() {
         <Text variant="body" className="mx-auto">
           How Curly Pottery handles and protects your personal data
         </Text>
-        <p className="text-sm text-gray-500 mt-2">
+        <p className="text-sm text-accent-6 mt-2">
           Last Updated: {lastUpdated}
         </p>
       </header>
@@ -33,7 +34,7 @@ export default function PrivacyPolicy() {
           In compliance with GDPR, we only collect data that is necessary for
           our service:
         </Text>
-        <ul className="space-y-3 text-primary-2 ml-4">
+        <ul className="space-y-3 text-secondary-2 ml-4">
           <li className="list-disc">
             <strong>Identity Data:</strong> Name and contact details for
             shipping handcrafted ceramics.
@@ -53,7 +54,7 @@ export default function PrivacyPolicy() {
           Under the General Data Protection Regulation, you have the following
           rights:
         </Text>
-        <ul className="space-y-3 text-primary-2 mb-2">
+        <ul className="space-y-3 text-secondary-2 mb-2">
           <li className="flex items-start">
             <span className="text-secondary mr-3">✓</span>
             <span>
