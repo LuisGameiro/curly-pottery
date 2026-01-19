@@ -9,20 +9,17 @@ import { mergeRefs } from "react-merge-refs";
 import hasParent from "./has-parent";
 
 interface ClickOutsideProps {
-  active?: boolean; // Made optional since you provide a default
+  active?: boolean; 
   onClick: (e: MouseEvent | TouchEvent) => void;
-  children: ReactElement; // Required, as the component crashes without it
+  children: ReactElement; 
 }
 
-// 1. Properly typed forwardRef: <RefType, PropsType>
 const ClickOutside = forwardRef<HTMLElement, ClickOutsideProps>(
   ({ active = true, onClick, children }, forwardedRef) => {
     const innerRef = useRef<HTMLElement>(null);
 
-    // 2. Remove @ts-ignore and use Children.only properly
     const child = React.Children.only(children);
 
-    // 3. Validation
     if (!child || child.type === React.Fragment) {
       throw new Error("ClickOutside: A valid non-Fragment React element must be provided.");
     }
@@ -50,10 +47,8 @@ const ClickOutside = forwardRef<HTMLElement, ClickOutsideProps>(
     }, [active, handleClick]);
 
     // 5. Simplify Ref Merging
-    // mergeRefs handles function refs and object refs automatically.
-    // We include the child's own ref to ensure we don't overwrite it.
     const composedRefs = mergeRefs([
-      (child as any).ref, // Capture existing ref on the child
+      (child as any).ref, 
       innerRef,
       forwardedRef,
     ]);

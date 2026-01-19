@@ -9,6 +9,11 @@ import InputCheckbox from "@components/ui/Input/InputCheckbox";
 import { useRouter } from "next/navigation";
 import { registerUser } from "actions/auth.actions";
 
+export const metadata = {
+  title: 'Register - Curly Pottery',
+  description: 'Create a new Curly Pottery account to start managing your orders, track shipments, and access exclusive member benefits. Enjoy a seamless shopping experience with us.',  
+};
+
 export default function RegisterPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);

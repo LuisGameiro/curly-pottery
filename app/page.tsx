@@ -5,6 +5,11 @@ import { Product } from "@lib/types/types";
 import { getAllCategories } from "actions/category.actions";
 import { getRandomProducts } from "actions/product.actions";
 
+export const metadata = {
+  title: 'HomePage - Curly Pottery',
+  description: 'Discover unique, handcrafted pottery at Curly Pottery. Explore our collection of artisanal ceramics, perfect for adding a touch of elegance to your home or gifting to loved ones.',
+};
+
 export default async function Home() {
   const responseProducts = await getRandomProducts(6);
   const responseCategories = await getAllCategories();

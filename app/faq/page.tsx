@@ -4,6 +4,11 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Container, Text } from "@components/ui";
 
+export const metadata = {
+  title: 'FAQ - Curly Pottery',
+  description: 'Find answers to frequently asked questions about Curly Pottery, including shipping, returns, care instructions, and more. We are here to help you with any inquiries you may have.',
+};
+
 interface FAQItem {
   question: string;
   answer: string;

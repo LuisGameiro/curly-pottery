@@ -1,5 +1,11 @@
 import { Container, Text } from "@components/ui";
 
+export const metadata = {
+  title: 'Terms of Service - Curly Pottery',
+  description: 'Read the legal agreement between you and Curly Pottery. Understand the terms governing your use of our handcrafted pottery products and services.',
+};
+
+
 export default function TermsOfService() {
   return (
     <Container className="p-10">

@@ -44,13 +44,13 @@ export default function MenuProducts({
 
   return (
     <aside className="gap-2 lg:col-span-3 flex flex-col sm:flex-row lg:flex-col ">
-      <div className="relative w-full z-30">
+      <div className="relative w-full ">
         <label className="text-xs font-bold uppercase tracking-wider text-accent-6 ml-1 mb-1 block">
           Sort by
         </label>
 
         <ClickOutside active={openSort} onClick={() => setOpenSort(!openSort)}>
-          <div>
+          <div className="z-30">
             <button
               className="w-full bg-accent-1 text-text-base border-2 border-border px-4 py-3 rounded-lg font-semibold flex justify-between items-center hover:bg-background transition-colors lg:cursor-default lg:hover:bg-accent-1 lg:hidden"
               onClick={() => setOpenSort((v) => !v)}
@@ -91,7 +91,7 @@ export default function MenuProducts({
         </ClickOutside>
       </div>
 
-      <div className="relative w-full z-30">
+      <div className="relative w-full">
         <label className="text-xs font-bold uppercase tracking-wider text-accent-6 ml-1 mb-1 block">
           Browse
         </label>
@@ -99,7 +99,7 @@ export default function MenuProducts({
           active={openFilter}
           onClick={() => setOpenFilter(!openFilter)}
         >
-          <div>
+          <div className="z-30">
             <button
               className="w-full bg-accent-1 text-text-base border-2 border-border px-4 py-3 rounded-lg font-semibold flex justify-between items-center hover:bg-white transition-colors lg:cursor-default lg:hover:bg-accent-1 lg:hidden"
               onClick={() => setOpenFilter((v) => !v)}

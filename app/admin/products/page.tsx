@@ -4,8 +4,10 @@ import { getAllProducts } from "actions/product.actions";
 import Loading from "app/loading";
 
 export const metadata = {
-  title: "Admin - Products",
+  title: 'Products - Curly Pottery',
+  description: 'Manage your store products at Curly Pottery.',
 };
+
 
 export default async function ProductsPage() {
   const response = await getAllProducts();

@@ -5,6 +5,11 @@ import OrderTable from "@components/tables/OrderTable";
 import Loading from "app/loading";
 import { Suspense } from "react";
 
+export const metadata = {
+  title: 'Orders - Curly Pottery',
+  description: 'Manage your store orders at Curly Pottery.',
+};
+
 export default async function OrdersPage() {
   const response = await getAllOrders();
 

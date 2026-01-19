@@ -3,6 +3,12 @@ import { getAllCategories } from "actions/category.actions";
 import ProductClient from "./ProductClient";
 import notFound from "app/not-found";
 
+export const metadata = {
+  title: 'Product - Curly Pottery',
+  description: 'Manage your store product at Curly Pottery.',
+};
+
+
 export default async function ProductForm({
   params,
 }: {

@@ -3,7 +3,6 @@
 import "../globals.css";
 import "@assets/chrome-bug.css";
 import "keen-slider/keen-slider.min.css";
-
 import { Layout } from "@components/common";
 import { SessionProvider } from "next-auth/react";
 
