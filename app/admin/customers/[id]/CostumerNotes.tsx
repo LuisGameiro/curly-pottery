@@ -10,10 +10,12 @@ interface CustomerNotesProps {
   customerId: string;
 }
 
-const CustomerNotes: React.FC<CustomerNotesProps> = ({
-  initialNotes,
-  customerId,
-}) => {
+const CustomerNotes = (
+  {
+    initialNotes,
+    customerId
+  }: CustomerNotesProps
+) => {
   const [notes, setNotes] = useState(initialNotes);
   const [isSaving, setIsSaving] = useState(false);
 
