@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@components/ui";
 import InputTextArea from "@components/ui/Input/InputTextArea";
 import { updateNotes } from "actions/customer.actions";
 import React, { useState } from "react";
@@ -41,9 +42,12 @@ const CustomerNotes = ({ initialNotes, customerId }: CustomerNotesProps) => {
         onChange={(e) => setNotes(e.target.value)}
         className={isSaving ? "opacity-50 pointer-events-none" : ""}
       />
+      <Button type="submit" disabled={isSaving} variant="slim" className="mt-2">
+        Save Notes
+      </Button>
 
       <p className="text-[10px] text-accent-4 mt-1">
-        {isSaving ? "Saving..." : "Press Enter to save notes"}
+        {isSaving ? "Saving..." : ""}
       </p>
     </form>
   );

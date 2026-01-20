@@ -28,24 +28,30 @@ export default function CategoryClient({
     files: (File | string)[];
     previews: string[];
   }>({
-    files: [category?.image || ""],
-    previews: [category?.image || ""],
+    files: category?.image ? [category.image] : [],
+    previews: category?.image ? [category.image] : []
   });
   const [formData, setFormData] = useState({
     id: category?.id || "",
     name: category?.name || "",
     slug: category?.slug || "",
-    image: category?.image || "",
+    image: category?.image || '',
   });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
+
+    try {
     e.preventDefault();
     setLoading(true);
-
+    setFormData((prev) => ({
+      ...prev,
+      slug: slugify(formData.name),
+    }));
+    setErrors({});
     const validation = CategorySchema.safeParse({
       ...formData,
-      slug: slugify(formData.name),
+      image: gallery.previews[0] ,
     });
 
     if (!validation.success) {
@@ -57,7 +63,6 @@ export default function CategoryClient({
       return;
     }
 
-    try {
       const ResponsEmail = await syncImages(gallery.files, [
         category?.image || "",
       ]);
@@ -65,11 +70,18 @@ export default function CategoryClient({
         return toast(ResponsEmail.message);
       }
 
+      // console.log("Submitting category with data:", {
+      //   id: formData.id,
+      //   name: formData.name,
+      //   slug: formData.slug,
+      //   image: ResponsEmail.data ? ResponsEmail.data[0] : category?.image || '',
+      // });
+
       const response = await upsertCategory({
         id: formData.id,
         name: formData.name,
         slug: formData.slug,
-        image: ResponsEmail.data ? ResponsEmail.data[0] : formData.image,
+        image: ResponsEmail.data ? ResponsEmail.data[0] : category?.image || '',
       });
 
       if (response.success) {
@@ -140,7 +152,9 @@ export default function CategoryClient({
             files={gallery.files}
             previews={gallery.previews}
             onImagesChange={setGallery}
-            error={errors.images}
+            error={errors.image}
+            size={64}
+            
           />
         </form>
       </main>

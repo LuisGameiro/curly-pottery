@@ -25,6 +25,7 @@ export default async function CategoriesPage() {
         <header>
           <div className="w-full flex flex-row justify-between">
             <Text variant="heading">Categories</Text>
+            
             <Link href="/admin/categories/new" passHref>
               <Button variant="slim">
                 <span className="mr-1">

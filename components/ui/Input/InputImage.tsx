@@ -17,6 +17,7 @@ interface ImageInputProps {
   }) => void;
   error?: string;
   className?: string;
+  size?: number
 }
 
 const InputImage = ({
@@ -26,6 +27,7 @@ const InputImage = ({
   previews = [],
   onImagesChange,
   error,
+  size =24,
   className,
 }: ImageInputProps) => {
   const generatedId = useId();
@@ -72,13 +74,16 @@ const InputImage = ({
           <div
             key={index}
             className={cn(
-              "relative w-24 h-24 rounded-lg border overflow-hidden bg-slate-50 shrink-0 transition-all",
+              "relative rounded-lg border overflow-hidden bg-slate-50 shrink-0 transition-all",
               error ? "border-red-500" : "border-border",
+              `w-${size} h-${size}`,
               className,
             )}
           >
             <Image
               src={src}
+              width={size}
+              height={size}
               alt="Preview"
               className={cn("object-cover w-full h-full")}
             />

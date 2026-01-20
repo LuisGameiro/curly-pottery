@@ -29,23 +29,26 @@ export default function ProductsClient({
   return (
     <Container>
       <header>
-        <div className="flex items-center gap-3 w-full md:w-auto justify-between">
+        <div className="flex flex-col sm:flex-row items-center gap-2  justify-between">
           <Text className="w-full" variant="heading">
             Products
           </Text>
+          <div className="flex gap-2 w-full  flex-row">
           <InputSearch
+            className="w-full"
             placeholder="Search name or SKU..."
             value={searchTerm}
             onValueChange={(e) => setSearchTerm(e)}
           />
           <Link href="/admin/products/new" passHref>
-            <Button variant="slim" className="w-36">
+            <Button variant="slim" className="text-nowrap">
               <span className="mr-1">
                 <Plus size={18} />
               </span>
               <span>New Product</span>
             </Button>
           </Link>
+          </div>
         </div>
         <Text variant="subHeading">Manage your inventory and variants.</Text>
       </header>

@@ -22,40 +22,41 @@ import { Variant } from "@lib/types/types";
 import { syncImages } from "actions/images.actions";
 
 interface ProductFormProps {
-  initialData: ProductWithVariantsCategories;
+  initialData: ProductWithVariantsCategories | null;
   categories: Category[];
+  isEditMode: boolean;
 }
 
 export default function ProductClient({
   initialData,
   categories = [],
+  isEditMode,
 }: ProductFormProps) {
-  const isEditing = !!initialData;
-
   const [product, setProduct] = useState<EditProduct>({
-    id: initialData.id ?? "",
-    name: initialData.name ?? "",
-    slug: initialData.slug ?? "",
-    description: initialData.description ?? "",
-    requiresShipping: initialData.requiresShipping ?? true,
-    files: initialData.images ?? [],
-    previews: initialData.images ?? [],
-    categoryIds: initialData.categories.map((c: Category) => c.id) || [],
-    images: initialData.images ?? [],
+    id: initialData?.id ?? "",
+    name: initialData?.name ?? "",
+    slug: initialData?.slug ?? "",
+    description: initialData?.description ?? "",
+    requiresShipping: initialData?.requiresShipping ?? true,
+    files: initialData?.images ?? [],
+    previews: initialData?.images ?? [],
+    categoryIds: initialData?.categories.map((c: Category) => c.id) || [],
+    images: initialData?.images ?? [],
   });
 
-  const initialVariants = initialData.variants.map((v: Variant) => ({
-    ...v,
-    files: v.images ?? [],
-    previews: v.images ?? [],
-    isExpanded: false,
-  }));
+  const initialVariants =
+    initialData?.variants.map((v: Variant) => ({
+      ...v,
+      files: v.images ?? [],
+      previews: v.images ?? [],
+      isExpanded: false,
+    })) ?? [];
 
   const [variants, setVariants] = useState<EditVariant[]>(
     initialVariants || [
       {
         id: `temp-${Date.now()}`,
-        productId: initialData.id ?? "",
+        productId: initialData?.id ?? "",
         sku: "",
         price: 0,
         currency: "GBP",
@@ -100,7 +101,7 @@ export default function ProductClient({
       );
       const imageUrls = await syncImages(
         product.files || [],
-        initialData.images ?? [],
+        initialData?.images ?? [],
       );
       if (!imageUrls.success) throw new Error(imageUrls.message);
 
@@ -141,7 +142,7 @@ export default function ProductClient({
 
         <div className="flex items-center justify-between">
           <Text variant="heading">
-            {isEditing ? "Edit Product" : "New Product"}
+            {isEditMode ? "Edit Product" : "New Product"}
           </Text>
           <Button
             type="submit"
@@ -149,7 +150,7 @@ export default function ProductClient({
             disabled={loading}
             onClick={handleSubmit}
           >
-            {isEditing ? "Update Product" : "Create Product"}
+            {isEditMode ? "Update Product" : "Create Product"}
           </Button>
         </div>
       </header>
