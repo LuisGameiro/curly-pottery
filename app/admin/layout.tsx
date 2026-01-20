@@ -15,27 +15,32 @@ import { Text } from "@components/ui";
 import { cn } from "@lib/utils";
 import ClickOutside from "@lib/click-outside";
 import { useUser } from "@lib/hooks/useUser";
+import Loading from "app/loading";
+
+const navItems = [
+  { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { name: "Products", href: "/admin/products", icon: Package },
+  { name: "Categories", href: "/admin/categories", icon: ChartBarIcon },
+  { name: "Orders", href: "/admin/orders", icon: Van },
+  { name: "Customers", href: "/admin/customers", icon: Users },
+];
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { isAuthenticated, isAdmin } = useUser();
-  if (!isAuthenticated && !isAdmin) {
-    redirect("/auth/login");
-  }
-
+  const { isAuthenticated, isAdmin, isLoading } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
-  const navItems = [
-    { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
-    { name: "Products", href: "/admin/products", icon: Package },
-    { name: "Categories", href: "/admin/categories", icon: ChartBarIcon },
-    { name: "Orders", href: "/admin/orders", icon: Van },
-    { name: "Customers", href: "/admin/customers", icon: Users },
-  ];
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (!isAuthenticated && !isAdmin) {
+    redirect("/auth/login");
+  }
 
   const currentItem =
     navItems.find((item) => item.href === pathname) || navItems[0];

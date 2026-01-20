@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import ProfileForm from "./profileForm";
 import { authOptions } from "@lib/auth/authOptions";
-import { prisma } from "prisma/prisma";
+import { getUserById } from "actions/customer.actions";
 
 export const metadata = {
   title: "User Profile - Curly Pottery",
@@ -17,13 +17,11 @@ export default async function ProfilePage() {
     redirect("/auth/login");
   }
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email as string },
-  });
+  const user = await getUserById(session.user.id);
 
-  if (!user) {
+  if (!user.data) {
     redirect("/auth/login");
   }
 
-  return <ProfileForm user={user} />;
+  return <ProfileForm user={user.data} />;
 }

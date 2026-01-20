@@ -8,25 +8,30 @@ import { Text } from "@components/ui";
 import { cn } from "@lib/utils";
 import { useUser } from "@lib/hooks/useUser";
 import ClickOutside from "@lib/click-outside";
+import Loading from "app/loading";
+
+const navItems = [
+  { name: "Profile", href: "/user", icon: User },
+  { name: "Cart", href: "/user/cart", icon: Package },
+  { name: "Orders", href: "/user/orders", icon: Van },
+];
 
 export default function UserLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { isAuthenticated } = useUser();
+  const { isAuthenticated, isLoading } = useUser();
+  const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   if (!isAuthenticated) {
     redirect("/auth/login");
   }
-  const [isOpen, setIsOpen] = useState(false);
-  const pathname = usePathname();
-
-  const navItems = [
-    { name: "Profile", href: "/user", icon: User },
-    { name: "Cart", href: "/user/cart", icon: Package },
-    { name: "Orders", href: "/user/orders", icon: Van },
-  ];
 
   const currentItem =
     navItems.find((item) => item.href === pathname) || navItems[0];
