@@ -264,8 +264,12 @@ export async function upsertProduct(
       connect: categoryIds.map((catId: string) => ({ id: catId })),
     };
     const prepareVariant = (v: EditVariant) => {
-      // ts-ignore
-      const { files, previews, isExpanded, ...variantData } = v;
+      const {
+        files: _files,
+        previews: _previews,
+        isExpanded: _isExpanded,
+        ...variantData
+      } = v;
       return {
         ...variantData,
         details: v.details ? v.details : Prisma.DbNull,

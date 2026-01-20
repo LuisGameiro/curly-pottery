@@ -7,7 +7,6 @@ import React, {
   useState,
   useRef,
   useEffect,
-  useCallback,
 } from "react";
 import { a } from "@react-spring/web";
 import s from "./ProductSlider.module.css";
@@ -105,8 +104,8 @@ const ProductSlider = ({ children, className = "" }: ProductSliderProps) => {
   // const onPrev = React.useCallback(() => slider.current?.prev(), [slider]);
   // const onNext = React.useCallback(() => slider.current?.next(), [slider]);
 
-  const onPrev = useCallback(() => slider.current?.prev(), []);
-  const onNext = useCallback(() => slider.current?.next(), []);
+  const onPrev = () => slider.current?.prev(); //useCallback(() => slider.current?.prev(), [slider]);
+  const onNext = () => slider.current?.next(); //useCallback(() => slider.current?.next(), [slider]);
   return (
     <div className={cn(s.root, className)} ref={sliderContainerRef}>
       <div

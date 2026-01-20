@@ -13,9 +13,9 @@ import {
 } from "lucide-react";
 import { Text } from "@components/ui";
 import { cn } from "@lib/utils";
-import ClickOutside from "@lib/click-outside";
 import { useUser } from "@lib/hooks/useUser";
 import Loading from "app/loading";
+import { useClickOutside } from "@lib/hooks/useClickOutside";
 
 const navItems = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -33,6 +33,9 @@ export default function AdminLayout({
   const { isAuthenticated, isAdmin, isLoading } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const containerRef = useClickOutside<HTMLDivElement>(() => {
+    setIsOpen(false);
+  }, isOpen);
 
   if (isLoading) {
     return <Loading />;
@@ -55,7 +58,7 @@ export default function AdminLayout({
           Store Admin
         </Text>
 
-        <div className="relative w-full z-30">
+        <div ref={containerRef} className="relative w-full z-30">
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="w-full lg:hidden flex items-center justify-between px-4 py-3 bg-accent-2 border-2 border-border rounded-lg font-semibold text-secondary"
@@ -69,35 +72,33 @@ export default function AdminLayout({
               size={18}
             />
           </button>
-          <ClickOutside active={isOpen} onClick={() => setIsOpen(!isOpen)}>
-            <ul
-              className={cn(
-                "space-y-1 mt-2 p-2 bg-accent-2 border-2 border-border rounded-xl shadow-xl lg:shadow-none lg:border-0 lg:bg-transparent lg:p-0 lg:mt-0 lg:block transition-all",
-                "absolute left-0 right-0 top-full lg:static z-50",
-                { hidden: !isOpen },
-              )}
-            >
-              {navItems.map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => setIsOpen(false)}
-                    className={cn(
-                      "flex items-center gap-3 px-4 py-2 rounded-lg transition-colors font-medium",
-                      isActive
-                        ? "bg-secondary text-white"
-                        : "text-secondary hover:bg-blue-50",
-                    )}
-                  >
-                    <item.icon size={20} />
-                    {item.name}
-                  </Link>
-                );
-              })}
-            </ul>
-          </ClickOutside>
+          <ul
+            className={cn(
+              "space-y-1 mt-2 p-2 bg-accent-2 border-2 border-border rounded-xl shadow-xl lg:shadow-none lg:border-0 lg:bg-transparent lg:p-0 lg:mt-0 lg:block transition-all",
+              "absolute left-0 right-0 top-full lg:static z-50",
+              { hidden: !isOpen },
+            )}
+          >
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className={cn(
+                    "flex items-center gap-3 px-4 py-2 rounded-lg transition-colors font-medium",
+                    isActive
+                      ? "bg-secondary text-white"
+                      : "text-secondary hover:bg-blue-50",
+                  )}
+                >
+                  <item.icon size={20} />
+                  {item.name}
+                </Link>
+              );
+            })}
+          </ul>
         </div>
       </aside>
 

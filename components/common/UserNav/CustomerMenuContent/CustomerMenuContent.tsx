@@ -30,7 +30,7 @@ export default function CustomerMenuContent() {
   const pathname = params?.slug ? `/${params.slug}` : "/";
   const { theme, setTheme } = useTheme();
 
-  function handleClick(_: React.MouseEvent<HTMLAnchorElement>, href: string) {
+  function handleClick(href: string) {
     router.push(href);
   }
 
@@ -50,7 +50,7 @@ export default function CustomerMenuContent() {
             className={cn(s.link, {
               [s.active]: pathname === href,
             })}
-            onClick={(e) => handleClick(e, href)}
+            onClick={() => handleClick(href)}
           >
             {name}
           </a>
@@ -79,17 +79,11 @@ export default function CustomerMenuContent() {
         {isAuthenticated ? (
           <div className={cn("border-t border-secondary mt-2 pt-2 flex-col")}>
             {isAdmin && (
-              <a
-                className={s.link}
-                onClick={() => handleClick(event as any, "/admin")}
-              >
+              <a className={s.link} onClick={() => handleClick("/admin")}>
                 Admin
               </a>
             )}
-            <a
-              className={s.link}
-              onClick={() => handleClick(event as any, "/user")}
-            >
+            <a className={s.link} onClick={() => handleClick("/user")}>
               My Account
             </a>
 
@@ -100,7 +94,7 @@ export default function CustomerMenuContent() {
         ) : (
           <a
             className={cn(s.link, "border-t border-accent-2 mt-4")}
-            onClick={() => handleClick(event as any, "/auth/login")}
+            onClick={() => handleClick("/auth/login")}
           >
             Login
           </a>

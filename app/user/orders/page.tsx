@@ -1,9 +1,10 @@
 import OrderUserTable from "@components/tables/OrderUserTable";
 import { Container, Text } from "@components/ui";
-import { useUser } from "@lib/hooks/useUser";
+import { authOptions } from "@lib/auth/authOptions";
 import { getUserById } from "actions/customer.actions";
 import Loading from "app/loading";
 import { CarFront } from "lucide-react";
+import { getServerSession } from "next-auth";
 import { Suspense } from "react";
 
 export const metadata = {
@@ -13,7 +14,8 @@ export const metadata = {
 };
 
 export default async function Orders() {
-  const { user } = useUser();
+  const session = await getServerSession(authOptions);
+  const user = session?.user;
 
   if (!user) {
     throw new Error("User not found");
@@ -25,7 +27,7 @@ export default async function Orders() {
   }
 
   const orders = response.data?.orders;
-  if (!orders)
+  if (!orders || orders?.length === 0)
     return (
       <Container className="py-20 flex flex-col items-center justify-center ">
         <CarFront size={64} className="text-accent-4 mb-4" />

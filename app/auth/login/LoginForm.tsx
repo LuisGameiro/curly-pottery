@@ -6,6 +6,7 @@ import { Container, Text, Button, Input } from "@components/ui";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
@@ -79,7 +80,13 @@ export default function LoginForm() {
 
       <main className="space-y-5 md:max-w-lg mx-auto">
         <Button variant="ghost" width="100%" onClick={handleGoogleLogin}>
-          <img src="/google-icon.svg" alt="Google" className="w-5 h-5 mr-2" />
+          <Image
+            width={20}
+            height={20}
+            src="/google-icon.svg"
+            alt="Google"
+            className="mr-5"
+          />
           Continue with Google
         </Button>
 

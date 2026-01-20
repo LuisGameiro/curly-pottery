@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import Link from "next/link";
 import { Logo } from "@components/ui";
 import { I18nWidget } from "@components/common";
@@ -10,13 +9,7 @@ type Page = {
   url: string;
 };
 
-interface Props {
-  className?: string;
-  children?: ReactNode;
-  pages?: Page[];
-}
-
-const links = [
+const links: Page[] = [
   {
     name: "FAQ",
     url: "/faq",

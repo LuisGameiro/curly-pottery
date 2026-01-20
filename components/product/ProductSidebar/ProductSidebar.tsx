@@ -15,6 +15,7 @@ import {
   Variant,
   Discount,
 } from "@lib/types/types";
+import { toast } from "sonner";
 
 interface ProductSidebarProps {
   product: ProductWithVariantsCategories;
@@ -33,13 +34,11 @@ const ProductSidebar = ({
 
   const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
-  const [error, setError] = useState<null | Error>(null);
 
   const forSale = variant?.stock !== 0 || variant?.availableForSale;
 
   const addToCart = async () => {
     setLoading(true);
-    setError(null);
     try {
       addItem(
         {
@@ -54,16 +53,11 @@ const ProductSidebar = ({
         },
         quantity,
       );
+      toast("Product added to cart");
+    } catch {
+      toast("Error adding item to cart");
+    } finally {
       setLoading(false);
-    } catch (err) {
-      setLoading(false);
-      if (err instanceof Error) {
-        console.error(err);
-        setError({
-          ...err,
-          message: "Could not add item to cart. Please try again.",
-        });
-      }
     }
   };
 

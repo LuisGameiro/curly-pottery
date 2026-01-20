@@ -19,7 +19,7 @@ const Input = (props: InputProps) => {
   const inputId = id || generatedId;
   const errorId = `${inputId}-error`;
 
-  const [showPassword, setShowPassword] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
   const rootClassName = cn(
     s.root,

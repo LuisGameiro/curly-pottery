@@ -3,11 +3,9 @@
 import { useState } from "react";
 import { Container, Text, Button, Input } from "@components/ui";
 import { Mail, MapPin, Phone, Plus, Trash2, UserIcon } from "lucide-react";
-import { UserWithOrdersAddress } from "@lib/types/types";
-import { useUser } from "@lib/hooks/useUser";
+import { Address, UserWithOrdersAddress } from "@lib/types/types";
 
 export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
-  const { isAdmin, user: u } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     firstName: user?.firstName || "",
@@ -19,7 +17,6 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
     addresses: user?.addresses || [],
   });
 
-  // 2. Helper to add a new empty address
   const addAddress = () => {
     setFormData({
       ...formData,
@@ -40,14 +37,12 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
     });
   };
 
-  // 3. Helper to update specific address fields
   const updateAddress = (index: number, field: string, value: string) => {
     const newAddresses = [...formData.addresses];
     newAddresses[index] = { ...newAddresses[index], [field]: value };
     setFormData({ ...formData, addresses: newAddresses });
   };
 
-  // 4. Helper to remove an address
   const removeAddress = (index: number) => {
     const newAddresses = formData.addresses.filter((_, i) => i !== index);
     setFormData({ ...formData, addresses: newAddresses });
@@ -144,7 +139,7 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
               <Text className="text-accent-5 italic">No addresses saved.</Text>
             )}
 
-            {formData.addresses.map((address: any, index: number) => (
+            {formData.addresses.map((address: Address, index: number) => (
               <div key={index} className="p-4 border rounded-lg relative">
                 {isEditing ? (
                   <div className="space-y-2">
@@ -162,9 +157,9 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
                     </div>
                     <Input
                       placeholder="Address"
-                      value={address.street}
+                      value={address.address}
                       onChange={(e) =>
-                        updateAddress(index, "street", e.target.value)
+                        updateAddress(index, "address", e.target.value)
                       }
                     />
                     <div className="gap-2 grid grid-cols-2">
@@ -199,7 +194,7 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
                   <div className="flex items-center">
                     <MapPin size={18} className="mr-2 mt-1 text-accent-6" />
                     <div>
-                      <Text>{address.street || "New Address"},</Text>
+                      <Text>{address.address || "New Address"},</Text>
                       <Text>
                         {address.postalCode}, {address.city} {address.country}
                       </Text>

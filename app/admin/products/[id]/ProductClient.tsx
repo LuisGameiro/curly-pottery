@@ -113,6 +113,7 @@ export default function ProductClient({
       };
       await upsertProduct(payload);
     } catch (error) {
+      setErrors(error as { [key: string]: string });
       console.error("Failed to update status", error);
     } finally {
       setLoading(false);

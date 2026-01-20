@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useParams } from "next/navigation";
 import s from "./I18nWidget.module.css";
-import ClickOutside from "@lib/click-outside";
 import Image from "next/image";
 import { cn } from "@lib/utils";
 import { ChevronRight } from "lucide-react";
+import { useClickOutside } from "@lib/hooks/useClickOutside";
 
 interface LOCALE_DATA {
   name: string;
@@ -37,44 +36,48 @@ export const i18n = {
   defaultLocale: "en",
   locales: ["en", "de", "fr", "es"],
 } as const;
-type Locale = (typeof i18n)["locales"][number];
+
+// type Locale = (typeof i18n)["locales"][number];
+
 const I18nWidget = () => {
   const [display, setDisplay] = useState(false);
-  const params = useParams();
-  const locale = params.locale as Locale;
+  // const params = useParams();
 
-  const locales = i18n.locales;
-  const defaultLocale = i18n.defaultLocale;
-  const currentPath =
-    typeof window !== "undefined" ? window.location.pathname : "/";
+  // const locale = params.locale as Locale;
+  // const locales = i18n.locales;
+  // const defaultLocale = i18n.defaultLocale;
+  // const currentPath =
+  //   typeof window !== "undefined" ? window.location.pathname : "/";
   const currentLocale = "en-UK"; //locale || defaultLocale;
   const options = null; //locales.filter((val) => val !== currentLocale);
+  const containerRef = useClickOutside<HTMLDivElement>(() => {
+    setDisplay(false);
+  }, display);
 
   return (
-    <ClickOutside active={display} onClick={() => setDisplay(false)}>
-      <nav className={s.root}>
-        <div
-          className="flex items-center relative"
-          onClick={() => setDisplay(!display)}
-        >
-          <button className={s.button} aria-label="Language selector">
-            <Image
-              width="20"
-              height="20"
-              className="block"
-              src={`/${LOCALES_MAP[currentLocale].img.filename}`}
-              alt={LOCALES_MAP[currentLocale].img.alt}
-              unoptimized
-            />
-            {options && (
-              <span className="cursor-pointer ml-1">
-                <ChevronRight className={cn(s.icon, { [s.active]: display })} />
-              </span>
-            )}
-          </button>
-        </div>
+    <nav ref={containerRef} className={s.root}>
+      <div
+        className="flex items-center relative"
+        onClick={() => setDisplay(!display)}
+      >
+        <button className={s.button} aria-label="Language selector">
+          <Image
+            width="20"
+            height="20"
+            className="block"
+            src={`/${LOCALES_MAP[currentLocale].img.filename}`}
+            alt={LOCALES_MAP[currentLocale].img.alt}
+            unoptimized
+          />
+          {options && (
+            <span className="cursor-pointer ml-1">
+              <ChevronRight className={cn(s.icon, { [s.active]: display })} />
+            </span>
+          )}
+        </button>
+      </div>
 
-        {/* <div className="absolute top-0 right-0">
+      {/* <div className="absolute top-0 right-0">
           {!!options && display ? (
             <div className={s.dropdownMenu}>
               <div className="flex flex-row justify-end px-6">
@@ -103,8 +106,7 @@ const I18nWidget = () => {
             </div>
           ) : null}
         </div> */}
-      </nav>
-    </ClickOutside>
+    </nav>
   );
 };
 

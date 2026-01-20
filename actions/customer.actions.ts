@@ -7,6 +7,7 @@ import {
   UserWithOrdersAddress,
   ActionResponse,
 } from "@lib/types/types";
+import { cache } from "react";
 
 export async function getAllCustomers(): Promise<
   ActionResponse<UserWithOrders[]>
@@ -37,32 +38,32 @@ export async function getAllCustomers(): Promise<
   }
 }
 
-export async function getUserById(
-  id: string,
-): Promise<ActionResponse<UserWithOrdersAddress | null>> {
-  try {
-    const user = await prisma.user.findUnique({
-      where: { id },
-      include: {
-        orders: true,
-        addresses: true,
-      },
-    });
-    return {
-      success: true,
-      message: "Fecthed user successfully",
-      data: user,
-    };
-  } catch (error) {
-    console.error("getUserById:", error);
-    return {
-      success: false,
-      message:
-        error instanceof Error ? error.message : "A database error occurred",
-      errors: error,
-    };
-  }
-}
+export const getUserById = cache(
+  async (id: string): Promise<ActionResponse<UserWithOrdersAddress | null>> => {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id },
+        include: {
+          orders: true,
+          addresses: true,
+        },
+      });
+      return {
+        success: true,
+        message: "Fecthed user successfully",
+        data: user,
+      };
+    } catch (error) {
+      console.error("getUserById:", error);
+      return {
+        success: false,
+        message:
+          error instanceof Error ? error.message : "A database error occurred",
+        errors: error,
+      };
+    }
+  },
+);
 
 export async function updateNotes(
   id: string,

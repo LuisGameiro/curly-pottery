@@ -17,7 +17,7 @@ type UserNavProps = {
 export default function UserNav({ className }: UserNavProps) {
   const { isAdmin, isAuthenticated } = useUser();
 
-  const { data, deleteAll } = useCart();
+  const { data } = useCart();
   const itemsCount = data?.lineItems.length ?? 0;
 
   return (
