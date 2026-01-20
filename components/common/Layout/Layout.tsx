@@ -41,18 +41,8 @@ export default function Layout({ children }: Props) {
         {children}
       </main>
       <Footer />
-      {/* <ModalUI /> */}
-      {/* <SidebarUI links={navBarlinks} /> */}
       <Toaster position="top-right" richColors />
-      <FeatureBar
-        title="This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy."
-        hide={acceptedCookies}
-        action={
-          <Button className="mx-5" onClick={() => onAcceptCookies()}>
-            Accept cookies
-          </Button>
-        }
-      />
+      <FeatureBar />
     </div>
   );
 }

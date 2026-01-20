@@ -23,7 +23,6 @@ export default function RootLayout({
             enableSystem
             themes={["light", "dark"]}
           >
-            {" "}
             <Layout>{children}</Layout>
           </ThemeProvider>
         </SessionProvider>
