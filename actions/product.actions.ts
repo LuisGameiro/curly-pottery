@@ -223,10 +223,10 @@ export async function getProductsByCategorySlug(
     const products = await prisma.product.findMany({
       where: category
         ? {
-          categories: {
-            some: { slug: category },
-          },
-        }
+            categories: {
+              some: { slug: category },
+            },
+          }
         : undefined,
       include: {
         variants: true,
@@ -253,7 +253,14 @@ export async function upsertProduct(
   payload: ProductInput,
 ): Promise<ActionResponse<Product | null>> {
   try {
-    const { categoryIds, variants, id, files: _files, previews: _previews, ...productData } = payload;
+    const {
+      categoryIds,
+      variants,
+      id,
+      files: _files,
+      previews: _previews,
+      ...productData
+    } = payload;
 
     const existingVariantIds = variants
       .map((v) => v.id)

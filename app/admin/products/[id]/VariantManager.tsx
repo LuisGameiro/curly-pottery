@@ -38,7 +38,9 @@ export const VariantManager = () => {
     if (fields.length === 1) {
       return toast.error("Product must have at least one variant.");
     }
-    return confirm("Are you sure you want to remove this variant?") && remove(index);
+    return (
+      confirm("Are you sure you want to remove this variant?") && remove(index)
+    );
   };
 
   return (

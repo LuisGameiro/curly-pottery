@@ -34,7 +34,7 @@ export const ProductVariant = ({
   const sku = watch(`variants.${index}.sku`);
 
   const variantData = watch(`variants.${index}`);
-  
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const variantErrors = (errors.variants as any)?.[index];
 
