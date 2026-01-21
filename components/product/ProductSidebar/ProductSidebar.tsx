@@ -2,7 +2,7 @@
 
 import s from "./ProductSidebar.module.css";
 import { useState } from "react";
-import { Button, Text } from "@components/ui";
+import { Button, Collapse, Text } from "@components/ui";
 import Link from "next/link";
 import { cn } from "@lib/utils";
 import ProductOptions from "../ProductOptions";
@@ -67,7 +67,7 @@ const ProductSidebar = ({
   );
 
   return (
-    <div className={cn(className, "space-y-4")}>
+    <div className={cn(className, "space-y-6")}>
       <section>
         <Text variant="heading">{product.name}</Text>
         {product.categories.map((category: Category) => (
@@ -80,20 +80,23 @@ const ProductSidebar = ({
       <section className="space-y-4">
         <Text variant="sectionHeading">
           {price.hasDiscount ? (
-            <>
+            <div className="flex items-center gap-4">
               <span className="line-through opacity-40">
                 {showCurrency[variant.currency]} {price.price}
               </span>
-              <span>{price.finalPrice}</span>
-
-              <span className=" bg-red-500 p-1 px-2 border-2 border-accent-9 bg-center">
-                SALE
+              <span>
+                {" "}
+                {showCurrency[variant.currency]} {price.finalPrice}
               </span>
-            </>
+
+              <span className=" bg-green-500 px-6 rounded-full ">SALE</span>
+            </div>
           ) : (
-            <span>
-              {showCurrency[variant.currency]} {price.finalPrice}
-            </span>
+            <div>
+              <span>
+                {showCurrency[variant.currency]} {price.finalPrice}
+              </span>
+            </div>
           )}
         </Text>
 
@@ -148,54 +151,68 @@ const ProductSidebar = ({
         className="wrap-break-word w-full max-w-xl "
         html={product.description}
       />
+
       <ProductOptions product={product} setVariant={setVariant} />
 
       <section>
-        {!!variant.details && (
-          <div className="space-y-6">
-            <Text variant="bold">Product details:</Text>
+        <Collapse title={"Product Details"}>
+          {!!variant.details && (
+            <div className="space-y-2">
+              {/* <Text variant="bold">Product details:</Text> */}
 
-            <div className="ml-10 space-y-4">
-              {(variant.details as Detail[]).map((detail: Detail) => (
-                <div key={detail.title}>
-                  <span className="font-semibold">{detail.title}: </span>
-                  <span>{detail.description}</span>
-                </div>
-              ))}
+              <ul
+                className="ml-2 space-y-1 mt-2"
+                style={{ listStyleType: "disc" }}
+              >
+                {(variant.details as Detail[]).map(
+                  (detail: Detail, index: number) => (
+                    <li
+                      key={detail.title + index}
+                      className="flex text-justify"
+                    >
+                      <Text className="font-semibold mr-1">
+                        {detail.title}:{" "}
+                      </Text>
+                      <Text>{detail.description}</Text>
+                    </li>
+                  ),
+                )}
+              </ul>
+
+              <Text className="text-justify">
+                Because each ceramic piece is hand-made, you may notice slight
+                variations in shape and size. These unique differences are what
+                make every ceramic piece special and full of character.
+              </Text>
             </div>
+          )}
+        </Collapse>
 
-            <Text>
-              Because each strainer is hand-carved, you may notice slight
-              variations in shape and size. These unique differences are what
-              make every strainer special and full of character.
-            </Text>
-          </div>
-        )}
-      </section>
+        <Collapse title={"Care Instructions"}>
+          {/* <Text variant="bold">Care Instructions</Text> */}
+          <Text className="text-justify">
+            Gently rinse with warm water and mild soap after use. Avoid soaking
+            for long periods to preserve the bamboo natural beauty. Dry
+            thoroughly before storing.
+          </Text>
+        </Collapse>
 
-      <section>
-        <Text variant="bold">Care Instructions</Text>
-        <Text>
-          Gently rinse with warm water and mild soap after use. Avoid soaking
-          for long periods to preserve the bamboo natural beauty. Dry thoroughly
-          before storing.
-        </Text>
-      </section>
-
-      <section>
-        <Text variant="bold">About Pottery</Text>
-        <Text>
-          Please expect some slight inperfections as every piece is hand made
-          and hand glazed which makes it unique to you.
-        </Text>
-      </section>
-      <section>
-        <Text variant="bold">Lets Stay connected</Text>
-        <Text>
-          I’d love to see how you style your tea strainer alongside my ceramics!
-          Tag me on Instagram @curlypottery to share your photos, or follow
-          along for behind-the-scenes updates and inspiration.
-        </Text>
+        <Collapse title={"About Pottery"}>
+          {/* <Text variant="bold">About Pottery</Text> */}
+          <Text className="text-justify">
+            Please expect some slight inperfections as every piece is hand made
+            and hand glazed which makes it unique to you.
+          </Text>
+        </Collapse>
+        
+        <Collapse title={"Let's Stay Connected"}>
+          {/* <Text variant="bold">Lets Stay connected</Text> */}
+          <Text className="text-justify">
+            I’d love to see how you style your tea strainer alongside my
+            ceramics! Tag me on Instagram @curlypottery to share your photos, or
+            follow along for behind-the-scenes updates and inspiration.
+          </Text>
+        </Collapse>
       </section>
     </div>
   );

@@ -52,11 +52,11 @@ const Text = ({
 
   return (
     <Component
-      className={cn(s.root, s[variant], className)}
       onClick={onClick}
       style={style}
       role={role}
       {...htmlContentProps}
+      className={cn(s.root, s[variant], className)}
     >
       {children}
     </Component>

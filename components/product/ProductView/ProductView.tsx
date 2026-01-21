@@ -41,11 +41,11 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
       <Container className="p-0 m-0" clean>
         <section className={cn(s.root,"p-0 m-0")}>
           <div className={cn(s.main)}>
-            <ProductSlider key={product.id}>
+            <ProductSlider key={variant.id}>
               {variant.images.map((image, i) => (
                 <div key={image} className={s.imageContainer}>
                   <Image
-                    
+
                     className={s.img}
                     src={image}
                     alt={`${product.name} Image ${i}`}
