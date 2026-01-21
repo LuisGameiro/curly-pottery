@@ -1,4 +1,4 @@
-import ShopClient from "./ShopClient";
+import ShopClient from "../../components/shop/ShopClient";
 import { getProductsByCategorySlug } from "actions/product.actions";
 import { getAllCategories } from "actions/category.actions";
 

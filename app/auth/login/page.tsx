@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import Loading from "app/loading";
-import LoginForm from "./LoginForm";
+import LoginForm from "../../../components/auth/LoginForm";
 
 export const metadata = {
   title: "Login - Curly Pottery",

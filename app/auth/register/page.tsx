@@ -1,5 +1,5 @@
 import { Container, Text } from "@components/ui";
-import RegisterForm from "./RefisterForm";
+import RegisterForm from "../../../components/auth/RegisterForm";
 
 export const metadata = {
   title: "Register - Curly Pottery",

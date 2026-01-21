@@ -3,7 +3,7 @@ import Image from "next/image";
 import { ArrowLeft, Package, MapPin, User } from "lucide-react";
 import Link from "next/link";
 import { getOrderById } from "actions/order.actions";
-import OrderStatusUpdate from "./orderStatusUpdate";
+import OrderStatusUpdate from "../../../../components/admin/orderStatusUpdate";
 import { showCurrency } from "@lib/calculate-price";
 import { Address, CartLineItem, Order } from "@lib/types/types";
 import notFound from "app/not-found";

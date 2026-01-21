@@ -1,8 +1,8 @@
 import { getProductById } from "actions/product.actions";
 import { getAllCategories } from "actions/category.actions";
+import ProductClient from "./ProductClient";
 import notFound from "app/not-found";
 import { Category, ProductWithVariantsCategories } from "@lib/types/types";
-import ProductClient from "@components/admin/product/ProductClient";
 
 export const metadata = {
   title: "Product - Curly Pottery",

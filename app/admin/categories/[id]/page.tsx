@@ -1,5 +1,5 @@
 import { getCategoryById } from "actions/category.actions";
-import CategoryClient from "./CategoryClient";
+import CategoryClient from "../../../../components/admin/CategoryClient";
 import notFound from "app/not-found";
 
 export const metadata = {

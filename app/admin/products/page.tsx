@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import ProductsCLient from "./ProductsClient";
+import ProductsCLient from "../../../components/admin/ProductsClient";
 import { getAllProducts } from "actions/product.actions";
 import Loading from "app/loading";
 
