@@ -1,5 +1,5 @@
 import { getAllCustomers } from "actions/customer.actions";
-import CustomersClient from "./CustomersClient";
+import CustomersClient from "../../../components/admin/CustomersClient";
 import { Suspense } from "react";
 import Loading from "app/loading";
 

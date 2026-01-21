@@ -6,7 +6,7 @@ import { Button, Text } from "@components/ui";
 import Link from "next/link";
 import { cn } from "@lib/utils";
 import ProductOptions from "../ProductOptions";
-import { calculateDiscount } from "@lib/calculate-price";
+import { calculateDiscount, showCurrency } from "@lib/calculate-price";
 import useCart from "@lib/hooks/useCart";
 import {
   Detail,
@@ -69,19 +69,21 @@ const ProductSidebar = ({
   return (
     <div className={cn(className, "space-y-4")}>
       <section>
-        <h1 className="text-3xl font-semibold ">{product.name}</h1>
+        <Text variant="heading">{product.name}</Text>
         {product.categories.map((category: Category) => (
-          <span key={category.id} className={"text-xl mr-2"}>
+          <Text key={category.id} variant="subHeading" className={"mr-2"}>
             {category.name}
-          </span>
+          </Text>
         ))}
       </section>
 
-      <section>
-        <p className="text-lg font-medium  space-x-2 my-2">
+      <section className="space-y-4">
+        <Text variant="sectionHeading">
           {price.hasDiscount ? (
             <>
-              <span className="line-through opacity-40">{price.price}</span>
+              <span className="line-through opacity-40">
+                {showCurrency[variant.currency]} {price.price}
+              </span>
               <span>{price.finalPrice}</span>
 
               <span className=" bg-red-500 p-1 px-2 border-2 border-accent-9 bg-center">
@@ -89,46 +91,41 @@ const ProductSidebar = ({
               </span>
             </>
           ) : (
-            <span>{price.finalPrice}</span>
+            <span>
+              {showCurrency[variant.currency]} {price.finalPrice}
+            </span>
           )}
-        </p>
+        </Text>
 
-        <p className="text-sm">
-          VAT included for EU orders. Duties and import taxes are calculated at
-          checkout for U.S. customers Shipping calculated at checkout.{" "}
+        <p className="text-xs">
+          VAT included for UK orders. Duties and import taxes are calculated at
+          checkout for other customers Shipping calculated at checkout.{" "}
         </p>
-        {/* <p className="py-2">
-          {error && <ErrorMessage message={error} />}
-        </p> */}
 
         {!forSale ? (
-          <div
-            className="bg-red text-accent-0 cursor-pointer 
-                      px-10 py-3 leading-6 transition ease-in-out duration-150
-                      shadow-sm text-center justify-center 
-                      border border-transparent items-center text-sm font-semibold
-                      tracking-wide"
-          >
-            <h3 className={s.button}>OUT OF STOCK</h3>
+          <div className="bg-red-500/20 px-10 py-2 text-center justify-center border border-primary items-center tracking-wide">
+            <Text variant="bold" className={s.button}>
+              OUT OF STOCK
+            </Text>
             <Link href="/contacts">
-              Please contact us if you want to order this product
+              <Text className="underline text-secondary-2">
+                Please contact us if you want to order this product
+              </Text>
             </Link>
           </div>
         ) : (
-          <div className="flex flex-row gap-2 items-center border border-border">
-            <div className="flex flex-row  text-xl font-semibold">
+          <div className="flex flex-row gap-4 items-center border border-border">
+            <div className="flex h-16 flex-1 text-2xl font-semibold items-center">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className=" px-4  hover:bg-accent-1 transition"
+                className="flex px-4 h-full  hover:bg-accent-1 transition items-center"
               >
                 -
               </button>
-              <span className="flex flex-row px-6  col-span-2 justify-center font-semibold select-none">
-                {quantity}
-              </span>
+              <span className="px-6 ">{quantity}</span>
               <button
                 onClick={() => setQuantity(quantity + 1)}
-                className="px-4  hover:bg-accent-1 transition "
+                className="flex px-4 h-full  hover:bg-accent-1 transition items-center"
               >
                 +
               </button>
@@ -155,8 +152,8 @@ const ProductSidebar = ({
 
       <section>
         {!!variant.details && (
-          <div>
-            <h2 className="text 2xl font-semibold">Product details:</h2>
+          <div className="space-y-6">
+            <Text variant="bold">Product details:</Text>
 
             <div className="ml-10 space-y-4">
               {(variant.details as Detail[]).map((detail: Detail) => (
@@ -167,38 +164,38 @@ const ProductSidebar = ({
               ))}
             </div>
 
-            <p>
+            <Text>
               Because each strainer is hand-carved, you may notice slight
               variations in shape and size. These unique differences are what
               make every strainer special and full of character.
-            </p>
+            </Text>
           </div>
         )}
       </section>
 
       <section>
-        <h2 className="text 2xl font-semibold">Care Instructions</h2>
-        <p>
+        <Text variant="bold">Care Instructions</Text>
+        <Text>
           Gently rinse with warm water and mild soap after use. Avoid soaking
           for long periods to preserve the bamboo natural beauty. Dry thoroughly
           before storing.
-        </p>
+        </Text>
       </section>
 
       <section>
-        <h2 className="text 2xl font-semibold">About Pottery</h2>
-        <p>
+        <Text variant="bold">About Pottery</Text>
+        <Text>
           Please expect some slight inperfections as every piece is hand made
           and hand glazed which makes it unique to you.
-        </p>
+        </Text>
       </section>
       <section>
-        <h2>Lets Stay connected</h2>
-        <p>
+        <Text variant="bold">Lets Stay connected</Text>
+        <Text>
           I’d love to see how you style your tea strainer alongside my ceramics!
           Tag me on Instagram @curlypottery to share your photos, or follow
           along for behind-the-scenes updates and inspiration.
-        </p>
+        </Text>
       </section>
     </div>
   );

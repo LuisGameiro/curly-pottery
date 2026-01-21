@@ -29,7 +29,7 @@ const ProductSlider = ({ children, className = "" }: ProductSliderProps) => {
     slides: { perView: 1 },
     created: () => setIsMounted(true),
     drag: true,
-    rubberband: true, // Adds resistance at the end of loops
+    rubberband: true, 
     slideChanged(s) {
       const slideNumber = s.track.details.rel;
       setCurrentSlide(slideNumber);
@@ -37,7 +37,6 @@ const ProductSlider = ({ children, className = "" }: ProductSliderProps) => {
       if (thumbsContainerRef.current) {
         const $el = document.getElementById(`thumb-${slideNumber}`);
         if ($el) {
-          // Improved smooth scrolling for thumbnails
           thumbsContainerRef.current.scrollTo({
             left:
               $el.offsetLeft -
@@ -50,18 +49,11 @@ const ProductSlider = ({ children, className = "" }: ProductSliderProps) => {
     },
   });
 
-  // Stop the history navigation gesture on touch devices
   useEffect(() => {
     const preventNavigation = (event: TouchEvent) => {
-      // Center point of the touch area
       const touchXPosition = event.touches[0].pageX;
-      // Size of the touch area
       const touchXRadius = event.touches[0].radiusX || 0;
 
-      // We set a threshold (10px) on both sizes of the screen,
-      // if the touch area overlaps with the screen edges
-      // it's likely to trigger the navigation. We prevent the
-      // touchstart event in that case.
       if (
         touchXPosition - touchXRadius < 10 ||
         touchXPosition + touchXRadius > window.innerWidth - 10

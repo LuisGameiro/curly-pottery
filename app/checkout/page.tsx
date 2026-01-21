@@ -1,4 +1,4 @@
-import CheckouClient from "./CheckouClient";
+import CheckouClient from "../../components/checkout/CheckouClient";
 
 export const metadata = {
   title: "Checkout - Curly Pottery",

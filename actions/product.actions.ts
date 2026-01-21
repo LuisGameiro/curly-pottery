@@ -158,7 +158,7 @@ export async function getRandomProducts(
 export async function getRelatedProducts(
   categories: Category[],
   excludeId?: string,
-  limit: number = 3,
+  limit: number = 4
 ): Promise<ActionResponse<Product[] | null>> {
   try {
     if (!categories.length)

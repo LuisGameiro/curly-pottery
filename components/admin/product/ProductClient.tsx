@@ -129,6 +129,8 @@ export default function ProductClient({
 
       const response = await upsertProduct({
         ...data,
+        files:[],
+        previews: [],
         id: product?.id,
         slug: slugify(data.name),
         images: productImages.data,

@@ -41,6 +41,16 @@ import { Variant } from "@lib/types/types";
 //   updater((prev) => ({ ...prev, ...defaultChoices }));
 // }
 
+const SIZE_ORDER: Record<string, number> = {
+  xxs: 1,
+  xs: 2,
+  s: 3,
+  m: 4,
+  l: 5,
+  xl: 6,
+  xxl: 7,
+};
+
 type VariantData = {
   variantId: string;
   colorHex: string;
@@ -49,22 +59,29 @@ type VariantData = {
 type VariantMatrix = Record<string, Record<string, VariantData>>;
 
 export function createVariantMatrix(variants: Variant[]): VariantMatrix {
-  // First, gather all unique sizes and colors
-  const sizes = Array.from(new Set(variants.map((v) => v.sizeName))).filter(
+  const rawSizes = Array.from(new Set(variants.map((v) => v.sizeName))).filter(
     (v) => v !== null,
   );
-  const colors = Array.from(new Set(variants.map((v) => v.colorName))).filter(
-    (v) => v !== null,
-  );
+  const rawColors = Array.from(
+    new Set(variants.map((v) => v.colorName)),
+  ).filter((v) => v !== null);
 
-  if (sizes.length === 0 || colors.length === 0) {
+  if (rawSizes.length === 0 || rawColors.length === 0) {
     return {};
   }
 
-  // Initialize the matrix with empty objects for each size and color
+  const sizes = rawSizes.sort((a, b) => {
+    const orderA = SIZE_ORDER[a.toLowerCase()] || 99;
+    const orderB = SIZE_ORDER[b.toLowerCase()] || 99;
+    return orderA - orderB;
+  });
+
+  const colors = rawColors.sort((a, b) => a.localeCompare(b));
+
   const matrix: VariantMatrix = {};
 
   for (const size of sizes) {
+    matrix[size] = {};
     for (const color of colors) {
       matrix[size][color] = {
         variantId: "",
@@ -73,8 +90,6 @@ export function createVariantMatrix(variants: Variant[]): VariantMatrix {
       };
     }
   }
-
-  // Populate the matrix with actual variant data
 
   variants.forEach((variant) => {
     const size = variant.sizeName;
@@ -87,6 +102,6 @@ export function createVariantMatrix(variants: Variant[]): VariantMatrix {
       };
     }
   });
-
+  console.log("Variant Matrix:", matrix);
   return matrix;
 }

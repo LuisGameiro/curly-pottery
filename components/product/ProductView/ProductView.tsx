@@ -38,18 +38,20 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
 
   return (
     <>
-      <Container className="max-w-none w-full " clean>
-        <section className={cn(s.root, "fit")}>
-          <div className={cn(s.main, "fit")}>
+      <Container className="p-0 m-0" clean>
+        <section className={cn(s.root,"p-0 m-0")}>
+          <div className={cn(s.main)}>
             <ProductSlider key={product.id}>
               {variant.images.map((image, i) => (
                 <div key={image} className={s.imageContainer}>
                   <Image
+                    
                     className={s.img}
                     src={image}
                     alt={`${product.name} Image ${i}`}
-                    width={600}
-                    height={600}
+                    width={2400}
+                    height={2400}
+                    
                     priority={i === 0}
                     quality="100"
                   />
@@ -66,21 +68,18 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
             className={s.sidebar}
           />
         </section>
-        <hr className="mt-7 border-accent-2" />
+        <hr className="border" />
 
         {relatedProducts.length > 0 && (
-          <section className="py-12 px-6 mb-10 text-primary">
+          <section className="px-6 my-4">
             <Text variant="sectionHeading">Related Products</Text>
             <div className={s.relatedProductsGrid}>
               {relatedProducts.map((p) => (
-                <div
-                  key={p.slug}
-                  className="bg-background border border-border"
-                >
+                <div key={p.slug}>
                   <ProductCard
+                    key={p.slug}
                     noNameTag
                     product={p}
-                    key={p.slug}
                     variant="default"
                     className="animated fadeIn"
                     imgProps={{
@@ -94,7 +93,7 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
           </section>
         )}
       </Container>
-      <SEO
+      {/* <SEO
         title={product.name}
         description={product.description}
         openGraph={{
@@ -110,7 +109,7 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
             },
           ],
         }}
-      />
+      /> */}
     </>
   );
 };
