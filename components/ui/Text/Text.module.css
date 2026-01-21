@@ -1,7 +1,6 @@
 @reference "tailwindcss";
 @reference "../../../globals.css";
 
-
 .body {
   @apply text-base leading-7 max-w-6xl;
 }
@@ -23,11 +22,15 @@
 }
 
 .boxTitle {
-  @apply  font-bold sm:font-semibold text-lg  tracking-wide border-b pb-2 mb-4 block;
+  @apply font-bold sm:font-semibold text-lg  tracking-wide border-b pb-2 mb-4 block;
 }
 
 .bold {
   @apply font-bold;
+}
+
+.error {
+  @apply text-xs text-red-500 font-medium animate-in fade-in slide-in-from-top-1;
 }
 
 /* Apply base font sizes and styles for typography markup (h2, h2, ul, p, etc.).
@@ -89,4 +92,3 @@
 .body a:hover {
   @apply no-underline;
 }
-

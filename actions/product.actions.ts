@@ -1,14 +1,12 @@
 "use server";
 
+import { ProductInput, VariantInput } from "@lib/form-validator";
 import {
   Product,
   ActionResponse,
   ProductWithVariantsCategories,
   Category,
-  CreateProduct,
-  EditVariant,
 } from "@lib/types/types";
-import { Prisma } from "prisma/generated/prisma/client";
 import { prisma } from "prisma/prisma";
 
 export async function getProductBySlug(
@@ -225,10 +223,10 @@ export async function getProductsByCategorySlug(
     const products = await prisma.product.findMany({
       where: category
         ? {
-            categories: {
-              some: { slug: category },
-            },
-          }
+          categories: {
+            some: { slug: category },
+          },
+        }
         : undefined,
       include: {
         variants: true,
@@ -252,149 +250,81 @@ export async function getProductsByCategorySlug(
   }
 }
 export async function upsertProduct(
-  payload: CreateProduct,
+  payload: ProductInput,
 ): Promise<ActionResponse<Product | null>> {
   try {
-    const { categoryIds, variants, id, ...productData } = payload;
-    const categoriesForUpdate = {
-      set: categoryIds.map((catId: string) => ({ id: catId })),
-    };
+    const { categoryIds, variants, id, files: _files, previews: _previews, ...productData } = payload;
 
-    const categoriesForCreate = {
-      connect: categoryIds.map((catId: string) => ({ id: catId })),
-    };
-    const prepareVariant = (v: EditVariant) => {
+    const existingVariantIds = variants
+      .map((v) => v.id)
+      .filter((id) => id && !id.startsWith("temp-"));
+
+    const productId =
+      id && !id.startsWith("temp-") ? id : "000000000000000000000000";
+
+    const prepareVariant = (v: VariantInput) => {
       const {
+        id: _vId,
         files: _files,
         previews: _previews,
         isExpanded: _isExpanded,
         ...variantData
       } = v;
+
       return {
         ...variantData,
-        details: v.details ? v.details : Prisma.DbNull,
-        discounts: v.discounts ? v.discounts : Prisma.DbNull,
+        details: v.details ?? [],
+        discounts: v.discounts ?? [],
+        images: v.images ?? [],
       };
     };
+
     const product = await prisma.product.upsert({
-      where: { id: id || "new-id" },
+      where: { id: productId },
       update: {
         ...productData,
-        categories: categoriesForUpdate,
+        categories: {
+          set: categoryIds.map((catId) => ({ id: catId })),
+        },
         variants: {
-          upsert: variants.map((v: EditVariant) => ({
-            where: { id: v.id.startsWith("temp-") ? "0" : v.id },
-            update: prepareVariant(v),
-            create: prepareVariant(v),
-          })),
+          deleteMany: {
+            productId: id,
+            id: { notIn: existingVariantIds },
+          },
+          upsert: variants.map((v) => {
+            const isTemp = !v.id || v.id.startsWith("temp-");
+            const variantData = prepareVariant(v);
+
+            return {
+              where: { id: isTemp ? "000000000000000000000000" : v.id },
+              update: variantData,
+              create: variantData,
+            };
+          }),
         },
       },
       create: {
         ...productData,
-        categories: categoriesForCreate,
+        categories: {
+          connect: categoryIds.map((catId) => ({ id: catId })),
+        },
         variants: {
-          create: variants.map((v: EditVariant) => prepareVariant(v)),
+          create: variants.map((v) => prepareVariant(v)),
         },
       },
     });
 
     return {
       success: true,
-      message: "Upsert of product was successfully",
+      message: "Product saved successfully",
       data: product,
     };
   } catch (error) {
     console.error("upsertProduct_ERROR:", error);
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : "A database error occurred",
+      message: error instanceof Error ? error.message : "Database error",
       errors: error,
     };
   }
 }
-
-// export async function createProduct(formData: FormData) {
-//   const categories = formData.getAll("categories") as string[];
-//   const variants = JSON.parse(formData.get("variants") as string); // array of variants
-
-//   await prisma.product.create({
-//     data: {
-//       name: formData.get("name") as string,
-//       description: formData.get("description") as string,
-//       slug: formData.get("slug") as string,
-//       images: JSON.parse(formData.get("images") as string),
-//       requiresShipping: formData.get("requiresShipping") === "on",
-
-//       categories: {
-//         connect: categories.map((id) => ({ id })),
-//       },
-
-//       variants: {
-//         create: variants.map((variant: any) => ({
-//           sku: variant.sku,
-//           price: Number(variant.price),
-//           currency: variant.currency,
-//           stock: Number(variant.stock),
-//           availableForSale: variant.availableForSale,
-//           images: variant.images,
-
-//           sizeName: variant.sizeName ?? null,
-//           widthCm: variant.widthCm ?? null,
-//           heightCm: variant.heightCm ?? null,
-//           depthCm: variant.depthCm ?? null,
-
-//           colorName: variant.colorName ?? null,
-//           colorHex: variant.colorHex ?? null,
-//           glazes: variant.glazes ?? [],
-//         })),
-//       },
-//     },
-//   });
-
-//   revalidatePath("/admin/products");
-// }
-
-// export async function updateProduct(id: string, formData: FormData) {
-//   const categories = formData.getAll("categories") as string[];
-//   const variants = JSON.parse(formData.get("variants") as string);
-
-//   await prisma.product.update({
-//     where: { id },
-//     data: {
-//       name: formData.get("name") as string,
-//       description: formData.get("description") as string,
-//       slug: formData.get("slug") as string,
-//       images: JSON.parse(formData.get("images") as string),
-//       requiresShipping: formData.get("requiresShipping") === "on",
-
-//       categories: {
-//         set: categories.map((id) => ({ id })),
-//       },
-
-//       // Simplest approach: delete & recreate variants
-//       variants: {
-//         deleteMany: {},
-//         create: variants.map((variant: any) => ({
-//           sku: variant.sku,
-//           price: Number(variant.price),
-//           currency: variant.currency,
-//           stock: Number(variant.stock),
-//           availableForSale: variant.availableForSale,
-//           images: variant.images,
-
-//           sizeName: variant.sizeName ?? null,
-//           widthCm: variant.widthCm ?? null,
-//           heightCm: variant.heightCm ?? null,
-//           depthCm: variant.depthCm ?? null,
-
-//           colorName: variant.colorName ?? null,
-//           colorHex: variant.colorHex ?? null,
-//           glazes: variant.glazes ?? [],
-//         })),
-//       },
-//     },
-//   });
-
-//   revalidatePath("/admin/products");
-// }

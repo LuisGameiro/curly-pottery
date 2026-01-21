@@ -34,20 +34,20 @@ export default function ProductsClient({
             Products
           </Text>
           <div className="flex gap-2 w-full  flex-row">
-          <InputSearch
-            className="w-full"
-            placeholder="Search name or SKU..."
-            value={searchTerm}
-            onValueChange={(e) => setSearchTerm(e)}
-          />
-          <Link href="/admin/products/new" passHref>
-            <Button variant="slim" className="text-nowrap">
-              <span className="mr-1">
-                <Plus size={18} />
-              </span>
-              <span>New Product</span>
-            </Button>
-          </Link>
+            <InputSearch
+              className="w-full"
+              placeholder="Search name or SKU..."
+              value={searchTerm}
+              onValueChange={(e) => setSearchTerm(e)}
+            />
+            <Link href="/admin/products/new" passHref>
+              <Button variant="slim" className="text-nowrap">
+                <span className="mr-1">
+                  <Plus size={18} />
+                </span>
+                <span>New Product</span>
+              </Button>
+            </Link>
           </div>
         </div>
         <Text variant="subHeading">Manage your inventory and variants.</Text>

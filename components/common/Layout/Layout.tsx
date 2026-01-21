@@ -2,8 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { Navbar, Footer } from "@components/common";
-import { useAcceptCookies } from "@lib/hooks/useAcceptCookies";
-import { Button, LoadingDots } from "@components/ui";
+import { LoadingDots } from "@components/ui";
 // import { MenuSidebarView } from "@components/common/UserNav";
 import { Toaster } from "sonner";
 
@@ -27,8 +26,6 @@ interface Props {
 }
 
 export default function Layout({ children }: Props) {
-  const { acceptedCookies, onAcceptCookies } = useAcceptCookies();
-
   const navBarlinks = [
     { label: "Shop", href: "/shop" },
     { label: "Contacts", href: "/contacts" },

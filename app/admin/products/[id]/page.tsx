@@ -2,7 +2,7 @@ import { getProductById } from "actions/product.actions";
 import { getAllCategories } from "actions/category.actions";
 import ProductClient from "./ProductClient";
 import notFound from "app/not-found";
-import { Category, Product, ProductWithVariantsCategories } from "@lib/types/types";
+import { Category, ProductWithVariantsCategories } from "@lib/types/types";
 
 export const metadata = {
   title: "Product - Curly Pottery",
@@ -20,25 +20,31 @@ export default async function ProductForm({
   let productData: ProductWithVariantsCategories | null = null;
   let categoriesData: Category[] = [];
 
+  const responseCategories = await getAllCategories();
+
+  if (!responseCategories.success) {
+    throw new Error(responseCategories.message);
+  }
+
+  categoriesData = responseCategories.data;
+
   if (isEditMode) {
     const responseProduct = await getProductById(id as string);
-    const responseCategories = await getAllCategories();
 
-    if (!responseProduct.success || !responseCategories.success) {
-      throw new Error(responseProduct.message + responseCategories.success);
+    if (!responseProduct.success) {
+      throw new Error(responseProduct.message);
     }
 
     if (!responseProduct.data) {
       return notFound();
     }
     productData = responseProduct.data;
-    categoriesData = responseCategories.data;
   }
 
   return (
     <ProductClient
       isEditMode={isEditMode}
-      initialData={productData}
+      product={productData}
       categories={categoriesData}
     />
   );

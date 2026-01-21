@@ -1,64 +1,44 @@
 "use client";
 
-import React from "react";
 import { Plus } from "lucide-react";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import { Text } from "@components/ui";
-import { EditProduct, EditVariant } from "@lib/types/types";
 import { ProductVariant } from "./ProductVariant";
+import { toast } from "sonner";
 
-interface VariantManagerProps {
-  product: EditProduct;
-  variants: EditVariant[];
-  setVariants: React.Dispatch<React.SetStateAction<EditVariant[]>>;
-}
+export const VariantManager = () => {
+  const { control } = useFormContext();
 
-export const VariantManager = ({
-  product,
-  variants,
-  setVariants,
-}: VariantManagerProps) => {
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "variants",
+  });
+
   const addVariant = () => {
-    setVariants([
-      ...variants,
-      {
-        id: `temp-${Date.now()}`,
-        sku: "",
-        price: 0,
-        stock: 0,
-        details: [],
-        discounts: [],
-        files: [],
-        previews: [],
-        sizeName: "M",
-        colorName: "",
-        availableForSale: true,
-        isExpanded: true,
-        currency: "USD",
-        colorHex: "FFFFFF",
-        productId: product.id,
-        images: [],
-      },
-    ]);
+    append({
+      id: `temp-${fields.length + 1}`,
+      sku: "",
+      price: 0,
+      stock: 0,
+      details: [],
+      discounts: [],
+      files: [],
+      previews: [],
+      sizeName: "M",
+      colorName: "",
+      availableForSale: true,
+      isExpanded: true,
+      currency: "USD",
+      colorHex: "FFFFFF",
+      images: [],
+    });
   };
 
-  const removeVariant = (id: string) => {
-    if (variants.length === 1)
-      return alert("Product must have at least one variant.");
-    setVariants(variants.filter((v) => v.id !== id));
-  };
-
-  const toggleVariant = (id: string) => {
-    setVariants(
-      variants.map((v) =>
-        v.id === id ? { ...v, isExpanded: !v.isExpanded } : v,
-      ),
-    );
-  };
-
-  const updateVariant = (id: string, field: string, value: unknown) => {
-    setVariants(
-      variants.map((v) => (v.id === id ? { ...v, [field]: value } : v)),
-    );
+  const handleRemoveVariant = (index: number) => {
+    if (fields.length === 1) {
+      return toast.error("Product must have at least one variant.");
+    }
+    return confirm("Are you sure you want to remove this variant?") && remove(index);
   };
 
   return (
@@ -69,7 +49,7 @@ export const VariantManager = ({
             Variants
           </h2>
           <Text className="text-muted-foreground text-sm">
-            ({variants.length})
+            ({fields.length})
           </Text>
         </div>
         <button
@@ -82,16 +62,11 @@ export const VariantManager = ({
       </div>
 
       <div className="space-y-4">
-        {variants.map((variant) => (
+        {fields.map((field, index) => (
           <ProductVariant
-            key={variant.id}
-            variant={variant}
-            product={product}
-            onToggle={() => toggleVariant(variant.id)}
-            onRemove={() => removeVariant(variant.id)}
-            onUpdate={(field: string, value: unknown) =>
-              updateVariant(variant.id, field, value)
-            }
+            key={field.id}
+            index={index}
+            onRemove={() => handleRemoveVariant(index)}
           />
         ))}
       </div>

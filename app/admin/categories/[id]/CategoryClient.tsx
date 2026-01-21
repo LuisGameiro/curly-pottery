@@ -29,39 +29,38 @@ export default function CategoryClient({
     previews: string[];
   }>({
     files: category?.image ? [category.image] : [],
-    previews: category?.image ? [category.image] : []
+    previews: category?.image ? [category.image] : [],
   });
   const [formData, setFormData] = useState({
     id: category?.id || "",
     name: category?.name || "",
     slug: category?.slug || "",
-    image: category?.image || '',
+    image: category?.image || "",
   });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-
     try {
-    e.preventDefault();
-    setLoading(true);
-    setFormData((prev) => ({
-      ...prev,
-      slug: slugify(formData.name),
-    }));
-    setErrors({});
-    const validation = CategorySchema.safeParse({
-      ...formData,
-      image: gallery.previews[0] ,
-    });
-
-    if (!validation.success) {
-      const fieldErrors: { [key: string]: string } = {};
-      validation.error.issues.forEach((err) => {
-        if (err.path[0]) fieldErrors[err.path[0].toString()] = err.message;
+      e.preventDefault();
+      setLoading(true);
+      setFormData((prev) => ({
+        ...prev,
+        slug: slugify(formData.name),
+      }));
+      setErrors({});
+      const validation = CategorySchema.safeParse({
+        ...formData,
+        image: gallery.previews[0],
       });
-      setErrors(fieldErrors);
-      return;
-    }
+
+      if (!validation.success) {
+        const fieldErrors: { [key: string]: string } = {};
+        validation.error.issues.forEach((err) => {
+          if (err.path[0]) fieldErrors[err.path[0].toString()] = err.message;
+        });
+        setErrors(fieldErrors);
+        return;
+      }
 
       const ResponsEmail = await syncImages(gallery.files, [
         category?.image || "",
@@ -81,7 +80,7 @@ export default function CategoryClient({
         id: formData.id,
         name: formData.name,
         slug: formData.slug,
-        image: ResponsEmail.data ? ResponsEmail.data[0] : category?.image || '',
+        image: ResponsEmail.data ? ResponsEmail.data[0] : category?.image || "",
       });
 
       if (response.success) {
@@ -154,7 +153,6 @@ export default function CategoryClient({
             onImagesChange={setGallery}
             error={errors.image}
             size={64}
-            
           />
         </form>
       </main>

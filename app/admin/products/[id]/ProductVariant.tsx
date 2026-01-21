@@ -4,43 +4,67 @@ import { Package, Trash2, ChevronUp, ChevronDown } from "lucide-react";
 import { Container, Text, Button, Input } from "@components/ui";
 import InputCheckbox from "@components/ui/Input/InputCheckbox";
 import InputImage from "@components/ui/Input/InputImage";
-import { SizeNames, Detail, EditProduct, EditVariant } from "@lib/types/types";
-import { skulify } from "@lib/skulify";
+import { SizeNames } from "@lib/types/types";
 import { VariantDetails } from "./VariantDetails";
 import { VariantDiscounts } from "./VariantDiscounts";
 import InputSelect from "@components/ui/Input/InputSelect";
-import { Discount } from "@lib/types/types";
-
-interface PorductVariantProps {
-  variant: EditVariant;
-  product: EditProduct;
-  onUpdate: (field: string, value: unknown) => void;
-  onRemove: () => void;
-  onToggle: () => void;
-}
+import { Controller, useFormContext } from "react-hook-form";
+import { skulify } from "@lib/skulify";
+import { useEffect } from "react";
 
 export const ProductVariant = ({
-  variant,
-  product,
-  onUpdate,
+  index,
   onRemove,
-  onToggle,
-}: PorductVariantProps) => {
+}: {
+  index: number;
+  onRemove: () => void;
+}) => {
+  const {
+    register,
+    control,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useFormContext();
+
+  const productName = watch(`name`);
+  const sizeName = watch(`variants.${index}.sizeName`);
+  const colorName = watch(`variants.${index}.colorName`);
+  const isExpanded = watch(`variants.${index}.isExpanded`);
+  const sku = watch(`variants.${index}.sku`);
+
+  const variantData = watch(`variants.${index}`);
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const variantErrors = (errors.variants as any)?.[index];
+
+  useEffect(() => {
+    const newSku = skulify(productName, sizeName, colorName);
+
+    setValue(`variants.${index}.sku`, newSku, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  }, [productName, sizeName, colorName, setValue, index]);
+
+  const toggleExpand = () => {
+    setValue(`variants.${index}.isExpanded`, !isExpanded);
+  };
+
   return (
     <Container variant="box" className="p-0 overflow-hidden">
       <div
-        className="p-4 flex items-center justify-between cursor-pointer bg-secondary/20 hover:bg-secondary/30 transition"
-        onClick={onToggle}
+        className={`p-4 flex items-center justify-between cursor-pointer border-b  ${variantErrors ? " bg-red-100" : "bg-secondary/20"}`}
+        onClick={toggleExpand}
       >
         <div className="flex items-center gap-4">
           <Package size={16} />
-          <Text className="font-bold">
-            {skulify(product, variant) || "New Variant"}
-          </Text>
+          <Text className="font-bold">{sku}</Text>
         </div>
         <div className="flex items-center gap-4">
-          <Text className="text-sm font-medium">£{variant.price}</Text>
+          <Text className="text-sm">£{variantData.price}</Text>
           <Button
+            type="button"
             variant="naked"
             color="danger"
             onClick={(e) => {
@@ -50,7 +74,7 @@ export const ProductVariant = ({
           >
             <Trash2 size={16} />
           </Button>
-          {variant.isExpanded ? (
+          {variantData.isExpanded ? (
             <ChevronUp size={18} />
           ) : (
             <ChevronDown size={18} />
@@ -58,81 +82,83 @@ export const ProductVariant = ({
         </div>
       </div>
 
-      {variant.isExpanded && (
+      {variantData.isExpanded && (
         <div className="p-6 space-y-6 animate-in fade-in slide-in-from-top-2">
           <div className=" grid grid-cols-1 md:grid-cols-2 gap-6">
             <Input
               type="number"
               label="Price (£)"
-              value={variant.price ?? 0}
-              onChange={(e) => onUpdate("price", parseFloat(e.target.value))}
+              {...register(`variants.${index}.price`, { valueAsNumber: true })}
+              error={variantErrors?.price?.message}
             />
-
             <Input
-              label="Inventory Stock"
               type="number"
-              value={variant.stock ?? 0}
-              onChange={(e) => onUpdate("stock", parseInt(e.target.value))}
+              label="Inventory Stock"
+              {...register(`variants.${index}.stock`, { valueAsNumber: true })}
+              error={variantErrors?.stock?.message}
             />
           </div>
-
           <div>
             <Text variant="subHeading">Size Variant</Text>
             <div className=" grid grid-cols-1 md:grid-cols-2 gap-6">
               <InputSelect
-                value={variant.sizeName ?? ""}
+                {...register(`variants.${index}.sizeName`)}
                 options={Object.values(SizeNames)}
-                onChange={(e) => onUpdate("sizeName", e.target.value)}
               />
             </div>
           </div>
 
           <div>
             <Text variant="subHeading">Color Variant</Text>
-
             <div className=" grid grid-cols-1 md:grid-cols-2 gap-6">
               <Input
                 label="Name"
-                value={variant.colorName ?? ""}
-                onChange={(e) => onUpdate("colorName", e.target.value)}
+                {...register(`variants.${index}.colorName`)}
+                error={variantErrors?.colorName?.message}
               />
 
               <Input
                 label="Hex"
                 type="color"
                 className=" h-10 [&::-webkit-color-swatch-wrapper]:p-0 "
-                value={variant.colorHex ?? ""}
-                onChange={(e) => onUpdate("colorHex", e.target.value)}
+                {...register(`variants.${index}.colorHex`)}
+                error={variantErrors?.colorHex?.message}
               />
             </div>
           </div>
 
-          <InputCheckbox
-            label="Available for Sale"
-            checked={variant.availableForSale}
-            onChange={(e) => onUpdate("availableForSale", e.target.checked)}
-          />
+          <div className="flex gap-4">
+            <Controller
+              name={`variants.${index}.availableForSale`}
+              control={control}
+              render={({ field }) => (
+                <InputCheckbox
+                  label="Available for Sale"
+                  checked={field.value}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+          </div>
 
-          <VariantDetails
-            details={(variant.details ?? []) as Detail[]}
-            onChange={(val) => onUpdate("details", val)}
-          />
+          <VariantDetails variantIndex={index} />
+          <VariantDiscounts variantIndex={index} />
 
-          <VariantDiscounts
-            discounts={(variant.discounts ?? []) as Discount[]}
-            onChange={(val) => onUpdate("discounts", val)}
-          />
-
-          <InputImage
-            label="Variant Images"
-            multiple={true}
-            files={variant.files}
-            previews={variant.previews}
-            onImagesChange={({ files, previews }) => {
-              onUpdate("files", files);
-              onUpdate("previews", previews);
-            }}
-            // error={errors.images}
+          <Controller
+            name={`variants.${index}.files`}
+            control={control}
+            render={({ field }) => (
+              <InputImage
+                multiple
+                files={field.value}
+                previews={watch(`variants.${index}.previews`)}
+                onImagesChange={({ files, previews }) => {
+                  field.onChange(files);
+                  setValue(`variants.${index}.previews`, previews);
+                }}
+                error={variantErrors?.files?.message as string}
+              />
+            )}
           />
         </div>
       )}

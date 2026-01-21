@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import cn from "clsx";
 import s from "./FeatureBar.module.css";
-import { Container, Text, Button, Input } from "@components/ui";
+import { Text, Button } from "@components/ui";
 
 interface FeatureBarProps {
   className?: string;
@@ -12,13 +12,10 @@ interface FeatureBarProps {
 const FeatureBar = ({ className }: FeatureBarProps) => {
   const [showBanner, setShowBanner] = useState(false);
 
-  useEffect(() => {
-    const consent = localStorage.getItem("cookie-consent");
-    if (!consent) {
-      setShowBanner(true);
-    }
-  }, []);
-
+  const consent = localStorage.getItem("cookie-consent");
+  if (!consent) {
+    setShowBanner(true);
+  }
   const handleAcceptAll = () => {
     localStorage.setItem(
       "cookie-consent",

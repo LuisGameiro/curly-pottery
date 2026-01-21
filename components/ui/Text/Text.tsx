@@ -9,6 +9,7 @@ interface TextProps {
   children?: React.ReactNode;
   html?: string;
   onClick?: () => void;
+  role?: string;
 }
 
 type Variant =
@@ -18,7 +19,8 @@ type Variant =
   | "sectionHeading"
   | "subHeading"
   | "bold"
-  | "boxTitle";
+  | "boxTitle"
+  | "error";
 
 const Text = ({
   style,
@@ -27,6 +29,7 @@ const Text = ({
   children,
   html,
   onClick,
+  role,
 }: TextProps) => {
   const componentsMap: Record<Variant, ElementType> = {
     body: "div",
@@ -36,6 +39,7 @@ const Text = ({
     boxTitle: "h3",
     subHeading: "h5",
     bold: "strong",
+    error: "p",
   };
 
   const Component = componentsMap[variant];
@@ -51,6 +55,7 @@ const Text = ({
       className={cn(s.root, s[variant], className)}
       onClick={onClick}
       style={style}
+      role={role}
       {...htmlContentProps}
     >
       {children}

@@ -17,7 +17,7 @@ interface ImageInputProps {
   }) => void;
   error?: string;
   className?: string;
-  size?: number
+  size?: number;
 }
 
 const InputImage = ({
@@ -27,7 +27,7 @@ const InputImage = ({
   previews = [],
   onImagesChange,
   error,
-  size =24,
+  size = 24,
   className,
 }: ImageInputProps) => {
   const generatedId = useId();

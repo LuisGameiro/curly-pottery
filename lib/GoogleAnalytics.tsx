@@ -1,7 +1,6 @@
 "use client";
 import Script from "next/script";
 import { useEffect, useState } from "react";
-import { id } from "zod/v4/locales";
 export const getConsent = () => {
   if (typeof window === "undefined") return null;
   const saved = localStorage.getItem("cookie-consent");

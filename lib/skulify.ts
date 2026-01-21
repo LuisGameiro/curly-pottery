@@ -1,21 +1,20 @@
-import { EditProduct, EditVariant, Product, Variant } from "./types/types";
-
 export const skulify = (
-  product: Product | EditProduct,
-  variant: Variant | EditVariant,
+  name: string,
+  sizeName: string,
+  colorName: string,
 ): string => {
-  const namePart = product.name
+  const safeName = String(name || "");
+  const safeSize = String(sizeName || "");
+  const safeColor = String(colorName || "");
+  const namePart = safeName
     .split(" ")
     .map((word) => word.slice(0, 3))
     .join("-")
     .toLowerCase()
-    .replace(/[^\w-]+/g, "") // Remove non-word chars
-    .replace(/--+/g, "-") // Replace multiple dashes
+    .replace(/[^\w-]+/g, "")
+    .replace(/--+/g, "-")
     .trim()
     .toLowerCase();
 
-  return `${namePart}-${variant.sizeName ?? ""}-${variant.colorName ?? ""}`.replace(
-    /\s+/g,
-    "-",
-  );
+  return `${namePart}-${safeSize}-${safeColor}`.replace(/\s+/g, "-");
 };
