@@ -44,11 +44,7 @@ export default function UserNav({ className }: UserNavProps) {
         </li>
         <li className={s.item}>
           <Link href="/cart">
-            <Button
-              className={s.item}
-              variant="naked"
-              aria-label={`Cart items: ${itemsCount}`}
-            >
+            <Button variant="naked" aria-label={`Cart items: ${itemsCount}`}>
               <ShoppingBasket size={28} />
               {itemsCount > 0 && (
                 <span className={s.bagCount}>{itemsCount}</span>
@@ -56,7 +52,6 @@ export default function UserNav({ className }: UserNavProps) {
             </Button>
           </Link>
         </li>
-
         <li className={s.mobileMenu}>
           <Dropdown>
             <DropdownTrigger

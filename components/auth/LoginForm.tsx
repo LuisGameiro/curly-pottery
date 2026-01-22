@@ -13,28 +13,8 @@ export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState("");
-  // const [success, setSuccess] = useState(false);
   const redirectTo = searchParams.get("redirect") || "/shop";
   const isRegistered = searchParams.get("registered") === "true";
-
-  // useEffect(() => {
-  //   if (isRegistered) {
-  //     const timer = setTimeout(() => {
-  //       router.replace("/auth/login");
-  //     }, 5000);
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [isRegistered, router]);
-  // useEffect(() => {
-  //   if (searchParams.get("registered") === "true") {
-  //     setSuccess(true);
-  //     const timer = setTimeout(() => {
-  //       setSuccess(false);
-  //       router.replace("/auth/login");
-  //     }, 5000);
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [searchParams, router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -131,7 +111,7 @@ export default function LoginForm() {
 
         <div className="mt-6 text-center">
           <Text className="text-sm">
-            Don&apost have an account?{" "}
+            Do not have an account?{" "}
             <Link
               href="/auth/register"
               className="font-bold text-secondary hover:underline"

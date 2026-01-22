@@ -43,7 +43,6 @@ export default function RegisterForm() {
       setError(result.error);
       setLoading(false);
     } else {
-      // Logic for auto-login after registration
       const email = formData.get("email") as string;
       const password = formData.get("password") as string;
 

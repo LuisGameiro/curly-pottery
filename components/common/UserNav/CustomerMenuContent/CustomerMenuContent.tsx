@@ -10,6 +10,7 @@ import {
 } from "@components/ui/Dropdown/Dropdown";
 import { Moon, Sun } from "lucide-react";
 import { useUser } from "@lib/hooks/useUser";
+import { signOut } from "next-auth/react";
 
 const LINKS = [
   {
@@ -87,7 +88,7 @@ export default function CustomerMenuContent() {
               My Account
             </a>
 
-            <a className={s.link} onClick={() => logout()}>
+            <a className={s.link} onClick={() => signOut()}>
               Logout
             </a>
           </div>

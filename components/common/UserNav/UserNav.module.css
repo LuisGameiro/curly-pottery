@@ -43,7 +43,7 @@
 }
 
 .mobileMenu {
-  @apply flex md:hidden ml-6 text-secondary;
+  @apply p-2 rounded-lg flex md:hidden ml-6 text-secondary hover:text-on-secondary hover:bg-secondary/20 ;
 }
 
 .avatarButton:focus,
