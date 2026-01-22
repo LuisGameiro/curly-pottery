@@ -63,11 +63,11 @@ const ProductSlider = ({ children, className = "" }: ProductSliderProps) => {
 
     const slider = sliderContainerRef.current!;
 
-    slider.addEventListener("touchstart", preventNavigation);
+    slider.addEventListener("touchstart", preventNavigation,{ passive: true });
 
     return () => {
       if (slider) {
-        slider.removeEventListener("touchstart", preventNavigation);
+        slider.removeEventListener("touchstart", preventNavigation,);
       }
     };
   }, []);

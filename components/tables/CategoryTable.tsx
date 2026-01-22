@@ -37,13 +37,19 @@ export default function CategoryTable({
     {
       header: "Image",
       render: (cat: Category) => (
-        <div className="flex justify-center items-center w-full">
+        <div className="flex justify-center items-center">
           <Image
             src={cat.image || "/placeholder.png"}
             alt={cat.name}
-            width={40}
-            height={40}
-            className="object-cover rounded-lg"
+            height={60}
+            width={60}
+            quality={100}
+            style={{
+              width: 'auto',
+              height: 'auto',
+              borderRadius: '8px',
+            }}
+            loading="eager"
           />
         </div>
       ),

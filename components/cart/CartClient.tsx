@@ -10,7 +10,7 @@ import Link from "next/link";
 export default function CartClient() {
   const { data, isLoading, isEmpty } = useCart();
 
-  if (isLoading)
+  if (!isLoading)
     return <Container className="py-20 text-center">Loading...</Container>;
 
   if (isEmpty) {
@@ -23,7 +23,7 @@ export default function CartClient() {
   }
 
   return (
-    <Container className="p-10">
+    <Container>
       <header>
         <Text variant="heading">Shopping Cart</Text>
       </header>
@@ -32,7 +32,7 @@ export default function CartClient() {
         <div className="lg:col-span-8">
           <ul className="divide-y border-b">
             {data?.lineItems.map((item: CartLineItem) => (
-              <CartItem key={item.id} item={item} />
+              <CartItem key={item.variantId} item={item} />
             ))}
           </ul>
         </div>

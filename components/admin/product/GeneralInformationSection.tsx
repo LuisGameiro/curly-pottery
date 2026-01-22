@@ -118,7 +118,6 @@ export default function GeneralInformationSection({
                   onChange(files);
                   setValue("previews", previews);
                 }}
-                className="w-40 h-40 flex flex-1 justify-center"
                 error={errors.files?.message as string}
               />
             )}

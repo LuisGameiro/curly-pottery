@@ -35,8 +35,7 @@ const ProductSidebar = ({
   const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
 
-  const forSale = variant?.stock !== 0 || variant?.availableForSale;
-
+  const forSale = variant?.stock !== 0 && variant?.availableForSale;
   const addToCart = async () => {
     setLoading(true);
     try {
@@ -106,7 +105,7 @@ const ProductSidebar = ({
         </p>
 
         {!forSale ? (
-          <div className="bg-red-500/20 px-10 py-2 text-center justify-center border border-primary items-center tracking-wide">
+          <div className="bg-red-500/20 px-10 py-2 text-center justify-center border border-red-500 items-center tracking-wide">
             <Text variant="bold" className={s.button}>
               OUT OF STOCK
             </Text>
@@ -121,13 +120,17 @@ const ProductSidebar = ({
             <div className="flex h-16 flex-1 text-2xl font-semibold items-center">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                disabled={quantity <= 1}
                 className="flex px-4 h-full  hover:bg-accent-1 transition items-center"
               >
                 -
               </button>
               <span className="px-6 ">{quantity}</span>
               <button
-                onClick={() => setQuantity(quantity + 1)}
+                onClick={() =>
+                  setQuantity(Math.min(variant.stock, quantity + 1))
+                }
+                disabled={quantity >= variant.stock}
                 className="flex px-4 h-full  hover:bg-accent-1 transition items-center"
               >
                 +
@@ -204,7 +207,7 @@ const ProductSidebar = ({
             and hand glazed which makes it unique to you.
           </Text>
         </Collapse>
-        
+
         <Collapse title={"Let's Stay Connected"}>
           {/* <Text variant="bold">Lets Stay connected</Text> */}
           <Text className="text-justify">

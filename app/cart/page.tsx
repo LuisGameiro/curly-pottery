@@ -7,5 +7,10 @@ export const metadata = {
 };
 
 export default function CartPage() {
-  return <CartClient />;
+  return (
+    <div className="p-10">
+      <CartClient />
+    </div>
+  )
+  
 }

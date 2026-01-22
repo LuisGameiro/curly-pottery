@@ -1,9 +1,9 @@
 /* @reference "tailwindcss";
-@reference "../../../../globals.css";
+@reference "../../../globals.css";
 
 .root {
   @apply flex flex-col py-4;
-}  */
+}   */
 
 /* .root:first-child {
   padding-top: 0;

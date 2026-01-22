@@ -84,8 +84,9 @@ const InputImage = ({
               src={src}
               width={size}
               height={size}
+              quality={100}
               alt="Preview"
-              className={cn("object-cover w-full h-full")}
+              className={"object-cover w-full h-full"}
             />
             <button
               type="button"

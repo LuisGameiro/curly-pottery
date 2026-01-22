@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth";
 import { Prisma } from "prisma/generated/prisma/client";
 import { prisma } from "prisma/prisma";
 
-export async function getCartFromDbAction() {
+export async function getCartFromDbAction(): Promise<Cart | null> {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) return null;

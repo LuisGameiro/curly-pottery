@@ -38,11 +38,11 @@ export default function useCart() {
       totalPrice: subtotal,
       currency: "GBP",
     },
-    isLoading: isLoading,
+    isLoading,
     isEmpty: cartItems.length === 0,
-    addItem: addItem,
-    removeItem: removeItem,
-    updateItem: updateItem,
-    deleteAll: deleteAll,
+    addItem,
+    removeItem,
+    updateItem,
+    deleteAll,
   };
 }

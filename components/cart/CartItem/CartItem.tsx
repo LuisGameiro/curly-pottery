@@ -4,7 +4,7 @@ import { ChangeEvent, useState } from "react";
 import cn from "clsx";
 import Image from "next/image";
 import Link from "next/link";
-
+import s from "./CartItem.module.css";
 import Quantity from "@components/ui/Quantity";
 import useCart from "@lib/hooks/useCart";
 import { calculateDiscount } from "@lib/calculate-price";
@@ -21,10 +21,8 @@ const CartItem = ({
 }: {
   variant?: "default" | "display";
   item: CartLineItem;
-  // currencyCode: CurrencyCode;
 }) => {
   const { removeItem, updateItem } = useCart();
-  // const { closeSidebarIfPresent } = useUI();
   const [removing, setRemoving] = useState(false);
   const [quantity, setQuantity] = useState<number>(item.quantity);
 
@@ -52,16 +50,9 @@ const CartItem = ({
     }
   };
 
-  // useEffect(() => {
-  //   if (item.quantity !== Number(quantity)) {
-  //     setQuantity(item.quantity);
-  //   }
-  // }, [item.quantity, quantity,setQuantity]);
-
   return (
     <li
       className={cn(
-        // s.root,
         "border-b border-accent-2 last:border-b-0 sm:flex justify-between py-2",
         {
           "opacity-50 pointer-events-none": removing,
@@ -69,24 +60,27 @@ const CartItem = ({
       )}
       {...rest}
     >
-      <div className="flex ">
-        <div className="relative w-20 h-20 sm:w-24 sm:h-24 bg-accent-1 rounded-md overflow-hidden border border-accent-2  mr-2">
-          <Link href={`/shop/${item.slug}`}>
+      <div className="flex items-center">
+        <div className="w-20 h-20 sm:w-24 sm:h-24 bg-accent-1 rounded-md overflow-hidden border border-accent-2 mr-2">
+          <Link
+            href={`/shop/${item.slug}`}
+            className="relative block w-full h-full"
+          >
             <Image
-              // onClick={() => closeSidebarIfPresent()}
-              className="object-cover transition-transform hover:scale-105"
-              fill
-              src={item.images?.[0] || placeholderImg}
+              src={item.images || placeholderImg}
               alt={item.sku || "Product Image"}
+              className="object-cover"
+              fill
+              sizes="80px"
             />
           </Link>
         </div>
 
-        <div>
+        <div className="ml-2 flex-1 items-center">
           <Link href={`/shop/${item.slug}`}>
             <Text
               variant="bold"
-              // onClick={() => closeSidebarIfPresent()}
+              className="hover:underline mb-1 block max-w-xs"
             >
               {item.name}
             </Text>

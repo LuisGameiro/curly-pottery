@@ -40,15 +40,22 @@ export default function ProductTable({
     {
       header: "Product",
       render: (p: ProductWithVariantsCategories) => (
-        <div className="flex items-center gap-3 justify-center">
+        <div className="flex items-center gap-3 justify-start">
           <Image
             src={p.images[0] || "/placeholder.png"}
-            width={40}
-            height={40}
-            className="rounded-md object-cover"
-            alt=""
+            alt={`${p.name} Image`}
+            height={60}
+            width={60}
+            quality={100}
+            style={{
+              width: 'auto',
+              height: 'auto',
+              borderRadius: '8px',
+            }}
+            loading="eager"
           />
-          <div>
+
+          <div className="flex-1 justify-center">
             <div className="font-medium">{p.name}</div>
             <div className="text-xs text-muted-foreground">
               {p.variants.length} variants

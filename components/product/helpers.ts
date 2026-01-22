@@ -102,6 +102,6 @@ export function createVariantMatrix(variants: Variant[]): VariantMatrix {
       };
     }
   });
-  console.log("Variant Matrix:", matrix);
+
   return matrix;
 }

@@ -2,8 +2,9 @@ import Link from "next/link";
 import s from "./ProductCard.module.css";
 import Image, { ImageProps } from "next/image";
 import { cn } from "@lib/utils";
-import { calculateDiscount } from "@lib/calculate-price";
+import { calculateDiscount, showCurrency } from "@lib/calculate-price";
 import {
+  CurrencyCode,
   Discount,
   Product,
   ProductWithVariantsCategories,
@@ -40,26 +41,16 @@ const ProductCard = ({
           product.variants[0].price,
           product.variants[0].discounts as Discount[],
         )
-      : { price: "$0.00", finalPrice: "$0.00", hasDiscount: false };
+      : { price: "0", finalPrice: "0", hasDiscount: false };
 
   return (
     <Link
-      href={admin ? `/admin/products/${product.slug}` : `/shop/${product.slug}`}
+      href={`/shop/${product.slug}`}
       className={rootClassName}
       aria-label={product.name}
     >
       {variant === "slim" && (
         <>
-          <div className="absolute top-0 bg-transparent left-0 z-20">
-            <span>
-              {product &&
-              "categories" in product &&
-              product.categories.length > 0
-                ? product.categories[0].name
-                : ""}
-            </span>
-          </div>
-
           {product?.images && (
             <Image
               quality="100"
@@ -67,6 +58,11 @@ const ProductCard = ({
               alt={product.name || "Product Image"}
               height={320}
               width={320}
+              style={{
+                width: "100%",
+                height: "auto",
+                objectFit: "cover",
+              }}
               {...imgProps}
             />
           )}
@@ -88,6 +84,11 @@ const ProductCard = ({
                 src={product.images[0] || placeholderImg}
                 height={540}
                 width={540}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  objectFit: "cover",
+                }}
                 quality="85"
                 {...imgProps}
               />
@@ -95,11 +96,13 @@ const ProductCard = ({
             <div className="absolute bottom-2 right-2 z-20 rounded-md bg-background/30  px-2 py-1 text-sm font-medium text-foreground backdrop-blur">
               {hasDiscount ? (
                 <>
-                  <span className="line-through opacity-40 mr-1">{price}</span>
-                  <span>{finalPrice}</span>
+                  <span className="line-through opacity-40 mr-1">
+                    £ {price}
+                  </span>
+                  <span>£ {finalPrice}</span>
                 </>
               ) : (
-                <span>{price}</span>
+                <span>£ {price}</span>
               )}
             </div>
           </div>
@@ -108,10 +111,6 @@ const ProductCard = ({
 
       {variant === "default" && (
         <>
-          {/* <ProductTag
-            name={product.name}
-            price={`${price} ${product.price?.currencyCode}`}
-          /> */}
           <div className={s.imageContainer}>
             {product?.images && (
               <Image
@@ -121,6 +120,11 @@ const ProductCard = ({
                 height={540}
                 width={540}
                 quality="100"
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  objectFit: "cover",
+                }}
                 {...imgProps}
               />
             )}

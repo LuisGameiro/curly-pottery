@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { syncCartAction } from "actions/cart.actions";
-import { CartLineItem, ProductWithVariantsCategories } from "@lib/types/types";
+import { getCartFromDbAction, syncCartAction } from "actions/cart.actions";
+import { CartLineItem, Discount, ProductWithVariantsCategories } from "@lib/types/types";
 
 interface CartStore {
   cartItems: CartLineItem[];
@@ -39,15 +39,19 @@ export const useCartStore = create<CartStore>()(
           newItems = [
             ...cartItems,
             {
-              ...item,
               quantity,
               images: item.images[0] || "",
               variantId: item.variants[0].id,
               sku: item.variants[0].sku || "",
               stock: item.variants[0].stock || 0,
               price: item.variants[0].price || 0,
-              currency: "USD",
-              discounts: [],
+              currency: item.variants[0].currency || "GBP",
+              discounts: (item.variants[0].discounts ?? []) as Discount[],
+              id: item.id,
+              slug: item.slug,
+              name: item.name,
+              colorName: item.variants[0].colorName ?? "",
+              sizeName: item.variants[0].sizeName ?? ""
             },
           ];
         }
@@ -82,7 +86,8 @@ export const useCartStore = create<CartStore>()(
         set({ isLoading: true });
         try {
           // const dbItems = await getCartFromDbAction();
-          //if (dbItems) set({ cartItems: dbItems });
+
+          // if (dbItems) set({ cartItems: dbItems.lineItems });
         } catch (error) {
           console.error("Failed to sync cart", error);
         } finally {

@@ -103,8 +103,8 @@ export type CartLineItem = {
   stock: number;
   price: number;
   currency: CurrencyCode;
-  colorName?: string;
-  sizeName?: string;
+  colorName: string;
+  sizeName: string;
   discounts: Discount[];
 };
 
@@ -132,6 +132,7 @@ export type CreateOrder = {
   shippingPrice: number;
   shippingMethod: string;
 };
+
 
 type PrismaOrderWithUser = Prisma.OrderGetPayload<{
   include: { user: true };

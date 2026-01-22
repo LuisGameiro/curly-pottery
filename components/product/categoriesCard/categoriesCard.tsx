@@ -7,21 +7,16 @@ interface Props {
   cat: Category;
   noNameTag?: boolean;
   imgProps?: Omit<ImageProps, "src" | "layout" | "placeholder" | "blurDataURL">;
-  admin?: boolean;
 }
 
 const placeholderImg = "/product-img-placeholder.svg";
 
-const CategoriesCard = ({ cat, imgProps, admin }: Props) => {
+const CategoriesCard = ({ cat, imgProps }: Props) => {
   if (!cat) return null;
 
   return (
     <Link
-      href={
-        admin
-          ? `/admin/categories/${cat?.slug}`
-          : `/shop/category?=${cat?.name}`
-      }
+      href={`/shop?category=${cat?.slug}`}
       aria-label={cat?.name}
       className="relative block h-full w-full overflow-hidden"
     >
@@ -32,6 +27,11 @@ const CategoriesCard = ({ cat, imgProps, admin }: Props) => {
           alt={cat.name || "Product Image"}
           height={320}
           width={320}
+          style={{
+            width: '100%',   
+            height: 'auto',  
+            objectFit: 'cover' 
+          }}
           {...imgProps}
         />
       )}

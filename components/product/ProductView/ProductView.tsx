@@ -4,7 +4,7 @@ import Image from "next/image";
 import s from "./ProductView.module.css";
 import { useState } from "react";
 import { ProductSlider, ProductCard } from "@components/product";
-import { Container, Text } from "@components/ui";
+import { Container, Marquee, Text } from "@components/ui";
 import { SEO } from "@components/common";
 import ProductSidebar from "../ProductSidebar";
 import {
@@ -38,20 +38,18 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
 
   return (
     <>
-      <Container className="p-0 m-0" clean>
-        <section className={cn(s.root,"p-0 m-0")}>
+      <Container clean>
+        <section className={cn(s.root)}>
           <div className={cn(s.main)}>
             <ProductSlider key={variant.id}>
               {variant.images.map((image, i) => (
                 <div key={image} className={s.imageContainer}>
                   <Image
-
                     className={s.img}
                     src={image}
                     alt={`${product.name} Image ${i}`}
                     width={2400}
                     height={2400}
-                    
                     priority={i === 0}
                     quality="100"
                   />
@@ -68,29 +66,31 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
             className={s.sidebar}
           />
         </section>
-        <hr className="border" />
 
         {relatedProducts.length > 0 && (
-          <section className="px-6 my-4">
-            <Text variant="sectionHeading">Related Products</Text>
-            <div className={s.relatedProductsGrid}>
-              {relatedProducts.map((p) => (
-                <div key={p.slug}>
-                  <ProductCard
-                    key={p.slug}
-                    noNameTag
-                    product={p}
-                    variant="default"
-                    className="animated fadeIn"
-                    imgProps={{
-                      alt: p.name,
-                      className: "w-full h-full object-cover",
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-          </section>
+          <Marquee variant="secondary">
+            {relatedProducts.map((p) => (
+              <ProductCard
+                key={p.slug}
+                noNameTag
+                product={p}
+                variant="slim"
+                className="animated fadeIn"
+                imgProps={{
+                  alt: p.name,
+                }}
+              />
+            ))}
+          </Marquee>
+
+          // <section className="px-6 my-4">
+          //   <Text variant="sectionHeading">Related Products</Text>
+          //   <div className={s.relatedProductsGrid}>
+
+          //       </div>
+          //     ))}
+          //   </div>
+          // </section>
         )}
       </Container>
       {/* <SEO

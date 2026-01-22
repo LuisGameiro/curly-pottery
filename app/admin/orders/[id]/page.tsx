@@ -74,8 +74,10 @@ export default async function OrderDetailsPage({
                         src={item.images[0]}
                         alt={item.name}
                         fill
-                        className="object-cover"
-                      />
+                        sizes="64px"
+
+
+/>
                     </div>
                     <div className="flex-1">
                       <Text className="font-medium text-sm">{item.name}</Text>

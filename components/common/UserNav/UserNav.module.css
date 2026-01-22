@@ -14,11 +14,11 @@
 }
 
 .item > button {
-  @apply cursor-pointer transition ease-in-out duration-100 outline-none text-primary;
+  @apply cursor-pointer transition ease-in-out duration-100 outline-none;
 }
 
 .item > button:hover {
-  @apply text-accent-6 transition scale-110 outline-none;
+  @apply transition scale-110 outline-none;
 }
 
 .item:first-child {
@@ -31,7 +31,7 @@
 }
 
 .bagCount {
-  @apply border border-accent-1 bg-secondary-2 text-on-secondary absolute rounded-full right-3 top-3 flex items-center justify-center font-bold text-xs;
+  @apply absolute right-0 bottom-0 bg-secondary/80 text-primary rounded-full flex items-center justify-center text-xs;
   padding-left: 2.5px;
   padding-right: 2.5px;
   min-width: 1.25rem;
