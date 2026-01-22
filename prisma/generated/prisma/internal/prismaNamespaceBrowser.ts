@@ -63,7 +63,6 @@ export const ModelName = {
   Account: "Account",
   Session: "Session",
   User: "User",
-  VerificationToken: "VerificationToken",
 } as const;
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -234,19 +233,12 @@ export const UserScalarFieldEnum = {
   acceptsMarketing: "acceptsMarketing",
   createdAt: "createdAt",
   updatedAt: "updatedAt",
+  resetToken: "resetToken",
+  resetTokenExpiry: "resetTokenExpiry",
 } as const;
 
 export type UserScalarFieldEnum =
   (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum];
-
-export const VerificationTokenScalarFieldEnum = {
-  identifier: "identifier",
-  token: "token",
-  expires: "expires",
-} as const;
-
-export type VerificationTokenScalarFieldEnum =
-  (typeof VerificationTokenScalarFieldEnum)[keyof typeof VerificationTokenScalarFieldEnum];
 
 export const SortOrder = {
   asc: "asc",

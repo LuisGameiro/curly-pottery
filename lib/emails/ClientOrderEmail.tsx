@@ -23,13 +23,13 @@ export const ClientOrderEmail = ({
 }: ClientOrderEmailProps) => (
   <Html>
     <Head />
-    <Preview>We&aposve received your order! - Curly Pottery</Preview>
+    <Preview>We have received your order!</Preview>
     <Body style={main}>
       <Container style={container}>
         <Heading style={h1}>Thank you for your order, {customerName}!</Heading>
         <Text style={text}>
           Your pottery is being prepared for shipment. We will notify you once
-          it’s on the way.
+          it is on the way.
         </Text>
         <Section style={section}>
           <Text style={label}>
@@ -48,26 +48,26 @@ export const ClientOrderEmail = ({
   </Html>
 );
 
-const main = { backgroundColor: "#fdfbf7", fontFamily: "sans-serif" };
+const main = { backgroundColor: "#f1fbff", fontFamily: "sans-serif" };
 const container = { margin: "0 auto", padding: "20px 0 48px", width: "580px" };
 const h1 = {
-  color: "#44352a",
+  color: "#fde372",
   fontSize: "24px",
   fontWeight: "bold",
   textAlign: "center" as const,
 };
-const text = { color: "#525f7f", fontSize: "16px", lineHeight: "24px" };
+const text = { color: "#000000", fontSize: "16px", lineHeight: "24px" };
 const section = {
   padding: "24px",
-  backgroundColor: "#fff",
+  backgroundColor: "#f1fbff",
   borderRadius: "8px",
-  border: "1px solid #e6e6e6",
+  border: "1px solid #d1e5f0",
 };
 const label = {
-  color: "#8898aa",
+  color: "#2d52ab",
   fontSize: "12px",
   textTransform: "uppercase" as const,
 };
-const value = { color: "#44352a", fontSize: "14px", fontWeight: "bold" };
-const hr = { borderColor: "#e6e6e6", margin: "20px 0" };
-const footer = { color: "#8898aa", fontSize: "12px" };
+const value = { color: "#64748b", fontSize: "14px", fontWeight: "bold" };
+const hr = { borderColor: "#d1e5f0", margin: "20px 0" };
+const footer = { color: "#fde372", fontSize: "12px" };

@@ -14,6 +14,7 @@ export default function LoginForm() {
   const searchParams = useSearchParams();
   const [error, setError] = useState("");
   // const [success, setSuccess] = useState(false);
+  const redirectTo = searchParams.get("redirect") || "/shop";
   const isRegistered = searchParams.get("registered") === "true";
 
   // useEffect(() => {
@@ -54,13 +55,13 @@ export default function LoginForm() {
       setError("Invalid email or password");
       setLoading(false);
     } else {
-      router.push("/shop");
+      router.push(redirectTo);
       router.refresh();
     }
   };
 
   const handleGoogleLogin = () => {
-    signIn("google", { callbackUrl: "/shop" });
+    signIn("google", { callbackUrl: redirectTo });
   };
 
   return (

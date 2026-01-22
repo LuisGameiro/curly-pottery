@@ -65,8 +65,3 @@ export type Session = Prisma.SessionModel;
  *
  */
 export type User = Prisma.UserModel;
-/**
- * Model VerificationToken
- *
- */
-export type VerificationToken = Prisma.VerificationTokenModel;

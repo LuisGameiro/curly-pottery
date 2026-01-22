@@ -38,6 +38,8 @@ export type UserMinAggregateOutputType = {
   acceptsMarketing: boolean | null;
   createdAt: Date | null;
   updatedAt: Date | null;
+  resetToken: string | null;
+  resetTokenExpiry: Date | null;
 };
 
 export type UserMaxAggregateOutputType = {
@@ -54,6 +56,8 @@ export type UserMaxAggregateOutputType = {
   acceptsMarketing: boolean | null;
   createdAt: Date | null;
   updatedAt: Date | null;
+  resetToken: string | null;
+  resetTokenExpiry: Date | null;
 };
 
 export type UserCountAggregateOutputType = {
@@ -70,6 +74,8 @@ export type UserCountAggregateOutputType = {
   acceptsMarketing: number;
   createdAt: number;
   updatedAt: number;
+  resetToken: number;
+  resetTokenExpiry: number;
   _all: number;
 };
 
@@ -87,6 +93,8 @@ export type UserMinAggregateInputType = {
   acceptsMarketing?: true;
   createdAt?: true;
   updatedAt?: true;
+  resetToken?: true;
+  resetTokenExpiry?: true;
 };
 
 export type UserMaxAggregateInputType = {
@@ -103,6 +111,8 @@ export type UserMaxAggregateInputType = {
   acceptsMarketing?: true;
   createdAt?: true;
   updatedAt?: true;
+  resetToken?: true;
+  resetTokenExpiry?: true;
 };
 
 export type UserCountAggregateInputType = {
@@ -119,6 +129,8 @@ export type UserCountAggregateInputType = {
   acceptsMarketing?: true;
   createdAt?: true;
   updatedAt?: true;
+  resetToken?: true;
+  resetTokenExpiry?: true;
   _all?: true;
 };
 
@@ -215,6 +227,8 @@ export type UserGroupByOutputType = {
   acceptsMarketing: boolean;
   createdAt: Date;
   updatedAt: Date;
+  resetToken: string | null;
+  resetTokenExpiry: Date | null;
   _count: UserCountAggregateOutputType | null;
   _min: UserMinAggregateOutputType | null;
   _max: UserMaxAggregateOutputType | null;
@@ -249,6 +263,12 @@ export type UserWhereInput = {
   acceptsMarketing?: Prisma.BoolFilter<"User"> | boolean;
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string;
+  resetToken?: Prisma.StringNullableFilter<"User"> | string | null;
+  resetTokenExpiry?:
+    | Prisma.DateTimeNullableFilter<"User">
+    | Date
+    | string
+    | null;
   accounts?: Prisma.AccountListRelationFilter;
   sessions?: Prisma.SessionListRelationFilter;
   addresses?: Prisma.AddressListRelationFilter;
@@ -273,6 +293,8 @@ export type UserOrderByWithRelationInput = {
   acceptsMarketing?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
+  resetToken?: Prisma.SortOrderInput | Prisma.SortOrder;
+  resetTokenExpiry?: Prisma.SortOrderInput | Prisma.SortOrder;
   accounts?: Prisma.AccountOrderByRelationAggregateInput;
   sessions?: Prisma.SessionOrderByRelationAggregateInput;
   addresses?: Prisma.AddressOrderByRelationAggregateInput;
@@ -284,6 +306,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
   {
     id?: string;
     email?: string;
+    resetToken?: string;
     AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
     OR?: Prisma.UserWhereInput[];
     NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
@@ -302,6 +325,11 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
     acceptsMarketing?: Prisma.BoolFilter<"User"> | boolean;
     createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string;
+    resetTokenExpiry?:
+      | Prisma.DateTimeNullableFilter<"User">
+      | Date
+      | string
+      | null;
     accounts?: Prisma.AccountListRelationFilter;
     sessions?: Prisma.SessionListRelationFilter;
     addresses?: Prisma.AddressListRelationFilter;
@@ -311,7 +339,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
       Prisma.CartWhereInput
     > | null;
   },
-  "id" | "email"
+  "id" | "email" | "resetToken"
 >;
 
 export type UserOrderByWithAggregationInput = {
@@ -328,6 +356,8 @@ export type UserOrderByWithAggregationInput = {
   acceptsMarketing?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
+  resetToken?: Prisma.SortOrderInput | Prisma.SortOrder;
+  resetTokenExpiry?: Prisma.SortOrderInput | Prisma.SortOrder;
   _count?: Prisma.UserCountOrderByAggregateInput;
   _max?: Prisma.UserMaxOrderByAggregateInput;
   _min?: Prisma.UserMinOrderByAggregateInput;
@@ -358,6 +388,15 @@ export type UserScalarWhereWithAggregatesInput = {
   acceptsMarketing?: Prisma.BoolWithAggregatesFilter<"User"> | boolean;
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string;
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string;
+  resetToken?:
+    | Prisma.StringNullableWithAggregatesFilter<"User">
+    | string
+    | null;
+  resetTokenExpiry?:
+    | Prisma.DateTimeNullableWithAggregatesFilter<"User">
+    | Date
+    | string
+    | null;
 };
 
 export type UserCreateInput = {
@@ -374,6 +413,8 @@ export type UserCreateInput = {
   acceptsMarketing?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  resetToken?: string | null;
+  resetTokenExpiry?: Date | string | null;
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput;
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput;
   addresses?: Prisma.AddressCreateNestedManyWithoutUserInput;
@@ -395,6 +436,8 @@ export type UserUncheckedCreateInput = {
   acceptsMarketing?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  resetToken?: string | null;
+  resetTokenExpiry?: Date | string | null;
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput;
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput;
   addresses?: Prisma.AddressUncheckedCreateNestedManyWithoutUserInput;
@@ -420,6 +463,12 @@ export type UserUpdateInput = {
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  resetTokenExpiry?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput;
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput;
   addresses?: Prisma.AddressUpdateManyWithoutUserNestedInput;
@@ -445,6 +494,12 @@ export type UserUncheckedUpdateInput = {
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  resetTokenExpiry?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput;
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput;
   addresses?: Prisma.AddressUncheckedUpdateManyWithoutUserNestedInput;
@@ -466,6 +521,8 @@ export type UserCreateManyInput = {
   acceptsMarketing?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  resetToken?: string | null;
+  resetTokenExpiry?: Date | string | null;
 };
 
 export type UserUpdateManyMutationInput = {
@@ -486,6 +543,12 @@ export type UserUpdateManyMutationInput = {
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  resetTokenExpiry?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
 };
 
 export type UserUncheckedUpdateManyInput = {
@@ -506,6 +569,12 @@ export type UserUncheckedUpdateManyInput = {
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  resetTokenExpiry?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
 };
 
 export type UserNullableScalarRelationFilter = {
@@ -532,6 +601,8 @@ export type UserCountOrderByAggregateInput = {
   acceptsMarketing?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
+  resetToken?: Prisma.SortOrder;
+  resetTokenExpiry?: Prisma.SortOrder;
 };
 
 export type UserMaxOrderByAggregateInput = {
@@ -548,6 +619,8 @@ export type UserMaxOrderByAggregateInput = {
   acceptsMarketing?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
+  resetToken?: Prisma.SortOrder;
+  resetTokenExpiry?: Prisma.SortOrder;
 };
 
 export type UserMinOrderByAggregateInput = {
@@ -564,6 +637,8 @@ export type UserMinOrderByAggregateInput = {
   acceptsMarketing?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
+  resetToken?: Prisma.SortOrder;
+  resetTokenExpiry?: Prisma.SortOrder;
 };
 
 export type UserCreateNestedOneWithoutAddressesInput = {
@@ -720,6 +795,8 @@ export type UserCreateWithoutAddressesInput = {
   acceptsMarketing?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  resetToken?: string | null;
+  resetTokenExpiry?: Date | string | null;
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput;
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput;
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput;
@@ -740,6 +817,8 @@ export type UserUncheckedCreateWithoutAddressesInput = {
   acceptsMarketing?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  resetToken?: string | null;
+  resetTokenExpiry?: Date | string | null;
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput;
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput;
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput;
@@ -792,6 +871,12 @@ export type UserUpdateWithoutAddressesInput = {
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  resetTokenExpiry?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput;
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput;
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput;
@@ -816,6 +901,12 @@ export type UserUncheckedUpdateWithoutAddressesInput = {
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  resetTokenExpiry?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput;
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput;
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput;
@@ -836,6 +927,8 @@ export type UserCreateWithoutCartInput = {
   acceptsMarketing?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  resetToken?: string | null;
+  resetTokenExpiry?: Date | string | null;
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput;
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput;
   addresses?: Prisma.AddressCreateNestedManyWithoutUserInput;
@@ -856,6 +949,8 @@ export type UserUncheckedCreateWithoutCartInput = {
   acceptsMarketing?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  resetToken?: string | null;
+  resetTokenExpiry?: Date | string | null;
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput;
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput;
   addresses?: Prisma.AddressUncheckedCreateNestedManyWithoutUserInput;
@@ -908,6 +1003,12 @@ export type UserUpdateWithoutCartInput = {
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  resetTokenExpiry?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput;
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput;
   addresses?: Prisma.AddressUpdateManyWithoutUserNestedInput;
@@ -932,6 +1033,12 @@ export type UserUncheckedUpdateWithoutCartInput = {
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  resetTokenExpiry?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput;
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput;
   addresses?: Prisma.AddressUncheckedUpdateManyWithoutUserNestedInput;
@@ -952,6 +1059,8 @@ export type UserCreateWithoutOrdersInput = {
   acceptsMarketing?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  resetToken?: string | null;
+  resetTokenExpiry?: Date | string | null;
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput;
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput;
   addresses?: Prisma.AddressCreateNestedManyWithoutUserInput;
@@ -972,6 +1081,8 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   acceptsMarketing?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  resetToken?: string | null;
+  resetTokenExpiry?: Date | string | null;
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput;
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput;
   addresses?: Prisma.AddressUncheckedCreateNestedManyWithoutUserInput;
@@ -1024,6 +1135,12 @@ export type UserUpdateWithoutOrdersInput = {
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  resetTokenExpiry?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput;
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput;
   addresses?: Prisma.AddressUpdateManyWithoutUserNestedInput;
@@ -1048,6 +1165,12 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  resetTokenExpiry?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput;
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput;
   addresses?: Prisma.AddressUncheckedUpdateManyWithoutUserNestedInput;
@@ -1068,6 +1191,8 @@ export type UserCreateWithoutAccountsInput = {
   acceptsMarketing?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  resetToken?: string | null;
+  resetTokenExpiry?: Date | string | null;
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput;
   addresses?: Prisma.AddressCreateNestedManyWithoutUserInput;
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput;
@@ -1088,6 +1213,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   acceptsMarketing?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  resetToken?: string | null;
+  resetTokenExpiry?: Date | string | null;
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput;
   addresses?: Prisma.AddressUncheckedCreateNestedManyWithoutUserInput;
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput;
@@ -1140,6 +1267,12 @@ export type UserUpdateWithoutAccountsInput = {
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  resetTokenExpiry?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput;
   addresses?: Prisma.AddressUpdateManyWithoutUserNestedInput;
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput;
@@ -1164,6 +1297,12 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  resetTokenExpiry?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput;
   addresses?: Prisma.AddressUncheckedUpdateManyWithoutUserNestedInput;
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput;
@@ -1184,6 +1323,8 @@ export type UserCreateWithoutSessionsInput = {
   acceptsMarketing?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  resetToken?: string | null;
+  resetTokenExpiry?: Date | string | null;
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput;
   addresses?: Prisma.AddressCreateNestedManyWithoutUserInput;
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput;
@@ -1204,6 +1345,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   acceptsMarketing?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  resetToken?: string | null;
+  resetTokenExpiry?: Date | string | null;
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput;
   addresses?: Prisma.AddressUncheckedCreateNestedManyWithoutUserInput;
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput;
@@ -1256,6 +1399,12 @@ export type UserUpdateWithoutSessionsInput = {
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  resetTokenExpiry?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput;
   addresses?: Prisma.AddressUpdateManyWithoutUserNestedInput;
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput;
@@ -1280,6 +1429,12 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  resetTokenExpiry?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput;
   addresses?: Prisma.AddressUncheckedUpdateManyWithoutUserNestedInput;
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput;
@@ -1378,6 +1533,8 @@ export type UserSelect<
     acceptsMarketing?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
+    resetToken?: boolean;
+    resetTokenExpiry?: boolean;
     accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>;
     sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>;
     addresses?: boolean | Prisma.User$addressesArgs<ExtArgs>;
@@ -1406,6 +1563,8 @@ export type UserSelectCreateManyAndReturn<
     acceptsMarketing?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
+    resetToken?: boolean;
+    resetTokenExpiry?: boolean;
   },
   ExtArgs["result"]["user"]
 >;
@@ -1428,6 +1587,8 @@ export type UserSelectUpdateManyAndReturn<
     acceptsMarketing?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
+    resetToken?: boolean;
+    resetTokenExpiry?: boolean;
   },
   ExtArgs["result"]["user"]
 >;
@@ -1446,6 +1607,8 @@ export type UserSelectScalar = {
   acceptsMarketing?: boolean;
   createdAt?: boolean;
   updatedAt?: boolean;
+  resetToken?: boolean;
+  resetTokenExpiry?: boolean;
 };
 
 export type UserOmit<
@@ -1464,7 +1627,9 @@ export type UserOmit<
   | "notes"
   | "acceptsMarketing"
   | "createdAt"
-  | "updatedAt",
+  | "updatedAt"
+  | "resetToken"
+  | "resetTokenExpiry",
   ExtArgs["result"]["user"]
 >;
 export type UserInclude<
@@ -1514,6 +1679,8 @@ export type $UserPayload<
       acceptsMarketing: boolean;
       createdAt: Date;
       updatedAt: Date;
+      resetToken: string | null;
+      resetTokenExpiry: Date | null;
     },
     ExtArgs["result"]["user"]
   >;
@@ -2176,6 +2343,8 @@ export interface UserFieldRefs {
   readonly acceptsMarketing: Prisma.FieldRef<"User", "Boolean">;
   readonly createdAt: Prisma.FieldRef<"User", "DateTime">;
   readonly updatedAt: Prisma.FieldRef<"User", "DateTime">;
+  readonly resetToken: Prisma.FieldRef<"User", "String">;
+  readonly resetTokenExpiry: Prisma.FieldRef<"User", "DateTime">;
 }
 
 // Custom InputTypes

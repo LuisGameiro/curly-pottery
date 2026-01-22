@@ -8,19 +8,29 @@ interface ContactProps {
 
 export const ContactFormEmail = ({ name, email, message }: ContactProps) => (
   <Html>
-    <Body style={{ padding: "20px", fontFamily: "sans-serif" }}>
-      <Heading style={{ fontSize: "20px" }}>New Inquiry from {name}</Heading>
-      <Section
-        style={{ background: "#f9f9f9", padding: "15px", borderRadius: "5px" }}
-      >
+    <Body style={main}>
+      <Heading style={h1}>New Inquiry from {name}</Heading>
+      <Section style={container}>
         <Text>
           <strong>From:</strong> {name} ({email})
         </Text>
         <Text>
           <strong>Message:</strong>
         </Text>
-        <Text style={{ fontStyle: "italic" }}>&quot{message}&quot</Text>
+        <Text style={text}>{message}</Text>
       </Section>
     </Body>
   </Html>
 );
+
+const main = { backgroundColor: "#f1fbff", fontFamily: "sans-serif" };
+
+const container = { margin: "0 auto", padding: "20px 0 48px", width: "580px" };
+
+const h1 = {
+  color: "#fde372",
+  fontSize: "24px",
+  fontWeight: "bold",
+  textAlign: "center" as const,
+};
+const text = { color: "#000000", fontSize: "16px", lineHeight: "24px" };
