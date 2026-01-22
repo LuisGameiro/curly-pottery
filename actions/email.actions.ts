@@ -6,17 +6,22 @@ import { CreateEmailResponseSuccess, Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function sendEmail(
-  toEmail: string,
-  subject: string,
-  body: ReactNode,
-  fromEmail: string = "noreply@curlypottery.com",
-): Promise<ActionResponse<CreateEmailResponseSuccess>> {
+export async function sendEmail({
+  to,
+  subject,
+  body,
+  from = "noreply@curlypottery.com",
+}: {
+  to: string;
+  subject: string;
+  body: ReactNode;
+  from?: string;
+}): Promise<ActionResponse<CreateEmailResponseSuccess>> {
   try {
     const { data, error } = await resend.emails.send({
-      from: fromEmail,
-      to: toEmail,
-      subject: subject,
+      from,
+      to,
+      subject,
       react: body,
     });
 

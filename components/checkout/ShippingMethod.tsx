@@ -1,5 +1,6 @@
 import { Button, Text } from "@components/ui";
 import { cn } from "@lib/utils";
+import { useFormContext } from "react-hook-form";
 
 const shippingOptions = [
   {
@@ -15,10 +16,12 @@ const shippingOptions = [
 ];
 
 interface ShippingMethodProps {
-  onComplete: (shippingPrice: number, shippingMethod: string) => void;
+  onComplete: () => void;
 }
 
 export default function ShippingMethod({ onComplete }: ShippingMethodProps) {
+  const { setValue } = useFormContext();
+
   return (
     <div className="space-y-8">
       <Text variant="sectionHeading">Select Shipping</Text>
@@ -29,7 +32,11 @@ export default function ShippingMethod({ onComplete }: ShippingMethodProps) {
           variant="secondary"
           className="w-full"
           type="button"
-          onClick={() => onComplete(o.price, o.method)}
+          onClick={() => {
+            setValue("shippingPrice", o.price);
+            setValue("shippingMethod", o.method);
+            onComplete();
+          }}
         >
           <div className="w-full flex justify-between gap-4">
             <Text>{o.conditions}</Text>

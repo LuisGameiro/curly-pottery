@@ -1,8 +1,8 @@
 import { Button, Input, Text } from "@components/ui";
-import { UserWithOrdersAddress } from "@lib/types/types";
 import { getUserById } from "actions/customer.actions";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
 
 interface InformationFormProps {
   onComplete: (formData: FormData) => void;
@@ -17,17 +17,31 @@ export default function InformationForm({
 }: InformationFormProps) {
   const [continueAsGuest, setContinueAsGuest] = useState(false);
 
-  const [initialData, setInitialData] = useState<UserWithOrdersAddress>();
+  const { register, setValue } = useFormContext();
 
   useEffect(() => {
     const fetchData = async () => {
       if (isLoggedIn && userId) {
         const response = await getUserById(userId);
-        if (response.data) setInitialData(response.data);
+        if (response.data) {
+          setValue("email", response.data.email);
+          setValue("firstName", response.data.firstName);
+          setValue("lastName", response.data.lastName);
+          setValue("country", "United Kingdom");
+          if (response.data.addresses && response.data.addresses.length > 0) {
+            setValue("address", response.data.addresses[0].address);
+            setValue("city", response.data.addresses[0].city);
+            setValue("postcode", response.data.addresses[0].postalCode);
+            setValue(
+              "country",
+              response.data.addresses[0].country || "United Kingdom",
+            );
+          }
+        }
       }
     };
     fetchData();
-  }, [isLoggedIn, userId]);
+  }, [setValue, isLoggedIn, userId]);
 
   if (!isLoggedIn && !continueAsGuest) {
     return (
@@ -77,18 +91,14 @@ export default function InformationForm({
           <Input
             title="email"
             type="email"
-            name="email"
+            {...register("email", { required: true })}
             placeholder="Email Address"
-            defaultValue={initialData?.email || ""}
-            required
           />
           <Input
             title="Phone"
             type="phone"
-            name="phone"
+            {...register("phone", { required: true })}
             placeholder="Phone"
-            defaultValue={initialData?.phone || ""}
-            required
           />
         </div>
       </section>
@@ -99,45 +109,30 @@ export default function InformationForm({
         </Text>
         <div className="grid grid-cols-2 gap-4">
           <Input
-            name="firstName"
+            {...register("firstName", { required: true })}
             placeholder="First Name"
-            defaultValue={initialData?.firstName || ""}
-            required
           />
           <Input
-            name="lastName"
             placeholder="Last Name"
-            defaultValue={initialData?.lastName || ""}
-            required
+            {...register("lastName", { required: true })}
           />
           <div className="col-span-2">
             <Input
-              name="address"
               placeholder="Address"
-              defaultValue={initialData?.addresses[0]?.address || ""}
-              required
+              {...register("address", { required: true })}
             />
           </div>
 
+          <Input placeholder="City" {...register("city", { required: true })} />
           <Input
-            name="city"
-            placeholder="City"
-            defaultValue={initialData?.addresses[0]?.city || ""}
-            required
+            placeholder="Postal code"
+            {...register("postalCode", { required: true })}
           />
           <Input
-            name="postcode"
-            placeholder="Postcode"
-            defaultValue={initialData?.addresses[0]?.postalCode || ""}
-            required
-          />
-          <Input
-            name="country"
             placeholder="Country"
+            value={"United Kingdom"}
             disabled
-            required
-            defaultValue={initialData?.addresses[0]?.country || ""}
-            value={"United Kingdown"}
+            {...register("country", { required: true })}
           />
         </div>
         <Text>

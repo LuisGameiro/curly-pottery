@@ -37,11 +37,11 @@ export default function ContactForm() {
     try {
       setStatus("loading");
 
-      const response = await sendEmail(
-        "curly.pottery@gmail.com",
-        "New Message",
-        ContactFormEmail(formData),
-      );
+      const response = await sendEmail({
+        to: "curly.pottery@gmail.com",
+        subject: "New Message",
+        body: ContactFormEmail(formData),
+      });
       console.log(response);
 
       if (response.data) {

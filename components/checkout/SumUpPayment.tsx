@@ -1,5 +1,9 @@
 import Script from "next/script";
 import { Text } from "@components/ui";
+import { toast } from "sonner";
+import { useEffect, useState } from "react";
+import { CurrencyCode } from "@lib/types/types";
+import { Loader2 } from "lucide-react";
 
 interface SumUpResponse {
   status: "PAID" | "PENDING" | "FAILED" | "EXPIRED";
@@ -14,20 +18,70 @@ declare global {
       mount: (options: {
         id: string;
         checkoutId: string;
+        currency: CurrencyCode;
+        locale: string;
+        country: string;
+        showFooter: boolean;
+        onLoad: () => void;
+
         onResponse: (type: string, body: SumUpResponse) => void;
       }) => void;
+      unmount: () => void;
     };
   }
 }
-export default function SumUpPayment({ checkoutId }: { checkoutId: string }) {
+export default function SumUpPayment({
+  checkoutId,
+  onComplete,
+}: {
+  checkoutId: string;
+  onComplete: () => void;
+}) {
+  const [loading, setLoading] = useState(false);
+  const [showRetry, setShowRetry] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (loading) {
+        setShowRetry(true);
+      }
+    }, 10000);
+
+    return () => clearTimeout(timer);
+  }, [loading]);
+
   const mountSumUp = () => {
+    setShowRetry(false);
+    setLoading(true);
+
+    if (!window.SumUpCard) return;
+
     window.SumUpCard.mount({
       id: "sumup-card",
       checkoutId: checkoutId,
+      currency: CurrencyCode.GBP,
+      locale: "en_GB",
+      country: "GB",
+      showFooter: false,
+      onLoad: () => {
+        setLoading(false);
+      },
       onResponse: function (type: string, body: SumUpResponse) {
         if (type === "success" || body.status === "PAID") {
-          window.location.href = "/checkout/success";
+          onComplete();
         }
+        if (type === "error" || body.status === "FAILED") {
+          toast.error("Payment failed. Please try again.");
+        }
+        if (body.status === "PENDING") {
+          toast.warning("Payment is pending. Please complete the payment.");
+        }
+        if (body.status === "EXPIRED") {
+          toast.error("Payment session expired. Please try again.");
+        } else {
+          toast.error("An unexpected error occurred. Please try again.");
+        }
+        window.SumUpCard.unmount();
       },
     });
   };
@@ -35,15 +89,45 @@ export default function SumUpPayment({ checkoutId }: { checkoutId: string }) {
   return (
     <div className="space-y-8">
       <Text variant="sectionHeading">Finalize Payment</Text>
+
       <Script
-        className="bg-background"
         src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js"
         onLoad={mountSumUp}
+        onError={() => setShowRetry(true)} // Handle network block/failure
       />
+
       <div
         id="sumup-card"
-        className="border p-4 rounded-xl bg-accent-1 min-h-[250px]"
-      />
+        className="relative border p-4 rounded-xl bg-accent-1 min-h-[250px] flex flex-col items-center justify-center"
+      >
+        {loading && !showRetry && (
+          <div className="animate-pulse text-gray-400">
+            <Loader2 className="mx-auto mb-2" />
+            Loading Secure Gateway...
+          </div>
+        )}
+
+        {showRetry && (
+          <div className="text-center space-y-4">
+            <p className="text-sm text-red-500">
+              Gateway taking too long to load.
+            </p>
+            <button
+              onClick={mountSumUp}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            >
+              Reload Payment Gateway
+            </button>
+          </div>
+        )}
+      </div>
+
+      <button
+        onClick={onComplete}
+        className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+      >
+        test button
+      </button>
     </div>
   );
 }

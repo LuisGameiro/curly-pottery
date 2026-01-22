@@ -109,6 +109,13 @@ export async function createOrder({
       },
     });
 
+    await prisma.user.update({
+      where: { id: userId || "" },
+      data: {
+        cart: {},
+      },
+    });
+
     return {
       success: true,
       message: "Order created successfully",

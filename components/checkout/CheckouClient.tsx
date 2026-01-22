@@ -10,105 +10,106 @@ import { createSumUpCheckout } from "actions/sumUpPayment.actions";
 import { createOrder } from "actions/order.actions";
 import { Container } from "@components/ui";
 import { toast } from "sonner";
-import { InputAddress } from "@lib/types/types";
+import { CreateOrder, CurrencyCode } from "@lib/types/types";
 import { useUser } from "@lib/hooks/useUser";
 import { redirect } from "next/navigation";
-
-export type FormDataCheckout = {
-  firstName: string;
-  lastName: string;
-  address: string;
-  country: string;
-  postcode: string;
-  city: string;
-  shippingPrice: number;
-  shippingMethod: string;
-  email: string;
-  phone: string;
-  taxes?: number;
-};
+import { FormProvider, useForm } from "react-hook-form";
+import { sendEmail } from "actions/email.actions";
+import { ClientOrderEmail } from "@lib/emails/ClientOrderEmail";
+import { showCurrency } from "@lib/calculate-price";
+import { AdminOrderEmail } from "@lib/emails/AdminOrderEmail";
 
 export default function CheckouClient() {
-  const { data } = useCart();
+  const { data, deleteAll } = useCart();
   const { user, isAuthenticated } = useUser();
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<FormDataCheckout>({
-    firstName: "",
-    lastName: "",
-    address: "",
-    country: "",
-    postcode: "",
-    city: "",
-    email: "",
-    phone: "",
-    shippingPrice: 0,
-    shippingMethod: "",
-    taxes: 0,
-  });
   const [checkoutId, setCheckoutId] = useState("");
   const [loading, setLoading] = useState(false);
   const cartId = useId();
 
-  if (data.lineItems.length === 0) redirect("/cart");
-
-  const nextToShipping = (data: FormData) => {
-    setFormData({ ...formData, ...data });
-    setStep(2);
-  };
-
-  const nextToPayment = async (
-    shippingPrice: number,
-    shippingMethod: string,
-    taxes: number = 0,
-  ) => {
-    setLoading(true);
-    setFormData((prev) => ({ ...prev, shippingPrice, shippingMethod, taxes }));
-
-    const address: InputAddress = {
-      address: formData.address,
-      postalCode: formData.postcode,
-      city: formData.city,
-      country: formData.country || "United Kingdom",
+  const methods = useForm<CreateOrder>({
+    defaultValues: {
       userId: user?.id || "",
-    };
+      email: user?.email || "",
+      currency: data?.currency || CurrencyCode.GBP,
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      lineItems: data.lineItems ?? [],
+      subtotalPrice: data.subtotalPrice,
+      totalPrice: data.totalPrice,
+      shippingMethod: "",
+      shippingPrice: 0,
+      taxes: 0,
+    },
+  });
 
+  if (!data || data.lineItems.length === 0) {
+    return redirect("/cart");
+  }
+  const { watch } = methods;
+  const currentValues = watch();
+
+  const onInformationSubmit = () => setStep(2);
+
+  const nextToPayment = async () => {
     try {
+      setLoading(true);
       const response = await createSumUpCheckout(
-        data.subtotalPrice + shippingPrice,
+        currentValues.totalPrice,
         cartId,
       );
 
       if (!response.success && !response.data) {
         setLoading(false);
-        return toast(response.message);
-      } else setCheckoutId(response.data ?? "");
-
-      await createOrder({
-        userId: user?.id,
-
-        email: formData.email,
-        phone: formData.phone,
-        lastName: formData.lastName,
-        firstName: formData.firstName,
-        address,
-
-        lineItems: data.lineItems,
-        discounts: [],
-        subtotalPrice: data.subtotalPrice,
-        totalPrice: data.subtotalPrice + shippingPrice + taxes,
-        currency: "GBP",
-
-        shippingPrice,
-        shippingMethod,
-        taxes: 0,
-      });
-
-      setStep(3);
+        toast(response.message);
+      } else {
+        setCheckoutId(response.data ?? "");
+        setStep(3);
+      }
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const onPaymentComplete = async () => {
+    let red = false;
+    try {
+      setLoading(true);
+
+      const orderResponse = await createOrder(currentValues);
+
+      if (!orderResponse.success) {
+        toast.error(orderResponse.message);
+      } else {
+        red = true;
+        await sendEmail({
+          to: currentValues.email,
+          subject: "Order Confirmation",
+          body: ClientOrderEmail({
+            customerName: currentValues.firstName,
+            orderId: orderResponse.data?.id || "",
+            totalAmount: `${showCurrency[currentValues.currency]} ${currentValues.totalPrice.toFixed(2)}`,
+          }),
+        });
+        await sendEmail({
+          to: currentValues.email,
+          subject: "Order Confirmation",
+          body: AdminOrderEmail({
+            customerEmail: currentValues.email,
+            orderId: orderResponse.data?.id || "",
+            itemsCount: currentValues.lineItems.length || 0,
+          }),
+        });
+        deleteAll();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+    if (red) redirect("/checkout/success");
   };
 
   const goBack = (goStep: number) => {
@@ -117,65 +118,67 @@ export default function CheckouClient() {
   };
 
   return (
-    <Container className="lg:max-w-5xl mx-auto p-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
-      <div className="lg:col-span-8">
-        <div className="flex items-center gap-4 mb-8 text-sm font-medium">
-          <button
-            className={
-              step >= 1
-                ? "text-secondary hover:text-secondary/60 cursor-pointer"
-                : "text-accent-4"
-            }
-            onClick={() => goBack(1)}
-            disabled={loading}
-          >
-            Info
-          </button>
-          <div className="h-px w-8 bg-accent-2" />
-          <button
-            className={
-              step >= 2
-                ? "text-secondary hover:text-secondary/60 cursor-pointer"
-                : "text-accent-4"
-            }
-            onClick={() => goBack(2)}
-            disabled={loading}
-          >
-            Shipping
-          </button>
-          <div className="h-px w-8 bg-accent-2" />
-          <button
-            className={
-              step >= 3
-                ? "text-secondary hover:text-secondary/60 cursor-pointer"
-                : "text-accent-4"
-            }
-            onClick={() => goBack(3)}
-            disabled={loading}
-          >
-            Payment
-          </button>
+    <FormProvider {...methods}>
+      <Container className="lg:max-w-5xl mx-auto p-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div className="lg:col-span-8">
+          <div className="flex items-center gap-4 mb-8 text-sm font-medium">
+            <button
+              className={
+                step >= 1
+                  ? "text-secondary hover:text-secondary/60 cursor-pointer"
+                  : "text-accent-4"
+              }
+              onClick={() => goBack(1)}
+              disabled={loading}
+            >
+              Info
+            </button>
+            <div className="h-px w-8 bg-accent-2" />
+            <button
+              className={
+                step >= 2
+                  ? "text-secondary hover:text-secondary/60 cursor-pointer"
+                  : "text-accent-4"
+              }
+              onClick={() => goBack(2)}
+              disabled={loading}
+            >
+              Shipping
+            </button>
+            <div className="h-px w-8 bg-accent-2" />
+            <button
+              className={
+                step >= 3
+                  ? "text-secondary hover:text-secondary/60 cursor-pointer"
+                  : "text-accent-4"
+              }
+              onClick={() => goBack(3)}
+              disabled={loading}
+            >
+              Payment
+            </button>
+          </div>
+
+          {step === 1 && (
+            <InformationForm
+              userId={user?.id}
+              onComplete={onInformationSubmit}
+              isLoggedIn={isAuthenticated}
+            />
+          )}
+          {step === 2 && <ShippingMethod onComplete={nextToPayment} />}
+          {step === 3 && (
+            <SumUpPayment
+              checkoutId={checkoutId}
+              onComplete={onPaymentComplete}
+            />
+          )}
         </div>
 
-        {step === 1 && (
-          <InformationForm
-            userId={user?.id}
-            onComplete={nextToShipping}
-            isLoggedIn={isAuthenticated}
-          />
-        )}
-        {step === 2 && <ShippingMethod onComplete={nextToPayment} />}
-        {step === 3 && <SumUpPayment checkoutId={checkoutId} />}
-      </div>
-
-      <div className="lg:col-span-4">
-        <CheckoutSummary
-          items={data.lineItems}
-          total={data.subtotalPrice}
-          tax={0}
-          shipping={formData?.shippingPrice}
-        />
-      </div>
-    </Container>
+        <div className="lg:col-span-4">
+          <CheckoutSummary />
+        </div>
+      </Container>
+    </FormProvider>
   );
 }

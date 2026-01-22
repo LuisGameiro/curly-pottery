@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react";
 import { useUser } from "./useUser";
 import { calculateDiscount } from "@lib/calculate-price";
 import { useCartStore } from "@lib/zustand/cart";
+import { CurrencyCode } from "prisma/generated/prisma/enums";
 
 export default function useCart() {
   const { isAuthenticated } = useUser();
@@ -36,7 +37,7 @@ export default function useCart() {
       lineItems: cartItems,
       subtotalPrice: subtotal,
       totalPrice: subtotal,
-      currency: "GBP",
+      currency: CurrencyCode.GBP,
     },
     isLoading,
     isEmpty: cartItems.length === 0,

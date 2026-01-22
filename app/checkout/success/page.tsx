@@ -1,15 +1,25 @@
+"use client";
+
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
-import { Text } from "@components/ui";
+import { Button, Text } from "@components/ui";
+import useCart from "@lib/hooks/useCart";
+import { useEffect } from "react";
 
 export default function SuccessPage() {
+  const { deleteAll } = useCart();
+
+  useEffect(() => {
+    deleteAll();
+  }, [deleteAll]);
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-4">
-      <CheckCircle size={80} className="text-green-500 mb-6" />
-      <Text variant="sectionHeading" className="mb-2">
+    <div className="flex flex-col items-center justify-center w-sm text-center py-20 px-4">
+      <CheckCircle size={64} className="text-green-500 mb-4" />
+      <Text variant="heading" className="mb-2">
         Order Confirmed!
       </Text>
-      <Text className="text-accent-6 mb-8 max-w-md">
+      <Text className="text-accent-8 text-justify mb-8  max-w-20">
         Thank you for your purchase. We have sent a confirmation email to your
         inbox. Your order is being processed and will be shipped soon.
       </Text>
@@ -17,7 +27,7 @@ export default function SuccessPage() {
         href="/shop"
         className="text-secondary px-8 py-3 rounded-full font-bold"
       >
-        Continue Shopping
+        <Button variant="secondary">Continue Shopping</Button>
       </Link>
     </div>
   );
