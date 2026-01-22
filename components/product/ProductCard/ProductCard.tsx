@@ -2,9 +2,8 @@ import Link from "next/link";
 import s from "./ProductCard.module.css";
 import Image, { ImageProps } from "next/image";
 import { cn } from "@lib/utils";
-import { calculateDiscount, showCurrency } from "@lib/calculate-price";
+import { calculateDiscount } from "@lib/calculate-price";
 import {
-  CurrencyCode,
   Discount,
   Product,
   ProductWithVariantsCategories,
@@ -16,7 +15,6 @@ interface Props {
   noNameTag?: boolean;
   imgProps?: Omit<ImageProps, "src" | "layout" | "placeholder" | "blurDataURL">;
   variant?: "default" | "slim" | "simple";
-  admin?: boolean;
 }
 
 const placeholderImg = "/product-img-placeholder.svg";
@@ -27,7 +25,6 @@ const ProductCard = ({
   className,
   noNameTag = false,
   variant = "default",
-  admin = false,
 }: Props) => {
   const rootClassName = cn(
     s.root,

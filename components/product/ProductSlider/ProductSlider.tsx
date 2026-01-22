@@ -29,7 +29,7 @@ const ProductSlider = ({ children, className = "" }: ProductSliderProps) => {
     slides: { perView: 1 },
     created: () => setIsMounted(true),
     drag: true,
-    rubberband: true, 
+    rubberband: true,
     slideChanged(s) {
       const slideNumber = s.track.details.rel;
       setCurrentSlide(slideNumber);
@@ -63,11 +63,11 @@ const ProductSlider = ({ children, className = "" }: ProductSliderProps) => {
 
     const slider = sliderContainerRef.current!;
 
-    slider.addEventListener("touchstart", preventNavigation,{ passive: true });
+    slider.addEventListener("touchstart", preventNavigation, { passive: true });
 
     return () => {
       if (slider) {
-        slider.removeEventListener("touchstart", preventNavigation,);
+        slider.removeEventListener("touchstart", preventNavigation);
       }
     };
   }, []);

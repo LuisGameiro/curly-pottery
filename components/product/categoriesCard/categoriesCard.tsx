@@ -28,9 +28,9 @@ const CategoriesCard = ({ cat, imgProps }: Props) => {
           height={320}
           width={320}
           style={{
-            width: '100%',   
-            height: 'auto',  
-            objectFit: 'cover' 
+            width: "100%",
+            height: "auto",
+            objectFit: "cover",
           }}
           {...imgProps}
         />

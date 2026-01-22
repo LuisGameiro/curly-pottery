@@ -18,7 +18,7 @@ export async function getCartFromDbAction(): Promise<Cart | null> {
     },
   });
 
-  return user?.cart ? user.cart : [];
+  return user?.cart ? (user.cart as Cart) : null;
 }
 
 export async function syncCartAction(items: CartLineItem[]) {

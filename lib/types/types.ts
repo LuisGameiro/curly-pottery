@@ -133,7 +133,6 @@ export type CreateOrder = {
   shippingMethod: string;
 };
 
-
 type PrismaOrderWithUser = Prisma.OrderGetPayload<{
   include: { user: true };
 }>;

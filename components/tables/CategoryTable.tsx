@@ -45,9 +45,9 @@ export default function CategoryTable({
             width={60}
             quality={100}
             style={{
-              width: 'auto',
-              height: 'auto',
-              borderRadius: '8px',
+              width: "auto",
+              height: "auto",
+              borderRadius: "8px",
             }}
             loading="eager"
           />

@@ -75,9 +75,7 @@ export default async function OrderDetailsPage({
                         alt={item.name}
                         fill
                         sizes="64px"
-
-
-/>
+                      />
                     </div>
                     <div className="flex-1">
                       <Text className="font-medium text-sm">{item.name}</Text>

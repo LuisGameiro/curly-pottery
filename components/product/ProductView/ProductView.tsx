@@ -4,8 +4,7 @@ import Image from "next/image";
 import s from "./ProductView.module.css";
 import { useState } from "react";
 import { ProductSlider, ProductCard } from "@components/product";
-import { Container, Marquee, Text } from "@components/ui";
-import { SEO } from "@components/common";
+import { Container, Marquee } from "@components/ui";
 import ProductSidebar from "../ProductSidebar";
 import {
   Product,

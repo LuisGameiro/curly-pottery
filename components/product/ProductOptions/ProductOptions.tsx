@@ -33,7 +33,7 @@ const ProductOptions = ({ product, setVariant }: ProductOptionsProps) => {
     <div className="space-y-6">
       {allSizes.length > 1 && (
         <div>
-          <Text variant="bold" >Size</Text>
+          <Text variant="bold">Size</Text>
           <div role="listbox" className="flex flex-row mt-2">
             {allSizes.map((size) => (
               <button
@@ -68,12 +68,11 @@ const ProductOptions = ({ product, setVariant }: ProductOptionsProps) => {
           <Text variant="bold">Color</Text>
           <div role="listbox" className="flex flex-row mt-2">
             {allColors.map((color) => {
-              const colorData = matrix[selectedSize || allSizes[0]]?.[color];
               return (
                 <button
                   key={color}
                   className={`px-4 py-2 mr-2 border rounded-md 
-                    ${matrix[selectedSize]?.[color]?.isAvailable?selectedColor === color ? "bg-green-500" : "bg-primary":"bg-gray-500"}`}
+                    ${matrix[selectedSize]?.[color]?.isAvailable ? (selectedColor === color ? "bg-green-500" : "bg-primary") : "bg-gray-500"}`}
                   disabled={
                     matrix[selectedSize]?.[color]?.isAvailable === false
                   }

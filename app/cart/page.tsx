@@ -11,6 +11,5 @@ export default function CartPage() {
     <div className="p-10">
       <CartClient />
     </div>
-  )
-  
+  );
 }
