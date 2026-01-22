@@ -25,15 +25,19 @@ export default function InformationForm({
         const response = await getUserById(userId);
         if (response.data) {
           setValue("email", response.data.email);
+          setValue("phone", response.data.phone || "");
           setValue("firstName", response.data.firstName);
           setValue("lastName", response.data.lastName);
-          setValue("country", "United Kingdom");
+          setValue("address,country", "United Kingdom");
           if (response.data.addresses && response.data.addresses.length > 0) {
-            setValue("address", response.data.addresses[0].address);
-            setValue("city", response.data.addresses[0].city);
-            setValue("postcode", response.data.addresses[0].postalCode);
+            setValue("address.address", response.data.addresses[0].address);
+            setValue("address.city", response.data.addresses[0].city);
             setValue(
-              "country",
+              "address.postalCode",
+              response.data.addresses[0].postalCode,
+            );
+            setValue(
+              "address.country",
               response.data.addresses[0].country || "United Kingdom",
             );
           }
@@ -119,20 +123,23 @@ export default function InformationForm({
           <div className="col-span-2">
             <Input
               placeholder="Address"
-              {...register("address", { required: true })}
+              {...register("address.address", { required: true })}
             />
           </div>
 
-          <Input placeholder="City" {...register("city", { required: true })} />
+          <Input
+            placeholder="City"
+            {...register("address.city", { required: true })}
+          />
           <Input
             placeholder="Postal code"
-            {...register("postalCode", { required: true })}
+            {...register("address.postalCode", { required: true })}
           />
           <Input
             placeholder="Country"
             value={"United Kingdom"}
             disabled
-            {...register("country", { required: true })}
+            {...register("address.country", { required: true })}
           />
         </div>
         <Text>

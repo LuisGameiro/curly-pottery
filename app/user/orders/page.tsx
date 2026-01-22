@@ -1,7 +1,7 @@
 import OrderUserTable from "@components/tables/OrderUserTable";
 import { Container, Text } from "@components/ui";
 import { authOptions } from "@lib/auth/authOptions";
-import { getUserById } from "actions/customer.actions";
+import { getOrdersById } from "actions/order.actions";
 import Loading from "app/loading";
 import { CarFront } from "lucide-react";
 import { getServerSession } from "next-auth";
@@ -20,13 +20,13 @@ export default async function Orders() {
   if (!user) {
     throw new Error("User not found");
   }
-  const response = await getUserById(user.id);
+  const response = await getOrdersById(user.id);
 
   if (!response.success) {
     throw new Error(response.message);
   }
 
-  const orders = response.data?.orders;
+  const orders = response.data;
   if (!orders || orders?.length === 0)
     return (
       <Container className="py-20 flex flex-col items-center justify-center ">

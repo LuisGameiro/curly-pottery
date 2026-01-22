@@ -1,6 +1,6 @@
 import { Container, Text } from "@components/ui";
 import Image from "next/image";
-import { ArrowLeft, Package, MapPin, User, BellIcon } from "lucide-react";
+import { ArrowLeft, Package, MapPin, BellIcon } from "lucide-react";
 import Link from "next/link";
 import { getOrderById } from "actions/order.actions";
 import { showCurrency } from "@lib/calculate-price";
@@ -32,28 +32,31 @@ export default async function OrderDetailsPage({
 
   const lineItems = response.data.lineItems as CartLineItem[];
   const address = response.data.shippingAddress as unknown as Address;
-  const user = response.data.user;
-
   const order = response.data as Order;
 
   return (
     <Suspense fallback={<Loading />}>
       <Container>
         <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex flex-col gap-2">
+          <div className="flex-1 flex-col gap-2">
             <Link
-              href="/admin/orders"
+              href="/user/orders"
               className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition"
             >
               <ArrowLeft size={16} /> Back to Orders
             </Link>
-            <div className="flex items-center gap-3">
-              <Text variant="heading">
+            <div className="flex-1 flex-col">
+              <Text variant="heading" className="my-0 py-0">
                 Order #{order.id.slice(-6).toUpperCase()}
               </Text>
-              <span className="text-sm bg-accent-1 px-3 py-1 rounded-full font-mono">
-                {order.id}
-              </span>
+              <div className="flex flex-row  items-center justify-between gap-10">
+                <span className="text-sm bg-accent-1 px-3 py-1 rounded-full font-mono ">
+                  {order.id}
+                </span>
+                <Text>
+                  created: {new Date(order.createdAt).toLocaleDateString()}
+                </Text>
+              </div>
             </div>
           </div>
         </div>
@@ -67,12 +70,16 @@ export default async function OrderDetailsPage({
               </div>
               <div className="divide-y">
                 {lineItems.map((item: CartLineItem) => (
-                  <div key={item.id} className="p-4 flex items-center gap-4">
+                  <div
+                    key={item.variantId}
+                    className="p-4 flex items-center gap-4"
+                  >
                     <div className="relative h-16 w-16 rounded-md overflow-hidden border shrink-0">
                       <Image
-                        src={item.images[0]}
+                        src={item.images}
                         alt={item.name}
                         fill
+                        sizes="64"
                         className="object-cover"
                       />
                     </div>
@@ -121,29 +128,14 @@ export default async function OrderDetailsPage({
             </Container>
           </div>
 
-          {/* Right Column: Customer & Shipping Details */}
           <div className="space-y-6">
             <Container variant="box" className="space-y-3">
               <div className="flex items-center gap-2 border-b pb-2">
                 <BellIcon size={18} className="text-accent-6" />
                 <Text variant="bold">Status</Text>
               </div>
-              <Text>{order.status}</Text>
-            </Container>
 
-            <Container variant="box" className="space-y-4">
-              <div className="flex items-center gap-2 border-b pb-2">
-                <User size={18} className="text-accent-6" />
-                <Text variant="bold">Customer</Text>
-              </div>
-              <div>
-                <Text>
-                  {user?.firstName || order?.firstName}{" "}
-                  {user?.lastName || order?.lastName}
-                </Text>
-                <Text>{order.email}</Text>
-                <Text>{order.phone}</Text>
-              </div>
+              <Text>{order.status}</Text>
             </Container>
 
             <Container variant="box" className="space-y-4">
@@ -152,12 +144,12 @@ export default async function OrderDetailsPage({
                 <Text variant="bold">Shipping Address</Text>
               </div>
               {address ? (
-                <div className="text-sm space-y-1 text-muted-foreground">
-                  <p>{address.address}</p>
-                  <p>
+                <div>
+                  <Text>{address.address}</Text>
+                  <Text>
                     {address.city}, {address.postalCode}
-                  </p>
-                  <p>{address.country}</p>
+                  </Text>
+                  <Text>{address.country}</Text>
                 </div>
               ) : (
                 <Text>No shipping address provided.</Text>

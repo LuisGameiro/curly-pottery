@@ -77,7 +77,7 @@ export default function CheckouClient() {
     let red = false;
     try {
       setLoading(true);
-
+      console.log("createOrder_INPUT:", currentValues);
       const orderResponse = await createOrder(currentValues);
 
       if (!orderResponse.success) {

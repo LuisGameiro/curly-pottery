@@ -39,12 +39,43 @@ export async function getAllOrders(): Promise<
   }
 }
 
+export async function getOrdersById(
+  id: string,
+): Promise<ActionResponse<OrderWithUser[] | null>> {
+  try {
+    const order = await prisma.order.findMany({
+      where: { userId: id },
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Fetched order successfully",
+      data: order,
+    };
+  } catch (error) {
+    console.error("getOrderById_ERROR:", error);
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "A database error occurred",
+      errors: error,
+    };
+  }
+}
+
 export async function getOrderById(
   id: string,
 ): Promise<ActionResponse<OrderWithUser | null>> {
   try {
     const order = await prisma.order.findUnique({
       where: { id },
+
       include: {
         user: true,
       },
@@ -90,7 +121,6 @@ export async function createOrder({
         firstName,
         email,
         phone,
-
         discounts: discounts || [],
         currency: currency || "GBP",
         shippingAddress: address || {},

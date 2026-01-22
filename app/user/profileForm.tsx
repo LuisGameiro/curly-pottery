@@ -1,132 +1,142 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useForm, useFieldArray } from "react-hook-form";
 import { Container, Text, Button, Input } from "@components/ui";
 import { Mail, MapPin, Phone, Plus, Trash2, UserIcon } from "lucide-react";
 import { Address, UserWithOrdersAddress } from "@lib/types/types";
+import { toast } from "sonner";
+import { updateUser } from "actions/customer.actions";
 
 export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: user?.firstName || "",
-    lastName: user?.lastName || "",
 
-    phone: user?.phone || "",
-    company: user?.company || "",
-    notes: user?.notes || "",
-    addresses: user?.addresses || [],
+  const { register, control, handleSubmit, reset, watch } =
+    useForm<UserWithOrdersAddress>({
+      defaultValues: {
+        firstName: user?.firstName || "",
+        lastName: user?.lastName || "",
+        phone: user?.phone || "",
+        addresses: user?.addresses || [],
+      },
+    });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "addresses",
   });
 
-  const addAddress = () => {
-    setFormData({
-      ...formData,
-      addresses: [
-        ...formData.addresses,
-        {
-          address: "",
-          city: "",
-          postalCode: "",
-          id: "",
-          company: null,
-          createdAt: new Date(),
-          type: null,
-          country: "United Kingdom",
-          userId: null,
-        },
-      ],
+  useEffect(() => {
+    reset({
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      phone: user?.phone || "",
+      addresses: user?.addresses || [],
     });
+  }, [user, reset]);
+
+  const onSubmit = async (data: UserWithOrdersAddress) => {
+    try {
+      const response = await updateUser(user.id, data);
+      console.log("Update response:", user.id, data, response);
+      if (response.success) {
+        toast.success("Profile updated successfully!");
+      } else {
+        toast.error("Failed to update profile. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("Failed to update profile. Please try again.");
+    } finally {
+      setIsEditing(false);
+    }
   };
 
-  const updateAddress = (index: number, field: string, value: string) => {
-    const newAddresses = [...formData.addresses];
-    newAddresses[index] = { ...newAddresses[index], [field]: value };
-    setFormData({ ...formData, addresses: newAddresses });
-  };
-
-  const removeAddress = (index: number) => {
-    const newAddresses = formData.addresses.filter((_, i) => i !== index);
-    setFormData({ ...formData, addresses: newAddresses });
-  };
-  const handleSave = async () => {
-    setIsEditing(false);
-    console.log("Saved data:", formData);
-  };
-
-  const EditingButton = () => {
+  const toggleEditing = () => {
+    if (!isEditing && fields.length === 0) {
+      append({
+        address: "",
+        city: "",
+        postalCode: "",
+        country: "United Kingdom",
+      } as Address);
+    }
     setIsEditing(!isEditing);
-    if (formData.addresses.length === 0) addAddress();
   };
+
+  const watchedName = watch("firstName");
 
   return (
     <Container>
-      <header>
-        <div className="w-full flex flex-row justify-between">
-          <Text variant="heading">Welcome, {formData.firstName}!</Text>
-
-          <Button variant="slim" onClick={EditingButton}>
+      <header className="mb-8">
+        <div className="w-full flex flex-row justify-between items-center">
+          <Text variant="heading">Welcome, {watchedName}!</Text>
+          <Button variant="slim" onClick={toggleEditing}>
             {isEditing ? "Cancel" : "Edit Profile"}
           </Button>
         </div>
       </header>
 
-      <section>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
-          <label>Email</label>
+          <label className="text-sm font-semibold">Email</label>
           <div className="flex items-center mt-1 text-accent-9">
             <Mail size={18} className="mr-2" />
             <span>{user?.email}</span>
           </div>
         </div>
 
-        <div className="mt-6">
-          <label>Full Name</label>
+        <div>
+          <label className="text-sm font-semibold">Full Name</label>
           {isEditing ? (
             <div className="gap-2 grid grid-cols-2 py-2">
               <Input
-                value={formData.firstName}
-                onChange={(e) =>
-                  setFormData({ ...formData, firstName: e.target.value })
-                }
+                {...register("firstName", { required: true })}
+                placeholder="First Name"
               />
               <Input
-                value={formData.lastName}
-                onChange={(e) =>
-                  setFormData({ ...formData, lastName: e.target.value })
-                }
+                {...register("lastName", { required: true })}
+                placeholder="Last Name"
               />
             </div>
           ) : (
-            <div className="flex items-center pt-4 pb-4">
-              <UserIcon size={18} className="mr-2" /> {formData.firstName}{" "}
-              {formData.lastName}
+            <div className="flex items-center pt-2 pb-2">
+              <UserIcon size={18} className="mr-2" />
+              {watch("firstName")} {watch("lastName")}
             </div>
           )}
         </div>
 
-        <div className="mt-2">
-          <label>Phone</label>
+        <div>
+          <label className="text-sm font-semibold">Phone</label>
           {isEditing ? (
-            <Input
-              value={formData.phone}
-              onChange={(e) =>
-                setFormData({ ...formData, phone: e.target.value })
-              }
-            />
+            <div className="py-2">
+              <Input {...register("phone")} placeholder="Phone Number" />
+            </div>
           ) : (
-            <div className="flex items-center my-4">
-              <Phone size={18} className="mr-2" />{" "}
-              {formData.phone || "Not provided"}
+            <div className="flex items-center py-2">
+              <Phone size={18} className="mr-2" />
+              {watch("phone") || "Not provided"}
             </div>
           )}
         </div>
 
-        <div className="mt-2">
+        {/* Addresses Section */}
+        <div className="mt-8">
           <div className="flex justify-between items-center mb-4">
             <Text variant="subHeading">Your Addresses</Text>
             {isEditing && (
               <Button
+                type="button"
                 variant="naked"
-                onClick={addAddress}
+                onClick={() =>
+                  append({
+                    address: "",
+                    city: "",
+                    postalCode: "",
+                    country: "United Kingdom",
+                  } as Address)
+                }
                 className="flex items-center text-secondary"
               >
                 <Plus size={16} className="mr-1" /> Add Address
@@ -135,68 +145,71 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
           </div>
 
           <div className="space-y-4">
-            {formData.addresses.length === 0 && !isEditing && (
+            {fields.length === 0 && !isEditing && (
               <Text className="text-accent-5 italic">No addresses saved.</Text>
             )}
 
-            {formData.addresses.map((address: Address, index: number) => (
-              <div key={index} className="p-4 border rounded-lg relative">
+            {fields.map((field, index) => (
+              <div
+                key={field.id}
+                className="p-4 border rounded-lg relative bg-accent-0"
+              >
                 {isEditing ? (
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
                       <Text className="font-bold text-sm">
                         Address #{index + 1}
                       </Text>
                       <Button
+                        type="button"
                         variant="naked"
-                        color="danger"
-                        onClick={() => removeAddress(index)}
+                        onClick={() => remove(index)}
+                        className="text-red-500"
                       >
                         <Trash2 size={16} />
                       </Button>
                     </div>
+
                     <Input
                       placeholder="Address"
-                      value={address.address}
-                      onChange={(e) =>
-                        updateAddress(index, "address", e.target.value)
-                      }
+                      {...register(`addresses.${index}.address` as const, {
+                        required: true,
+                      })}
                     />
+
                     <div className="gap-2 grid grid-cols-2">
                       <Input
                         placeholder="City"
-                        value={address.city}
-                        onChange={(e) =>
-                          updateAddress(index, "city", e.target.value)
-                        }
+                        {...register(`addresses.${index}.city` as const, {
+                          required: true,
+                        })}
                       />
                       <Input
                         placeholder="Postal Code"
-                        value={address.postalCode}
-                        onChange={(e) =>
-                          updateAddress(index, "postalCode", e.target.value)
-                        }
+                        {...register(`addresses.${index}.postalCode` as const, {
+                          required: true,
+                        })}
                       />
                     </div>
+
                     <div className="items-center gap-2 grid grid-cols-2">
-                      <Input
-                        placeholder="Country"
-                        value={address.country}
-                        disabled
-                        onChange={(e) =>
-                          updateAddress(index, "country", e.target.value)
-                        }
-                      />
-                      <Text> Currently we only ship to Uk.</Text>
+                      <Input value="United Kingdom" disabled />
+                      <Text className="text-xs text-accent-5">
+                        Currently only shipping to UK.
+                      </Text>
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-center">
+                  <div className="flex items-start">
                     <MapPin size={18} className="mr-2 mt-1 text-accent-6" />
                     <div>
-                      <Text>{address.address || "New Address"},</Text>
-                      <Text>
-                        {address.postalCode}, {address.city} {address.country}
+                      <Text className="font-medium">
+                        {watch(`addresses.${index}.address`) || "New Address"}
+                      </Text>
+                      <Text className="text-accent-7">
+                        {watch(`addresses.${index}.postalCode`)},{" "}
+                        {watch(`addresses.${index}.city`)}{" "}
+                        {watch(`addresses.${index}.country`)}
                       </Text>
                     </div>
                   </div>
@@ -207,11 +220,11 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
         </div>
 
         {isEditing && (
-          <Button width="100%" variant="slim" onClick={handleSave}>
+          <Button type="submit" width="100%" variant="slim" className="mt-6">
             Save Changes
           </Button>
         )}
-      </section>
+      </form>
     </Container>
   );
 }

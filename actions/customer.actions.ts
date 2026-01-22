@@ -6,6 +6,7 @@ import {
   UserWithOrders,
   UserWithOrdersAddress,
   ActionResponse,
+  Address,
 } from "@lib/types/types";
 import { cache } from "react";
 
@@ -90,8 +91,46 @@ export async function updateNotes(
   }
 }
 
-// export async function createUser(formData: FormData) {
-//   await prisma.user.create({
+export async function updateUser(
+  id: string,
+  data: UserWithOrdersAddress,
+): Promise<ActionResponse<User | null>> {
+  try {
+    const { orders: _orders, addresses, ...updateData } = data;
+    const user = await prisma.user.update({
+      where: { id },
+      data: {
+        ...updateData,
+        addresses: {
+          deleteMany: {},
+          create: addresses.map((addr: Address) => ({
+            address: addr.address,
+            city: addr.city,
+            postalCode: addr.postalCode,
+            country: addr.country || "United Kingdom",
+          })),
+        },
+      },
+    });
+    return {
+      success: true,
+      message: "User note updated successfully",
+      data: user,
+    };
+  } catch (error) {
+    console.error("updateNotes_ERROR:", error);
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "A database error occurred",
+      errors: error,
+    };
+  }
+}
+
+// export async function updateUser(id: string, formData: FormData) {
+//   await prisma.user.update({
+//     where: { id },
 //     data: {
 //       firstName: formData.get("firstName") as string,
 //       lastName: formData.get("lastName") as string,
@@ -105,9 +144,8 @@ export async function updateNotes(
 //   revalidatePath("/admin/users");
 // }
 
-// export async function updateUser(id: string, formData: FormData) {
-//   await prisma.user.update({
-//     where: { id },
+// export async function createUser(formData: FormData) {
+//   await prisma.user.create({
 //     data: {
 //       firstName: formData.get("firstName") as string,
 //       lastName: formData.get("lastName") as string,

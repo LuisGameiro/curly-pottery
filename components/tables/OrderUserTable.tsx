@@ -33,7 +33,7 @@ export default function OrderTable({ orders }: { orders: Order[] }) {
       header: "View",
       align: "center" as const,
       render: (o: Order) => (
-        <Link href={`/admin/orders/${o.id}`}>
+        <Link href={`/user/orders/${o.id}`}>
           <Button variant="naked">
             <Eye size={18} />
           </Button>
