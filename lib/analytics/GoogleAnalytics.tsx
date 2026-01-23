@@ -1,23 +1,30 @@
 "use client";
 import Script from "next/script";
+import ReactGA from "react-ga4";
 import { useEffect, useState } from "react";
-export const getConsent = () => {
-  if (typeof window === "undefined") return null;
-  const saved = localStorage.getItem("cookie-consent");
-  return saved ? JSON.parse(saved) : null;
-};
+
+declare global {
+  interface Window {
+    _analytics_initialized?: boolean;
+  }
+}
 export default function GoogleAnalytics() {
+  if (!process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID) {
+    return null;
+  }
   const [consent, setConsent] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const check = () => {
-      const c = getConsent();
-      setConsent(c?.analytics ?? false);
-    };
+    const saved = localStorage.getItem("cookie-consent");
+    const isConsented = saved ? JSON.parse(saved).analytics : false;
+    setConsent(isConsented);
 
-    check();
-    window.addEventListener("cookie-updated", check);
-    return () => window.removeEventListener("cookie-updated", check);
+    if (isConsented) {
+      if (!window._analytics_initialized) {
+        ReactGA.initialize(process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || "");
+        window._analytics_initialized = true;
+      }
+    }
   }, []);
 
   if (!consent) return null;
@@ -25,7 +32,7 @@ export default function GoogleAnalytics() {
   return (
     <>
       <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GOOGLE_ANALYTICS_ID}`}
+        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}
         strategy="afterInteractive"
       />
       <Script id="google-analytics" strategy="afterInteractive">
@@ -33,7 +40,7 @@ export default function GoogleAnalytics() {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());   
-          gtag('config', '${process.env.GOOGLE_ANALYTICS_ID}  ');
+          gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}  ');
         `}
       </Script>
     </>

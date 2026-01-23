@@ -6,9 +6,9 @@ import "keen-slider/keen-slider.min.css";
 import { Layout } from "@components/common";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
-import constructMetadata from "@components/common/SEO";
+import { PHProvider } from "@lib/analytics/posthogProvider";
+import GoogleAnalytics from "@lib/analytics/googleAnalytics";
 
-export const metadata = constructMetadata();
 export default function RootLayout({
   children,
 }: {
@@ -16,19 +16,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
-      <body className="loading bg-primary">
-        <SessionProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            themes={["light", "dark"]}
-          >
-            <Layout>{children}</Layout>
-          </ThemeProvider>
-        </SessionProvider>
-      </body>
+      <PHProvider>
+        <head />
+        <body className="loading bg-primary">
+          <SessionProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              themes={["light", "dark"]}
+            >
+              <GoogleAnalytics />
+              <Layout>{children}</Layout>
+            </ThemeProvider>
+          </SessionProvider>
+        </body>
+      </PHProvider>
     </html>
   );
 }

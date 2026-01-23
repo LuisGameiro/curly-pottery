@@ -25,7 +25,7 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
         <p>Something unexpected happened.</p>
         <p>Try refreshing the page, or check back in a moment.</p>
       </p>
-      {env.APP_ENV === 'dev' && (
+      {process.env.APP_ENV === 'dev' && (
         <>
           {error.digest && (
             <code className="block bg-muted p-2 rounded text-xs text-red-500">
