@@ -6,7 +6,9 @@ import "keen-slider/keen-slider.min.css";
 import { Layout } from "@components/common";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
+import constructMetadata from "@components/common/SEO";
 
+export const metadata = constructMetadata();
 export default function RootLayout({
   children,
 }: {

@@ -1,10 +1,11 @@
+import constructMetadata from "@components/common/SEO";
 import { Container, Text } from "@components/ui";
 
-export const metadata = {
-  title: "About - Curly Pottery",
+export const metadata = constructMetadata({
+  title: "About",
   description:
     "Learn about Curly Pottery, our story, mission, and why we are passionate about handcrafted ceramics.",
-};
+});
 
 export default function About() {
   return (

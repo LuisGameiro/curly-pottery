@@ -35,15 +35,11 @@ export default function CustomerMenuContent() {
     router.push(href);
   }
 
-  function logout(): void {
-    throw new Error("Function not implemented.");
-  }
-
   return (
     <DropdownContent
       sideOffset={10}
       id="CustomerMenuContent"
-      className="border-2 border-secondary rounded-md shadow-2xl"
+      className="border border-border rounded-md shadow-2xl"
     >
       {LINKS.map(({ name, href }) => (
         <DropdownMenuItem key={href}>

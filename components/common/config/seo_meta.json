@@ -1,25 +1,25 @@
 {
-  "title": "Curly Pottery Storefront | Powered by Next.js Commerce",
-  "titleTemplate": "%s - Curly Pottery Storefront",
-  "description": "Next.js Commerce - https://www.nextjs.org/commerce",
+  "title": "Curly Pottery",
+  "titleTemplate": "%s - Curly Pottery",
+  "description": "Handcrafted pottery and ceramics from Curly Pottery.",
   "openGraph": {
-    "title": "Curly Pottery Storefront | Powered by Next.js Commerce",
-    "description": "Next.js Commerce - https://www.nextjs.org/commerce",
+    "title": "Curly Pottery",
+    "description": "Handcrafted pottery and ceramics from Curly Pottery.",
     "type": "website",
-    "url": "https://nextjs.org/commerce",
-    "site_name": "Next.js Commerce",
+    "url":  "https://curlypottery.com",
+    "site_name": "Curly Pottery",
     "images": [
       {
         "url": "/card.png",
         "width": "800",
         "height": "600",
-        "alt": "Next.js Commerce"
+        "alt": "Curly Pottery"
       }
     ]
   },
   "twitter": {
-    "handle": "@nextjs",
-    "site": "@nextjs",
+    "handle": "@curlypottery",
+    "site": "@curlypottery",
     "cardType": "summary_large_image"
   }
 }

@@ -81,34 +81,8 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
               />
             ))}
           </Marquee>
-
-          // <section className="px-6 my-4">
-          //   <Text variant="sectionHeading">Related Products</Text>
-          //   <div className={s.relatedProductsGrid}>
-
-          //       </div>
-          //     ))}
-          //   </div>
-          // </section>
         )}
       </Container>
-      {/* <SEO
-        title={product.name}
-        description={product.description}
-        openGraph={{
-          type: "website",
-          title: product.name,
-          description: product.description,
-          images: [
-            {
-              url: product.images[0],
-              width: "800",
-              height: "600",
-              alt: product.name,
-            },
-          ],
-        }}
-      /> */}
     </>
   );
 };

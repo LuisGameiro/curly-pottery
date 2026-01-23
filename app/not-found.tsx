@@ -4,9 +4,10 @@ import { Text } from "@components/ui";
 export default function NotFound() {
   return (
     <div className="space-y-10 text-center bg-background py-20">
-      <Text variant="heading">Not Found</Text>
+      <Text variant="heading">Oops! This page is missing.</Text>
       <Text variant="body">
-        The requested page does not exist or you do not have access to it.
+        We couldn't find the page you're looking for. It might have moved, or
+        the link could be slightly broken.
       </Text>
       <Link href="/" className="text-secondary">
         Return Home

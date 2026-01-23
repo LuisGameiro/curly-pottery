@@ -4,26 +4,15 @@ import { cn } from "@lib/utils";
 import { ChevronDown } from "lucide-react";
 import { Category } from "@lib/types/types";
 import { useClickOutside } from "@lib/hooks/useClickOutside";
-
-export const sortLabels: Record<string, string> = {
-  newest: "Newest first",
-  "price-asc": "Price: Low to High",
-  "price-desc": "Price: High to Low",
-  "name-asc": "Alphabetically: A-Z",
-  "name-desc": "Alphabetically: Z-A",
-};
-
-type SortLabels = keyof typeof sortLabels;
+import { sortLabels, SortLabels } from "./sortProducts";
 
 interface MenuProductsProps {
-  setSortMethod: (key: SortLabels) => void;
-  sortMethod: string;
+  sortMethod: SortLabels;
   categories: Category[];
   activeCategory: string | null;
 }
 
 export default function MenuProducts({
-  setSortMethod,
   sortMethod,
   categories,
   activeCategory,
@@ -33,13 +22,18 @@ export default function MenuProducts({
   const [openFilter, setOpenFilter] = useState(false);
   const [openSort, setOpenSort] = useState(false);
 
-  const handleCategoryClick = (slug?: string) => {
+  const handleCategoryChange = (slug?: string) => {
     setOpenFilter(false);
     if (slug) {
       router.push(`/shop?category=${slug}`);
     } else {
       router.push(`/shop`);
     }
+  };
+
+  const handleSortMethodChange = (key: SortLabels) => {
+    setOpenSort(false);
+    router.replace(`/shop?category=${activeCategory || ""}&sort=${key}`);
   };
 
   const containerSortRef = useClickOutside<HTMLDivElement>(() => {
@@ -51,7 +45,7 @@ export default function MenuProducts({
   }, openFilter);
 
   return (
-    <aside className="gap-2 lg:col-span-3 flex flex-col sm:flex-row lg:flex-col ">
+    <aside className="gap-2 lg:col-span-3 flex flex-col sm:flex-row lg:flex-col">
       <div className="relative w-full ">
         <label className="text-xs font-bold uppercase tracking-wider text-accent-6 ml-1 mb-1 block">
           Sort by
@@ -85,8 +79,7 @@ export default function MenuProducts({
                     : "hover:bg-accent-1 text-text-secondary hover:text-text-base font-medium",
                 )}
                 onClick={() => {
-                  setSortMethod(key);
-                  setOpenSort(false);
+                  handleSortMethodChange(key);
                 }}
               >
                 {label}
@@ -126,7 +119,7 @@ export default function MenuProducts({
                   ? "bg-secondary text-secondary-foreground font-bold shadow-sm"
                   : "hover:bg-accent-1 text-text-secondary hover:text-text-base font-medium",
               )}
-              onClick={() => handleCategoryClick()}
+              onClick={() => handleCategoryChange()}
             >
               All Products
             </li>
@@ -140,7 +133,7 @@ export default function MenuProducts({
                     ? "bg-secondary text-secondary-foreground font-bold shadow-sm"
                     : "hover:bg-accent-1 text-text-secondary hover:text-text-base font-medium",
                 )}
-                onClick={() => handleCategoryClick(cat.slug)}
+                onClick={() => handleCategoryChange(cat.slug)}
               >
                 {cat.name}
               </li>
