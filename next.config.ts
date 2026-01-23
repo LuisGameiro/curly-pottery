@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/ingest/:path*',
+        destination: 'https://eu.i.posthog.com/:path*',
+      },
+    ]
+  },
 };
 
 export default withSentryConfig(nextConfig, {
@@ -53,3 +61,5 @@ export default withSentryConfig(nextConfig, {
   tunnelRoute: "/monitoring-sentry",
   // hideSourceMaps: true,
 });
+
+module.exports = nextConfig

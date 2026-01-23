@@ -2,11 +2,12 @@ import { getAllCustomers } from "actions/customer.actions";
 import CustomersClient from "../../../components/admin/CustomersClient";
 import { Suspense } from "react";
 import Loading from "app/loading";
+import constructMetadata from "@components/common/SEO/SEO";
 
-export const metadata = {
-  title: "Customers - Curly Pottery",
+export const metadata = constructMetadata({
+  title: "Customers Admin",
   description: "Manage your store customers at Curly Pottery.",
-};
+});
 
 export default async function CustomersPage() {
   const response = await getAllCustomers();

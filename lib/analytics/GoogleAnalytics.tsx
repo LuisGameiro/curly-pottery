@@ -15,15 +15,19 @@ export default function GoogleAnalytics() {
   const [consent, setConsent] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem("cookie-consent");
-    const isConsented = saved ? JSON.parse(saved).analytics : false;
-    setConsent(isConsented);
+    try {
+      const saved = localStorage.getItem("cookie-consent");
+      const isConsented = saved ? JSON.parse(saved).analytics : false;
+      setConsent(isConsented);
 
-    if (isConsented) {
-      if (!window._analytics_initialized) {
-        ReactGA.initialize(process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || "");
-        window._analytics_initialized = true;
+      if (isConsented) {
+        if (!window._analytics_initialized) {
+          ReactGA.initialize(process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || "");
+          window._analytics_initialized = true;
+        }
       }
+    } catch (e) {
+      console.warn("Analytics blocked by browser extension", e);
     }
   }, []);
 

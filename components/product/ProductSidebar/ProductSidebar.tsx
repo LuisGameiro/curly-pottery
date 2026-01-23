@@ -2,7 +2,7 @@
 
 import s from "./ProductSidebar.module.css";
 import { useState } from "react";
-import { Button, Collapse, Text } from "@components/ui";
+import { Button, Collapse, ShareButton, Text } from "@components/ui";
 import Link from "next/link";
 import { cn } from "@lib/utils";
 import ProductOptions from "../ProductOptions";
@@ -16,6 +16,8 @@ import {
   Discount,
 } from "@lib/types/types";
 import { toast } from "sonner";
+import { Share, Undo2 } from "lucide-react";
+import { trackEvent } from "@lib/analytics/trackEvents";
 
 interface ProductSidebarProps {
   product: ProductWithVariantsCategories;
@@ -52,7 +54,13 @@ const ProductSidebar = ({
         },
         quantity,
       );
-      toast("Product added to cart");
+      trackEvent("add_to_cart", {
+        name: product.name,
+        currency: variant.currency,
+        sku: variant.sku,
+        price: calculateDiscount(variant.price, variant.discounts as Discount[]).finalPrice,
+        quantity: quantity,
+      });
     } catch {
       toast("Error adding item to cart");
     } finally {
@@ -68,7 +76,22 @@ const ProductSidebar = ({
   return (
     <div className={cn(className, "space-y-6")}>
       <section>
-        <Text variant="heading">{product.name}</Text>
+        <div className="flex justify-between items-center">
+          <Text variant="heading">{product.name}</Text>
+          <div className="flex items-center gap-2">
+            <Link href={`/shop/`}>
+              <Button variant="naked">
+                <Undo2 size={24} />
+              </Button>
+            </Link>
+            <ShareButton
+              title={product.name}
+              text={product.description || ""}
+              url={`${process.env.NEXT_PUBLIC_APP_URL}/shop/${product.slug}`}
+            />
+          </div>
+        </div>
+
         {product.categories.map((category: Category) => (
           <Text key={category.id} variant="subHeading" className={"mr-2"}>
             {category.name}

@@ -18,6 +18,7 @@ import { sendEmail } from "actions/email.actions";
 import { ClientOrderEmail } from "@lib/emails/ClientOrderEmail";
 import { showCurrency } from "@lib/calculate-price";
 import { AdminOrderEmail } from "@lib/emails/AdminOrderEmail";
+import { trackEvent } from "@lib/analytics/trackEvents";
 
 export default function CheckouClient() {
   const { data, deleteAll } = useCart();
@@ -49,6 +50,14 @@ export default function CheckouClient() {
   const { watch } = methods;
   const currentValues = watch();
 
+  trackEvent('begin_checkout', {
+    userId: currentValues?.userId,
+    total_value: currentValues.totalPrice,
+    currency: currentValues.currency,
+    item_count: currentValues.lineItems.length,
+    items: currentValues.lineItems.map(item => item.quantity + " * " + item.sku),
+  });
+
   const onInformationSubmit = () => setStep(2);
 
   const nextToPayment = async () => {
@@ -58,12 +67,19 @@ export default function CheckouClient() {
         currentValues.totalPrice,
         cartId,
       );
-
+      trackEvent('before_purchase', {
+        transaction_id: response.data,
+        userId: currentValues?.userId,
+        total_value: currentValues.totalPrice,
+        currency: currentValues.currency,
+        item_count: currentValues.lineItems.length,
+        items: currentValues.lineItems.map(item => item.quantity + " * " + item.sku),
+      });
       if (!response.success && !response.data) {
         setLoading(false);
         toast(response.message);
       } else {
-        setCheckoutId(response.data ?? "");
+        setCheckoutId(response.data || "");
         setStep(3);
       }
     } catch (error) {
@@ -77,7 +93,7 @@ export default function CheckouClient() {
     let red = false;
     try {
       setLoading(true);
-      console.log("createOrder_INPUT:", currentValues);
+
       const orderResponse = await createOrder(currentValues);
 
       if (!orderResponse.success) {
@@ -102,6 +118,17 @@ export default function CheckouClient() {
             itemsCount: currentValues.lineItems.length || 0,
           }),
         });
+        trackEvent('purchase_complete', {
+          order_id: orderResponse.data?.id,
+          transaction_id: checkoutId,
+          userId: currentValues?.userId,
+          total_value: currentValues.totalPrice,
+          currency: currentValues.currency,
+          item_count: currentValues.lineItems.length,
+          items: currentValues.lineItems.map(item => item.quantity + " * " + item.sku),
+        });
+
+
         deleteAll();
       }
     } catch (error) {
@@ -178,6 +205,8 @@ export default function CheckouClient() {
         <div className="lg:col-span-4">
           <CheckoutSummary />
         </div>
+
+        
       </Container>
     </FormProvider>
   );

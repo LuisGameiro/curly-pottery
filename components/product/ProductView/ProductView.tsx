@@ -7,11 +7,14 @@ import { ProductSlider, ProductCard } from "@components/product";
 import { Container, Marquee } from "@components/ui";
 import ProductSidebar from "../ProductSidebar";
 import {
+  Discount,
   Product,
   ProductWithVariantsCategories,
   Variant,
 } from "@lib/types/types";
 import { cn } from "@lib/utils";
+import { trackEvent } from "@lib/analytics/trackEvents";
+import { calculateDiscount } from "@lib/calculate-price";
 
 export const getRelatedProducts = async (
   categories: string[],
@@ -34,6 +37,13 @@ interface ProductViewProps {
 
 const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
   const [variant, setVariant] = useState<Variant>(product.variants[0]);
+
+   trackEvent("view_product", {
+        name: product.name,
+        currency: variant.currency,
+        sku: variant.sku,
+        price: calculateDiscount(variant.price, variant.discounts as Discount[]).finalPrice,
+      });
 
   return (
     <>

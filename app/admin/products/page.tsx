@@ -2,11 +2,12 @@ import { Suspense } from "react";
 import ProductsCLient from "../../../components/admin/ProductsClient";
 import { getAllProducts } from "actions/product.actions";
 import Loading from "app/loading";
+import constructMetadata from "@components/common/SEO";
 
-export const metadata = {
-  title: "Products - Curly Pottery",
+export const metadata = constructMetadata({
+  title: "Products Admin",
   description: "Manage your store products at Curly Pottery.",
-};
+});
 
 export default async function ProductsPage() {
   const response = await getAllProducts();

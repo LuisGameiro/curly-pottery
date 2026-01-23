@@ -81,13 +81,11 @@ const ProductCard = ({
                 src={product.images[0] || placeholderImg}
                 height={540}
                 width={540}
-                fill
                 loading="lazy"
                 style={{
                   width: "auto",
                   height: "64",
-                  objectFit: "fill",
-                }}
+                  objectFit: "cover",}}
                 quality={100}
                 {...imgProps}
               />

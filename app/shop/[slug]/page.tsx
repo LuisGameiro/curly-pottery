@@ -6,6 +6,7 @@ import {
   getProductBySlug,
   getRelatedProducts,
 } from "actions/product.actions";
+import constructMetadata from "@components/common/SEO/SEO";
 
 export async function generateStaticParams() {
   const response = await getAllProducts();
@@ -30,16 +31,15 @@ export async function generateMetadata({
   }
 
   const product = response.data;
-
   const url = `${process.env.NEXT_PUBLIC_APP_URL}/product/${slug}`;
   const productImage = product.images?.[0] || "/logo.png";
 
-  return {
-    title: `${product.name} | Curtly Pottery`,
+  return constructMetadata({
+    title: product.name,
     description:
       product.description?.slice(0, 160) ||
       `Unique hand-crafted ${product.name} by Curly Pottery.`,
-    alternates: { canonical: url },
+    canonical: url,
     openGraph: {
       title: product.name,
       description: product.description || "Beautiful hand-crafted pottery.",
@@ -50,13 +50,7 @@ export async function generateMetadata({
       ],
       type: "website",
     },
-    twitter: {
-      card: "summary_large_image",
-      title: product.name,
-      description: product.description || "Hand-crafted pottery.",
-      images: [productImage],
-    },
-  };
+  });
 }
 
 export default async function ProductPage({

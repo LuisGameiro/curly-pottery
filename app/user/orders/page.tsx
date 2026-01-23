@@ -1,3 +1,4 @@
+import constructMetadata from "@components/common/SEO/SEO";
 import OrderUserTable from "@components/tables/OrderUserTable";
 import { Container, Text } from "@components/ui";
 import { authOptions } from "@lib/auth/authOptions";
@@ -7,12 +8,11 @@ import { CarFront } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { Suspense } from "react";
 
-export const metadata = {
-  title: "Your Orders - Curly Pottery",
+export const metadata = constructMetadata({
+  title: "Your Orders",
   description:
     "View and manage your past orders at Curly Pottery. Keep track of your handcrafted pottery purchases and order history for a seamless shopping experience.",
-};
-
+});
 export default async function Orders() {
   const session = await getServerSession(authOptions);
   const user = session?.user;

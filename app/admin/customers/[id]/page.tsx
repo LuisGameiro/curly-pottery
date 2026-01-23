@@ -18,11 +18,12 @@ import OrderTable from "@components/tables/OrderTable";
 import CustomerNotes from "../../../../components/admin/CostumerNotes";
 import { showCurrency } from "@lib/calculate-price";
 import { Address, Order } from "@lib/types/types";
+import constructMetadata from "@components/common/SEO/SEO";
 
-export const metadata = {
-  title: "Customer - Curly Pottery",
+export const metadata = constructMetadata({
+  title: "Customer Admin",
   description: "Manage your store customer at Curly Pottery.",
-};
+});
 
 export default async function CustomerDetailsPage({
   params,

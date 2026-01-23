@@ -17,3 +17,4 @@ export { default as Collapse } from "./Collapse";
 export { default as Quantity } from "./Quantity";
 export { default as Table } from "./Table";
 export * from "./Dropdown/Dropdown";
+export { default as ShareButton } from "./ShareButton";

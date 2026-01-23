@@ -5,13 +5,16 @@ import { CheckCircle } from "lucide-react";
 import { Button, Text } from "@components/ui";
 import useCart from "@lib/hooks/useCart";
 import { useEffect } from "react";
-
+import constructMetadata from "@components/common/SEO/SEO";
+import { trackEvent } from "@lib/analytics/trackEvents";
+  
 export default function SuccessPage() {
   const { deleteAll } = useCart();
 
   useEffect(() => {
     deleteAll();
   }, [deleteAll]);
+
 
   return (
     <div className="flex flex-col items-center justify-center max-w-lg text-center py-20 px-4 mx-auto">

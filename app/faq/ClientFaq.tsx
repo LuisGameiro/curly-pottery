@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { Container, Text } from "@components/ui";
-
+import { Button, Container, Text } from "@components/ui";
+import posthog from 'posthog-js'
 interface FAQItem {
   question: string;
   answer: string;
@@ -68,15 +68,26 @@ const faqData: FAQItem[] = [
   //     ""
   // },
 ];
+
+   posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY || "", {
+          api_host: "/ingest",
+          ui_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+          person_profiles: "always",
+        });
+
 export default function ClientFAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggleAccordion = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
-
+function handlePurchase() {
+  console.log('Purchase completed');
+        posthog.capture('purchase_completed', { amount: 99 })
+    }
   return (
     <section className="space-y-5 md:max-w-4xl mx-auto">
+      <Button onClick={handlePurchase}>Complete purchase</Button>
       {faqData.map((item, index) => (
         <button
           key={index}

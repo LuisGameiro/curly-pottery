@@ -4,11 +4,12 @@ import { CheckCircle2, AlertCircle } from "lucide-react";
 import OrderTable from "@components/tables/OrderTable";
 import Loading from "app/loading";
 import { Suspense } from "react";
+import constructMetadata from "@components/common/SEO";
 
-export const metadata = {
-  title: "Orders - Curly Pottery",
+export const metadata = constructMetadata({
+  title: "Orders Admin",
   description: "Manage your store orders at Curly Pottery.",
-};
+});
 
 export default async function OrdersPage() {
   const response = await getAllOrders();

@@ -1,11 +1,11 @@
+import constructMetadata from "@components/common/SEO";
 import { Container, Text } from "@components/ui";
 
-export const metadata = {
-  title: "Privacy Policy - Curly Pottery",
+export const metadata = constructMetadata({
+  title: "Privacy Policy",
   description:
     "Learn about Curly Pottery’s commitment to protecting your personal data and privacy. Read our comprehensive Privacy Policy to understand how we handle your information in compliance with GDPR regulations.",
-};
-
+});
 export default function PrivacyPolicy() {
   const lastUpdated = "January 18, 2026";
 

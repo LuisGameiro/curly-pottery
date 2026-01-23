@@ -1,11 +1,12 @@
 import { Text, Container } from "@components/ui";
 import ContactForm from "./ContactForm";
+import constructMetadata from "@components/common/SEO";
 
-export const metadata = {
-  title: "Contact Us - Curly Pottery",
+export const metadata = constructMetadata({
+  title: "Contact Us",
   description:
     "Get in touch with Curly Pottery for inquiries, custom orders, or any questions you may have. We are here to help and look forward to hearing from you.",
-};
+})
 
 const contacts = {
   email: "curly.pottery@gmail.com",

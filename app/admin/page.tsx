@@ -1,3 +1,4 @@
+import constructMetadata from "@components/common/SEO";
 import { Container, Text } from "@components/ui";
 import { getDashboardStats } from "actions/dashboard.actions";
 import Loading from "app/loading";
@@ -14,11 +15,11 @@ import {
 import Link from "next/link";
 import { ReactNode, Suspense } from "react";
 
-export const metadata = {
-  title: "Admin Dashboard - Curly Pottery",
+export const metadata = constructMetadata({
+  title: "Admin Dashboard",
   description:
     "Overview of your store performance and inventory health at Curly Pottery.",
-};
+});
 
 export default async function DashboardPage() {
   const response = await getDashboardStats();

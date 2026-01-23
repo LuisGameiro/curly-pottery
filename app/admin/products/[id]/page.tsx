@@ -3,11 +3,12 @@ import { getAllCategories } from "actions/category.actions";
 import notFound from "app/not-found";
 import { Category, ProductWithVariantsCategories } from "@lib/types/types";
 import ProductClient from "@components/admin/product/ProductClient";
+import constructMetadata from "@components/common/SEO";
 
-export const metadata = {
-  title: "Product - Curly Pottery",
+export const metadata = constructMetadata({
+  title: "Product Admin ",
   description: "Manage your store product at Curly Pottery.",
-};
+});
 
 export default async function ProductForm({
   params,

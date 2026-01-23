@@ -6,11 +6,12 @@ import { Text } from "@components/ui";
 import CategoryTable from "@components/tables/CategoryTable";
 import Loading from "app/loading";
 import { Suspense } from "react";
+import constructMetadata from "@components/common/SEO/SEO";
 
-export const metadata = {
-  title: "Categories - Curly Pottery",
+export const metadata = constructMetadata({
+  title: "Categories Admin",
   description: "Manage your store product groupings at Curly Pottery.",
-};
+});
 
 export default async function CategoriesPage() {
   const response = await getAllCategories();
