@@ -1,7 +1,6 @@
 'use client'
 
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Container, Text, Button } from '@components/ui'
 import { useState } from 'react'
 import { ArrowLeft } from 'lucide-react'
@@ -16,6 +15,7 @@ import { toast } from 'sonner'
 import { slugify } from '@lib/slugify'
 import { upsertProduct } from 'actions/product.actions'
 import { syncImages } from 'actions/images.actions'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 interface ProductFormProps {
   product: ProductWithVariantsCategories | null
@@ -109,7 +109,7 @@ export default function ProductClient({
       const updatedVariants = await Promise.all(
         data.variants.map(async (variant) => {
           const originalVariant = initialVariants.find(
-            (v) => v.id === variant?.id,
+            (v: Variant) => v.id === variant?.id,
           )
           const oldImages = originalVariant?.images ?? []
           const variantImages = await syncImages(variant.files || [], oldImages)

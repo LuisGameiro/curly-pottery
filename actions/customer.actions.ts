@@ -1,12 +1,12 @@
 'use server'
 
 import { prisma } from 'prisma/prisma'
-import { User } from 'prisma/generated/prisma/client'
 import {
   UserWithOrders,
   UserWithOrdersAddress,
   ActionResponse,
   Address,
+  User,
 } from '@lib/types/types'
 import { cache } from 'react'
 

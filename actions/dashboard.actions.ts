@@ -1,5 +1,5 @@
 'use server'
-import { ActionResponse } from '@lib/types/types'
+import { ActionResponse, Variant } from '@lib/types/types'
 import { prisma } from 'prisma/prisma'
 
 export interface DashboardStats {
@@ -43,10 +43,13 @@ export async function getDashboardStats(): Promise<
 
     const productsOutOfStock = totalProducts - productsWithStock
 
-    const totalInventoryUnits = variants.reduce((acc, v) => acc + v.stock, 0)
+    const totalInventoryUnits = variants.reduce(
+      (acc: number, v: Variant) => acc + v.stock,
+      0,
+    )
     const lowStockThreshold = 5
     const lowStockVariants = variants.filter(
-      (v) => v.stock > 0 && v.stock <= lowStockThreshold,
+      (v: Variant) => v.stock > 0 && v.stock <= lowStockThreshold,
     ).length
 
     return {

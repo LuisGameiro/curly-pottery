@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { useUser } from './useUser'
 import { calculateDiscount } from '@lib/calculate-price'
 import { useCartStore } from '@lib/zustand/cart'
-import { CurrencyCode } from 'prisma/generated/prisma/enums'
+import { CurrencyCode } from '@lib/types/types'
 
 export default function useCart() {
   const { isAuthenticated } = useUser()

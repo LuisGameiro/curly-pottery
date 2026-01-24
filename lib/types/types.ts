@@ -1,5 +1,4 @@
-import { JsonValue } from '@prisma/client/runtime/client'
-import { Prisma } from 'prisma/generated/prisma/client'
+import { CurrencyCode as PrismaCurrencyCode, Prisma } from '@prisma/client'
 
 export interface EditVariant extends Omit<Variant, 'createdAt' | 'updatedAt'> {
   files: (File | string)[]
@@ -22,24 +21,22 @@ export interface CreateProduct extends EditProduct {
 
 export type Product = Prisma.ProductGetPayload<null>
 
-type PrismaVariant = Prisma.ProductVariantGetPayload<null>
-
-export type Variant = Omit<PrismaVariant, 'details' | 'discounts'> & {
-  details: Detail[] | Prisma.InputJsonValue | JsonValue
-  discounts: Discount[] | Prisma.InputJsonValue | JsonValue
-}
+export type Variant = Prisma.ProductVariantGetPayload<null>
+// Omit<PrismaVariant, 'details' | 'discounts'> & {
+//   details: Detail[] | Prisma.InputJsonValue | JsonValue
+//   discounts: Discount[] | Prisma.InputJsonValue | JsonValue
+// }
 
 export type ProductWithVariantsCategories = Prisma.ProductGetPayload<{
   include: { categories: true; variants: true }
 }>
-
-export const CurrencyCode = {
+export const CurrencyCode: Record<CurrencyCode, CurrencyCode> = {
   USD: 'USD',
   EUR: 'EUR',
   GBP: 'GBP',
 } as const
 
-export type CurrencyCode = (typeof CurrencyCode)[keyof typeof CurrencyCode]
+export type CurrencyCode = PrismaCurrencyCode //(typeof CurrencyCode)[keyof typeof CurrencyCode]
 
 export const SizeNames = {
   XXS: 'XXS',
@@ -136,21 +133,25 @@ export type CreateOrder = {
 type PrismaOrderWithUser = Prisma.OrderGetPayload<{
   include: { user: true }
 }>
-export type OrderWithUser = Omit<PrismaOrderWithUser, 'lineItems'> & {
-  lineItems: CartLineItem[] | JsonValue | Prisma.InputJsonValue
-}
+export type OrderWithUser = PrismaOrderWithUser
+// Omit<PrismaOrderWithUser, 'lineItems'> & {
+//   lineItems: CartLineItem[] | JsonValue | Prisma.InputJsonValue
+// }
 
 type PrismaOrder = Prisma.OrderGetPayload<null>
-export type Order = Omit<PrismaOrder, 'lineItems'> & {
-  lineItems: CartLineItem[] | JsonValue | Prisma.InputJsonValue
-}
+export type Order = PrismaOrder
+// Omit<PrismaOrder, 'lineItems'> & {
+//   lineItems: CartLineItem[] | JsonValue | Prisma.InputJsonValue,
+//   currency: CurrencyCode
+// }
 
 type PrismaCart = Prisma.CartGetPayload<null>
 
-export type Cart = Omit<PrismaCart, 'lineItems' | 'discounts'> & {
-  lineItems: CartLineItem[] | Prisma.InputJsonValue
-  discounts: Discount[] | Prisma.InputJsonValue
-}
+export type Cart = PrismaCart
+// Omit<PrismaCart, 'lineItems' | 'discounts'> & {
+//   lineItems: CartLineItem[] | Prisma.InputJsonValue
+//   discounts: Discount[] | Prisma.InputJsonValue
+// }
 
 export type Address = Prisma.AddressGetPayload<null>
 

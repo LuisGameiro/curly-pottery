@@ -1,4 +1,4 @@
-import { ProductWithVariantsCategories } from '@lib/types/types'
+import { ProductWithVariantsCategories, Variant } from '@lib/types/types'
 
 export const sortLabels: Record<string, string> = {
   newest: 'Newest first',
@@ -22,14 +22,14 @@ export const sortProducts = (
     case 'price-asc':
       return list.sort(
         (a, b) =>
-          Math.min(...a.variants.map((v) => v.price)) -
-          Math.min(...b.variants.map((v) => v.price)),
+          Math.min(...a.variants.map((v: Variant) => v.price)) -
+          Math.min(...b.variants.map((v: Variant) => v.price)),
       )
     case 'price-desc':
       return list.sort(
         (a, b) =>
-          Math.max(...b.variants.map((v) => v.price)) -
-          Math.max(...a.variants.map((v) => v.price)),
+          Math.max(...b.variants.map((v: Variant) => v.price)) -
+          Math.max(...a.variants.map((v: Variant) => v.price)),
       )
     case 'name-asc':
       return list.sort((a, b) => a.name.localeCompare(b.name))

@@ -4,9 +4,9 @@ import Link from 'next/link'
 import { Eye } from 'lucide-react'
 import { Button } from '@components/ui'
 import DataTable from '@components/ui/Table/DataTable'
-import { CartLineItem, Order } from '@lib/types/types'
+import { CartLineItem, Order, OrderWithUser } from '@lib/types/types'
 
-export default function OrderTable({ orders }: { orders: Order[] }) {
+export default function OrderTable({ orders }: { orders: OrderWithUser[] }) {
   const orderColumns = [
     {
       header: 'Order ID',
@@ -43,7 +43,7 @@ export default function OrderTable({ orders }: { orders: Order[] }) {
   ]
 
   return (
-    <DataTable
+    <DataTable<OrderWithUser & { id: string }>
       data={orders}
       columns={orderColumns}
       emptyMessage="No orders found"

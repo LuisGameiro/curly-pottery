@@ -18,6 +18,7 @@ import {
 import { toast } from 'sonner'
 import { Undo2 } from 'lucide-react'
 import { trackEvent } from '@lib/analytics/trackEvents'
+import { CurrencyCode } from '@prisma/client'
 
 interface ProductSidebarProps {
   product: ProductWithVariantsCategories
@@ -105,11 +106,11 @@ const ProductSidebar = ({
           {price.hasDiscount ? (
             <div className="flex items-center gap-4">
               <span className="line-through opacity-40">
-                {showCurrency[variant.currency]} {price.price}
+                {showCurrency[variant.currency as CurrencyCode]} {price.price}
               </span>
               <span>
-                {' '}
-                {showCurrency[variant.currency]} {price.finalPrice}
+                {showCurrency[variant.currency as CurrencyCode]}{' '}
+                {price.finalPrice}
               </span>
 
               <span className=" bg-green-500 px-6 rounded-full ">SALE</span>
@@ -117,7 +118,8 @@ const ProductSidebar = ({
           ) : (
             <div>
               <span>
-                {showCurrency[variant.currency]} {price.finalPrice}
+                {showCurrency[variant.currency as CurrencyCode]}{' '}
+                {price.finalPrice}
               </span>
             </div>
           )}

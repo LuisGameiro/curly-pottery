@@ -46,5 +46,10 @@ export default function VariantTable({ variants }: { variants: Variant[] }) {
       ),
     },
   ]
-  return <DataTable data={variants} columns={variantColumns} />
+  return (
+    <DataTable<Variant & { id: string }>
+      data={variants}
+      columns={variantColumns}
+    />
+  )
 }
