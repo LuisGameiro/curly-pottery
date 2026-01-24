@@ -1,24 +1,24 @@
-"use client";
+'use client'
 
-import s from "./UserNav.module.css";
-import { Button, Dropdown, DropdownTrigger } from "@components/ui";
-import { signOut } from "next-auth/react";
-import { cn } from "@lib/utils";
-import useCart from "@lib/hooks/useCart";
-import { Menu, ShoppingBasket } from "lucide-react";
-import Link from "next/link";
-import { useUser } from "@lib/hooks/useUser";
-import CustomerMenuContent from "./CustomerMenuContent";
+import s from './UserNav.module.css'
+import { Button, Dropdown, DropdownTrigger } from '@components/ui'
+import { signOut } from 'next-auth/react'
+import { cn } from '@lib/utils'
+import useCart from '@lib/hooks/useCart'
+import { Menu, ShoppingBasket } from 'lucide-react'
+import Link from 'next/link'
+import { useUser } from '@lib/hooks/useUser'
+import CustomerMenuContent from './CustomerMenuContent'
 
 type UserNavProps = {
-  className?: string;
-};
+  className?: string
+}
 
 export default function UserNav({ className }: UserNavProps) {
-  const { isAdmin, isAuthenticated } = useUser();
+  const { isAdmin, isAuthenticated } = useUser()
 
-  const { data } = useCart();
-  const itemsCount = data?.lineItems.length ?? 0;
+  const { data } = useCart()
+  const itemsCount = data?.lineItems.length ?? 0
 
   return (
     <nav className={cn(s.root, className)}>
@@ -65,7 +65,7 @@ export default function UserNav({ className }: UserNavProps) {
         </li>
       </ul>
     </nav>
-  );
+  )
 }
 
-UserNav.displayName = "UserNav";
+UserNav.displayName = 'UserNav'

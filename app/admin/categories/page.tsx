@@ -1,23 +1,23 @@
-import { Button, Container } from "@components/ui";
-import { getAllCategories } from "actions/category.actions";
-import Link from "next/link";
-import { Plus } from "lucide-react";
-import { Text } from "@components/ui";
-import CategoryTable from "@components/tables/CategoryTable";
-import Loading from "app/loading";
-import { Suspense } from "react";
-import constructMetadata from "@components/common/SEO/SEO";
+import { Button, Container } from '@components/ui'
+import { getAllCategories } from 'actions/category.actions'
+import Link from 'next/link'
+import { Plus } from 'lucide-react'
+import { Text } from '@components/ui'
+import CategoryTable from '@components/tables/CategoryTable'
+import Loading from 'app/loading'
+import { Suspense } from 'react'
+import constructMetadata from '@components/common/SEO/SEO'
 
 export const metadata = constructMetadata({
-  title: "Categories Admin",
-  description: "Manage your store product groupings at Curly Pottery.",
-});
+  title: 'Categories Admin',
+  description: 'Manage your store product groupings at Curly Pottery.',
+})
 
 export default async function CategoriesPage() {
-  const response = await getAllCategories();
+  const response = await getAllCategories()
 
   if (!response.success) {
-    throw new Error(response.message);
+    throw new Error(response.message)
   }
 
   return (
@@ -42,5 +42,5 @@ export default async function CategoriesPage() {
         <CategoryTable categories={response.data ?? []} />
       </Container>
     </Suspense>
-  );
+  )
 }

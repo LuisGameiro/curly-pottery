@@ -1,26 +1,26 @@
-import constructMetadata from "@components/common/SEO";
-import { ProductCard } from "@components/product";
-import CategoriesCard from "@components/product/categoriesCard";
-import { Grid, Marquee, Hero } from "@components/ui";
-import { Product } from "@lib/types/types";
-import { getAllCategories } from "actions/category.actions";
-import { getRandomProducts } from "actions/product.actions";
+import constructMetadata from '@components/common/SEO'
+import { ProductCard } from '@components/product'
+import CategoriesCard from '@components/product/categoriesCard'
+import { Grid, Marquee, Hero } from '@components/ui'
+import { Product } from '@lib/types/types'
+import { getAllCategories } from 'actions/category.actions'
+import { getRandomProducts } from 'actions/product.actions'
 
 export const metadata = constructMetadata({
-  title: "HomePage - Curly Pottery",
+  title: 'HomePage - Curly Pottery',
   description:
-    "Discover unique, handcrafted pottery at Curly Pottery. Explore our collection of artisanal ceramics, perfect for adding a touch of elegance to your home or gifting to loved ones.",
-});
+    'Discover unique, handcrafted pottery at Curly Pottery. Explore our collection of artisanal ceramics, perfect for adding a touch of elegance to your home or gifting to loved ones.',
+})
 
 export default async function Home() {
-  const responseProducts = await getRandomProducts(6);
-  const responseCategories = await getAllCategories();
+  const responseProducts = await getRandomProducts(6)
+  const responseCategories = await getAllCategories()
 
   if (!responseProducts.success || !responseCategories.success)
-    throw new Error(responseProducts.message + responseCategories.message);
+    throw new Error(responseProducts.message + responseCategories.message)
 
-  const products = responseProducts.data ?? [];
-  const categories = responseCategories.data ?? [];
+  const products = responseProducts.data ?? []
+  const categories = responseCategories.data ?? []
 
   return (
     <main className="flex flex-col bg-background">
@@ -50,5 +50,5 @@ export default async function Home() {
         ))}
       </Marquee>
     </main>
-  );
+  )
 }

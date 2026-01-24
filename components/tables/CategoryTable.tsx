@@ -1,53 +1,53 @@
-"use client";
+'use client'
 
-import Image from "next/image";
-import Link from "next/link";
-import { Pencil, Trash2 } from "lucide-react";
-import { Button } from "@components/ui";
-import { useState } from "react";
-import DataTable from "@components/ui/Table/DataTable";
-import { deleteCategory } from "actions/category.actions";
-import { useRouter } from "next/navigation";
-import { Category } from "@lib/types/types";
+import Image from 'next/image'
+import Link from 'next/link'
+import { Pencil, Trash2 } from 'lucide-react'
+import { Button } from '@components/ui'
+import { useState } from 'react'
+import DataTable from '@components/ui/Table/DataTable'
+import { deleteCategory } from 'actions/category.actions'
+import { useRouter } from 'next/navigation'
+import { Category } from '@lib/types/types'
 
 export default function CategoryTable({
   categories,
 }: {
-  categories: Category[];
+  categories: Category[]
 }) {
-  const [isDeleting, setIsDeleting] = useState<string | null>(null);
-  const router = useRouter();
+  const [isDeleting, setIsDeleting] = useState<string | null>(null)
+  const router = useRouter()
 
   const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
+    if (!confirm(`Are you sure you want to delete "${name}"?`)) return
 
-    setIsDeleting(id);
+    setIsDeleting(id)
     try {
-      const response = await deleteCategory(id);
+      const response = await deleteCategory(id)
       if (response.success) {
-        router.refresh();
+        router.refresh()
       }
     } catch (error) {
-      console.error("Delete failed", error);
+      console.error('Delete failed', error)
     } finally {
-      setIsDeleting(null);
+      setIsDeleting(null)
     }
-  };
+  }
   const columns = [
     {
-      header: "Image",
+      header: 'Image',
       render: (cat: Category) => (
         <div className="flex justify-center items-center">
           <Image
-            src={cat.image || "/placeholder.png"}
+            src={cat.image || '/placeholder.png'}
             alt={cat.name}
             height={60}
             width={60}
             quality={100}
             style={{
-              width: "auto",
-              height: "auto",
-              borderRadius: "8px",
+              width: 'auto',
+              height: 'auto',
+              borderRadius: '8px',
             }}
             loading="eager"
           />
@@ -55,17 +55,17 @@ export default function CategoryTable({
       ),
     },
     {
-      header: "Name",
+      header: 'Name',
       render: (cat: Category) => (
         <span className="font-medium">{cat.name}</span>
       ),
     },
     {
-      header: "Slug",
+      header: 'Slug',
       render: (cat: Category) => <span className="text-xs">/{cat.slug}</span>,
     },
     {
-      header: "Actions",
+      header: 'Actions',
       render: (cat: Category) => (
         <div className="flex gap-2 sm:gap-4 justify-center">
           <Link href={`/admin/categories/${cat.id}`}>
@@ -84,7 +84,7 @@ export default function CategoryTable({
         </div>
       ),
     },
-  ];
+  ]
 
-  return <DataTable data={categories} columns={columns} />;
+  return <DataTable data={categories} columns={columns} />
 }

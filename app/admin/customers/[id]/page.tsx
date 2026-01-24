@@ -1,6 +1,6 @@
-import { Container, Text } from "@components/ui";
-import { getUserById } from "actions/customer.actions";
-import Link from "next/link";
+import { Container, Text } from '@components/ui'
+import { getUserById } from 'actions/customer.actions'
+import Link from 'next/link'
 import {
   ArrowLeft,
   Mail,
@@ -12,40 +12,40 @@ import {
   CheckCircle2,
   XCircle,
   Notebook,
-} from "lucide-react";
-import notFound from "app/not-found";
-import OrderTable from "@components/tables/OrderTable";
-import CustomerNotes from "../../../../components/admin/CostumerNotes";
-import { showCurrency } from "@lib/calculate-price";
-import { Address, Order } from "@lib/types/types";
-import constructMetadata from "@components/common/SEO/SEO";
+} from 'lucide-react'
+import notFound from 'app/not-found'
+import OrderTable from '@components/tables/OrderTable'
+import CustomerNotes from '../../../../components/admin/CostumerNotes'
+import { showCurrency } from '@lib/calculate-price'
+import { Address, Order } from '@lib/types/types'
+import constructMetadata from '@components/common/SEO/SEO'
 
 export const metadata = constructMetadata({
-  title: "Customer Admin",
-  description: "Manage your store customer at Curly Pottery.",
-});
+  title: 'Customer Admin',
+  description: 'Manage your store customer at Curly Pottery.',
+})
 
 export default async function CustomerDetailsPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>
 }) {
-  const { id } = await params;
-  const response = await getUserById(id);
+  const { id } = await params
+  const response = await getUserById(id)
 
   if (!response.success) {
-    throw new Error(response.message);
+    throw new Error(response.message)
   }
 
   if (!response.data) {
-    return notFound();
+    return notFound()
   }
-  const user = response.data;
+  const user = response.data
 
   const totalSpend = user!.orders.reduce(
     (acc: number, order: Order) => acc + order.totalPrice,
     0,
-  );
+  )
 
   return (
     <Container>
@@ -64,7 +64,7 @@ export default async function CustomerDetailsPage({
           </Text>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <span className="flex items-center gap-1">
-              <Calendar size={14} /> Joined{" "}
+              <Calendar size={14} /> Joined{' '}
               {new Date(user.createdAt).toLocaleDateString()}
             </span>
             <span>•</span>
@@ -87,7 +87,7 @@ export default async function CustomerDetailsPage({
                 Total Spend
               </Text>
               <Text>
-                {showCurrency["GBP"]} {totalSpend.toFixed(2)}
+                {showCurrency['GBP']} {totalSpend.toFixed(2)}
               </Text>
             </div>
           </Container>
@@ -104,7 +104,7 @@ export default async function CustomerDetailsPage({
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <Phone size={16} className="text-muted-foreground" />
-                <span>{user.phone || "No phone provided"}</span>
+                <span>{user.phone || 'No phone provided'}</span>
               </div>
               <div className="flex items-center gap-3 text-sm">
                 {user.acceptsMarketing ? (
@@ -115,13 +115,13 @@ export default async function CustomerDetailsPage({
                 <span
                   className={
                     user.acceptsMarketing
-                      ? "text-green-700 font-medium"
-                      : "text-muted-foreground"
+                      ? 'text-green-700 font-medium'
+                      : 'text-muted-foreground'
                   }
                 >
                   {user.acceptsMarketing
-                    ? "Subscribed to Marketing"
-                    : "No Marketing"}
+                    ? 'Subscribed to Marketing'
+                    : 'No Marketing'}
                 </span>
               </div>
             </div>
@@ -179,10 +179,10 @@ export default async function CustomerDetailsPage({
               <Notebook size={18} className="text-accent-6" />
               <Text variant="bold">Internal Notes</Text>
             </div>
-            <CustomerNotes initialNotes={user.notes || ""} customerId={id} />
+            <CustomerNotes initialNotes={user.notes || ''} customerId={id} />
           </Container>
         </div>
       </div>
     </Container>
-  );
+  )
 }

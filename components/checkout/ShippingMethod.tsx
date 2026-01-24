@@ -1,26 +1,26 @@
-import { Button, Text } from "@components/ui";
-import { cn } from "@lib/utils";
-import { useFormContext } from "react-hook-form";
+import { Button, Text } from '@components/ui'
+import { cn } from '@lib/utils'
+import { useFormContext } from 'react-hook-form'
 
 const shippingOptions = [
   {
-    method: "standard",
-    conditions: "Standard Delivery (3-5 days)",
+    method: 'standard',
+    conditions: 'Standard Delivery (3-5 days)',
     price: 0,
   },
   {
-    method: "express",
-    conditions: "Next Day Delivery",
+    method: 'express',
+    conditions: 'Next Day Delivery',
     price: 5.99,
   },
-];
+]
 
 interface ShippingMethodProps {
-  onComplete: () => void;
+  onComplete: () => void
 }
 
 export default function ShippingMethod({ onComplete }: ShippingMethodProps) {
-  const { setValue } = useFormContext();
+  const { setValue } = useFormContext()
 
   return (
     <div className="space-y-8">
@@ -33,21 +33,21 @@ export default function ShippingMethod({ onComplete }: ShippingMethodProps) {
           className="w-full"
           type="button"
           onClick={() => {
-            setValue("shippingPrice", o.price);
-            setValue("shippingMethod", o.method);
-            onComplete();
+            setValue('shippingPrice', o.price)
+            setValue('shippingMethod', o.method)
+            onComplete()
           }}
         >
           <div className="w-full flex justify-between gap-4">
             <Text>{o.conditions}</Text>
             <Text
-              className={cn("font-bold ", o.price === 0 && "text-green-600")}
+              className={cn('font-bold ', o.price === 0 && 'text-green-600')}
             >
-              {o.price === 0 ? "FREE" : o.price}
+              {o.price === 0 ? 'FREE' : o.price}
             </Text>
           </div>
         </Button>
       ))}
     </div>
-  );
+  )
 }

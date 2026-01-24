@@ -1,36 +1,36 @@
-"use client";
+'use client'
 
-import { ReactNode } from "react";
-import s from "./Grid.module.css";
-import { cn } from "@lib/utils";
+import { ReactNode } from 'react'
+import s from './Grid.module.css'
+import { cn } from '@lib/utils'
 
 interface GridProps {
-  className?: string;
-  children?: ReactNode;
-  layout?: "A" | "B" | "C" | "D" | "normal";
-  variant?: "default" | "filled";
+  className?: string
+  children?: ReactNode
+  layout?: 'A' | 'B' | 'C' | 'D' | 'normal'
+  variant?: 'default' | 'filled'
 }
 
 const Grid = ({
   className,
-  layout = "A",
+  layout = 'A',
   children,
-  variant = "default",
+  variant = 'default',
 }: GridProps) => {
   const rootClassName = cn(
     s.root,
     {
-      [s.layoutA]: layout === "A",
+      [s.layoutA]: layout === 'A',
       // [s.layoutB]: layout === "B",
       // [s.layoutC]: layout === "C",
       // [s.layoutD]: layout === "D",
       // [s.layoutNormal]: layout === "normal",
       // [s.default]: variant === "default",
-      [s.filled]: variant === "filled",
+      [s.filled]: variant === 'filled',
     },
     className,
-  );
-  return <div className={rootClassName}>{children}</div>;
-};
+  )
+  return <div className={rootClassName}>{children}</div>
+}
 
-export default Grid;
+export default Grid

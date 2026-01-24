@@ -1,15 +1,15 @@
-import { Metadata } from "next";
-import config from "../config/seo_meta.json";
+import { Metadata } from 'next'
+import config from '../config/seo_meta.json'
 
 type OGImage = {
-  url: string;
-  width?: number;
-  height?: number;
-  alt?: string;
-};
+  url: string
+  width?: number
+  height?: number
+  alt?: string
+}
 
-const storeUrl = process.env.NEXT_PUBLIC_APP_URL;
-const storeBaseUrl = storeUrl ? `https://${storeUrl}` : "";
+const storeUrl = process.env.NEXT_PUBLIC_APP_URL
+const storeBaseUrl = storeUrl ? `https://${storeUrl}` : ''
 
 export default function constructMetadata({
   title,
@@ -18,29 +18,29 @@ export default function constructMetadata({
   robots,
   canonical,
 }: {
-  title?: string;
-  description?: string;
-  robots?: string;
-  canonical?: string;
-  openGraph?: Metadata["openGraph"];
+  title?: string
+  description?: string
+  robots?: string
+  canonical?: string
+  openGraph?: Metadata['openGraph']
 } = {}): Metadata {
   const seoTitle = title
     ? config.titleTemplate.replace(/%s/g, title)
-    : config.title;
+    : config.title
 
-  const seoDescription = description || config.description;
+  const seoDescription = description || config.description
 
   const images = (openGraph?.images || config.openGraph.images) as
     | OGImage
-    | OGImage[];
+    | OGImage[]
   const ogImages = Array.isArray(images)
     ? images.map((img: OGImage) => ({
-        url: img.url.startsWith("http") ? img.url : `${storeBaseUrl}${img.url}`,
+        url: img.url.startsWith('http') ? img.url : `${storeBaseUrl}${img.url}`,
         width: img.width,
         height: img.height,
         alt: img.alt,
       }))
-    : [images];
+    : [images]
 
   return {
     title: seoTitle,
@@ -54,18 +54,18 @@ export default function constructMetadata({
       description: openGraph?.description || seoDescription,
       url: openGraph?.url || storeBaseUrl,
       siteName: openGraph?.siteName || config.openGraph.site_name,
-      locale: openGraph?.locale || "en_US",
+      locale: openGraph?.locale || 'en_US',
       type: config.openGraph.type,
       images: ogImages,
-    } as Metadata["openGraph"],
+    } as Metadata['openGraph'],
     twitter: {
-      card: config.twitter.cardType as "summary_large_image",
+      card: config.twitter.cardType as 'summary_large_image',
       title: openGraph?.title || seoTitle,
       images: ogImages,
       description: openGraph?.description || seoDescription,
       site: config.twitter.site,
       creator: config.twitter.handle,
-    } as Metadata["twitter"],
-    robots: robots ?? "index, follow",
-  };
+    } as Metadata['twitter'],
+    robots: robots ?? 'index, follow',
+  }
 }

@@ -1,23 +1,23 @@
-"use client";
+'use client'
 
-import React, { useId } from "react";
-import { X, Plus, Upload } from "lucide-react";
-import { cn } from "@lib/utils";
-import s from "./Input.module.css";
-import Image from "next/image";
+import React, { useId } from 'react'
+import { X, Plus, Upload } from 'lucide-react'
+import { cn } from '@lib/utils'
+import s from './Input.module.css'
+import Image from 'next/image'
 
 interface ImageInputProps {
-  label?: string;
-  multiple?: boolean;
-  files: (File | string)[];
-  previews: string[];
+  label?: string
+  multiple?: boolean
+  files: (File | string)[]
+  previews: string[]
   onImagesChange: (data: {
-    files: (File | string)[];
-    previews: string[];
-  }) => void;
-  error?: string;
-  className?: string;
-  size?: number;
+    files: (File | string)[]
+    previews: string[]
+  }) => void
+  error?: string
+  className?: string
+  size?: number
 }
 
 const InputImage = ({
@@ -30,40 +30,40 @@ const InputImage = ({
   size = 24,
   className,
 }: ImageInputProps) => {
-  const generatedId = useId();
-  const errorId = `${generatedId}-error`;
+  const generatedId = useId()
+  const errorId = `${generatedId}-error`
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = Array.from(e.target.files || []);
-    if (selectedFiles.length === 0) return;
+    const selectedFiles = Array.from(e.target.files || [])
+    if (selectedFiles.length === 0) return
 
-    const newPreviews = selectedFiles.map((file) => URL.createObjectURL(file));
+    const newPreviews = selectedFiles.map((file) => URL.createObjectURL(file))
 
     if (multiple) {
       onImagesChange({
         files: [...files, ...selectedFiles],
         previews: [...previews, ...newPreviews],
-      });
+      })
     } else {
-      if (previews[0]) URL.revokeObjectURL(previews[0]);
+      if (previews[0]) URL.revokeObjectURL(previews[0])
       onImagesChange({
         files: [selectedFiles[0]],
         previews: [newPreviews[0]],
-      });
+      })
     }
-    e.target.value = "";
-  };
+    e.target.value = ''
+  }
 
   const removeImage = (index: number) => {
-    const updatedFiles = files.filter((_, i) => i !== index);
-    const updatedPreviews = previews.filter((_, i) => i !== index);
+    const updatedFiles = files.filter((_, i) => i !== index)
+    const updatedPreviews = previews.filter((_, i) => i !== index)
 
-    if (previews[index].startsWith("blob:")) {
-      URL.revokeObjectURL(previews[index]);
+    if (previews[index].startsWith('blob:')) {
+      URL.revokeObjectURL(previews[index])
     }
 
-    onImagesChange({ files: updatedFiles, previews: updatedPreviews });
-  };
+    onImagesChange({ files: updatedFiles, previews: updatedPreviews })
+  }
 
   return (
     <div className={cn(s.container)}>
@@ -74,8 +74,8 @@ const InputImage = ({
           <div
             key={index}
             className={cn(
-              "relative rounded-lg border overflow-hidden bg-slate-50 shrink-0 transition-all",
-              error ? "border-red-500" : "border-border",
+              'relative rounded-lg border overflow-hidden bg-slate-50 shrink-0 transition-all',
+              error ? 'border-red-500' : 'border-border',
               `w-${size} h-${size}`,
               className,
             )}
@@ -86,7 +86,7 @@ const InputImage = ({
               height={size}
               quality={100}
               alt="Preview"
-              className={"object-cover w-full h-full"}
+              className={'object-cover w-full h-full'}
             />
             <button
               type="button"
@@ -101,15 +101,15 @@ const InputImage = ({
         {(multiple || previews.length === 0) && (
           <label
             className={cn(
-              "w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer transition-all shrink-0 bg-slate-50",
+              'w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer transition-all shrink-0 bg-slate-50',
               error
-                ? "border-red-300 bg-red-50 text-red-500 hover:bg-red-100"
-                : "border-border text-slate-400 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-500",
+                ? 'border-red-300 bg-red-50 text-red-500 hover:bg-red-100'
+                : 'border-border text-slate-400 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-500',
             )}
           >
             {multiple ? <Plus size={24} /> : <Upload size={24} />}
             <span className="text-[10px] font-medium mt-1">
-              {multiple ? "Add More" : "Upload"}
+              {multiple ? 'Add More' : 'Upload'}
             </span>
             <input
               id={generatedId}
@@ -129,7 +129,7 @@ const InputImage = ({
         </p>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default InputImage;
+export default InputImage

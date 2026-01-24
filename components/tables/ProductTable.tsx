@@ -1,56 +1,56 @@
-"use client";
+'use client'
 
-import Image from "next/image";
-import Link from "next/link";
-import { Pencil, Trash2 } from "lucide-react";
-import { Button } from "@components/ui";
-import { useState } from "react";
-import DataTable from "@components/ui/Table/DataTable";
-import { useRouter } from "next/navigation";
-import { cn } from "@lib/utils";
-import { deleteProduct } from "actions/product.actions";
-import { ProductWithVariantsCategories, Variant } from "@lib/types/types";
-import VariantTable from "./VariantTable";
+import Image from 'next/image'
+import Link from 'next/link'
+import { Pencil, Trash2 } from 'lucide-react'
+import { Button } from '@components/ui'
+import { useState } from 'react'
+import DataTable from '@components/ui/Table/DataTable'
+import { useRouter } from 'next/navigation'
+import { cn } from '@lib/utils'
+import { deleteProduct } from 'actions/product.actions'
+import { ProductWithVariantsCategories, Variant } from '@lib/types/types'
+import VariantTable from './VariantTable'
 
 export default function ProductTable({
   products,
 }: {
-  products: ProductWithVariantsCategories[];
+  products: ProductWithVariantsCategories[]
 }) {
-  const [isDeleting, setIsDeleting] = useState<string | null>(null);
-  const router = useRouter();
+  const [isDeleting, setIsDeleting] = useState<string | null>(null)
+  const router = useRouter()
 
   const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
+    if (!confirm(`Are you sure you want to delete "${name}"?`)) return
 
-    setIsDeleting(id);
+    setIsDeleting(id)
     try {
-      const response = await deleteProduct(id);
+      const response = await deleteProduct(id)
       if (response.success) {
-        router.refresh();
+        router.refresh()
       }
     } catch (error) {
-      console.error("Delete failed", error);
+      console.error('Delete failed', error)
     } finally {
-      setIsDeleting(null);
+      setIsDeleting(null)
     }
-  };
+  }
 
   const productColumns = [
     {
-      header: "Product",
+      header: 'Product',
       render: (p: ProductWithVariantsCategories) => (
         <div className="flex items-center gap-3 justify-start">
           <Image
-            src={p.images[0] || "/placeholder.png"}
+            src={p.images[0] || '/placeholder.png'}
             alt={`${p.name} Image`}
             height={60}
             width={60}
             quality={100}
             style={{
-              width: "auto",
-              height: "auto",
-              borderRadius: "8px",
+              width: 'auto',
+              height: 'auto',
+              borderRadius: '8px',
             }}
             loading="eager"
           />
@@ -65,32 +65,32 @@ export default function ProductTable({
       ),
     },
     {
-      header: "Stock",
+      header: 'Stock',
       render: (p: ProductWithVariantsCategories) => {
         const stock = p.variants.reduce(
           (acc: number, v: Variant) => acc + v.stock,
           0,
-        );
+        )
         return (
           <span
             className={cn(
-              "px-2 py-1 rounded text-xs font-bold",
+              'px-2 py-1 rounded text-xs font-bold',
               stock <= 2
-                ? "bg-red-100 text-red-700"
-                : "bg-green-100 text-green-700",
+                ? 'bg-red-100 text-red-700'
+                : 'bg-green-100 text-green-700',
             )}
           >
             {stock}
           </span>
-        );
+        )
       },
     },
     {
-      header: "Price Range",
+      header: 'Price Range',
       render: (p: ProductWithVariantsCategories) => {
-        const prices = p.variants.map((v: Variant) => v.price);
-        const minPrice = Math.min(...prices);
-        const maxPrice = Math.max(...prices);
+        const prices = p.variants.map((v: Variant) => v.price)
+        const minPrice = Math.min(...prices)
+        const maxPrice = Math.max(...prices)
 
         return (
           <span>
@@ -98,17 +98,17 @@ export default function ProductTable({
               ? `£${minPrice}`
               : `£${minPrice} - £${maxPrice}`}
           </span>
-        );
+        )
       },
     },
     {
-      header: "Last Update",
+      header: 'Last Update',
       render: (p: ProductWithVariantsCategories) => {
-        return <span> {new Date(p.updatedAt).toLocaleDateString()}</span>;
+        return <span> {new Date(p.updatedAt).toLocaleDateString()}</span>
       },
     },
     {
-      header: "Actions",
+      header: 'Actions',
       render: (p: ProductWithVariantsCategories) => (
         <div className="flex gap-2 justify-center">
           <Link href={`/admin/products/${p.id}`}>
@@ -127,7 +127,7 @@ export default function ProductTable({
         </div>
       ),
     },
-  ];
+  ]
 
   return (
     <DataTable
@@ -137,5 +137,5 @@ export default function ProductTable({
         <VariantTable variants={product.variants} />
       )}
     />
-  );
+  )
 }

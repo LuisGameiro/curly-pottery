@@ -1,5 +1,5 @@
-import posthog from "posthog-js";
-import ReactGA from "react-ga4";
+import posthog from 'posthog-js'
+import ReactGA from 'react-ga4'
 
 /**
  * Global track function for both PostHog and GA4
@@ -10,11 +10,11 @@ export const trackEvent = (
   eventName: string,
   properties: Record<string, unknown> = {},
 ) => {
-  posthog.capture(eventName, properties);
+  posthog.capture(eventName, properties)
 
-  ReactGA.event(eventName, properties);
+  ReactGA.event(eventName, properties)
 
-  if (process.env.NODE_ENV === "development") {
-    console.log(`[Analytics] ${eventName}`, properties);
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`[Analytics] ${eventName}`, properties)
   }
-};
+}

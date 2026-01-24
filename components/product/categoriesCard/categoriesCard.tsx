@@ -1,18 +1,18 @@
-import Link from "next/link";
-import Image, { ImageProps } from "next/image";
-import { Category } from "@lib/types/types";
+import Link from 'next/link'
+import Image, { ImageProps } from 'next/image'
+import { Category } from '@lib/types/types'
 
 interface Props {
-  className?: string;
-  cat: Category;
-  noNameTag?: boolean;
-  imgProps?: Omit<ImageProps, "src" | "layout" | "placeholder" | "blurDataURL">;
+  className?: string
+  cat: Category
+  noNameTag?: boolean
+  imgProps?: Omit<ImageProps, 'src' | 'layout' | 'placeholder' | 'blurDataURL'>
 }
 
-const placeholderImg = "/product-img-placeholder.svg";
+const placeholderImg = '/product-img-placeholder.svg'
 
 const CategoriesCard = ({ cat, imgProps }: Props) => {
-  if (!cat) return null;
+  if (!cat) return null
 
   return (
     <Link
@@ -24,13 +24,13 @@ const CategoriesCard = ({ cat, imgProps }: Props) => {
         <Image
           quality="100"
           src={cat.image || placeholderImg}
-          alt={cat.name || "Product Image"}
+          alt={cat.name || 'Product Image'}
           height={320}
           width={320}
           style={{
-            width: "100%",
-            height: "auto",
-            objectFit: "cover",
+            width: '100%',
+            height: 'auto',
+            objectFit: 'cover',
           }}
           {...imgProps}
         />
@@ -42,7 +42,7 @@ const CategoriesCard = ({ cat, imgProps }: Props) => {
         </h1>
       </div>
     </Link>
-  );
-};
+  )
+}
 
-export default CategoriesCard;
+export default CategoriesCard

@@ -1,6 +1,6 @@
-export { default } from "./Input";
-export { default as InputTextArea } from "./InputTextArea";
-export { default as InputSelect } from "./InputSelect";
-export { default as InputSearch } from "./InputSearch";
-export { default as InputImage } from "./InputImage";
-export { default as InputCheckbox } from "./InputCheckbox";
+export { default } from './Input'
+export { default as InputTextArea } from './InputTextArea'
+export { default as InputSelect } from './InputSelect'
+export { default as InputSearch } from './InputSearch'
+export { default as InputImage } from './InputImage'
+export { default as InputCheckbox } from './InputCheckbox'

@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { Text } from "@components/ui";
+import Link from 'next/link'
+import { Text } from '@components/ui'
 
 export default function NotFound() {
   return (
@@ -13,5 +13,5 @@ export default function NotFound() {
         Return Home
       </Link>
     </div>
-  );
+  )
 }

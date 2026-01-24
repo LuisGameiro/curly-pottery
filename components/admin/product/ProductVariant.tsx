@@ -1,23 +1,23 @@
-"use client";
+'use client'
 
-import { Package, Trash2, ChevronUp, ChevronDown } from "lucide-react";
-import { Container, Text, Button, Input } from "@components/ui";
-import InputCheckbox from "@components/ui/Input/InputCheckbox";
-import InputImage from "@components/ui/Input/InputImage";
-import { SizeNames } from "@lib/types/types";
-import { VariantDetails } from "./VariantDetails";
-import { VariantDiscounts } from "./VariantDiscounts";
-import InputSelect from "@components/ui/Input/InputSelect";
-import { Controller, useFormContext } from "react-hook-form";
-import { skulify } from "@lib/skulify";
-import { useEffect } from "react";
+import { Package, Trash2, ChevronUp, ChevronDown } from 'lucide-react'
+import { Container, Text, Button, Input } from '@components/ui'
+import InputCheckbox from '@components/ui/Input/InputCheckbox'
+import InputImage from '@components/ui/Input/InputImage'
+import { SizeNames } from '@lib/types/types'
+import { VariantDetails } from './VariantDetails'
+import { VariantDiscounts } from './VariantDiscounts'
+import InputSelect from '@components/ui/Input/InputSelect'
+import { Controller, useFormContext } from 'react-hook-form'
+import { skulify } from '@lib/skulify'
+import { useEffect } from 'react'
 
 export const ProductVariant = ({
   index,
   onRemove,
 }: {
-  index: number;
-  onRemove: () => void;
+  index: number
+  onRemove: () => void
 }) => {
   const {
     register,
@@ -25,36 +25,36 @@ export const ProductVariant = ({
     watch,
     setValue,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext()
 
-  const productName = watch(`name`);
-  const sizeName = watch(`variants.${index}.sizeName`);
-  const colorName = watch(`variants.${index}.colorName`);
-  const isExpanded = watch(`variants.${index}.isExpanded`);
-  const sku = watch(`variants.${index}.sku`);
+  const productName = watch(`name`)
+  const sizeName = watch(`variants.${index}.sizeName`)
+  const colorName = watch(`variants.${index}.colorName`)
+  const isExpanded = watch(`variants.${index}.isExpanded`)
+  const sku = watch(`variants.${index}.sku`)
 
-  const variantData = watch(`variants.${index}`);
+  const variantData = watch(`variants.${index}`)
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const variantErrors = (errors.variants as any)?.[index];
+  const variantErrors = (errors.variants as any)?.[index]
 
   useEffect(() => {
-    const newSku = skulify(productName, sizeName, colorName);
+    const newSku = skulify(productName, sizeName, colorName)
 
     setValue(`variants.${index}.sku`, newSku, {
       shouldValidate: true,
       shouldDirty: true,
-    });
-  }, [productName, sizeName, colorName, setValue, index]);
+    })
+  }, [productName, sizeName, colorName, setValue, index])
 
   const toggleExpand = () => {
-    setValue(`variants.${index}.isExpanded`, !isExpanded);
-  };
+    setValue(`variants.${index}.isExpanded`, !isExpanded)
+  }
 
   return (
     <Container variant="box" className="p-0 overflow-hidden">
       <div
-        className={`p-4 flex items-center justify-between cursor-pointer border-b  ${variantErrors ? " bg-red-100" : "bg-secondary/20"}`}
+        className={`p-4 flex items-center justify-between cursor-pointer border-b  ${variantErrors ? ' bg-red-100' : 'bg-secondary/20'}`}
         onClick={toggleExpand}
       >
         <div className="flex items-center gap-4">
@@ -68,8 +68,8 @@ export const ProductVariant = ({
             variant="naked"
             color="danger"
             onClick={(e) => {
-              e.stopPropagation();
-              onRemove();
+              e.stopPropagation()
+              onRemove()
             }}
           >
             <Trash2 size={16} />
@@ -153,8 +153,8 @@ export const ProductVariant = ({
                 files={field.value}
                 previews={watch(`variants.${index}.previews`)}
                 onImagesChange={({ files, previews }) => {
-                  field.onChange(files);
-                  setValue(`variants.${index}.previews`, previews);
+                  field.onChange(files)
+                  setValue(`variants.${index}.previews`, previews)
                 }}
                 error={variantErrors?.files?.message as string}
               />
@@ -163,5 +163,5 @@ export const ProductVariant = ({
         </div>
       )}
     </Container>
-  );
-};
+  )
+}

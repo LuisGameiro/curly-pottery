@@ -1,45 +1,45 @@
-import { getProductById } from "actions/product.actions";
-import { getAllCategories } from "actions/category.actions";
-import notFound from "app/not-found";
-import { Category, ProductWithVariantsCategories } from "@lib/types/types";
-import ProductClient from "@components/admin/product/ProductClient";
-import constructMetadata from "@components/common/SEO";
+import { getProductById } from 'actions/product.actions'
+import { getAllCategories } from 'actions/category.actions'
+import notFound from 'app/not-found'
+import { Category, ProductWithVariantsCategories } from '@lib/types/types'
+import ProductClient from '@components/admin/product/ProductClient'
+import constructMetadata from '@components/common/SEO'
 
 export const metadata = constructMetadata({
-  title: "Product Admin ",
-  description: "Manage your store product at Curly Pottery.",
-});
+  title: 'Product Admin ',
+  description: 'Manage your store product at Curly Pottery.',
+})
 
 export default async function ProductForm({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>
 }) {
-  const { id } = await params;
-  const isEditMode = id !== "new";
+  const { id } = await params
+  const isEditMode = id !== 'new'
 
-  let productData: ProductWithVariantsCategories | null = null;
-  let categoriesData: Category[] = [];
+  let productData: ProductWithVariantsCategories | null = null
+  let categoriesData: Category[] = []
 
-  const responseCategories = await getAllCategories();
+  const responseCategories = await getAllCategories()
 
   if (!responseCategories.success) {
-    throw new Error(responseCategories.message);
+    throw new Error(responseCategories.message)
   }
 
-  categoriesData = responseCategories.data;
+  categoriesData = responseCategories.data
 
   if (isEditMode) {
-    const responseProduct = await getProductById(id as string);
+    const responseProduct = await getProductById(id as string)
 
     if (!responseProduct.success) {
-      throw new Error(responseProduct.message);
+      throw new Error(responseProduct.message)
     }
 
     if (!responseProduct.data) {
-      return notFound();
+      return notFound()
     }
-    productData = responseProduct.data;
+    productData = responseProduct.data
   }
 
   return (
@@ -48,5 +48,5 @@ export default async function ProductForm({
       product={productData}
       categories={categoriesData}
     />
-  );
+  )
 }

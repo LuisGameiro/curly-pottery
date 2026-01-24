@@ -10,17 +10,17 @@ import {
   Text,
   Hr,
   Img,
-} from "@react-email/components";
-import * as React from "react";
+} from '@react-email/components'
+import * as React from 'react'
 
 interface ResetPasswordEmailProps {
-  userFirstname?: string;
-  resetPasswordLink?: string;
+  userFirstname?: string
+  resetPasswordLink?: string
 }
 
 export const ResetPasswordEmail = ({
-  userFirstname = "Customer",
-  resetPasswordLink = "https://yourstore.com/auth/reset-password?token=123",
+  userFirstname = 'Customer',
+  resetPasswordLink = 'https://yourstore.com/auth/reset-password?token=123',
 }: ResetPasswordEmailProps) => {
   return (
     <Html>
@@ -29,7 +29,7 @@ export const ResetPasswordEmail = ({
       <Body style={main}>
         <Container style={container}>
           <Section style={section}>
-            <Img src={"logo.png"} />
+            <Img src={'logo.png'} />
 
             <Text style={h1}>
               <strong>Curly Pottery</strong>
@@ -47,7 +47,7 @@ export const ResetPasswordEmail = ({
             </Button>
           </Section>
           <Text style={text}>
-            or copy and paste this URL into your browser:{" "}
+            or copy and paste this URL into your browser:{' '}
             <Link href={resetPasswordLink} style={link}>
               {resetPasswordLink}
             </Link>
@@ -60,34 +60,34 @@ export const ResetPasswordEmail = ({
         </Container>
       </Body>
     </Html>
-  );
-};
+  )
+}
 
-export default ResetPasswordEmail;
+export default ResetPasswordEmail
 
-const main = { backgroundColor: "#f1fbff", fontFamily: "sans-serif" };
-const container = { margin: "0 auto", padding: "20px 0 48px", width: "580px" };
+const main = { backgroundColor: '#f1fbff', fontFamily: 'sans-serif' }
+const container = { margin: '0 auto', padding: '20px 0 48px', width: '580px' }
 const h1 = {
-  color: "#fde372",
-  fontSize: "24px",
-  fontWeight: "bold",
-  textAlign: "center" as const,
-};
-const text = { color: "#000000", fontSize: "16px", lineHeight: "24px" };
+  color: '#fde372',
+  fontSize: '24px',
+  fontWeight: 'bold',
+  textAlign: 'center' as const,
+}
+const text = { color: '#000000', fontSize: '16px', lineHeight: '24px' }
 const section = {
-  padding: "24px",
-  backgroundColor: "#f1fbff",
-  borderRadius: "8px",
-  border: "1px solid #e6e6e6",
-};
+  padding: '24px',
+  backgroundColor: '#f1fbff',
+  borderRadius: '8px',
+  border: '1px solid #e6e6e6',
+}
 
-const hr = { borderColor: "#e6e6e6", margin: "20px 0" };
-const footer = { color: "#fde372", fontSize: "12px" };
+const hr = { borderColor: '#e6e6e6', margin: '20px 0' }
+const footer = { color: '#fde372', fontSize: '12px' }
 
 const button = {
-  background: "#3b67d4",
-  color: "#000000",
-  padding: "12px 20px",
-  borderRadius: "4px",
-};
-const link = { color: "#0000EE", stTextDecoration: "underline" as const };
+  background: '#3b67d4',
+  color: '#000000',
+  padding: '12px 20px',
+  borderRadius: '4px',
+}
+const link = { color: '#0000EE', stTextDecoration: 'underline' as const }

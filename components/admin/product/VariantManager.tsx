@@ -1,47 +1,47 @@
-"use client";
+'use client'
 
-import { Plus } from "lucide-react";
-import { useFieldArray, useFormContext } from "react-hook-form";
-import { Text } from "@components/ui";
-import { ProductVariant } from "./ProductVariant";
-import { toast } from "sonner";
+import { Plus } from 'lucide-react'
+import { useFieldArray, useFormContext } from 'react-hook-form'
+import { Text } from '@components/ui'
+import { ProductVariant } from './ProductVariant'
+import { toast } from 'sonner'
 
 export const VariantManager = () => {
-  const { control } = useFormContext();
+  const { control } = useFormContext()
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "variants",
-  });
+    name: 'variants',
+  })
 
   const addVariant = () => {
     append({
       id: `temp-${fields.length + 1}`,
-      sku: "",
+      sku: '',
       price: 0,
       stock: 0,
       details: [],
       discounts: [],
       files: [],
       previews: [],
-      sizeName: "M",
-      colorName: "",
+      sizeName: 'M',
+      colorName: '',
       availableForSale: true,
       isExpanded: true,
-      currency: "USD",
-      colorHex: "FFFFFF",
+      currency: 'USD',
+      colorHex: 'FFFFFF',
       images: [],
-    });
-  };
+    })
+  }
 
   const handleRemoveVariant = (index: number) => {
     if (fields.length === 1) {
-      return toast.error("Product must have at least one variant.");
+      return toast.error('Product must have at least one variant.')
     }
     return (
-      confirm("Are you sure you want to remove this variant?") && remove(index)
-    );
-  };
+      confirm('Are you sure you want to remove this variant?') && remove(index)
+    )
+  }
 
   return (
     <div className="space-y-4">
@@ -73,5 +73,5 @@ export const VariantManager = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}

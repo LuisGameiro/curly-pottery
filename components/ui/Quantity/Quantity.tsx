@@ -1,13 +1,13 @@
-import { Minus, Plus } from "lucide-react";
-import React from "react";
+import { Minus, Plus } from 'lucide-react'
+import React from 'react'
 
 export interface QuantityProps {
-  value: number;
-  increase: () => void;
-  decrease: () => void;
-  handleRemove: React.MouseEventHandler<HTMLButtonElement>;
-  handleChange: React.ChangeEventHandler<HTMLInputElement>;
-  max?: number;
+  value: number
+  increase: () => void
+  decrease: () => void
+  handleRemove: React.MouseEventHandler<HTMLButtonElement>
+  handleChange: React.ChangeEventHandler<HTMLInputElement>
+  max?: number
 }
 
 const Quantity = ({
@@ -34,8 +34,8 @@ const Quantity = ({
         <input
           className="w-10 text-center text-sm font-medium bg-transparent outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           onChange={(e) => {
-            const val = Number(e.target.value);
-            if (val >= 0 && val <= max) handleChange(e);
+            const val = Number(e.target.value)
+            if (val >= 0 && val <= max) handleChange(e)
           }}
           value={value}
           type="number"
@@ -53,7 +53,7 @@ const Quantity = ({
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Quantity;
+export default Quantity

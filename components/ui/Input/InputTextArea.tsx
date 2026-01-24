@@ -1,20 +1,20 @@
-import { cn } from "@lib/utils";
-import s from "./Input.module.css";
-import React, { TextareaHTMLAttributes, useId } from "react";
+import { cn } from '@lib/utils'
+import s from './Input.module.css'
+import React, { TextareaHTMLAttributes, useId } from 'react'
 
 interface InputProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-  className?: string;
-  label?: string;
-  error?: string;
-  onValueChange?: (value: string) => void;
+  className?: string
+  label?: string
+  error?: string
+  onValueChange?: (value: string) => void
 }
 
 const InputTextArea = (props: InputProps) => {
-  const { className, label, error, onValueChange, id, ...rest } = props;
+  const { className, label, error, onValueChange, id, ...rest } = props
 
-  const generatedId = useId();
-  const inputId = id || generatedId;
-  const errorId = `${inputId}-error`;
+  const generatedId = useId()
+  const inputId = id || generatedId
+  const errorId = `${inputId}-error`
 
   const rootClassName = cn(
     s.rootArea,
@@ -22,16 +22,16 @@ const InputTextArea = (props: InputProps) => {
       [s.error]: !!error,
     },
     className,
-  );
+  )
 
   const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (onValueChange) {
-      onValueChange(e.target.value);
+      onValueChange(e.target.value)
     }
     if (props.onChange) {
-      props.onChange(e);
+      props.onChange(e)
     }
-  };
+  }
 
   return (
     <div className={s.container}>
@@ -57,7 +57,7 @@ const InputTextArea = (props: InputProps) => {
         </p>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default InputTextArea;
+export default InputTextArea

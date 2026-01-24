@@ -1,14 +1,14 @@
-"use client";
+'use client'
 
-import { Category } from "@lib/types/types";
-import MenuProducts from "./MenuProducts";
-import { SortLabels } from "./sortProducts";
+import { Category } from '@lib/types/types'
+import MenuProducts from './MenuProducts'
+import { SortLabels } from './sortProducts'
 
 interface ShopClientProps {
-  sortMethod: SortLabels;
-  categories: Category[];
-  activeCategory: string | null;
-  children: React.ReactNode;
+  sortMethod: SortLabels
+  categories: Category[]
+  activeCategory: string | null
+  children: React.ReactNode
 }
 
 export default function ShopClient({
@@ -28,5 +28,5 @@ export default function ShopClient({
         <section className=" col-span-1 lg:col-span-9">{children}</section>
       </div>
     </main>
-  );
+  )
 }

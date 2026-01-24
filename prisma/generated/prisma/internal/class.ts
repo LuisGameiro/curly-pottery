@@ -10,14 +10,14 @@
  * Please import the `PrismaClient` class from the `client.ts` file instead.
  */
 
-import * as runtime from "@prisma/client/runtime/client";
-import type * as Prisma from "./prismaNamespace.js";
+import * as runtime from '@prisma/client/runtime/client'
+import type * as Prisma from './prismaNamespace.js'
 
 const config: runtime.GetPrismaClientConfig = {
   previewFeatures: [],
-  clientVersion: "7.2.0",
-  engineVersion: "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
-  activeProvider: "postgresql",
+  clientVersion: '7.2.0',
+  engineVersion: '0c8ef2ce45c83248ab3df073180d5eda9e8be7a3',
+  activeProvider: 'postgresql',
   inlineSchema:
     '// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = "prisma-client"\n  output   = "./generated/prisma"\n}\n\ndatasource db {\n  provider = "postgresql"\n}\n\n/**\n * -------------------- ENUMS --------------------\n */\nenum CurrencyCode {\n  USD\n  EUR\n  GBP\n}\n\nenum OrderStatus {\n  PENDING\n  PAID\n  SHIPPED\n  COMPLETED\n  CANCELLED\n}\n\nenum SizeNames {\n  XXS\n  XS\n  S\n  M\n  L\n  XL\n  XXL\n}\n\n/**\n * -------------------- CATEGORY --------------------\n */\nmodel Category {\n  id        String    @id @default(cuid())\n  name      String    @unique\n  slug      String    @unique\n  url       String?\n  image     String\n  products  Product[]\n  createdAt DateTime  @default(now())\n  updatedAt DateTime  @updatedAt\n}\n\n/**\n * -------------------- PRODUCT --------------------\n */\nmodel Product {\n  id               String           @id @default(cuid())\n  name             String           @unique\n  slug             String           @unique\n  description      String\n  images           String[]\n  variants         ProductVariant[]\n  categories       Category[]\n  requiresShipping Boolean          @default(true)\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel ProductVariant {\n  id               String       @id @default(cuid())\n  sku              String       @unique\n  price            Float\n  currency         CurrencyCode @default(GBP)\n  stock            Int          @default(0)\n  availableForSale Boolean      @default(true)\n  images           String[]     @default([])\n\n  sizeName  String?\n  colorName String?\n  colorHex  String?\n  details   Json?\n  discounts Json?\n  productId String\n  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@unique([productId, sizeName, colorName])\n}\n\n/**\n * -------------------- ADDRESS --------------------\n */\nmodel Address {\n  id         String  @id @default(cuid())\n  type       String? // billing | shipping\n  company    String?\n  address    String\n  postalCode String\n  city       String\n  country    String\n\n  userId String?\n  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  createdAt DateTime @default(now())\n}\n\nmodel Cart {\n  id            String       @id @default(cuid())\n  userId        String       @unique\n  user          User         @relation(fields: [userId], references: [id])\n  currency      CurrencyCode @default(GBP)\n  lineItems     Json\n  discounts     Json?\n  subtotalPrice Float        @default(0)\n  totalPrice    Float        @default(0)\n  taxes         Float        @default(0)\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\n/**\n * -------------------- ORDER --------------------\n */\nmodel Order {\n  id              String       @id @default(cuid())\n  email           String?\n  phone           String?\n  userId          String?\n  firstName       String\n  lastName        String\n  user            User?        @relation(fields: [userId], references: [id])\n  status          OrderStatus  @default(PENDING)\n  lineItems       Json\n  discounts       Json?\n  taxesIncluded   Boolean      @default(false)\n  shippingAddress Json?\n  billingAddress  Json\n  subtotalPrice   Float\n  totalPrice      Float\n  taxes           Float        @default(0)\n  shippingPrice   Float        @default(0)\n  shippingMethod  String\n  currency        CurrencyCode @default(GBP)\n  createdAt       DateTime     @default(now())\n  updatedAt       DateTime     @updatedAt\n}\n\nmodel Account {\n  id                       String   @id @default(cuid())\n  createdAt                DateTime @default(now())\n  updatedAt                DateTime @updatedAt\n  userId                   String\n  type                     String\n  provider                 String\n  providerAccountId        String\n  refresh_token            String?  @db.VarChar(500)\n  access_token             String?  @db.VarChar(500)\n  refresh_token_expires_in Int?\n  expires_at               Int?\n  token_type               String?\n  scope                    String?\n  id_token                 String?  @db.Text\n  session_state            String?\n  oauth_token_secret       String?\n  oauth_token              String?\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([provider, providerAccountId])\n}\n\nmodel Session {\n  id           String   @id @default(cuid())\n  sessionToken String   @unique\n  expires      DateTime\n  user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)\n  userId       String?\n}\n\nmodel User {\n  id               String    @id @default(cuid())\n  email            String    @unique\n  password         String?\n  emailVerified    DateTime?\n  firstName        String\n  lastName         String\n  role             String?   @default("user")\n  phone            String?\n  company          String?\n  notes            String?\n  acceptsMarketing Boolean   @default(false)\n\n  accounts  Account[]\n  sessions  Session[]\n  addresses Address[]\n  orders    Order[]\n  cart      Cart?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  resetToken       String?   @unique\n  resetTokenExpiry DateTime?\n}\n\n/**\n * -------------------- CUSTOMER --------------------\n * model Customer {\n * id               String   @id @default(cuid())\n * firstName        String\n * lastName         String\n * email            String   @unique\n * phone            String?\n * company          String?\n * notes            String?\n * acceptsMarketing Boolean  @default(false)\n * addresses        Address[]\n * orders           Order[]\n * cart             Cart?\n * account          Account  @relation(fields: [accountId], references: [id])\n * accountId        String   @unique\n * createdAt        DateTime @default(now())\n * updatedAt        DateTime @updatedAt\n * }\n * model VerificationToken {\n * identifier      String\n * token           String   @unique\n * expires         DateTime\n * @@unique([identifier, token])\n * }\n */\n',
   runtimeDataModel: {
@@ -25,37 +25,37 @@ const config: runtime.GetPrismaClientConfig = {
     enums: {},
     types: {},
   },
-};
+}
 
 config.runtimeDataModel = JSON.parse(
   '{"models":{"Category":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"name","kind":"scalar","type":"String"},{"name":"slug","kind":"scalar","type":"String"},{"name":"url","kind":"scalar","type":"String"},{"name":"image","kind":"scalar","type":"String"},{"name":"products","kind":"object","type":"Product","relationName":"CategoryToProduct"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"}],"dbName":null},"Product":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"name","kind":"scalar","type":"String"},{"name":"slug","kind":"scalar","type":"String"},{"name":"description","kind":"scalar","type":"String"},{"name":"images","kind":"scalar","type":"String"},{"name":"variants","kind":"object","type":"ProductVariant","relationName":"ProductToProductVariant"},{"name":"categories","kind":"object","type":"Category","relationName":"CategoryToProduct"},{"name":"requiresShipping","kind":"scalar","type":"Boolean"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"}],"dbName":null},"ProductVariant":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"sku","kind":"scalar","type":"String"},{"name":"price","kind":"scalar","type":"Float"},{"name":"currency","kind":"enum","type":"CurrencyCode"},{"name":"stock","kind":"scalar","type":"Int"},{"name":"availableForSale","kind":"scalar","type":"Boolean"},{"name":"images","kind":"scalar","type":"String"},{"name":"sizeName","kind":"scalar","type":"String"},{"name":"colorName","kind":"scalar","type":"String"},{"name":"colorHex","kind":"scalar","type":"String"},{"name":"details","kind":"scalar","type":"Json"},{"name":"discounts","kind":"scalar","type":"Json"},{"name":"productId","kind":"scalar","type":"String"},{"name":"product","kind":"object","type":"Product","relationName":"ProductToProductVariant"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"}],"dbName":null},"Address":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"type","kind":"scalar","type":"String"},{"name":"company","kind":"scalar","type":"String"},{"name":"address","kind":"scalar","type":"String"},{"name":"postalCode","kind":"scalar","type":"String"},{"name":"city","kind":"scalar","type":"String"},{"name":"country","kind":"scalar","type":"String"},{"name":"userId","kind":"scalar","type":"String"},{"name":"user","kind":"object","type":"User","relationName":"AddressToUser"},{"name":"createdAt","kind":"scalar","type":"DateTime"}],"dbName":null},"Cart":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"userId","kind":"scalar","type":"String"},{"name":"user","kind":"object","type":"User","relationName":"CartToUser"},{"name":"currency","kind":"enum","type":"CurrencyCode"},{"name":"lineItems","kind":"scalar","type":"Json"},{"name":"discounts","kind":"scalar","type":"Json"},{"name":"subtotalPrice","kind":"scalar","type":"Float"},{"name":"totalPrice","kind":"scalar","type":"Float"},{"name":"taxes","kind":"scalar","type":"Float"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"}],"dbName":null},"Order":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"email","kind":"scalar","type":"String"},{"name":"phone","kind":"scalar","type":"String"},{"name":"userId","kind":"scalar","type":"String"},{"name":"firstName","kind":"scalar","type":"String"},{"name":"lastName","kind":"scalar","type":"String"},{"name":"user","kind":"object","type":"User","relationName":"OrderToUser"},{"name":"status","kind":"enum","type":"OrderStatus"},{"name":"lineItems","kind":"scalar","type":"Json"},{"name":"discounts","kind":"scalar","type":"Json"},{"name":"taxesIncluded","kind":"scalar","type":"Boolean"},{"name":"shippingAddress","kind":"scalar","type":"Json"},{"name":"billingAddress","kind":"scalar","type":"Json"},{"name":"subtotalPrice","kind":"scalar","type":"Float"},{"name":"totalPrice","kind":"scalar","type":"Float"},{"name":"taxes","kind":"scalar","type":"Float"},{"name":"shippingPrice","kind":"scalar","type":"Float"},{"name":"shippingMethod","kind":"scalar","type":"String"},{"name":"currency","kind":"enum","type":"CurrencyCode"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"}],"dbName":null},"Account":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"userId","kind":"scalar","type":"String"},{"name":"type","kind":"scalar","type":"String"},{"name":"provider","kind":"scalar","type":"String"},{"name":"providerAccountId","kind":"scalar","type":"String"},{"name":"refresh_token","kind":"scalar","type":"String"},{"name":"access_token","kind":"scalar","type":"String"},{"name":"refresh_token_expires_in","kind":"scalar","type":"Int"},{"name":"expires_at","kind":"scalar","type":"Int"},{"name":"token_type","kind":"scalar","type":"String"},{"name":"scope","kind":"scalar","type":"String"},{"name":"id_token","kind":"scalar","type":"String"},{"name":"session_state","kind":"scalar","type":"String"},{"name":"oauth_token_secret","kind":"scalar","type":"String"},{"name":"oauth_token","kind":"scalar","type":"String"},{"name":"user","kind":"object","type":"User","relationName":"AccountToUser"}],"dbName":null},"Session":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"sessionToken","kind":"scalar","type":"String"},{"name":"expires","kind":"scalar","type":"DateTime"},{"name":"user","kind":"object","type":"User","relationName":"SessionToUser"},{"name":"userId","kind":"scalar","type":"String"}],"dbName":null},"User":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"email","kind":"scalar","type":"String"},{"name":"password","kind":"scalar","type":"String"},{"name":"emailVerified","kind":"scalar","type":"DateTime"},{"name":"firstName","kind":"scalar","type":"String"},{"name":"lastName","kind":"scalar","type":"String"},{"name":"role","kind":"scalar","type":"String"},{"name":"phone","kind":"scalar","type":"String"},{"name":"company","kind":"scalar","type":"String"},{"name":"notes","kind":"scalar","type":"String"},{"name":"acceptsMarketing","kind":"scalar","type":"Boolean"},{"name":"accounts","kind":"object","type":"Account","relationName":"AccountToUser"},{"name":"sessions","kind":"object","type":"Session","relationName":"SessionToUser"},{"name":"addresses","kind":"object","type":"Address","relationName":"AddressToUser"},{"name":"orders","kind":"object","type":"Order","relationName":"OrderToUser"},{"name":"cart","kind":"object","type":"Cart","relationName":"CartToUser"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"resetToken","kind":"scalar","type":"String"},{"name":"resetTokenExpiry","kind":"scalar","type":"DateTime"}],"dbName":null}},"enums":{},"types":{}}',
-);
+)
 
 async function decodeBase64AsWasm(
   wasmBase64: string,
 ): Promise<WebAssembly.Module> {
-  const { Buffer } = await import("node:buffer");
-  const wasmArray = Buffer.from(wasmBase64, "base64");
-  return new WebAssembly.Module(wasmArray);
+  const { Buffer } = await import('node:buffer')
+  const wasmArray = Buffer.from(wasmBase64, 'base64')
+  return new WebAssembly.Module(wasmArray)
 }
 
 config.compilerWasm = {
   getRuntime: async () =>
-    await import("@prisma/client/runtime/query_compiler_bg.postgresql.mjs"),
+    await import('@prisma/client/runtime/query_compiler_bg.postgresql.mjs'),
 
   getQueryCompilerWasmModule: async () => {
     const { wasm } =
-      await import("@prisma/client/runtime/query_compiler_bg.postgresql.wasm-base64.mjs");
-    return await decodeBase64AsWasm(wasm);
+      await import('@prisma/client/runtime/query_compiler_bg.postgresql.wasm-base64.mjs')
+    return await decodeBase64AsWasm(wasm)
   },
-};
+}
 
 export type LogOptions<ClientOptions extends Prisma.PrismaClientOptions> =
-  "log" extends keyof ClientOptions
-    ? ClientOptions["log"] extends Array<Prisma.LogLevel | Prisma.LogDefinition>
-      ? Prisma.GetEvents<ClientOptions["log"]>
+  'log' extends keyof ClientOptions
+    ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition>
+      ? Prisma.GetEvents<ClientOptions['log']>
       : never
-    : never;
+    : never
 
 export interface PrismaClientConstructor {
   /**
@@ -75,16 +75,16 @@ export interface PrismaClientConstructor {
   new <
     Options extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
     LogOpts extends LogOptions<Options> = LogOptions<Options>,
-    OmitOpts extends Prisma.PrismaClientOptions["omit"] = Options extends {
-      omit: infer U;
+    OmitOpts extends Prisma.PrismaClientOptions['omit'] = Options extends {
+      omit: infer U
     }
       ? U
-      : Prisma.PrismaClientOptions["omit"],
+      : Prisma.PrismaClientOptions['omit'],
     ExtArgs extends runtime.Types.Extensions.InternalArgs =
       runtime.Types.Extensions.DefaultArgs,
   >(
     options: Prisma.Subset<Options, Prisma.PrismaClientOptions>,
-  ): PrismaClient<LogOpts, OmitOpts, ExtArgs>;
+  ): PrismaClient<LogOpts, OmitOpts, ExtArgs>
 }
 
 /**
@@ -103,28 +103,28 @@ export interface PrismaClientConstructor {
 
 export interface PrismaClient<
   in LogOpts extends Prisma.LogLevel = never,
-  in out OmitOpts extends Prisma.PrismaClientOptions["omit"] = undefined,
+  in out OmitOpts extends Prisma.PrismaClientOptions['omit'] = undefined,
   in out ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > {
-  [K: symbol]: { types: Prisma.TypeMap<ExtArgs>["other"] };
+  [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
 
   $on<V extends LogOpts>(
     eventType: V,
     callback: (
-      event: V extends "query" ? Prisma.QueryEvent : Prisma.LogEvent,
+      event: V extends 'query' ? Prisma.QueryEvent : Prisma.LogEvent,
     ) => void,
-  ): PrismaClient;
+  ): PrismaClient
 
   /**
    * Connect with the database
    */
-  $connect(): runtime.Types.Utils.JsPromise<void>;
+  $connect(): runtime.Types.Utils.JsPromise<void>
 
   /**
    * Disconnect from the database
    */
-  $disconnect(): runtime.Types.Utils.JsPromise<void>;
+  $disconnect(): runtime.Types.Utils.JsPromise<void>
 
   /**
    * Executes a prepared raw query and returns the number of affected rows.
@@ -138,7 +138,7 @@ export interface PrismaClient<
   $executeRaw<T = unknown>(
     query: TemplateStringsArray | Prisma.Sql,
     ...values: any[]
-  ): Prisma.PrismaPromise<number>;
+  ): Prisma.PrismaPromise<number>
 
   /**
    * Executes a raw query and returns the number of affected rows.
@@ -153,7 +153,7 @@ export interface PrismaClient<
   $executeRawUnsafe<T = unknown>(
     query: string,
     ...values: any[]
-  ): Prisma.PrismaPromise<number>;
+  ): Prisma.PrismaPromise<number>
 
   /**
    * Performs a prepared raw query and returns the `SELECT` data.
@@ -167,7 +167,7 @@ export interface PrismaClient<
   $queryRaw<T = unknown>(
     query: TemplateStringsArray | Prisma.Sql,
     ...values: any[]
-  ): Prisma.PrismaPromise<T>;
+  ): Prisma.PrismaPromise<T>
 
   /**
    * Performs a raw query and returns the `SELECT` data.
@@ -182,7 +182,7 @@ export interface PrismaClient<
   $queryRawUnsafe<T = unknown>(
     query: string,
     ...values: any[]
-  ): Prisma.PrismaPromise<T>;
+  ): Prisma.PrismaPromise<T>
 
   /**
    * Allows the running of a sequence of read/write operations that are guaranteed to either succeed or fail as a whole.
@@ -200,30 +200,30 @@ export interface PrismaClient<
   $transaction<P extends Prisma.PrismaPromise<any>[]>(
     arg: [...P],
     options?: { isolationLevel?: Prisma.TransactionIsolationLevel },
-  ): runtime.Types.Utils.JsPromise<runtime.Types.Utils.UnwrapTuple<P>>;
+  ): runtime.Types.Utils.JsPromise<runtime.Types.Utils.UnwrapTuple<P>>
 
   $transaction<R>(
     fn: (
       prisma: Omit<PrismaClient, runtime.ITXClientDenyList>,
     ) => runtime.Types.Utils.JsPromise<R>,
     options?: {
-      maxWait?: number;
-      timeout?: number;
-      isolationLevel?: Prisma.TransactionIsolationLevel;
+      maxWait?: number
+      timeout?: number
+      isolationLevel?: Prisma.TransactionIsolationLevel
     },
-  ): runtime.Types.Utils.JsPromise<R>;
+  ): runtime.Types.Utils.JsPromise<R>
 
   $extends: runtime.Types.Extensions.ExtendsHook<
-    "extends",
+    'extends',
     Prisma.TypeMapCb<OmitOpts>,
     ExtArgs,
     runtime.Types.Utils.Call<
       Prisma.TypeMapCb<OmitOpts>,
       {
-        extArgs: ExtArgs;
+        extArgs: ExtArgs
       }
     >
-  >;
+  >
 
   /**
    * `prisma.category`: Exposes CRUD operations for the **Category** model.
@@ -233,7 +233,7 @@ export interface PrismaClient<
    * const categories = await prisma.category.findMany()
    * ```
    */
-  get category(): Prisma.CategoryDelegate<ExtArgs, { omit: OmitOpts }>;
+  get category(): Prisma.CategoryDelegate<ExtArgs, { omit: OmitOpts }>
 
   /**
    * `prisma.product`: Exposes CRUD operations for the **Product** model.
@@ -243,7 +243,7 @@ export interface PrismaClient<
    * const products = await prisma.product.findMany()
    * ```
    */
-  get product(): Prisma.ProductDelegate<ExtArgs, { omit: OmitOpts }>;
+  get product(): Prisma.ProductDelegate<ExtArgs, { omit: OmitOpts }>
 
   /**
    * `prisma.productVariant`: Exposes CRUD operations for the **ProductVariant** model.
@@ -256,7 +256,7 @@ export interface PrismaClient<
   get productVariant(): Prisma.ProductVariantDelegate<
     ExtArgs,
     { omit: OmitOpts }
-  >;
+  >
 
   /**
    * `prisma.address`: Exposes CRUD operations for the **Address** model.
@@ -266,7 +266,7 @@ export interface PrismaClient<
    * const addresses = await prisma.address.findMany()
    * ```
    */
-  get address(): Prisma.AddressDelegate<ExtArgs, { omit: OmitOpts }>;
+  get address(): Prisma.AddressDelegate<ExtArgs, { omit: OmitOpts }>
 
   /**
    * `prisma.cart`: Exposes CRUD operations for the **Cart** model.
@@ -276,7 +276,7 @@ export interface PrismaClient<
    * const carts = await prisma.cart.findMany()
    * ```
    */
-  get cart(): Prisma.CartDelegate<ExtArgs, { omit: OmitOpts }>;
+  get cart(): Prisma.CartDelegate<ExtArgs, { omit: OmitOpts }>
 
   /**
    * `prisma.order`: Exposes CRUD operations for the **Order** model.
@@ -286,7 +286,7 @@ export interface PrismaClient<
    * const orders = await prisma.order.findMany()
    * ```
    */
-  get order(): Prisma.OrderDelegate<ExtArgs, { omit: OmitOpts }>;
+  get order(): Prisma.OrderDelegate<ExtArgs, { omit: OmitOpts }>
 
   /**
    * `prisma.account`: Exposes CRUD operations for the **Account** model.
@@ -296,7 +296,7 @@ export interface PrismaClient<
    * const accounts = await prisma.account.findMany()
    * ```
    */
-  get account(): Prisma.AccountDelegate<ExtArgs, { omit: OmitOpts }>;
+  get account(): Prisma.AccountDelegate<ExtArgs, { omit: OmitOpts }>
 
   /**
    * `prisma.session`: Exposes CRUD operations for the **Session** model.
@@ -306,7 +306,7 @@ export interface PrismaClient<
    * const sessions = await prisma.session.findMany()
    * ```
    */
-  get session(): Prisma.SessionDelegate<ExtArgs, { omit: OmitOpts }>;
+  get session(): Prisma.SessionDelegate<ExtArgs, { omit: OmitOpts }>
 
   /**
    * `prisma.user`: Exposes CRUD operations for the **User** model.
@@ -316,9 +316,9 @@ export interface PrismaClient<
    * const users = await prisma.user.findMany()
    * ```
    */
-  get user(): Prisma.UserDelegate<ExtArgs, { omit: OmitOpts }>;
+  get user(): Prisma.UserDelegate<ExtArgs, { omit: OmitOpts }>
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {
-  return runtime.getPrismaClient(config) as unknown as PrismaClientConstructor;
+  return runtime.getPrismaClient(config) as unknown as PrismaClientConstructor
 }

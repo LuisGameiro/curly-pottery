@@ -1,11 +1,11 @@
-import constructMetadata from "@components/common/SEO";
-import { Container, Text } from "@components/ui";
+import constructMetadata from '@components/common/SEO'
+import { Container, Text } from '@components/ui'
 
 export const metadata = constructMetadata({
-  title: "About",
+  title: 'About',
   description:
-    "Learn about Curly Pottery, our story, mission, and why we are passionate about handcrafted ceramics.",
-});
+    'Learn about Curly Pottery, our story, mission, and why we are passionate about handcrafted ceramics.',
+})
 
 export default function About() {
   return (
@@ -50,5 +50,5 @@ export default function About() {
         </ul>
       </section>
     </Container>
-  );
+  )
 }

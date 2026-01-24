@@ -1,7 +1,7 @@
-import { useTheme } from "next-themes";
+import { useTheme } from 'next-themes'
 
 export const useToggleTheme = () => {
-  const { theme, themes, setTheme } = useTheme();
+  const { theme, themes, setTheme } = useTheme()
   // const [themeValue, setThemeValue] = useState<string>(theme ?? "light");
 
   // useLayoutEffect(() => {
@@ -11,6 +11,6 @@ export const useToggleTheme = () => {
   //   });
   // }, [theme]);
 
-  const currentTheme = theme ?? "light";
-  return { theme: currentTheme, setTheme, themes };
-};
+  const currentTheme = theme ?? 'light'
+  return { theme: currentTheme, setTheme, themes }
+}

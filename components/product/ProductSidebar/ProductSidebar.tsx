@@ -1,29 +1,29 @@
-"use client";
+'use client'
 
-import s from "./ProductSidebar.module.css";
-import { useState } from "react";
-import { Button, Collapse, ShareButton, Text } from "@components/ui";
-import Link from "next/link";
-import { cn } from "@lib/utils";
-import ProductOptions from "../ProductOptions";
-import { calculateDiscount, showCurrency } from "@lib/calculate-price";
-import useCart from "@lib/hooks/useCart";
+import s from './ProductSidebar.module.css'
+import { useState } from 'react'
+import { Button, Collapse, ShareButton, Text } from '@components/ui'
+import Link from 'next/link'
+import { cn } from '@lib/utils'
+import ProductOptions from '../ProductOptions'
+import { calculateDiscount, showCurrency } from '@lib/calculate-price'
+import useCart from '@lib/hooks/useCart'
 import {
   Detail,
   Category,
   ProductWithVariantsCategories,
   Variant,
   Discount,
-} from "@lib/types/types";
-import { toast } from "sonner";
-import { Undo2 } from "lucide-react";
-import { trackEvent } from "@lib/analytics/trackEvents";
+} from '@lib/types/types'
+import { toast } from 'sonner'
+import { Undo2 } from 'lucide-react'
+import { trackEvent } from '@lib/analytics/trackEvents'
 
 interface ProductSidebarProps {
-  product: ProductWithVariantsCategories;
-  variant: Variant;
-  setVariant: (variant: Variant) => void;
-  className?: string;
+  product: ProductWithVariantsCategories
+  variant: Variant
+  setVariant: (variant: Variant) => void
+  className?: string
 }
 
 const ProductSidebar = ({
@@ -32,14 +32,14 @@ const ProductSidebar = ({
   variant,
   setVariant,
 }: ProductSidebarProps) => {
-  const { addItem } = useCart();
+  const { addItem } = useCart()
 
-  const [loading, setLoading] = useState(false);
-  const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(false)
+  const [quantity, setQuantity] = useState(1)
 
-  const forSale = variant?.stock !== 0 && variant?.availableForSale;
+  const forSale = variant?.stock !== 0 && variant?.availableForSale
   const addToCart = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
       addItem(
         {
@@ -53,29 +53,29 @@ const ProductSidebar = ({
           ],
         },
         quantity,
-      );
-      trackEvent("add_to_cart", {
+      )
+      trackEvent('add_to_cart', {
         name: product.name,
         currency: variant.currency,
         sku: variant.sku,
         price: calculateDiscount(variant.price, variant.discounts as Discount[])
           .finalPrice,
         quantity: quantity,
-      });
+      })
     } catch {
-      toast("Error adding item to cart");
+      toast('Error adding item to cart')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const price = calculateDiscount(
     variant.price,
     variant.discounts as Discount[],
-  );
+  )
 
   return (
-    <div className={cn(className, "space-y-6")}>
+    <div className={cn(className, 'space-y-6')}>
       <section>
         <div className="flex justify-between items-center">
           <Text variant="heading">{product.name}</Text>
@@ -87,14 +87,14 @@ const ProductSidebar = ({
             </Link>
             <ShareButton
               title={product.name}
-              text={product.description || ""}
+              text={product.description || ''}
               url={`${process.env.NEXT_PUBLIC_APP_URL}/shop/${product.slug}`}
             />
           </div>
         </div>
 
         {product.categories.map((category: Category) => (
-          <Text key={category.id} variant="subHeading" className={"mr-2"}>
+          <Text key={category.id} variant="subHeading" className={'mr-2'}>
             {category.name}
           </Text>
         ))}
@@ -108,7 +108,7 @@ const ProductSidebar = ({
                 {showCurrency[variant.currency]} {price.price}
               </span>
               <span>
-                {" "}
+                {' '}
                 {showCurrency[variant.currency]} {price.finalPrice}
               </span>
 
@@ -125,7 +125,7 @@ const ProductSidebar = ({
 
         <p className="text-xs">
           VAT included for UK orders. Duties and import taxes are calculated at
-          checkout for other customers Shipping calculated at checkout.{" "}
+          checkout for other customers Shipping calculated at checkout.{' '}
         </p>
 
         {!forSale ? (
@@ -168,7 +168,7 @@ const ProductSidebar = ({
               loading={loading}
               disabled={!variant.availableForSale}
             >
-              {variant?.availableForSale ? "Add To Cart" : "Not Available"}
+              {variant?.availableForSale ? 'Add To Cart' : 'Not Available'}
             </Button>
           </div>
         )}
@@ -182,14 +182,14 @@ const ProductSidebar = ({
       <ProductOptions product={product} setVariant={setVariant} />
 
       <section>
-        <Collapse title={"Product Details"}>
+        <Collapse title={'Product Details'}>
           {!!variant.details && (
             <div className="space-y-2">
               {/* <Text variant="bold">Product details:</Text> */}
 
               <ul
                 className="ml-2 space-y-1 mt-2"
-                style={{ listStyleType: "disc" }}
+                style={{ listStyleType: 'disc' }}
               >
                 {(variant.details as Detail[]).map(
                   (detail: Detail, index: number) => (
@@ -198,7 +198,7 @@ const ProductSidebar = ({
                       className="flex text-justify"
                     >
                       <Text className="font-semibold mr-1">
-                        {detail.title}:{" "}
+                        {detail.title}:{' '}
                       </Text>
                       <Text>{detail.description}</Text>
                     </li>
@@ -215,7 +215,7 @@ const ProductSidebar = ({
           )}
         </Collapse>
 
-        <Collapse title={"Care Instructions"}>
+        <Collapse title={'Care Instructions'}>
           {/* <Text variant="bold">Care Instructions</Text> */}
           <Text className="text-justify">
             Gently rinse with warm water and mild soap after use. Avoid soaking
@@ -224,7 +224,7 @@ const ProductSidebar = ({
           </Text>
         </Collapse>
 
-        <Collapse title={"About Pottery"}>
+        <Collapse title={'About Pottery'}>
           {/* <Text variant="bold">About Pottery</Text> */}
           <Text className="text-justify">
             Please expect some slight inperfections as every piece is hand made
@@ -242,7 +242,7 @@ const ProductSidebar = ({
         </Collapse>
       </section>
     </div>
-  );
-};
+  )
+}
 
-export default ProductSidebar;
+export default ProductSidebar

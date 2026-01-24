@@ -1,17 +1,17 @@
-"use client";
+'use client'
 
-import { CartItem } from "@components/cart";
-import { Container, Text, Button } from "@components/ui";
-import useCart from "@lib/hooks/useCart";
-import { CartLineItem } from "@lib/types/types";
-import { ShoppingBag } from "lucide-react";
-import Link from "next/link";
+import { CartItem } from '@components/cart'
+import { Container, Text, Button } from '@components/ui'
+import useCart from '@lib/hooks/useCart'
+import { CartLineItem } from '@lib/types/types'
+import { ShoppingBag } from 'lucide-react'
+import Link from 'next/link'
 
 export default function CartClient() {
-  const { data, isLoading, isEmpty } = useCart();
+  const { data, isLoading, isEmpty } = useCart()
 
   if (!isLoading)
-    return <Container className="py-20 text-center">Loading...</Container>;
+    return <Container className="py-20 text-center">Loading...</Container>
 
   if (isEmpty) {
     return (
@@ -19,7 +19,7 @@ export default function CartClient() {
         <ShoppingBag size={64} className="text-accent-4 mb-4" />
         <Text variant="heading">Your cart is empty</Text>
       </Container>
-    );
+    )
   }
 
   return (
@@ -59,5 +59,5 @@ export default function CartClient() {
         </Container>
       </div>
     </Container>
-  );
+  )
 }

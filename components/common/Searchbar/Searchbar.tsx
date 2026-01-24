@@ -27,7 +27,7 @@ const Searchbar: FC<Props> = ({ className, id = 'search' }) => {
           query: q ? { q } : {},
         },
         undefined,
-        { shallow: true }
+        { shallow: true },
       )
     }
   }

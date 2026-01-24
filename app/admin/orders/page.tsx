@@ -1,26 +1,26 @@
-import { Container, Text } from "@components/ui";
-import { getAllOrders } from "actions/order.actions";
-import { CheckCircle2, AlertCircle } from "lucide-react";
-import OrderTable from "@components/tables/OrderTable";
-import Loading from "app/loading";
-import { Suspense } from "react";
-import constructMetadata from "@components/common/SEO";
+import { Container, Text } from '@components/ui'
+import { getAllOrders } from 'actions/order.actions'
+import { CheckCircle2, AlertCircle } from 'lucide-react'
+import OrderTable from '@components/tables/OrderTable'
+import Loading from 'app/loading'
+import { Suspense } from 'react'
+import constructMetadata from '@components/common/SEO'
 
 export const metadata = constructMetadata({
-  title: "Orders Admin",
-  description: "Manage your store orders at Curly Pottery.",
-});
+  title: 'Orders Admin',
+  description: 'Manage your store orders at Curly Pottery.',
+})
 
 export default async function OrdersPage() {
-  const response = await getAllOrders();
+  const response = await getAllOrders()
 
   if (!response.success) {
-    throw new Error(response.message);
+    throw new Error(response.message)
   }
 
-  const orders = response.data ?? [];
-  const pendingOrders = orders.filter((o) => o.status === "PENDING");
-  const otherOrders = orders.filter((o) => o.status !== "PENDING");
+  const orders = response.data ?? []
+  const pendingOrders = orders.filter((o) => o.status === 'PENDING')
+  const otherOrders = orders.filter((o) => o.status !== 'PENDING')
 
   return (
     <Suspense fallback={<Loading />}>
@@ -51,5 +51,5 @@ export default async function OrdersPage() {
         </main>
       </Container>
     </Suspense>
-  );
+  )
 }

@@ -1,38 +1,38 @@
-"use client";
+'use client'
 
-import cn from "clsx";
-import { useTheme } from "next-themes";
-import { useParams, useRouter } from "next/navigation";
-import s from "./CustomerMenuContent.module.css";
+import cn from 'clsx'
+import { useTheme } from 'next-themes'
+import { useParams, useRouter } from 'next/navigation'
+import s from './CustomerMenuContent.module.css'
 import {
   DropdownContent,
   DropdownMenuItem,
-} from "@components/ui/Dropdown/Dropdown";
-import { Moon, Sun } from "lucide-react";
-import { useUser } from "@lib/hooks/useUser";
-import { signOut } from "next-auth/react";
+} from '@components/ui/Dropdown/Dropdown'
+import { Moon, Sun } from 'lucide-react'
+import { useUser } from '@lib/hooks/useUser'
+import { signOut } from 'next-auth/react'
 
 const LINKS = [
   {
-    name: "Shop",
-    href: "/shop",
+    name: 'Shop',
+    href: '/shop',
   },
   {
-    name: "Contact Us",
-    href: "/contacts",
+    name: 'Contact Us',
+    href: '/contacts',
   },
-];
+]
 
 export default function CustomerMenuContent() {
-  const params = useParams();
-  const router = useRouter();
-  const { isAdmin, isAuthenticated } = useUser();
+  const params = useParams()
+  const router = useRouter()
+  const { isAdmin, isAuthenticated } = useUser()
 
-  const pathname = params?.slug ? `/${params.slug}` : "/";
-  const { theme, setTheme } = useTheme();
+  const pathname = params?.slug ? `/${params.slug}` : '/'
+  const { theme, setTheme } = useTheme()
 
   function handleClick(href: string) {
-    router.push(href);
+    router.push(href)
   }
 
   return (
@@ -55,16 +55,16 @@ export default function CustomerMenuContent() {
       ))}
       <DropdownMenuItem>
         <a
-          className={cn(s.link, "justify-between")}
+          className={cn(s.link, 'justify-between')}
           onClick={() => {
-            setTheme(theme === "dark" ? "light" : "dark");
+            setTheme(theme === 'dark' ? 'light' : 'dark')
           }}
         >
           <div>
-            Theme: <strong>{theme}</strong>{" "}
+            Theme: <strong>{theme}</strong>{' '}
           </div>
           <div className="ml-3">
-            {theme == "dark" ? (
+            {theme == 'dark' ? (
               <Moon width={20} height={20} />
             ) : (
               <Sun width={20} height={20} />
@@ -74,13 +74,13 @@ export default function CustomerMenuContent() {
       </DropdownMenuItem>
       <DropdownMenuItem>
         {isAuthenticated ? (
-          <div className={cn("border-t border-secondary mt-2 pt-2 flex-col")}>
+          <div className={cn('border-t border-secondary mt-2 pt-2 flex-col')}>
             {isAdmin && (
-              <a className={s.link} onClick={() => handleClick("/admin")}>
+              <a className={s.link} onClick={() => handleClick('/admin')}>
                 Admin
               </a>
             )}
-            <a className={s.link} onClick={() => handleClick("/user")}>
+            <a className={s.link} onClick={() => handleClick('/user')}>
               My Account
             </a>
 
@@ -90,13 +90,13 @@ export default function CustomerMenuContent() {
           </div>
         ) : (
           <a
-            className={cn(s.link, "border-t border-accent-2 mt-4")}
-            onClick={() => handleClick("/auth/login")}
+            className={cn(s.link, 'border-t border-accent-2 mt-4')}
+            onClick={() => handleClick('/auth/login')}
           >
             Login
           </a>
         )}
       </DropdownMenuItem>
     </DropdownContent>
-  );
+  )
 }

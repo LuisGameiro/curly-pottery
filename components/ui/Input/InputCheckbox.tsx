@@ -1,25 +1,25 @@
-import { cn } from "@lib/utils";
-import s from "./Input.module.css";
-import React, { InputHTMLAttributes, useId } from "react";
+import { cn } from '@lib/utils'
+import s from './Input.module.css'
+import React, { InputHTMLAttributes, useId } from 'react'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  className?: string;
-  label?: string;
-  error?: string;
+  className?: string
+  label?: string
+  error?: string
 }
 
 const InputCheckbox = (props: InputProps) => {
-  const { label, error, id, ...rest } = props;
+  const { label, error, id, ...rest } = props
 
-  const generatedId = useId();
-  const inputId = id || generatedId;
-  const errorId = `${inputId}-error`;
+  const generatedId = useId()
+  const inputId = id || generatedId
+  const errorId = `${inputId}-error`
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (props.onChange) {
-      props.onChange(e);
+      props.onChange(e)
     }
-  };
+  }
 
   return (
     <div className={cn(s.container)}>
@@ -53,7 +53,7 @@ const InputCheckbox = (props: InputProps) => {
         </p>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default InputCheckbox;
+export default InputCheckbox

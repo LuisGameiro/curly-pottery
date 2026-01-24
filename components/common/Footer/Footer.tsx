@@ -1,36 +1,36 @@
-import Link from "next/link";
-import { Logo } from "@components/ui";
-import { I18nWidget } from "@components/common";
-import ThemeSwitcher from "@components/ui/ThemeSwitcher";
-import s from "./Footer.module.css";
+import Link from 'next/link'
+import { Logo } from '@components/ui'
+import { I18nWidget } from '@components/common'
+import ThemeSwitcher from '@components/ui/ThemeSwitcher'
+import s from './Footer.module.css'
 
 type Page = {
-  name: string;
-  url: string;
-};
+  name: string
+  url: string
+}
 
 const links: Page[] = [
   {
-    name: "FAQ",
-    url: "/faq",
+    name: 'FAQ',
+    url: '/faq',
   },
   {
-    name: "Contacts",
-    url: "/contacts",
+    name: 'Contacts',
+    url: '/contacts',
   },
   {
-    name: "About",
-    url: "/about",
+    name: 'About',
+    url: '/about',
   },
   {
-    name: "Terms of Service",
-    url: "/terms",
+    name: 'Terms of Service',
+    url: '/terms',
   },
   {
-    name: "Privacy Policy",
-    url: "/privacy",
+    name: 'Privacy Policy',
+    url: '/privacy',
   },
-];
+]
 
 const Footer = () => {
   return (
@@ -62,7 +62,7 @@ const Footer = () => {
         <span>Created by Luis Gameiro</span>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

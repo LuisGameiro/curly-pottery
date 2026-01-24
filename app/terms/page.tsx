@@ -1,11 +1,11 @@
-import constructMetadata from "@components/common/SEO/SEO";
-import { Container, Text } from "@components/ui";
+import constructMetadata from '@components/common/SEO/SEO'
+import { Container, Text } from '@components/ui'
 
 export const metadata = constructMetadata({
-  title: "Terms of Service",
+  title: 'Terms of Service',
   description:
-    "Read the legal agreement between you and Curly Pottery. Understand the terms governing your use of our handcrafted pottery products and services.",
-});
+    'Read the legal agreement between you and Curly Pottery. Understand the terms governing your use of our handcrafted pottery products and services.',
+})
 
 export default function TermsOfService() {
   return (
@@ -54,5 +54,5 @@ export default function TermsOfService() {
         </Text>
       </section>
     </Container>
-  );
+  )
 }

@@ -1,11 +1,11 @@
-import { MouseEventHandler, memo } from "react";
-import cn from "clsx";
-import s from "./ProductSliderControl.module.css";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { MouseEventHandler, memo } from 'react'
+import cn from 'clsx'
+import s from './ProductSliderControl.module.css'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 
 interface ProductSliderControl {
-  onPrev: MouseEventHandler<HTMLButtonElement>;
-  onNext: MouseEventHandler<HTMLButtonElement>;
+  onPrev: MouseEventHandler<HTMLButtonElement>
+  onNext: MouseEventHandler<HTMLButtonElement>
 }
 
 const ProductSliderControl = ({ onPrev, onNext }: ProductSliderControl) => (
@@ -25,6 +25,6 @@ const ProductSliderControl = ({ onPrev, onNext }: ProductSliderControl) => (
       <ArrowRight />
     </button>
   </div>
-);
+)
 
-export default memo(ProductSliderControl);
+export default memo(ProductSliderControl)

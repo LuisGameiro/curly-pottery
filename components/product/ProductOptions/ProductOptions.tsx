@@ -1,33 +1,33 @@
-"use client";
+'use client'
 
-import { memo, useMemo, useState } from "react";
-import { Text } from "@components/ui";
-import { ProductWithVariantsCategories, Variant } from "@lib/types/types";
-import { createVariantMatrix } from "../helpers";
+import { memo, useMemo, useState } from 'react'
+import { Text } from '@components/ui'
+import { ProductWithVariantsCategories, Variant } from '@lib/types/types'
+import { createVariantMatrix } from '../helpers'
 
 interface ProductOptionsProps {
-  product: ProductWithVariantsCategories;
-  setVariant: (variant: Variant) => void;
+  product: ProductWithVariantsCategories
+  setVariant: (variant: Variant) => void
 }
 
 const ProductOptions = ({ product, setVariant }: ProductOptionsProps) => {
   const matrix = useMemo(
     () => createVariantMatrix(product.variants),
     [product.variants],
-  );
+  )
 
   const [selectedSize, setSelectedSize] = useState<string>(
     Object.keys(matrix)[0],
-  );
+  )
 
   const [selectedColor, setSelectedColor] = useState<string>(
     Object.keys(matrix[Object.keys(matrix)[0]])[0],
-  );
+  )
 
-  const allSizes = Object.keys(matrix);
+  const allSizes = Object.keys(matrix)
   const allColors = Array.from(
     new Set(product.variants.flatMap((v: Variant) => v.colorName)),
-  ) as string[];
+  ) as string[]
 
   return (
     <div className="space-y-6">
@@ -40,21 +40,21 @@ const ProductOptions = ({ product, setVariant }: ProductOptionsProps) => {
                 key={size}
                 className={`px-4 py-2 mr-2 rounded-md border border-border
 
-                  ${selectedSize === size ? "bg-green-500" : "bg-primary"}`}
+                  ${selectedSize === size ? 'bg-green-500' : 'bg-primary'}`}
                 onClick={() => {
-                  const colorToUse = matrix[size]?.[selectedColor ?? ""]
+                  const colorToUse = matrix[size]?.[selectedColor ?? '']
                     ?.variantId
                     ? selectedColor
-                    : Object.keys(matrix[size] ?? {})[0];
+                    : Object.keys(matrix[size] ?? {})[0]
 
                   const variantToSet = product.variants.find(
                     (v: Variant) =>
-                      v.id === matrix[size]?.[colorToUse ?? ""]?.variantId,
-                  );
+                      v.id === matrix[size]?.[colorToUse ?? '']?.variantId,
+                  )
 
-                  if (variantToSet) setVariant(variantToSet);
-                  setSelectedColor(colorToUse);
-                  setSelectedSize(size);
+                  if (variantToSet) setVariant(variantToSet)
+                  setSelectedColor(colorToUse)
+                  setSelectedSize(size)
                 }}
               >
                 <Text variant="bold">{size}</Text>
@@ -72,7 +72,7 @@ const ProductOptions = ({ product, setVariant }: ProductOptionsProps) => {
                 <button
                   key={color}
                   className={`px-4 py-2 mr-2 border rounded-md 
-                    ${matrix[selectedSize]?.[color]?.isAvailable ? (selectedColor === color ? "bg-green-500" : "bg-primary") : "bg-gray-500"}`}
+                    ${matrix[selectedSize]?.[color]?.isAvailable ? (selectedColor === color ? 'bg-green-500' : 'bg-primary') : 'bg-gray-500'}`}
                   disabled={
                     matrix[selectedSize]?.[color]?.isAvailable === false
                   }
@@ -82,19 +82,19 @@ const ProductOptions = ({ product, setVariant }: ProductOptionsProps) => {
                         (v: Variant) =>
                           v.id === matrix[selectedSize][color]?.variantId,
                       )!,
-                    );
-                    setSelectedColor(color);
+                    )
+                    setSelectedColor(color)
                   }}
                 >
                   <Text variant="bold">{color}</Text>
                 </button>
-              );
+              )
             })}
           </div>
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default memo(ProductOptions);
+export default memo(ProductOptions)

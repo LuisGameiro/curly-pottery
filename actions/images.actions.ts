@@ -1,4 +1,4 @@
-import { ActionResponse } from "@lib/types/types";
+import { ActionResponse } from '@lib/types/types'
 // import { put, del } from "@vercel/blob";
 
 // export async function uploadImages(
@@ -77,38 +77,38 @@ export const uploadImagesToBlob = async (
 ): Promise<string[]> => {
   const uploadPromises = items.map(async (item) => {
     // 1. Check if it is already a permanent URL (string)
-    if (typeof item === "string") {
-      return item;
+    if (typeof item === 'string') {
+      return item
     }
     // 2. If it is a File object, perform the upload
     try {
-      const formData = new FormData();
-      formData.append("file", item);
+      const formData = new FormData()
+      formData.append('file', item)
 
-      const response = await fetch("/api/upload", {
-        method: "POST",
+      const response = await fetch('/api/upload', {
+        method: 'POST',
         body: formData,
-      });
+      })
 
-      if (!response.ok) throw new Error("Upload failed");
+      if (!response.ok) throw new Error('Upload failed')
 
-      const data = await response.json();
-      return data.url; // The new permanent URL from your blob storage
+      const data = await response.json()
+      return data.url // The new permanent URL from your blob storage
     } catch (error) {
-      console.error("Error uploading file:", item.name, error);
-      throw error;
+      console.error('Error uploading file:', item.name, error)
+      throw error
     }
-  });
+  })
 
-  return Promise.all(uploadPromises);
-};
+  return Promise.all(uploadPromises)
+}
 
 const generateRandomImages = (amount: number, width = 600, height = 400) => {
   return Array.from({ length: amount }, () => {
-    const randomId = Math.floor(Math.random() * 1000);
-    return `https://picsum.photos/seed/${randomId}/${width}/${height}`;
-  });
-};
+    const randomId = Math.floor(Math.random() * 1000)
+    return `https://picsum.photos/seed/${randomId}/${width}/${height}`
+  })
+}
 
 export async function syncImages(
   currentItems: (File | string)[],
@@ -116,62 +116,62 @@ export async function syncImages(
 ): Promise<ActionResponse<string[]>> {
   return {
     success: true,
-    message: "Upload images successfully",
+    message: 'Upload images successfully',
     data: generateRandomImages(currentItems.length) ?? [],
-  };
+  }
 
   try {
     // 1. Identify images to delete
     // (Items that are in existingUrls but NOT in currentItems)
     const urlsToDelete = existingUrls.filter(
       (oldUrl) => !currentItems.includes(oldUrl),
-    );
+    )
 
     // 2. Perform deletions
     await Promise.all(
       urlsToDelete.map(async (url) => {
         try {
-          await fetch("/api/upload/delete", {
-            method: "POST",
+          await fetch('/api/upload/delete', {
+            method: 'POST',
             body: JSON.stringify({ url }),
-          });
+          })
         } catch (e) {
-          console.error("Failed to delete orphaned image:", url, e);
+          console.error('Failed to delete orphaned image:', url, e)
         }
       }),
-    );
+    )
 
     // 3. Upload new files and return the full list of strings
     const finalUrls = await Promise.all(
       currentItems.map(async (item) => {
-        if (typeof item === "string") return item; // Keep existing
+        if (typeof item === 'string') return item // Keep existing
 
-        const formData = new FormData();
-        formData.append("file", item);
+        const formData = new FormData()
+        formData.append('file', item)
 
-        const res = await fetch("/api/upload", {
-          method: "POST",
+        const res = await fetch('/api/upload', {
+          method: 'POST',
           body: formData,
-        });
-        const data = await res.json();
-        return data.url;
+        })
+        const data = await res.json()
+        return data.url
       }),
-    );
+    )
 
     return {
       success: true,
-      message: "Upload images successfully",
+      message: 'Upload images successfully',
       data: finalUrls,
-    };
+    }
   } catch (error) {
-    console.error("uploadImages_ERROR:", error);
+    console.error('uploadImages_ERROR:', error)
     return {
       success: false,
       message:
         error instanceof Error
           ? JSON.stringify(error)
-          : "A database error occurred",
+          : 'A database error occurred',
       errors: error,
-    };
+    }
   }
 }

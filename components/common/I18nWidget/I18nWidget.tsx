@@ -1,46 +1,46 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import s from "./I18nWidget.module.css";
-import Image from "next/image";
-import { cn } from "@lib/utils";
-import { ChevronRight } from "lucide-react";
-import { useClickOutside } from "@lib/hooks/useClickOutside";
+import { useState } from 'react'
+import s from './I18nWidget.module.css'
+import Image from 'next/image'
+import { cn } from '@lib/utils'
+import { ChevronRight } from 'lucide-react'
+import { useClickOutside } from '@lib/hooks/useClickOutside'
 
 interface LOCALE_DATA {
-  name: string;
+  name: string
   img: {
-    filename: string;
-    alt: string;
-  };
+    filename: string
+    alt: string
+  }
 }
 
 const LOCALES_MAP: Record<string, LOCALE_DATA> = {
   es: {
-    name: "Español",
+    name: 'Español',
     img: {
-      filename: "flag-es-co.svg",
-      alt: "Bandera española",
+      filename: 'flag-es-co.svg',
+      alt: 'Bandera española',
     },
   },
-  "en-UK": {
-    name: "English",
+  'en-UK': {
+    name: 'English',
     img: {
-      filename: "flag-en-uk.svg",
-      alt: "Uk Flag",
+      filename: 'flag-en-uk.svg',
+      alt: 'Uk Flag',
     },
   },
-};
+}
 
 export const i18n = {
-  defaultLocale: "en",
-  locales: ["en", "de", "fr", "es"],
-} as const;
+  defaultLocale: 'en',
+  locales: ['en', 'de', 'fr', 'es'],
+} as const
 
 // type Locale = (typeof i18n)["locales"][number];
 
 const I18nWidget = () => {
-  const [display, setDisplay] = useState(false);
+  const [display, setDisplay] = useState(false)
   // const params = useParams();
 
   // const locale = params.locale as Locale;
@@ -48,11 +48,11 @@ const I18nWidget = () => {
   // const defaultLocale = i18n.defaultLocale;
   // const currentPath =
   //   typeof window !== "undefined" ? window.location.pathname : "/";
-  const currentLocale = "en-UK"; //locale || defaultLocale;
-  const options = null; //locales.filter((val) => val !== currentLocale);
+  const currentLocale = 'en-UK' //locale || defaultLocale;
+  const options = null //locales.filter((val) => val !== currentLocale);
   const containerRef = useClickOutside<HTMLDivElement>(() => {
-    setDisplay(false);
-  }, display);
+    setDisplay(false)
+  }, display)
 
   return (
     <nav ref={containerRef} className={s.root}>
@@ -107,7 +107,7 @@ const I18nWidget = () => {
           ) : null}
         </div> */}
     </nav>
-  );
-};
+  )
+}
 
-export default I18nWidget;
+export default I18nWidget

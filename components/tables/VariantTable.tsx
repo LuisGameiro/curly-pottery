@@ -1,18 +1,18 @@
-"use client";
+'use client'
 
-import DataTable from "@components/ui/Table/DataTable";
-import { Variant } from "@lib/types/types";
+import DataTable from '@components/ui/Table/DataTable'
+import { Variant } from '@lib/types/types'
 
 export default function VariantTable({ variants }: { variants: Variant[] }) {
   const variantColumns = [
     {
-      header: "SKU",
+      header: 'SKU',
       render: (v: Variant) => (
         <span className="text-secondary font-mono">{v.sku}</span>
       ),
     },
     {
-      header: "Size / Color",
+      header: 'Size / Color',
       render: (v: Variant) => (
         <span>
           {v.sizeName} {v.colorName && `• ${v.colorName}`}
@@ -20,31 +20,31 @@ export default function VariantTable({ variants }: { variants: Variant[] }) {
       ),
     },
     {
-      header: "Price",
-      align: "center" as const,
+      header: 'Price',
+      align: 'center' as const,
       render: (v: Variant) => `£${v.price}`,
     },
     {
-      header: "Stock",
-      align: "center" as const,
+      header: 'Stock',
+      align: 'center' as const,
       render: (v: Variant) => v.stock,
     },
     {
-      header: "Discount",
-      align: "center" as const,
-      render: (v: Variant) => (v.discounts ? "Active" : "None"),
+      header: 'Discount',
+      align: 'center' as const,
+      render: (v: Variant) => (v.discounts ? 'Active' : 'None'),
     },
     {
-      header: "Status",
-      align: "center" as const,
+      header: 'Status',
+      align: 'center' as const,
       render: (v: Variant) => (
         <span
-          className={v.availableForSale ? "text-green-600" : "text-slate-400"}
+          className={v.availableForSale ? 'text-green-600' : 'text-slate-400'}
         >
-          {v.availableForSale ? "Active" : "Hidden"}
+          {v.availableForSale ? 'Active' : 'Hidden'}
         </span>
       ),
     },
-  ];
-  return <DataTable data={variants} columns={variantColumns} />;
+  ]
+  return <DataTable data={variants} columns={variantColumns} />
 }

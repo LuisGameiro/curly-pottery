@@ -1,18 +1,18 @@
-"use client";
+'use client'
 
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from 'react-hook-form'
 
-import { Container, Text, Input } from "@components/ui";
-import { slugify } from "@lib/slugify";
-import InputTextArea from "@components/ui/Input/InputTextArea";
-import InputImage from "@components/ui/Input/InputImage";
-import InputCheckbox from "@components/ui/Input/InputCheckbox";
-import { Category } from "@lib/types/types";
+import { Container, Text, Input } from '@components/ui'
+import { slugify } from '@lib/slugify'
+import InputTextArea from '@components/ui/Input/InputTextArea'
+import InputImage from '@components/ui/Input/InputImage'
+import InputCheckbox from '@components/ui/Input/InputCheckbox'
+import { Category } from '@lib/types/types'
 
 export default function GeneralInformationSection({
   categories,
 }: {
-  categories: Category[];
+  categories: Category[]
 }) {
   const {
     register,
@@ -20,8 +20,8 @@ export default function GeneralInformationSection({
     watch,
     setValue,
     formState: { errors },
-  } = useFormContext();
-  const productName = watch("name");
+  } = useFormContext()
+  const productName = watch('name')
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -30,7 +30,7 @@ export default function GeneralInformationSection({
         <div className="space-y-4">
           <Input
             label="Product Name"
-            {...register("name")}
+            {...register('name')}
             error={errors.name?.message as string}
             type="text"
             placeholder="e.g. vase"
@@ -38,14 +38,14 @@ export default function GeneralInformationSection({
 
           <div className="gap-2">
             <span className=" font-semibold mr-2">Slug: </span>
-            <span>{"/" + slugify(productName || "")} </span>
+            <span>{'/' + slugify(productName || '')} </span>
           </div>
 
           <InputTextArea
             label="Description"
             className="flex h-40"
             error={errors.description?.message as string}
-            {...register("description")}
+            {...register('description')}
             placeholder="e.g. vase dedcor description"
           />
         </div>
@@ -57,7 +57,7 @@ export default function GeneralInformationSection({
           <div className="space-y-4">
             <InputCheckbox
               label="Requires Shipping"
-              {...register("requiresShipping")}
+              {...register('requiresShipping')}
             />
             <div>
               <label>Categories</label>
@@ -66,27 +66,27 @@ export default function GeneralInformationSection({
                 control={control}
                 rules={{
                   validate: (val) =>
-                    val.length > 0 || "Select at least one category",
+                    val.length > 0 || 'Select at least one category',
                 }}
                 render={({ field }) => (
                   <div
-                    className={`flex flex-wrap gap-1 mt-2 ${errors?.categoryIds ? "border border-red-500" : ""}`}
+                    className={`flex flex-wrap gap-1 mt-2 ${errors?.categoryIds ? 'border border-red-500' : ''}`}
                   >
                     {categories.map((cat) => (
                       <button
                         key={cat.id}
                         type="button"
                         onClick={() => {
-                          const current = field.value;
+                          const current = field.value
                           const next = current.includes(cat.id)
                             ? current.filter((id: string) => id !== cat.id)
-                            : [...current, cat.id];
-                          field.onChange(next);
+                            : [...current, cat.id]
+                          field.onChange(next)
                         }}
                         className={`px-3 py-1 rounded-full text-xs border transition ${
                           field.value.includes(cat.id)
-                            ? "bg-primary text-accent-6 border-primary  hover:bg-primary/60"
-                            : "bg-accent-8 text-accent-0 hover:bg-accent-6"
+                            ? 'bg-primary text-accent-6 border-primary  hover:bg-primary/60'
+                            : 'bg-accent-8 text-accent-0 hover:bg-accent-6'
                         }`}
                       >
                         {cat.name}
@@ -113,10 +113,10 @@ export default function GeneralInformationSection({
               <InputImage
                 multiple={false}
                 files={value}
-                previews={watch("previews")}
+                previews={watch('previews')}
                 onImagesChange={({ files, previews }) => {
-                  onChange(files);
-                  setValue("previews", previews);
+                  onChange(files)
+                  setValue('previews', previews)
                 }}
                 error={errors.files?.message as string}
               />
@@ -125,5 +125,5 @@ export default function GeneralInformationSection({
         </Container>
       </div>
     </div>
-  );
+  )
 }

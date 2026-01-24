@@ -1,17 +1,17 @@
-import React, { CSSProperties } from "react";
-import cn from "clsx";
-import px from "@lib/to-pixels";
-import s from "./Skeleton.module.css";
+import React, { CSSProperties } from 'react'
+import cn from 'clsx'
+import px from '@lib/to-pixels'
+import s from './Skeleton.module.css'
 
 interface SkeletonProps {
-  show?: boolean;
-  block?: boolean;
-  className?: string;
-  style?: CSSProperties;
-  width?: string | number;
-  height?: string | number;
-  boxHeight?: string | number;
-  children?: React.ReactNode;
+  show?: boolean
+  block?: boolean
+  className?: string
+  style?: CSSProperties
+  width?: string | number
+  height?: string | number
+  boxHeight?: string | number
+  children?: React.ReactNode
 }
 
 const Skeleton = ({
@@ -25,11 +25,11 @@ const Skeleton = ({
 }: SkeletonProps) => {
   // Automatically calculate the size if there are children
   // and no fixed sizes are specified
-  const shouldAutoSize = !!children && !(width || height);
+  const shouldAutoSize = !!children && !(width || height)
 
-  width = width || 24;
-  height = height || 24;
-  boxHeight = boxHeight || height;
+  width = width || 24
+  height = height || 24
+  boxHeight = boxHeight || height
 
   return (
     <span
@@ -51,7 +51,7 @@ const Skeleton = ({
     >
       {children}
     </span>
-  );
-};
+  )
+}
 
-export default Skeleton;
+export default Skeleton

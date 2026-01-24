@@ -1,6 +1,6 @@
-import Image from "next/image";
+import Image from 'next/image'
 
-const Logo = ({ className = "", ...props }) => (
+const Logo = ({ className = '', ...props }) => (
   <Image
     src="/Logo.png"
     alt="Logo"
@@ -10,6 +10,6 @@ const Logo = ({ className = "", ...props }) => (
     className={className}
     {...props}
   />
-);
+)
 
-export default Logo;
+export default Logo

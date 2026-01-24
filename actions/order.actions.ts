@@ -1,14 +1,14 @@
-"use server";
+'use server'
 
-import { prisma } from "prisma/prisma";
+import { prisma } from 'prisma/prisma'
 import {
   Order,
   OrderStatus,
   OrderWithUser,
   ActionResponse,
   CreateOrder,
-} from "@lib/types/types";
-import { revalidatePath } from "next/cache";
+} from '@lib/types/types'
+import { revalidatePath } from 'next/cache'
 
 export async function getAllOrders(): Promise<
   ActionResponse<OrderWithUser[] | null>
@@ -16,26 +16,26 @@ export async function getAllOrders(): Promise<
   try {
     const order = await prisma.order.findMany({
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
       include: {
         user: true,
       },
-    });
+    })
 
     return {
       success: true,
-      message: "Fetched all orders successfully",
+      message: 'Fetched all orders successfully',
       data: order,
-    };
+    }
   } catch (error) {
-    console.error("getAllOrders_ERROR:", error);
+    console.error('getAllOrders_ERROR:', error)
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : "A database error occurred",
+        error instanceof Error ? error.message : 'A database error occurred',
       errors: error,
-    };
+    }
   }
 }
 
@@ -46,26 +46,26 @@ export async function getOrdersById(
     const order = await prisma.order.findMany({
       where: { userId: id },
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
       include: {
         user: true,
       },
-    });
+    })
 
     return {
       success: true,
-      message: "Fetched order successfully",
+      message: 'Fetched order successfully',
       data: order,
-    };
+    }
   } catch (error) {
-    console.error("getOrderById_ERROR:", error);
+    console.error('getOrderById_ERROR:', error)
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : "A database error occurred",
+        error instanceof Error ? error.message : 'A database error occurred',
       errors: error,
-    };
+    }
   }
 }
 
@@ -79,21 +79,21 @@ export async function getOrderById(
       include: {
         user: true,
       },
-    });
+    })
 
     return {
       success: true,
-      message: "Fetched order successfully",
+      message: 'Fetched order successfully',
       data: order,
-    };
+    }
   } catch (error) {
-    console.error("getOrderById_ERROR:", error);
+    console.error('getOrderById_ERROR:', error)
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : "A database error occurred",
+        error instanceof Error ? error.message : 'A database error occurred',
       errors: error,
-    };
+    }
   }
 }
 
@@ -122,10 +122,10 @@ export async function createOrder({
         email,
         phone,
         discounts: discounts || [],
-        currency: currency || "GBP",
+        currency: currency || 'GBP',
         shippingAddress: address || {},
         billingAddress: address || {},
-        status: "PENDING",
+        status: 'PENDING',
         taxes,
         shippingPrice: shippingPrice,
         subtotalPrice: Number(subtotalPrice) || 0,
@@ -137,28 +137,28 @@ export async function createOrder({
           },
         }),
       },
-    });
+    })
 
     await prisma.user.update({
-      where: { id: userId || "" },
+      where: { id: userId || '' },
       data: {
         cart: {},
       },
-    });
+    })
 
     return {
       success: true,
-      message: "Order created successfully",
+      message: 'Order created successfully',
       data: order,
-    };
+    }
   } catch (error) {
-    console.error("createOrder", error);
+    console.error('createOrder', error)
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : "A database error occurred",
+        error instanceof Error ? error.message : 'A database error occurred',
       errors: error,
-    };
+    }
   }
 }
 
@@ -167,27 +167,27 @@ export async function updateOrderStatus(
   newStatus: string,
 ): Promise<ActionResponse<Order | null>> {
   try {
-    const status = newStatus.toUpperCase() as OrderStatus;
+    const status = newStatus.toUpperCase() as OrderStatus
 
     const order = await prisma.order.update({
       where: { id: orderId },
       data: { status },
-    });
+    })
 
-    revalidatePath("/admin/orders");
+    revalidatePath('/admin/orders')
     return {
       success: true,
-      message: "Updated order status successfully",
+      message: 'Updated order status successfully',
       data: order,
-    };
+    }
   } catch (error) {
-    console.error("updateOrderStatus_ERROR:", error);
+    console.error('updateOrderStatus_ERROR:', error)
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : "A database error occurred",
+        error instanceof Error ? error.message : 'A database error occurred',
       errors: error,
-    };
+    }
   }
 }
 

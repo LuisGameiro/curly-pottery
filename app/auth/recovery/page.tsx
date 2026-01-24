@@ -1,12 +1,12 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { Container, Text, Button, Input } from "@components/ui";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import { toast } from "sonner";
-import { sendResetEmail } from "actions/email.actions";
-import zod from "zod";
+import { useState } from 'react'
+import { Container, Text, Button, Input } from '@components/ui'
+import { ArrowLeft } from 'lucide-react'
+import Link from 'next/link'
+import { toast } from 'sonner'
+import { sendResetEmail } from 'actions/email.actions'
+import zod from 'zod'
 
 // export const metadata = constructMetadata({
 //   title: "Recovery Account",
@@ -15,36 +15,36 @@ import zod from "zod";
 // });
 
 export default function RecoveryForm() {
-  const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
+    e.preventDefault()
+    setLoading(true)
 
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email");
+    const formData = new FormData(e.currentTarget)
+    const email = formData.get('email')
 
     if (
       zod.email().safeParse(email).success === false &&
       typeof email === null
     ) {
-      toast.error("Please enter a valid email address.");
-      setLoading(false);
-      return;
+      toast.error('Please enter a valid email address.')
+      setLoading(false)
+      return
     }
     try {
-      await sendResetEmail(email as string);
+      await sendResetEmail(email as string)
 
-      console.log("Recovery email sent to:", email);
-      setSubmitted(true);
-      toast.success("Reset link sent to your email");
+      console.log('Recovery email sent to:', email)
+      setSubmitted(true)
+      toast.success('Reset link sent to your email')
     } catch {
-      toast.error("Something went wrong. Please try again.");
+      toast.error('Something went wrong. Please try again.')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <Container className="p-10">
@@ -97,5 +97,5 @@ export default function RecoveryForm() {
         </div>
       </main>
     </Container>
-  );
+  )
 }

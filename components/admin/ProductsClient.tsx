@@ -1,19 +1,19 @@
-"use client";
+'use client'
 
-import { Button, Container, Text } from "@components/ui";
-import Link from "next/link";
-import { useState, useMemo } from "react";
-import { ProductWithVariantsCategories, Variant } from "@lib/types/types";
-import InputSearch from "@components/ui/Input/InputSearch";
-import ProductTable from "@components/tables/ProductTable";
-import { Plus } from "lucide-react";
+import { Button, Container, Text } from '@components/ui'
+import Link from 'next/link'
+import { useState, useMemo } from 'react'
+import { ProductWithVariantsCategories, Variant } from '@lib/types/types'
+import InputSearch from '@components/ui/Input/InputSearch'
+import ProductTable from '@components/tables/ProductTable'
+import { Plus } from 'lucide-react'
 
 export default function ProductsClient({
   products,
 }: {
-  products: ProductWithVariantsCategories[];
+  products: ProductWithVariantsCategories[]
 }) {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('')
   const filteredProducts = useMemo(() => {
     const items = products.filter(
       (p) =>
@@ -21,10 +21,10 @@ export default function ProductsClient({
         p.variants.some((v: Variant) =>
           v.sku.toLowerCase().includes(searchTerm.toLowerCase()),
         ),
-    );
+    )
 
-    return items;
-  }, [products, searchTerm]);
+    return items
+  }, [products, searchTerm])
 
   return (
     <Container>
@@ -55,5 +55,5 @@ export default function ProductsClient({
 
       <ProductTable products={filteredProducts} />
     </Container>
-  );
+  )
 }

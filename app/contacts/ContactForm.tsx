@@ -1,27 +1,27 @@
-"use client";
+'use client'
 
-import { Text, Button, Input } from "@components/ui";
-import InputTextArea from "@components/ui/Input/InputTextArea";
-import { ContactFormEmail } from "@lib/emails/ContactFormEmail";
-import { sendEmail } from "actions/email.actions";
-import React, { useState } from "react";
-import { toast } from "sonner";
+import { Text, Button, Input } from '@components/ui'
+import InputTextArea from '@components/ui/Input/InputTextArea'
+import { ContactFormEmail } from '@lib/emails/ContactFormEmail'
+import { sendEmail } from 'actions/email.actions'
+import React, { useState } from 'react'
+import { toast } from 'sonner'
 
 interface FormData {
-  name: string;
-  email: string;
-  message: string;
+  name: string
+  email: string
+  message: string
 }
 
 export default function ContactForm() {
   const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    message: "",
-  });
+    name: '',
+    email: '',
+    message: '',
+  })
   const [status, setStatus] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
+    'idle' | 'loading' | 'success' | 'error'
+  >('idle')
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -29,36 +29,36 @@ export default function ContactForm() {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    });
-  };
+    })
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
-      setStatus("loading");
+      setStatus('loading')
 
       const response = await sendEmail({
-        to: "curly.pottery@gmail.com",
-        subject: "New Message",
+        to: 'curly.pottery@gmail.com',
+        subject: 'New Message',
         body: ContactFormEmail(formData),
-      });
-      console.log(response);
+      })
+      console.log(response)
 
       if (response.data) {
-        setStatus("success");
-        toast("Thank you for your message! We will be in touch soon.");
-        setFormData({ name: "", email: "", message: "" });
+        setStatus('success')
+        toast('Thank you for your message! We will be in touch soon.')
+        setFormData({ name: '', email: '', message: '' })
       } else {
-        setStatus("error");
-        toast("There was an error sending your message. Please try again.");
+        setStatus('error')
+        toast('There was an error sending your message. Please try again.')
       }
     } catch (error) {
-      console.error("Submission error:", error);
-      setStatus("error");
+      console.error('Submission error:', error)
+      setStatus('error')
 
-      toast("An unexpected error occurred. Please check your connection.");
+      toast('An unexpected error occurred. Please check your connection.')
     }
-  };
+  }
 
   return (
     <section className="w-full">
@@ -95,12 +95,12 @@ export default function ContactForm() {
           <Button
             type="submit"
             variant="secondary"
-            disabled={status === "loading" || status === "success"}
+            disabled={status === 'loading' || status === 'success'}
           >
-            {status === "loading" ? "Sending..." : "Send Message"}
+            {status === 'loading' ? 'Sending...' : 'Send Message'}
           </Button>
         </div>
       </form>
     </section>
-  );
+  )
 }

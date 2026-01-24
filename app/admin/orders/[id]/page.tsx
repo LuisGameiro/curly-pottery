@@ -1,42 +1,42 @@
-import { Container, Text } from "@components/ui";
-import Image from "next/image";
-import { ArrowLeft, Package, MapPin, User } from "lucide-react";
-import Link from "next/link";
-import { getOrderById } from "actions/order.actions";
-import OrderStatusUpdate from "../../../../components/admin/orderStatusUpdate";
-import { showCurrency } from "@lib/calculate-price";
-import { Address, CartLineItem, Order } from "@lib/types/types";
-import notFound from "app/not-found";
-import Loading from "app/loading";
-import { Suspense } from "react";
-import constructMetadata from "@components/common/SEO";
+import { Container, Text } from '@components/ui'
+import Image from 'next/image'
+import { ArrowLeft, Package, MapPin, User } from 'lucide-react'
+import Link from 'next/link'
+import { getOrderById } from 'actions/order.actions'
+import OrderStatusUpdate from '../../../../components/admin/orderStatusUpdate'
+import { showCurrency } from '@lib/calculate-price'
+import { Address, CartLineItem, Order } from '@lib/types/types'
+import notFound from 'app/not-found'
+import Loading from 'app/loading'
+import { Suspense } from 'react'
+import constructMetadata from '@components/common/SEO'
 
 export const metadata = constructMetadata({
-  title: "Order Admin",
-  description: "Manage your store order at Curly Pottery.",
-});
+  title: 'Order Admin',
+  description: 'Manage your store order at Curly Pottery.',
+})
 
 export default async function OrderDetailsPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>
 }) {
-  const { id } = await params;
+  const { id } = await params
 
-  const response = await getOrderById(id);
+  const response = await getOrderById(id)
   if (!response.success) {
-    throw new Error(response.message);
+    throw new Error(response.message)
   }
 
   if (!response.data) {
-    return notFound();
+    return notFound()
   }
 
-  const lineItems = response.data.lineItems as CartLineItem[];
-  const address = response.data.shippingAddress as unknown as Address;
-  const user = response.data.user;
+  const lineItems = response.data.lineItems as CartLineItem[]
+  const address = response.data.shippingAddress as unknown as Address
+  const user = response.data.user
 
-  const order = response.data as Order;
+  const order = response.data as Order
 
   return (
     <Suspense fallback={<Loading />}>
@@ -94,7 +94,7 @@ export default async function OrderDetailsPage({
                     </div>
                     <div className="text-right">
                       <Text className="text-sm font-medium">
-                        {showCurrency[order.currency]}{" "}
+                        {showCurrency[order.currency]}{' '}
                         {Number(item.price).toFixed(2)}
                       </Text>
                       <Text className="text-xs text-muted-foreground">
@@ -108,16 +108,16 @@ export default async function OrderDetailsPage({
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
                   <span>
-                    {showCurrency[order.currency]}{" "}
+                    {showCurrency[order.currency]}{' '}
                     {order.subtotalPrice.toFixed(2)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">
-                    Shipping {order.taxesIncluded && "(Included)"}
+                    Shipping {order.taxesIncluded && '(Included)'}
                   </span>
                   <span>
-                    {showCurrency[order.currency]}{" "}
+                    {showCurrency[order.currency]}{' '}
                     {Number(order.shippingPrice).toFixed(2) || 0.0}
                   </span>
                 </div>
@@ -145,7 +145,7 @@ export default async function OrderDetailsPage({
               </div>
               <div>
                 <Text>
-                  {user?.firstName || order?.firstName}{" "}
+                  {user?.firstName || order?.firstName}{' '}
                   {user?.lastName || order?.lastName}
                 </Text>
                 <Text>{order.email}</Text>
@@ -174,5 +174,5 @@ export default async function OrderDetailsPage({
         </div>
       </Container>
     </Suspense>
-  );
+  )
 }

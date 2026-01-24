@@ -1,72 +1,72 @@
-"use client";
+'use client'
 
-import React, { useState } from "react";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import { slugify } from "@lib/slugify";
-import { Button, Container, Input, Text } from "@components/ui";
-import { CategorySchema } from "@lib/form-validator";
-import { useRouter } from "next/navigation";
-import { upsertCategory } from "actions/category.actions";
-import InputImage from "@components/ui/Input/InputImage";
-import Loading from "app/loading";
-import { Category } from "@lib/types/types";
-import { toast } from "sonner";
-import { syncImages } from "actions/images.actions";
+import React, { useState } from 'react'
+import { ArrowLeft } from 'lucide-react'
+import Link from 'next/link'
+import { slugify } from '@lib/slugify'
+import { Button, Container, Input, Text } from '@components/ui'
+import { CategorySchema } from '@lib/form-validator'
+import { useRouter } from 'next/navigation'
+import { upsertCategory } from 'actions/category.actions'
+import InputImage from '@components/ui/Input/InputImage'
+import Loading from 'app/loading'
+import { Category } from '@lib/types/types'
+import { toast } from 'sonner'
+import { syncImages } from 'actions/images.actions'
 
 export default function CategoryClient({
   category,
   isEditMode,
 }: {
-  category: Category | null;
-  isEditMode: boolean;
+  category: Category | null
+  isEditMode: boolean
 }) {
-  const router = useRouter();
+  const router = useRouter()
 
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({})
   const [gallery, setGallery] = useState<{
-    files: (File | string)[];
-    previews: string[];
+    files: (File | string)[]
+    previews: string[]
   }>({
     files: category?.image ? [category.image] : [],
     previews: category?.image ? [category.image] : [],
-  });
+  })
   const [formData, setFormData] = useState({
-    id: category?.id || "",
-    name: category?.name || "",
-    slug: category?.slug || "",
-    image: category?.image || "",
-  });
-  const [loading, setLoading] = useState(false);
+    id: category?.id || '',
+    name: category?.name || '',
+    slug: category?.slug || '',
+    image: category?.image || '',
+  })
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     try {
-      e.preventDefault();
-      setLoading(true);
+      e.preventDefault()
+      setLoading(true)
       setFormData((prev) => ({
         ...prev,
         slug: slugify(formData.name),
-      }));
-      setErrors({});
+      }))
+      setErrors({})
       const validation = CategorySchema.safeParse({
         ...formData,
         image: gallery.previews[0],
-      });
+      })
 
       if (!validation.success) {
-        const fieldErrors: { [key: string]: string } = {};
+        const fieldErrors: { [key: string]: string } = {}
         validation.error.issues.forEach((err) => {
-          if (err.path[0]) fieldErrors[err.path[0].toString()] = err.message;
-        });
-        setErrors(fieldErrors);
-        return;
+          if (err.path[0]) fieldErrors[err.path[0].toString()] = err.message
+        })
+        setErrors(fieldErrors)
+        return
       }
 
       const ResponsEmail = await syncImages(gallery.files, [
-        category?.image || "",
-      ]);
+        category?.image || '',
+      ])
       if (!ResponsEmail.success) {
-        return toast(ResponsEmail.message);
+        return toast(ResponsEmail.message)
       }
 
       // console.log("Submitting category with data:", {
@@ -80,26 +80,26 @@ export default function CategoryClient({
         id: formData.id,
         name: formData.name,
         slug: formData.slug,
-        image: ResponsEmail.data ? ResponsEmail.data[0] : category?.image || "",
-      });
+        image: ResponsEmail.data ? ResponsEmail.data[0] : category?.image || '',
+      })
 
       if (response.success) {
-        router.replace("/admin/categories");
-        router.refresh();
+        router.replace('/admin/categories')
+        router.refresh()
       } else {
-        setErrors({ from: response?.message || "Failed to save category" });
-        return toast(ResponsEmail.message);
+        setErrors({ from: response?.message || 'Failed to save category' })
+        return toast(ResponsEmail.message)
       }
     } catch (err) {
-      console.error("Submit error:", err);
-      setErrors({ form: "An error occurred while saving." });
-      toast("An error occurred while saving.");
+      console.error('Submit error:', err)
+      setErrors({ form: 'An error occurred while saving.' })
+      toast('An error occurred while saving.')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
-  if (loading) return Loading();
+  if (loading) return Loading()
 
   return (
     <Container>
@@ -113,7 +113,7 @@ export default function CategoryClient({
 
         <div className="flex items-center justify-between">
           <Text variant="heading">
-            {isEditMode ? "Edit Category" : "New Category"}
+            {isEditMode ? 'Edit Category' : 'New Category'}
           </Text>
           <Button
             onClick={handleSubmit}
@@ -121,7 +121,7 @@ export default function CategoryClient({
             variant="slim"
             disabled={loading}
           >
-            {isEditMode ? "Save Category" : "Create Category"}
+            {isEditMode ? 'Save Category' : 'Create Category'}
           </Button>
         </div>
       </header>
@@ -157,5 +157,5 @@ export default function CategoryClient({
         </form>
       </main>
     </Container>
-  );
+  )
 }

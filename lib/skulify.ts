@@ -3,18 +3,18 @@ export const skulify = (
   sizeName: string,
   colorName: string,
 ): string => {
-  const safeName = String(name || "");
-  const safeSize = String(sizeName || "");
-  const safeColor = String(colorName || "");
+  const safeName = String(name || '')
+  const safeSize = String(sizeName || '')
+  const safeColor = String(colorName || '')
   const namePart = safeName
-    .split(" ")
+    .split(' ')
     .map((word) => word.slice(0, 3))
-    .join("-")
+    .join('-')
     .toLowerCase()
-    .replace(/[^\w-]+/g, "")
-    .replace(/--+/g, "-")
+    .replace(/[^\w-]+/g, '')
+    .replace(/--+/g, '-')
     .trim()
-    .toLowerCase();
+    .toLowerCase()
 
-  return `${namePart}-${safeSize}-${safeColor}`.replace(/\s+/g, "-");
-};
+  return `${namePart}-${safeSize}-${safeColor}`.replace(/\s+/g, '-')
+}

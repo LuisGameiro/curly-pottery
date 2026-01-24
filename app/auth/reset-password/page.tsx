@@ -1,26 +1,26 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { Container, Text, Button, Input } from "@components/ui";
-import { CheckCircle2 } from "lucide-react";
-import { toast } from "sonner";
-import { resetPassword } from "actions/email.actions";
-import constructMetadata from "@components/common/SEO";
+import { useState } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import { Container, Text, Button, Input } from '@components/ui'
+import { CheckCircle2 } from 'lucide-react'
+import { toast } from 'sonner'
+import { resetPassword } from 'actions/email.actions'
+import constructMetadata from '@components/common/SEO'
 
 export const metadata = constructMetadata({
-  title: "Reset Password",
+  title: 'Reset Password',
   description:
     "Set a new password for your Curly Pottery account to continue enjoying our services. Ensure your account's security with a strong password.",
-});
+})
 export default function ResetPasswordPage() {
-  const [loading, setLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const searchParams = useSearchParams();
-  const router = useRouter();
+  const [loading, setLoading] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
+  const searchParams = useSearchParams()
+  const router = useRouter()
 
-  const token = searchParams.get("token");
+  const token = searchParams.get('token')
 
   const {
     register,
@@ -29,39 +29,39 @@ export default function ResetPasswordPage() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      password: "",
-      confirmPassword: "",
+      password: '',
+      confirmPassword: '',
     },
-  });
+  })
 
-  const password = watch("password");
+  const password = watch('password')
 
   const onSubmit = async (data: {
-    password: string;
-    confirmPassword: string;
+    password: string
+    confirmPassword: string
   }) => {
     if (!token) {
-      toast.error("Missing reset token.");
-      return;
+      toast.error('Missing reset token.')
+      return
     }
 
-    setLoading(true);
+    setLoading(true)
     try {
-      const result = await resetPassword(token, data.password);
+      const result = await resetPassword(token, data.password)
 
       if (result.success) {
-        setIsSuccess(true);
-        toast.success("Password updated successfully!");
-        setTimeout(() => router.push("/auth/login"), 3000);
+        setIsSuccess(true)
+        toast.success('Password updated successfully!')
+        setTimeout(() => router.push('/auth/login'), 3000)
       } else {
-        toast.error(result.message || "Invalid or expired token.");
+        toast.error(result.message || 'Invalid or expired token.')
       }
     } catch {
-      toast.error("An unexpected error occurred.");
+      toast.error('An unexpected error occurred.')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   if (!token)
     return (
@@ -69,7 +69,7 @@ export default function ResetPasswordPage() {
         <Text variant="heading">Invalid Link</Text>
         <Text>This password reset link is invalid or has expired.</Text>
       </Container>
-    );
+    )
 
   if (isSuccess)
     return (
@@ -79,9 +79,9 @@ export default function ResetPasswordPage() {
         </div>
         <Text variant="heading">Password Changed!</Text>
         <Text>Your password has been updated. Redirecting you to login...</Text>
-        <Button onClick={() => router.push("/auth/login")}>Go to Login</Button>
+        <Button onClick={() => router.push('/auth/login')}>Go to Login</Button>
       </Container>
-    );
+    )
 
   return (
     <Container className="p-10 max-w-lg mx-auto">
@@ -94,9 +94,9 @@ export default function ResetPasswordPage() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
-          {...register("password", {
-            required: "Password is required",
-            minLength: { value: 8, message: "Minimum 8 characters" },
+          {...register('password', {
+            required: 'Password is required',
+            minLength: { value: 8, message: 'Minimum 8 characters' },
           })}
           label="New Password"
           type="password"
@@ -105,8 +105,8 @@ export default function ResetPasswordPage() {
         />
 
         <Input
-          {...register("confirmPassword", {
-            validate: (value) => value === password || "Passwords do not match",
+          {...register('confirmPassword', {
+            validate: (value) => value === password || 'Passwords do not match',
           })}
           label="Confirm New Password"
           type="password"
@@ -119,5 +119,5 @@ export default function ResetPasswordPage() {
         </Button>
       </form>
     </Container>
-  );
+  )
 }

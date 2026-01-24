@@ -1,33 +1,33 @@
-"use client";
+'use client'
 
-import React, { useState, useTransition } from "react";
-import { BellIcon, Loader2 } from "lucide-react";
-import { Text, Container } from "@components/ui";
-import { cn } from "@lib/utils";
-import { OrderStatus } from "@lib/types/types";
-import { updateOrderStatus } from "actions/order.actions";
+import React, { useState, useTransition } from 'react'
+import { BellIcon, Loader2 } from 'lucide-react'
+import { Text, Container } from '@components/ui'
+import { cn } from '@lib/utils'
+import { OrderStatus } from '@lib/types/types'
+import { updateOrderStatus } from 'actions/order.actions'
 
 interface OrderStatusProps {
-  orderId: string;
-  currentStatus: OrderStatus;
+  orderId: string
+  currentStatus: OrderStatus
 }
 
 const OrderStatusUpdate = ({ orderId, currentStatus }: OrderStatusProps) => {
-  const [isPending, startTransition] = useTransition();
-  const [localStatus, setLocalStatus] = useState(currentStatus);
+  const [isPending, startTransition] = useTransition()
+  const [localStatus, setLocalStatus] = useState(currentStatus)
 
   const handleStatusChange = (newStatus: OrderStatus) => {
-    setLocalStatus(newStatus);
+    setLocalStatus(newStatus)
 
     startTransition(async () => {
       try {
-        await updateOrderStatus(orderId, newStatus);
+        await updateOrderStatus(orderId, newStatus)
       } catch (error) {
-        setLocalStatus(currentStatus);
-        console.error("Failed to update status", error);
+        setLocalStatus(currentStatus)
+        console.error('Failed to update status', error)
       }
-    });
-  };
+    })
+  }
 
   return (
     <Container variant="box" className="space-y-3">
@@ -42,8 +42,8 @@ const OrderStatusUpdate = ({ orderId, currentStatus }: OrderStatusProps) => {
 
       <select
         className={cn(
-          "w-full border-border text-sm font-medium rounded-lg px-3 py-2 outline-none border-none cursor-pointer transition-opacity",
-          isPending && "opacity-50 pointer-events-none",
+          'w-full border-border text-sm font-medium rounded-lg px-3 py-2 outline-none border-none cursor-pointer transition-opacity',
+          isPending && 'opacity-50 pointer-events-none',
         )}
         value={localStatus}
         onChange={(e) => handleStatusChange(e.target.value as OrderStatus)}
@@ -56,7 +56,7 @@ const OrderStatusUpdate = ({ orderId, currentStatus }: OrderStatusProps) => {
         <option value="COMPLETED">Completed</option>
       </select>
     </Container>
-  );
-};
+  )
+}
 
-export default OrderStatusUpdate;
+export default OrderStatusUpdate

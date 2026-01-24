@@ -1,28 +1,28 @@
-"use client";
+'use client'
 
-import { useKeenSlider } from "keen-slider/react";
+import { useKeenSlider } from 'keen-slider/react'
 import React, {
   Children,
   isValidElement,
   useState,
   useRef,
   useEffect,
-} from "react";
-import { a } from "@react-spring/web";
-import s from "./ProductSlider.module.css";
-import ProductSliderControl from "../ProductSliderControl";
-import { cn } from "@lib/utils";
+} from 'react'
+import { a } from '@react-spring/web'
+import s from './ProductSlider.module.css'
+import ProductSliderControl from '../ProductSliderControl'
+import { cn } from '@lib/utils'
 
 interface ProductSliderProps {
-  children?: React.ReactNode[];
-  className?: string;
+  children?: React.ReactNode[]
+  className?: string
 }
 
-const ProductSlider = ({ children, className = "" }: ProductSliderProps) => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isMounted, setIsMounted] = useState(false);
-  const sliderContainerRef = useRef<HTMLDivElement>(null);
-  const thumbsContainerRef = useRef<HTMLDivElement>(null);
+const ProductSlider = ({ children, className = '' }: ProductSliderProps) => {
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [isMounted, setIsMounted] = useState(false)
+  const sliderContainerRef = useRef<HTMLDivElement>(null)
+  const thumbsContainerRef = useRef<HTMLDivElement>(null)
 
   const [ref, slider] = useKeenSlider<HTMLDivElement>({
     loop: true,
@@ -31,46 +31,46 @@ const ProductSlider = ({ children, className = "" }: ProductSliderProps) => {
     drag: true,
     rubberband: true,
     slideChanged(s) {
-      const slideNumber = s.track.details.rel;
-      setCurrentSlide(slideNumber);
+      const slideNumber = s.track.details.rel
+      setCurrentSlide(slideNumber)
 
       if (thumbsContainerRef.current) {
-        const $el = document.getElementById(`thumb-${slideNumber}`);
+        const $el = document.getElementById(`thumb-${slideNumber}`)
         if ($el) {
           thumbsContainerRef.current.scrollTo({
             left:
               $el.offsetLeft -
               thumbsContainerRef.current.offsetWidth / 2 +
               $el.offsetWidth / 2,
-            behavior: "smooth",
-          });
+            behavior: 'smooth',
+          })
         }
       }
     },
-  });
+  })
 
   useEffect(() => {
     const preventNavigation = (event: TouchEvent) => {
-      const touchXPosition = event.touches[0].pageX;
-      const touchXRadius = event.touches[0].radiusX || 0;
+      const touchXPosition = event.touches[0].pageX
+      const touchXRadius = event.touches[0].radiusX || 0
 
       if (
         touchXPosition - touchXRadius < 10 ||
         touchXPosition + touchXRadius > window.innerWidth - 10
       )
-        event.preventDefault();
-    };
+        event.preventDefault()
+    }
 
-    const slider = sliderContainerRef.current!;
+    const slider = sliderContainerRef.current!
 
-    slider.addEventListener("touchstart", preventNavigation, { passive: true });
+    slider.addEventListener('touchstart', preventNavigation, { passive: true })
 
     return () => {
       if (slider) {
-        slider.removeEventListener("touchstart", preventNavigation);
+        slider.removeEventListener('touchstart', preventNavigation)
       }
-    };
-  }, []);
+    }
+  }, [])
   // useEffect(() => {
   //     const slider = sliderContainerRef.current;
   //     if (!slider) return;
@@ -96,13 +96,13 @@ const ProductSlider = ({ children, className = "" }: ProductSliderProps) => {
   // const onPrev = React.useCallback(() => slider.current?.prev(), [slider]);
   // const onNext = React.useCallback(() => slider.current?.next(), [slider]);
 
-  const onPrev = () => slider.current?.prev(); //useCallback(() => slider.current?.prev(), [slider]);
-  const onNext = () => slider.current?.next(); //useCallback(() => slider.current?.next(), [slider]);
+  const onPrev = () => slider.current?.prev() //useCallback(() => slider.current?.prev(), [slider]);
+  const onNext = () => slider.current?.next() //useCallback(() => slider.current?.next(), [slider]);
   return (
     <div className={cn(s.root, className)} ref={sliderContainerRef}>
       <div
         ref={ref}
-        className={cn(s.slider, { [s.show]: isMounted }, "keen-slider")}
+        className={cn(s.slider, { [s.show]: isMounted }, 'keen-slider')}
       >
         {slider && <ProductSliderControl onPrev={onPrev} onNext={onNext} />}
         {Children.map(children, (child) => {
@@ -113,12 +113,12 @@ const ProductSlider = ({ children, className = "" }: ProductSliderProps) => {
               props: {
                 ...child.props,
                 className: `${
-                  child.props.className ? `${child.props.className} ` : ""
+                  child.props.className ? `${child.props.className} ` : ''
                 }keen-slider__slide`,
               },
-            };
+            }
           }
-          return child;
+          return child
         })}
       </div>
 
@@ -135,16 +135,16 @@ const ProductSlider = ({ children, className = "" }: ProductSliderProps) => {
                   }),
                   id: `thumb-${idx}`,
                   onClick: () => {
-                    slider.current?.moveToIdx(idx);
+                    slider.current?.moveToIdx(idx)
                   },
                 },
-              };
+              }
             }
-            return child;
+            return child
           })}
       </a.div>
     </div>
-  );
-};
+  )
+}
 
-export default ProductSlider;
+export default ProductSlider

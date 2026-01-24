@@ -1,30 +1,30 @@
-"use server";
+'use server'
 
-import { revalidatePath } from "next/cache";
-import { prisma } from "prisma/prisma";
-import { Category, ActionResponse } from "@lib/types/types";
+import { revalidatePath } from 'next/cache'
+import { prisma } from 'prisma/prisma'
+import { Category, ActionResponse } from '@lib/types/types'
 
 export async function getAllCategories(): Promise<ActionResponse<Category[]>> {
   try {
     const categories = await prisma.category.findMany({
       orderBy: {
-        name: "asc",
+        name: 'asc',
       },
-    });
+    })
 
     return {
       success: true,
-      message: "Fecthed all Categories successfully",
+      message: 'Fecthed all Categories successfully',
       data: categories,
-    };
+    }
   } catch (error) {
-    console.error("getAllCustomers_ERROR:", error);
+    console.error('getAllCustomers_ERROR:', error)
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : "A database error occurred",
+        error instanceof Error ? error.message : 'A database error occurred',
       errors: error,
-    };
+    }
   }
 }
 
@@ -36,32 +36,32 @@ export async function getCategoryById(
       where: {
         id,
       },
-    });
+    })
 
     return {
       success: true,
-      message: "Fecthed Category successfully",
+      message: 'Fecthed Category successfully',
       data: category,
-    };
+    }
   } catch (error) {
-    console.error("getCategoryById_ERROR:", error);
+    console.error('getCategoryById_ERROR:', error)
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : "A database error occurred",
+        error instanceof Error ? error.message : 'A database error occurred',
       errors: error,
-    };
+    }
   }
 }
 
 export async function upsertCategory(formData: {
-  id?: string;
-  name: string;
-  slug: string;
-  image: string;
+  id?: string
+  name: string
+  slug: string
+  image: string
 }) {
   try {
-    let category;
+    let category
     if (formData.id) {
       category = await prisma.category.update({
         where: { id: formData.id },
@@ -70,7 +70,7 @@ export async function upsertCategory(formData: {
           slug: formData.slug,
           image: formData.image,
         },
-      });
+      })
     } else {
       category = await prisma.category.create({
         data: {
@@ -78,23 +78,23 @@ export async function upsertCategory(formData: {
           slug: formData.slug,
           image: formData.image,
         },
-      });
+      })
     }
 
-    revalidatePath("/admin/categories");
+    revalidatePath('/admin/categories')
     return {
       success: true,
-      message: "Updated category successfully",
+      message: 'Updated category successfully',
       data: category,
-    };
+    }
   } catch (error) {
-    console.error("upsertCategory_ERROR:", error);
+    console.error('upsertCategory_ERROR:', error)
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : "A database error occurred",
+        error instanceof Error ? error.message : 'A database error occurred',
       errors: error,
-    };
+    }
   }
 }
 
@@ -102,21 +102,21 @@ export async function deleteCategory(id: string) {
   try {
     const category = await prisma.category.delete({
       where: { id },
-    });
+    })
 
-    revalidatePath("/admin/categories");
+    revalidatePath('/admin/categories')
     return {
       success: true,
-      message: "Deleted category successfully",
+      message: 'Deleted category successfully',
       data: category,
-    };
+    }
   } catch (error) {
-    console.error("deleteCategory_ERROR:", error);
+    console.error('deleteCategory_ERROR:', error)
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : "A database error occurred",
+        error instanceof Error ? error.message : 'A database error occurred',
       errors: error,
-    };
+    }
   }
 }

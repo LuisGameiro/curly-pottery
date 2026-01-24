@@ -1,14 +1,14 @@
-import React from "react";
-import { Container } from "@components/ui";
-import { Text } from "@components/ui";
+import React from 'react'
+import { Container } from '@components/ui'
+import { Text } from '@components/ui'
 
-import s from "./Hero.module.css";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import s from './Hero.module.css'
+import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
 interface HeroProps {
-  className?: string;
-  headline: string;
-  description: string;
+  className?: string
+  headline: string
+  description: string
 }
 
 const Hero = ({ headline, description }: HeroProps) => {
@@ -32,7 +32,7 @@ const Hero = ({ headline, description }: HeroProps) => {
         </div>
       </Container>
     </div>
-  );
-};
+  )
+}
 
-export default Hero;
+export default Hero

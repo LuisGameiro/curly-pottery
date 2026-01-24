@@ -1,44 +1,44 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import cn from "clsx";
-import s from "./FeatureBar.module.css";
-import { Text, Button } from "@components/ui";
+import { useState } from 'react'
+import cn from 'clsx'
+import s from './FeatureBar.module.css'
+import { Text, Button } from '@components/ui'
 
 interface FeatureBarProps {
-  className?: string;
+  className?: string
 }
 
 const FeatureBar = ({ className }: FeatureBarProps) => {
-  const [showBanner, setShowBanner] = useState(false);
+  const [showBanner, setShowBanner] = useState(false)
 
-  const consent = localStorage.getItem("cookie-consent");
+  const consent = localStorage.getItem('cookie-consent')
   if (!consent) {
-    setShowBanner(true);
+    setShowBanner(true)
   }
   const handleAcceptAll = () => {
     localStorage.setItem(
-      "cookie-consent",
+      'cookie-consent',
       JSON.stringify({ analytics: true, marketing: true }),
-    );
-    setShowBanner(false);
-  };
+    )
+    setShowBanner(false)
+  }
 
   const handleAcceptEssential = () => {
     localStorage.setItem(
-      "cookie-consent",
+      'cookie-consent',
       JSON.stringify({ analytics: false, marketing: false }),
-    );
-    setShowBanner(false);
-  };
+    )
+    setShowBanner(false)
+  }
 
-  if (!showBanner) return null;
+  if (!showBanner) return null
 
   return (
     <div
       className={cn(
         s.root,
-        "fixed bottom-0 left-0 w-full p-4 z-50 border-t-2 border-secondary",
+        'fixed bottom-0 left-0 w-full p-4 z-50 border-t-2 border-secondary',
         className,
       )}
     >
@@ -48,7 +48,7 @@ const FeatureBar = ({ className }: FeatureBarProps) => {
           <Text>
             We use cookies to enhance your experience. Essential cookies are
             necessary for the site to function. Others help us analyze traffic.
-            View our{" "}
+            View our{' '}
             <a href="/privacy" className="underline">
               Privacy Policy
             </a>
@@ -75,7 +75,7 @@ const FeatureBar = ({ className }: FeatureBarProps) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default FeatureBar;
+export default FeatureBar

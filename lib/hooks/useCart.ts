@@ -1,11 +1,11 @@
-import { useEffect, useMemo } from "react";
-import { useUser } from "./useUser";
-import { calculateDiscount } from "@lib/calculate-price";
-import { useCartStore } from "@lib/zustand/cart";
-import { CurrencyCode } from "prisma/generated/prisma/enums";
+import { useEffect, useMemo } from 'react'
+import { useUser } from './useUser'
+import { calculateDiscount } from '@lib/calculate-price'
+import { useCartStore } from '@lib/zustand/cart'
+import { CurrencyCode } from 'prisma/generated/prisma/enums'
 
 export default function useCart() {
-  const { isAuthenticated } = useUser();
+  const { isAuthenticated } = useUser()
   const {
     syncWithDatabase,
     cartItems,
@@ -14,11 +14,11 @@ export default function useCart() {
     removeItem,
     updateItem,
     deleteAll,
-  } = useCartStore();
+  } = useCartStore()
 
   useEffect(() => {
-    syncWithDatabase();
-  }, [isAuthenticated, syncWithDatabase, cartItems]);
+    syncWithDatabase()
+  }, [isAuthenticated, syncWithDatabase, cartItems])
 
   const subtotal = useMemo(
     () =>
@@ -30,7 +30,7 @@ export default function useCart() {
         0,
       ),
     [cartItems],
-  );
+  )
 
   return {
     data: {
@@ -45,5 +45,5 @@ export default function useCart() {
     removeItem,
     updateItem,
     deleteAll,
-  };
+  }
 }

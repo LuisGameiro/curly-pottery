@@ -1,21 +1,21 @@
-import { cn } from "@lib/utils";
+import { cn } from '@lib/utils'
 
 interface ErrorMessageProps {
   error: {
-    message: string;
-    code?: string;
+    message: string
+    code?: string
     errors?: {
-      message: string;
-    }[];
-  };
-  className?: string;
+      message: string
+    }[]
+  }
+  className?: string
 }
 
 const ErrorMessages = ({ error, className }: ErrorMessageProps) => {
   return (
     <div
       className={cn(
-        "flex flex-col text-red py-2.5 px-4 border border-solid border-red",
+        'flex flex-col text-red py-2.5 px-4 border border-solid border-red',
         className,
       )}
     >
@@ -28,7 +28,7 @@ const ErrorMessages = ({ error, className }: ErrorMessageProps) => {
         </ul>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ErrorMessages;
+export default ErrorMessages

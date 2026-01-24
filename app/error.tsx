@@ -1,19 +1,19 @@
-"use client";
+'use client'
 
-import { Button, Text } from "@components/ui";
-import { useEffect } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { Button, Text } from '@components/ui'
+import { useEffect } from 'react'
+import * as Sentry from '@sentry/nextjs'
 
 interface ErrorProps {
-  error: Error & { digest?: string };
-  reset: () => void;
+  error: Error & { digest?: string }
+  reset: () => void
 }
 export default function ErrorPage({ error, reset }: ErrorProps) {
   useEffect(() => {
     Sentry.captureException(error, {
       extra: { digest: error.digest },
-    });
-  }, [error]);
+    })
+  }, [error])
 
   return (
     <div className="space-y-10 text-center bg-background py-20">
@@ -24,7 +24,7 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
         <p>Something unexpected happened.</p>
         <p>Try refreshing the page, or check back in a moment.</p>
       </p>
-      {process.env.NEXT_PUBLIC_APP_ENV === "dev" && (
+      {process.env.NEXT_PUBLIC_APP_ENV === 'dev' && (
         <>
           {error.digest && (
             <code className="block bg-muted p-2 rounded text-xs text-red-500">
@@ -38,5 +38,5 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
         Try again
       </Button>
     </div>
-  );
+  )
 }

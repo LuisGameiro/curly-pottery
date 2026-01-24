@@ -1,70 +1,70 @@
-"use client";
+'use client'
 
-import { useEffect, useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
-import { Container, Text, Button, Input } from "@components/ui";
-import { Mail, MapPin, Phone, Plus, Trash2, UserIcon } from "lucide-react";
-import { Address, UserWithOrdersAddress } from "@lib/types/types";
-import { toast } from "sonner";
-import { updateUser } from "actions/customer.actions";
+import { useEffect, useState } from 'react'
+import { useForm, useFieldArray } from 'react-hook-form'
+import { Container, Text, Button, Input } from '@components/ui'
+import { Mail, MapPin, Phone, Plus, Trash2, UserIcon } from 'lucide-react'
+import { Address, UserWithOrdersAddress } from '@lib/types/types'
+import { toast } from 'sonner'
+import { updateUser } from 'actions/customer.actions'
 
 export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false)
 
   const { register, control, handleSubmit, reset, watch } =
     useForm<UserWithOrdersAddress>({
       defaultValues: {
-        firstName: user?.firstName || "",
-        lastName: user?.lastName || "",
-        phone: user?.phone || "",
+        firstName: user?.firstName || '',
+        lastName: user?.lastName || '',
+        phone: user?.phone || '',
         addresses: user?.addresses || [],
       },
-    });
+    })
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "addresses",
-  });
+    name: 'addresses',
+  })
 
   useEffect(() => {
     reset({
-      firstName: user?.firstName || "",
-      lastName: user?.lastName || "",
-      phone: user?.phone || "",
+      firstName: user?.firstName || '',
+      lastName: user?.lastName || '',
+      phone: user?.phone || '',
       addresses: user?.addresses || [],
-    });
-  }, [user, reset]);
+    })
+  }, [user, reset])
 
   const onSubmit = async (data: UserWithOrdersAddress) => {
     try {
-      const response = await updateUser(user.id, data);
-      console.log("Update response:", user.id, data, response);
+      const response = await updateUser(user.id, data)
+      console.log('Update response:', user.id, data, response)
       if (response.success) {
-        toast.success("Profile updated successfully!");
+        toast.success('Profile updated successfully!')
       } else {
-        toast.error("Failed to update profile. Please try again.");
+        toast.error('Failed to update profile. Please try again.')
       }
     } catch (error) {
-      console.error("Error updating profile:", error);
-      toast.error("Failed to update profile. Please try again.");
+      console.error('Error updating profile:', error)
+      toast.error('Failed to update profile. Please try again.')
     } finally {
-      setIsEditing(false);
+      setIsEditing(false)
     }
-  };
+  }
 
   const toggleEditing = () => {
     if (!isEditing && fields.length === 0) {
       append({
-        address: "",
-        city: "",
-        postalCode: "",
-        country: "United Kingdom",
-      } as Address);
+        address: '',
+        city: '',
+        postalCode: '',
+        country: 'United Kingdom',
+      } as Address)
     }
-    setIsEditing(!isEditing);
-  };
+    setIsEditing(!isEditing)
+  }
 
-  const watchedName = watch("firstName");
+  const watchedName = watch('firstName')
 
   return (
     <Container>
@@ -72,7 +72,7 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
         <div className="w-full flex flex-row justify-between items-center">
           <Text variant="heading">Welcome, {watchedName}!</Text>
           <Button variant="slim" onClick={toggleEditing}>
-            {isEditing ? "Cancel" : "Edit Profile"}
+            {isEditing ? 'Cancel' : 'Edit Profile'}
           </Button>
         </div>
       </header>
@@ -91,18 +91,18 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
           {isEditing ? (
             <div className="gap-2 grid grid-cols-2 py-2">
               <Input
-                {...register("firstName", { required: true })}
+                {...register('firstName', { required: true })}
                 placeholder="First Name"
               />
               <Input
-                {...register("lastName", { required: true })}
+                {...register('lastName', { required: true })}
                 placeholder="Last Name"
               />
             </div>
           ) : (
             <div className="flex items-center pt-2 pb-2">
               <UserIcon size={18} className="mr-2" />
-              {watch("firstName")} {watch("lastName")}
+              {watch('firstName')} {watch('lastName')}
             </div>
           )}
         </div>
@@ -111,12 +111,12 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
           <label className="text-sm font-semibold">Phone</label>
           {isEditing ? (
             <div className="py-2">
-              <Input {...register("phone")} placeholder="Phone Number" />
+              <Input {...register('phone')} placeholder="Phone Number" />
             </div>
           ) : (
             <div className="flex items-center py-2">
               <Phone size={18} className="mr-2" />
-              {watch("phone") || "Not provided"}
+              {watch('phone') || 'Not provided'}
             </div>
           )}
         </div>
@@ -131,10 +131,10 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
                 variant="naked"
                 onClick={() =>
                   append({
-                    address: "",
-                    city: "",
-                    postalCode: "",
-                    country: "United Kingdom",
+                    address: '',
+                    city: '',
+                    postalCode: '',
+                    country: 'United Kingdom',
                   } as Address)
                 }
                 className="flex items-center text-secondary"
@@ -204,11 +204,11 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
                     <MapPin size={18} className="mr-2 mt-1 text-accent-6" />
                     <div>
                       <Text className="font-medium">
-                        {watch(`addresses.${index}.address`) || "New Address"}
+                        {watch(`addresses.${index}.address`) || 'New Address'}
                       </Text>
                       <Text className="text-accent-7">
-                        {watch(`addresses.${index}.postalCode`)},{" "}
-                        {watch(`addresses.${index}.city`)}{" "}
+                        {watch(`addresses.${index}.postalCode`)},{' '}
+                        {watch(`addresses.${index}.city`)}{' '}
                         {watch(`addresses.${index}.country`)}
                       </Text>
                     </div>
@@ -226,5 +226,5 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
         )}
       </form>
     </Container>
-  );
+  )
 }

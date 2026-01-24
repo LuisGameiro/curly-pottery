@@ -1,16 +1,16 @@
-import constructMetadata from "@components/common/SEO/SEO";
-import CartClient from "../../components/cart/CartClient";
+import constructMetadata from '@components/common/SEO/SEO'
+import CartClient from '../../components/cart/CartClient'
 
 export const metadata = constructMetadata({
-  title: "Cart",
+  title: 'Cart',
   description:
-    "Review the items in your Curly Pottery shopping cart before proceeding to checkout. Enjoy a seamless shopping experience with us.",
-});
+    'Review the items in your Curly Pottery shopping cart before proceeding to checkout. Enjoy a seamless shopping experience with us.',
+})
 
 export default function CartPage() {
   return (
     <div className="py-10 md:px-10">
       <CartClient />
     </div>
-  );
+  )
 }

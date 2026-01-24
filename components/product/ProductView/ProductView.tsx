@@ -1,50 +1,50 @@
-"use client";
+'use client'
 
-import Image from "next/image";
-import s from "./ProductView.module.css";
-import { useState } from "react";
-import { ProductSlider, ProductCard } from "@components/product";
-import { Container, Marquee } from "@components/ui";
-import ProductSidebar from "../ProductSidebar";
+import Image from 'next/image'
+import s from './ProductView.module.css'
+import { useState } from 'react'
+import { ProductSlider, ProductCard } from '@components/product'
+import { Container, Marquee } from '@components/ui'
+import ProductSidebar from '../ProductSidebar'
 import {
   Discount,
   Product,
   ProductWithVariantsCategories,
   Variant,
-} from "@lib/types/types";
-import { cn } from "@lib/utils";
-import { trackEvent } from "@lib/analytics/trackEvents";
-import { calculateDiscount } from "@lib/calculate-price";
+} from '@lib/types/types'
+import { cn } from '@lib/utils'
+import { trackEvent } from '@lib/analytics/trackEvents'
+import { calculateDiscount } from '@lib/calculate-price'
 
 export const getRelatedProducts = async (
   categories: string[],
   excludeId: number,
 ) => {
   const params = new URLSearchParams({
-    categories: categories.join(","),
+    categories: categories.join(','),
     excludeId: excludeId.toString(),
-    limit: "4",
-  });
+    limit: '4',
+  })
 
-  const res = await fetch(`/api/related-products?${params}`);
-  return res.json();
-};
+  const res = await fetch(`/api/related-products?${params}`)
+  return res.json()
+}
 
 interface ProductViewProps {
-  product: ProductWithVariantsCategories;
-  relatedProducts: Product[];
+  product: ProductWithVariantsCategories
+  relatedProducts: Product[]
 }
 
 const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
-  const [variant, setVariant] = useState<Variant>(product.variants[0]);
+  const [variant, setVariant] = useState<Variant>(product.variants[0])
 
-  trackEvent("view_product", {
+  trackEvent('view_product', {
     name: product.name,
     currency: variant.currency,
     sku: variant.sku,
     price: calculateDiscount(variant.price, variant.discounts as Discount[])
       .finalPrice,
-  });
+  })
 
   return (
     <>
@@ -95,7 +95,7 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
         )}
       </Container>
     </>
-  );
-};
+  )
+}
 
-export default ProductView;
+export default ProductView

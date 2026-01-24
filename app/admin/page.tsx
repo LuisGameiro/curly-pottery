@@ -1,7 +1,7 @@
-import constructMetadata from "@components/common/SEO";
-import { Container, Text } from "@components/ui";
-import { getDashboardStats } from "actions/dashboard.actions";
-import Loading from "app/loading";
+import constructMetadata from '@components/common/SEO'
+import { Container, Text } from '@components/ui'
+import { getDashboardStats } from 'actions/dashboard.actions'
+import Loading from 'app/loading'
 import {
   Users,
   Package,
@@ -11,24 +11,24 @@ import {
   CheckCircle2,
   ShoppingBag,
   TouchpadIcon,
-} from "lucide-react";
-import Link from "next/link";
-import { ReactNode, Suspense } from "react";
+} from 'lucide-react'
+import Link from 'next/link'
+import { ReactNode, Suspense } from 'react'
 
 export const metadata = constructMetadata({
-  title: "Admin Dashboard",
+  title: 'Admin Dashboard',
   description:
-    "Overview of your store performance and inventory health at Curly Pottery.",
-});
+    'Overview of your store performance and inventory health at Curly Pottery.',
+})
 
 export default async function DashboardPage() {
-  const response = await getDashboardStats();
+  const response = await getDashboardStats()
 
   if (!response.success) {
-    throw new Error(response.message);
+    throw new Error(response.message)
   }
 
-  const stats = response.data;
+  const stats = response.data
 
   return (
     <Suspense fallback={<Loading />}>
@@ -51,7 +51,7 @@ export default async function DashboardPage() {
               label="Pending Orders"
               value={stats.pendingOrders}
               icon={<Clock className="text-red-500" size={20} />}
-              trend={stats.pendingOrders > 0 ? "Action Required" : "All Clear"}
+              trend={stats.pendingOrders > 0 ? 'Action Required' : 'All Clear'}
               isCritical={stats.pendingOrders > 0}
             />
             <StatCard
@@ -94,11 +94,11 @@ export default async function DashboardPage() {
                   </div>
                   <div className="flex justify-between text-xs font-medium">
                     <span className="flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-green-500" />{" "}
+                      <span className="w-2 h-2 rounded-full bg-green-500" />{' '}
                       {stats.productsWithStock} In Stock
                     </span>
                     <span className="flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-red-400" />{" "}
+                      <span className="w-2 h-2 rounded-full bg-red-400" />{' '}
                       {stats.productsOutOfStock} Out of Stock
                     </span>
                   </div>
@@ -107,10 +107,10 @@ export default async function DashboardPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="p-4 rounded-xl border border-border bg-red-50/50">
                     <Text className=" text-red-700 font-bold block mb-1">
-                      {"Low Stock (<5)"}
+                      {'Low Stock (<5)'}
                     </Text>
                     <Text className=" text-red-700">
-                      {stats.lowStockVariants + " Variants"}
+                      {stats.lowStockVariants + ' Variants'}
                     </Text>
                   </div>
                   <div className="p-4 rounded-xl border border-border bg-green-50/50">
@@ -165,22 +165,22 @@ export default async function DashboardPage() {
         </section>
       </Container>
     </Suspense>
-  );
+  )
 }
 
 interface StatCardProp {
-  label: string;
-  value: number;
-  icon: ReactNode;
-  trend?: string;
-  isCritical?: boolean;
+  label: string
+  value: number
+  icon: ReactNode
+  trend?: string
+  isCritical?: boolean
 }
 
 function StatCard({ label, value, icon, trend, isCritical }: StatCardProp) {
   return (
     <Container
       variant="box"
-      className={` ${isCritical ? "border-red-200 " : ""}`}
+      className={` ${isCritical ? 'border-red-200 ' : ''}`}
     >
       <div className="flex items-center justify-between ">
         <div className="flex items-center gap-4 mb-4 ">
@@ -189,7 +189,7 @@ function StatCard({ label, value, icon, trend, isCritical }: StatCardProp) {
         </div>
         {trend && (
           <span
-            className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${isCritical ? "text-red-700" : " text-green-500"}`}
+            className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${isCritical ? 'text-red-700' : ' text-green-500'}`}
           >
             {trend}
           </span>
@@ -200,5 +200,5 @@ function StatCard({ label, value, icon, trend, isCritical }: StatCardProp) {
         <Text className="subHeanding">{value}</Text>
       </div>
     </Container>
-  );
+  )
 }

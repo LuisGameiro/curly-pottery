@@ -1,39 +1,39 @@
-"use server";
+'use server'
 
-import { z } from "zod";
-import { hashPassword } from "@lib/auth/password";
-import { prisma } from "prisma/prisma";
+import { z } from 'zod'
+import { hashPassword } from '@lib/auth/password'
+import { prisma } from 'prisma/prisma'
 
 const registerSchema = z.object({
-  email: z.email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
+  email: z.email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
   phone: z.string().optional(),
   acceptsMarketing: z.boolean().default(false),
-});
+})
 
 export async function registerUser(formData: FormData) {
   // Convert FormData to object
-  const rawData = Object.fromEntries(formData.entries());
+  const rawData = Object.fromEntries(formData.entries())
 
   // Validate data
   const validation = registerSchema.safeParse({
     ...rawData,
-    acceptsMarketing: rawData.acceptsMarketing === "on", // Checkbox logic
-  });
+    acceptsMarketing: rawData.acceptsMarketing === 'on', // Checkbox logic
+  })
 
   if (!validation.success) {
-    return { error: validation.error.message };
+    return { error: validation.error.message }
   }
 
   try {
     const { email, password, firstName, lastName, phone, acceptsMarketing } =
-      validation.data;
+      validation.data
 
-    const existingUser = await prisma.user.findUnique({ where: { email } });
+    const existingUser = await prisma.user.findUnique({ where: { email } })
     if (existingUser) {
-      return { error: "User already exists" };
+      return { error: 'User already exists' }
     }
 
     await prisma.user.create({
@@ -45,13 +45,13 @@ export async function registerUser(formData: FormData) {
         phone,
         acceptsMarketing,
         emailVerified: new Date(),
-        role: "USER",
+        role: 'USER',
       },
-    });
+    })
 
-    return { success: true };
+    return { success: true }
   } catch (error) {
-    console.error("Registration error:", error);
-    return { error: "Internal server error" };
+    console.error('Registration error:', error)
+    return { error: 'Internal server error' }
   }
 }

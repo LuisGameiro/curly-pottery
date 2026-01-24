@@ -1,17 +1,17 @@
-"use client";
+'use client'
 
-import Link from "next/link";
-import { CheckCircle } from "lucide-react";
-import { Button, Text } from "@components/ui";
-import useCart from "@lib/hooks/useCart";
-import { useEffect } from "react";
+import Link from 'next/link'
+import { CheckCircle } from 'lucide-react'
+import { Button, Text } from '@components/ui'
+import useCart from '@lib/hooks/useCart'
+import { useEffect } from 'react'
 
 export default function SuccessPage() {
-  const { deleteAll } = useCart();
+  const { deleteAll } = useCart()
 
   useEffect(() => {
-    deleteAll();
-  }, [deleteAll]);
+    deleteAll()
+  }, [deleteAll])
 
   return (
     <div className="flex flex-col items-center justify-center max-w-lg text-center py-20 px-4 mx-auto">
@@ -30,5 +30,5 @@ export default function SuccessPage() {
         <Button variant="secondary">Continue Shopping</Button>
       </Link>
     </div>
-  );
+  )
 }

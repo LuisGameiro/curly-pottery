@@ -1,35 +1,35 @@
-"use client";
+'use client'
 
-import { Fragment, ReactNode, useState } from "react";
-import { Button, Skeleton } from "@components/ui";
-import { cn } from "@lib/utils";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { Fragment, ReactNode, useState } from 'react'
+import { Button, Skeleton } from '@components/ui'
+import { cn } from '@lib/utils'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 
 interface Column<T> {
-  header: string;
-  render: (item: T) => ReactNode;
+  header: string
+  render: (item: T) => ReactNode
 }
 
 interface DataTableProps<T> {
-  data: T[];
-  columns: Column<T>[];
-  isLoading?: boolean;
-  renderExpansion?: (item: T) => ReactNode;
-  emptyMessage?: string;
+  data: T[]
+  columns: Column<T>[]
+  isLoading?: boolean
+  renderExpansion?: (item: T) => ReactNode
+  emptyMessage?: string
 }
 
 export default function DataTable<T extends { id: string }>({
   data,
   columns,
   isLoading,
-  emptyMessage = "No data found.",
+  emptyMessage = 'No data found.',
   renderExpansion,
 }: DataTableProps<T>) {
-  const [expandedRows, setExpandedRows] = useState<string | null>(null);
+  const [expandedRows, setExpandedRows] = useState<string | null>(null)
 
   const toggleRow = (id: string) => {
-    setExpandedRows((prev) => (prev === id ? null : id));
-  };
+    setExpandedRows((prev) => (prev === id ? null : id))
+  }
   if (isLoading || !data) {
     return (
       <div className="space-y-4">
@@ -37,13 +37,13 @@ export default function DataTable<T extends { id: string }>({
           <Skeleton key={i} className="w-full h-16 rounded-lg" />
         ))}
       </div>
-    );
+    )
   }
 
   if (data.length === 0) {
     return (
       <div className="p-8 text-center border rounded-xl">{emptyMessage}</div>
-    );
+    )
   }
 
   return (
@@ -81,7 +81,7 @@ export default function DataTable<T extends { id: string }>({
                   {columns.map((col, i) => (
                     <td
                       key={i}
-                      className={cn("px-6 py-4 text-sm", "text-center")}
+                      className={cn('px-6 py-4 text-sm', 'text-center')}
                     >
                       {col.render(item)}
                     </td>
@@ -103,5 +103,5 @@ export default function DataTable<T extends { id: string }>({
         </table>
       </div>
     </div>
-  );
+  )
 }

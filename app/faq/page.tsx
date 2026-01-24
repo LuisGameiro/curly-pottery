@@ -1,12 +1,12 @@
-import { Container, Text } from "@components/ui";
-import ClientFAQ from "./ClientFaq";
-import constructMetadata from "@components/common/SEO/SEO";
+import { Container, Text } from '@components/ui'
+import ClientFAQ from './ClientFaq'
+import constructMetadata from '@components/common/SEO/SEO'
 
 export const metadata = constructMetadata({
-  title: "FAQ - Frequently Asked Questions",
+  title: 'FAQ - Frequently Asked Questions',
   description:
-    "Find answers to frequently asked questions about Curly Pottery, including shipping, returns, care instructions, and more. We are here to help you with any inquiries you may have.",
-});
+    'Find answers to frequently asked questions about Curly Pottery, including shipping, returns, care instructions, and more. We are here to help you with any inquiries you may have.',
+})
 
 export default function FAQ() {
   return (
@@ -20,5 +20,5 @@ export default function FAQ() {
 
       <ClientFAQ />
     </Container>
-  );
+  )
 }

@@ -1,5 +1,5 @@
-import { LoadingDots } from "@components/ui";
-import { Text } from "@components/ui";
+import { LoadingDots } from '@components/ui'
+import { Text } from '@components/ui'
 
 export default function Loading() {
   return (
@@ -9,5 +9,5 @@ export default function Loading() {
         Loading
       </Text>
     </div>
-  );
+  )
 }

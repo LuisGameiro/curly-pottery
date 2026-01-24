@@ -1,13 +1,13 @@
-import constructMetadata from "@components/common/SEO";
-import { Container, Text } from "@components/ui";
+import constructMetadata from '@components/common/SEO'
+import { Container, Text } from '@components/ui'
 
 export const metadata = constructMetadata({
-  title: "Privacy Policy",
+  title: 'Privacy Policy',
   description:
-    "Learn about Curly Pottery’s commitment to protecting your personal data and privacy. Read our comprehensive Privacy Policy to understand how we handle your information in compliance with GDPR regulations.",
-});
+    'Learn about Curly Pottery’s commitment to protecting your personal data and privacy. Read our comprehensive Privacy Policy to understand how we handle your information in compliance with GDPR regulations.',
+})
 export default function PrivacyPolicy() {
-  const lastUpdated = "January 18, 2026";
+  const lastUpdated = 'January 18, 2026'
 
   return (
     <Container className="p-10">
@@ -79,5 +79,5 @@ export default function PrivacyPolicy() {
         </ul>
       </section>
     </Container>
-  );
+  )
 }

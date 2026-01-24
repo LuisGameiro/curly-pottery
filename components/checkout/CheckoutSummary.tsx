@@ -1,22 +1,22 @@
-"use client";
+'use client'
 
-import { Container, Text } from "@components/ui";
-import { calculateDiscount } from "@lib/calculate-price";
-import { CartLineItem } from "@lib/types/types";
-import { useEffect } from "react";
-import { useFormContext } from "react-hook-form";
+import { Container, Text } from '@components/ui'
+import { calculateDiscount } from '@lib/calculate-price'
+import { CartLineItem } from '@lib/types/types'
+import { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 export function CheckoutSummary() {
-  const { watch, setValue } = useFormContext();
-  const order = watch();
+  const { watch, setValue } = useFormContext()
+  const order = watch()
 
   useEffect(() => {
     const total =
       (order.subtotalPrice || 0) +
       (order.shippingPrice || 0) +
-      (order.taxes || 0);
-    setValue("totalPrice", total.toFixed(2));
-  }, [order.subtotalPrice, order.shippingPrice, order.taxes, setValue]);
+      (order.taxes || 0)
+    setValue('totalPrice', total.toFixed(2))
+  }, [order.subtotalPrice, order.shippingPrice, order.taxes, setValue])
 
   return (
     <Container variant="box" className="lg:col-span-4">
@@ -46,14 +46,14 @@ export function CheckoutSummary() {
         <div className="flex justify-between">
           <Text>Taxes</Text>
           <Text className="text-green-600">
-            {order?.taxes === 0 ? "Included" : `£${order?.taxes.toFixed(2)}`}
+            {order?.taxes === 0 ? 'Included' : `£${order?.taxes.toFixed(2)}`}
           </Text>
         </div>
         <div className="flex justify-between">
           <Text>Shipping</Text>
           <Text className="text-green-600">
             {order?.shippingPrice === 0
-              ? "FREE"
+              ? 'FREE'
               : `£${order?.shippingPrice.toFixed(2)}`}
           </Text>
         </div>
@@ -63,5 +63,5 @@ export function CheckoutSummary() {
         <Text variant="bold">£{order.totalPrice}</Text>
       </div>
     </Container>
-  );
+  )
 }

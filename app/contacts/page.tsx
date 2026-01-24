@@ -1,18 +1,18 @@
-import { Text, Container } from "@components/ui";
-import ContactForm from "./ContactForm";
-import constructMetadata from "@components/common/SEO";
+import { Text, Container } from '@components/ui'
+import ContactForm from './ContactForm'
+import constructMetadata from '@components/common/SEO'
 
 export const metadata = constructMetadata({
-  title: "Contact Us",
+  title: 'Contact Us',
   description:
-    "Get in touch with Curly Pottery for inquiries, custom orders, or any questions you may have. We are here to help and look forward to hearing from you.",
-});
+    'Get in touch with Curly Pottery for inquiries, custom orders, or any questions you may have. We are here to help and look forward to hearing from you.',
+})
 
 const contacts = {
-  email: "curly.pottery@gmail.com",
-  instagram: "curly_pottery",
-  address: "london, uk",
-};
+  email: 'curly.pottery@gmail.com',
+  instagram: 'curly_pottery',
+  address: 'london, uk',
+}
 
 export default function Contacts() {
   return (
@@ -31,7 +31,7 @@ export default function Contacts() {
 
           <ul className="space-y-4">
             <li>
-              📧 Email:{" "}
+              📧 Email:{' '}
               <a
                 href={`mailto:${contacts.email}`}
                 className="hover:text-secondary/60"
@@ -40,7 +40,7 @@ export default function Contacts() {
               </a>
             </li>
             <li>
-              📸 instagram:{" "}
+              📸 instagram:{' '}
               <a
                 href={
                   new URL(`https://www.instagram.com/${contacts.instagram}`)
@@ -68,5 +68,5 @@ export default function Contacts() {
         <ContactForm />
       </section>
     </Container>
-  );
+  )
 }

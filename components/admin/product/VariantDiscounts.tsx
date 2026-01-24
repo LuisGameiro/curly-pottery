@@ -1,21 +1,21 @@
-"use client";
+'use client'
 
-import { Plus, Trash2 } from "lucide-react";
-import { Text, Button, Input } from "@components/ui";
-import { DiscountType } from "@lib/types/types";
-import InputSelect from "@components/ui/Input/InputSelect";
-import { useFormContext, useFieldArray } from "react-hook-form";
+import { Plus, Trash2 } from 'lucide-react'
+import { Text, Button, Input } from '@components/ui'
+import { DiscountType } from '@lib/types/types'
+import InputSelect from '@components/ui/Input/InputSelect'
+import { useFormContext, useFieldArray } from 'react-hook-form'
 
 export const VariantDiscounts = ({
   variantIndex,
 }: {
-  variantIndex: number;
+  variantIndex: number
 }) => {
-  const { control, register, watch } = useFormContext();
+  const { control, register, watch } = useFormContext()
   const { fields, append, remove } = useFieldArray({
     control,
     name: `variants.${variantIndex}.discounts`,
-  });
+  })
 
   return (
     <div className="space-y-4 bg-green-50/50 p-4 rounded-lg">
@@ -27,14 +27,14 @@ export const VariantDiscounts = ({
           type="button"
           color="success"
           onClick={() =>
-            append({ code: "", type: "PERCENTAGE", value: 0, percentage: 0 })
+            append({ code: '', type: 'PERCENTAGE', value: 0, percentage: 0 })
           }
         >
           <Plus size={14} /> Add Discount
         </Button>
       </div>
       {fields.map((field, dIndex) => {
-        const type = watch(`variants.${variantIndex}.discounts.${dIndex}.type`);
+        const type = watch(`variants.${variantIndex}.discounts.${dIndex}.type`)
         return (
           <div key={field.id} className="flex gap-2 items-end">
             <Input
@@ -48,9 +48,9 @@ export const VariantDiscounts = ({
             />
             <Input
               type="number"
-              label={type === "PERCENTAGE" ? "%" : "Fixed"}
+              label={type === 'PERCENTAGE' ? '%' : 'Fixed'}
               {...register(
-                `variants.${variantIndex}.discounts.${dIndex}.${type === "PERCENTAGE" ? "percentage" : "value"}`,
+                `variants.${variantIndex}.discounts.${dIndex}.${type === 'PERCENTAGE' ? 'percentage' : 'value'}`,
                 { valueAsNumber: true },
               )}
             />
@@ -63,8 +63,8 @@ export const VariantDiscounts = ({
               <Trash2 size={16} />
             </Button>
           </div>
-        );
+        )
       })}
     </div>
-  );
-};
+  )
+}

@@ -9,31 +9,31 @@
  */
 
 export const CurrencyCode = {
-  USD: "USD",
-  EUR: "EUR",
-  GBP: "GBP",
-} as const;
+  USD: 'USD',
+  EUR: 'EUR',
+  GBP: 'GBP',
+} as const
 
-export type CurrencyCode = (typeof CurrencyCode)[keyof typeof CurrencyCode];
+export type CurrencyCode = (typeof CurrencyCode)[keyof typeof CurrencyCode]
 
 export const OrderStatus = {
-  PENDING: "PENDING",
-  PAID: "PAID",
-  SHIPPED: "SHIPPED",
-  COMPLETED: "COMPLETED",
-  CANCELLED: "CANCELLED",
-} as const;
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  SHIPPED: 'SHIPPED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+} as const
 
-export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
 
 export const SizeNames = {
-  XXS: "XXS",
-  XS: "XS",
-  S: "S",
-  M: "M",
-  L: "L",
-  XL: "XL",
-  XXL: "XXL",
-} as const;
+  XXS: 'XXS',
+  XS: 'XS',
+  S: 'S',
+  M: 'M',
+  L: 'L',
+  XL: 'XL',
+  XXL: 'XXL',
+} as const
 
-export type SizeNames = (typeof SizeNames)[keyof typeof SizeNames];
+export type SizeNames = (typeof SizeNames)[keyof typeof SizeNames]

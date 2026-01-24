@@ -1,33 +1,33 @@
-import { withSentryConfig } from "@sentry/nextjs";
-import type { NextConfig } from "next";
+import { withSentryConfig } from '@sentry/nextjs'
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   images: {
     qualities: [75, 85, 100],
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "picsum.photos",
+        protocol: 'https',
+        hostname: 'picsum.photos',
       },
     ],
   },
   async rewrites() {
     return [
       {
-        source: "/ingest/:path*",
-        destination: "https://eu.i.posthog.com/:path*",
+        source: '/ingest/:path*',
+        destination: 'https://eu.i.posthog.com/:path*',
       },
-    ];
+    ]
   },
-};
+}
 
 export default withSentryConfig(nextConfig, {
   // For all available options, see:
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
-  org: "curly-pottery",
+  org: 'curly-pottery',
 
-  project: "javascript-nextjs",
+  project: 'javascript-nextjs',
 
   // Only print logs for uploading source maps in CI
   silent: !process.env.CI,
@@ -58,8 +58,8 @@ export default withSentryConfig(nextConfig, {
     },
   },
 
-  tunnelRoute: "/monitoring-sentry",
+  tunnelRoute: '/monitoring-sentry',
   // hideSourceMaps: true,
-});
+})
 
-module.exports = nextConfig;
+module.exports = nextConfig

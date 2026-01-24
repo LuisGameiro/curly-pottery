@@ -1,16 +1,16 @@
-"use client";
+'use client'
 
-import { Plus, Trash2 } from "lucide-react";
-import { Text, Button, Input } from "@components/ui";
-import { Detailtype } from "@lib/types/types";
-import InputSelect from "@components/ui/Input/InputSelect";
-import { useFormContext, useFieldArray } from "react-hook-form";
+import { Plus, Trash2 } from 'lucide-react'
+import { Text, Button, Input } from '@components/ui'
+import { Detailtype } from '@lib/types/types'
+import InputSelect from '@components/ui/Input/InputSelect'
+import { useFormContext, useFieldArray } from 'react-hook-form'
 export const VariantDetails = ({ variantIndex }: { variantIndex: number }) => {
-  const { control, register } = useFormContext();
+  const { control, register } = useFormContext()
   const { fields, append, remove } = useFieldArray({
     control,
     name: `variants.${variantIndex}.details`,
-  });
+  })
 
   return (
     <div className="space-y-4 bg-primary/10 p-4 rounded-lg">
@@ -21,7 +21,7 @@ export const VariantDetails = ({ variantIndex }: { variantIndex: number }) => {
           size="sm"
           type="button"
           color="success"
-          onClick={() => append({ title: "Materials", description: "" })}
+          onClick={() => append({ title: 'Materials', description: '' })}
         >
           <Plus size={14} /> Add Detail
         </Button>
@@ -52,5 +52,5 @@ export const VariantDetails = ({ variantIndex }: { variantIndex: number }) => {
         </div>
       ))}
     </div>
-  );
-};
+  )
+}

@@ -1,9 +1,9 @@
-import { Body, Button, Heading, Hr, Html, Text } from "@react-email/components";
+import { Body, Button, Heading, Hr, Html, Text } from '@react-email/components'
 
 interface AdminOrderEmailProps {
-  orderId: string;
-  customerEmail: string;
-  itemsCount: number;
+  orderId: string
+  customerEmail: string
+  itemsCount: number
 }
 
 export const AdminOrderEmail = ({
@@ -34,13 +34,13 @@ export const AdminOrderEmail = ({
       </Button>
     </Body>
   </Html>
-);
+)
 
-const main = { backgroundColor: "#f1fbff", fontFamily: "sans-serif" };
+const main = { backgroundColor: '#f1fbff', fontFamily: 'sans-serif' }
 
 const button = {
-  background: "#fde372",
-  color: "#000000",
-  padding: "12px 20px",
-  borderRadius: "4px",
-};
+  background: '#fde372',
+  color: '#000000',
+  padding: '12px 20px',
+  borderRadius: '4px',
+}

@@ -1,48 +1,48 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { signIn } from "next-auth/react";
-import { Container, Text, Button, Input } from "@components/ui";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Image from "next/image";
+import { useState } from 'react'
+import { signIn } from 'next-auth/react'
+import { Container, Text, Button, Input } from '@components/ui'
+import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import Image from 'next/image'
 
 export default function LoginForm() {
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [error, setError] = useState("");
-  const redirectTo = searchParams.get("redirect") || "/shop";
-  const isRegistered = searchParams.get("registered") === "true";
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [error, setError] = useState('')
+  const redirectTo = searchParams.get('redirect') || '/shop'
+  const isRegistered = searchParams.get('registered') === 'true'
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+    e.preventDefault()
+    setLoading(true)
+    setError('')
 
-    const target = e.currentTarget;
-    const email = target.email.value;
-    const password = target.password.value;
+    const target = e.currentTarget
+    const email = target.email.value
+    const password = target.password.value
 
-    const result = await signIn("credentials", {
+    const result = await signIn('credentials', {
       email,
       password,
       redirect: false,
-    });
+    })
 
     if (result?.error) {
-      setError("Invalid email or password");
-      setLoading(false);
+      setError('Invalid email or password')
+      setLoading(false)
     } else {
-      router.push(redirectTo);
-      router.refresh();
+      router.push(redirectTo)
+      router.refresh()
     }
-  };
+  }
 
   const handleGoogleLogin = () => {
-    signIn("google", { callbackUrl: redirectTo });
-  };
+    signIn('google', { callbackUrl: redirectTo })
+  }
 
   return (
     <Container className="p-10">
@@ -111,7 +111,7 @@ export default function LoginForm() {
 
         <div className="mt-6 text-center">
           <Text className="text-sm">
-            Do not have an account?{" "}
+            Do not have an account?{' '}
             <Link
               href="/auth/register"
               className="font-bold text-secondary hover:underline"
@@ -122,5 +122,5 @@ export default function LoginForm() {
         </div>
       </main>
     </Container>
-  );
+  )
 }

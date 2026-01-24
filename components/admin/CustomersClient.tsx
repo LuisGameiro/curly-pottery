@@ -1,17 +1,17 @@
-"use client";
+'use client'
 
-import { Container, Text } from "@components/ui";
-import { useState, useMemo } from "react";
-import InputSearch from "@components/ui/Input/InputSearch";
-import CustomerTable from "@components/tables/CustomerTable";
-import { UserWithOrders } from "@lib/types/types";
+import { Container, Text } from '@components/ui'
+import { useState, useMemo } from 'react'
+import InputSearch from '@components/ui/Input/InputSearch'
+import CustomerTable from '@components/tables/CustomerTable'
+import { UserWithOrders } from '@lib/types/types'
 
 export default function CustomersClient({
   customers,
 }: {
-  customers: UserWithOrders[];
+  customers: UserWithOrders[]
 }) {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('')
 
   const filteredCustomers = useMemo(() => {
     return customers.filter(
@@ -20,8 +20,8 @@ export default function CustomersClient({
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
         c.email.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
-  }, [customers, searchTerm]);
+    )
+  }, [customers, searchTerm])
 
   return (
     <Container>
@@ -44,5 +44,5 @@ export default function CustomersClient({
 
       <CustomerTable customers={filteredCustomers} />
     </Container>
-  );
+  )
 }

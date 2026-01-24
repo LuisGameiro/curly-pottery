@@ -1,28 +1,28 @@
-"use client";
+'use client'
 
-import { cn } from "@lib/utils";
-import React, { ReactNode, useState } from "react";
-import s from "./Collapse.module.css";
-import { useSpring, a } from "@react-spring/web";
-import useMeasure from "react-use-measure";
-import { ChevronRight } from "lucide-react";
+import { cn } from '@lib/utils'
+import React, { ReactNode, useState } from 'react'
+import s from './Collapse.module.css'
+import { useSpring, a } from '@react-spring/web'
+import useMeasure from 'react-use-measure'
+import { ChevronRight } from 'lucide-react'
 
 export interface CollapseProps {
-  title: string;
-  children?: ReactNode;
+  title: string
+  children?: ReactNode
 }
 
 const Collapse = ({ title, children }: CollapseProps) => {
-  const [isActive, setActive] = useState(false);
-  const [ref, { height: viewHeight }] = useMeasure();
+  const [isActive, setActive] = useState(false)
+  const [ref, { height: viewHeight }] = useMeasure()
 
   const animProps = useSpring({
     height: isActive ? viewHeight : 0,
     config: { tension: 250, friction: 32, clamp: true, duration: 150 },
     opacity: isActive ? 1 : 0,
-  });
+  })
 
-  const toggle = () => setActive((x) => !x);
+  const toggle = () => setActive((x) => !x)
 
   return (
     <div
@@ -36,13 +36,13 @@ const Collapse = ({ title, children }: CollapseProps) => {
         <ChevronRight className={cn(s.icon, { [s.open]: isActive })} />
         <span className={s.label}>{title}</span>
       </div>
-      <a.div style={{ overflow: "hidden", ...animProps }}>
+      <a.div style={{ overflow: 'hidden', ...animProps }}>
         <div ref={ref} className={s.content}>
           {children}
         </div>
       </a.div>
     </div>
-  );
-};
+  )
+}
 
-export default React.memo(Collapse);
+export default React.memo(Collapse)

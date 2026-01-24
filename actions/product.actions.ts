@@ -1,13 +1,13 @@
-"use server";
+'use server'
 
-import { ProductInput, VariantInput } from "@lib/form-validator";
+import { ProductInput, VariantInput } from '@lib/form-validator'
 import {
   Product,
   ActionResponse,
   ProductWithVariantsCategories,
   Category,
-} from "@lib/types/types";
-import { prisma } from "prisma/prisma";
+} from '@lib/types/types'
+import { prisma } from 'prisma/prisma'
 
 export async function getProductBySlug(
   slug: string | null,
@@ -15,9 +15,9 @@ export async function getProductBySlug(
   if (!slug)
     return {
       success: false,
-      message: "Slug not provided",
+      message: 'Slug not provided',
       errors: null,
-    };
+    }
   try {
     const product = await prisma.product.findUnique({
       where: {
@@ -27,21 +27,21 @@ export async function getProductBySlug(
         variants: true,
         categories: true,
       },
-    });
+    })
 
     return {
       success: true,
-      message: "Fecthed product successfully",
+      message: 'Fecthed product successfully',
       data: product,
-    };
+    }
   } catch (error) {
-    console.error("getProductBySlugd_ERROR:", error);
+    console.error('getProductBySlugd_ERROR:', error)
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : "A database error occurred",
+        error instanceof Error ? error.message : 'A database error occurred',
       errors: error,
-    };
+    }
   }
 }
 
@@ -51,9 +51,9 @@ export async function getProductById(
   if (!id)
     return {
       success: false,
-      message: "Id not provided",
+      message: 'Id not provided',
       errors: null,
-    };
+    }
   try {
     const product = await prisma.product.findUnique({
       where: {
@@ -63,21 +63,21 @@ export async function getProductById(
         variants: true,
         categories: true,
       },
-    });
+    })
 
     return {
       success: true,
-      message: "Fecthed product successfully",
+      message: 'Fecthed product successfully',
       data: product,
-    };
+    }
   } catch (error) {
-    console.error("getProductById_ERROR:", error);
+    console.error('getProductById_ERROR:', error)
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : "A database error occurred",
+        error instanceof Error ? error.message : 'A database error occurred',
       errors: error,
-    };
+    }
   }
 }
 
@@ -87,21 +87,21 @@ export async function deleteProduct(
   try {
     const product = await prisma.product.delete({
       where: { id },
-    });
+    })
 
     return {
       success: true,
-      message: "Fecthed Category successfully",
+      message: 'Fecthed Category successfully',
       data: product,
-    };
+    }
   } catch (error) {
-    console.error("getCategoryById_ERROR:", error);
+    console.error('getCategoryById_ERROR:', error)
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : "A database error occurred",
+        error instanceof Error ? error.message : 'A database error occurred',
       errors: error,
-    };
+    }
   }
 }
 
@@ -115,44 +115,44 @@ export async function getAllProducts(): Promise<
         categories: true,
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
-    });
+    })
 
     return {
       success: true,
-      message: "Fecthed Category successfully",
+      message: 'Fecthed Category successfully',
       data: products,
-    };
+    }
   } catch (error) {
-    console.error("getCategoryById_ERROR:", error);
+    console.error('getCategoryById_ERROR:', error)
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : "A database error occurred",
+        error instanceof Error ? error.message : 'A database error occurred',
       errors: error,
-    };
+    }
   }
 }
 export async function getRandomProducts(
   limit = 3,
 ): Promise<ActionResponse<Product[] | null>> {
   try {
-    const products = await prisma.product.findMany();
+    const products = await prisma.product.findMany()
 
     return {
       success: true,
-      message: "Fecthed random products successfully",
+      message: 'Fecthed random products successfully',
       data: products.sort(() => 0.5 - Math.random()).slice(0, limit),
-    };
+    }
   } catch (error) {
-    console.error("getRandomProducts_ERROR:", error);
+    console.error('getRandomProducts_ERROR:', error)
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : "A database error occurred",
+        error instanceof Error ? error.message : 'A database error occurred',
       errors: error,
-    };
+    }
   }
 }
 export async function getRelatedProducts(
@@ -164,10 +164,10 @@ export async function getRelatedProducts(
     if (!categories.length)
       return {
         success: true,
-        message: "No related Products",
+        message: 'No related Products',
         data: [],
-      };
-    const categoriesName = categories.map((c) => c.name);
+      }
+    const categoriesName = categories.map((c) => c.name)
     const count = await prisma.product.count({
       where: {
         categories: {
@@ -177,16 +177,16 @@ export async function getRelatedProducts(
         },
         ...(excludeId && { id: { not: excludeId } }),
       },
-    });
+    })
 
     if (count === 0)
       return {
         success: true,
-        message: "No related Products",
+        message: 'No related Products',
         data: [],
-      };
+      }
 
-    const skip = Math.floor(Math.random() * Math.max(1, count - limit));
+    const skip = Math.floor(Math.random() * Math.max(1, count - limit))
 
     const relatedProducts = await prisma.product.findMany({
       where: {
@@ -199,20 +199,20 @@ export async function getRelatedProducts(
       },
       take: limit,
       skip,
-    });
+    })
     return {
       success: true,
-      message: "Fecthed Category successfully",
+      message: 'Fecthed Category successfully',
       data: relatedProducts,
-    };
+    }
   } catch (error) {
-    console.error("getCategoryById_ERROR:", error);
+    console.error('getCategoryById_ERROR:', error)
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : "A database error occurred",
+        error instanceof Error ? error.message : 'A database error occurred',
       errors: error,
-    };
+    }
   }
 }
 
@@ -232,21 +232,21 @@ export async function getProductsByCategorySlug(
         variants: true,
         categories: true,
       },
-    });
+    })
 
     return {
       success: true,
-      message: "Fetched products successfully",
+      message: 'Fetched products successfully',
       data: products,
-    };
+    }
   } catch (error) {
-    console.error("getRelatedProducts_ERROR:", error);
+    console.error('getRelatedProducts_ERROR:', error)
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : "A database error occurred",
+        error instanceof Error ? error.message : 'A database error occurred',
       errors: error,
-    };
+    }
   }
 }
 export async function upsertProduct(
@@ -260,14 +260,14 @@ export async function upsertProduct(
       files: _files,
       previews: _previews,
       ...productData
-    } = payload;
+    } = payload
 
     const existingVariantIds = variants
       .map((v) => v.id)
-      .filter((id) => id && !id.startsWith("temp-"));
+      .filter((id) => id && !id.startsWith('temp-'))
 
     const productId =
-      id && !id.startsWith("temp-") ? id : "000000000000000000000000";
+      id && !id.startsWith('temp-') ? id : '000000000000000000000000'
 
     const prepareVariant = (v: VariantInput) => {
       const {
@@ -276,15 +276,15 @@ export async function upsertProduct(
         previews: _previews,
         isExpanded: _isExpanded,
         ...variantData
-      } = v;
+      } = v
 
       return {
         ...variantData,
         details: v.details ?? [],
         discounts: v.discounts ?? [],
         images: v.images ?? [],
-      };
-    };
+      }
+    }
 
     const product = await prisma.product.upsert({
       where: { id: productId },
@@ -299,14 +299,14 @@ export async function upsertProduct(
             id: { notIn: existingVariantIds },
           },
           upsert: variants.map((v) => {
-            const isTemp = !v.id || v.id.startsWith("temp-");
-            const variantData = prepareVariant(v);
+            const isTemp = !v.id || v.id.startsWith('temp-')
+            const variantData = prepareVariant(v)
 
             return {
-              where: { id: isTemp ? "000000000000000000000000" : v.id },
+              where: { id: isTemp ? '000000000000000000000000' : v.id },
               update: variantData,
               create: variantData,
-            };
+            }
           }),
         },
       },
@@ -319,19 +319,19 @@ export async function upsertProduct(
           create: variants.map((v) => prepareVariant(v)),
         },
       },
-    });
+    })
 
     return {
       success: true,
-      message: "Product saved successfully",
+      message: 'Product saved successfully',
       data: product,
-    };
+    }
   } catch (error) {
-    console.error("upsertProduct_ERROR:", error);
+    console.error('upsertProduct_ERROR:', error)
     return {
       success: false,
-      message: error instanceof Error ? error.message : "Database error",
+      message: error instanceof Error ? error.message : 'Database error',
       errors: error,
-    };
+    }
   }
 }

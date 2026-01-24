@@ -1,68 +1,68 @@
-import { useEffect, RefObject, createElement, ReactNode, useRef } from "react";
-import { tabbable } from "tabbable";
+import { useEffect, RefObject, createElement, ReactNode, useRef } from 'react'
+import { tabbable } from 'tabbable'
 
 interface Props {
-  children: ReactNode;
-  focusFirst?: boolean;
+  children: ReactNode
+  focusFirst?: boolean
 }
 
 export default function FocusTrap({ children, focusFirst = false }: Props) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const root: RefObject<any> = useRef(null);
+  const root: RefObject<any> = useRef(null)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const anchor: RefObject<any> = useRef(document.activeElement);
+  const anchor: RefObject<any> = useRef(document.activeElement)
 
   const returnFocus = () => {
     if (anchor) {
-      anchor.current.focus();
+      anchor.current.focus()
     }
-  };
+  }
 
   const trapFocus = () => {
     if (root.current) {
-      root.current.focus();
+      root.current.focus()
       if (focusFirst) {
-        selectFirstFocusableEl();
+        selectFirstFocusableEl()
       }
     }
-  };
+  }
 
   const selectFirstFocusableEl = () => {
     // Try to find focusable elements, if match then focus
     // Up to 6 seconds of load time threshold
-    let match = false;
-    const end = 60; // Try to find match at least n times
-    let i = 0;
+    let match = false
+    const end = 60 // Try to find match at least n times
+    let i = 0
     const timer = setInterval(() => {
       if (!match !== i > end) {
-        match = !!tabbable(root.current).length;
+        match = !!tabbable(root.current).length
         if (match) {
           // Attempt to focus the first el
-          tabbable(root.current)[0].focus();
+          tabbable(root.current)[0].focus()
         }
-        i = i + 1;
+        i = i + 1
       } else {
         // Clear interval after n attempts
-        clearInterval(timer);
+        clearInterval(timer)
       }
-    }, 100);
-  };
+    }, 100)
+  }
 
   useEffect(() => {
-    setTimeout(trapFocus, 20);
+    setTimeout(trapFocus, 20)
     return () => {
-      returnFocus();
-    };
+      returnFocus()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [root, children]);
+  }, [root, children])
 
   return createElement(
-    "div",
+    'div',
     {
       ref: root,
-      className: "outline-hidden focus-trap",
+      className: 'outline-hidden focus-trap',
       tabIndex: -1,
     },
     children,
-  );
+  )
 }

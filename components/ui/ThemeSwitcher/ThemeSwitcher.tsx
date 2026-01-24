@@ -1,18 +1,18 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { useToggleTheme } from "@lib/hooks/useToggleTheme";
-import ThemeIcon from "./ThemeIcon";
-import { cn } from "@lib/utils";
-import { ChevronRight } from "lucide-react";
-import { useClickOutside } from "@lib/hooks/useClickOutside";
+import { useState } from 'react'
+import { useToggleTheme } from '@lib/hooks/useToggleTheme'
+import ThemeIcon from './ThemeIcon'
+import { cn } from '@lib/utils'
+import { ChevronRight } from 'lucide-react'
+import { useClickOutside } from '@lib/hooks/useClickOutside'
 
 const ThemeSwitcher = () => {
-  const [display, setDisplay] = useState(false);
-  const { theme, themes, setTheme } = useToggleTheme();
+  const [display, setDisplay] = useState(false)
+  const { theme, themes, setTheme } = useToggleTheme()
   const containerRef = useClickOutside<HTMLDivElement>(() => {
-    setDisplay(false);
-  }, display);
+    setDisplay(false)
+  }, display)
 
   return (
     <div ref={containerRef} className="relative">
@@ -22,22 +22,22 @@ const ThemeSwitcher = () => {
       >
         <button
           className={
-            "w-[125px] h-10 pl-2 pr-1 rounded-md border border-accent-4 flex items-center justify-between transition-colors ease-linear hover:border-accent-3 hover:shadow-xs"
+            'w-[125px] h-10 pl-2 pr-1 rounded-md border border-accent-4 flex items-center justify-between transition-colors ease-linear hover:border-accent-3 hover:shadow-xs'
           }
           aria-label="Theme Switcher"
         >
           <span className="flex shrink items-center">
             <ThemeIcon width={20} height={20} theme={theme} />
             <span
-              className={cn("capitalize leading-none ml-3 text-on-primary")}
+              className={cn('capitalize leading-none ml-3 text-on-primary')}
             >
               {theme}
             </span>
           </span>
           <span className="cursor-pointer">
             <ChevronRight
-              className={cn("transition duration-300  text-secondary", {
-                ["rotate-90"]: display,
+              className={cn('transition duration-300  text-secondary', {
+                ['rotate-90']: display,
               })}
             />
           </span>
@@ -49,7 +49,7 @@ const ThemeSwitcher = () => {
         {themes.length && display ? (
           <div
             className={
-              " shadow-lg right-0 bottom-2 py-2 origin-top-right  outline-hidden z-40 absolute border border-border w-[125px] h-auto bg-secondary"
+              ' shadow-lg right-0 bottom-2 py-2 origin-top-right  outline-hidden z-40 absolute border border-border w-[125px] h-auto bg-secondary'
             }
           >
             <ul>
@@ -57,10 +57,10 @@ const ThemeSwitcher = () => {
                 <li key={t}>
                   <button
                     className="flex w-full capitalize cursor-pointer px-6 py-1 transition ease-in-out duration-150 text-primary leading-6 font-medium items-center hover:bg-accent-1"
-                    role={"link"}
+                    role={'link'}
                     onClick={() => {
-                      setTheme(t);
-                      setDisplay(false);
+                      setTheme(t)
+                      setDisplay(false)
                     }}
                   >
                     {t}
@@ -72,7 +72,7 @@ const ThemeSwitcher = () => {
         ) : null}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ThemeSwitcher;
+export default ThemeSwitcher

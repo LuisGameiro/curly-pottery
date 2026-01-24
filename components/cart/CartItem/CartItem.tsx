@@ -1,60 +1,60 @@
-"use client";
+'use client'
 
-import { ChangeEvent, useState } from "react";
-import cn from "clsx";
-import Image from "next/image";
-import Link from "next/link";
-import Quantity from "@components/ui/Quantity";
-import useCart from "@lib/hooks/useCart";
-import { calculateDiscount } from "@lib/calculate-price";
-import { Trash } from "lucide-react";
-import { Button, Text } from "@components/ui";
-import { CartLineItem } from "@lib/types/types";
+import { ChangeEvent, useState } from 'react'
+import cn from 'clsx'
+import Image from 'next/image'
+import Link from 'next/link'
+import Quantity from '@components/ui/Quantity'
+import useCart from '@lib/hooks/useCart'
+import { calculateDiscount } from '@lib/calculate-price'
+import { Trash } from 'lucide-react'
+import { Button, Text } from '@components/ui'
+import { CartLineItem } from '@lib/types/types'
 
-const placeholderImg = "/product-img-placeholder.svg";
+const placeholderImg = '/product-img-placeholder.svg'
 
 const CartItem = ({
   item,
-  variant = "default",
+  variant = 'default',
   ...rest
 }: {
-  variant?: "default" | "display";
-  item: CartLineItem;
+  variant?: 'default' | 'display'
+  item: CartLineItem
 }) => {
-  const { removeItem, updateItem } = useCart();
-  const [removing, setRemoving] = useState(false);
-  const [quantity, setQuantity] = useState<number>(item.quantity);
+  const { removeItem, updateItem } = useCart()
+  const [removing, setRemoving] = useState(false)
+  const [quantity, setQuantity] = useState<number>(item.quantity)
 
-  const price = calculateDiscount(item.price, item.discounts);
+  const price = calculateDiscount(item.price, item.discounts)
 
   const handleChange = async ({
     target: { value },
   }: ChangeEvent<HTMLInputElement>) => {
-    setQuantity(Number(value));
-    await updateItem(item.variantId, Number(value));
-  };
+    setQuantity(Number(value))
+    await updateItem(item.variantId, Number(value))
+  }
 
   const increaseQuantity = async (n = 1) => {
-    const val = Number(quantity) + n;
-    setQuantity(val);
-    await updateItem(item.variantId, Number(val));
-  };
+    const val = Number(quantity) + n
+    setQuantity(val)
+    await updateItem(item.variantId, Number(val))
+  }
 
   const handleRemove = async () => {
-    setRemoving(true);
+    setRemoving(true)
     try {
-      await removeItem(item.variantId);
+      await removeItem(item.variantId)
     } catch {
-      setRemoving(false);
+      setRemoving(false)
     }
-  };
+  }
 
   return (
     <li
       className={cn(
-        "border-b border-accent-2 last:border-b-0 sm:flex justify-between py-2",
+        'border-b border-accent-2 last:border-b-0 sm:flex justify-between py-2',
         {
-          "opacity-50 pointer-events-none": removing,
+          'opacity-50 pointer-events-none': removing,
         },
       )}
       {...rest}
@@ -67,7 +67,7 @@ const CartItem = ({
           >
             <Image
               src={item.images || placeholderImg}
-              alt={item.sku || "Product Image"}
+              alt={item.sku || 'Product Image'}
               className="object-cover"
               fill
               sizes="80px"
@@ -106,7 +106,7 @@ const CartItem = ({
       </div>
 
       <div className="flex items-center justify-end py-2">
-        {variant === "default" ? (
+        {variant === 'default' ? (
           <div className="flex items-center">
             <Quantity
               value={quantity}
@@ -143,7 +143,7 @@ const CartItem = ({
         </Button>
       </div>
     </li>
-  );
-};
+  )
+}
 
-export default CartItem;
+export default CartItem

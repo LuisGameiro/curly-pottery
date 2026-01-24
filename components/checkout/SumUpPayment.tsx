@@ -1,90 +1,90 @@
-import Script from "next/script";
-import { Text } from "@components/ui";
-import { toast } from "sonner";
-import { useEffect, useState } from "react";
-import { CurrencyCode } from "@lib/types/types";
-import { Loader2 } from "lucide-react";
+import Script from 'next/script'
+import { Text } from '@components/ui'
+import { toast } from 'sonner'
+import { useEffect, useState } from 'react'
+import { CurrencyCode } from '@lib/types/types'
+import { Loader2 } from 'lucide-react'
 
 interface SumUpResponse {
-  status: "PAID" | "PENDING" | "FAILED" | "EXPIRED";
-  id: string;
-  transaction_code?: string;
-  amount: number;
-  currency: string;
+  status: 'PAID' | 'PENDING' | 'FAILED' | 'EXPIRED'
+  id: string
+  transaction_code?: string
+  amount: number
+  currency: string
 }
 declare global {
   interface Window {
     SumUpCard: {
       mount: (options: {
-        id: string;
-        checkoutId: string;
-        currency: CurrencyCode;
-        locale: string;
-        country: string;
-        showFooter: boolean;
-        onLoad: () => void;
+        id: string
+        checkoutId: string
+        currency: CurrencyCode
+        locale: string
+        country: string
+        showFooter: boolean
+        onLoad: () => void
 
-        onResponse: (type: string, body: SumUpResponse) => void;
-      }) => void;
-      unmount: () => void;
-    };
+        onResponse: (type: string, body: SumUpResponse) => void
+      }) => void
+      unmount: () => void
+    }
   }
 }
 export default function SumUpPayment({
   checkoutId,
   onComplete,
 }: {
-  checkoutId: string;
-  onComplete: () => void;
+  checkoutId: string
+  onComplete: () => void
 }) {
-  const [loading, setLoading] = useState(false);
-  const [showRetry, setShowRetry] = useState(false);
+  const [loading, setLoading] = useState(false)
+  const [showRetry, setShowRetry] = useState(false)
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (loading) {
-        setShowRetry(true);
+        setShowRetry(true)
       }
-    }, 10000);
+    }, 10000)
 
-    return () => clearTimeout(timer);
-  }, [loading]);
+    return () => clearTimeout(timer)
+  }, [loading])
 
   const mountSumUp = () => {
-    setShowRetry(false);
-    setLoading(true);
+    setShowRetry(false)
+    setLoading(true)
 
-    if (!window.SumUpCard) return;
+    if (!window.SumUpCard) return
 
     window.SumUpCard.mount({
-      id: "sumup-card",
+      id: 'sumup-card',
       checkoutId: checkoutId,
       currency: CurrencyCode.GBP,
-      locale: "en_GB",
-      country: "GB",
+      locale: 'en_GB',
+      country: 'GB',
       showFooter: false,
       onLoad: () => {
-        setLoading(false);
+        setLoading(false)
       },
       onResponse: function (type: string, body: SumUpResponse) {
-        if (type === "success" || body.status === "PAID") {
-          onComplete();
+        if (type === 'success' || body.status === 'PAID') {
+          onComplete()
         }
-        if (type === "error" || body.status === "FAILED") {
-          toast.error("Payment failed. Please try again.");
+        if (type === 'error' || body.status === 'FAILED') {
+          toast.error('Payment failed. Please try again.')
         }
-        if (body.status === "PENDING") {
-          toast.warning("Payment is pending. Please complete the payment.");
+        if (body.status === 'PENDING') {
+          toast.warning('Payment is pending. Please complete the payment.')
         }
-        if (body.status === "EXPIRED") {
-          toast.error("Payment session expired. Please try again.");
+        if (body.status === 'EXPIRED') {
+          toast.error('Payment session expired. Please try again.')
         } else {
-          toast.error("An unexpected error occurred. Please try again.");
+          toast.error('An unexpected error occurred. Please try again.')
         }
-        window.SumUpCard.unmount();
+        window.SumUpCard.unmount()
       },
-    });
-  };
+    })
+  }
 
   return (
     <div className="space-y-8">
@@ -129,5 +129,5 @@ export default function SumUpPayment({
         test button
       </button>
     </div>
-  );
+  )
 }

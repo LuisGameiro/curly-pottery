@@ -1,12 +1,12 @@
-import { Container, Text } from "@components/ui";
-import RegisterForm from "../../../components/auth/RegisterForm";
-import constructMetadata from "@components/common/SEO";
+import { Container, Text } from '@components/ui'
+import RegisterForm from '../../../components/auth/RegisterForm'
+import constructMetadata from '@components/common/SEO'
 
 export const metadata = constructMetadata({
-  title: "Register",
+  title: 'Register',
   description:
-    "Create a new Curly Pottery account to start managing your orders, track shipments, and access exclusive member benefits. Enjoy a seamless shopping experience with us.",
-});
+    'Create a new Curly Pottery account to start managing your orders, track shipments, and access exclusive member benefits. Enjoy a seamless shopping experience with us.',
+})
 
 export default function RegisterPage() {
   return (
@@ -20,5 +20,5 @@ export default function RegisterPage() {
 
       <RegisterForm />
     </Container>
-  );
+  )
 }

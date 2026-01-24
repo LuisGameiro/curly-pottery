@@ -1,64 +1,64 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { signIn } from "next-auth/react";
-import { Text, Button, Input } from "@components/ui";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import InputCheckbox from "@components/ui/Input/InputCheckbox";
-import { useRouter } from "next/navigation";
-import { registerUser } from "actions/auth.actions";
+import { useState } from 'react'
+import { signIn } from 'next-auth/react'
+import { Text, Button, Input } from '@components/ui'
+import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
+import InputCheckbox from '@components/ui/Input/InputCheckbox'
+import { useRouter } from 'next/navigation'
+import { registerUser } from 'actions/auth.actions'
 
 export default function RegisterForm() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    password2: "",
-    firstName: "",
-    lastName: "",
-    phone: "",
+    email: '',
+    password: '',
+    password2: '',
+    firstName: '',
+    lastName: '',
+    phone: '',
     acceptsMarketing: false,
-  });
+  })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked } = e.target
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+      [name]: type === 'checkbox' ? checked : value,
+    }))
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+    e.preventDefault()
+    setLoading(true)
+    setError('')
 
-    const formData = new FormData(e.currentTarget);
-    const result = await registerUser(formData);
+    const formData = new FormData(e.currentTarget)
+    const result = await registerUser(formData)
 
     if (result.error) {
-      setError(result.error);
-      setLoading(false);
+      setError(result.error)
+      setLoading(false)
     } else {
-      const email = formData.get("email") as string;
-      const password = formData.get("password") as string;
+      const email = formData.get('email') as string
+      const password = formData.get('password') as string
 
-      const signInResult = await signIn("credentials", {
+      const signInResult = await signIn('credentials', {
         email,
         password,
         redirect: false,
-      });
+      })
 
       if (signInResult?.error) {
-        router.push("/auth/login?registered=true");
+        router.push('/auth/login?registered=true')
       } else {
-        router.push("/user");
+        router.push('/user')
       }
     }
-  };
+  }
 
   return (
     <section className="space-y-5 md:max-w-lg mx-auto">
@@ -135,7 +135,7 @@ export default function RegisterForm() {
 
       <div className="mt-6 text-center">
         <Text className="text-sm">
-          Already have an account?{" "}
+          Already have an account?{' '}
           <Link
             href="/auth/login"
             className="font-bold text-secondary hover:underline"
@@ -145,5 +145,5 @@ export default function RegisterForm() {
         </Text>
       </div>
     </section>
-  );
+  )
 }

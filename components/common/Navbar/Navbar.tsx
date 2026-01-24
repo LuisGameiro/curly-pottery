@@ -1,16 +1,16 @@
-import Link from "next/link";
-import s from "./Navbar.module.css";
-import NavbarRoot from "./NavbarRoot";
-import { Logo, Container } from "@components/ui";
-import { UserNav } from "@components/common";
+import Link from 'next/link'
+import s from './Navbar.module.css'
+import NavbarRoot from './NavbarRoot'
+import { Logo, Container } from '@components/ui'
+import { UserNav } from '@components/common'
 
 interface Link {
-  href: string;
-  label: string;
+  href: string
+  label: string
 }
 
 interface NavbarProps {
-  links?: Link[];
+  links?: Link[]
 }
 
 const Navbar = ({ links }: NavbarProps) => (
@@ -44,6 +44,6 @@ const Navbar = ({ links }: NavbarProps) => (
       </div>
     </Container>
   </NavbarRoot>
-);
+)
 
-export default Navbar;
+export default Navbar

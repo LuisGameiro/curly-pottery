@@ -8,12 +8,12 @@ import {
   Preview,
   Section,
   Text,
-} from "@react-email/components";
+} from '@react-email/components'
 
 interface ClientOrderEmailProps {
-  customerName: string;
-  orderId: string;
-  totalAmount: string;
+  customerName: string
+  orderId: string
+  totalAmount: string
 }
 
 export const ClientOrderEmail = ({
@@ -46,28 +46,28 @@ export const ClientOrderEmail = ({
       </Container>
     </Body>
   </Html>
-);
+)
 
-const main = { backgroundColor: "#f1fbff", fontFamily: "sans-serif" };
-const container = { margin: "0 auto", padding: "20px 0 48px", width: "580px" };
+const main = { backgroundColor: '#f1fbff', fontFamily: 'sans-serif' }
+const container = { margin: '0 auto', padding: '20px 0 48px', width: '580px' }
 const h1 = {
-  color: "#fde372",
-  fontSize: "24px",
-  fontWeight: "bold",
-  textAlign: "center" as const,
-};
-const text = { color: "#000000", fontSize: "16px", lineHeight: "24px" };
+  color: '#fde372',
+  fontSize: '24px',
+  fontWeight: 'bold',
+  textAlign: 'center' as const,
+}
+const text = { color: '#000000', fontSize: '16px', lineHeight: '24px' }
 const section = {
-  padding: "24px",
-  backgroundColor: "#f1fbff",
-  borderRadius: "8px",
-  border: "1px solid #d1e5f0",
-};
+  padding: '24px',
+  backgroundColor: '#f1fbff',
+  borderRadius: '8px',
+  border: '1px solid #d1e5f0',
+}
 const label = {
-  color: "#2d52ab",
-  fontSize: "12px",
-  textTransform: "uppercase" as const,
-};
-const value = { color: "#64748b", fontSize: "14px", fontWeight: "bold" };
-const hr = { borderColor: "#d1e5f0", margin: "20px 0" };
-const footer = { color: "#fde372", fontSize: "12px" };
+  color: '#2d52ab',
+  fontSize: '12px',
+  textTransform: 'uppercase' as const,
+}
+const value = { color: '#64748b', fontSize: '14px', fontWeight: 'bold' }
+const hr = { borderColor: '#d1e5f0', margin: '20px 0' }
+const footer = { color: '#fde372', fontSize: '12px' }
