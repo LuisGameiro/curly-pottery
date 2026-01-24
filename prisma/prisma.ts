@@ -1,29 +1,15 @@
-// import { PrismaNeon } from '@prisma/adapter-neon'
-// import dotenv from 'dotenv'
-// import { PrismaClient } from './generated/prisma/client'
-
-// dotenv.config()
-// const connectionString = `${process.env.DATABASE_URL}`
-
-// const adapter = new PrismaNeon({ connectionString })
-// export const prisma = new PrismaClient({ adapter })
-
-// const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL });
-// export const prisma = new PrismaClient({ adapter });
-// // ✅ Add PrismaClient options if required
-
 import { PrismaNeon } from '@prisma/adapter-neon'
 import { PrismaClient } from './generated/prisma/client'
 import { Pool } from 'pg'
 
-new Pool({ connectionString: process.env.DATABASE_URL })
+new Pool({ connectionString: process.env.DB_DATABASE_URL })
 
 const globalForPrisma = global as unknown as {
   prisma: PrismaClient
 }
 
 const adapter = new PrismaNeon({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.DB_DATABASE_URL,
 })
 
 const prisma =
