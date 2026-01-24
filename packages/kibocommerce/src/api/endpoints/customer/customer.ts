@@ -7,7 +7,7 @@ import { CommerceAPIError } from '@vercel/commerce/api/utils/errors'
 const getLoggedInCustomer: CustomerEndpoint['handlers']['getLoggedInCustomer'] =
   async ({ req, config }) => {
     const cookieHandler = new CookieHandler(config, req)
-    let accessToken = cookieHandler.getAccessToken()
+    const accessToken = cookieHandler.getAccessToken()
 
     if (!cookieHandler.isShopperCookieAnonymous()) {
       const { data } = await config.fetch(getCustomerAccountQuery, undefined, {

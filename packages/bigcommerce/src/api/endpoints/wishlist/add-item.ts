@@ -15,7 +15,7 @@ const addItem: WishlistEndpoint['handlers']['addItem'] = async ({
     throw new Error('Invalid request. No CustomerId')
   }
 
-  let { wishlist } = await commerce.getCustomerWishlist({
+  const { wishlist } = await commerce.getCustomerWishlist({
     variables: { customerId },
     config,
   })

@@ -1,4 +1,4 @@
-import type { Provider, SFCCProviderAPI } from '..'
+import type { SFCCProviderAPI } from '..'
 
 import createEndpoints from '@vercel/commerce/api/endpoints'
 

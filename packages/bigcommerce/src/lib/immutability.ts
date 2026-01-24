@@ -1,4 +1,4 @@
-import update, { Context } from 'immutability-helper'
+import { Context } from 'immutability-helper'
 
 const c = new Context()
 

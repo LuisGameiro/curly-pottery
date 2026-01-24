@@ -3,7 +3,7 @@ import type {
   OperationOptions,
 } from '@vercel/commerce/api/operations'
 import type { GetCustomerWishlistOperation } from '@vercel/commerce/types/wishlist'
-import type { RecursivePartial, BCWishlist } from '../utils/types'
+import type { BCWishlist } from '../utils/types'
 import { BigcommerceConfig, Provider } from '..'
 import { ProductEdge } from './get-all-products'
 import { normalizeWishlist } from '../../lib/normalize'

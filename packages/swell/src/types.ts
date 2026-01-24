@@ -2,9 +2,9 @@ import type { CheckoutLineItem } from '../schema'
 
 export type SwellImage = {
   file: {
-    url: String
-    height: Number
-    width: Number
+    url: string
+    height: number
+    width: number
   }
   id: string
 }

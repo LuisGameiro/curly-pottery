@@ -1,7 +1,6 @@
 import type {
   UpdateItemHook,
   LineItem,
-  Cart,
 } from '@vercel/commerce/types/cart'
 import type {
   HookFetcherContext,

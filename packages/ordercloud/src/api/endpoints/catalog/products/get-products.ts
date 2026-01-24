@@ -19,7 +19,7 @@ const getProducts: ProductsEndpoint['handlers']['getProducts'] = async ({
     url.searchParams.set('categoryID', String(categoryId))
   }
 
-  var rawProducts = await restBuyerFetch(
+  const rawProducts = await restBuyerFetch(
     'GET',
     url.pathname + url.search,
     null,

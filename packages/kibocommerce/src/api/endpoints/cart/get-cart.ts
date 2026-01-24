@@ -15,7 +15,7 @@ const getCart: CartEndpoint['handlers']['getCart'] = async ({
     let accessToken = null
 
     if (!cookieHandler.getAccessToken()) {
-      let anonymousShopperTokenResponse =
+      const anonymousShopperTokenResponse =
         await cookieHandler.getAnonymousToken()
       const response = anonymousShopperTokenResponse.response
       accessToken = anonymousShopperTokenResponse.accessToken
@@ -24,7 +24,7 @@ const getCart: CartEndpoint['handlers']['getCart'] = async ({
       accessToken = cookieHandler.getAccessToken()
     }
 
-    let result = await config.fetch(
+    const result = await config.fetch(
       getCartQuery,
       {},
       { headers: { 'x-vol-user-claims': accessToken } }

@@ -53,10 +53,10 @@ const getCheckout: CheckoutEndpoint['handlers']['getCheckout'] = async ({
       channel_id: config.storeChannelId,
       redirect_to: data.checkout_url.replace(config.storeUrl, ''),
     }
-    let token = jwt.sign(payload, config.storeApiClientSecret!, {
+    const token = jwt.sign(payload, config.storeApiClientSecret!, {
       algorithm: 'HS256',
     })
-    let checkouturl = `${config.storeUrl}/login/token/${token}`
+    const checkouturl = `${config.storeUrl}/login/token/${token}`
 
     if (fullCheckout) {
       return { redirectTo: checkouturl }

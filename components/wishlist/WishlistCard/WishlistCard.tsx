@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { useState } from 'react'
 import cn from 'clsx'
 import Link from 'next/link'
 import Image from 'next/image'

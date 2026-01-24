@@ -26,7 +26,7 @@ const removeItem: CartEndpoint['handlers']['removeItem'] = async ({
 
   let currentCart = null
   if (removeItemResponse.data.deleteCurrentCartItem) {
-    let result = await config.fetch(
+    const result = await config.fetch(
       getCartQuery,
       {},
       { headers: { 'x-vol-user-claims': accessToken } }

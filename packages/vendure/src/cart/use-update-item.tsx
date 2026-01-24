@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 import {
   HookFetcherContext,
-  MutationHook,
   MutationHookContext,
 } from '@vercel/commerce/utils/types'
 import { CommerceError, ValidationError } from '@vercel/commerce/utils/errors'

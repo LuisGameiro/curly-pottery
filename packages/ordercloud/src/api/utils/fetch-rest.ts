@@ -122,7 +122,7 @@ export const createBuyerFetcher: (
     // Get provider config
     const config = getConfig()
 
-    let meta: any = {}
+    const meta: any = {}
 
     if (!token) {
       const newToken = await getToken({

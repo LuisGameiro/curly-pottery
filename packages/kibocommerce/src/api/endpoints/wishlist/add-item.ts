@@ -27,7 +27,7 @@ const buildAddToWishlistVariables = ({
     (v: any) => v.productCode === variantId
   ).options
   const quantity = 1
-  let options: any[] = []
+  const options: any[] = []
   selectedOptions?.forEach((each: any) => {
     product?.options
       .filter((option: any) => {

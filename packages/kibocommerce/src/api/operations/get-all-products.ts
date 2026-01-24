@@ -21,7 +21,7 @@ export default function getAllProductsOperation({
     const cfg = commerce.getConfig(config)
     const { data } = await cfg.fetch(query)
 
-    let normalizedProducts = data.products.items
+    const normalizedProducts = data.products.items
       ? data.products.items.map((item: any) => normalizeProduct(item, cfg))
       : []
 

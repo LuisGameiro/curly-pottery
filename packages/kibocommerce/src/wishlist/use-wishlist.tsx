@@ -3,7 +3,6 @@ import { SWRHook } from '@vercel/commerce/utils/types'
 import useWishlist, {
   UseWishlist,
 } from '@vercel/commerce/wishlist/use-wishlist'
-import type { GetWishlistHook } from '@vercel/commerce/types/wishlist'
 import useCustomer from '../customer/use-customer'
 
 export default useWishlist as UseWishlist<typeof handler>

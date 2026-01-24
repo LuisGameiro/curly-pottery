@@ -39,7 +39,7 @@ export const handler: MutationHook<AddItemHook> = {
       return null
     }
 
-    let token: IToken | undefined = ensureIToken()
+    const token: IToken | undefined = ensureIToken()
 
     const addItemParameters: WishlistsAddWishedItem = {
       variant_id: `${variantId}`,

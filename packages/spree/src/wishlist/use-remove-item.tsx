@@ -32,7 +32,7 @@ export const handler: MutationHook<RemoveItemHook> = {
       return null
     }
 
-    let token: IToken | undefined = ensureIToken()
+    const token: IToken | undefined = ensureIToken()
 
     await fetch<GraphQLFetcherResult<WishedItem>>({
       variables: {

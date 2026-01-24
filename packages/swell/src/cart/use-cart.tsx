@@ -2,7 +2,7 @@ import useCart, { UseCart } from '@vercel/commerce/cart/use-cart'
 import { SWRHook } from '@vercel/commerce/utils/types'
 import { useMemo } from 'react'
 import { normalizeCart } from '../utils/normalize'
-import { checkoutCreate, checkoutToCart } from './utils'
+import { checkoutCreate } from './utils'
 import type { GetCartHook } from '@vercel/commerce/types/cart'
 
 export default useCart as UseCart<typeof handler>

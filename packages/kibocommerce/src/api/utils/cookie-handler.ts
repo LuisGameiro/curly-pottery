@@ -28,7 +28,7 @@ export default class CookieHandler {
     const response: any = await getAnonymousShopperToken({
       config: this.config,
     })
-    let anonymousAccessToken = response?.accessToken
+    const anonymousAccessToken = response?.accessToken
     return {
       response,
       accessToken: anonymousAccessToken,

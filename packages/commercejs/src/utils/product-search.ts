@@ -7,7 +7,7 @@ const getFilterVariables = ({
   search?: string | null
   categoryId?: string | number | null
 }) => {
-  let filterVariables: { [key: string]: any } = {}
+  const filterVariables: { [key: string]: any } = {}
   if (search) {
     filterVariables.query = search
   }

@@ -25,7 +25,7 @@ const updateItem: CartEndpoint['handlers']['updateItem'] = async ({
 
   let currentCart = null
   if (updateItemResponse.data) {
-    let result = await config.fetch(
+    const result = await config.fetch(
       getCartQuery,
       {},
       { headers: { 'x-vol-user-claims': accessToken } }

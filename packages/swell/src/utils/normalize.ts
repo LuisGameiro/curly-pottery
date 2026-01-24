@@ -38,7 +38,7 @@ const normalizeProductOption = ({
   name: displayName = '',
   values = [],
 }: swellProductOption): ProductOption => {
-  let returnValues = values.map((value) => {
+  const returnValues = values.map((value) => {
     let output: any = {
       label: value.name,
       // id: value?.id || id,

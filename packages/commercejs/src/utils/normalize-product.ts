@@ -36,7 +36,7 @@ function normalizeVariants(
         return {
           id: variantOptionId,
           displayName: variantGroupFromId?.name || '',
-          __typename: 'MultipleChoiceOption' as 'MultipleChoiceOption',
+          __typename: 'MultipleChoiceOption' as const,
           values: [
             {
               label: valueLabel || '',

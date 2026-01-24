@@ -1,5 +1,5 @@
 import type { OperationContext } from '@vercel/commerce/api/operations'
-import type { KiboCommerceConfig, KiboCommerceProvider } from '..'
+import type { KiboCommerceConfig } from '..'
 import { normalizePage } from '../../lib/normalize'
 import { getPageQuery } from '../queries/get-page-query'
 import type { Page, GetPageOperation } from '@vercel/commerce/types/page'

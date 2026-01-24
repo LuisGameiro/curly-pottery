@@ -23,7 +23,7 @@ const buildAddToCartVariables = ({
     (v: any) => v.productCode === variantId
   ).options
 
-  let options: any[] = []
+  const options: any[] = []
   selectedOptions?.forEach((each: any) => {
     product?.options
       .filter((option: any) => {
@@ -64,7 +64,7 @@ const addItem: CartEndpoint['handlers']['addItem'] = async ({
   let accessToken = null
 
   if (!cookieHandler.getAccessToken()) {
-    let anonymousShopperTokenResponse = await cookieHandler.getAnonymousToken()
+    const anonymousShopperTokenResponse = await cookieHandler.getAnonymousToken()
     accessToken = anonymousShopperTokenResponse.accessToken
   } else {
     accessToken = cookieHandler.getAccessToken()
@@ -79,7 +79,7 @@ const addItem: CartEndpoint['handlers']['addItem'] = async ({
   )
   let currentCart = null
   if (addToCartResponse.data.addItemToCurrentCart) {
-    let result = await config.fetch(
+    const result = await config.fetch(
       getCartQuery,
       {},
       { headers: { 'x-vol-user-claims': accessToken } }

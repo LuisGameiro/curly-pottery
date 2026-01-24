@@ -3,7 +3,7 @@ import type { MutationHook } from '@vercel/commerce/utils/types'
 import { CommerceError } from '@vercel/commerce/utils/errors'
 import useSignup, { UseSignup } from '@vercel/commerce/auth/use-signup'
 import useCustomer from '../customer/use-customer'
-import { AccountRegisterInput, Mutation, MutationAccountRegisterArgs } from '../../schema'
+import { Mutation, MutationAccountRegisterArgs } from '../../schema'
 
 import * as mutation from '../utils/mutations'
 import { handleAutomaticLogin, throwUserErrors } from '../utils'

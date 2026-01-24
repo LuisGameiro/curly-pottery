@@ -2,7 +2,6 @@ import { useCallback } from 'react'
 import type {
   MutationHookContext,
   HookFetcherContext,
-  MutationHook,
 } from '@vercel/commerce/utils/types'
 import useRemoveItem, {
   UseRemoveItem,

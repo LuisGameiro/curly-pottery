@@ -1,7 +1,7 @@
 import { Product } from '@vercel/commerce/types/product'
 import { GetAllProductsOperation } from '@vercel/commerce/types/product'
 import type { OperationContext } from '@vercel/commerce/api/operations'
-import type { LocalConfig, Provider } from '../index'
+import type { LocalConfig } from '../index'
 import data from '../../data.json'
 
 export default function getAllProductsOperation({

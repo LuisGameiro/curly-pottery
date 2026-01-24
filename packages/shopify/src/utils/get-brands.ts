@@ -15,7 +15,7 @@ const getBrands = async (config: ShopifyConfig) => {
     },
   })
 
-  let vendorsStrings = data.products.edges.map(({ node: { vendor } }) => vendor)
+  const vendorsStrings = data.products.edges.map(({ node: { vendor } }) => vendor)
 
   return [...new Set(vendorsStrings)].map((v) => {
     const id = v.replace(/\s+/g, '-').toLowerCase()
