@@ -7,13 +7,7 @@ import { Container, Text, Button, Input } from '@components/ui'
 import { CheckCircle2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { resetPassword } from 'actions/email.actions'
-import constructMetadata from '@components/common/SEO'
 
-export const metadata = constructMetadata({
-  title: 'Reset Password',
-  description:
-    "Set a new password for your Curly Pottery account to continue enjoying our services. Ensure your account's security with a strong password.",
-})
 export default function ResetPasswordPage() {
   const [loading, setLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
