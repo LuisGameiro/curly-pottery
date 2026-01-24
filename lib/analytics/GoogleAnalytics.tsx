@@ -9,7 +9,7 @@ declare global {
     _analytics_initialized?: boolean
   }
 }
-export default function GoogleAnalytics() {
+export function GoogleAnalytics() {
   useEffect(() => {
     try {
       const saved = localStorage.getItem('cookie-consent')
