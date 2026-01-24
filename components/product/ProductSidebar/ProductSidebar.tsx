@@ -16,7 +16,7 @@ import {
   Discount,
 } from "@lib/types/types";
 import { toast } from "sonner";
-import { Share, Undo2 } from "lucide-react";
+import { Undo2 } from "lucide-react";
 import { trackEvent } from "@lib/analytics/trackEvents";
 
 interface ProductSidebarProps {
@@ -58,7 +58,8 @@ const ProductSidebar = ({
         name: product.name,
         currency: variant.currency,
         sku: variant.sku,
-        price: calculateDiscount(variant.price, variant.discounts as Discount[]).finalPrice,
+        price: calculateDiscount(variant.price, variant.discounts as Discount[])
+          .finalPrice,
         quantity: quantity,
       });
     } catch {

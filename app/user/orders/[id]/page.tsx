@@ -10,7 +10,7 @@ import Loading from "app/loading";
 import { Suspense } from "react";
 import constructMetadata from "@components/common/SEO/SEO";
 
-export const metadata = constructMetadata({ 
+export const metadata = constructMetadata({
   title: "Order Details",
   description: "Manage your store order at Curly Pottery.",
 });

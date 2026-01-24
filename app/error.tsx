@@ -3,7 +3,6 @@
 import { Button, Text } from "@components/ui";
 import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
-import { env } from "node:process";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -25,7 +24,7 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
         <p>Something unexpected happened.</p>
         <p>Try refreshing the page, or check back in a moment.</p>
       </p>
-      {process.env.NEXT_PUBLIC_APP_ENV === 'dev' && (
+      {process.env.NEXT_PUBLIC_APP_ENV === "dev" && (
         <>
           {error.digest && (
             <code className="block bg-muted p-2 rounded text-xs text-red-500">

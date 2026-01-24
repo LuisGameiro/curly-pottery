@@ -50,12 +50,14 @@ export default function CheckouClient() {
   const { watch } = methods;
   const currentValues = watch();
 
-  trackEvent('begin_checkout', {
+  trackEvent("begin_checkout", {
     userId: currentValues?.userId,
     total_value: currentValues.totalPrice,
     currency: currentValues.currency,
     item_count: currentValues.lineItems.length,
-    items: currentValues.lineItems.map(item => item.quantity + " * " + item.sku),
+    items: currentValues.lineItems.map(
+      (item) => item.quantity + " * " + item.sku,
+    ),
   });
 
   const onInformationSubmit = () => setStep(2);
@@ -67,13 +69,15 @@ export default function CheckouClient() {
         currentValues.totalPrice,
         cartId,
       );
-      trackEvent('before_purchase', {
+      trackEvent("before_purchase", {
         transaction_id: response.data,
         userId: currentValues?.userId,
         total_value: currentValues.totalPrice,
         currency: currentValues.currency,
         item_count: currentValues.lineItems.length,
-        items: currentValues.lineItems.map(item => item.quantity + " * " + item.sku),
+        items: currentValues.lineItems.map(
+          (item) => item.quantity + " * " + item.sku,
+        ),
       });
       if (!response.success && !response.data) {
         setLoading(false);
@@ -118,16 +122,17 @@ export default function CheckouClient() {
             itemsCount: currentValues.lineItems.length || 0,
           }),
         });
-        trackEvent('purchase_complete', {
+        trackEvent("purchase_complete", {
           order_id: orderResponse.data?.id,
           transaction_id: checkoutId,
           userId: currentValues?.userId,
           total_value: currentValues.totalPrice,
           currency: currentValues.currency,
           item_count: currentValues.lineItems.length,
-          items: currentValues.lineItems.map(item => item.quantity + " * " + item.sku),
+          items: currentValues.lineItems.map(
+            (item) => item.quantity + " * " + item.sku,
+          ),
         });
-
 
         deleteAll();
       }
@@ -205,8 +210,6 @@ export default function CheckouClient() {
         <div className="lg:col-span-4">
           <CheckoutSummary />
         </div>
-
-        
       </Container>
     </FormProvider>
   );

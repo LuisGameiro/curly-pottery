@@ -1,7 +1,8 @@
 "use client";
+
 import Script from "next/script";
 import ReactGA from "react-ga4";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 declare global {
   interface Window {
@@ -9,29 +10,19 @@ declare global {
   }
 }
 export default function GoogleAnalytics() {
-  if (!process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID) {
-    return null;
-  }
-  const [consent, setConsent] = useState<boolean | null>(null);
-
   useEffect(() => {
     try {
       const saved = localStorage.getItem("cookie-consent");
-      const isConsented = saved ? JSON.parse(saved).analytics : false;
-      setConsent(isConsented);
+      const hasConsent = saved ? JSON.parse(saved).analytics : false;
 
-      if (isConsented) {
-        if (!window._analytics_initialized) {
-          ReactGA.initialize(process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || "");
-          window._analytics_initialized = true;
-        }
+      if (hasConsent && !window._analytics_initialized) {
+        ReactGA.initialize(process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || "");
+        window._analytics_initialized = true;
       }
     } catch (e) {
       console.warn("Analytics blocked by browser extension", e);
     }
   }, []);
-
-  if (!consent) return null;
 
   return (
     <>

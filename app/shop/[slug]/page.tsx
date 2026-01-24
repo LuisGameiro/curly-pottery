@@ -48,6 +48,7 @@ export async function generateMetadata({
       images: [
         { url: productImage, width: 1200, height: 630, alt: product.name },
       ],
+      locale: "en_UK",
       type: "website",
     },
   });

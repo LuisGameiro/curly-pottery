@@ -6,7 +6,7 @@ export const metadata = constructMetadata({
   title: "Contact Us",
   description:
     "Get in touch with Curly Pottery for inquiries, custom orders, or any questions you may have. We are here to help and look forward to hearing from you.",
-})
+});
 
 const contacts = {
   email: "curly.pottery@gmail.com",

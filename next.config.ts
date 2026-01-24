@@ -14,10 +14,10 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: '/ingest/:path*',
-        destination: 'https://eu.i.posthog.com/:path*',
+        source: "/ingest/:path*",
+        destination: "https://eu.i.posthog.com/:path*",
       },
-    ]
+    ];
   },
 };
 
@@ -62,4 +62,4 @@ export default withSentryConfig(nextConfig, {
   // hideSourceMaps: true,
 });
 
-module.exports = nextConfig
+module.exports = nextConfig;

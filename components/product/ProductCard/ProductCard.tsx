@@ -85,7 +85,8 @@ const ProductCard = ({
                 style={{
                   width: "auto",
                   height: "64",
-                  objectFit: "cover",}}
+                  objectFit: "cover",
+                }}
                 quality={100}
                 {...imgProps}
               />

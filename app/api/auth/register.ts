@@ -29,7 +29,6 @@ export default async function handler(
     const validation = registerSchema.safeParse(body);
     console.log(validation);
     if (!validation.success) {
-      // Return the first error message for simplicity on the frontend
       return res.status(400).json({
         error: validation.error.message[0],
       });

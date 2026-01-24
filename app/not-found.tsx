@@ -6,7 +6,7 @@ export default function NotFound() {
     <div className="space-y-10 text-center bg-background py-20">
       <Text variant="heading">Oops! This page is missing.</Text>
       <Text variant="body">
-        We couldn't find the page you're looking for. It might have moved, or
+        We could not find the page you are looking for. It might have moved, or
         the link could be slightly broken.
       </Text>
       <Link href="/" className="text-secondary">

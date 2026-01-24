@@ -7,7 +7,6 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { sendResetEmail } from "actions/email.actions";
 import zod from "zod";
-import constructMetadata from "@components/common/SEO";
 
 // export const metadata = constructMetadata({
 //   title: "Recovery Account",

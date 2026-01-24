@@ -38,12 +38,13 @@ interface ProductViewProps {
 const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
   const [variant, setVariant] = useState<Variant>(product.variants[0]);
 
-   trackEvent("view_product", {
-        name: product.name,
-        currency: variant.currency,
-        sku: variant.sku,
-        price: calculateDiscount(variant.price, variant.discounts as Discount[]).finalPrice,
-      });
+  trackEvent("view_product", {
+    name: product.name,
+    currency: variant.currency,
+    sku: variant.sku,
+    price: calculateDiscount(variant.price, variant.discounts as Discount[])
+      .finalPrice,
+  });
 
   return (
     <>

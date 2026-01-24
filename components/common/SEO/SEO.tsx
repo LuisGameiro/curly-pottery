@@ -1,6 +1,12 @@
-// utils/seo.ts
 import { Metadata } from "next";
 import config from "../config/seo_meta.json";
+
+type OGImage = {
+  url: string;
+  width?: number;
+  height?: number;
+  alt?: string;
+};
 
 const storeUrl = process.env.NEXT_PUBLIC_APP_URL;
 const storeBaseUrl = storeUrl ? `https://${storeUrl}` : "";
@@ -16,7 +22,7 @@ export default function constructMetadata({
   description?: string;
   robots?: string;
   canonical?: string;
-  openGraph?: any; // You can type this strictly using Metadata['openGraph']
+  openGraph?: Metadata["openGraph"];
 } = {}): Metadata {
   const seoTitle = title
     ? config.titleTemplate.replace(/%s/g, title)
@@ -24,13 +30,17 @@ export default function constructMetadata({
 
   const seoDescription = description || config.description;
 
-  const images = openGraph?.images || config.openGraph.images;
-  const ogImages = images.map((img: any) => ({
-    url: img.url.startsWith("http") ? img.url : `${storeBaseUrl}${img.url}`,
-    width: img.width,
-    height: img.height,
-    alt: img.alt,
-  }));
+  const images = (openGraph?.images || config.openGraph.images) as
+    | OGImage
+    | OGImage[];
+  const ogImages = Array.isArray(images)
+    ? images.map((img: OGImage) => ({
+        url: img.url.startsWith("http") ? img.url : `${storeBaseUrl}${img.url}`,
+        width: img.width,
+        height: img.height,
+        alt: img.alt,
+      }))
+    : [images];
 
   return {
     title: seoTitle,
@@ -43,19 +53,19 @@ export default function constructMetadata({
       title: openGraph?.title || seoTitle,
       description: openGraph?.description || seoDescription,
       url: openGraph?.url || storeBaseUrl,
-      siteName: openGraph?.site_name || config.openGraph.site_name,
+      siteName: openGraph?.siteName || config.openGraph.site_name,
       locale: openGraph?.locale || "en_US",
-      type: (openGraph?.type || config.openGraph.type) as any,
+      type: config.openGraph.type,
       images: ogImages,
-    },
+    } as Metadata["openGraph"],
     twitter: {
-      card: config.twitter.cardType as any,
+      card: config.twitter.cardType as "summary_large_image",
       title: openGraph?.title || seoTitle,
       images: ogImages,
       description: openGraph?.description || seoDescription,
       site: config.twitter.site,
       creator: config.twitter.handle,
-    },
+    } as Metadata["twitter"],
     robots: robots ?? "index, follow",
   };
 }

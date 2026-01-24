@@ -1,6 +1,6 @@
 "use client";
 
-import { Share2 } from "lucide-react"; 
+import { Share2 } from "lucide-react";
 import Button from "../Button";
 
 interface ShareButtonProps {
@@ -34,10 +34,7 @@ export default function ShareButton({ title, text, url }: ShareButtonProps) {
   };
 
   return (
-    <Button
-      onClick={handleShare}
-      variant="naked"
-      >
+    <Button onClick={handleShare} variant="naked">
       <Share2 size={24} />
     </Button>
   );

@@ -10,15 +10,16 @@ export function PHProvider({ children }: { children: React.ReactNode }) {
       const saved = localStorage.getItem("cookie-consent");
       const hasConsent = saved ? JSON.parse(saved).analytics : false;
 
-      if (hasConsent) {
+      if (hasConsent && !posthog.__loaded) {
         posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY || "", {
           api_host: "/ingest",
-          ui_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+          ui_host: "https://eu.posthog.com",
           person_profiles: "always",
+          capture_pageview: false,
         });
       }
     } catch (e) {
-      console.warn("Posthog blocked by browser extension", e);
+      console.warn("Analytics blocked by browser extension", e);
     }
   }, []);
 
