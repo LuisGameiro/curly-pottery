@@ -16,12 +16,7 @@ export async function POST(request: Request): Promise<NextResponse> {
         return {
           allowedContentTypes: ['image/jpeg', 'image/png', 'image/webp'],
           addRandomSuffix: true,
-          // callbackUrl: 'https://example.com/api/avatar/upload',
-          // optional, `callbackUrl` is automatically computed when hosted on Vercel
-          tokenPayload: JSON.stringify({
-            // optional, sent to your server on upload completion
-            // you could pass a user id from auth, or a value from clientPayload
-          }),
+       
         }
       },
       onUploadCompleted: async ({ blob, tokenPayload }) => {
