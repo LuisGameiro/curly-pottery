@@ -148,9 +148,6 @@ export default async function CustomerDetailsPage({
                         {address.type}
                       </span>
                     </div>
-                    {/* <p className="font-medium">
-                      {address.firstName} {address.lastName}
-                    </p> */}
                     <p className="text-muted-foreground text-xs leading-relaxed">
                       {address.address}
                       <br />

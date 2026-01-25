@@ -7,9 +7,7 @@ interface Props {
 }
 
 export default function FocusTrap({ children, focusFirst = false }: Props) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const root: RefObject<any> = useRef(null)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const anchor: RefObject<any> = useRef(document.activeElement)
 
   const returnFocus = () => {

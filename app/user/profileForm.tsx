@@ -121,7 +121,6 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
           )}
         </div>
 
-        {/* Addresses Section */}
         <div className="mt-8">
           <div className="flex justify-between items-center mb-4">
             <Text variant="subHeading">Your Addresses</Text>

@@ -1,14 +1,15 @@
+// TODO : Replace with actual blob storage upload logic
+
 import { ActionResponse } from '@lib/types/types'
 
 export const uploadImagesToBlob = async (
   items: (File | string)[],
 ): Promise<string[]> => {
   const uploadPromises = items.map(async (item) => {
-    // 1. Check if it is already a permanent URL (string)
+
     if (typeof item === 'string') {
       return item
     }
-    // 2. If it is a File object, perform the upload
     try {
       const formData = new FormData()
       formData.append('file', item)

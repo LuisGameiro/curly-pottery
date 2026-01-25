@@ -1,5 +1,7 @@
 'use server'
 
+// TODO : Replace with with promise types
+
 import { z } from 'zod'
 import { hashPassword } from '@lib/auth/password'
 import { prisma } from 'prisma/prisma'
@@ -14,13 +16,11 @@ const registerSchema = z.object({
 })
 
 export async function registerUser(formData: FormData) {
-  // Convert FormData to object
   const rawData = Object.fromEntries(formData.entries())
 
-  // Validate data
   const validation = registerSchema.safeParse({
     ...rawData,
-    acceptsMarketing: rawData.acceptsMarketing === 'on', // Checkbox logic
+    acceptsMarketing: rawData.acceptsMarketing === 'on',
   })
 
   if (!validation.success) {

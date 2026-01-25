@@ -8,12 +8,6 @@ import { toast } from 'sonner'
 import { sendResetEmail } from 'actions/email.actions'
 import zod from 'zod'
 
-// export const metadata = constructMetadata({
-//   title: "Recovery Account",
-//   description:
-//     "Recover your password for your Curly Pottery account to manage your orders, track shipments, and access exclusive member benefits. Enjoy a seamless shopping experience with us.",
-// });
-
 export default function RecoveryForm() {
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)

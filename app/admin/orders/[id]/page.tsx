@@ -132,7 +132,6 @@ export default async function OrderDetailsPage({
             </Container>
           </div>
 
-          {/* Right Column: Customer & Shipping Details */}
           <div className="space-y-6">
             <OrderStatusUpdate
               orderId={order.id}

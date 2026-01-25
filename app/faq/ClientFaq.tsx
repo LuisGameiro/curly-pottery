@@ -61,10 +61,9 @@ const faqData: FAQItem[] = [
         differences that appear in the handmade crafting process. These slight variations are not flaws, but rather the unique\
          characteristics that give handmade pottery its value and charm.​',
   },
-  //    {
+  // {
   //   question: "?",
-  //   answer:
-  //     ""
+  //   answer: ""
   // },
 ]
 

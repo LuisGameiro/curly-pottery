@@ -69,7 +69,6 @@ model Product {
   variants          ProductVariant[] 
   categories        Category[]
   requiresShipping  Boolean     @default(true)
-
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
 }
@@ -82,7 +81,6 @@ model ProductVariant {
   stock            Int          @default(0)
   availableForSale Boolean      @default(true)
   images           String[]     @default([])
-
   sizeName         String?
   colorName        String? 
   colorHex         String? 
@@ -90,7 +88,6 @@ model ProductVariant {
   discounts        Json?
   productId        String
   product          Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
   @@unique([productId, sizeName, colorName])
@@ -109,10 +106,8 @@ model Address {
   postalCode   String
   city         String
   country      String
-
   userId       String?
   user         User? @relation(fields: [userId], references: [id], onDelete: Cascade)
-
   createdAt    DateTime @default(now())
 }
 
@@ -216,38 +211,3 @@ model User {
     resetTokenExpiry DateTime?
 }
 
-
-
-/**
- * -------------------- CUSTOMER --------------------
-
-model Customer {
-  id               String   @id @default(cuid())
-  firstName        String
-  lastName         String
-  email            String   @unique
-  phone            String?
-  company          String?
-  notes            String?
-  acceptsMarketing Boolean  @default(false)
-
-  addresses        Address[]
-  orders           Order[]
-  cart             Cart?
-  account          Account  @relation(fields: [accountId], references: [id])
-  accountId        String   @unique
-
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-}
- 
-
-
-model VerificationToken {
-    identifier      String
-    token           String   @unique
-    expires         DateTime
-    @@unique([identifier, token])
-}
-
-*/
