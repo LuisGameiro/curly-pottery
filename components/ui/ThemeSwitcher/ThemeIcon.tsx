@@ -9,13 +9,13 @@ interface ThemeIconProps {
 const ThemeIcon = ({ theme, ...props }: ThemeIconProps) => {
   switch (theme) {
     case 'light':
-      return <Sun {...props} color="blue" />
+      return <Sun {...props} />
 
     case 'dark':
-      return <Moon {...props} color="blue" />
+      return <Moon {...props} />
 
     default:
-      return <Computer {...props} color="blue" />
+      return <Computer {...props} />
   }
 }
 

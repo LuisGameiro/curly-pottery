@@ -2,8 +2,9 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply text-center p-6 bg-primary text-sm flex-row 
+  @apply left-0 p-4 border-t-2 border-secondary
+  text-center bg-primary text-sm flex-row 
   justify-center items-center font-medium fixed bottom-0
-  w-full z-30 transition-all duration-300 ease-out
+  w-full z-50 transition-all duration-300 ease-out
   md:flex md:text-left;
 }

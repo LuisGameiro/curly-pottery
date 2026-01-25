@@ -43,11 +43,10 @@ const FeatureBar = ({ className }: FeatureBarProps) => {
     <div
       className={cn(
         s.root,
-        'fixed bottom-0 left-0 w-full p-4 z-50 border-t-2 border-secondary',
         className,
       )}
     >
-      <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="max-w-screen mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-on-primary">
         <div className="text-sm">
           <Text variant="bold">We value your privacy</Text>
           <Text>
