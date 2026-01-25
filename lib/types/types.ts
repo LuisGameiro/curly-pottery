@@ -1,4 +1,5 @@
-import { CurrencyCode as PrismaCurrencyCode, Prisma } from '@prisma/client'
+import type { CurrencyCode as PrismaCurrencyCode } from 'generated/client'
+import { Prisma } from 'generated/client'
 
 export interface EditVariant extends Omit<Variant, 'createdAt' | 'updatedAt'> {
   files: (File | string)[]

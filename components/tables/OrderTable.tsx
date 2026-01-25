@@ -6,7 +6,7 @@ import { Button } from '@components/ui'
 import DataTable from '@components/ui/Table/DataTable'
 import { CartLineItem, Order, OrderWithUser } from '@lib/types/types'
 
-export default function OrderTable({ orders }: { orders: OrderWithUser[] }) {
+export default function OrderTable({ orders }: { orders: Order[] }) {
   const orderColumns = [
     {
       header: 'Order ID',

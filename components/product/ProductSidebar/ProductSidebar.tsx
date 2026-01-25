@@ -14,11 +14,11 @@ import {
   ProductWithVariantsCategories,
   Variant,
   Discount,
+  CurrencyCode,
 } from '@lib/types/types'
 import { toast } from 'sonner'
 import { Undo2 } from 'lucide-react'
 import { trackEvent } from '@lib/analytics/trackEvents'
-import { CurrencyCode } from '@prisma/client'
 
 interface ProductSidebarProps {
   product: ProductWithVariantsCategories
@@ -191,7 +191,6 @@ const ProductSidebar = ({
 
               <ul
                 className="ml-2 space-y-1 mt-2"
-                style={{ listStyleType: 'disc' }}
               >
                 {(variant.details as Detail[]).map(
                   (detail: Detail, index: number) => (

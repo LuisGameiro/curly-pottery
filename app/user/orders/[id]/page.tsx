@@ -4,12 +4,11 @@ import { ArrowLeft, Package, MapPin, BellIcon } from 'lucide-react'
 import Link from 'next/link'
 import { getOrderById } from 'actions/order.actions'
 import { showCurrency } from '@lib/calculate-price'
-import { Address, CartLineItem, Order } from '@lib/types/types'
+import { Address, CartLineItem, CurrencyCode, Order } from '@lib/types/types'
 import notFound from 'app/not-found'
 import Loading from 'app/loading'
 import { Suspense } from 'react'
 import constructMetadata from '@components/common/SEO/SEO'
-import { CurrencyCode } from '@prisma/client'
 
 export const metadata = constructMetadata({
   title: 'Order Details',

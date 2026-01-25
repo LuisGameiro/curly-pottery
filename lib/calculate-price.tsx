@@ -1,6 +1,5 @@
 import { Discount } from './types/types'
-import { CurrencyCode } from '@prisma/client'
-
+import { CurrencyCode } from './types/types'
 // export function calculatePrice(
 //   price: number = 0,
 //   currency: CurrencyCode = "GBP",
@@ -70,7 +69,7 @@ export function calculateDiscount(
 }
 
 export const showCurrency: Record<CurrencyCode, string> = {
-  [CurrencyCode.GBP]: '£',
-  [CurrencyCode.EUR]: '$',
-  [CurrencyCode.USD]: '$',
+  GBP: '£',
+  EUR: '$',
+  USD: '$',
 }
