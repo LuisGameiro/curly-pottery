@@ -13,7 +13,7 @@ export async function sendEmail({
   to,
   subject,
   body,
-  from = 'noreply@curlypottery.com',
+  from = 'onboarding@resend.dev',
 }: {
   to: string
   subject: string

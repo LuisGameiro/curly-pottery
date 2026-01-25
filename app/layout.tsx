@@ -17,7 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <PHProvider>
-        <head />
+        <head >
+              <GoogleAnalytics />
+        </head>
         <body className="loading bg-primary">
           <SessionProvider>
             <ThemeProvider
@@ -26,7 +28,6 @@ export default function RootLayout({
               enableSystem
               themes={['light', 'dark']}
             >
-              <GoogleAnalytics />
               <Layout>{children}</Layout>
             </ThemeProvider>
           </SessionProvider>
