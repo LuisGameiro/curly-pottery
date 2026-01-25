@@ -17,8 +17,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <PHProvider>
-        <head >
-              <GoogleAnalytics />
+        <head>
+          <GoogleAnalytics />
         </head>
         <body className="loading bg-primary">
           <SessionProvider>

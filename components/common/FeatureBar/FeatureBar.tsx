@@ -40,12 +40,7 @@ const FeatureBar = ({ className }: FeatureBarProps) => {
   if (!showBanner) return null
 
   return (
-    <div
-      className={cn(
-        s.root,
-        className,
-      )}
-    >
+    <div className={cn(s.root, className)}>
       <div className="max-w-screen mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-on-primary">
         <div className="text-sm">
           <Text variant="bold">We value your privacy</Text>

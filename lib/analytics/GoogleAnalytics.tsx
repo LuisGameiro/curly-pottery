@@ -1,8 +1,6 @@
 'use client'
 
 import Script from 'next/script'
-import ReactGA from 'react-ga4'
-import { useEffect } from 'react'
 
 declare global {
   interface Window {
