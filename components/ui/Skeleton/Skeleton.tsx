@@ -23,8 +23,6 @@ const Skeleton = ({
   show = true,
   boxHeight = height,
 }: SkeletonProps) => {
-  // Automatically calculate the size if there are children
-  // and no fixed sizes are specified
   const shouldAutoSize = !!children && !(width || height)
 
   width = width || 24

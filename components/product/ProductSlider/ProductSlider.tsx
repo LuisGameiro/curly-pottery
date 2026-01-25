@@ -71,33 +71,9 @@ const ProductSlider = ({ children, className = '' }: ProductSliderProps) => {
       }
     }
   }, [])
-  // useEffect(() => {
-  //     const slider = sliderContainerRef.current;
-  //     if (!slider) return;
 
-  //     const preventNavigation = (event: TouchEvent) => {
-  //       const touchXPosition = event.touches[0].pageX;
-  //       const touchXRadius = event.touches[0].radiusX || 0;
-
-  //       // Only prevent if very close to edges to allow browser "Back" gesture
-  //       // but keep the slider responsive
-  //       if (
-  //         touchXPosition - touchXRadius < 10 ||
-  //         touchXPosition + touchXRadius > window.innerWidth - 10
-  //       ) {
-  //         event.preventDefault();
-  //       }
-  //     };
-
-  //     slider.addEventListener("touchstart", preventNavigation, { passive: false });
-  //     return () => slider.removeEventListener("touchstart", preventNavigation);
-  //   }, []);
-
-  // const onPrev = React.useCallback(() => slider.current?.prev(), [slider]);
-  // const onNext = React.useCallback(() => slider.current?.next(), [slider]);
-
-  const onPrev = () => slider.current?.prev() //useCallback(() => slider.current?.prev(), [slider]);
-  const onNext = () => slider.current?.next() //useCallback(() => slider.current?.next(), [slider]);
+  const onPrev = () => slider.current?.prev() 
+  const onNext = () => slider.current?.next() 
   return (
     <div className={cn(s.root, className)} ref={sliderContainerRef}>
       <div
@@ -106,7 +82,6 @@ const ProductSlider = ({ children, className = '' }: ProductSliderProps) => {
       >
         {slider && <ProductSliderControl onPrev={onPrev} onNext={onNext} />}
         {Children.map(children, (child) => {
-          // Add the keen-slider__slide className to children
           if (isValidElement<HTMLElement>(child)) {
             return {
               ...child,

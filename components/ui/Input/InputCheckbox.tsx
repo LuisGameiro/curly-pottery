@@ -33,7 +33,6 @@ const InputCheckbox = (props: InputProps) => {
           autoCapitalize="none"
           spellCheck="false"
           type="checkbox"
-          // ARIA Rules
           aria-invalid={!!error}
           aria-describedby={error ? errorId : undefined}
           {...rest}

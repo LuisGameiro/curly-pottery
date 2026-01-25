@@ -29,11 +29,9 @@
   @apply text-xs text-red-500 font-medium animate-in fade-in slide-in-from-top-1
 }
 
-
 .options {
   @apply bg-background px-2 py-2 w-full appearance-none transition duration-150 ease-in-out border-2 border-border hover:bg-red-400;
 }
-
 
 .inputWrapper {
   position: relative;
@@ -41,7 +39,7 @@
   align-items: center;
   width: 100%;
 }
-/* Ensure text doesn't go under the eye icon */
+
 .withIcon {
   padding-right: 40px;
 }
@@ -55,7 +53,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #666; /* Adjust based on your theme */
+  color: #666;
   padding: 0;
   transition: color 0.2s;
 }

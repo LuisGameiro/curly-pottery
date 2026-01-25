@@ -22,7 +22,6 @@
   cursor: grabbing;
 }
 
-/* Ensure slides don't have weird spacing during drag */
 .keen-slider__slide {
   overflow: hidden;
 }
@@ -53,7 +52,6 @@
   scrollbar-width: none;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
 .album::-webkit-scrollbar {
   display: none;
 }

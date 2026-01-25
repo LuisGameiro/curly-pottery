@@ -45,10 +45,11 @@
 .naked:hover{
   @apply text-on-secondary bg-secondary/20
 }
+
 .naked:focus {
   @apply bg-transparent border-none;
 }
-/* --- NEW SIZES --- */
+
 .sm {
   @apply px-4 py-2 text-xs h-auto;
   max-height: 40px;
@@ -59,23 +60,18 @@
   max-height: 80px;
 }
 
-/* --- NEW COLORS --- */
-/* Danger: Red tones for destructive actions like "Delete Variant" */
 .danger {
   @apply  text-red-700 hover:bg-red-700/20 ;
 }
 
-/* Success: Green tones for "Save" or "Completed" status */
 .success {
   @apply bg-emerald-600 text-white hover:bg-emerald-700 border-emerald-700;
 }
 
-/* Warning: Amber tones for caution */
 .warning {
   @apply bg-amber-500 text-black hover:bg-amber-600 border-amber-600;
 }
 
-/* --- UTILITY --- */
 .disabled,
 .disabled:hover {
   @apply text-accent-4 border-accent-2 bg-accent-1 cursor-not-allowed;

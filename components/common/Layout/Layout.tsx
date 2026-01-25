@@ -32,13 +32,13 @@ export default function Layout({ children }: Props) {
 
   return (
     <div>
-      {/* <Navbar links={navBarlinks} /> */}
+      <Navbar links={navBarlinks} />
       <main className="bg-background w-full h-full min-h-[calc(100vh-310px)] flex flex-col">
         {children}
       </main>
-      <Footer />
+      {/* <Footer />
       <Toaster position="top-right" richColors />
-      <FeatureBar />
+      <FeatureBar /> */}
     </div>
   )
 }

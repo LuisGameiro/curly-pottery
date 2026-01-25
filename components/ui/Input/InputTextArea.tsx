@@ -45,7 +45,6 @@ const InputTextArea = (props: InputProps) => {
         autoCorrect="off"
         autoCapitalize="none"
         spellCheck="false"
-        // ARIA Rules
         aria-invalid={!!error}
         aria-describedby={error ? errorId : undefined}
         {...rest}

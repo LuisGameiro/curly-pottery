@@ -60,7 +60,6 @@ const FeatureBar = ({ className }: FeatureBarProps) => {
           <Button
             variant="slim"
             onClick={handleAcceptEssential}
-            // className="px-4 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50 transition"
           >
             Essential Only
           </Button>
@@ -68,7 +67,6 @@ const FeatureBar = ({ className }: FeatureBarProps) => {
             color="success"
             variant="slim"
             onClick={handleAcceptAll}
-            // className="px-4 py-2 bg-black text-white rounded text-sm hover:bg-gray-800 transition"
           >
             Accept All
           </Button>

@@ -21,11 +21,6 @@ const Grid = ({
     s.root,
     {
       [s.layoutA]: layout === 'A',
-      // [s.layoutB]: layout === "B",
-      // [s.layoutC]: layout === "C",
-      // [s.layoutD]: layout === "D",
-      // [s.layoutNormal]: layout === "normal",
-      // [s.default]: variant === "default",
       [s.filled]: variant === 'filled',
     },
     className,

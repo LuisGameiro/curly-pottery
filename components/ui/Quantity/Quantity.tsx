@@ -19,7 +19,6 @@ const Quantity = ({
 }: QuantityProps) => {
   return (
     <div className="flex items-center gap-3">
-      {/* QUANTITY SELECTOR GROUP */}
       <div className="flex items-center border border-accent-2 rounded-md bg-accent-0 overflow-hidden h-8">
         <button
           type="button"
