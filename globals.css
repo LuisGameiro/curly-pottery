@@ -79,7 +79,7 @@
 
 @theme inline {
   --color-primary: var(--primary);
-  --color-primary-2: var(--primary-2);
+  /* --color-primary-2: var(--primary-2); */
   --color-primary-foreground: var(--primary-foreground);
 
   --color-secondary: var(--secondary);

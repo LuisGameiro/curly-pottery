@@ -8,10 +8,7 @@ import { ShoppingBag } from 'lucide-react'
 import Link from 'next/link'
 
 export default function CartClient() {
-  const { data, isLoading, isEmpty } = useCart()
-
-  // if (!isLoading)
-  //   return <Container className="py-20 text-center">Loading...</Container>
+  const { data, isEmpty } = useCart()
 
   if (isEmpty) {
     return (
