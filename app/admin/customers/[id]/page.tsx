@@ -17,7 +17,7 @@ import notFound from 'app/not-found'
 import OrderTable from '@components/tables/OrderTable'
 import CustomerNotes from '../../../../components/admin/CostumerNotes'
 import { showCurrency } from '@lib/calculate-price'
-import { Address, Order, OrderWithUser } from '@lib/types/types'
+import { Address, Order } from '@lib/types/types'
 import constructMetadata from '@components/common/SEO/SEO'
 
 export const metadata = constructMetadata({
@@ -168,7 +168,7 @@ export default async function CustomerDetailsPage({
               <ShoppingBag size={18} className="text-accent-6" />
               <Text variant="bold">Order History</Text>
             </div>
-            <OrderTable orders={user.orders } />
+            <OrderTable orders={user.orders} />
           </Container>
 
           <Container variant="box" className="space-y-4">

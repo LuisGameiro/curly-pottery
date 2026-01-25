@@ -28,11 +28,7 @@ const ThemeSwitcher = () => {
         >
           <span className="flex shrink items-center">
             <ThemeIcon width={20} height={20} theme={theme} />
-            <span
-              className={cn('capitalize ml-2' )}
-            >
-              {theme}
-            </span>
+            <span className={cn('capitalize ml-2')}>{theme}</span>
           </span>
           <span className="cursor-pointer">
             <ChevronRight

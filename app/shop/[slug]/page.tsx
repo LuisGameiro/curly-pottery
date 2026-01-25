@@ -10,17 +10,17 @@ import constructMetadata from '@components/common/SEO/SEO'
 
 export async function generateStaticParams() {
   try {
-    const response = await getAllProducts();
+    const response = await getAllProducts()
     if (!response?.success || !Array.isArray(response?.data)) {
-      console.error("Failed to fetch products for static params");
-      return [];
+      console.error('Failed to fetch products for static params')
+      return []
     }
     return response.data.map((product) => ({
       slug: product.slug,
-    }));
+    }))
   } catch (error) {
-    console.error("Error in generateStaticParams:", error);
-    return [];
+    console.error('Error in generateStaticParams:', error)
+    return []
   }
 }
 export async function generateMetadata({

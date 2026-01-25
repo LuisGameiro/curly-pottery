@@ -60,11 +60,12 @@ export default function Contacts() {
               </a>
             </li> */}
             <li>
-              📍 Address:{" "}
+              📍 Address:{' '}
               <a
                 href={
-                  new URL(`https://www.google.co.uk/maps?q=London,+United+Kingdom`)
-                    .href
+                  new URL(
+                    `https://www.google.co.uk/maps?q=London,+United+Kingdom`,
+                  ).href
                 }
                 target="_blank"
                 rel="noopener noreferrer"

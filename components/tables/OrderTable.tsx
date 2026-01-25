@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Eye } from 'lucide-react'
 import { Button } from '@components/ui'
 import DataTable from '@components/ui/Table/DataTable'
-import { CartLineItem, Order, OrderWithUser } from '@lib/types/types'
+import { CartLineItem, Order } from '@lib/types/types'
 
 export default function OrderTable({ orders }: { orders: Order[] }) {
   const orderColumns = [

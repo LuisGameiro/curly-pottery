@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import s from './Navbar.module.css'
 import NavbarRoot from './NavbarRoot'
-import { Logo, Container } from '@components/ui'
+import { Logo } from '@components/ui'
 import { UserNav } from '@components/common'
 
 interface Link {

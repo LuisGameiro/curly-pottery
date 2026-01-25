@@ -14,36 +14,37 @@ export async function syncImages(
 ): Promise<ActionResponse<string[]>> {
   try {
     const urlsToDelete = existingUrls.filter(
-      (oldUrl) => !currentItems.includes(oldUrl)
-    );
+      (oldUrl) => !currentItems.includes(oldUrl),
+    )
 
     if (urlsToDelete.length > 0) {
-      await del(urlsToDelete);
+      await del(urlsToDelete)
     }
 
     const finalUrls = await Promise.all(
       currentItems.map(async (item) => {
-        if (typeof item === 'string') return item;
+        if (typeof item === 'string') return item
 
         const blob = await put(item.name, item, {
           access: 'public',
-        });
+        })
 
-        return blob.url;
+        return blob.url
       }),
-    );
+    )
 
     return {
       success: true,
       message: 'Images synced successfully',
       data: finalUrls,
-    };
+    }
   } catch (error) {
-    console.error('VercelBlob_Sync_ERROR:', error);
+    console.error('VercelBlob_Sync_ERROR:', error)
     return {
       success: false,
-      message: error instanceof Error ? error.message : 'An unknown error occurred',
-    };
+      message:
+        error instanceof Error ? error.message : 'An unknown error occurred',
+    }
   }
 }
 // import { put, del } from "@vercel/blob";

@@ -36,9 +36,7 @@ export default function CustomerMenuContent() {
   }
 
   return (
-    
     <DropdownContent
-      
       sideOffset={10}
       id="CustomerMenuContent"
       className={s.container}

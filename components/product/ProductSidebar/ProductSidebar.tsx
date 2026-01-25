@@ -189,9 +189,7 @@ const ProductSidebar = ({
             <div className="space-y-2">
               {/* <Text variant="bold">Product details:</Text> */}
 
-              <ul
-                className="ml-2 space-y-1 mt-2"
-              >
+              <ul className="ml-2 space-y-1 mt-2">
                 {(variant.details as Detail[]).map(
                   (detail: Detail, index: number) => (
                     <li

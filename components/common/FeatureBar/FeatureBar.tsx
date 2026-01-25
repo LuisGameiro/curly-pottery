@@ -15,7 +15,9 @@ const FeatureBar = ({ className }: FeatureBarProps) => {
   useEffect(() => {
     const consent = localStorage.getItem('cookie-consent')
     if (!consent) {
-      setShowBanner(true)
+      setTimeout(() => {
+        setShowBanner(true)
+      }, 0)
     }
   }, [])
 

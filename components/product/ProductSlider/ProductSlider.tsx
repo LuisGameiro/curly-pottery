@@ -72,8 +72,8 @@ const ProductSlider = ({ children, className = '' }: ProductSliderProps) => {
     }
   }, [])
 
-  const onPrev = () => slider.current?.prev() 
-  const onNext = () => slider.current?.next() 
+  const onPrev = () => slider.current?.prev()
+  const onNext = () => slider.current?.next()
   return (
     <div className={cn(s.root, className)} ref={sliderContainerRef}>
       <div
