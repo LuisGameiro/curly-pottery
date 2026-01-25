@@ -18,7 +18,7 @@ export async function syncImages(
     )
 
     if (urlsToDelete.length > 0) {
-      await del(urlsToDelete)
+      await del(urlsToDelete, { token: process.env.BLOB_READ_WRITE_TOKEN })
     }
 
     const finalUrls = await Promise.all(
@@ -27,6 +27,7 @@ export async function syncImages(
 
         const blob = await put(item.name, item, {
           access: 'public',
+          token: process.env.BLOB_READ_WRITE_TOKEN,
         })
 
         return blob.url
