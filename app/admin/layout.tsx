@@ -49,7 +49,7 @@ export default function AdminLayout({
     navItems.find((item) => item.href === pathname) || navItems[0]
 
   return (
-    <div className="flex flex-col lg:flex-row mx-auto">
+    <div className="flex flex-col lg:flex-row">
       <aside className="w-full lg:w-2/12 bg-background lg:border-r border-border px-4 py-2 ">
         <Text
           variant="pageHeading"

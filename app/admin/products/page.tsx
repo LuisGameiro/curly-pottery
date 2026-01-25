@@ -18,7 +18,7 @@ export default async function ProductsPage() {
 
   return (
     <Suspense fallback={<Loading />}>
-      <ProductsCLient products={response.data || []} />;
+      <ProductsCLient products={response.data || []} />
     </Suspense>
   )
 }
