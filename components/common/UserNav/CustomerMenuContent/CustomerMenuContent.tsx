@@ -36,10 +36,12 @@ export default function CustomerMenuContent() {
   }
 
   return (
+    
     <DropdownContent
+      
       sideOffset={10}
       id="CustomerMenuContent"
-      className="border border-border rounded-md shadow-2xl"
+      className={s.container}
     >
       {LINKS.map(({ name, href }) => (
         <DropdownMenuItem key={href}>
@@ -74,7 +76,7 @@ export default function CustomerMenuContent() {
       </DropdownMenuItem>
       <DropdownMenuItem>
         {isAuthenticated ? (
-          <div className={cn('border-t border-secondary mt-2 pt-2 flex-col')}>
+          <div className={s.auth}>
             {isAdmin && (
               <a className={s.link} onClick={() => handleClick('/admin')}>
                 Admin
@@ -89,12 +91,11 @@ export default function CustomerMenuContent() {
             </a>
           </div>
         ) : (
-          <a
-            className={cn(s.link, 'border-t border-accent-2 mt-4')}
-            onClick={() => handleClick('/auth/login')}
-          >
-            Login
-          </a>
+          <div className={s.auth}>
+            <a className={s.link} onClick={() => handleClick('/auth/login')}>
+              Login
+            </a>
+          </div>
         )}
       </DropdownMenuItem>
     </DropdownContent>

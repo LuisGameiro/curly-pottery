@@ -2,7 +2,7 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply border-t border-border bg-primary;
+  @apply border-t border-border bg-primary ;
 }
 
 .link {
@@ -28,7 +28,7 @@
 }
 
 .logo {
-  @apply rounded-full border-2 border-border mr-2 p-1
+  @apply rounded-full border-2 border-on-primary mr-2
 }
 
 .navlist {
@@ -36,7 +36,7 @@
 }
 
 .navlist a {
-  @apply text-on-primary font-semibold hover:text-accent-4 transition-colors duration-150
+  @apply text-on-primary font-semibold hover:text-on-primary/60 transition-colors duration-150
 
 }
 

@@ -22,21 +22,21 @@ const ThemeSwitcher = () => {
       >
         <button
           className={
-            'w-[125px] h-10 pl-2 pr-1 rounded-md border border-accent-4 flex items-center justify-between transition-colors ease-linear hover:border-accent-3 hover:shadow-xs'
+            'w-[125px] h-10 pl-2 pr-1 text-on-primary hover:text-on-primary/60 rounded-md border border-border flex items-center justify-between transition-colors ease-linear hover:border-on-primary/60 hover:bg-primary/60 hover:shadow-xs'
           }
           aria-label="Theme Switcher"
         >
           <span className="flex shrink items-center">
             <ThemeIcon width={20} height={20} theme={theme} />
             <span
-              className={cn('capitalize leading-none ml-3 text-on-primary')}
+              className={cn('capitalize ml-2' )}
             >
               {theme}
             </span>
           </span>
           <span className="cursor-pointer">
             <ChevronRight
-              className={cn('transition duration-300  text-secondary', {
+              className={cn('transition duration-300', {
                 ['rotate-90']: display,
               })}
             />
@@ -49,14 +49,14 @@ const ThemeSwitcher = () => {
         {themes.length && display ? (
           <div
             className={
-              ' shadow-lg right-0 bottom-2 py-2 origin-top-right  outline-hidden z-40 absolute border border-border w-[125px] h-auto bg-secondary'
+              ' shadow-lg right-0 bottom-2 py-2 origin-top-right  outline-hidden z-40 absolute border border-border w-[125px] h-auto bg-background rounded-md'
             }
           >
             <ul>
               {themes.map((t: string) => (
                 <li key={t}>
                   <button
-                    className="flex w-full capitalize cursor-pointer px-6 py-1 transition ease-in-out duration-150 text-primary leading-6 font-medium items-center hover:bg-accent-1"
+                    className="flex w-full capitalize cursor-pointer px-6 py-1 transition ease-in-out duration-150 text-secondary leading-6 font-medium items-center hover:bg-accent-1 hover:text-secondary/60"
                     role={'link'}
                     onClick={() => {
                       setTheme(t)

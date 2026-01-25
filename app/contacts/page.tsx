@@ -34,7 +34,7 @@ export default function Contacts() {
               📧 Email:{' '}
               <a
                 href={`mailto:${contacts.email}`}
-                className="hover:text-secondary/60"
+                className="text-secondary hover:text-secondary/60"
               >
                 {contacts.email}
               </a>
@@ -48,7 +48,7 @@ export default function Contacts() {
                 }
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-secondary/60"
+                className="text-secondary hover:text-secondary/60"
               >
                 @{contacts.instagram}
               </a>
@@ -59,8 +59,19 @@ export default function Contacts() {
                 +1 (234) 567-890
               </a>
             </li> */}
-            <li className="hover:text-secondary/60">
-              📍 Address: {contacts.address}
+            <li>
+              📍 Address:{" "}
+              <a
+                href={
+                  new URL(`https://www.google.co.uk/maps?q=London,+United+Kingdom`)
+                    .href
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-secondary hover:text-secondary/60"
+              >
+                {contacts.address}
+              </a>
             </li>
           </ul>
         </section>

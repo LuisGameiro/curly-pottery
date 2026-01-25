@@ -15,34 +15,26 @@ interface NavbarProps {
 
 const Navbar = ({ links }: NavbarProps) => (
   <NavbarRoot>
-    <Container clean className="max-w-10/12 mx-auto">
-      <div className={s.nav}>
-        <div className="flex items-center">
-          <Link href="/" className={s.logo} aria-label="Logo">
-            <div className="flex items-center flex-row">
-              <Logo />
-              <h1 className="ml-4 mr-8 text-on-primary hidden lg:block">
-                Curly Pottery
-              </h1>
-            </div>
-          </Link>
+    <div className={s.nav}>
+      <div className="flex items-center">
+        <Link href="/" className={s.logo} aria-label="Logo">
+          <Logo />
+          <h1>Curly Pottery</h1>
+        </Link>
 
-          {links && (
-            <nav className={s.navMenu}>
-              {links.map((link) => (
-                <Link key={link.href} href={link.href} className={s.link}>
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          )}
-        </div>
-
-        <div className="flex items-center justify-end flex-1 space-x-8">
-          <UserNav />
-        </div>
+        {links && (
+          <nav className={s.navMenu}>
+            {links.map((link) => (
+              <Link key={link.href} href={link.href} className={s.link}>
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        )}
       </div>
-    </Container>
+
+      <UserNav />
+    </div>
   </NavbarRoot>
 )
 

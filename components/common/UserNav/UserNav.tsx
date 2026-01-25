@@ -53,7 +53,7 @@ export default function UserNav({ className }: UserNavProps) {
           </Link>
         </li>
         <li className={s.mobileMenu}>
-          <Dropdown>
+          <Dropdown modal={false}>
             <DropdownTrigger
               id="user-nav-mobile-trigger"
               aria-label="Open Navigation Menu"
