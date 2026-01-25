@@ -36,8 +36,8 @@ export default function Layout({ children }: Props) {
       <main className="bg-background w-full h-full min-h-[calc(100vh-310px)] flex flex-col">
         {children}
       </main>
-      {/* <Footer />
-      <Toaster position="top-right" richColors />
+      <Footer />
+      {/* <Toaster position="top-right" richColors />
       <FeatureBar /> */}
     </div>
   )
