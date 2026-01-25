@@ -1,110 +1,51 @@
-// TODO : Replace with actual blob storage upload logic
-
 import { ActionResponse } from '@lib/types/types'
+import { put, del } from '@vercel/blob'
 
-export const uploadImagesToBlob = async (
-  items: (File | string)[],
-): Promise<string[]> => {
-  const uploadPromises = items.map(async (item) => {
-
-    if (typeof item === 'string') {
-      return item
-    }
-    try {
-      const formData = new FormData()
-      formData.append('file', item)
-
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      })
-
-      if (!response.ok) throw new Error('Upload failed')
-
-      const data = await response.json()
-      return data.url // The new permanent URL from your blob storage
-    } catch (error) {
-      console.error('Error uploading file:', item.name, error)
-      throw error
-    }
-  })
-
-  return Promise.all(uploadPromises)
-}
-
-const generateRandomImages = (amount: number, width = 600, height = 400) => {
-  return Array.from({ length: amount }, () => {
-    const randomId = Math.floor(Math.random() * 1000)
-    return `https://picsum.photos/seed/${randomId}/${width}/${height}`
-  })
-}
+// const generateRandomImages = (amount: number, width = 600, height = 400) => {
+//   return Array.from({ length: amount }, () => {
+//     const randomId = Math.floor(Math.random() * 1000)
+//     return `https://picsum.photos/seed/${randomId}/${width}/${height}`
+//   })
+// }
 
 export async function syncImages(
   currentItems: (File | string)[],
   existingUrls: string[],
 ): Promise<ActionResponse<string[]>> {
-  return {
-    success: true,
-    message: 'Upload images successfully',
-    data: generateRandomImages(currentItems.length) ?? [],
-  }
-
   try {
-    // 1. Identify images to delete
-    // (Items that are in existingUrls but NOT in currentItems)
     const urlsToDelete = existingUrls.filter(
-      (oldUrl) => !currentItems.includes(oldUrl),
-    )
+      (oldUrl) => !currentItems.includes(oldUrl)
+    );
 
-    // 2. Perform deletions
-    await Promise.all(
-      urlsToDelete.map(async (url) => {
-        try {
-          await fetch('/api/upload/delete', {
-            method: 'POST',
-            body: JSON.stringify({ url }),
-          })
-        } catch (e) {
-          console.error('Failed to delete orphaned image:', url, e)
-        }
-      }),
-    )
+    if (urlsToDelete.length > 0) {
+      await del(urlsToDelete);
+    }
 
-    // 3. Upload new files and return the full list of strings
     const finalUrls = await Promise.all(
       currentItems.map(async (item) => {
-        if (typeof item === 'string') return item // Keep existing
+        if (typeof item === 'string') return item;
 
-        const formData = new FormData()
-        formData.append('file', item)
+        const blob = await put(item.name, item, {
+          access: 'public',
+        });
 
-        const res = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData,
-        })
-        const data = await res.json()
-        return data.url
+        return blob.url;
       }),
-    )
+    );
 
     return {
       success: true,
-      message: 'Upload images successfully',
+      message: 'Images synced successfully',
       data: finalUrls,
-    }
+    };
   } catch (error) {
-    console.error('uploadImages_ERROR:', error)
+    console.error('VercelBlob_Sync_ERROR:', error);
     return {
       success: false,
-      message:
-        error instanceof Error
-          ? JSON.stringify(error)
-          : 'A database error occurred',
-      errors: error,
-    }
+      message: error instanceof Error ? error.message : 'An unknown error occurred',
+    };
   }
 }
-
 // import { put, del } from "@vercel/blob";
 
 // export async function uploadImages(
