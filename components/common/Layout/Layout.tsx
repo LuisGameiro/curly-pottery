@@ -37,8 +37,8 @@ export default function Layout({ children }: Props) {
         {children}
       </main>
       <Footer />
-      {/* <Toaster position="top-right" richColors />
-      <FeatureBar /> */}
+      <Toaster position="top-right" richColors />
+      <FeatureBar />
     </div>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import cn from 'clsx'
 import s from './FeatureBar.module.css'
 import { Text, Button } from '@components/ui'
@@ -12,10 +12,13 @@ interface FeatureBarProps {
 const FeatureBar = ({ className }: FeatureBarProps) => {
   const [showBanner, setShowBanner] = useState(false)
 
-  const consent = localStorage.getItem('cookie-consent')
-  if (!consent) {
-    setShowBanner(true)
-  }
+  useEffect(() => {
+    const consent = localStorage.getItem('cookie-consent')
+    if (!consent) {
+      setShowBanner(true)
+    }
+  }, [])
+
   const handleAcceptAll = () => {
     localStorage.setItem(
       'cookie-consent',
@@ -57,17 +60,10 @@ const FeatureBar = ({ className }: FeatureBarProps) => {
         </div>
 
         <div className="flex  sm:flex-row gap-2 shrink-0">
-          <Button
-            variant="slim"
-            onClick={handleAcceptEssential}
-          >
+          <Button variant="slim" onClick={handleAcceptEssential}>
             Essential Only
           </Button>
-          <Button
-            color="success"
-            variant="slim"
-            onClick={handleAcceptAll}
-          >
+          <Button color="success" variant="slim" onClick={handleAcceptAll}>
             Accept All
           </Button>
         </div>
