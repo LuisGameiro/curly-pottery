@@ -33,18 +33,18 @@ export default function RootLayout({
             </ThemeProvider>
 
             <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-ZG8YLH673J"
-          strategy="afterInteractive"
-        />
-        
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
+              src="https://www.googletagmanager.com/gtag/js?id=G-ZG8YLH673J"
+              strategy="afterInteractive"
+            />
+
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-ZG8YLH673J');
           `}
-        </Script>
+            </Script>
           </SessionProvider>
         </body>
       </PHProvider>

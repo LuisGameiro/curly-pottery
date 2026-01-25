@@ -75,7 +75,7 @@ export default function ClientFAQ() {
   }
 
   return (
-    <section className="space-y-5 md:max-w-4xl mx-auto">
+    <section className="space-y-5 md:max-w-2xl mx-auto">
       {faqData.map((item, index) => (
         <button
           key={index}

@@ -17,7 +17,7 @@ export default function About() {
         </Text>
       </header>
 
-      <section className="space-y-5 md:max-w-lg mx-auto">
+      <section className="space-y-5 md:max-w-2xl mx-auto">
         <Text variant="sectionHeading">Our Story </Text>
         <Text variant="body" className="text-justify">
           At Curly Pottery, we believe in creating beautiful, functional
