@@ -16,8 +16,3 @@
   @apply flex flex-col flex-1 box-border;
 }
 
-/* @screen lg {
-  .header {
-    min-height: 74px;
-  }
-} */

@@ -69,13 +69,6 @@ export default function CategoryClient({
         return toast(ResponsEmail.message)
       }
 
-      // console.log("Submitting category with data:", {
-      //   id: formData.id,
-      //   name: formData.name,
-      //   slug: formData.slug,
-      //   image: ResponsEmail.data ? ResponsEmail.data[0] : category?.image || '',
-      // });
-
       const response = await upsertCategory({
         id: formData.id,
         name: formData.name,

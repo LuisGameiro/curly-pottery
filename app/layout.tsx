@@ -27,7 +27,7 @@ export default function RootLayout({
               themes={['light', 'dark']}
             >
               <GoogleAnalytics />
-              {/* <Layout>{children}</Layout> */}
+              <Layout>{children}</Layout>
             </ThemeProvider>
           </SessionProvider>
         </body>

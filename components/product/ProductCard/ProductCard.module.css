@@ -10,7 +10,7 @@
 
 .root:hover {
   & .productImage {
-    transition: transform 5s cubic-bezier(0.25, 1, 0.5, 1); /* 5 seconds, very smooth */
+    transition: transform 5s cubic-bezier(0.25, 1, 0.5, 1);
     transform: scale(1.1);
   }
 
@@ -60,16 +60,12 @@
 .header .name span {
   @apply py-4 px-6 text-primary font-bold
   transition-colors ease-in-out duration-500;
-  /* font-size: inherit;
-  letter-spacing: inherit;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone; */
+
 }
 
 .header .price {
   @apply pt-2 px-6 pb-4 text-sm bg-primary text-accent-9
-  /* font-semibold inline-block tracking-wide
-  transition-colors ease-in-out duration-500; */
+
 }
 
 .imageContainer {
@@ -80,7 +76,6 @@
   @apply object-cover;
   transition: transform 0.5s ease-in-out !important;
   will-change: transform;
-  /* @apply transform transition-transform duration-500 object-cover; */
 }
 
 .root .wishlistButton {
