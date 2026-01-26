@@ -3,11 +3,7 @@
     "baseUrl": "./",
     "target": "esnext",
     "module": "esnext",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -25,24 +21,12 @@
       }
     ],
     "paths": {
-      "@lib/*": [
-        "lib/*"
-      ],
-      "@utils/*": [
-        "utils/*"
-      ],
-      "@config/*": [
-        "config/*"
-      ],
-      "@assets/*": [
-        "assets/*"
-      ],
-            "@public/*": [
-        "public/*"
-      ],
-      "@components/*": [
-        "components/*"
-      ]
+      "@lib/*": ["lib/*"],
+      "@utils/*": ["utils/*"],
+      "@config/*": ["config/*"],
+      "@assets/*": ["assets/*"],
+      "@public/*": ["public/*"],
+      "@components/*": ["components/*"]
     }
   },
   "include": [
@@ -51,9 +35,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
-, "lib/click-outside/has-parent.js"  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "**/*.mts",
+    "lib/click-outside/has-parent.js"
+  ],
+  "exclude": ["node_modules"]
 }

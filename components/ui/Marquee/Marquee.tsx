@@ -32,7 +32,7 @@ const Marquee = ({
   )
 
   return (
-    <FastMarquee gradient={false} className={rootClassName} autoFill={true} >
+    <FastMarquee gradient={false} className={rootClassName} autoFill={true}>
       {Children.map(children, (child: ReactNode) => {
         if (!isValidElement(child)) return child
 

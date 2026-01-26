@@ -7,7 +7,7 @@ import { cn } from '@lib/utils'
 interface GridProps {
   className?: string
   children?: ReactNode
-  layout?: 'A' | 'B' | 'C' | 'D' 
+  layout?: 'A' | 'B' | 'C' | 'D'
   variant?: 'default' | 'filled'
 }
 

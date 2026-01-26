@@ -1,6 +1,6 @@
 import constructMetadata from '@components/common/SEO'
 import { ProductCard } from '@components/product'
-import CategoriesCard from '@components/product/CategoriesCard'
+import CategoriesCard from '@components/product/categoriesCard'
 import { Grid, Marquee, Hero } from '@components/ui'
 import { Product } from '@lib/types/types'
 import { getAllCategories } from 'actions/category.actions'
@@ -15,7 +15,11 @@ export const metadata = constructMetadata({
 export default async function Home() {
   const responseProducts = await getRandomProducts(6)
   const responseCategories = await getAllCategories()
-  console.log('Home Page Rendered',responseProducts.data,responseCategories.data); 
+  console.log(
+    'Home Page Rendered',
+    responseProducts.data,
+    responseCategories.data,
+  )
   if (!responseProducts.success || !responseCategories.success)
     throw new Error(responseProducts.message + responseCategories.message)
 
