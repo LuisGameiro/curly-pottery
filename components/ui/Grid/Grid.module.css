@@ -2,7 +2,7 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply grid grid-cols-1 grid-auto-flow-dense;
+  @apply grid grid-cols-1;
 }
 
 .root > * {
@@ -20,8 +20,6 @@
 }
 
 .layoutA {
-  @apply grid-auto-flow-dense;
-
   /* First item: Big Feature (2x2) */
   & > *:nth-child(6n + 1) {
     @apply sm:col-span-2 sm:row-span-2;
