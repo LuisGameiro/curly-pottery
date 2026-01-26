@@ -69,8 +69,13 @@ const CartItem = ({
               src={item.images || placeholderImg}
               alt={item.sku || 'Product Image'}
               className="object-cover"
-              fill
-              sizes="80px"
+              height={125}
+              width={125}
+              quality={85}
+              style={{
+                aspectRatio: '1/1',
+                objectFit: 'cover',
+              }}
             />
           </Link>
         </div>
@@ -124,7 +129,7 @@ const CartItem = ({
         )}
 
         {price.hasDiscount && (
-          <span className="font-semibold text-sm ml-4 text-red-500 line-through">
+          <span className="font-semibold text-sm ml-4 text-red line-through">
             x {price.price} £
           </span>
         )}

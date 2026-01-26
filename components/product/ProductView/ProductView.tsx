@@ -58,10 +58,14 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
                     className={s.img}
                     src={image}
                     alt={`${product.name} Image ${i}`}
+                    priority={i === 0}
                     width={2400}
                     height={2400}
-                    priority={i === 0}
-                    quality="100"
+                    quality={100}
+                    style={{
+                      aspectRatio: '1/1',
+                      objectFit: 'cover',
+                    }}
                   />
                 </div>
               ))}

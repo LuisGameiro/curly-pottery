@@ -97,12 +97,9 @@
   --color-accent-8: var(--accent-8);
   --color-accent-9: var(--accent-9);
 
-  --color-violet: var(--violet);
-  --color-pink: var(--pink);
-  --color-cyan: var(--cyan);
-  --color-blue: var(--blue);
   --color-green: var(--green);
   --color-red: var(--red);
+  --color-amber: var(--amber);
 
   --color-base: var(--text-base);
   --color-on-primary: var(--on-primary);
@@ -145,8 +142,8 @@
   --on-primary: #0440d8;
   --on-secondary: #64748b;
   --muted: #6a808b;
-  
-  /* Backgrounds */ 
+
+  /* Backgrounds */
   --background: #f1fbff;
 
   /* Primary (Yellow/Gold) */
@@ -172,12 +169,9 @@
   --accent-9: #36444b;
 
   /* Status Colors (Matched to your saturation) */
-  --violet: #8b5cf6;
-  --pink: #ec4899;
-  --cyan: #06b6d4;
-  --blue: #3b82f6;
-  --green: #10b981;
-  --red: #ef4444;
+  --green: #059669;
+  --red: #dc2626;
+  --amber: #d97706;
 }
 .dark {
   --radius: 0.625rem;
@@ -187,8 +181,8 @@
   --on-primary: #1e3a8a;
   --on-secondary: #64748b;
   --muted: #6a808b;
-  
-  /* Backgrounds */ 
+
+  /* Backgrounds */
   --background: #05070a;
 
   /* Primary (Yellow/Gold) - Kept bright for pop */
@@ -213,15 +207,9 @@
   --accent-9: #e1e7ef;
 
   /* Status Colors (Slightly more "neon" to punch through the black) */
-  /* --violet: #8b5cf6;
-  --pink: #ec4899;
-  --cyan: #06b6d4;
-  --blue: #3b82f6; */
-  --green: #10b981;
-  --red: #ef4444;
-
-  /* amber */
-  /* emerald */
+  --green: #34d399; 
+  --red: #f87171; 
+  --amber: #fbbf24; 
 }
 
 @layer base {

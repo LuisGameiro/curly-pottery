@@ -163,7 +163,7 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
                         type="button"
                         variant="naked"
                         onClick={() => remove(index)}
-                        className="text-red-500"
+                        className="text-red"
                       >
                         <Trash2 size={16} />
                       </Button>

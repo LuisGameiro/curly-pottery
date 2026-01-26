@@ -54,7 +54,7 @@ export const ProductVariant = ({
   return (
     <Container variant="box" className="p-0 overflow-hidden">
       <div
-        className={`p-4 flex items-center justify-between cursor-pointer border-b  ${variantErrors ? ' bg-red-100' : 'bg-secondary/20'}`}
+        className={`p-4 flex items-center justify-between cursor-pointer border-b  ${variantErrors ? ' bg-red/20' : 'bg-secondary/20'}`}
         onClick={toggleExpand}
       >
         <div className="flex items-center gap-4">

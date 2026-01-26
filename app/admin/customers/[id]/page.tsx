@@ -108,14 +108,14 @@ export default async function CustomerDetailsPage({
               </div>
               <div className="flex items-center gap-2 text-sm">
                 {user.acceptsMarketing ? (
-                  <CheckCircle2 size={16} className="text-green-500" />
+                  <CheckCircle2 size={16} className="text-green" />
                 ) : (
                   <XCircle size={16} className="text-muted" />
                 )}
                 <span
                   className={
                     user.acceptsMarketing
-                      ? 'text-green-500 font-medium'
+                      ? 'text-green font-medium'
                       : 'text-muted'
                   }
                 >

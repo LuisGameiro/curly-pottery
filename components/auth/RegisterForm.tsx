@@ -122,7 +122,7 @@ export default function RegisterForm() {
 
         <div className="h-8">
           {error && (
-            <Text className="text-red-500 text-xs text-center font-medium">
+            <Text className="text-red text-xs text-center font-medium">
               {error}
             </Text>
           )}

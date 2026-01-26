@@ -61,7 +61,7 @@
 }
 
 .danger {
-  @apply  text-red-500 hover:bg-red-100/20 ;
+  @apply  text-red hover:bg-red/20 ;
 }
 
 .success {
@@ -69,7 +69,7 @@
 }
 
 .warning {
-  @apply bg-amber-500  hover:bg-amber-600 border-amber-600;
+  @apply bg-amber  hover:bg-amber border-amber;
 }
 
 .disabled,

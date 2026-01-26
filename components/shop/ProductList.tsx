@@ -1,6 +1,7 @@
 import { ProductCard } from '@components/product'
 import { SortLabels, sortProducts } from './sortProducts'
 import { getProductsByCategorySlug } from 'actions/product.actions'
+import { Text } from '@components/ui'
 
 export default async function ShopClient({
   categorySlug,
@@ -14,7 +15,11 @@ export default async function ShopClient({
   if (!products.success) throw new Error(products.message)
 
   if (!products.data || products.data.length === 0) {
-    return <p>No products found.</p>
+    return (
+      <div className="py-10 text-center">
+        <Text variant="bold">No products found!</Text>
+      </div>
+    )
   }
 
   const ProductsSort = sortProducts(products.data || [], sortMethod || 'newest')

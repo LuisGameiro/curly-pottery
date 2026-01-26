@@ -45,13 +45,13 @@ export function CheckoutSummary() {
         </div>
         <div className="flex justify-between">
           <Text>Taxes</Text>
-          <Text className="text-green-500">
+          <Text className="text-green">
             {order?.taxes === 0 ? 'Included' : `£${order?.taxes.toFixed(2)}`}
           </Text>
         </div>
         <div className="flex justify-between">
           <Text>Shipping</Text>
-          <Text className="text-green-500">
+          <Text className="text-green">
             {order?.shippingPrice === 0
               ? 'FREE'
               : `£${order?.shippingPrice.toFixed(2)}`}

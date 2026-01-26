@@ -109,9 +109,7 @@ export default function SumUpPayment({
 
         {showRetry && (
           <div className="text-center space-y-4">
-            <p className="text-sm text-red-500">
-              Gateway taking too long to load.
-            </p>
+            <p className="text-sm text-red">Gateway taking too long to load.</p>
             <Button variant="secondary" onClick={mountSumUp}>
               Reload Payment Gateway
             </Button>

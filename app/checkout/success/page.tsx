@@ -15,7 +15,7 @@ export default function SuccessPage() {
 
   return (
     <div className="flex flex-col items-center justify-center max-w-lg text-center py-20 px-4 mx-auto">
-      <CheckCircle size={64} className="text-green-500 mb-4" />
+      <CheckCircle size={64} className="text-green mb-4" />
       <Text variant="heading" className="mb-2">
         Order Confirmed!
       </Text>

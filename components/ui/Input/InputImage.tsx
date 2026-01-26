@@ -75,7 +75,7 @@ const InputImage = ({
             key={index}
             className={cn(
               'relative rounded-lg border overflow-hidden bg-accent-2 shrink-0 transition-all',
-              error ? 'border-red-200' : 'border-border',
+              error ? 'border-red/60' : 'border-border',
               `w-${size} h-${size}`,
               className,
             )}
@@ -91,7 +91,7 @@ const InputImage = ({
             <button
               type="button"
               onClick={() => removeImage(index)}
-              className="absolute top-1 right-1 bg-accent-2 hover:bg-red-100 p-1 rounded-full transition-colors"
+              className="absolute top-1 right-1 bg-accent-2 hover:bg-red/60 p-1 rounded-full transition-colors"
             >
               <X size={14} />
             </button>
@@ -103,7 +103,7 @@ const InputImage = ({
             className={cn(
               'w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer transition-all shrink-0 bg-accent-2',
               error
-                ? 'border-red-200 bg-red-100 text-red-500 hover:bg-red-100'
+                ? 'border-red/60 bg-red/60 text-red hover:bg-red/20'
                 : 'border-border text-muted hover:border-secondary hover:bg-secondary/60 hover:text-secondary',
             )}
           >

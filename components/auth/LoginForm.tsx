@@ -47,7 +47,7 @@ export default function LoginForm() {
   return (
     <Container className="p-10">
       {isRegistered && (
-        <div className="bg-green-100 border border-green-500 text-green-500 px-4 py-3 rounded mb-4 text-center">
+        <div className="bg-green/20 border border-green text-green px-4 py-3 rounded mb-4 text-center">
           Registration successful! Please log in.
         </div>
       )}
@@ -100,7 +100,7 @@ export default function LoginForm() {
 
           <div className="h-8">
             {error && (
-              <Text className="text-red-500 text-xs text-center">{error}</Text>
+              <Text className="text-red text-xs text-center">{error}</Text>
             )}
           </div>
 

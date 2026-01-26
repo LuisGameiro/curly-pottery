@@ -50,14 +50,14 @@ const ProductCard = ({
         <>
           {product?.images && (
             <Image
-              quality="100"
               src={product.images[0] || placeholderImg}
               alt={product.name || 'Product Image'}
-              height={320}
-              width={320}
+              height={250}
+              width={250}
+              quality={85}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               style={{
-                width: '100%',
-                height: 'auto',
+                aspectRatio: '1/1',
                 objectFit: 'cover',
               }}
               {...imgProps}
@@ -79,15 +79,16 @@ const ProductCard = ({
                 alt={product.name || 'Product Image'}
                 className={s.productImage}
                 src={product.images[0] || placeholderImg}
-                height={540}
-                width={540}
+                height={500}
+                width={500}
+                quality={100}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 loading="lazy"
                 style={{
-                  width: 'auto',
-                  height: '64',
+                  aspectRatio: '1/1',
+
                   objectFit: 'cover',
                 }}
-                quality={100}
                 {...imgProps}
               />
             )}
@@ -108,26 +109,24 @@ const ProductCard = ({
       )}
 
       {variant === 'default' && (
-        <>
-          <div className={s.imageContainer}>
-            {product?.images && (
-              <Image
-                alt={product.name || 'Product Image'}
-                className={s.productImage}
-                src={product.images[0] || placeholderImg}
-                height={540}
-                width={540}
-                quality="100"
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  objectFit: 'cover',
-                }}
-                {...imgProps}
-              />
-            )}
-          </div>
-        </>
+        <div className={s.imageContainer}>
+          {product?.images && (
+            <Image
+              alt={product.name || 'Product Image'}
+              className={s.productImage}
+              src={product.images[0] || placeholderImg}
+              height={500}
+              width={500}
+              quality={100}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              style={{
+                aspectRatio: '1/1',
+                objectFit: 'cover',
+              }}
+              {...imgProps}
+            />
+          )}
+        </div>
       )}
     </Link>
   )

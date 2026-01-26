@@ -43,13 +43,12 @@ export default function CategoryTable({
             alt={cat.name}
             height={60}
             width={60}
-            quality={100}
+            quality={85}
             style={{
-              width: 'auto',
-              height: 'auto',
-              borderRadius: '8px',
+              aspectRatio: '1/1',
+              objectFit: 'cover',
             }}
-            loading="eager"
+            loading="lazy"
           />
         </div>
       ),

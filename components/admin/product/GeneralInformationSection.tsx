@@ -70,7 +70,7 @@ export default function GeneralInformationSection({
                 }}
                 render={({ field }) => (
                   <div
-                    className={`flex flex-wrap gap-2 mt-2 ${errors?.categoryIds ? 'border border-red-200' : ''}`}
+                    className={`flex flex-wrap gap-2 mt-2 ${errors?.categoryIds ? 'border border-red/60' : ''}`}
                   >
                     {categories.map((cat) => (
                       <button

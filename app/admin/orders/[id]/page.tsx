@@ -83,7 +83,13 @@ export default async function OrderDetailsPage({
                         src={item.images}
                         alt={item.name}
                         fill
-                        sizes="64px"
+                        height={125}
+                        width={125}
+                        quality={85}
+                        style={{
+                          aspectRatio: '1/1',
+                          objectFit: 'cover',
+                        }}
                       />
                     </div>
                     <div className="flex-1">

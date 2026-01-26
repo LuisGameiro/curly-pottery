@@ -40,7 +40,7 @@ const ProductOptions = ({ product, setVariant }: ProductOptionsProps) => {
                 key={size}
                 className={`px-4 py-2 mr-2 rounded-md border border-border
 
-                  ${selectedSize === size ? 'bg-green-500' : 'bg-primary'}`}
+                  ${selectedSize === size ? 'bg-green' : 'bg-primary'}`}
                 onClick={() => {
                   const colorToUse = matrix[size]?.[selectedColor ?? '']
                     ?.variantId
@@ -72,7 +72,7 @@ const ProductOptions = ({ product, setVariant }: ProductOptionsProps) => {
                 <button
                   key={color}
                   className={`px-4 py-2 mr-2 border rounded-md 
-                    ${matrix[selectedSize]?.[color]?.isAvailable ? (selectedColor === color ? 'bg-green-500' : 'bg-primary') : 'bg-gray-500'}`}
+                    ${matrix[selectedSize]?.[color]?.isAvailable ? (selectedColor === color ? 'bg-green' : 'bg-primary') : 'bg-gray-500'}`}
                   disabled={
                     matrix[selectedSize]?.[color]?.isAvailable === false
                   }

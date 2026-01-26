@@ -27,7 +27,7 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
       {process.env.NEXT_PUBLIC_APP_ENV === 'dev' && (
         <>
           {error.digest && (
-            <code className="block bg-muted p-2 rounded text-xs text-red-500">
+            <code className="block bg-muted p-2 rounded text-xs text-red">
               System ID: {error.digest}
             </code>
           )}

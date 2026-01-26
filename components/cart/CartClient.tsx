@@ -43,7 +43,7 @@ export default function CartClient() {
             </div>
             <div className="flex justify-between">
               <Text className="text-muted">Shipping</Text>
-              <Text className="text-green-500">next step</Text>
+              <Text className="text-green">next step</Text>
             </div>
           </div>
           <div className="text-lg flex justify-between py-2">

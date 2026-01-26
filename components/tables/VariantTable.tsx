@@ -36,7 +36,7 @@ export default function VariantTable({ variants }: { variants: Variant[] }) {
       header: 'Status',
       align: 'center' as const,
       render: (v: Variant) => (
-        <span className={v.availableForSale ? 'text-green-500' : 'text-muted'}>
+        <span className={v.availableForSale ? 'text-green' : 'text-muted'}>
           {v.availableForSale ? 'Active' : 'Hidden'}
         </span>
       ),

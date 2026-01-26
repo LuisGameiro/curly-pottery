@@ -68,7 +68,7 @@ export default function ResetPasswordPage() {
   if (isSuccess)
     return (
       <Container className="p-10 text-center space-y-4">
-        <div className="flex justify-center text-green-500">
+        <div className="flex justify-center text-green">
           <CheckCircle2 size={48} />
         </div>
         <Text variant="heading">Password Changed!</Text>

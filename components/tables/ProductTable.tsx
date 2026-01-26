@@ -46,13 +46,12 @@ export default function ProductTable({
             alt={`${p.name} Image`}
             height={60}
             width={60}
-            quality={100}
+            quality={85}
             style={{
-              width: 'auto',
-              height: 'auto',
-              borderRadius: '8px',
+              aspectRatio: '1/1',
+              objectFit: 'cover',
             }}
-            loading="eager"
+            loading="lazy"
           />
 
           <div className="flex-1 justify-center">
@@ -75,9 +74,7 @@ export default function ProductTable({
           <span
             className={cn(
               'px-2 py-1 rounded text-xs font-bold',
-              stock <= 2
-                ? 'bg-red-100 text-red-500'
-                : 'bg-green-100 text-green-500',
+              stock <= 2 ? 'bg-red/60 text-red' : 'bg-green/20 text-green',
             )}
           >
             {stock}

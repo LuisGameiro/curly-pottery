@@ -113,7 +113,7 @@ const ProductSidebar = ({
                 {price.finalPrice}
               </span>
 
-              <span className=" bg-green-500 px-6 rounded-full ">SALE</span>
+              <span className=" bg-green px-6 rounded-full ">SALE</span>
             </div>
           ) : (
             <div>
@@ -131,7 +131,7 @@ const ProductSidebar = ({
         </p>
 
         {!forSale ? (
-          <div className="bg-red-100/20 px-10 py-2 text-center justify-center border border-red-200 items-center tracking-wide">
+          <div className="bg-red/20 px-10 py-2 text-center justify-center border border-red/60 items-center tracking-wide">
             <Text variant="bold" className={s.button}>
               OUT OF STOCK
             </Text>
