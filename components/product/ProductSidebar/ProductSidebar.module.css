@@ -2,7 +2,7 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply relative grid items-start gap-1 grid-cols-1 overflow-x-hidden bg-background;
+  @apply relative grid items-start gap-2 grid-cols-1 overflow-x-hidden bg-background;
   min-height: auto;
 }
 
@@ -35,7 +35,7 @@
 }
 
 .header .price {
-  @apply pt-2 px-6 pb-4 text-sm bg-primary text-accent-9
+  @apply pt-2 px-6 pb-4 text-sm bg-primary text-muted
   font-semibold inline-block tracking-wide;
 }
 
@@ -44,7 +44,7 @@
 }
 
 .sliderContainer {
-  @apply flex items-center justify-center overflow-x-hidden bg-violet;
+  @apply flex items-center justify-center overflow-x-hidden bg-accent-2;
 }
 
 .imageContainer {
@@ -66,6 +66,6 @@
 
 
 .relatedProductsGrid {
-  @apply grid grid-cols-2 py-2 gap-2 md:grid-cols-4 md:gap-7;
+  @apply grid grid-cols-2 py-2 gap-2 md:grid-cols-4 md:gap-6;
 }
 

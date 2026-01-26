@@ -41,7 +41,7 @@ export default function ShippingMethod({ onComplete }: ShippingMethodProps) {
           <div className="w-full flex justify-between gap-4">
             <Text>{o.conditions}</Text>
             <Text
-              className={cn('font-bold ', o.price === 0 && 'text-green-600')}
+              className={cn('font-bold ', o.price === 0 && 'text-green-500')}
             >
               {o.price === 0 ? 'FREE' : o.price}
             </Text>

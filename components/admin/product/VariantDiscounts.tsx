@@ -18,7 +18,7 @@ export const VariantDiscounts = ({
   })
 
   return (
-    <div className="space-y-4 bg-green-50/50 p-4 rounded-lg">
+    <div className="space-y-4 bg-green-100/60 p-4 rounded-lg">
       <div className="flex justify-between items-center">
         <Text variant="subHeading">Discounts</Text>
         <Button

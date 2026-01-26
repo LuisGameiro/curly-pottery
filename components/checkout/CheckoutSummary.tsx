@@ -25,7 +25,7 @@ export function CheckoutSummary() {
         {order?.lineItems &&
           order.lineItems.map((item: CartLineItem) => (
             <div key={item.variantId} className="flex justify-between text-sm">
-              <Text className="text-accent-8">
+              <Text className="text-muted">
                 {item.quantity} x {item.name}
               </Text>
               <Text className="font-medium">
@@ -45,13 +45,13 @@ export function CheckoutSummary() {
         </div>
         <div className="flex justify-between">
           <Text>Taxes</Text>
-          <Text className="text-green-600">
+          <Text className="text-green-500">
             {order?.taxes === 0 ? 'Included' : `£${order?.taxes.toFixed(2)}`}
           </Text>
         </div>
         <div className="flex justify-between">
           <Text>Shipping</Text>
-          <Text className="text-green-600">
+          <Text className="text-green-500">
             {order?.shippingPrice === 0
               ? 'FREE'
               : `£${order?.shippingPrice.toFixed(2)}`}

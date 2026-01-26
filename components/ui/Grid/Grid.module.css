@@ -2,7 +2,7 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply grid grid-cols-1 gap-0 ;
+  @apply grid grid-cols-1 gap-2 ;
 }
 
 .root > * {
@@ -16,7 +16,7 @@
 }
 
 .layoutNormal {
-  @apply gap-3;
+  @apply gap-2;
 }
 
 .layoutA {

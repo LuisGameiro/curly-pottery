@@ -35,7 +35,7 @@ const OrderStatusUpdate = ({ orderId, currentStatus }: OrderStatusProps) => {
         {isPending ? (
           <Loader2 size={18} className="text-secondary animate-spin" />
         ) : (
-          <BellIcon size={18} className="text-accent-6" />
+          <BellIcon size={18} className="text-muted" />
         )}
         <Text variant="bold">Status</Text>
       </div>

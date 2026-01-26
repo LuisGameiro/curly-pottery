@@ -20,7 +20,7 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
       <Text variant="heading" className="mb-2">
         We hit a little snag
       </Text>
-      <p className="text-muted-foreground max-w-sm mx-auto">
+      <p className="text-muted max-w-sm mx-auto">
         <p>Something unexpected happened.</p>
         <p>Try refreshing the page, or check back in a moment.</p>
       </p>

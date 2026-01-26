@@ -38,10 +38,7 @@ const InputCheckbox = (props: InputProps) => {
           {...rest}
         />
         {label && (
-          <label
-            htmlFor={inputId}
-            className="text-text-base p-0 m-0 font-medium"
-          >
+          <label htmlFor={inputId} className="text-base p-0 m-0 font-medium">
             {label}
           </label>
         )}

@@ -2,7 +2,7 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply bg-background/60 px-2 py-2 w-full appearance-none transition duration-150 ease-in-out border border-border ;
+  @apply bg-accent-1 px-2 py-2 w-full appearance-none transition duration-150 ease-in-out border border-border ;
 }
 
 .root:focus {
@@ -10,7 +10,7 @@
 }
 
 .rootArea {
-  @apply min-h-[120px] bg-background/60 px-2 py-2 w-full appearance-none transition duration-150 ease-in-out border border-border ;
+  @apply min-h-[120px] bg-accent-1 px-2 py-2 w-full appearance-none transition duration-150 ease-in-out border border-border ;
 }
 
 .rootArea:focus {
@@ -22,7 +22,7 @@
 }
 
 .error{
-  @apply border-red-500
+  @apply border-red-200
 }
 
 .errorMessage{
@@ -30,34 +30,23 @@
 }
 
 .options {
-  @apply bg-background px-2 py-2 w-full appearance-none transition duration-150 ease-in-out border-2 border-border hover:bg-red-400;
+  @apply bg-background px-2 py-2 w-full appearance-none transition duration-150 ease-in-out border-2 border-border hover:bg-red-100;
 }
 
 .inputWrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
+  @apply relative flex items-center w-full;
 }
 
-.withIcon {
-  padding-right: 40px;
+.inputField {
+  @apply w-full pr-10 py-2 border rounded-md transition-all bg-accent-1;
+  @apply focus:outline-none focus:ring-2 focus:ring-secondary 
 }
 
 .toggleButton {
-  position: absolute;
-  right: 12px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #666;
-  padding: 0;
-  transition: color 0.2s;
-}
-
-.toggleButton:hover {
-  color: #000;
+  @apply absolute right-3 p-0;
+  @apply flex items-center justify-center;
+  @apply bg-transparent border-none cursor-pointer outline-none;
+  @apply text-muted transition-colors duration-200;
+  
+  @apply hover:text-base;
 }

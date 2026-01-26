@@ -16,7 +16,6 @@ export async function POST(request: Request): Promise<NextResponse> {
         return {
           allowedContentTypes: ['image/jpeg', 'image/png', 'image/webp'],
           addRandomSuffix: true,
-       
         }
       },
       onUploadCompleted: async ({ blob, tokenPayload }) => {

@@ -18,13 +18,13 @@ const Quantity = ({
   max = 6,
 }: QuantityProps) => {
   return (
-    <div className="flex items-center gap-3">
-      <div className="flex items-center border border-accent-2 rounded-md bg-accent-0 overflow-hidden h-8">
+    <div className="flex items-center gap-2">
+      <div className="flex items-center border border-border rounded-md bg-background overflow-hidden h-8">
         <button
           type="button"
           onClick={decrease}
           disabled={value <= 1}
-          className="px-2 h-full flex items-center justify-center hover:bg-accent-1 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border-r border-accent-2"
+          className="px-2 h-full flex items-center justify-center hover:bg-accent-1 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border-r border-border"
           aria-label="Decrease quantity"
         >
           <Minus width={14} height={14} />
@@ -45,7 +45,7 @@ const Quantity = ({
           type="button"
           onClick={increase}
           disabled={value >= max}
-          className="px-2 h-full flex items-center justify-center hover:bg-accent-1 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border-l border-accent-2"
+          className="px-2 h-full flex items-center justify-center hover:bg-accent-1 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border-l border-border"
           aria-label="Increase quantity"
         >
           <Plus width={14} height={14} />

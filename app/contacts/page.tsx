@@ -11,7 +11,7 @@ export const metadata = constructMetadata({
 const contacts = {
   email: 'curly.pottery@gmail.com',
   instagram: 'curly_pottery',
-  address: 'london, uk',
+  address: 'London, UK',
 }
 
 export default function Contacts() {
@@ -25,7 +25,7 @@ export default function Contacts() {
         </Text>
       </header>
 
-      <section className="grid gap-8 mx-auto px-4 sm:px-8 md:flex lg:max-w-4xl">
+      <section className="grid gap-6 mx-auto px-4 sm:px-8 md:flex lg:max-w-4xl">
         <section className="w-full">
           <Text variant="sectionHeading">Our Details</Text>
 
@@ -40,7 +40,7 @@ export default function Contacts() {
               </a>
             </li>
             <li>
-              📸 instagram:{' '}
+              📸 Instagram:{' '}
               <a
                 href={
                   new URL(`https://www.instagram.com/${contacts.instagram}`)

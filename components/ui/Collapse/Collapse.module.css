@@ -2,7 +2,7 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply border-b border-accent-2 py-4 flex flex-col outline-none;
+  @apply border-b border-border py-4 flex flex-col outline-none;
 }
 
 .header {
@@ -18,7 +18,7 @@
 }
 
 .icon {
-  @apply mr-3 text-accent-6;
+  @apply mr-3 text-muted;
   margin-left: -6px;
   transition: transform 0.2s ease;
 }

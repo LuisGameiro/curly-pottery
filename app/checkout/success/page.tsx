@@ -19,7 +19,7 @@ export default function SuccessPage() {
       <Text variant="heading" className="mb-2">
         Order Confirmed!
       </Text>
-      <Text className="text-accent-8 text-justify mb-8  max-w-20">
+      <Text className="text-muted text-justify mb-8  max-w-20">
         Thank you for your purchase. We have sent a confirmation email to your
         inbox. Your order is being processed and will be shipped soon.
       </Text>

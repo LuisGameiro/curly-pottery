@@ -1,5 +1,5 @@
 import Script from 'next/script'
-import { Text } from '@components/ui'
+import { Button, Text } from '@components/ui'
 import { toast } from 'sonner'
 import { useEffect, useState } from 'react'
 import { CurrencyCode } from '@lib/types/types'
@@ -101,7 +101,7 @@ export default function SumUpPayment({
         className="relative border p-4 rounded-xl bg-accent-1 min-h-[250px] flex flex-col items-center justify-center"
       >
         {loading && !showRetry && (
-          <div className="animate-pulse text-gray-400">
+          <div className="animate-pulse text-muted">
             <Loader2 className="mx-auto mb-2" />
             Loading Secure Gateway...
           </div>
@@ -112,22 +112,16 @@ export default function SumUpPayment({
             <p className="text-sm text-red-500">
               Gateway taking too long to load.
             </p>
-            <button
-              onClick={mountSumUp}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-            >
+            <Button variant="secondary" onClick={mountSumUp}>
               Reload Payment Gateway
-            </button>
+            </Button>
           </div>
         )}
       </div>
 
-      <button
-        onClick={onComplete}
-        className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-      >
+      <Button variant="secondary" onClick={onComplete}>
         test button
-      </button>
+      </Button>
     </div>
   )
 }

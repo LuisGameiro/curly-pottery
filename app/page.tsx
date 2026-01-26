@@ -1,6 +1,6 @@
 import constructMetadata from '@components/common/SEO'
 import { ProductCard } from '@components/product'
-import CategoriesCard from '@components/product/categoriesCard'
+import CategoriesCard from '@components/product/CategoriesCard'
 import { Grid, Marquee, Hero } from '@components/ui'
 import { Product } from '@lib/types/types'
 import { getAllCategories } from 'actions/category.actions'

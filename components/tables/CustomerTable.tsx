@@ -19,21 +19,19 @@ export default function CustomerTable({
           <div className="font-medium">
             {user.firstName} {user.lastName}
           </div>
-          <div className="text-xs text-muted-foreground">
-            ID: {user.id.slice(-6)}
-          </div>
+          <div className="text-xs text-muted">ID: {user.id.slice(-6)}</div>
         </div>
       ),
     },
     {
       header: 'Contacts',
       render: (user: UserWithOrders) => (
-        <div className="flex flex-col gap-1 items-center">
-          <div className="flex items-center gap-1.5">
+        <div className="flex flex-col gap-2 items-center">
+          <div className="flex items-center gap-2.5">
             <Mail size={12} /> {user.email}
           </div>
           {user.phone && (
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2.5">
               <Phone size={12} /> {user.phone}
             </div>
           )}

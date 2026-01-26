@@ -52,7 +52,7 @@ export default async function CustomerDetailsPage({
       <header>
         <Link
           href="/admin/customers"
-          className="flex items-center gap-2 text-muted-foreground hover:text-accent-6 mb-4 transition"
+          className="flex items-center gap-2 text-muted hover:text-muted/60 mb-4 transition"
         >
           <ArrowLeft size={16} /> Back to Customers
         </Link>
@@ -62,13 +62,13 @@ export default async function CustomerDetailsPage({
             {user.firstName}
             {user.lastName}
           </Text>
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1">
+          <div className="flex items-center gap-4 text-sm text-muted">
+            <span className="flex items-center gap-2">
               <Calendar size={14} /> Joined{' '}
               {new Date(user.createdAt).toLocaleDateString()}
             </span>
             <span>•</span>
-            <span className="font-mono uppercase ">ID: {user.id}</span>
+            <span className="uppercase ">ID: {user.id}</span>
           </div>
         </div>
       </header>
@@ -94,29 +94,29 @@ export default async function CustomerDetailsPage({
 
           <Container variant="box" className="space-y-4">
             <div className="flex items-center gap-2 border-b pb-2">
-              <User size={18} className="text-accent-6" />
+              <User size={18} className="text-muted" />
               <Text variant="bold">Contact Details</Text>
             </div>
             <div className="space-y-3">
-              <div className="flex items-center gap-3 text-sm">
-                <Mail size={16} className="text-muted-foreground" />
+              <div className="flex items-center gap-2 text-sm">
+                <Mail size={16} className="text-muted" />
                 <span className="truncate">{user.email}</span>
               </div>
-              <div className="flex items-center gap-3 text-sm">
-                <Phone size={16} className="text-muted-foreground" />
+              <div className="flex items-center gap-2 text-sm">
+                <Phone size={16} className="text-muted" />
                 <span>{user.phone || 'No phone provided'}</span>
               </div>
-              <div className="flex items-center gap-3 text-sm">
+              <div className="flex items-center gap-2 text-sm">
                 {user.acceptsMarketing ? (
                   <CheckCircle2 size={16} className="text-green-500" />
                 ) : (
-                  <XCircle size={16} className="text-accent-3" />
+                  <XCircle size={16} className="text-muted" />
                 )}
                 <span
                   className={
                     user.acceptsMarketing
-                      ? 'text-green-700 font-medium'
-                      : 'text-muted-foreground'
+                      ? 'text-green-500 font-medium'
+                      : 'text-muted'
                   }
                 >
                   {user.acceptsMarketing
@@ -129,12 +129,12 @@ export default async function CustomerDetailsPage({
 
           <Container variant="box" className="space-y-4">
             <div className="flex items-center gap-2 border-b pb-2">
-              <MapPin size={18} className="text-accent-6" />
+              <MapPin size={18} className="text-muted" />
               <Text variant="bold">Saved Addresses</Text>
             </div>
             <div className="space-y-4">
               {!user?.addresses ? (
-                <Text className="text-sm italic text-muted-foreground">
+                <Text className="text-sm italic text-muted">
                   No saved addresses for this user.
                 </Text>
               ) : (
@@ -144,11 +144,11 @@ export default async function CustomerDetailsPage({
                     className="text-sm p-3 rounded-lg border border-border"
                   >
                     <div className="flex justify-between mb-1">
-                      <span className="text-[10px] uppercase font-bold text-accent-4">
+                      <span className="uppercase font-bold text-muted">
                         {address.type}
                       </span>
                     </div>
-                    <p className="text-muted-foreground text-xs leading-relaxed">
+                    <p className="text-muted text-xs leading-relaxed">
                       {address.address}
                       <br />
                       {address.city}, {address.postalCode}
@@ -165,7 +165,7 @@ export default async function CustomerDetailsPage({
         <div className="lg:col-span-2 space-y-6">
           <Container variant="box" className="space-y-4">
             <div className="flex items-center gap-2 border-b pb-2">
-              <ShoppingBag size={18} className="text-accent-6" />
+              <ShoppingBag size={18} className="text-muted" />
               <Text variant="bold">Order History</Text>
             </div>
             <OrderTable orders={user.orders} />
@@ -173,7 +173,7 @@ export default async function CustomerDetailsPage({
 
           <Container variant="box" className="space-y-4">
             <div className="flex items-center gap-2 border-b pb-2">
-              <Notebook size={18} className="text-accent-6" />
+              <Notebook size={18} className="text-muted" />
               <Text variant="bold">Internal Notes</Text>
             </div>
             <CustomerNotes initialNotes={user.notes || ''} customerId={id} />

@@ -53,7 +53,7 @@ export default function UserLayout({
             onClick={() => setIsOpen((s) => !s)}
             className="w-full lg:hidden flex items-center justify-between px-4 py-3 bg-accent-2 border-2 border-border rounded-lg font-semibold text-secondary"
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <currentItem.icon size={20} />
               <span>{currentItem.name}</span>
             </div>
@@ -78,10 +78,10 @@ export default function UserLayout({
                   href={item.href}
                   onClick={() => setIsOpen(false)}
                   className={cn(
-                    'flex items-center gap-3 px-4 py-2 rounded-lg transition-colors font-medium',
+                    'flex items-center gap-2 px-4 py-2 rounded-lg transition-colors font-medium',
                     isActive
-                      ? 'bg-secondary text-white'
-                      : 'text-secondary hover:bg-blue-50',
+                      ? 'bg-secondary text-background'
+                      : 'text-secondary hover:bg-secondary/60',
                   )}
                 >
                   <item.icon size={20} />

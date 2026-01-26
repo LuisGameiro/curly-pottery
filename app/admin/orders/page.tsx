@@ -33,7 +33,7 @@ export default async function OrdersPage() {
         </header>
 
         <main>
-          <div className="flex items-center gap-3 w-full md:w-auto ">
+          <div className="flex items-center gap-2 w-full md:w-auto ">
             <AlertCircle size={24} />
             <Text variant="sectionHeading" className="mt-2">
               Pending Orders ({pendingOrders.length})
@@ -41,7 +41,7 @@ export default async function OrdersPage() {
           </div>
           <OrderTable orders={pendingOrders} />
 
-          <div className="flex items-center gap-3 w-full md:w-auto ">
+          <div className="flex items-center gap-2 w-full md:w-auto ">
             <CheckCircle2 size={24} />
             <Text variant="sectionHeading" className="mt-2">
               Order History ({otherOrders.length})

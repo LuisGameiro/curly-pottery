@@ -50,14 +50,12 @@ export const VariantManager = () => {
           <h2 className="text-3xl font-bold tracking-wide cursor-default">
             Variants
           </h2>
-          <Text className="text-muted-foreground text-sm">
-            ({fields.length})
-          </Text>
+          <Text className="text-muted text-sm">({fields.length})</Text>
         </div>
         <button
           type="button"
           onClick={addVariant}
-          className="flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition"
+          className="flex items-center gap-2 text-sm font-medium text-secondary hover:text-secondary transition"
         >
           <Plus size={16} /> Add Variant
         </button>

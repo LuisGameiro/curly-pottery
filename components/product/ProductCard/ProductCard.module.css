@@ -2,89 +2,88 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply relative max-h-full w-full box-border overflow-hidden
-  bg-no-repeat bg-center bg-cover transition-transform
-  ease-linear cursor-pointer bg-accent-1;
+  @apply relative max-h-full w-full box-border overflow-hidden bg-accent-1 bg-no-repeat bg-center bg-cover transition-transform ease-linear cursor-pointer;
   height: 100% !important;
-}
 
-.root:hover {
-  & .productImage {
-    transition: transform 5s cubic-bezier(0.25, 1, 0.5, 1);
-    transform: scale(1.1);
+  /* Nested Hover Logic */
+  &:hover {
+    & .productImage {
+      transition: transform 5s cubic-bezier(0.25, 1, 0.5, 1);
+      transform: scale(1.1);
+    }
+
+    /* Default hover colors */
+    & .header .name span,
+    & .header .price,
+    & .wishlistButton {
+      @apply bg-secondary text-on-secondary;
+    }
+
+    /* Pattern: 1, 7, 13... */
+    &:nth-child(6n + 1) {
+      & .header .name span, & .header .price, & .wishlistButton {
+        @apply bg-primary text-on-primary;
+      }
+    }
+
+    /* Pattern: 5, 11, 17... */
+    &:nth-child(6n + 5) {
+      & .header .name span, & .header .price, & .wishlistButton {
+        @apply bg-background text-background;
+      }
+    }
+
+    /* Pattern: 3, 9, 15... */
+    &:nth-child(6n + 3) {
+      & .header .name span, & .header .price, & .wishlistButton {
+        @apply bg-accent-5 text-background;
+      }
+    }
+
+    /* Pattern: 6, 12, 18... */
+    &:nth-child(6n + 6) {
+      & .header .name span, & .header .price, & .wishlistButton {
+        @apply bg-accent-9 text-background;
+      }
+    }
   }
 
-  & .header .name span,
-  & .header .price,
   & .wishlistButton {
-    @apply bg-secondary text-secondary;
-  }
-
-  &:nth-child(6n + 1) .header .name span,
-  &:nth-child(6n + 1) .header .price,
-  &:nth-child(6n + 1) .wishlistButton {
-    @apply bg-primary text-white;
-  }
-
-  &:nth-child(6n + 5) .header .name span,
-  &:nth-child(6n + 5) .header .price,
-  &:nth-child(6n + 5) .wishlistButton {
-    @apply bg-accent-0 text-white;
-  }
-
-  &:nth-child(6n + 3) .header .name span,
-  &:nth-child(6n + 3) .header .price,
-  &:nth-child(6n + 3) .wishlistButton {
-    @apply bg-accent-5 text-white;
-  }
-
-  &:nth-child(6n + 6) .header .name span,
-  &:nth-child(6n + 6) .header .price,
-  &:nth-child(6n + 6) .wishlistButton {
-    @apply bg-accent-9 text-white;
+    @apply top-0 right-0 z-30 absolute;
   }
 }
 
 .header {
-  @apply transition-colors ease-in-out duration-500
-  absolute top-0 left-0 z-20 pr-16;
-}
+  @apply absolute top-0 left-0 z-20 pr-16 transition-colors duration-500 ease-in-out;
+  
+  & .name {
+    @apply max-w-full w-full pt-0 leading-extra-loose transition-colors duration-500 ease-in-out;
+    font-size: 2rem;
+    letter-spacing: 0.4px;
 
-.header .name {
-  @apply pt-0 max-w-full w-full leading-extra-loose
-  transition-colors ease-in-out duration-500;
-  font-size: 2rem;
-  letter-spacing: 0.4px;
-}
+    & span {
+      @apply py-4 px-6 text-primary font-bold transition-colors duration-500 ease-in-out;
+    }
+  }
 
-.header .name span {
-  @apply py-4 px-6 text-primary font-bold
-  transition-colors ease-in-out duration-500;
-
-}
-
-.header .price {
-  @apply pt-2 px-6 pb-4 text-sm bg-primary text-accent-9
-
+  & .price {
+    @apply bg-primary text-muted px-6 pt-2 pb-4 text-sm;
+  }
 }
 
 .imageContainer {
-  @apply flex items-center justify-center overflow-hidden w-full h-full;
-}
+  @apply flex h-full w-full items-center justify-center overflow-hidden;
 
-.imageContainer .productImage {
-  @apply object-cover;
-  transition: transform 0.5s ease-in-out !important;
-  will-change: transform;
-}
-
-.root .wishlistButton {
-  @apply top-0 right-0 z-30 absolute;
+  & .productImage {
+    @apply object-cover;
+    transition: transform 0.5s ease-in-out !important;
+    will-change: transform;
+  }
 }
 
 /* Variant Simple */
 .simple .header .name {
-  @apply pt-2 text-lg leading-10 -mt-1;
+  @apply mt-1 pt-2 text-lg leading-10;
 }
 
 .simple .header .price {
@@ -93,19 +92,13 @@
 
 /* Variant Slim */
 .slim {
-  @apply bg-transparent relative overflow-hidden
-  box-border;
-}
+  @apply relative box-border overflow-hidden bg-transparent;
 
-.slim .header {
-  @apply absolute inset-0 flex items-center justify-end mr-8 z-20;
-}
+  & .header {
+    @apply absolute inset-0 z-20 mr-8 flex items-center justify-end;
+  }
 
-.slim span {
-  @apply bg-accent-9 text-accent-0 inline-block p-3
-  font-bold text-xl wrap-anywhere;
-}
-
-.root:global(.secondary) .header span {
-  @apply bg-accent-0 text-accent-9;
+  & span {
+    @apply bg-accent-9 text-muted inline-block p-3 text-xl font-bold wrap-anywhere;
+  }
 }

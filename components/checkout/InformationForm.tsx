@@ -52,7 +52,7 @@ export default function InformationForm({
       <div className="flex flex-col items-center justify-center space-y-6">
         <div className="text-center space-y-2">
           <Text variant="sectionHeading">Already have an account?</Text>
-          <Text className=" text-accent-6">
+          <Text className=" text-muted">
             Log in for a faster checkout experience.
           </Text>
         </div>
@@ -63,9 +63,9 @@ export default function InformationForm({
           </Link>
 
           <div className="relative flex py-2 items-center">
-            <div className="flex-1 border-t border-accent-2"></div>
-            <Text className=" mx-4 text-accent-4  uppercase">Or</Text>
-            <div className="flex-1 border-t border-accent-2"></div>
+            <div className="flex-1 border-t border-border"></div>
+            <Text className=" mx-4 text-muted  uppercase">Or</Text>
+            <div className="flex-1 border-t border-border"></div>
           </div>
 
           <Button

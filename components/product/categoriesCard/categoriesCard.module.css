@@ -22,25 +22,25 @@
   &:nth-child(6n + 1) .header .name span,
   &:nth-child(6n + 1) .header .price,
   &:nth-child(6n + 1) .wishlistButton {
-    @apply bg-primary text-white;
+    @apply bg-primary text-background;
   }
 
   &:nth-child(6n + 5) .header .name span,
   &:nth-child(6n + 5) .header .price,
   &:nth-child(6n + 5) .wishlistButton {
-    @apply bg-accent-0 text-white;
+    @apply bg-background text-background;
   }
 
   &:nth-child(6n + 3) .header .name span,
   &:nth-child(6n + 3) .header .price,
   &:nth-child(6n + 3) .wishlistButton {
-    @apply bg-accent-5 text-white;
+    @apply bg-accent-5 text-background;
   }
 
   &:nth-child(6n + 6) .header .name span,
   &:nth-child(6n + 6) .header .price,
   &:nth-child(6n + 6) .wishlistButton {
-    @apply bg-accent-9 text-white;
+    @apply bg-accent-9 text-background;
   }
 }
 
@@ -62,7 +62,7 @@
 }
 
 .header .price {
-  @apply pt-2 px-6 pb-4 text-sm bg-primary text-accent-9
+  @apply pt-2 px-6 pb-4 text-sm bg-primary text-muted
 }
 
 .imageContainer {
@@ -95,10 +95,10 @@
 }
 
 .slim span {
-  @apply bg-accent-9 text-accent-0 inline-block p-3
+  @apply bg-accent-9 text-muted inline-block p-3
   font-bold text-xl wrap-anywhere;
 }
 
 .root:global(.secondary) .header span {
-  @apply bg-accent-0 text-accent-9;
+  @apply bg-background text-muted;
 }

@@ -30,7 +30,7 @@ export default async function Orders() {
   if (!orders || orders?.length === 0)
     return (
       <Container className="py-20 flex flex-col items-center justify-center ">
-        <CarFront size={64} className="text-accent-4 mb-4" />
+        <CarFront size={64} className="text-muted mb-4" />
         <Text variant="heading">Your Orders are empty</Text>
       </Container>
     )

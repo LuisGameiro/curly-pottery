@@ -2,8 +2,8 @@
 @reference "../../../globals.css";
 
 .actions {
-  @apply flex p-1 border-accent-2 border items-center justify-center
-  w-12 text-accent-7;
+  @apply flex p-1 border-border border items-center justify-center
+  w-12 text-muted;
   transition-property: border-color, background, color, transform, box-shadow;
 
   transition-duration: 0.15s;
@@ -12,7 +12,7 @@
 }
 
 .actions:hover {
-  @apply border bg-accent-1 border-accent-3 text-accent-9;
+  @apply border bg-accent-1 border-border text-muted;
   transition: border-color;
   z-index: 10;
 }

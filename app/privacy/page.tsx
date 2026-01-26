@@ -16,9 +16,7 @@ export default function PrivacyPolicy() {
         <Text variant="body" className="mx-auto">
           How Curly Pottery handles and protects your personal data
         </Text>
-        <p className="text-sm text-accent-6 mt-2">
-          Last Updated: {lastUpdated}
-        </p>
+        <p className="text-sm text-muted mt-2">Last Updated: {lastUpdated}</p>
       </header>
 
       <section className="space-y-5 md:max-w-2xl mx-auto">
@@ -34,7 +32,7 @@ export default function PrivacyPolicy() {
           In compliance with GDPR, we only collect data that is necessary for
           our service:
         </Text>
-        <ul className="space-y-3 text-secondary-2 ml-4">
+        <ul className="space-y-3 text-secondary ml-4">
           <li className="list-disc">
             <strong>Identity Data:</strong> Name and contact details for
             shipping handcrafted ceramics.
@@ -54,7 +52,7 @@ export default function PrivacyPolicy() {
           Under the General Data Protection Regulation, you have the following
           rights:
         </Text>
-        <ul className="space-y-3 text-secondary-2 mb-2">
+        <ul className="space-y-3 text-secondary mb-2">
           <li className="flex items-start">
             <span className="text-secondary mr-3">✓</span>
             <span>

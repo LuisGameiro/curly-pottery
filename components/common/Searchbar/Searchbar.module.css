@@ -1,5 +1,5 @@
 .root {
-  @apply relative text-sm bg-accent-0 text-base w-full transition-colors duration-150 border border-accent-2;
+  @apply relative text-sm bg-background text-base w-full transition-colors duration-150 border border-border;
 }
 
 .input {
@@ -7,7 +7,7 @@
 }
 
 .input::placeholder {
-  @apply text-accent-3;
+  @apply text-muted;
 }
 
 .input:focus {

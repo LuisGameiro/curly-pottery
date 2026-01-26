@@ -10,7 +10,7 @@
 }
 
 .button:hover {
-  @apply border-accent-3 shadow-sm;
+  @apply border-border shadow-sm;
 }
 
 .button:focus {

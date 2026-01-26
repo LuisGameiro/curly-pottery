@@ -42,7 +42,7 @@ export default async function OrderDetailsPage({
           <div className="flex-1 flex-col gap-2">
             <Link
               href="/user/orders"
-              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition"
+              className="flex items-center gap-2 text-sm text-muted hover:text-primary transition"
             >
               <ArrowLeft size={16} /> Back to Orders
             </Link>
@@ -50,7 +50,7 @@ export default async function OrderDetailsPage({
               <Text variant="heading" className="my-0 py-0">
                 Order #{order.id.slice(-6).toUpperCase()}
               </Text>
-              <div className="flex flex-row  items-center justify-between gap-10">
+              <div className="flex flex-row  items-center justify-between gap-20">
                 <span className="text-sm bg-accent-1 px-3 py-1 rounded-full font-mono ">
                   {order.id}
                 </span>
@@ -62,11 +62,11 @@ export default async function OrderDetailsPage({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-2">
             <Container variant="box" className="space-y-4">
               <div className="flex items-center gap-2 border-b pb-2">
-                <Package size={18} className="text-accent-6" />
+                <Package size={18} className="text-muted" />
                 <Text variant="bold">Items Summary</Text>
               </div>
               <div className="divide-y">
@@ -86,7 +86,7 @@ export default async function OrderDetailsPage({
                     </div>
                     <div className="flex-1">
                       <Text className="font-medium text-sm">{item.name}</Text>
-                      <Text className="text-xs text-muted-foreground font-mono">
+                      <Text className="text-xs text-muted font-mono">
                         {item.sku}
                       </Text>
                     </div>
@@ -95,7 +95,7 @@ export default async function OrderDetailsPage({
                         {showCurrency[order.currency as CurrencyCode]}{' '}
                         {Number(item.price).toFixed(2)}
                       </Text>
-                      <Text className="text-xs text-muted-foreground">
+                      <Text className="text-xs text-muted">
                         Qty: {item.quantity}
                       </Text>
                     </div>
@@ -104,14 +104,14 @@ export default async function OrderDetailsPage({
               </div>
               <div className="p-6 space-y-2 border-t">
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Subtotal</span>
+                  <span className="text-muted">Subtotal</span>
                   <span>
                     {showCurrency[order.currency as CurrencyCode]}{' '}
                     {order.subtotalPrice.toFixed(2)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">
+                  <span className="text-muted">
                     Shipping {order.taxesIncluded && '(Included)'}
                   </span>
                   <span>
@@ -133,7 +133,7 @@ export default async function OrderDetailsPage({
           <div className="space-y-6">
             <Container variant="box" className="space-y-3">
               <div className="flex items-center gap-2 border-b pb-2">
-                <BellIcon size={18} className="text-accent-6" />
+                <BellIcon size={18} className="text-muted" />
                 <Text variant="bold">Status</Text>
               </div>
 
@@ -142,7 +142,7 @@ export default async function OrderDetailsPage({
 
             <Container variant="box" className="space-y-4">
               <div className="flex items-center gap-2 border-b pb-2">
-                <MapPin size={18} className="text-accent-6" />
+                <MapPin size={18} className="text-muted" />
                 <Text variant="bold">Shipping Address</Text>
               </div>
               {address ? (

@@ -69,13 +69,13 @@ const InputImage = ({
     <div className={cn(s.container)}>
       {label && <label htmlFor={generatedId}>{label}</label>}
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-2">
         {previews.map((src, index) => (
           <div
             key={index}
             className={cn(
-              'relative rounded-lg border overflow-hidden bg-slate-50 shrink-0 transition-all',
-              error ? 'border-red-500' : 'border-border',
+              'relative rounded-lg border overflow-hidden bg-accent-2 shrink-0 transition-all',
+              error ? 'border-red-200' : 'border-border',
               `w-${size} h-${size}`,
               className,
             )}
@@ -91,7 +91,7 @@ const InputImage = ({
             <button
               type="button"
               onClick={() => removeImage(index)}
-              className="absolute top-1 right-1 bg-black/50 hover:bg-red-500 text-white p-1 rounded-full transition-colors"
+              className="absolute top-1 right-1 bg-accent-2 hover:bg-red-100 p-1 rounded-full transition-colors"
             >
               <X size={14} />
             </button>
@@ -101,14 +101,14 @@ const InputImage = ({
         {(multiple || previews.length === 0) && (
           <label
             className={cn(
-              'w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer transition-all shrink-0 bg-slate-50',
+              'w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer transition-all shrink-0 bg-accent-2',
               error
-                ? 'border-red-300 bg-red-50 text-red-500 hover:bg-red-100'
-                : 'border-border text-slate-400 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-500',
+                ? 'border-red-200 bg-red-100 text-red-500 hover:bg-red-100'
+                : 'border-border text-muted hover:border-secondary hover:bg-secondary/60 hover:text-secondary',
             )}
           >
             {multiple ? <Plus size={24} /> : <Upload size={24} />}
-            <span className="text-[10px] font-medium mt-1">
+            <span className=" font-medium mt-1">
               {multiple ? 'Add More' : 'Upload'}
             </span>
             <input

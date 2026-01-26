@@ -33,7 +33,7 @@
 }
 
 .thumb.selected {
-  @apply bg-white/30;
+  @apply bg-background/20;
 }
 
 .thumb img {
@@ -47,7 +47,7 @@
   box-sizing: content-box;
   overflow-y: hidden;
   overflow-x: auto;
-  white-space: nowrap;
+  background-space: nowrap;
   height: 125px;
   scrollbar-width: none;
 }

@@ -19,7 +19,7 @@ export default function ShopClient({
 }: ShopClientProps) {
   return (
     <main className="relative h-full flex-1 bg-linear-to-r from-background to-accent-2 py-4 lg:py-8 px-4">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
         <MenuProducts
           sortMethod={sortMethod}
           categories={categories}

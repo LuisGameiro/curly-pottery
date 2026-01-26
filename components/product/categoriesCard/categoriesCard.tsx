@@ -22,14 +22,16 @@ const CategoriesCard = ({ cat, imgProps }: Props) => {
     >
       {cat.image && (
         <Image
-          quality="100"
           src={cat.image || placeholderImg}
           alt={cat.name || 'Product Image'}
           height={320}
           width={320}
+          quality={100}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           style={{
-            width: '100%',
-            height: 'auto',
+            // width: '100%',
+            // height: 'auto',
+            aspectRatio: '1/1',
             objectFit: 'cover',
           }}
           {...imgProps}

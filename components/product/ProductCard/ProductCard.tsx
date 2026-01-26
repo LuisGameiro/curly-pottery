@@ -69,7 +69,7 @@ const ProductCard = ({
       {variant === 'simple' && (
         <>
           {!noNameTag && (
-            <h3 className="absolute bg-accent-3/60 top-0 left-0 z-20 px-2 py-1 text-xs md:text-md  lg:text-xl font-medium text-foreground">
+            <h3 className="absolute bg-accent-3/60 top-0 left-0 z-20 px-2 py-1 text-xs md:text-md  lg:text-xl font-medium text-base">
               {product.name}
             </h3>
           )}
@@ -91,7 +91,7 @@ const ProductCard = ({
                 {...imgProps}
               />
             )}
-            <div className="absolute bottom-2 right-2 z-20 rounded-md bg-background/30  px-2 py-1 text-sm font-medium text-foreground backdrop-blur">
+            <div className="absolute bottom-2 right-2 z-20 rounded-md bg-background/20  px-2 py-1 text-sm font-medium text-base backdrop-blur">
               {hasDiscount ? (
                 <>
                   <span className="line-through opacity-40 mr-1">

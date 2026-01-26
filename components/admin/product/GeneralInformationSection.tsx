@@ -24,7 +24,7 @@ export default function GeneralInformationSection({
   const productName = watch('name')
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <Container variant="box" className="lg:col-span-2 space-y-">
         <Text variant="boxTitle">General Information</Text>
         <div className="space-y-4">
@@ -70,7 +70,7 @@ export default function GeneralInformationSection({
                 }}
                 render={({ field }) => (
                   <div
-                    className={`flex flex-wrap gap-1 mt-2 ${errors?.categoryIds ? 'border border-red-500' : ''}`}
+                    className={`flex flex-wrap gap-2 mt-2 ${errors?.categoryIds ? 'border border-red-200' : ''}`}
                   >
                     {categories.map((cat) => (
                       <button
@@ -85,8 +85,8 @@ export default function GeneralInformationSection({
                         }}
                         className={`px-3 py-1 rounded-full text-xs border transition ${
                           field.value.includes(cat.id)
-                            ? 'bg-primary text-accent-6 border-primary  hover:bg-primary/60'
-                            : 'bg-accent-8 text-accent-0 hover:bg-accent-6'
+                            ? 'bg-primary text-muted border-primary  hover:bg-primary/60'
+                            : 'bg-accent-8 text-muted hover:bg-accent-6'
                         }`}
                       >
                         {cat.name}

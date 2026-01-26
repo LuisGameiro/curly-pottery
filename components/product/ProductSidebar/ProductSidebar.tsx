@@ -131,12 +131,12 @@ const ProductSidebar = ({
         </p>
 
         {!forSale ? (
-          <div className="bg-red-500/20 px-10 py-2 text-center justify-center border border-red-500 items-center tracking-wide">
+          <div className="bg-red-100/20 px-10 py-2 text-center justify-center border border-red-200 items-center tracking-wide">
             <Text variant="bold" className={s.button}>
               OUT OF STOCK
             </Text>
             <Link href="/contacts">
-              <Text className="underline text-secondary-2">
+              <Text className="underline text-secondary">
                 Please contact us if you want to order this product
               </Text>
             </Link>

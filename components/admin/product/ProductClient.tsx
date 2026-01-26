@@ -164,7 +164,7 @@ export default function ProductClient({
           <header>
             <Link
               href="/admin/products"
-              className="flex items-center gap-2 text-muted-foreground hover:text-accent-6  transition"
+              className="flex items-center gap-2 text-muted hover:text-muted/60  transition"
             >
               <ArrowLeft size={16} /> Back to products
             </Link>

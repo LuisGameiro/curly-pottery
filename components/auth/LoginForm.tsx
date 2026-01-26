@@ -47,7 +47,7 @@ export default function LoginForm() {
   return (
     <Container className="p-10">
       {isRegistered && (
-        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center">
+        <div className="bg-green-100 border border-green-500 text-green-500 px-4 py-3 rounded mb-4 text-center">
           Registration successful! Please log in.
         </div>
       )}
@@ -72,7 +72,7 @@ export default function LoginForm() {
         </Button>
 
         <div className="relative flex justify-center text-xs uppercase">
-          <span className=" px-2 text-accent-6">Or email</span>
+          <span className=" px-2 text-muted">Or email</span>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

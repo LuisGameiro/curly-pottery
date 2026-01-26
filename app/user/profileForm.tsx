@@ -80,7 +80,7 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
           <label className="text-sm font-semibold">Email</label>
-          <div className="flex items-center mt-1 text-accent-9">
+          <div className="flex items-center mt-1 text-muted">
             <Mail size={18} className="mr-2" />
             <span>{user?.email}</span>
           </div>
@@ -145,13 +145,13 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
 
           <div className="space-y-4">
             {fields.length === 0 && !isEditing && (
-              <Text className="text-accent-5 italic">No addresses saved.</Text>
+              <Text className="text-muted italic">No addresses saved.</Text>
             )}
 
             {fields.map((field, index) => (
               <div
                 key={field.id}
-                className="p-4 border rounded-lg relative bg-accent-0"
+                className="p-4 border rounded-lg relative bg-background "
               >
                 {isEditing ? (
                   <div className="space-y-3">
@@ -193,19 +193,19 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
 
                     <div className="items-center gap-2 grid grid-cols-2">
                       <Input value="United Kingdom" disabled />
-                      <Text className="text-xs text-accent-5">
+                      <Text className="text-xs text-muted">
                         Currently only shipping to UK.
                       </Text>
                     </div>
                   </div>
                 ) : (
                   <div className="flex items-start">
-                    <MapPin size={18} className="mr-2 mt-1 text-accent-6" />
+                    <MapPin size={18} className="mr-2 mt-1 text-muted" />
                     <div>
                       <Text className="font-medium">
                         {watch(`addresses.${index}.address`) || 'New Address'}
                       </Text>
-                      <Text className="text-accent-7">
+                      <Text className="text-muted">
                         {watch(`addresses.${index}.postalCode`)},{' '}
                         {watch(`addresses.${index}.city`)}{' '}
                         {watch(`addresses.${index}.country`)}

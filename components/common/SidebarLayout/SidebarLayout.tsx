@@ -22,20 +22,20 @@ const SidebarLayout = ({
           <button
             onClick={handleClose}
             aria-label="Close"
-            className="hover:text-accent-5 transition ease-in-out duration-150 flex items-center focus:outline-hidden mr-6"
+            className="hover:text-muted/60 transition ease-in-out duration-150 flex items-center focus:outline-hidden mr-6"
           >
-            <Cross className="h-6 w-6 hover:text-accent-3" />
-            <span className="ml-2 text-accent-7 text-sm ">Close</span>
+            <Cross className="h-6 w-6 hover:text-muted/60" />
+            <span className="ml-2 text-muted text-sm ">Close</span>
           </button>
         )}
         {handleBack && (
           <button
             onClick={handleBack}
             aria-label="Go back"
-            className="hover:text-accent-5 transition ease-in-out duration-150 flex items-center focus:outline-hidden"
+            className="hover:text-muted/60 transition ease-in-out duration-150 flex items-center focus:outline-hidden"
           >
-            <ChevronLeft className="h-6 w-6 hover:text-accent-3" />
-            <span className="ml-2 text-accent-7 text-xs">Back</span>
+            <ChevronLeft className="h-6 w-6 hover:text-muted/60" />
+            <span className="ml-2 text-muted text-xs">Back</span>
           </button>
         )}
 

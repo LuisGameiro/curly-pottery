@@ -1,5 +1,5 @@
+import CartClient from '@components/cart/CartClient'
 import constructMetadata from '@components/common/SEO/SEO'
-import CartPage from 'app/cart/page'
 
 export const metadata = constructMetadata({
   title: 'Your Cart',
@@ -8,5 +8,5 @@ export const metadata = constructMetadata({
 })
 
 export default function Cart() {
-  return <CartPage />
+  return <CartClient />
 }

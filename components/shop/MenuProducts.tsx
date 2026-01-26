@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { cn } from '@lib/utils'
-import { ChevronDown } from 'lucide-react'
+import { ChevronUp } from 'lucide-react'
 import { Category } from '@lib/types/types'
 import { useClickOutside } from '@lib/hooks/useClickOutside'
 import { sortLabels, SortLabels } from './sortProducts'
@@ -47,17 +47,17 @@ export default function MenuProducts({
   return (
     <aside className="gap-2 lg:col-span-3 flex flex-col sm:flex-row lg:flex-col">
       <div className="relative w-full ">
-        <label className="text-xs font-bold uppercase tracking-wider text-accent-6 ml-1 mb-1 block">
+        <label className="text-xs font-bold uppercase tracking-wider text-muted ml-1 mb-1 block">
           Sort by
         </label>
 
         <div ref={containerSortRef} className="z-30">
           <button
-            className="w-full bg-accent-1 text-text-base border-2 border-border px-4 py-3 rounded-lg font-semibold flex justify-between items-center hover:bg-background transition-colors lg:cursor-default lg:hover:bg-accent-1 lg:hidden"
+            className="w-full bg-accent-1 text-base border-2 border-border px-4 py-3 rounded-lg font-semibold flex justify-between items-center hover:bg-background transition-colors lg:cursor-default lg:hover:bg-accent-1 lg:hidden"
             onClick={() => setOpenSort((v) => !v)}
           >
             <span>{sortLabels[sortMethod]}</span>
-            <ChevronDown
+            <ChevronUp
               size={18}
               className={cn('transition-transform', openSort && 'rotate-180')}
             />
@@ -75,8 +75,8 @@ export default function MenuProducts({
                 className={cn(
                   'px-4 py-2 rounded-md cursor-pointer transition-colors flex items-center justify-between',
                   sortMethod === key
-                    ? 'bg-secondary text-secondary-foreground font-bold'
-                    : 'hover:bg-accent-1 text-text-secondary hover:text-text-base font-medium',
+                    ? 'bg-secondary text-background font-bold'
+                    : 'hover:bg-accent-1 font-medium',
                 )}
                 onClick={() => {
                   handleSortMethodChange(key)
@@ -90,19 +90,19 @@ export default function MenuProducts({
       </div>
 
       <div className="relative w-full">
-        <label className="text-xs font-bold uppercase tracking-wider text-accent-6 ml-1 mb-1 block">
+        <label className="text-xs font-bold uppercase tracking-wider text-muted ml-1 mb-1 block">
           Browse
         </label>
 
         <div ref={containerFilterRef} className="z-30">
           <button
-            className="w-full bg-accent-1 text-text-base border-2 border-border px-4 py-3 rounded-lg font-semibold flex justify-between items-center hover:bg-white transition-colors lg:cursor-default lg:hover:bg-accent-1 lg:hidden"
+            className="w-full bg-accent-1 text-base border-2 border-border px-4 py-3 rounded-lg font-semibold flex justify-between items-center hover:bg-background transition-colors lg:cursor-default lg:hover:bg-accent-1 lg:hidden"
             onClick={() => setOpenFilter((v) => !v)}
           >
             <span>{activeCategory || 'All Categories'}</span>
-            <ChevronDown
+            <ChevronUp
               size={18}
-              className={cn('transition-transform', openSort && 'rotate-180')}
+              className={cn('transition-transform', openFilter && 'rotate-180')}
             />
           </button>
           <ul
@@ -114,10 +114,10 @@ export default function MenuProducts({
           >
             <li
               className={cn(
-                'px-4 py-2 rounded-md cursor-pointer transition-colors',
+                'px-4 py-2 rounded-md cursor-pointer transition-colors flex items-center justify-between',
                 !activeCategory
-                  ? 'bg-secondary text-secondary-foreground font-bold shadow-sm'
-                  : 'hover:bg-accent-1 text-text-secondary hover:text-text-base font-medium',
+                  ? 'bg-secondary text-background font-bold'
+                  : 'hover:bg-accent-1 font-medium',
               )}
               onClick={() => handleCategoryChange()}
             >
@@ -130,8 +130,8 @@ export default function MenuProducts({
                 className={cn(
                   'px-4 py-2 rounded-md cursor-pointer transition-colors flex items-center justify-between',
                   activeCategory === cat.name || activeCategory === cat.slug
-                    ? 'bg-secondary text-secondary-foreground font-bold shadow-sm'
-                    : 'hover:bg-accent-1 text-text-secondary hover:text-text-base font-medium',
+                    ? 'bg-secondary text-background font-bold'
+                    : 'hover:bg-accent-1 font-medium',
                 )}
                 onClick={() => handleCategoryChange(cat.slug)}
               >

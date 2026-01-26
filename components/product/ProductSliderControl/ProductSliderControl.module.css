@@ -3,7 +3,7 @@
 
 .control {
   @apply bg-secondary/20 absolute bottom-5 right-5 flex flex-row
-  border-accent-0/20 border text-accent-0 z-30 shadow-xl select-none;
+  border-border/20 border text-muted z-30 shadow-xl select-none;
   height: 48px;
 }
 
@@ -15,7 +15,7 @@
 
 .leftControl:hover,
 .rightControl:hover {
-  @apply bg-secondary-2/80;
+  @apply bg-secondary/60;
 }
 
 .leftControl:focus,
@@ -24,7 +24,7 @@
 }
 
 .rightControl {
-  @apply border-l border-accent-0;
+  @apply border-l border-border;
 }
 
 .leftControl {

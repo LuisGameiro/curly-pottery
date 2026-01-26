@@ -151,14 +151,14 @@ export default function CheckouClient() {
 
   return (
     <FormProvider {...methods}>
-      <Container className="lg:max-w-5xl mx-auto p-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <Container className="lg:max-w-5xl mx-auto p-10 grid grid-cols-1 lg:grid-cols-12 gap-20">
         <div className="lg:col-span-8">
           <div className="flex items-center gap-4 mb-8 text-sm font-medium">
             <button
               className={
                 step >= 1
                   ? 'text-secondary hover:text-secondary/60 cursor-pointer'
-                  : 'text-accent-4'
+                  : 'text-muted'
               }
               onClick={() => goBack(1)}
               disabled={loading}
@@ -170,7 +170,7 @@ export default function CheckouClient() {
               className={
                 step >= 2
                   ? 'text-secondary hover:text-secondary/60 cursor-pointer'
-                  : 'text-accent-4'
+                  : 'text-muted'
               }
               onClick={() => goBack(2)}
               disabled={loading}
@@ -182,7 +182,7 @@ export default function CheckouClient() {
               className={
                 step >= 3
                   ? 'text-secondary hover:text-secondary/60 cursor-pointer'
-                  : 'text-accent-4'
+                  : 'text-muted'
               }
               onClick={() => goBack(3)}
               disabled={loading}

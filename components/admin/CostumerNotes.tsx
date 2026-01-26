@@ -46,9 +46,7 @@ const CustomerNotes = ({ initialNotes, customerId }: CustomerNotesProps) => {
         Save Notes
       </Button>
 
-      <p className="text-[10px] text-accent-4 mt-1">
-        {isSaving ? 'Saving...' : ''}
-      </p>
+      <p className=" text-muted mt-1">{isSaving ? 'Saving...' : ''}</p>
     </form>
   )
 }

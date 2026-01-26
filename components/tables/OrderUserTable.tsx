@@ -54,10 +54,10 @@ export default function OrderTable({ orders }: { orders: OrderWithUser[] }) {
 function StatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
     PENDING: 'bg-amber-100 text-amber-700 border-amber-200',
-    PAID: 'bg-blue-100 text-blue-700 border-blue-200',
+    PAID: 'bg-secondary/60 text-secondary border-border',
     SHIPPED: 'bg-purple-100 text-purple-700 border-purple-200',
-    DELIVERED: 'bg-green-100 text-green-700 border-green-200',
-    CANCELLED: 'bg-red-100 text-red-700 border-red-200',
+    DELIVERED: 'bg-green-100 text-green-500 border-green-100',
+    CANCELLED: 'bg-red-100 text-red-500 border-red-200',
   }
 
   return (

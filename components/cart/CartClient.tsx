@@ -13,7 +13,7 @@ export default function CartClient() {
   if (isEmpty) {
     return (
       <Container className="py-20 flex flex-col items-center justify-center ">
-        <ShoppingBag size={64} className="text-accent-4 mb-4" />
+        <ShoppingBag size={64} className="text-muted mb-4" />
         <Text variant="heading">Your cart is empty</Text>
       </Container>
     )
@@ -25,7 +25,7 @@ export default function CartClient() {
         <Text variant="heading">Shopping Cart</Text>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
         <div className="lg:col-span-8">
           <ul className="divide-y border-b">
             {data?.lineItems.map((item: CartLineItem) => (
@@ -38,12 +38,12 @@ export default function CartClient() {
           <Text variant="boxTitle">Order Summary</Text>
           <div className="space-y-1 pb-4 border-b">
             <div className="flex justify-between">
-              <Text className="text-accent-8">Subtotal</Text>
+              <Text className="text-muted">Subtotal</Text>
               <Text>£ {data?.subtotalPrice.toFixed(2)}</Text>
             </div>
             <div className="flex justify-between">
-              <Text className="text-accent-8">Shipping</Text>
-              <Text className="text-green-600">next step</Text>
+              <Text className="text-muted">Shipping</Text>
+              <Text className="text-green-500">next step</Text>
             </div>
           </div>
           <div className="text-lg flex justify-between py-2">

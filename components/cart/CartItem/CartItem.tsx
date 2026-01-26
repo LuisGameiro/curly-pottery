@@ -52,7 +52,7 @@ const CartItem = ({
   return (
     <li
       className={cn(
-        'border-b border-accent-2 last:border-b-0 sm:flex justify-between py-2',
+        'border-b border-border last:border-b-0 sm:flex justify-between py-2',
         {
           'opacity-50 pointer-events-none': removing,
         },
@@ -60,7 +60,7 @@ const CartItem = ({
       {...rest}
     >
       <div className="flex items-center">
-        <div className="w-20 h-20 sm:w-24 sm:h-24 bg-accent-1 rounded-md overflow-hidden border border-accent-2 mr-2">
+        <div className="w-20 h-20 sm:w-24 sm:h-24 bg-accent-1 rounded-md overflow-hidden border border-border mr-2">
           <Link
             href={`/shop/${item.slug}`}
             className="relative block w-full h-full"
@@ -88,7 +88,7 @@ const CartItem = ({
             {item.colorName && (
               <Text
                 variant="bold"
-                className="uppercase tracking-wider px-3 py-1 rounded-md bg-accent-1 border border-accent-2 text-accent-7"
+                className="uppercase tracking-wider px-3 py-1 rounded-md bg-accent-1 border border-border text-muted"
               >
                 {item.colorName}
               </Text>
@@ -96,7 +96,7 @@ const CartItem = ({
             {item.sizeName && (
               <Text
                 variant="bold"
-                className="text-sm uppercase tracking-wider px-3 py-1 rounded-md bg-accent-1 border border-accent-2 text-accent-7"
+                className="text-sm uppercase tracking-wider px-3 py-1 rounded-md bg-accent-1 border border-border text-muted"
               >
                 {item.sizeName}
               </Text>
@@ -118,8 +118,8 @@ const CartItem = ({
             />
           </div>
         ) : (
-          <div className="text-xs text-accent-6 italic">
-            Qty: <span className="font-medium text-accent-9">{quantity}</span>
+          <div className="text-xs text-muted italic">
+            Qty: <span className="font-medium text-muted">{quantity}</span>
           </div>
         )}
 

@@ -7,9 +7,7 @@ export default function VariantTable({ variants }: { variants: Variant[] }) {
   const variantColumns = [
     {
       header: 'SKU',
-      render: (v: Variant) => (
-        <span className="text-secondary font-mono">{v.sku}</span>
-      ),
+      render: (v: Variant) => <span className="text-secondary">{v.sku}</span>,
     },
     {
       header: 'Size / Color',
@@ -38,9 +36,7 @@ export default function VariantTable({ variants }: { variants: Variant[] }) {
       header: 'Status',
       align: 'center' as const,
       render: (v: Variant) => (
-        <span
-          className={v.availableForSale ? 'text-green-600' : 'text-slate-400'}
-        >
+        <span className={v.availableForSale ? 'text-green-500' : 'text-muted'}>
           {v.availableForSale ? 'Active' : 'Hidden'}
         </span>
       ),

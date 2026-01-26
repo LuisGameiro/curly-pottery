@@ -99,7 +99,7 @@ export default function CategoryClient({
       <header>
         <Link
           href="/admin/categories"
-          className="flex items-center gap-2 text-muted-foreground hover:text-accent-6 mb-4 transition"
+          className="flex items-center gap-2 text-muted hover:text-muted/60 mb-4 transition"
         >
           <ArrowLeft size={16} /> Back to Categories
         </Link>
@@ -133,9 +133,7 @@ export default function CategoryClient({
 
           <div className="flex gap-2 ">
             <span className="font-semibold">URL Slug:</span>
-            <span className="text-muted-foreground">
-              /{slugify(formData.name)}
-            </span>
+            <span className="text-muted">/{slugify(formData.name)}</span>
           </div>
 
           <InputImage

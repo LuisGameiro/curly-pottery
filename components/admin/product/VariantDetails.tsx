@@ -13,7 +13,7 @@ export const VariantDetails = ({ variantIndex }: { variantIndex: number }) => {
   })
 
   return (
-    <div className="space-y-4 bg-primary/10 p-4 rounded-lg">
+    <div className="space-y-4 bg-primary/20 p-4 rounded-lg">
       <div className="flex justify-between items-center">
         <Text variant="subHeading">Technical Details</Text>
         <Button

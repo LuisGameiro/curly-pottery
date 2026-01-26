@@ -1,29 +1,28 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant light (&:where(.light, .light *));
 
 @font-face {
-  font-family: "Aptos";
-  src: url("/Aptos.ttf") format("truetype");
+  font-family: 'Aptos';
+  src: url('/Aptos.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Arial Rounded MT Bold";
-  src: url("/arialroundedmtbold.ttf") format("truetype");
+  font-family: 'Arial Rounded MT Bold';
+  src: url('/arialroundedmtbold.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @theme {
-  --font-header: "Arial Rounded MT Bold", sans-serif;
-  --font-body: "Aptos", sans-serif;
+  --font-header: 'Arial Rounded MT Bold', sans-serif;
+  --font-body: 'Aptos', sans-serif;
   --breakpoint-xs: 400px;
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
@@ -79,16 +78,12 @@
 
 @theme inline {
   --color-primary: var(--primary);
-  /* --color-primary-2: var(--primary-2); */
-  --color-primary-foreground: var(--primary-foreground);
 
   --color-secondary: var(--secondary);
-  --color-secondary-2: var(--secondary-2);
-  --color-secondary-foreground: var(--secondary-foreground);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-hover: var(--hover);
+  --color-muted: var(--muted);
   --color-border: var(--border);
 
   --color-accent-0: var(--accent-0);
@@ -109,7 +104,7 @@
   --color-green: var(--green);
   --color-red: var(--red);
 
-  --color-text-base: var(--text-base);
+  --color-base: var(--text-base);
   --color-on-primary: var(--on-primary);
   --color-on-secondary: var(--on-secondary);
 
@@ -118,9 +113,9 @@
     rgba(0, 0, 0, 0.02) 0px 30px 30px, rgba(0, 0, 0, 0.03) 0px 0px 8px,
     rgba(0, 0, 0, 0.05) 0px 1px 0px;
 
-  --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  /* --font-crimson-pro: "Crimson Pro", serif; */
+  --font-body: var(--font-aptos);
+  --font-header: var(--font-arial-rounded);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -145,26 +140,23 @@
 .light {
   --radius: 0.625rem;
 
-  /* Backgrounds & Text */
-  --background: #f1fbff; /* Your light blue tint */
-  --foreground: #000000; /* Your solid black */
-  --text-base: #000000;
-  --on-primary: #0440d8; /* Your deep blue text */
-  --on-secondary: #64748b; /* Muted blue-grey */
+  /* Text */
+  --base: #000000;
+  --on-primary: #0440d8;
+  --on-secondary: #64748b;
+  --muted: #6a808b;
+  
+  /* Backgrounds */ 
+  --background: #f1fbff;
 
   /* Primary (Yellow/Gold) */
-  --primary: #fde372; /* Your signature yellow */
-  --primary-2: #e5cc65; /* Slightly darker yellow for hover */
-  --primary-foreground: #000000;
+  --primary: #fde372;
 
   /* Secondary (Electric Blue) */
-  --secondary: #3b67d4; /* Your vibrant blue */
-  --secondary-2: #2d52ab; /* Deep blue hover */
-  --secondary-foreground: #ffffff;
+  --secondary: #3b67d4;
 
   /* UI Elements */
   --border: #d1e5f0; /* Soft blue border */
-  --hover: #e6f4fa;
 
   /* Accent Scale (Lightest to Darkest) 
      Based on your #f1fbff background */
@@ -188,29 +180,28 @@
   --red: #ef4444;
 }
 .dark {
-  /* Backgrounds & Text */
-  --background: #05070a; /* Near black, very subtle depth */
-  --foreground: #e1e7ef; /* Slightly dimmed white to reduce eye strain */
-  --text-base: #e1e7ef;
+  --radius: 0.625rem;
+
+  /* Text */
+  --base: #e1e7ef;
   --on-primary: #1e3a8a;
-  --on-secondary: #64748b; /* Dimmer secondary text */
+  --on-secondary: #64748b;
+  --muted: #6a808b;
+  
+  /* Backgrounds */ 
+  --background: #05070a;
 
   /* Primary (Yellow/Gold) - Kept bright for pop */
   --primary: #fde372;
-  --primary-2: #ffe98a;
-  --primary-foreground: #000000;
 
   /* Secondary (Deep Blue) - Darkened to blend into the shadows */
   --secondary: #5d87e9;
-  --secondary-2: #2563eb;
-  --secondary-foreground: #ffffff;
 
   /* UI Elements - Much stealthier */
-  --border: #121820; /* Subtle borders */
-  --hover: #0f172a; /* Very dark hover state */
+  --border: #121820;
 
   /* Accent Scale (OLED to Steel) */
-  --accent-0: #05070a; /* True depth */
+  --accent-0: #05070a;
   --accent-1: #0a0f16;
   --accent-2: #111823; /* Perfect for Card backgrounds */
   --accent-3: #1a222e; /* For elevated elements like Modals */
@@ -222,12 +213,15 @@
   --accent-9: #e1e7ef;
 
   /* Status Colors (Slightly more "neon" to punch through the black) */
-  --violet: #8b5cf6;
+  /* --violet: #8b5cf6;
   --pink: #ec4899;
   --cyan: #06b6d4;
-  --blue: #3b82f6;
+  --blue: #3b82f6; */
   --green: #10b981;
   --red: #ef4444;
+
+  /* amber */
+  /* emerald */
 }
 
 @layer base {
@@ -236,6 +230,6 @@
   }
 
   body {
-    @apply bg-background text-foreground w-full min-h-screen flex flex-col;
+    @apply bg-background text-base w-full min-h-screen flex flex-col;
   }
 }

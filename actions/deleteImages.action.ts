@@ -1,9 +1,8 @@
 'use server'
 
-import { del, BlobServiceRateLimited } from '@vercel/blob'
-import { setTimeout } from 'node:timers/promises'
+import { del } from '@vercel/blob'
 
-export async function deleteAllBlobs(blobs: string[]) {
+export async function deleteAllBlobs(blobs: string) {
   try {
     await del(blobs)
 
