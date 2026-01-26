@@ -47,7 +47,7 @@
     @apply col-span-4;
   }
 
-  .imageContainer {
+  /* .imageContainer {
     max-height: 600px;
-  }
+  } */
 }

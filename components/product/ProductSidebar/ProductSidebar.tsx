@@ -83,7 +83,7 @@ const ProductSidebar = ({
           <div className="flex items-center gap-2">
             <Link href={`/shop/`}>
               <Button variant="naked">
-                <Undo2 size={24} />
+                <Undo2 size={24} className='text-on-secondary'/>
               </Button>
             </Link>
             <ShareButton

@@ -47,58 +47,55 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
   })
 
   return (
-    <>
-      <Container clean>
-        <section className={cn(s.root)}>
-          <div className={cn(s.main)}>
-            <ProductSlider key={variant.id}>
-              {variant.images.map((image: string, i: number) => (
-                <div key={image} className={s.imageContainer}>
-                  <Image
-                    className={s.img}
-                    src={image}
-                    alt={`${product.name} Image ${i}`}
-                    priority={i === 0}
-                    width={2400}
-                    height={2400}
-                    quality={100}
-                    style={{
-                      aspectRatio: '1/1',
-                      objectFit: 'cover',
-                    }}
-                  />
-                </div>
-              ))}
-            </ProductSlider>
-          </div>
-
-          <ProductSidebar
-            key={product.id}
-            product={product}
-            variant={variant}
-            setVariant={setVariant}
-            className={s.sidebar}
-          />
-        </section>
-
-        {relatedProducts.length > 0 && (
-          <Marquee variant="secondary">
-            {relatedProducts.map((p) => (
-              <ProductCard
-                key={p.slug}
-                noNameTag
-                product={p}
-                variant="slim"
-                className="animated fadeIn"
-                imgProps={{
-                  alt: p.name,
-                }}
-              />
+    <Container clean>
+      <section className={cn(s.root)}>
+        <div className={cn(s.main)}>
+          <ProductSlider key={variant.id}>
+            {variant.images.map((image: string, i: number) => (
+              <div key={image} className={s.imageContainer}>
+                <Image
+                  className={s.img}
+                  src={image}
+                  alt={`${product.name} Image ${i}`}
+                  priority={i === 0}
+                  width={2400}
+                  height={2400}
+                  quality={100}
+                  style={{
+                    aspectRatio: '1/1',
+                    objectFit: 'cover',
+                  }}
+                />
+              </div>
             ))}
-          </Marquee>
-        )}
-      </Container>
-    </>
+          </ProductSlider>
+        </div>
+
+        <ProductSidebar
+          key={product.id}
+          product={product}
+          variant={variant}
+          setVariant={setVariant}
+          className={s.sidebar}
+        />
+      </section>
+
+      {relatedProducts.length > 0 && (
+        <Marquee variant="secondary">
+          {relatedProducts.map((p) => (
+            <ProductCard
+              key={p.slug}
+              noNameTag
+              product={p}
+              variant="slim"
+              imgProps={{
+                alt: p.name,
+              }}
+            />
+          ))}
+        </Marquee>
+      )}
+    </Container>
   )
 }
 

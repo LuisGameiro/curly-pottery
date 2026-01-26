@@ -52,8 +52,8 @@ const ProductCard = ({
             <Image
               src={product.images[0] || placeholderImg}
               alt={product.name || 'Product Image'}
-              height={250}
-              width={250}
+              height={125}
+              width={125}
               quality={85}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               style={{
