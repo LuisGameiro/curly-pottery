@@ -138,7 +138,9 @@ export async function getRandomProducts(
   limit = 3,
 ): Promise<ActionResponse<Product[] | null>> {
   try {
-    const products = await prisma.product.findMany()
+    const products = await prisma.product.findMany({
+      where: {variants: { some: { stock: { gt: 0 } } }},
+    })
 
     return {
       success: true,
