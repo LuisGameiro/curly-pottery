@@ -56,12 +56,12 @@ export default function CategoryTable({
     {
       header: 'Name',
       render: (cat: Category) => (
-        <span className="font-medium">{cat.name}</span>
+        <span>{cat.name}</span>
       ),
     },
     {
       header: 'Slug',
-      render: (cat: Category) => <span className="text-xs">/{cat.slug}</span>,
+      render: (cat: Category) => <span>/{cat.slug}</span>,
     },
     {
       header: 'Actions',

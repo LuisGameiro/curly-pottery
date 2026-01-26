@@ -18,7 +18,7 @@ export default function ShopClient({
   children,
 }: ShopClientProps) {
   return (
-    <main className="relative h-full flex-1 bg-linear-to-r from-background to-accent-2 py-4 lg:py-8 px-4">
+    <main className="relative h-full flex-1 bg-linear-to-r from-background to-accent-2 py-4 lg:py-8 px-4 lg:px-8 max-w-6xl">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
         <MenuProducts
           sortMethod={sortMethod}

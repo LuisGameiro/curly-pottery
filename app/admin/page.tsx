@@ -1,3 +1,4 @@
+import { StatCard } from '@components/admin/StatCard'
 import constructMetadata from '@components/common/SEO'
 import { Container, Text } from '@components/ui'
 import { getDashboardStats } from 'actions/dashboard.actions'
@@ -13,7 +14,7 @@ import {
   TouchpadIcon,
 } from 'lucide-react'
 import Link from 'next/link'
-import { ReactNode, Suspense } from 'react'
+import { Suspense } from 'react'
 
 export const metadata = constructMetadata({
   title: 'Admin Dashboard',
@@ -40,7 +41,7 @@ export default async function DashboardPage() {
           </Text>
         </header>
 
-        <section className="space-y-8">
+        <section className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <StatCard
               label="Total Customers"
@@ -57,7 +58,7 @@ export default async function DashboardPage() {
             <StatCard
               label="Active Products"
               value={stats.totalProducts}
-              icon={<Package className="text-purple-500" size={20} />}
+              icon={<Package className="text-amber" size={20} />}
             />
             <StatCard
               label="Total Units in Stock"
@@ -86,7 +87,7 @@ export default async function DashboardPage() {
                       }}
                     />
                     <div
-                      className="bg-red/60 transition-all"
+                      className="bg-red transition-all"
                       style={{
                         width: `${(stats.productsOutOfStock / stats.totalProducts) * 100}%`,
                       }}
@@ -98,26 +99,26 @@ export default async function DashboardPage() {
                       {stats.productsWithStock} In Stock
                     </span>
                     <span className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-red/20" />{' '}
+                      <span className="w-2 h-2 rounded-full bg-red" />{' '}
                       {stats.productsOutOfStock} Out of Stock
                     </span>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 rounded-xl border border-border bg-red/20/60">
-                    <Text className=" text-red font-bold block mb-1">
+                  <div className="p-4 rounded-xl border border-border bg-red/20">
+                    <Text className="font-bold block mb-1">
                       {'Low Stock (<5)'}
                     </Text>
-                    <Text className=" text-red">
+                    <Text className="justify-center">
                       {stats.lowStockVariants + ' Variants'}
                     </Text>
                   </div>
                   <div className="p-4 rounded-xl border border-border bg-green/20">
-                    <Text className=" text-muted font-bold block mb-1">
+                    <Text className="font-bold block mb-1">
                       Active Categories
                     </Text>
-                    <Text className="text-muted">{stats.totalCategories}</Text>
+                    <Text className="justify-center">{stats.totalCategories}</Text>
                   </div>
                 </div>
               </div>
@@ -129,27 +130,27 @@ export default async function DashboardPage() {
                 <Text variant="bold">Quick Tasks</Text>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {stats.pendingOrders > 0 ? (
                   <Link
                     href="/admin/orders"
-                    className="flex gap-2 p-3 rounded-lg border border-red/60 bg-red/60 hover:bg-red/60 transition items-center"
+                    className="flex items-center gap-2 p-3 rounded-lg border border-red/60 bg-red/20 hover:bg-red/60 transition"
                   >
-                    <AlertCircle className="text-red shrink-0" size={18} />
+                    <AlertCircle className="text-red" size={18} />
                     <div>
-                      <Text className=" font-bold text-red">
+                      <Text className="font-bold">
                         Process Orders
                       </Text>
-                      <Text className=" text-red">
+                      <Text>
                         You have {stats.pendingOrders} orders waiting for
                         shipment.
                       </Text>
                     </div>
                   </Link>
                 ) : (
-                  <div className="flex items-center gap-2 p-3 rounded-lg border border-green/20 bg-green-50">
-                    <CheckCircle2 className="text-green shrink-0" size={18} />
-                    <Text className=" font-bold text-green">
+                  <div className="flex items-center gap-2 p-3 rounded-lg border border-green/20 bg-green/20">
+                    <CheckCircle2 className="text-green" size={18} />
+                    <Text className="font-bold">
                       All orders processed
                     </Text>
                   </div>
@@ -160,40 +161,5 @@ export default async function DashboardPage() {
         </section>
       </Container>
     </Suspense>
-  )
-}
-
-interface StatCardProp {
-  label: string
-  value: number
-  icon: ReactNode
-  trend?: string
-  isCritical?: boolean
-}
-
-function StatCard({ label, value, icon, trend, isCritical }: StatCardProp) {
-  return (
-    <Container
-      variant="box"
-      className={` ${isCritical ? 'border-red/60 ' : ''}`}
-    >
-      <div className="flex items-center justify-between ">
-        <div className="flex items-center gap-4 mb-4 ">
-          <div className="rounded-lg">{icon}</div>
-          <Text variant="bold">{label}</Text>
-        </div>
-        {trend && (
-          <span
-            className={` font-bold px-2 py-0.5 rounded-full ${isCritical ? 'text-red' : ' text-green'}`}
-          >
-            {trend}
-          </span>
-        )}
-      </div>
-
-      <div className="flex justify-end items-center">
-        <Text className="subHeanding">{value}</Text>
-      </div>
-    </Container>
   )
 }

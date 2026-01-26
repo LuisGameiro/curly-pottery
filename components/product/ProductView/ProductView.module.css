@@ -2,7 +2,7 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply relative grid items-start grid-cols-1 overflow-x-hidden;
+  @apply bg-linear-to-r from-background to-accent-2 relative grid items-start grid-cols-1 overflow-x-hidden;
 }
 
 .main {
@@ -10,7 +10,7 @@
 }
 
 .sidebar {
-  @apply bg-secondary/20 flex flex-col col-span-1 px-6 w-full h-full pt-2;
+  @apply  flex flex-col col-span-1 px-6 w-full h-full pt-2;
 }
 
 

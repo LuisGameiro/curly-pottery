@@ -5,6 +5,7 @@ import { Eye } from 'lucide-react'
 import { Button } from '@components/ui'
 import DataTable from '@components/ui/Table/DataTable'
 import { CartLineItem, Order } from '@lib/types/types'
+import { StatusBadge } from '@components/admin/StatusBadge'
 
 export default function OrderTable({ orders }: { orders: Order[] }) {
   const orderColumns = [
@@ -19,7 +20,7 @@ export default function OrderTable({ orders }: { orders: Order[] }) {
           <span className="font-medium">
             {o.firstName} {o.lastName}
           </span>
-          <span className="text-xs opacity-70">{o.email}</span>
+          <span className="text-xs text-muted">{o.email}</span>
         </div>
       ),
     },
@@ -29,7 +30,7 @@ export default function OrderTable({ orders }: { orders: Order[] }) {
         return (
           <div className="max-w-[150px] truncate">
             {((o?.lineItems as CartLineItem[]) || [])
-              .map((i: CartLineItem) => `${i.quantity}x ${i.sku}`)
+              .map((i: CartLineItem) => `${i.quantity}x${i.sku}`)
               .join(', ')}
           </div>
         )
@@ -59,23 +60,5 @@ export default function OrderTable({ orders }: { orders: Order[] }) {
       columns={orderColumns}
       emptyMessage="No orders found"
     />
-  )
-}
-
-function StatusBadge({ status }: { status: string }) {
-  const styles: Record<string, string> = {
-    PENDING: 'bg-amber/60 text-amber border-amber/60',
-    PAID: 'bg-secondary/60 text-secondary border-border',
-    SHIPPED: 'bg-purple-100 text-purple-700 border-purple-200',
-    DELIVERED: 'bg-green/20 text-green border-green/20',
-    CANCELLED: 'bg-red/60 text-red border-red/60',
-  }
-
-  return (
-    <span
-      className={`text-sm font-bold px-1 rounded-full border ${styles[status] || styles.PENDING}`}
-    >
-      {status}
-    </span>
   )
 }

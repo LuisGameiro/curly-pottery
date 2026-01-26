@@ -7,12 +7,12 @@ export default function VariantTable({ variants }: { variants: Variant[] }) {
   const variantColumns = [
     {
       header: 'SKU',
-      render: (v: Variant) => <span className="text-secondary">{v.sku}</span>,
+      render: (v: Variant) => <span className="text-secondary uppercase">{v.sku}</span>,
     },
     {
       header: 'Size / Color',
       render: (v: Variant) => (
-        <span>
+        <span className='capitalize'>
           {v.sizeName} {v.colorName && `• ${v.colorName}`}
         </span>
       ),
@@ -20,7 +20,7 @@ export default function VariantTable({ variants }: { variants: Variant[] }) {
     {
       header: 'Price',
       align: 'center' as const,
-      render: (v: Variant) => `£${v.price}`,
+      render: (v: Variant) => `£${v.price.toFixed(2)}`,
     },
     {
       header: 'Stock',

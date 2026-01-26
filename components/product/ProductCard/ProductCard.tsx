@@ -35,9 +35,9 @@ const ProductCard = ({
   const { finalPrice, price, hasDiscount } =
     product && 'variants' in product && product.variants.length > 0
       ? calculateDiscount(
-          product.variants[0].price,
-          product.variants[0].discounts as Discount[],
-        )
+        product.variants[0].price,
+        product.variants[0].discounts as Discount[],
+      )
       : { price: '0', finalPrice: '0', hasDiscount: false }
 
   return (
@@ -52,8 +52,8 @@ const ProductCard = ({
             <Image
               src={product.images[0] || placeholderImg}
               alt={product.name || 'Product Image'}
-              height={125}
-              width={125}
+              height={250}
+              width={250}
               quality={85}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               style={{

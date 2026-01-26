@@ -73,8 +73,8 @@ export default function ProductTable({
         return (
           <span
             className={cn(
-              'px-2 py-1 rounded text-xs font-bold',
-              stock <= 2 ? 'bg-red/60 text-red' : 'bg-green/20 text-green',
+              'px-2 py-1 rounded font-bold',
+              stock <= 2 ? 'bg-red/20 text-red' : 'bg-green/20 text-green',
             )}
           >
             {stock}
@@ -92,8 +92,8 @@ export default function ProductTable({
         return (
           <span>
             {minPrice === maxPrice
-              ? `£${minPrice}`
-              : `£${minPrice} - £${maxPrice}`}
+              ? `£${minPrice.toFixed(2)}`
+              : `£${minPrice.toFixed(2)} - £${maxPrice.toFixed(2)}`}
           </span>
         )
       },

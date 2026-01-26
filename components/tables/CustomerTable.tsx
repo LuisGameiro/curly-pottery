@@ -27,11 +27,11 @@ export default function CustomerTable({
       header: 'Contacts',
       render: (user: UserWithOrders) => (
         <div className="flex flex-col gap-2 items-center">
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2">
             <Mail size={12} /> {user.email}
           </div>
           {user.phone && (
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2">
               <Phone size={12} /> {user.phone}
             </div>
           )}
@@ -51,7 +51,7 @@ export default function CustomerTable({
             (sum: number, o: Order) => sum + o.totalPrice,
             0,
           ) || 0
-        return `£${total.toLocaleString()}`
+        return `£${total.toFixed(2)}`
       },
     },
     {
