@@ -6,7 +6,7 @@
 }
 
 .main {
-  @apply relative flex-col col-span-1 flex items-center justify-center;
+  @apply relative flex-col 2xl:flex-row-reverse col-span-1 flex items-center justify-center;
 }
 
 .sidebar {

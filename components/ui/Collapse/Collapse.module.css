@@ -14,11 +14,11 @@
 }
 
 .content {
-  @apply pt-3 overflow-hidden pl-8;
+  @apply pt-2 overflow-hidden py-2;
 }
 
 .icon {
-  @apply mr-3 text-muted;
+  @apply mr-4 text-muted;
   margin-left: -6px;
   transition: transform 0.2s ease;
 }
