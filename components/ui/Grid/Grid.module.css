@@ -7,8 +7,8 @@
 
 .root > * {
   @apply row-span-1 bg-transparent box-border overflow-hidden;
-  height: 500px;
-  max-height: 800px;
+  /* height: 500px;
+  max-height: 800px; */
 }
 
 .default > * {

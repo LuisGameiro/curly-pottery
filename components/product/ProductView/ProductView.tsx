@@ -47,7 +47,7 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
   })
 
   return (
-    <Container clean>
+    <Container clean className='mx-auto bg-linear-to-r from-background to-accent-2 max-w-7xl'>
       <section className={cn(s.root)}>
         <div className={cn(s.main)}>
           <ProductSlider key={variant.id}>
