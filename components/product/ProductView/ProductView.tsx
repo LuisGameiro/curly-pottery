@@ -48,8 +48,8 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
 
   return (
     <Container clean className='bg-linear-to-r from-background to-accent-2'>
-      <section className={cn(s.root)}>
-        <div className={cn(s.main)}>
+      <section className={s.root}>
+        <div className={s.main}>
           <ProductSlider key={variant.id}>
             {variant.images.map((image: string, i: number) => (
               <div key={image} className={s.imageContainer}>
@@ -58,8 +58,9 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
                   src={image}
                   alt={`${product.name} Image ${i}`}
                   priority={i === 0}
-                  width={1000}
-                  height={1000}
+                  width={500}
+                  height={500}
+                  
                   quality={100}
                   style={{
                     aspectRatio: '1/1',

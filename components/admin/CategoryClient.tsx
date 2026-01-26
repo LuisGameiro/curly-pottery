@@ -45,7 +45,6 @@ export default function CategoryClient({
       setLoading(true)
       setFormData((prev) => ({
         ...prev,
-        slug: slugify(formData.name),
       }))
       setErrors({})
       const validation = CategorySchema.safeParse({
@@ -72,7 +71,6 @@ export default function CategoryClient({
       const response = await upsertCategory({
         id: formData.id,
         name: formData.name,
-        slug: formData.slug,
         image: ResponsEmail.data ? ResponsEmail.data[0] : category?.image || '',
       })
 

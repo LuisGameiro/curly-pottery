@@ -100,7 +100,7 @@ export default async function OrderDetailsPage({
                     </div>
                     <div className="text-right">
                       <Text className="text-sm font-medium">
-                        {showCurrency[order.currency as CurrencyCode]}{' '}
+                        {showCurrency[order.currency ]}{' '}
                         {Number(item.price).toFixed(2)}
                       </Text>
                       <Text className="text-xs text-muted">
@@ -114,7 +114,7 @@ export default async function OrderDetailsPage({
                 <div className="flex justify-between text-sm">
                   <span className="text-muted">Subtotal</span>
                   <span>
-                    {showCurrency[order.currency as CurrencyCode]}{' '}
+                    {showCurrency[order.currency ]}{' '}
                     {order.subtotalPrice.toFixed(2)}
                   </span>
                 </div>
@@ -123,14 +123,14 @@ export default async function OrderDetailsPage({
                     Shipping {order.taxesIncluded && '(Included)'}
                   </span>
                   <span>
-                    {showCurrency[order.currency as CurrencyCode]}{' '}
+                    {showCurrency[order.currency ]}{' '}
                     {Number(order.shippingPrice).toFixed(2) || 0.0}
                   </span>
                 </div>
                 <div className="flex justify-between text-lg font-bold pt-2 border-t">
                   <span>Total</span>
                   <span>
-                    {showCurrency[order.currency as CurrencyCode]}{' '}
+                    {showCurrency[order.currency ]}{' '}
                     {order.totalPrice.toFixed(2)}
                   </span>
                 </div>

@@ -6,20 +6,19 @@
 }
 
 .header {
-  @apply flex flex-row items-center;
+  @apply flex flex-row items-center ;
 }
 
 .header .label {
-  @apply text-base font-medium;
+  @apply text-base font-semibold;
 }
 
 .content {
-  @apply pt-2 overflow-hidden py-2;
+  @apply overflow-hidden py-2;
 }
 
 .icon {
   @apply mr-4 text-muted;
-  margin-left: -6px;
   transition: transform 0.2s ease;
 }
 

@@ -4,17 +4,25 @@ import { ActionResponse } from '@lib/types/types'
 import { upload } from '@vercel/blob/client'
 import { deleteAllBlobs } from './deleteImages.action'
 import { cropToSquare } from '@lib/cropToSquare'
-// const generateRandomImages = (amount: number, width = 600, height = 400) => {
-//   return Array.from({ length: amount }, () => {
-//     const randomId = Math.floor(Math.random() * 1000)
-//     return `https://picsum.photos/seed/${randomId}/${width}/${height}`
-//   })
-// }
+const generateRandomImages = (amount: number, width = 1000, height = 1000) => {
+  return Array.from({ length: amount }, () => {
+    const randomId = Math.floor(Math.random() * 1000)
+    return `https://picsum.photos/seed/${randomId}/${width}/${height}`
+  })
+}
 
 export async function syncImages(
   currentItems: (File | string)[],
   existingUrls: string[],
 ): Promise<ActionResponse<string[]>> {
+
+  if (process.env.NEXT_PUBLIC_APP_ENV === 'dev') 
+  return {
+    success: true,
+    message: 'Sync images skipped in development mode',
+    data: generateRandomImages(currentItems.length),
+  }
+
   try {
     const urlsToDelete = existingUrls
       .filter((oldUrl) => !currentItems.includes(oldUrl))

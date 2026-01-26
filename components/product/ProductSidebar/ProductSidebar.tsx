@@ -76,14 +76,14 @@ const ProductSidebar = ({
   )
 
   return (
-    <div className={cn(className, 'space-y-6')}>
+    <div className={cn(className, 'space-y-4')}>
       <section>
         <div className="flex justify-between items-center">
-          <Text variant="heading">{product.name}</Text>
+          <p className='text-2xl font-bold text-secondary'>{product.name}</p>
           <div className="flex items-center gap-2">
             <Link href={`/shop/`}>
-              <Button variant="naked">
-                <Undo2 size={24} className="text-on-secondary" />
+              <Button variant="naked" color='primary'>
+                <Undo2 size={24} />
               </Button>
             </Link>
             <ShareButton
@@ -93,39 +93,41 @@ const ProductSidebar = ({
             />
           </div>
         </div>
-
+        <div className="flex flex-wrap gap-2">
         {product.categories.map((category: Category) => (
-          <Text key={category.id} variant="subHeading" className={'mr-2'}>
+          <Text key={category.id} variant="subHeading">
             {category.name}
           </Text>
         ))}
+        </div>
       </section>
 
       <section className="space-y-4">
         <Text variant="sectionHeading">
-          {price.hasDiscount ? (
-            <div className="flex items-center gap-4">
+          {!price.hasDiscount ? (
+            <div className="flex items-center gap-2 text-4xl font-semibold">
               <span className="line-through opacity-40">
-                {showCurrency[variant.currency as CurrencyCode]} {price.price}
+                {showCurrency[variant.currency]}
+                {price.price.toFixed(2)}
               </span>
               <span>
-                {showCurrency[variant.currency as CurrencyCode]}{' '}
-                {price.finalPrice}
+                {showCurrency[variant.currency]}
+                {price.finalPrice.toFixed(2)}
               </span>
 
-              <span className=" bg-green px-6 rounded-full ">SALE</span>
+              <span className="bg-green px-4 py-1 rounded-full items-center text-lg">SALE</span>
             </div>
           ) : (
             <div>
-              <span>
-                {showCurrency[variant.currency as CurrencyCode]}{' '}
-                {price.finalPrice}
+              <span className="text-4xl font-semibold">
+                {showCurrency[variant.currency]}
+                {price.finalPrice.toFixed(2)}
               </span>
             </div>
           )}
         </Text>
 
-        <p className="text-xs">
+        <p className="text-xs text-justify text-muted">
           VAT included for UK orders. Duties and import taxes are calculated at
           checkout for other customers Shipping calculated at checkout.{' '}
         </p>
@@ -177,7 +179,7 @@ const ProductSidebar = ({
       </section>
 
       <Text
-        className="wrap-break-word w-full max-w-xl "
+        className="wrap-break-word w-full max-w-xl text-justify"
         html={product.description}
       />
 

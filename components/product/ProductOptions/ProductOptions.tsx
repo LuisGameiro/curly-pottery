@@ -30,7 +30,7 @@ const ProductOptions = ({ product, setVariant }: ProductOptionsProps) => {
   ) as string[]
 
   return (
-    <div className="space-y-6">
+    <>
       {allSizes.length > 1 && (
         <div>
           <Text variant="bold">Size</Text>
@@ -93,7 +93,7 @@ const ProductOptions = ({ product, setVariant }: ProductOptionsProps) => {
           </div>
         </div>
       )}
-    </div>
+    </>
   )
 }
 

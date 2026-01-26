@@ -6,7 +6,8 @@
 }
 
 .main {
-  @apply relative flex-col 2xl:flex-row-reverse col-span-1 flex items-center justify-center;
+  /* @apply flex-1 flex-col mx-auto  w-full h-full flex; */
+  @apply relative flex-row col-span-1 flex items-center justify-center;
 }
 
 .sidebar {
@@ -15,7 +16,7 @@
 
 
 .imageContainer {
-  @apply flex items-center justify-center w-full h-full relative;
+  @apply flex items-center justify-center w-full h-full relative lg:max-h-[calc(100vh-276px)];
 }
 
 .sliderContainer .img {
@@ -47,7 +48,4 @@
     @apply col-span-4;
   }
 
-  /* .imageContainer {
-    max-height: 600px;
-  } */
 }

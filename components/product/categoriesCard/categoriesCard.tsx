@@ -37,7 +37,7 @@ const CategoriesCard = ({ cat, imgProps }: Props) => {
       )}
 
       <div className="absolute inset-0 z-20 flex items-center justify-center">
-        <h1 className=" bg-accent-3/60 text-2xl px-5 py-1 text-center text-on-primary">
+        <h1 className="bg-accent-2/60 text-2xl px-5 py-1 text-center text-secondary backdrop-blur-sm">
           {cat.name}
         </h1>
       </div>

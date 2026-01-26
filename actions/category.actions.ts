@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { prisma } from 'prisma/prisma'
 import { Category, ActionResponse } from '@lib/types/types'
+import { slugify } from '@lib/slugify'
 
 export async function getAllCategories(): Promise<ActionResponse<Category[]>> {
   try {
@@ -57,7 +58,6 @@ export async function getCategoryById(
 export async function upsertCategory(formData: {
   id?: string
   name: string
-  slug: string
   image: string
 }) {
   try {
@@ -67,7 +67,7 @@ export async function upsertCategory(formData: {
         where: { id: formData.id },
         data: {
           name: formData.name,
-          slug: formData.slug,
+          slug: slugify(formData.name),
           image: formData.image,
         },
       })
@@ -75,7 +75,7 @@ export async function upsertCategory(formData: {
       category = await prisma.category.create({
         data: {
           name: formData.name,
-          slug: formData.slug,
+          slug: slugify(formData.name),
           image: formData.image,
         },
       })

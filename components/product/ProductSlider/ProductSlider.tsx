@@ -7,6 +7,7 @@ import React, {
   useState,
   useRef,
   useEffect,
+  cloneElement,
 } from 'react'
 import { a } from '@react-spring/web'
 import s from './ProductSlider.module.css'
@@ -49,6 +50,27 @@ const ProductSlider = ({ children, className = '' }: ProductSliderProps) => {
     },
   })
 
+  const [thumbnailRef, thumbnailSlider] = useKeenSlider<HTMLDivElement>({
+    vertical: false,
+    slides: {
+      perView: 3,
+      spacing: 0
+    },
+    loop: true,
+
+    drag: true,
+    breakpoints: {
+    '(min-width: 640px)': {
+      slides: { perView: 4, spacing: 0 },
+    },
+    '(min-width: 1024px)': {
+      slides: { perView: 4, spacing: 0 },
+    },
+  },
+  })
+
+
+
   useEffect(() => {
     const preventNavigation = (event: TouchEvent) => {
       const touchXPosition = event.touches[0].pageX
@@ -87,9 +109,8 @@ const ProductSlider = ({ children, className = '' }: ProductSliderProps) => {
               ...child,
               props: {
                 ...child.props,
-                className: `${
-                  child.props.className ? `${child.props.className} ` : ''
-                }keen-slider__slide`,
+                className: `${child.props.className ? `${child.props.className} ` : ''
+                  } keen-slider__slide`,
               },
             }
           }
@@ -97,7 +118,10 @@ const ProductSlider = ({ children, className = '' }: ProductSliderProps) => {
         })}
       </div>
 
-      <a.div className={s.album} ref={thumbsContainerRef}>
+      <a.div
+        className={cn(s.album, 'keen-slider')}
+        ref={thumbnailRef}
+      >
         {slider &&
           Children.map(children, (child, idx) => {
             if (isValidElement<HTMLElement>(child)) {
@@ -105,18 +129,20 @@ const ProductSlider = ({ children, className = '' }: ProductSliderProps) => {
                 ...child,
                 props: {
                   ...child.props,
-                  className: cn(child.props.className, s.thumb, {
+                  className: cn(child.props.className, s.thumb, 'keen-slider__slide', {
                     [s.selected]: currentSlide === idx,
                   }),
                   id: `thumb-${idx}`,
                   onClick: () => {
                     slider.current?.moveToIdx(idx)
                   },
+
                 },
               }
             }
             return child
           })}
+
       </a.div>
     </div>
   )

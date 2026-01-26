@@ -34,8 +34,8 @@ export default function ShareButton({ title, text, url }: ShareButtonProps) {
   }
 
   return (
-    <Button onClick={handleShare} variant="naked">
-      <Share2 size={24} className="text-on-secondary" />
+    <Button onClick={handleShare} variant="naked" color="primary">
+      <Share2 size={24}/>
     </Button>
   )
 }
