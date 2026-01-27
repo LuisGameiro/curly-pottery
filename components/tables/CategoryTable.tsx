@@ -18,12 +18,12 @@ export default function CategoryTable({
   const [isDeleting, setIsDeleting] = useState<string | null>(null)
   const router = useRouter()
 
-  const handleDelete = async (id: string, name: string ,image: string) => {
+  const handleDelete = async (id: string, name: string, image: string) => {
     if (!confirm(`Are you sure you want to delete "${name}"?`)) return
 
     setIsDeleting(id)
     try {
-      const response = await deleteCategory(id,image)
+      const response = await deleteCategory(id, image)
       if (response.success) {
         router.refresh()
       }
@@ -36,26 +36,26 @@ export default function CategoryTable({
   const columns = [
     {
       header: 'Image',
-            align: 'center' as const,
+      align: 'center' as const,
 
       render: (cat: Category) => (
-          <Image
-            src={cat.image || '/placeholder.png'}
-            alt={cat.name}
-            height={60}
-            width={60}
-            quality={85}
-            style={{
-              aspectRatio: '1/1',
-              objectFit: 'cover',
-            }}
-            loading="lazy"
-          />
+        <Image
+          src={cat.image || '/placeholder.png'}
+          alt={cat.name}
+          height={60}
+          width={60}
+          quality={85}
+          style={{
+            aspectRatio: '1/1',
+            objectFit: 'cover',
+          }}
+          loading="lazy"
+        />
       ),
     },
     {
       header: 'Name',
-      
+
       render: (cat: Category) => <span>{cat.name}</span>,
     },
     {
@@ -75,7 +75,7 @@ export default function CategoryTable({
             variant="naked"
             color="danger"
             disabled={isDeleting === cat.id}
-            onClick={() => handleDelete(cat.id, cat.name , cat.image)}
+            onClick={() => handleDelete(cat.id, cat.name, cat.image)}
           >
             <Trash2 size={20} />
           </Button>

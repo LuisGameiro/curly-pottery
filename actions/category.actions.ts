@@ -99,9 +99,8 @@ export async function upsertCategory(formData: {
   }
 }
 
-export async function deleteCategory(id: string , image: string) {
+export async function deleteCategory(id: string, image: string) {
   try {
-
     await deleteBlob(image)
 
     const category = await prisma.category.delete({

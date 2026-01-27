@@ -8,6 +8,7 @@ import {
   Product,
   ProductWithVariantsCategories,
 } from '@lib/types/types'
+import { shimmerDataUrl } from '@lib/shimmer'
 
 interface Props {
   className?: string
@@ -61,6 +62,8 @@ const ProductCard = ({
                 objectFit: 'cover',
               }}
               {...imgProps}
+              placeholder="blur"
+              blurDataURL={shimmerDataUrl(250, 250)}
             />
           )}
         </>
@@ -86,10 +89,11 @@ const ProductCard = ({
                 loading="lazy"
                 style={{
                   aspectRatio: '1/1',
-
                   objectFit: 'cover',
                 }}
                 {...imgProps}
+                placeholder="blur"
+                blurDataURL={shimmerDataUrl(500, 500)}
               />
             )}
             <div className="absolute bottom-2 right-2 z-20 rounded-md bg-background/20  px-2 py-1 text-sm font-medium text-base backdrop-blur">
@@ -118,12 +122,13 @@ const ProductCard = ({
               height={500}
               width={500}
               quality={100}
-              // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               style={{
                 aspectRatio: '1/1',
                 objectFit: 'cover',
               }}
               {...imgProps}
+              placeholder="blur"
+              blurDataURL={shimmerDataUrl(500, 500)}
             />
           )}
         </div>

@@ -11,4 +11,3 @@ export async function deleteBlob(blobs: string) {
     console.log('Error deleting blobs:', error)
   }
 }
-

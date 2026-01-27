@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image, { ImageProps } from 'next/image'
 import { Category } from '@lib/types/types'
+import { shimmerDataUrl } from '@lib/shimmer'
 
 interface Props {
   className?: string
@@ -33,6 +34,8 @@ const CategoriesCard = ({ cat, imgProps }: Props) => {
             objectFit: 'cover',
           }}
           {...imgProps}
+          placeholder="blur"
+          blurDataURL={shimmerDataUrl(250, 250)}
         />
       )}
 

@@ -25,9 +25,9 @@ export default function ProductTable({
 
     setIsDeleting(id)
     try {
-      const productToDelete =products.find((p) => p.id === id)!
-      const images = (productToDelete.variants).flatMap((v) => v.images)
-       images.push(...productToDelete.images)
+      const productToDelete = products.find((p) => p.id === id)!
+      const images = productToDelete.variants.flatMap((v) => v.images)
+      images.push(...productToDelete.images)
 
       const response = await deleteProduct(id, images)
       if (response.success) {

@@ -118,15 +118,17 @@ export async function createOrder({
       for (const item of lineItems) {
         const variant = await tx.productVariant.findUnique({
           where: { id: item.variantId },
-          select: { stock: true, product: { select: { name: true } } }
-        });
+          select: { stock: true, product: { select: { name: true } } },
+        })
 
         if (!variant) {
-          throw new Error(`Variant not found for ID: ${item.variantId}`);
+          throw new Error(`Variant not found for ID: ${item.variantId}`)
         }
 
         if (variant.stock < item.quantity) {
-          throw new Error(`Insufficient stock for ${variant.product.name}. Available: ${variant.stock}`);
+          throw new Error(
+            `Insufficient stock for ${variant.product.name}. Available: ${variant.stock}`,
+          )
         }
 
         await tx.productVariant.update({
@@ -134,12 +136,12 @@ export async function createOrder({
           data: {
             stock: { decrement: item.quantity },
           },
-        });
+        })
       }
 
       const newOrder = await tx.order.create({
         data: {
-          lineItems: lineItems as any, 
+          lineItems: lineItems,
           lastName,
           firstName,
           email,
@@ -158,30 +160,31 @@ export async function createOrder({
             user: { connect: { id: userId } },
           }),
         },
-      });
+      })
 
       if (userId) {
         await tx.user.update({
           where: { id: userId },
           data: { cart: {} },
-        });
+        })
       }
 
-      return newOrder;
-    });
+      return newOrder
+    })
 
     return {
       success: true,
       message: 'Order created successfully',
       data: order,
-    };
+    }
   } catch (error) {
-    console.error('createOrder_ERROR:', error);
+    console.error('createOrder_ERROR:', error)
     return {
       success: false,
-      message: error instanceof Error ? error.message : 'Failed to create order',
+      message:
+        error instanceof Error ? error.message : 'Failed to create order',
       errors: error,
-    };
+    }
   }
 }
 
@@ -202,7 +205,7 @@ export async function createOrder({
 //   shippingMethod,
 // }: CreateOrder): Promise<ActionResponse<Order | null>> {
 //   try {
-    
+
 //     const mappedLineItems = lineItems.map((item) => ({
 //       productId: item.id,
 //       variantId: item.variantId,
@@ -218,13 +221,9 @@ export async function createOrder({
 //       data: {
 //         stock: {
 //           decrement:
-//         },    
+//         },
 //       },
 //     })
-
-    
-
-
 
 //     const order = await prisma.order.create({
 //       data: {

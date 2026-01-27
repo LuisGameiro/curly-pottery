@@ -14,6 +14,7 @@ import {
 } from '@lib/types/types'
 import { trackEvent } from '@lib/analytics/trackEvents'
 import { calculateDiscount } from '@lib/calculate-price'
+import { shimmerDataUrl } from '@lib/shimmer'
 
 export const getRelatedProducts = async (
   categories: string[],
@@ -64,6 +65,8 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
                     aspectRatio: '1/1',
                     objectFit: 'cover',
                   }}
+                  placeholder="blur"
+                  blurDataURL={shimmerDataUrl(500, 500)}
                 />
               </div>
             ))}
