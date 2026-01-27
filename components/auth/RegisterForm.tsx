@@ -39,8 +39,8 @@ export default function RegisterForm() {
     const formData = new FormData(e.currentTarget)
     const result = await registerUser(formData)
 
-    if (result.error) {
-      setError(result.error)
+    if (!result.success) {
+      setError(result.message)
       setLoading(false)
     } else {
       const email = formData.get('email') as string

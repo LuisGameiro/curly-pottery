@@ -78,7 +78,7 @@ export default function DataTable<T extends { id: string }>({
                     </td>
                   )}
                   {columns.map((col, i) => (
-                    <td key={i} className={'px-4 py-2 text-sm text-center'}>
+                    <td key={i} className={'px-2 py-1 text-sm text-center'}>
                       {col.render(item)}
                     </td>
                   ))}

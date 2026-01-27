@@ -114,53 +114,165 @@ export async function createOrder({
   shippingMethod,
 }: CreateOrder): Promise<ActionResponse<Order | null>> {
   try {
-    const order = await prisma.order.create({
-      data: {
-        lineItems,
-        lastName,
-        firstName,
-        email,
-        phone,
-        discounts: discounts || [],
-        currency: currency || 'GBP',
-        shippingAddress: address || {},
-        billingAddress: address || {},
-        status: 'PENDING',
-        taxes,
-        shippingPrice: shippingPrice,
-        subtotalPrice: Number(subtotalPrice) || 0,
-        totalPrice: Number(totalPrice) || 0,
-        shippingMethod: shippingMethod,
-        ...(userId && {
-          user: {
-            connect: { id: userId },
-          },
-        }),
-      },
-    })
+    const order = await prisma.$transaction(async (tx) => {
+      for (const item of lineItems) {
+        const variant = await tx.productVariant.findUnique({
+          where: { id: item.variantId },
+          select: { stock: true, product: { select: { name: true } } }
+        });
 
-    await prisma.user.update({
-      where: { id: userId || '' },
-      data: {
-        cart: {},
-      },
-    })
+        if (!variant) {
+          throw new Error(`Variant not found for ID: ${item.variantId}`);
+        }
+
+        if (variant.stock < item.quantity) {
+          throw new Error(`Insufficient stock for ${variant.product.name}. Available: ${variant.stock}`);
+        }
+
+        await tx.productVariant.update({
+          where: { id: item.variantId },
+          data: {
+            stock: { decrement: item.quantity },
+          },
+        });
+      }
+
+      const newOrder = await tx.order.create({
+        data: {
+          lineItems: lineItems as any, 
+          lastName,
+          firstName,
+          email,
+          phone,
+          discounts: discounts || [],
+          currency: currency || 'GBP',
+          shippingAddress: address || {},
+          billingAddress: address || {},
+          status: 'PENDING',
+          taxes,
+          shippingPrice,
+          subtotalPrice: Number(subtotalPrice) || 0,
+          totalPrice: Number(totalPrice) || 0,
+          shippingMethod,
+          ...(userId && {
+            user: { connect: { id: userId } },
+          }),
+        },
+      });
+
+      if (userId) {
+        await tx.user.update({
+          where: { id: userId },
+          data: { cart: {} },
+        });
+      }
+
+      return newOrder;
+    });
 
     return {
       success: true,
       message: 'Order created successfully',
       data: order,
-    }
+    };
   } catch (error) {
-    console.error('createOrder', error)
+    console.error('createOrder_ERROR:', error);
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : 'A database error occurred',
+      message: error instanceof Error ? error.message : 'Failed to create order',
       errors: error,
-    }
+    };
   }
 }
+
+// export async function createOrder({
+//   userId,
+//   address,
+//   firstName,
+//   lastName,
+//   phone,
+//   email,
+//   lineItems,
+//   discounts,
+//   subtotalPrice,
+//   totalPrice,
+//   taxes,
+//   currency,
+//   shippingPrice,
+//   shippingMethod,
+// }: CreateOrder): Promise<ActionResponse<Order | null>> {
+//   try {
+    
+//     const mappedLineItems = lineItems.map((item) => ({
+//       productId: item.id,
+//       variantId: item.variantId,
+//       quantity: item.quantity,
+//     }))
+
+//     await prisma.productVariant.updateMany({
+//       where: {
+//         id: {
+//           in: lineItems.map((item) => item.variantId),
+//         },
+//       },
+//       data: {
+//         stock: {
+//           decrement:
+//         },    
+//       },
+//     })
+
+    
+
+
+
+//     const order = await prisma.order.create({
+//       data: {
+//         lineItems,
+//         lastName,
+//         firstName,
+//         email,
+//         phone,
+//         discounts: discounts || [],
+//         currency: currency || 'GBP',
+//         shippingAddress: address || {},
+//         billingAddress: address || {},
+//         status: 'PENDING',
+//         taxes,
+//         shippingPrice: shippingPrice,
+//         subtotalPrice: Number(subtotalPrice) || 0,
+//         totalPrice: Number(totalPrice) || 0,
+//         shippingMethod: shippingMethod,
+//         ...(userId && {
+//           user: {
+//             connect: { id: userId },
+//           },
+//         }),
+//       },
+//     })
+
+//     await prisma.user.update({
+//       where: { id: userId || '' },
+//       data: {
+//         cart: {},
+//       },
+//     })
+
+//     return {
+//       success: true,
+//       message: 'Order created successfully',
+//       data: order,
+//     }
+//   } catch (error) {
+//     console.error('createOrder', error)
+//     return {
+//       success: false,
+//       message:
+//         error instanceof Error ? error.message : 'A database error occurred',
+//       errors: error,
+//     }
+//   }
+// }
 
 export async function updateOrderStatus(
   orderId: string,

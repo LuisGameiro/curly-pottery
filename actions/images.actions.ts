@@ -2,7 +2,7 @@
 
 import { ActionResponse } from '@lib/types/types'
 import { upload } from '@vercel/blob/client'
-import { deleteAllBlobs } from './deleteImages.action'
+import { deleteBlob } from './serverImages.action'
 import { cropToSquare } from '@lib/cropToSquare'
 const generateRandomImages = (amount: number, width = 1000, height = 1000) => {
   return Array.from({ length: amount }, () => {
@@ -28,7 +28,7 @@ export async function syncImages(
       .filter((url) => typeof url === 'string' && url.length > 0)
 
     if (urlsToDelete.length > 0) {
-      await Promise.all(urlsToDelete.map(async (url) => deleteAllBlobs(url)))
+      Promise.all(urlsToDelete.map(async (url) => deleteBlob(url)))
     }
 
     const finalUrls = await Promise.all(

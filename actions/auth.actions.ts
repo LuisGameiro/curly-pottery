@@ -1,10 +1,9 @@
 'use server'
 
-// TODO : Replace with with promise types
-
 import { z } from 'zod'
 import { hashPassword } from '@lib/auth/password'
 import { prisma } from 'prisma/prisma'
+import { ActionResponse } from '@lib/types/types'
 
 const registerSchema = z.object({
   email: z.email('Invalid email address'),
@@ -15,7 +14,9 @@ const registerSchema = z.object({
   acceptsMarketing: z.boolean().default(false),
 })
 
-export async function registerUser(formData: FormData) {
+export async function registerUser(
+  formData: FormData,
+): Promise<ActionResponse<null>> {
   const rawData = Object.fromEntries(formData.entries())
 
   const validation = registerSchema.safeParse({
@@ -24,7 +25,11 @@ export async function registerUser(formData: FormData) {
   })
 
   if (!validation.success) {
-    return { error: validation.error.message }
+    return {
+      success: false,
+      message: 'Validation error',
+      errors: validation.error.message,
+    }
   }
 
   try {
@@ -33,7 +38,11 @@ export async function registerUser(formData: FormData) {
 
     const existingUser = await prisma.user.findUnique({ where: { email } })
     if (existingUser) {
-      return { error: 'User already exists' }
+      return {
+        success: false,
+        message: 'User already exists',
+        errors: 'User already exists',
+      }
     }
 
     await prisma.user.create({
@@ -49,9 +58,18 @@ export async function registerUser(formData: FormData) {
       },
     })
 
-    return { success: true }
+    return {
+      success: true,
+      message: 'User registered successfully',
+      data: null,
+    }
   } catch (error) {
     console.error('Registration error:', error)
-    return { error: 'Internal server error' }
+    return {
+      success: false,
+      message: 'Internal server error',
+      errors:
+        error instanceof Error ? error.message : 'An unknown error occurred',
+    }
   }
 }

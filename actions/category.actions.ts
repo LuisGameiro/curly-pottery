@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { prisma } from 'prisma/prisma'
 import { Category, ActionResponse } from '@lib/types/types'
 import { slugify } from '@lib/slugify'
+import { deleteBlob } from './serverImages.action'
 
 export async function getAllCategories(): Promise<ActionResponse<Category[]>> {
   try {
@@ -98,8 +99,11 @@ export async function upsertCategory(formData: {
   }
 }
 
-export async function deleteCategory(id: string) {
+export async function deleteCategory(id: string , image: string) {
   try {
+
+    await deleteBlob(image)
+
     const category = await prisma.category.delete({
       where: { id },
     })

@@ -25,8 +25,9 @@ export default function CustomerTable({
     },
     {
       header: 'Contacts',
+      align: 'center' as const,
       render: (user: UserWithOrders) => (
-        <div className="flex flex-col gap-2 items-center">
+        <div className="flex flex-col gap-1 text-sm">
           <div className="flex items-center gap-2">
             <Mail size={12} /> {user.email}
           </div>
@@ -45,6 +46,8 @@ export default function CustomerTable({
     },
     {
       header: 'Total Spend',
+      align: 'center' as const,
+
       render: (user: UserWithOrders) => {
         const total =
           user.orders?.reduce(

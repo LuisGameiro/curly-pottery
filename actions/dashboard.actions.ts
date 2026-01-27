@@ -1,4 +1,5 @@
 'use server'
+
 import { ActionResponse } from '@lib/types/types'
 import { prisma } from 'prisma/prisma'
 
@@ -42,7 +43,6 @@ export async function getDashboardStats(): Promise<
     })
 
     const productsOutOfStock = totalProducts - productsWithStock
-
     const totalInventoryUnits = variants.reduce((acc, v) => acc + v.stock, 0)
     const lowStockThreshold = 5
     const lowStockVariants = variants.filter(

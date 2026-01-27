@@ -8,6 +8,7 @@ import {
   Category,
 } from '@lib/types/types'
 import { prisma } from 'prisma/prisma'
+import { deleteBlob } from './serverImages.action'
 
 export async function getProductBySlug(
   slug: string | null,
@@ -83,8 +84,15 @@ export async function getProductById(
 
 export async function deleteProduct(
   id: string,
+  images: string[],
 ): Promise<ActionResponse<Product | null>> {
   try {
+    Promise.all(
+      images.map(async (img) => {
+        await deleteBlob(img)
+      }),
+    )
+
     const product = await prisma.product.delete({
       where: { id },
     })

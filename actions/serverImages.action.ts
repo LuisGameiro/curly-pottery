@@ -2,7 +2,7 @@
 
 import { del } from '@vercel/blob'
 
-export async function deleteAllBlobs(blobs: string) {
+export async function deleteBlob(blobs: string) {
   try {
     await del(blobs)
 
@@ -11,3 +11,4 @@ export async function deleteAllBlobs(blobs: string) {
     console.log('Error deleting blobs:', error)
   }
 }
+
