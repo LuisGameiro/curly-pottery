@@ -5,6 +5,7 @@ import { Grid, Marquee, Hero } from '@components/ui'
 import { Product } from '@lib/types/types'
 import { getAllCategories } from 'actions/category.actions'
 import { getRandomProducts } from 'actions/product.actions'
+import { Suspense } from 'react'
 
 export const metadata = constructMetadata({
   title: 'HomePage - Curly Pottery',
@@ -13,7 +14,7 @@ export const metadata = constructMetadata({
 })
 
 export default async function Home() {
-  const responseProducts = await getRandomProducts(6)
+  const responseProducts = await getRandomProducts(13)
   const responseCategories = await getAllCategories()
   console.log(
     'Home Page Rendered',
