@@ -14,7 +14,6 @@ import {
   ProductWithVariantsCategories,
   Variant,
   Discount,
-  CurrencyCode,
 } from '@lib/types/types'
 import { toast } from 'sonner'
 import { Undo2 } from 'lucide-react'
@@ -79,10 +78,10 @@ const ProductSidebar = ({
     <div className={cn(className, 'space-y-4')}>
       <section>
         <div className="flex justify-between items-center">
-          <p className='text-2xl font-bold text-secondary'>{product.name}</p>
+          <p className="text-2xl font-bold text-secondary">{product.name}</p>
           <div className="flex items-center gap-2">
             <Link href={`/shop/`}>
-              <Button variant="naked" color='primary'>
+              <Button variant="naked" color="primary">
                 <Undo2 size={24} />
               </Button>
             </Link>
@@ -94,11 +93,11 @@ const ProductSidebar = ({
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
-        {product.categories.map((category: Category) => (
-          <Text key={category.id} variant="subHeading">
-            {category.name}
-          </Text>
-        ))}
+          {product.categories.map((category: Category) => (
+            <Text key={category.id} variant="subHeading">
+              {category.name}
+            </Text>
+          ))}
         </div>
       </section>
 
@@ -115,7 +114,9 @@ const ProductSidebar = ({
                 {price.finalPrice.toFixed(2)}
               </span>
 
-              <span className="bg-green px-4 py-1 rounded-full items-center text-lg">SALE</span>
+              <span className="bg-green px-4 py-1 rounded-full items-center text-lg">
+                SALE
+              </span>
             </div>
           ) : (
             <div>

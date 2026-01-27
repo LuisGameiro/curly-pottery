@@ -1,8 +1,6 @@
 import { Container, Text } from '@components/ui'
 import { ReactNode } from 'react'
 
-
-
 interface StatCardProp {
   label: string
   value: number
@@ -11,7 +9,13 @@ interface StatCardProp {
   isCritical?: boolean
 }
 
-export function StatCard({ label, value, icon, trend, isCritical }: StatCardProp) {
+export function StatCard({
+  label,
+  value,
+  icon,
+  trend,
+  isCritical,
+}: StatCardProp) {
   return (
     <Container
       variant="box"

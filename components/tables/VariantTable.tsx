@@ -7,12 +7,14 @@ export default function VariantTable({ variants }: { variants: Variant[] }) {
   const variantColumns = [
     {
       header: 'SKU',
-      render: (v: Variant) => <span className="text-secondary uppercase">{v.sku}</span>,
+      render: (v: Variant) => (
+        <span className="text-secondary uppercase">{v.sku}</span>
+      ),
     },
     {
       header: 'Size / Color',
       render: (v: Variant) => (
-        <span className='capitalize'>
+        <span className="capitalize">
           {v.sizeName} {v.colorName && `• ${v.colorName}`}
         </span>
       ),

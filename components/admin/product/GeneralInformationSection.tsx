@@ -85,8 +85,8 @@ export default function GeneralInformationSection({
                         }}
                         className={`px-3 py-1 rounded-full text-xs border transition ${
                           field.value.includes(cat.id)
-                            ? 'bg-primary text-muted border-primary  hover:bg-primary/60'
-                            : 'bg-accent-8 text-muted hover:bg-accent-6'
+                            ? 'bg-primary text-secondary border-primary hover:bg-primary/60'
+                            : 'bg-muted/60 text-secondary hover:bg-muted/20'
                         }`}
                       >
                         {cat.name}

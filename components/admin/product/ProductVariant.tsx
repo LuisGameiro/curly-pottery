@@ -59,7 +59,7 @@ export const ProductVariant = ({
       >
         <div className="flex items-center gap-4">
           <Package size={16} />
-          <Text className="font-bold">{sku}</Text>
+          <Text className="font-bold uppercase">{sku}</Text>
         </div>
         <div className="flex items-center gap-4">
           <Text className="text-sm">£{variantData.price}</Text>

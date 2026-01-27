@@ -118,7 +118,9 @@ export default async function DashboardPage() {
                     <Text className="font-bold block mb-1">
                       Active Categories
                     </Text>
-                    <Text className="justify-center">{stats.totalCategories}</Text>
+                    <Text className="justify-center">
+                      {stats.totalCategories}
+                    </Text>
                   </div>
                 </div>
               </div>
@@ -138,9 +140,7 @@ export default async function DashboardPage() {
                   >
                     <AlertCircle className="text-red" size={18} />
                     <div>
-                      <Text className="font-bold">
-                        Process Orders
-                      </Text>
+                      <Text className="font-bold">Process Orders</Text>
                       <Text>
                         You have {stats.pendingOrders} orders waiting for
                         shipment.
@@ -150,9 +150,7 @@ export default async function DashboardPage() {
                 ) : (
                   <div className="flex items-center gap-2 p-3 rounded-lg border border-green/20 bg-green/20">
                     <CheckCircle2 className="text-green" size={18} />
-                    <Text className="font-bold">
-                      All orders processed
-                    </Text>
+                    <Text className="font-bold">All orders processed</Text>
                   </div>
                 )}
               </div>

@@ -33,7 +33,10 @@ const Collapse = ({ title, children }: CollapseProps) => {
       onClick={toggle}
     >
       <div className={s.header}>
-        <ChevronRight className={cn(s.icon, { [s.open]: isActive })} size={22} />
+        <ChevronRight
+          className={cn(s.icon, { [s.open]: isActive })}
+          size={22}
+        />
         <span className={s.label}>{title}</span>
       </div>
       <a.div style={{ overflow: 'hidden', ...animProps }}>

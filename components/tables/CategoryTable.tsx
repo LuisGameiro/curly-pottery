@@ -55,9 +55,7 @@ export default function CategoryTable({
     },
     {
       header: 'Name',
-      render: (cat: Category) => (
-        <span>{cat.name}</span>
-      ),
+      render: (cat: Category) => <span>{cat.name}</span>,
     },
     {
       header: 'Slug',

@@ -35,8 +35,8 @@ export default async function Home() {
             product={product}
             imgProps={{
               alt: product.name,
-              width: 1080,
-              height: 1080,
+              width: 1200,
+              height: 1200,
               priority: true,
             }}
           />

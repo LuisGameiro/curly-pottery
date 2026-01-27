@@ -12,7 +12,6 @@ import {
   ProductWithVariantsCategories,
   Variant,
 } from '@lib/types/types'
-import { cn } from '@lib/utils'
 import { trackEvent } from '@lib/analytics/trackEvents'
 import { calculateDiscount } from '@lib/calculate-price'
 
@@ -47,7 +46,7 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
   })
 
   return (
-    <Container clean className='bg-linear-to-r from-background to-accent-2'>
+    <Container clean className="bg-linear-to-r from-background to-accent-2">
       <section className={s.root}>
         <div className={s.main}>
           <ProductSlider key={variant.id}>
@@ -60,7 +59,6 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
                   priority={i === 0}
                   width={500}
                   height={500}
-                  
                   quality={100}
                   style={{
                     aspectRatio: '1/1',

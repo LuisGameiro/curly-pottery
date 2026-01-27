@@ -35,9 +35,9 @@ const ProductCard = ({
   const { finalPrice, price, hasDiscount } =
     product && 'variants' in product && product.variants.length > 0
       ? calculateDiscount(
-        product.variants[0].price,
-        product.variants[0].discounts as Discount[],
-      )
+          product.variants[0].price,
+          product.variants[0].discounts as Discount[],
+        )
       : { price: '0', finalPrice: '0', hasDiscount: false }
 
   return (
@@ -118,7 +118,7 @@ const ProductCard = ({
               height={500}
               width={500}
               quality={100}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               style={{
                 aspectRatio: '1/1',
                 objectFit: 'cover',

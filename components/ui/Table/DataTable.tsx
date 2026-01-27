@@ -2,7 +2,6 @@
 
 import { Fragment, ReactNode, useState } from 'react'
 import { Button, Skeleton } from '@components/ui'
-import { cn } from '@lib/utils'
 import { ChevronDown, ChevronRight } from 'lucide-react'
 
 interface Column<T> {
@@ -79,10 +78,7 @@ export default function DataTable<T extends { id: string }>({
                     </td>
                   )}
                   {columns.map((col, i) => (
-                    <td
-                      key={i}
-                      className={'px-4 py-2 text-sm text-center'}
-                    >
+                    <td key={i} className={'px-4 py-2 text-sm text-center'}>
                       {col.render(item)}
                     </td>
                   ))}
