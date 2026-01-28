@@ -87,7 +87,7 @@ export default function CheckouClient() {
         setStep(3)
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
     } finally {
       setLoading(false)
     }
@@ -137,7 +137,7 @@ export default function CheckouClient() {
         deleteAll()
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
     } finally {
       setLoading(false)
     }
@@ -145,7 +145,7 @@ export default function CheckouClient() {
   }
 
   const goBack = (goStep: number) => {
-    console.log(goStep)
+    console.error(goStep)
     if (step > goStep) setStep(goStep)
   }
 

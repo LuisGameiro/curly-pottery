@@ -15,11 +15,7 @@ export const metadata = constructMetadata({
 export default async function Home() {
   const responseProducts = await getRandomProducts(13)
   const responseCategories = await getAllCategories()
-  console.log(
-    'Home Page Rendered',
-    responseProducts.data,
-    responseCategories.data,
-  )
+
   if (!responseProducts.success || !responseCategories.success)
     throw new Error(responseProducts.message + responseCategories.message)
 

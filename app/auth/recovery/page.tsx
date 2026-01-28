@@ -30,10 +30,10 @@ export default function RecoveryForm() {
     try {
       await sendResetEmail(email as string)
 
-      console.log('Recovery email sent to:', email)
       setSubmitted(true)
       toast.success('Reset link sent to your email')
     } catch {
+      console.error('Error sending reset email')
       toast.error('Something went wrong. Please try again.')
     } finally {
       setLoading(false)

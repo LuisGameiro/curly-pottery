@@ -76,13 +76,14 @@ export default function ProductClient({
   const methods = useForm({
     resolver: zodResolver(ProductSchema),
     defaultValues: {
-      name: product?.name || '',
-      slug: product?.slug || '',
-      description: product?.description || '',
-      requiresShipping: product?.requiresShipping || false,
-      categoryIds: product?.categories.map((c: Category) => c.id) || [],
-      files: product?.images || [],
-      previews: product?.images || [],
+      name: product?.name ?? '',
+      hide: product?.hide ?? true,
+      slug: product?.slug ?? '',
+      description: product?.description ?? '',
+      requiresShipping: product?.requiresShipping ?? false,
+      categoryIds: product?.categories.map((c: Category) => c.id) ?? [],
+      files: product?.images ?? [],
+      previews: product?.images ?? [],
       variants: initialVariants,
     },
   })
@@ -90,7 +91,6 @@ export default function ProductClient({
   const [loading, setLoading] = useState(false)
 
   const onSubmit: SubmitHandler<ProductInput> = async (data) => {
-    console.log('Form Data Submitted:', data)
     try {
       setLoading(true)
 
@@ -157,7 +157,7 @@ export default function ProductClient({
         <form
           onSubmit={methods.handleSubmit(onSubmit, (errors) => {
             toast.error('Please fix the missing data in the form.')
-            console.log('Validation Errors:', errors)
+            console.error('Validation Errors:', errors)
           })}
           className="space-y-8"
         >

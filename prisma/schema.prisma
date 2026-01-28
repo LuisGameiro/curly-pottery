@@ -65,6 +65,7 @@ model Product {
   name              String      @unique
   slug              String      @unique
   description       String
+  hide              Boolean     @default(false)
   images            String[]
   variants          ProductVariant[] 
   categories        Category[]
@@ -81,8 +82,8 @@ model ProductVariant {
   stock            Int          @default(0)
   availableForSale Boolean      @default(true)
   images           String[]     @default([])
-  sizeName         String?
-  colorName        String? 
+  sizeName         String
+  colorName        String 
   colorHex         String? 
   details          Json?
   discounts        Json?

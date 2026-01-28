@@ -100,9 +100,9 @@ const InputImage = ({
 }: {
   label?: string
   multiple?: boolean
-  files: File[]
+  files: (File | string)[]
   previews: string[]
-  onImagesChange: (data: { files: File[]; previews: string[] }) => void
+  onImagesChange: (data: { files: (File | string)[]; previews: string[] }) => void
   error?: string
   size?: number
   className?: string

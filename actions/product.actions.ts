@@ -23,6 +23,7 @@ export async function getProductBySlug(
     const product = await prisma.product.findUnique({
       where: {
         slug,
+        hide: false,
       },
       include: {
         variants: true,
@@ -147,7 +148,8 @@ export async function getRandomProducts(
 ): Promise<ActionResponse<Product[] | null>> {
   try {
     const products = await prisma.product.findMany({
-      where: { variants: { some: { stock: { gt: 0 } } } },
+      where: { variants: { some: { stock: { gt: 0 } } }, hide: false },
+   
     })
 
     return {

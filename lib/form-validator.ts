@@ -39,6 +39,7 @@ export const VariantSchema = z.object({
 export const ProductSchema = z.object({
   id: z.string().optional(),
   slug: z.string(),
+  hide: z.boolean(),
   name: z
     .string()
     .min(2, 'Product name must be at least 2 characters')

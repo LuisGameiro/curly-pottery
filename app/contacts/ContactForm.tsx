@@ -42,7 +42,6 @@ export default function ContactForm() {
         subject: 'New Message',
         body: ContactFormEmail(formData),
       })
-      console.log(response)
 
       if (response.data) {
         setStatus('success')

@@ -9,29 +9,23 @@ export async function POST(request: Request): Promise<NextResponse> {
       body,
       request,
       onBeforeGenerateToken: async () => {
-        // Generate a client token for the browser to upload the file
-        // Make sure to authenticate and authorize users before generating the token.
-        // Otherwise, you're allowing anonymous uploads.
-
         return {
           allowedContentTypes: ['image/jpeg', 'image/png', 'image/webp'],
           addRandomSuffix: true,
         }
       },
-      onUploadCompleted: async ({ blob, tokenPayload }) => {
-        // Called by Vercel API on client upload completion
-        // Use tools like ngrok if you want this to work locally
+      // onUploadCompleted: async ({ blob, tokenPayload }) => {
+      //   // Called by Vercel API on client upload completion
+      //   // Use tools like ngrok if you want this to work locally
 
-        console.log('blob upload completed', blob, tokenPayload)
-
-        try {
-          // Run any logic after the file upload completed
-          // const { userId } = JSON.parse(tokenPayload);
-          // await db.update({ avatar: blob.url, userId });
-        } catch {
-          throw new Error('Could not update user')
-        }
-      },
+      //   try {
+      //     // Run any logic after the file upload completed
+      //     // const { userId } = JSON.parse(tokenPayload);
+      //     // await db.update({ avatar: blob.url, userId });
+      //   } catch {
+      //     throw new Error('Could not update user')
+      //   }
+      // },
     })
 
     return NextResponse.json(jsonResponse)

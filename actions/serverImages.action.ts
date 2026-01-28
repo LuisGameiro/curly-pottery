@@ -6,8 +6,7 @@ export async function deleteBlob(blobs: string) {
   try {
     await del(blobs)
 
-    console.log(`All blobs were deleted`)
   } catch (error) {
-    console.log('Error deleting blobs:', error)
+    console.error('Error deleting blobs:', error)
   }
 }

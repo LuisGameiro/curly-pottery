@@ -141,7 +141,7 @@ export default function CategoryClient({
             previews={gallery.previews}
             onImagesChange={setGallery}
             error={errors.image}
-            // size={64}
+            size={64}
           />
         </form>
       </main>

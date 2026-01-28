@@ -27,7 +27,6 @@ export default async function handler(
   try {
     const body = req.body
     const validation = registerSchema.safeParse(body)
-    console.log(validation)
     if (!validation.success) {
       return res.status(400).json({
         error: validation.error.message[0],
