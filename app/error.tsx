@@ -20,10 +20,10 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
       <Text variant="heading" className="mb-2">
         We hit a little snag
       </Text>
-      <p className="text-muted max-w-sm mx-auto">
+      <div className="text-muted max-w-sm mx-auto">
         <p>Something unexpected happened.</p>
         <p>Try refreshing the page, or check back in a moment.</p>
-      </p>
+      </div>
       {process.env.NEXT_PUBLIC_APP_ENV === 'dev' && (
         <>
           {error.digest && (

@@ -17,43 +17,44 @@ const ProductOptions = ({ product, setVariant }: ProductOptionsProps) => {
   )
 
   const [selectedSize, setSelectedSize] = useState<string>(
-    Object.keys(matrix)[0],
+    product.variants[0].sizeName!,
   )
 
   const [selectedColor, setSelectedColor] = useState<string>(
-    Object.keys(matrix[Object.keys(matrix)[0]])[0],
+    product.variants[0].colorName!,
   )
 
   const allSizes = Object.keys(matrix)
   const allColors = Array.from(
     new Set(product.variants.flatMap((v: Variant) => v.colorName)),
-  ) as string[]
+  )
 
   return (
-    <>
+    <div className="flex flex-wrap gap-12">
       {allSizes.length > 1 && (
         <div>
           <Text variant="bold">Size</Text>
-          <div role="listbox" className="flex flex-row mt-2">
+          <div role="listbox" className="flex mt-2 gap-2">
             {allSizes.map((size) => (
               <button
                 key={size}
-                className={`px-4 py-2 mr-2 rounded-md border border-border
+                className={`px-3 py-1.5 rounded-lg border border-border
 
-                  ${selectedSize === size ? 'bg-green' : 'bg-primary'}`}
+                  ${selectedSize === size ? 'bg-secondary' : 'bg-muted'}`}
                 onClick={() => {
-                  const colorToUse = matrix[size]?.[selectedColor ?? '']
-                    ?.variantId
+                  const colorToUse = matrix[size]?.[selectedColor]?.variantId
                     ? selectedColor
-                    : Object.keys(matrix[size] ?? {})[0]
+                    : Object.entries(matrix[size] || {}).find(
+                        ([_, details]) => details.isAvailable,
+                      )?.[0]
 
                   const variantToSet = product.variants.find(
                     (v: Variant) =>
-                      v.id === matrix[size]?.[colorToUse ?? '']?.variantId,
+                      v.id === matrix[size]?.[colorToUse!]?.variantId,
                   )
 
                   if (variantToSet) setVariant(variantToSet)
-                  setSelectedColor(colorToUse)
+                  setSelectedColor(colorToUse!)
                   setSelectedSize(size)
                 }}
               >
@@ -66,24 +67,24 @@ const ProductOptions = ({ product, setVariant }: ProductOptionsProps) => {
       {allColors.length > 1 && (
         <div>
           <Text variant="bold">Color</Text>
-          <div role="listbox" className="flex flex-row mt-2">
+          <div role="listbox" className="flex mt-2 gap-2">
             {allColors.map((color) => {
               return (
                 <button
                   key={color}
-                  className={`px-4 py-2 mr-2 border rounded-md 
-                    ${matrix[selectedSize]?.[color]?.isAvailable ? (selectedColor === color ? 'bg-green' : 'bg-primary') : 'bg-gray-500'}`}
+                  className={`px-3 py-1.5 rounded-lg border border-border
+                    ${matrix[selectedSize]?.[color!]?.isAvailable ? (selectedColor === color ? `bg-[${matrix[selectedSize]?.[color!].colorHex}]/60 border-secondary` : `bg-[${matrix[selectedSize]?.[color!].colorHex}] border-muted`) : 'bg-muted opacity-20'}`}
                   disabled={
-                    matrix[selectedSize]?.[color]?.isAvailable === false
+                    matrix[selectedSize]?.[color!]?.isAvailable === false
                   }
                   onClick={() => {
                     setVariant(
                       product.variants.find(
                         (v: Variant) =>
-                          v.id === matrix[selectedSize][color]?.variantId,
+                          v.id === matrix[selectedSize][color!]?.variantId,
                       )!,
                     )
-                    setSelectedColor(color)
+                    setSelectedColor(color!)
                   }}
                 >
                   <Text variant="bold">{color}</Text>
@@ -93,7 +94,7 @@ const ProductOptions = ({ product, setVariant }: ProductOptionsProps) => {
           </div>
         </div>
       )}
-    </>
+    </div>
   )
 }
 

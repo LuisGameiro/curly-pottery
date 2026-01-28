@@ -78,7 +78,7 @@ const ProductSidebar = ({
     <div className={cn(className, 'space-y-4')}>
       <section>
         <div className="flex justify-between items-center">
-          <p className="text-2xl font-bold text-secondary">{product.name}</p>
+          <p className="text-4xl font-bold text-secondary">{product.name}</p>
           <div className="flex items-center gap-2">
             <Link href={`/shop/`}>
               <Button variant="naked" color="primary">
@@ -103,8 +103,8 @@ const ProductSidebar = ({
 
       <section className="space-y-4">
         <Text variant="sectionHeading">
-          {!price.hasDiscount ? (
-            <div className="flex items-center gap-2 text-4xl font-semibold">
+          {price.hasDiscount ? (
+            <div className="flex items-center gap-4 text-4xl font-semibold">
               <span className="line-through opacity-40">
                 {showCurrency[variant.currency]}
                 {price.price.toFixed(2)}
@@ -114,7 +114,7 @@ const ProductSidebar = ({
                 {price.finalPrice.toFixed(2)}
               </span>
 
-              <span className="bg-green px-4 py-1 rounded-full items-center text-lg">
+              <span className="bg-green px-3 py-0.5 rounded-full items-center text-lg">
                 SALE
               </span>
             </div>
@@ -128,10 +128,7 @@ const ProductSidebar = ({
           )}
         </Text>
 
-        <p className="text-xs text-justify text-muted">
-          VAT included for UK orders. Duties and import taxes are calculated at
-          checkout for other customers Shipping calculated at checkout.{' '}
-        </p>
+        <ProductOptions product={product} setVariant={setVariant} />
 
         {!forSale ? (
           <div className="bg-red/20 px-10 py-2 text-center justify-center border border-red/60 items-center tracking-wide">
@@ -145,36 +142,42 @@ const ProductSidebar = ({
             </Link>
           </div>
         ) : (
-          <div className="flex flex-row gap-4 items-center border border-border">
-            <div className="flex h-16 flex-1 text-2xl font-semibold items-center">
-              <button
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                disabled={quantity <= 1}
-                className="flex px-4 h-full  hover:bg-accent-1 transition items-center"
+          <div>
+            <div className="flex flex-row gap-4 items-center border border-border">
+              <div className="flex h-16 flex-1 text-2xl font-semibold items-center">
+                <button
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  disabled={quantity <= 1}
+                  className="flex px-4 h-full  hover:bg-accent-1 transition items-center"
+                >
+                  -
+                </button>
+                <span className="px-6 ">{quantity}</span>
+                <button
+                  onClick={() =>
+                    setQuantity(Math.min(variant.stock, quantity + 1))
+                  }
+                  disabled={quantity >= variant.stock}
+                  className="flex px-4 h-full  hover:bg-accent-1 transition items-center"
+                >
+                  +
+                </button>
+              </div>
+              <Button
+                aria-label="Add to Cart"
+                type="button"
+                className={s.button}
+                onClick={addToCart}
+                loading={loading}
+                disabled={!variant.availableForSale}
               >
-                -
-              </button>
-              <span className="px-6 ">{quantity}</span>
-              <button
-                onClick={() =>
-                  setQuantity(Math.min(variant.stock, quantity + 1))
-                }
-                disabled={quantity >= variant.stock}
-                className="flex px-4 h-full  hover:bg-accent-1 transition items-center"
-              >
-                +
-              </button>
+                {variant?.availableForSale ? 'Add To Cart' : 'Not Available'}
+              </Button>
             </div>
-            <Button
-              aria-label="Add to Cart"
-              type="button"
-              className={s.button}
-              onClick={addToCart}
-              loading={loading}
-              disabled={!variant.availableForSale}
-            >
-              {variant?.availableForSale ? 'Add To Cart' : 'Not Available'}
-            </Button>
+            <p className="text-xs text-justify text-muted">
+              VAT included for UK orders. Duties and import taxes are calculated
+              at checkout for other customers Shipping calculated at checkout.
+            </p>
           </div>
         )}
       </section>
@@ -183,8 +186,6 @@ const ProductSidebar = ({
         className="wrap-break-word w-full max-w-xl text-justify"
         html={product.description}
       />
-
-      <ProductOptions product={product} setVariant={setVariant} />
 
       <section>
         <Collapse title={'Product Details'}>

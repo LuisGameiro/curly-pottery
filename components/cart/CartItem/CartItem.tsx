@@ -84,25 +84,19 @@ const CartItem = ({
           <Link href={`/shop/${item.slug}`}>
             <Text
               variant="bold"
-              className="hover:underline mb-1 block max-w-xs"
+              className="text-lg hover:underline mb-1 block max-w-xs"
             >
               {item.name}
             </Text>
           </Link>
           <div className="flex items-center gap-2 mt-1.5">
             {item.colorName && (
-              <Text
-                variant="bold"
-                className="uppercase tracking-wider px-3 py-1 rounded-md bg-accent-1 border border-border text-muted"
-              >
+              <Text className="text-sm uppercase tracking-wider px-2 py-0.5 rounded-lg bg-accent-2 border border-border">
                 {item.colorName}
               </Text>
             )}
             {item.sizeName && (
-              <Text
-                variant="bold"
-                className="text-sm uppercase tracking-wider px-3 py-1 rounded-md bg-accent-1 border border-border text-muted"
-              >
+              <Text className="text-sm uppercase tracking-wider px-2 py-0.5 rounded-lg bg-accent-2 border border-border">
                 {item.sizeName}
               </Text>
             )}

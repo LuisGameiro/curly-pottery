@@ -5,7 +5,6 @@ import { Grid, Marquee, Hero } from '@components/ui'
 import { Product } from '@lib/types/types'
 import { getAllCategories } from 'actions/category.actions'
 import { getRandomProducts } from 'actions/product.actions'
-import { Suspense } from 'react'
 
 export const metadata = constructMetadata({
   title: 'HomePage - Curly Pottery',

@@ -52,7 +52,7 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
         <div className={s.main}>
           <ProductSlider key={variant.id}>
             {variant.images.map((image: string, i: number) => (
-              <div key={image} className={s.imageContainer}>
+              <div key={i} className={s.imageContainer}>
                 <Image
                   className={s.img}
                   src={image}
