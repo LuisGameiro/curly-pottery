@@ -1,45 +1,28 @@
 export async function cropToSquare(file: File): Promise<Blob> {
-  return new Promise((resolve) => {
-    const img = new Image()
-    img.src = URL.createObjectURL(file)
-    img.onload = () => {
-      const canvas = document.createElement('canvas')
-      const ctx = canvas.getContext('2d')
+  // 1. Load the image into a bitmap
+  const sourceBitmap = await createImageBitmap(file)
 
-      const targetSize = 1000
-      canvas.width = targetSize
-      canvas.height = targetSize
+  const targetSize = 1000
+  const minSide = Math.min(sourceBitmap.width, sourceBitmap.height)
 
-      // 1. Calculate the scaling ratio
-      // We scale based on the SHORTER side to ensure the 1000px square is fully covered
-      const scale = targetSize / Math.min(img.width, img.height)
+  // Calculate source offsets to grab the center square
+  const sx = (sourceBitmap.width - minSide) / 2
+  const sy = (sourceBitmap.height - minSide) / 2
 
-      const scaledWidth = img.width * scale
-      const scaledHeight = img.height * scale
+  // 2. Crop directly while creating a new bitmap
+  const croppedBitmap = await createImageBitmap(
+    sourceBitmap,
+    sx,
+    sy,
+    minSide,
+    minSide, // Source crop area
+    { resizeWidth: targetSize, resizeHeight: targetSize }, // Final resize
+  )
 
-      // 2. Calculate offsets to pull the "middle"
-      // These will be negative because we are positioning the large image
-      // inside the smaller 1000x1000 "window"
-      const xOffset = (targetSize - scaledWidth) / 2
-      const yOffset = (targetSize - scaledHeight) / 2
+  // 3. Convert back to Blob using an OffscreenCanvas (no DOM needed)
+  const offscreen = new OffscreenCanvas(targetSize, targetSize)
+  const ctx = offscreen.getContext('2d')
+  ctx?.drawImage(croppedBitmap, 0, 0)
 
-      if (ctx) {
-        // High-quality image smoothing
-        ctx.imageSmoothingEnabled = true
-        ctx.imageSmoothingQuality = 'high'
-
-        ctx.drawImage(img, xOffset, yOffset, scaledWidth, scaledHeight)
-      }
-
-      canvas.toBlob(
-        (blob) => {
-          // Clean up memory
-          URL.revokeObjectURL(img.src)
-          resolve(blob!)
-        },
-        'image/jpeg',
-        0.9, // Quality setting
-      )
-    }
-  })
+  return offscreen.convertToBlob({ type: 'image/jpeg', quality: 0.9 })
 }

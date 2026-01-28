@@ -11,6 +11,7 @@ export function skulify({
   const safeSize = String(sizeName || '')
   const safeColor = String(colorName || '')
   const namePart = safeName
+    .trim()
     .split(' ')
     .map((word) => word.slice(0, 3))
     .join('-')

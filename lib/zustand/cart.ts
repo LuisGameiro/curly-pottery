@@ -17,6 +17,17 @@ interface CartStore {
   syncWithDatabase: () => Promise<void>
 }
 
+/**
+ * Zustand store for managing shopping cart state and operations.
+ *
+ * Persists cart data to localStorage with the key 'cart-storage'.
+ *
+ * @store
+ * @example
+ * ```typescript
+ * const { cartItems, addItem, removeItem } = useCartStore();
+ * ```
+ */
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({

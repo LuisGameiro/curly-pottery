@@ -6,48 +6,85 @@ describe('cropToSquare', () => {
   })
 
   it('should return a Blob', async () => {
-    const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' })
+    const mockBitmap = {
+      width: 2000,
+      height: 1000,
+    }
 
-    jest.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url')
-    jest.spyOn(URL, 'revokeObjectURL').mockImplementation()
+    global.createImageBitmap = jest
+      .fn()
+      .mockResolvedValueOnce(mockBitmap)
+      .mockResolvedValueOnce(mockBitmap)
 
     const mockBlob = new Blob(['test'], { type: 'image/jpeg' })
-    HTMLCanvasElement.prototype.toBlob = jest.fn((callback) => {
-      callback(mockBlob)
-    })
+    const mockOffscreenCanvas = {
+      getContext: jest.fn().mockReturnValue({
+        drawImage: jest.fn(),
+      }),
+      convertToBlob: jest.fn().mockResolvedValue(mockBlob),
+    }
 
+    global.OffscreenCanvas = jest
+      .fn()
+      .mockImplementation(() => mockOffscreenCanvas)
+
+    const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' })
     const result = await cropToSquare(file)
+
     expect(result).toBeInstanceOf(Blob)
+    expect(result.type).toBe('image/jpeg')
   })
 
-  it('should create a 1000x1000 canvas', async () => {
+  it('should crop to center square from wider image', async () => {
+    const mockBitmap = { width: 2000, height: 1000 }
+
+    global.createImageBitmap = jest
+      .fn()
+      .mockResolvedValueOnce(mockBitmap)
+      .mockResolvedValueOnce(mockBitmap)
+
+    const mockOffscreenCanvas = {
+      getContext: jest.fn().mockReturnValue({ drawImage: jest.fn() }),
+      convertToBlob: jest.fn().mockResolvedValue(new Blob()),
+    }
+
+    global.OffscreenCanvas = jest
+      .fn()
+      .mockImplementation(() => mockOffscreenCanvas)
+
     const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' })
-
-    jest.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url')
-    jest.spyOn(URL, 'revokeObjectURL').mockImplementation()
-
-    const createElementSpy = jest.spyOn(document, 'createElement')
-    const mockBlob = new Blob(['test'], { type: 'image/jpeg' })
-    HTMLCanvasElement.prototype.toBlob = jest.fn((callback) => {
-      callback(mockBlob)
-    })
-
     await cropToSquare(file)
-    expect(createElementSpy).toHaveBeenCalledWith('canvas')
+
+    expect(global.createImageBitmap).toHaveBeenCalledWith(
+      mockBitmap,
+      500,
+      0,
+      1000,
+      1000,
+      { resizeWidth: 1000, resizeHeight: 1000 },
+    )
   })
 
-  it('should revoke object URL after processing', async () => {
+  it('should create OffscreenCanvas with correct dimensions', async () => {
+    const mockBitmap = { width: 1500, height: 1500 }
+
+    global.createImageBitmap = jest
+      .fn()
+      .mockResolvedValueOnce(mockBitmap)
+      .mockResolvedValueOnce(mockBitmap)
+
+    const mockOffscreenCanvas = {
+      getContext: jest.fn().mockReturnValue({ drawImage: jest.fn() }),
+      convertToBlob: jest.fn().mockResolvedValue(new Blob()),
+    }
+
+    global.OffscreenCanvas = jest
+      .fn()
+      .mockImplementation(() => mockOffscreenCanvas)
+
     const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' })
-    const revokeObjectURLSpy = jest.spyOn(URL, 'revokeObjectURL')
-
-    jest.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url')
-
-    const mockBlob = new Blob(['test'], { type: 'image/jpeg' })
-    HTMLCanvasElement.prototype.toBlob = jest.fn((callback) => {
-      callback(mockBlob)
-    })
-
     await cropToSquare(file)
-    expect(revokeObjectURLSpy).toHaveBeenCalled()
+
+    expect(global.OffscreenCanvas).toHaveBeenCalledWith(1000, 1000)
   })
 })

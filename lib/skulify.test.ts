@@ -14,7 +14,7 @@ describe('skulify', () => {
   })
 
   it('should handle empty strings', () => {
-    expect(skulify({ name: '', sizeName: '', colorName: '' })).toBe('--')
+    expect(skulify({ name: '', sizeName: '', colorName: '' })).toBe('-')
   })
 
   it('should handle special characters in name', () => {

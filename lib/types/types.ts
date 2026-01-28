@@ -23,10 +23,6 @@ export interface CreateProduct extends EditProduct {
 export type Product = Prisma.ProductGetPayload<null>
 
 export type Variant = Prisma.ProductVariantGetPayload<null>
-// Omit<PrismaVariant, 'details' | 'discounts'> & {
-//   details: Detail[] | Prisma.InputJsonValue | JsonValue
-//   discounts: Discount[] | Prisma.InputJsonValue | JsonValue
-// }
 
 export type ProductWithVariantsCategories = Prisma.ProductGetPayload<{
   include: { categories: true; variants: true }
@@ -37,7 +33,7 @@ export const CurrencyCode: Record<CurrencyCode, CurrencyCode> = {
   GBP: 'GBP',
 } as const
 
-export type CurrencyCode = PrismaCurrencyCode //(typeof CurrencyCode)[keyof typeof CurrencyCode]
+export type CurrencyCode = PrismaCurrencyCode
 
 export const SizeNames = {
   XXS: 'XXS',
@@ -133,24 +129,13 @@ type PrismaOrderWithUser = Prisma.OrderGetPayload<{
   include: { user: true }
 }>
 export type OrderWithUser = PrismaOrderWithUser
-// Omit<PrismaOrderWithUser, 'lineItems'> & {
-//   lineItems: CartLineItem[] | JsonValue | Prisma.InputJsonValue
-// }
 
 type PrismaOrder = Prisma.OrderGetPayload<null>
 export type Order = PrismaOrder
-// Omit<PrismaOrder, 'lineItems'> & {
-//   lineItems: CartLineItem[] | JsonValue | Prisma.InputJsonValue,
-//   currency: CurrencyCode
-// }
 
 type PrismaCart = Prisma.CartGetPayload<null>
 
 export type Cart = PrismaCart
-// Omit<PrismaCart, 'lineItems' | 'discounts'> & {
-//   lineItems: CartLineItem[] | Prisma.InputJsonValue
-//   discounts: Discount[] | Prisma.InputJsonValue
-// }
 
 export type Address = Prisma.AddressGetPayload<null>
 
@@ -183,122 +168,3 @@ export type ActionResponse<T> =
       data?: never
       errors?: unknown
     }
-
-// export type Order = {
-//   id: string;
-//   userId: string | null;
-//   email: string;
-//   phone: string;
-//   status: OrderStatus;
-//   taxesIncluded: boolean;
-//   lineItems: CartLineItem[];
-//   discounts: Discount[];
-//   subtotalPrice: number;
-//   totalPrice: number;
-//   currency: CurrencyCode;
-//   shipping: { price: number; method: string };
-//   shippingAddress: Address;
-//   billingAddress: Address;
-//   createdAt: Date;
-//   updatedAt: Date;
-// };
-
-// export type User = {
-//   id: string;
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-//   phone?: string;
-//   company?: string;
-//   notes?: string;
-//   acceptsMarketing: boolean;
-//   createdAt: Date;
-//   updatedAt: Date;
-//   addresses: Address[];
-//   // orders: Order[];
-//   cart: Cart;
-// };
-
-// export type Address = {
-//   id: string;
-//   type?: string;
-//   firstName: string;
-//   lastName: string;
-//   company?: string;
-//   address: string;
-//   postalCode: string;
-//   city: string;
-//   country: string;
-//   customerId?: string;
-//   createdAt?: Date;
-// };
-
-// export type Cart = {
-//   id: string;
-//   customerId: string;
-//   taxesIncluded: boolean;
-//   lineItems: CartLineItem[];
-//   discounts: Discount[];
-//   subtotalPrice: number;
-//   totalPrice: number;
-//   currency: CurrencyCode;
-//   createdAt: Date;
-//   updatedAt: Date;
-// };
-
-// export type ProductWithVariantsCategories = {
-//   id: string;
-//   name: string;
-//   description: string;
-//   slug: string;
-
-//   images: string[];
-//   categories: string[];
-//   variants: Variant[];
-//   requiresShipping: boolean;
-
-//   sku: string;
-//   price: number;
-//   currency: CurrencyCode;
-//   stock: number;
-//   availableForSale: boolean;
-//   sizeName?: SizeNames;
-//   widthCm?: number;
-//   heightCm?: number;
-//   depthCm?: number;
-//   colorName?: string;
-//   colorHex?: string;
-//   createdAt: Date;
-//   updatedAt: Date;
-// };
-// export interface Product {
-//   id: string;
-//   name: string;
-//   description: string;
-//   slug: string;
-
-//   images: string[];
-//   categories: Category[];
-//   variants: Variant[];
-//   requiresShipping: boolean;
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
-
-// export interface Variant {
-//   id: string;
-//   sku: string;
-//   price: number;
-//   currency: CurrencyCode;
-//   stock: number;
-//   availableForSale: boolean;
-//   sizeName: string | null;
-//   colorName: string | null;
-//   colorHex: string | null;
-//   details: Detail[] | Prisma.JsonValue;
-//   discounts: Discount[] | Prisma.JsonValue;
-//   createdAt: Date;
-//   updatedAt: Date;
-//   productId: string;
-//   images: string[];
-// };
