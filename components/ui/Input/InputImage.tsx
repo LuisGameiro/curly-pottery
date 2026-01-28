@@ -25,14 +25,26 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
-const SortableImage = ({ src, index, onRemove, size, className }: { src: string, index: number, onRemove: (index: number) => void, size: number, className?: string }) => {
+const SortableImage = ({
+  src,
+  index,
+  onRemove,
+  size,
+  className,
+}: {
+  src: string
+  index: number
+  onRemove: (index: number) => void
+  size: number
+  className?: string
+}) => {
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
     transition,
-    isDragging
+    isDragging,
   } = useSortable({ id: src })
 
   const style = {
@@ -49,7 +61,7 @@ const SortableImage = ({ src, index, onRemove, size, className }: { src: string,
       className={cn(
         'relative rounded-lg border overflow-hidden bg-accent-2 shrink-0 group',
         `w-${size} h-${size}`,
-        className
+        className,
       )}
     >
       {/* Drag Handle Overlay */}
@@ -102,7 +114,10 @@ const InputImage = ({
   multiple?: boolean
   files: (File | string)[]
   previews: string[]
-  onImagesChange: (data: { files: (File | string)[]; previews: string[] }) => void
+  onImagesChange: (data: {
+    files: (File | string)[]
+    previews: string[]
+  }) => void
   error?: string
   size?: number
   className?: string
@@ -110,7 +125,9 @@ const InputImage = ({
   const generatedId = useId()
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
   )
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -141,7 +158,8 @@ const InputImage = ({
   const removeImage = (index: number) => {
     const updatedFiles = files.filter((_, i) => i !== index)
     const updatedPreviews = previews.filter((_, i) => i !== index)
-    if (previews[index].startsWith('blob:')) URL.revokeObjectURL(previews[index])
+    if (previews[index].startsWith('blob:'))
+      URL.revokeObjectURL(previews[index])
     onImagesChange({ files: updatedFiles, previews: updatedPreviews })
   }
 
@@ -169,10 +187,23 @@ const InputImage = ({
           </SortableContext>
 
           {(multiple || previews.length === 0) && (
-            <label className={cn("w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer transition-all shrink-0 bg-accent-2 border-border text-muted hover:border-secondary hover:text-secondary")}>
+            <label
+              className={cn(
+                'w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer transition-all shrink-0 bg-accent-2 border-border text-muted hover:border-secondary hover:text-secondary',
+              )}
+            >
               <Plus size={24} />
-              <span className="font-medium mt-1">{multiple ? 'Add More' : 'Upload'}</span>
-              <input id={generatedId} type="file" multiple={multiple} accept="image/*" onChange={handleFileChange} className="hidden" />
+              <span className="font-medium mt-1">
+                {multiple ? 'Add More' : 'Upload'}
+              </span>
+              <input
+                id={generatedId}
+                type="file"
+                multiple={multiple}
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+              />
             </label>
           )}
         </div>

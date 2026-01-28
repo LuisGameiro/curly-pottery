@@ -16,20 +16,6 @@ import { trackEvent } from '@lib/analytics/trackEvents'
 import { calculateDiscount } from '@lib/calculate-price'
 import { shimmerDataUrl } from '@lib/shimmer'
 
-export const getRelatedProducts = async (
-  categories: string[],
-  excludeId: number,
-) => {
-  const params = new URLSearchParams({
-    categories: categories.join(','),
-    excludeId: excludeId.toString(),
-    limit: '4',
-  })
-
-  const res = await fetch(`/api/related-products?${params}`)
-  return res.json()
-}
-
 interface ProductViewProps {
   product: ProductWithVariantsCategories
   relatedProducts: Product[]

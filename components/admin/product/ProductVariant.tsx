@@ -187,7 +187,7 @@ export const ProductVariant = ({
           <Controller
             name={`variants.${index}.files`}
             control={control}
-            render={({ field  }) => (
+            render={({ field }) => (
               <InputImage
                 multiple
                 files={field.value}
@@ -196,7 +196,6 @@ export const ProductVariant = ({
                   field.onChange(files)
                   setValue(`variants.${index}.previews`, previews)
                 }}
-            
                 error={variantErrors?.files?.message as string}
               />
             )}

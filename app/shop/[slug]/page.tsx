@@ -51,7 +51,7 @@ export async function generateMetadata({
       url: url,
       siteName: 'Curly Pottery',
       images: [
-        { url: productImage, width: 1200, height: 630, alt: product.name },
+        { url: productImage, width: 500, height: 500, alt: product.name },
       ],
       locale: 'en_UK',
       type: 'website',

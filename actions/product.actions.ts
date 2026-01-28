@@ -149,7 +149,6 @@ export async function getRandomProducts(
   try {
     const products = await prisma.product.findMany({
       where: { variants: { some: { stock: { gt: 0 } } }, hide: false },
-   
     })
 
     return {
@@ -170,7 +169,7 @@ export async function getRandomProducts(
 export async function getRelatedProducts(
   categories: Category[],
   excludeId?: string,
-  limit: number = 4,
+  limit: number = 12,
 ): Promise<ActionResponse<Product[] | null>> {
   try {
     if (!categories.length)
@@ -182,6 +181,7 @@ export async function getRelatedProducts(
     const categoriesName = categories.map((c) => c.name)
     const count = await prisma.product.count({
       where: {
+        hide: false,
         categories: {
           some: {
             name: { in: categoriesName },
@@ -233,13 +233,14 @@ export async function getProductsByCategorySlug(
 ): Promise<ActionResponse<ProductWithVariantsCategories[] | null>> {
   try {
     const products = await prisma.product.findMany({
-      where: category
-        ? {
-            categories: {
-              some: { slug: category },
-            },
-          }
-        : undefined,
+      where: {
+        hide: false,
+        categories: {
+          some: {
+            slug: category || '',
+          },
+        },
+      },
       include: {
         variants: true,
         categories: true,

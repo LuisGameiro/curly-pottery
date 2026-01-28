@@ -19,7 +19,7 @@ export function PHProvider({ children }: { children: React.ReactNode }) {
         })
       }
     } catch (e) {
-      console.warn('Analytics blocked by browser extension', e)
+      console.error('Analytics blocked by browser extension', e)
     }
   }, [])
 

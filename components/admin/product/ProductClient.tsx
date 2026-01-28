@@ -77,7 +77,7 @@ export default function ProductClient({
     resolver: zodResolver(ProductSchema),
     defaultValues: {
       name: product?.name ?? '',
-      hide: product?.hide ?? true,
+      hide: product?.hide ?? false,
       slug: product?.slug ?? '',
       description: product?.description ?? '',
       requiresShipping: product?.requiresShipping ?? false,
