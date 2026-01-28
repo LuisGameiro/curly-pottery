@@ -21,28 +21,36 @@
 
     /* Pattern: 1, 7, 13... */
     &:nth-child(6n + 1) {
-      & .header .name span, & .header .price, & .wishlistButton {
+      & .header .name span,
+      & .header .price,
+      & .wishlistButton {
         @apply bg-primary text-on-primary;
       }
     }
 
     /* Pattern: 5, 11, 17... */
     &:nth-child(6n + 5) {
-      & .header .name span, & .header .price, & .wishlistButton {
+      & .header .name span,
+      & .header .price,
+      & .wishlistButton {
         @apply bg-background text-background;
       }
     }
 
     /* Pattern: 3, 9, 15... */
     &:nth-child(6n + 3) {
-      & .header .name span, & .header .price, & .wishlistButton {
+      & .header .name span,
+      & .header .price,
+      & .wishlistButton {
         @apply bg-accent-5 text-background;
       }
     }
 
     /* Pattern: 6, 12, 18... */
     &:nth-child(6n + 6) {
-      & .header .name span, & .header .price, & .wishlistButton {
+      & .header .name span,
+      & .header .price,
+      & .wishlistButton {
         @apply bg-accent-9 text-background;
       }
     }
@@ -55,7 +63,7 @@
 
 .header {
   @apply absolute top-0 left-0 z-20 pr-16 transition-colors duration-500 ease-in-out;
-  
+
   & .name {
     @apply max-w-full w-full pt-0 leading-extra-loose transition-colors duration-500 ease-in-out;
     font-size: 2rem;

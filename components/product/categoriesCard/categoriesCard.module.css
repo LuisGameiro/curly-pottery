@@ -62,7 +62,7 @@
 }
 
 .header .price {
-  @apply pt-2 px-6 pb-4 text-sm bg-primary text-muted
+  @apply pt-2 px-6 pb-4 text-sm bg-primary text-muted;
 }
 
 .imageContainer {

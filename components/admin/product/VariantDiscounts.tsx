@@ -26,9 +26,7 @@ export const VariantDiscounts = ({
           size="sm"
           type="button"
           color="success"
-          onClick={() =>
-            append({ code: '', type: 'PERCENTAGE', value: 0, percentage: 0 })
-          }
+          onClick={() => append({ code: '', type: 'PERCENTAGE', value: 0 })}
         >
           <Plus size={14} /> Add Discount
         </Button>
@@ -50,8 +48,10 @@ export const VariantDiscounts = ({
               type="number"
               label={type === 'PERCENTAGE' ? '%' : 'Fixed'}
               {...register(
-                `variants.${variantIndex}.discounts.${dIndex}.${type === 'PERCENTAGE' ? 'percentage' : 'value'}`,
-                { valueAsNumber: true },
+                `variants.${variantIndex}.discounts.${dIndex}.value`,
+                {
+                  valueAsNumber: true,
+                },
               )}
             />
             <Button

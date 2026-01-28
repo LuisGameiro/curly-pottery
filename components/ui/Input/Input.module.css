@@ -2,7 +2,7 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply bg-accent-1 px-2 py-2 w-full appearance-none transition duration-150 ease-in-out border border-border ;
+  @apply bg-accent-1 px-2 py-2 w-full appearance-none transition duration-150 ease-in-out border border-border;
 }
 
 .root:focus {
@@ -10,7 +10,7 @@
 }
 
 .rootArea {
-  @apply min-h-[120px] bg-accent-1 px-2 py-2 w-full appearance-none transition duration-150 ease-in-out border border-border ;
+  @apply min-h-[120px] bg-accent-1 px-2 py-2 w-full appearance-none transition duration-150 ease-in-out border border-border;
 }
 
 .rootArea:focus {
@@ -18,15 +18,15 @@
 }
 
 .container {
-  @apply flex flex-col  w-full
+  @apply flex flex-col  w-full;
 }
 
-.error{
-  @apply border-red/60
+.error {
+  @apply border-red/60;
 }
 
-.errorMessage{
-  @apply text-xs text-red font-medium animate-in fade-in slide-in-from-top-1
+.errorMessage {
+  @apply text-xs text-red font-medium animate-in fade-in slide-in-from-top-1;
 }
 
 .options {
@@ -39,7 +39,7 @@
 
 .inputField {
   @apply w-full pr-10 py-2 border rounded-md transition-all bg-accent-1;
-  @apply focus:outline-none focus:ring-2 focus:ring-secondary 
+  @apply focus:outline-none focus:ring-2 focus:ring-secondary;
 }
 
 .toggleButton {
@@ -47,6 +47,6 @@
   @apply flex items-center justify-center;
   @apply bg-transparent border-none cursor-pointer outline-none;
   @apply text-muted transition-colors duration-200;
-  
+
   @apply hover:text-base;
 }

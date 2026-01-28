@@ -6,7 +6,7 @@
 }
 
 .root > * {
-  @apply row-span-1 bg-transparent box-border overflow-hidden ;
+  @apply row-span-1 bg-transparent box-border overflow-hidden;
 }
 
 .default > * {
@@ -18,9 +18,8 @@
 }
 
 .layoutA {
-
   /* First item: Big Feature (2x2) */
-  & > *:nth-child(6n  + 2) {
+  & > *:nth-child(6n + 2) {
     @apply sm:col-span-2 sm:row-span-2;
     min-height: var(--row-height);
   }
@@ -28,13 +27,21 @@
   /* Items 2, 3, 4, 6: Small squares (1x1) */
   /* Item 5: Wide or Tall feature to balance the 6th */
   & > *:nth-child(3n + 3) {
-    @apply col-span-2 row-span-2  sm:col-span-1 sm:row-span-1; 
+    @apply col-span-2 row-span-2  sm:col-span-1 sm:row-span-1;
   }
 
   &.filled {
-    & > *:nth-child(6n + 1) { @apply bg-accent-6; }
-    & > *:nth-child(6n + 2) { @apply bg-accent-8; }
-    & > *:nth-child(6n + 3) { @apply bg-accent-7; }
-    & > *:nth-child(6n + 6) { @apply bg-accent-9; }
+    & > *:nth-child(6n + 1) {
+      @apply bg-accent-6;
+    }
+    & > *:nth-child(6n + 2) {
+      @apply bg-accent-8;
+    }
+    & > *:nth-child(6n + 3) {
+      @apply bg-accent-7;
+    }
+    & > *:nth-child(6n + 6) {
+      @apply bg-accent-9;
+    }
   }
 }

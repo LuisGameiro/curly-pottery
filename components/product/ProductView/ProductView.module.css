@@ -11,9 +11,8 @@
 }
 
 .sidebar {
-  @apply  flex flex-col col-span-1 px-6 w-full h-full pt-2;
+  @apply flex flex-col col-span-1 px-6 w-full h-full pt-2;
 }
-
 
 .imageContainer {
   @apply flex items-center justify-center sm:max-h-[calc(100vh-254px)] sm:max-w-[calc(100vh-254px)];
@@ -47,5 +46,4 @@
   .sidebar {
     @apply col-span-4;
   }
-
 }

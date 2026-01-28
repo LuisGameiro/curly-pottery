@@ -48,7 +48,7 @@
   white-space: nowrap;
   height: 125px;
   scrollbar-width: none;
-  gap: 0px
+  gap: 0px;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */

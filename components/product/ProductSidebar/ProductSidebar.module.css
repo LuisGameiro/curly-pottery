@@ -7,7 +7,7 @@
 }
 
 .h2 {
-  font-weight: bold
+  font-weight: bold;
 }
 
 .main {
@@ -63,8 +63,6 @@
   width: 100%;
 }
 
-
 .relatedProductsGrid {
   @apply grid grid-cols-2 py-2 gap-2 md:grid-cols-4 md:gap-6;
 }
-

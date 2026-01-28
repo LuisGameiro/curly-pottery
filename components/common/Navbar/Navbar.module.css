@@ -1,4 +1,3 @@
-
 @reference "tailwindcss";
 @reference "../../../globals.css";
 
@@ -8,7 +7,7 @@
 }
 
 .nav {
-  @apply relative flex flex-row items-center justify-between py-4 max-w-10/12 mx-auto ;
+  @apply relative flex flex-row items-center justify-between py-4 max-w-10/12 mx-auto;
 }
 
 .nav h1 {

@@ -207,9 +207,9 @@
   --accent-9: #e1e7ef;
 
   /* Status Colors (Slightly more "neon" to punch through the black) */
-  --green: #34d399; 
-  --red: #f87171; 
-  --amber: #fbbf24; 
+  --green: #34d399;
+  --red: #f87171;
+  --amber: #fbbf24;
 }
 
 @layer base {

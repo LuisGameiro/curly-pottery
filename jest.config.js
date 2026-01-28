@@ -13,4 +13,4 @@ module.exports = {
   setupFilesAfterEnv: [],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
   roots: ['<rootDir>'],
-};
+}

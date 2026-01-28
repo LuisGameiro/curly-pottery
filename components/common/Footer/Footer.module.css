@@ -16,34 +16,33 @@
 }
 
 .menuContainer {
-  @apply max-w-10/12 mx-auto py-8 flex flex-col sm:flex-row gap-4
+  @apply max-w-10/12 mx-auto py-8 flex flex-col sm:flex-row gap-4;
 }
 
 .menu {
-  @apply w-full flex flex-row items-start justify-between
+  @apply w-full flex flex-row items-start justify-between;
 }
 
-.logoContainer{
-  @apply flex w-full items-center font-bold text-2xl text-on-primary
+.logoContainer {
+  @apply flex w-full items-center font-bold text-2xl text-on-primary;
 }
 
 .logo {
-  @apply rounded-full border-2 border-on-primary mr-2
+  @apply rounded-full border-2 border-on-primary mr-2;
 }
 
 .navlist {
-  @apply flex flex-col space-y-3
+  @apply flex flex-col space-y-3;
 }
 
 .navlist a {
-  @apply text-on-primary font-semibold hover:text-on-primary/60 transition-colors duration-150
-
+  @apply text-on-primary font-semibold hover:text-on-primary/60 transition-colors duration-150;
 }
 
 .widgetContainer {
-  @apply space-y-5
+  @apply space-y-5;
 }
 
 .signature {
-  @apply border-t border-border pt-2 pb-4 flex flex-col md:flex-row justify-around items-center text-muted text-sm gap-2
+  @apply border-t border-border pt-2 pb-4 flex flex-col md:flex-row justify-around items-center text-muted text-sm gap-2;
 }

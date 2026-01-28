@@ -107,11 +107,9 @@ export type CartLineItem = {
 }
 
 export type Discount = {
-  code: string
+  code?: string
   type: DiscountType
   value: number
-  percentage: number
-  amountSaved: number
 }
 
 export type CreateOrder = {
