@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { AlignCenter, Eye, EyeClosed, EyeOff, Pencil, Trash2 } from 'lucide-react'
+import { Eye, EyeOff, Pencil, Trash2 } from 'lucide-react'
 import { Button } from '@components/ui'
 import { useState } from 'react'
 import DataTable from '@components/ui/Table/DataTable'
@@ -37,7 +37,6 @@ export default function ProductTable({
     } catch (error) {
       console.error('Delete failed', error)
       toast.error('Delete failed')
-
     } finally {
       setIsLoading(null)
     }
@@ -46,7 +45,6 @@ export default function ProductTable({
   const handleToggleVisibility = async (id: string, hide: boolean) => {
     setIsLoading(id)
     try {
-
       const response = await toggleVisibility(id, hide)
       if (response.success) {
         router.refresh()
@@ -135,7 +133,8 @@ export default function ProductTable({
       render: (p: ProductWithVariantsCategories) => (
         <div className="flex gap-2 justify-center">
           <Link href={`/admin/products/${p.id}`}>
-            <Button variant="naked"
+            <Button
+              variant="naked"
               aria-label={`Edit ${p.name}`}
               title={`Edit ${p.name}`}
             >
@@ -149,7 +148,6 @@ export default function ProductTable({
             onClick={() => handleDelete(p.id, p.name)}
             aria-label={`Delete ${p.name}`}
             title={`Delete ${p.name}`}
-
           >
             <Trash2 size={18} />
           </Button>

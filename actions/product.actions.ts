@@ -118,7 +118,6 @@ export async function toggleVisibility(
   state: boolean,
 ): Promise<ActionResponse<Product | null>> {
   try {
-
     const product = await prisma.product.update({
       where: { id },
       data: {

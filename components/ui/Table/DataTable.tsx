@@ -2,7 +2,7 @@
 
 import { Fragment, ReactNode, useState } from 'react'
 import { Button, Skeleton } from '@components/ui'
-import { ChevronDown, ChevronRight } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 
 interface Column<T> {
   header: string
