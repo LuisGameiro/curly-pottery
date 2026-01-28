@@ -8,22 +8,23 @@ import { useState } from 'react'
 import DataTable from '@components/ui/Table/DataTable'
 import { useRouter } from 'next/navigation'
 import { cn } from '@lib/utils'
-import { deleteProduct } from 'actions/product.actions'
+import { deleteProduct, toggleVisibility } from 'actions/product.actions'
 import { ProductWithVariantsCategories, Variant } from '@lib/types/types'
 import VariantTable from './VariantTable'
+import { toast } from 'sonner'
 
 export default function ProductTable({
   products,
 }: {
   products: ProductWithVariantsCategories[]
 }) {
-  const [isDeleting, setIsDeleting] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState<string | null>(null)
   const router = useRouter()
 
   const handleDelete = async (id: string, name: string) => {
     if (!confirm(`Are you sure you want to delete "${name}"?`)) return
 
-    setIsDeleting(id)
+    setIsLoading(id)
     try {
       const productToDelete = products.find((p) => p.id === id)!
       const images = productToDelete.variants.flatMap((v) => v.images)
@@ -35,8 +36,27 @@ export default function ProductTable({
       }
     } catch (error) {
       console.error('Delete failed', error)
+      toast.error('Delete failed')
+
     } finally {
-      setIsDeleting(null)
+      setIsLoading(null)
+    }
+  }
+
+  const handleToggleVisibility = async (id: string, hide: boolean) => {
+    setIsLoading(id)
+    try {
+
+      const response = await toggleVisibility(id, hide)
+      if (response.success) {
+        router.refresh()
+      }
+    } catch (error) {
+      toast.error('Toggle visibility failed')
+
+      console.error('Delete failed', error)
+    } finally {
+      setIsLoading(null)
     }
   }
 
@@ -115,15 +135,21 @@ export default function ProductTable({
       render: (p: ProductWithVariantsCategories) => (
         <div className="flex gap-2 justify-center">
           <Link href={`/admin/products/${p.id}`}>
-            <Button variant="naked">
+            <Button variant="naked"
+              aria-label={`Edit ${p.name}`}
+              title={`Edit ${p.name}`}
+            >
               <Pencil size={18} />
             </Button>
           </Link>
           <Button
             variant="naked"
             color="danger"
-            disabled={!!isDeleting}
+            disabled={!!isLoading}
             onClick={() => handleDelete(p.id, p.name)}
+            aria-label={`Delete ${p.name}`}
+            title={`Delete ${p.name}`}
+
           >
             <Trash2 size={18} />
           </Button>
@@ -131,8 +157,10 @@ export default function ProductTable({
           <Button
             variant="naked"
             color="warning"
-            disabled={true}
-            // onClick={() => handleDelete(p.id, p.name)}
+            disabled={!!isLoading}
+            aria-label={p.hide ? 'Show Product' : 'Hide Product'}
+            title={p.hide ? 'Show Product' : 'Hide Product'}
+            onClick={() => handleToggleVisibility(p.id, p.hide)}
           >
             {p.hide ? <EyeOff size={18} /> : <Eye size={18} />}
           </Button>

@@ -113,7 +113,34 @@ export async function deleteProduct(
     }
   }
 }
+export async function toggleVisibility(
+  id: string,
+  state: boolean,
+): Promise<ActionResponse<Product | null>> {
+  try {
 
+    const product = await prisma.product.update({
+      where: { id },
+      data: {
+        hide: !state,
+      },
+    })
+
+    return {
+      success: true,
+      message: 'Fecthed Category successfully',
+      data: product,
+    }
+  } catch (error) {
+    console.error('getCategoryById_ERROR:', error)
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : 'A database error occurred',
+      errors: error,
+    }
+  }
+}
 export async function getAllProducts(): Promise<
   ActionResponse<ProductWithVariantsCategories[] | null>
 > {

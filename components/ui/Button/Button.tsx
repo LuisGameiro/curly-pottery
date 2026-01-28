@@ -19,13 +19,12 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   color?: 'primary' | 'danger' | 'success' | 'warning'
   active?: boolean
   type?: 'submit' | 'reset' | 'button'
-  Component?: ElementType
   width?: string | number
   loading?: boolean
   disabled?: boolean
 }
 
-const Button = forwardRef((props: ButtonProps, buttonRef) => {
+const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: ButtonProps, buttonRef) => {
   const {
     className,
     variant = 'flat',
@@ -37,11 +36,10 @@ const Button = forwardRef((props: ButtonProps, buttonRef) => {
     loading = false,
     disabled = false,
     style = {},
-    Component = 'button',
     ...rest
   } = props
 
-  const ref = useRef<typeof Component>(null)
+  const ref = useRef<HTMLButtonElement>(null)
 
   const rootClassName = cn(
     s.root,
@@ -64,7 +62,7 @@ const Button = forwardRef((props: ButtonProps, buttonRef) => {
   )
 
   return (
-    <Component
+    <button
       aria-pressed={active}
       data-variant={variant}
       data-size={size}
@@ -84,7 +82,7 @@ const Button = forwardRef((props: ButtonProps, buttonRef) => {
           <LoadingDots />
         </i>
       )}
-    </Component>
+    </button>
   )
 })
 
