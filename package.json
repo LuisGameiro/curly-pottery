@@ -11,8 +11,18 @@
     "check": "npm run lint && npm run typecheck && npm run format:check",
     "typecheck": "tsc --noEmit",
     "format:check": "prettier --check \"**/*.{ts,tsx,md}\"",
-    "format:fix": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "prepare": "husky"
+    "prepare": "husky",
+    "format:fix": "prettier --write .",
+    "lint:fix": "eslint . --fix"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
