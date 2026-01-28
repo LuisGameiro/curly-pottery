@@ -8,7 +8,6 @@ import { SessionProvider } from 'next-auth/react'
 import { ThemeProvider } from 'next-themes'
 import { PHProvider } from '@lib/analytics/posthogProvider'
 import { GoogleAnalytics } from '@lib/analytics/GoogleAnalytics'
-import Script from 'next/script'
 
 export default function RootLayout({
   children,
@@ -32,7 +31,7 @@ export default function RootLayout({
               <Layout>{children}</Layout>
             </ThemeProvider>
 
-            <Script
+            {/* <Script
               src="https://www.googletagmanager.com/gtag/js?id=G-ZG8YLH673J"
               strategy="afterInteractive"
             />
@@ -44,7 +43,7 @@ export default function RootLayout({
             gtag('js', new Date());
             gtag('config', 'G-ZG8YLH673J');
           `}
-            </Script>
+            </Script> */}
           </SessionProvider>
         </body>
       </PHProvider>
