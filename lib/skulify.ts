@@ -1,8 +1,12 @@
-export const skulify = (
-  name: string,
-  sizeName: string,
-  colorName: string,
-): string => {
+export function skulify({
+  name,
+  sizeName,
+  colorName,
+}: {
+  name: string
+  sizeName: string
+  colorName: string
+}): string {
   const safeName = String(name || '')
   const safeSize = String(sizeName || '')
   const safeColor = String(colorName || '')
@@ -16,5 +20,7 @@ export const skulify = (
     .trim()
     .toLowerCase()
 
-  return `${namePart}-${safeSize}-${safeColor}`.replace(/\s+/g, '-')
+  return `${namePart}-${safeSize}-${safeColor}`
+    .replace(/\s+/g, '-')
+    .replace('--', '-')
 }

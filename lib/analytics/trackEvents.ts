@@ -6,10 +6,10 @@ import ReactGA from 'react-ga4'
  * @param {string} eventName - GA4 recommended names (e.g., 'view_item')
  * @param {object} properties - Metadata about the action
  */
-export const trackEvent = (
+export function trackEvent(
   eventName: string,
   properties: Record<string, unknown> = {},
-) => {
+) {
   posthog.capture(eventName, properties)
 
   ReactGA.event(eventName, properties)

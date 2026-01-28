@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { syncCartAction } from 'actions/cart.actions'
+import { getCartFromDbAction, syncCartAction } from 'actions/cart.actions'
 import {
   CartLineItem,
   Discount,
@@ -89,8 +89,8 @@ export const useCartStore = create<CartStore>()(
         if (get().isLoading) return
         set({ isLoading: true })
         try {
-          // const dbItems = await getCartFromDbAction();
-          // if (dbItems) set({ cartItems: dbItems.lineItems });
+          const dbItems = await getCartFromDbAction()
+          if (dbItems) set({ cartItems: dbItems.lineItems as CartLineItem[] })
         } catch (error) {
           console.error('Failed to sync cart', error)
         } finally {

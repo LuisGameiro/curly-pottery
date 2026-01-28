@@ -35,7 +35,6 @@ export const authOptions: NextAuthOptions = {
         return {
           id: profile.sub,
           email: profile.email,
-          // Extract first name from the profile or split the name string
           firstName: profile.given_name || profile.name.split(' ')[0],
           lastName:
             profile.family_name || profile.name.split(' ').slice(1).join(' '),

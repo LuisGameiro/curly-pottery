@@ -54,7 +54,7 @@ export const ProductVariant = ({
   const variantErrors = (errors.variants as any)?.[index]
 
   useEffect(() => {
-    const newSku = skulify(productName, sizeName, colorName)
+    const newSku = skulify({ name: productName, sizeName, colorName })
 
     setValue(`variants.${index}.sku`, newSku, {
       shouldValidate: true,
