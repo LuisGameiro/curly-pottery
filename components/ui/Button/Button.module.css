@@ -27,7 +27,7 @@
 }
 
 .slim {
-  @apply  p-2 transform-none normal-case;
+  @apply p-2 transform-none normal-case;
 }
 
 .ghost {
@@ -42,8 +42,8 @@
   @apply bg-transparent font-semibold border-none shadow-none outline-none p-2   rounded-lg transition;
 }
 
-.naked:hover{
-  @apply text-on-secondary bg-secondary/20
+.naked:hover {
+  @apply text-on-secondary bg-secondary/20;
 }
 
 .naked:focus {
@@ -61,15 +61,15 @@
 }
 
 .danger {
-  @apply  text-red hover:bg-red/20 ;
+  @apply text-red hover:bg-red/20;
 }
 
 .success {
-  @apply bg-emerald-600 text-background hover:bg-emerald-700 border-emerald-700;
+  @apply text-green hover:bg-green/20;
 }
 
 .warning {
-  @apply bg-amber  hover:bg-amber border-amber;
+  @apply text-amber hover:bg-amber/20;
 }
 
 .disabled,

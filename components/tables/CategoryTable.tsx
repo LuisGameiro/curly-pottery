@@ -50,6 +50,7 @@ export default function CategoryTable({
             objectFit: 'cover',
           }}
           loading="lazy"
+          className="flex justify-center self-center bg-blue "
         />
       ),
     },

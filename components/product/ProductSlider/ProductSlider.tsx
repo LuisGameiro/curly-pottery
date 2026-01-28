@@ -64,7 +64,7 @@ const ProductSlider = ({ children, className = '' }: ProductSliderProps) => {
       '(min-width: 1280px)': {
         slides: { perView: 5, spacing: 0 },
       },
-       '(min-width: 1536px)': {
+      '(min-width: 1536px)': {
         slides: { perView: 6, spacing: 0 },
       },
     },

@@ -53,7 +53,7 @@ export default function DataTable<T extends { id: string }>({
             <tr className="bg-accent-1 border-b border-border">
               {renderExpansion && <th className="w-10 px-4" />}
               {columns.map((col, i) => (
-                <th key={i} className="p-4 font-semibold text-sm">
+                <th key={i} className="p-1font-semibold text-sm">
                   {col.header}
                 </th>
               ))}
@@ -64,16 +64,17 @@ export default function DataTable<T extends { id: string }>({
               <Fragment key={item.id}>
                 <tr className="hover:bg-accent-2 transition-colors">
                   {renderExpansion && (
-                    <td className="px-4">
+                    <td className="">
                       <Button
                         variant="naked"
                         onClick={() => toggleRow(item.id)}
                       >
-                        {expandedRows === item.id ? (
-                          <ChevronDown size={20} />
-                        ) : (
-                          <ChevronRight size={20} />
-                        )}
+                        <ChevronRight
+                          size={16}
+                          className={
+                            expandedRows === item.id ? 'rotate-90' : ''
+                          }
+                        />
                       </Button>
                     </td>
                   )}

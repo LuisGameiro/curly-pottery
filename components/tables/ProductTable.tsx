@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Pencil, Trash2 } from 'lucide-react'
+import { AlignCenter, Eye, EyeClosed, EyeOff, Pencil, Trash2 } from 'lucide-react'
 import { Button } from '@components/ui'
 import { useState } from 'react'
 import DataTable from '@components/ui/Table/DataTable'
@@ -42,9 +42,10 @@ export default function ProductTable({
 
   const productColumns = [
     {
-      header: 'Product',
+      header: 'Image',
+
       render: (p: ProductWithVariantsCategories) => (
-        <div className="flex items-center gap-2 justify-start">
+        <div className="flex justify-center ">
           <Image
             src={p.images[0] || '/placeholder.png'}
             alt={`${p.name} Image`}
@@ -52,18 +53,19 @@ export default function ProductTable({
             width={60}
             quality={85}
             style={{
-              aspectRatio: '1/1',
-              objectFit: 'cover',
+              objectFit: 'contain',
             }}
             loading="lazy"
           />
-
-          <div className="flex-1 justify-center">
-            <div className="font-medium">{p.name}</div>
-            <div className="text-xs text-muted">
-              {p.variants.length} variants
-            </div>
-          </div>
+        </div>
+      ),
+    },
+    {
+      header: 'Product',
+      render: (p: ProductWithVariantsCategories) => (
+        <div className="flex-1 min-w-24">
+          <div className="font-medium">{p.name}</div>
+          <div className="text-xs text-muted">{p.variants.length} variants</div>
         </div>
       ),
     },
@@ -124,6 +126,15 @@ export default function ProductTable({
             onClick={() => handleDelete(p.id, p.name)}
           >
             <Trash2 size={18} />
+          </Button>
+
+          <Button
+            variant="naked"
+            color="warning"
+            disabled={true}
+            // onClick={() => handleDelete(p.id, p.name)}
+          >
+            {p.hide ? <EyeOff size={18} /> : <Eye size={18} />}
           </Button>
         </div>
       ),
