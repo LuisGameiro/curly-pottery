@@ -231,13 +231,29 @@ export async function getRelatedProducts(
 export async function getProductsByCategorySlug(
   category: string | null,
 ): Promise<ActionResponse<ProductWithVariantsCategories[] | null>> {
+  if (!category) {
+    const products = await prisma.product.findMany({
+      where: {
+        hide: false,
+      },
+      include: {
+        variants: true,
+        categories: true,
+      },
+    })
+    return {
+      success: true,
+      message: 'Category slug not provided',
+      data: products,
+    }
+  }
   try {
     const products = await prisma.product.findMany({
       where: {
         hide: false,
         categories: {
           some: {
-            slug: category || '',
+            slug: category,
           },
         },
       },

@@ -16,11 +16,11 @@
 
 
 .imageContainer {
-  @apply flex items-center justify-center w-full h-full relative lg:max-h-[calc(100vh-276px)];
+  @apply flex items-center justify-center sm:max-h-[calc(100vh-254px)] sm:max-w-[calc(100vh-254px)];
 }
 
 .sliderContainer .img {
-  @apply object-cover h-full;
+  @apply object-contain;
 }
 
 .button {

@@ -61,8 +61,11 @@ const ProductSlider = ({ children, className = '' }: ProductSliderProps) => {
       '(min-width: 640px)': {
         slides: { perView: 4, spacing: 0 },
       },
-      '(min-width: 1024px)': {
-        slides: { perView: 4, spacing: 0 },
+      '(min-width: 1280px)': {
+        slides: { perView: 5, spacing: 0 },
+      },
+       '(min-width: 1536px)': {
+        slides: { perView: 6, spacing: 0 },
       },
     },
   })
@@ -105,9 +108,7 @@ const ProductSlider = ({ children, className = '' }: ProductSliderProps) => {
               ...child,
               props: {
                 ...child.props,
-                className: `${
-                  child.props.className ? `${child.props.className} ` : ''
-                } keen-slider__slide`,
+                className: `keen-slider__slide object-contain sm:max-h-[calc(100vh-274px)] sm:max-w-[calc(100vh-274px)]`,
               },
             }
           }
