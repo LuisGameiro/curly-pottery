@@ -9,7 +9,7 @@ import { toast } from 'sonner'
 export const VariantManager = () => {
   const { control } = useFormContext()
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, move } = useFieldArray({
     control,
     name: 'variants',
   })
@@ -43,6 +43,7 @@ export const VariantManager = () => {
     )
   }
 
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -66,6 +67,10 @@ export const VariantManager = () => {
           <ProductVariant
             key={field.id}
             index={index}
+            isFirst={index === 0}
+            isLast={index === fields.length - 1}
+            onMoveUp={() => move(index, index - 1)}
+            onMoveDown={() => move(index, index + 1)}
             onRemove={() => handleRemoveVariant(index)}
           />
         ))}

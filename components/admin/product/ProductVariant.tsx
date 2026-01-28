@@ -1,6 +1,13 @@
 'use client'
 
-import { Package, Trash2, ChevronUp, ChevronDown } from 'lucide-react'
+import {
+  Package,
+  Trash2,
+  ChevronUp,
+  ChevronDown,
+  ArrowUp,
+  ArrowDown,
+} from 'lucide-react'
 import { Container, Text, Button, Input } from '@components/ui'
 import InputCheckbox from '@components/ui/Input/InputCheckbox'
 import InputImage from '@components/ui/Input/InputImage'
@@ -15,9 +22,17 @@ import { useEffect } from 'react'
 export const ProductVariant = ({
   index,
   onRemove,
+  isFirst,
+  isLast,
+  onMoveUp,
+  onMoveDown,
 }: {
   index: number
   onRemove: () => void
+  isFirst: boolean
+  isLast: boolean
+  onMoveUp: () => void
+  onMoveDown: () => void
 }) => {
   const {
     register,
@@ -63,6 +78,31 @@ export const ProductVariant = ({
         </div>
         <div className="flex items-center gap-4">
           <Text className="text-sm">£{variantData.price}</Text>
+          <Button
+            type="button"
+            variant="naked"
+            disabled={isFirst}
+            onClick={(e) => {
+              e.stopPropagation()
+              onMoveUp()
+            }}
+            className="p-1 hover:bg-accent rounded disabled:opacity-30"
+          >
+            <ArrowUp size={16} />
+          </Button>
+          <Button
+            type="button"
+            variant="naked"
+            disabled={isLast}
+            onClick={(e) => {
+              e.stopPropagation()
+              onMoveDown()
+            }}
+            className="p-1 hover:bg-accent rounded disabled:opacity-30"
+          >
+            <ArrowDown size={16} />
+          </Button>
+
           <Button
             type="button"
             variant="naked"
@@ -147,7 +187,7 @@ export const ProductVariant = ({
           <Controller
             name={`variants.${index}.files`}
             control={control}
-            render={({ field }) => (
+            render={({ field  }) => (
               <InputImage
                 multiple
                 files={field.value}
@@ -156,6 +196,7 @@ export const ProductVariant = ({
                   field.onChange(files)
                   setValue(`variants.${index}.previews`, previews)
                 }}
+            
                 error={variantErrors?.files?.message as string}
               />
             )}
