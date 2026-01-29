@@ -25,3 +25,10 @@ if (typeof global.TransformStream === 'undefined') {
   // @ts-expect-error some errors here
   global.TransformStream = TransformStream
 }
+
+// Object.defineProperties(global, {
+//   fetch: { value: fetch, writable: true },
+//   Request: { value: Request, writable: true },
+//   Response: { value: Response, writable: true },
+//   Headers: { value: Headers, writable: true },
+// });

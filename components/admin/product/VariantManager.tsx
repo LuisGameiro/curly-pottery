@@ -6,7 +6,7 @@ import { Text } from '@components/ui'
 import { ProductVariant } from './ProductVariant'
 import { toast } from 'sonner'
 
-export const VariantManager = () => {
+export function VariantManager() {
   const { control } = useFormContext()
 
   const { fields, append, remove, move } = useFieldArray({

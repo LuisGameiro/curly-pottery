@@ -5,7 +5,8 @@ import { Text, Button, Input } from '@components/ui'
 import { Detailtype } from '@lib/types/types'
 import InputSelect from '@components/ui/Input/InputSelect'
 import { useFormContext, useFieldArray } from 'react-hook-form'
-export const VariantDetails = ({ variantIndex }: { variantIndex: number }) => {
+
+export function VariantDetails({ variantIndex }: { variantIndex: number }) {
   const { control, register } = useFormContext()
   const { fields, append, remove } = useFieldArray({
     control,

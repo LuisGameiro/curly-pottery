@@ -1,12 +1,15 @@
 'use client'
 
 import { Controller, useFormContext } from 'react-hook-form'
-
-import { Container, Text, Input } from '@components/ui'
+import {
+  Container,
+  Text,
+  Input,
+  InputTextArea,
+  InputImage,
+  InputCheckbox,
+} from '@components/ui'
 import { slugify } from '@lib/slugify'
-import InputTextArea from '@components/ui/Input/InputTextArea'
-import InputImage from '@components/ui/Input/InputImage'
-import InputCheckbox from '@components/ui/Input/InputCheckbox'
 import { Category } from '@lib/types/types'
 
 export default function GeneralInformationSection({

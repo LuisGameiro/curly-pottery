@@ -8,18 +8,23 @@ import {
   ArrowUp,
   ArrowDown,
 } from 'lucide-react'
-import { Container, Text, Button, Input } from '@components/ui'
-import InputCheckbox from '@components/ui/Input/InputCheckbox'
-import InputImage from '@components/ui/Input/InputImage'
+import {
+  Container,
+  Text,
+  Button,
+  Input,
+  InputImage,
+  InputCheckbox,
+  InputSelect,
+} from '@components/ui'
 import { SizeNames } from '@lib/types/types'
 import { VariantDetails } from './VariantDetails'
 import { VariantDiscounts } from './VariantDiscounts'
-import InputSelect from '@components/ui/Input/InputSelect'
 import { Controller, useFormContext } from 'react-hook-form'
 import { skulify } from '@lib/skulify'
 import { useEffect } from 'react'
 
-export const ProductVariant = ({
+export function ProductVariant({
   index,
   onRemove,
   isFirst,
@@ -33,7 +38,7 @@ export const ProductVariant = ({
   isLast: boolean
   onMoveUp: () => void
   onMoveDown: () => void
-}) => {
+}) {
   const {
     register,
     control,

@@ -205,7 +205,7 @@ describe('resetPassword', () => {
   })
 
   it('should reset password successfully', async () => {
-    jest.mocked(hashPassword).mockRejectedValue('123hashedpassword')
+    jest.mocked(hashPassword).mockResolvedValue('123hashedpassword ')
     jest.mocked(prisma.user.update).mockResolvedValue({} as User)
 
     const result = await resetPassword({

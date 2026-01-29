@@ -1,3 +1,9 @@
+import nextJest from 'next/jest'
+
+const createJestConfig = nextJest({
+  dir: './',
+})
+
 /** @type {import('jest').Config} */
 const config = {
   // All imported modules in your tests should be mocked automatically
@@ -175,8 +181,7 @@ const config = {
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [
-  //   "\\\\node_modules\\\\",
-  //   "\\.pnp\\.[^\\\\]+$"
+  //   '/node_modules/(?!react-merge-refs/',
   // ],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
@@ -191,12 +196,21 @@ const config = {
   // Whether to use watchman for file crawling
   // watchman: true,
   preset: 'ts-jest',
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+  setupFilesAfterEnv: [
+    '<rootDir>/jest.setup.ts',
+    '<rootDir>/jest.components.tsx',
+  ],
   moduleNameMapper: {
+    '^.+\\.(css|sass|scss)$': 'identity-obj-proxy',
+    '\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
+    '^.+\\.(jpg|jpeg|png|gif|webp|avif|svg)$':
+      '<rootDir>/__mocks__/fileMock.js',
+
+    '^actions/(.*)$': '<rootDir>/actions/$1',
     '^prisma/(.*)$': '<rootDir>/prisma/$1',
     '^@components/(.*)$': '<rootDir>/components/$1',
     '^@lib/(.*)$': '<rootDir>/lib/$1',
   },
 }
 
-module.exports = config
+module.exports = createJestConfig(config)

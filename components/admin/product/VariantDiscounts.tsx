@@ -1,16 +1,11 @@
 'use client'
 
 import { Plus, Trash2 } from 'lucide-react'
-import { Text, Button, Input } from '@components/ui'
+import { Text, Button, Input, InputSelect } from '@components/ui'
 import { DiscountType } from '@lib/types/types'
-import InputSelect from '@components/ui/Input/InputSelect'
 import { useFormContext, useFieldArray } from 'react-hook-form'
 
-export const VariantDiscounts = ({
-  variantIndex,
-}: {
-  variantIndex: number
-}) => {
+export function VariantDiscounts({ variantIndex }: { variantIndex: number }) {
   const { control, register, watch } = useFormContext()
   const { fields, append, remove } = useFieldArray({
     control,

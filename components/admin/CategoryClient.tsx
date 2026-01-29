@@ -4,15 +4,20 @@ import React, { useState } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { slugify } from '@lib/slugify'
-import { Button, Container, Input, Text } from '@components/ui'
+import {
+  Button,
+  Container,
+  Input,
+  Text,
+  InputImage,
+  LoadingDots,
+} from '@components/ui'
 import { CategorySchema } from '@lib/form-validator'
 import { useRouter } from 'next/navigation'
-import { upsertCategory } from 'actions/category.actions'
-import InputImage from '@components/ui/Input/InputImage'
-import Loading from 'app/loading'
 import { Category } from '@lib/types/types'
 import { toast } from 'sonner'
 import { syncImages } from 'actions/images.actions'
+import { upsertCategory } from 'actions/category.actions'
 
 export default function CategoryClient({
   category,
@@ -91,7 +96,7 @@ export default function CategoryClient({
     }
   }
 
-  if (loading) return Loading()
+  if (loading) return <LoadingDots />
 
   return (
     <Container>
