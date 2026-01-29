@@ -73,10 +73,10 @@ export default async function ProductPage({
 
   const product = response.data
 
-  const relatedResponse = await getRelatedProducts(
-    product.categories,
-    product.id,
-  )
+  const relatedResponse = await getRelatedProducts({
+    categories: product.categories,
+    excludeId: product.id,
+  })
 
   return (
     <ProductView

@@ -30,7 +30,7 @@ export default function ProductTable({
       const images = productToDelete.variants.flatMap((v) => v.images)
       images.push(...productToDelete.images)
 
-      const response = await deleteProduct(id, images)
+      const response = await deleteProduct({ id, images })
       if (response.success) {
         router.refresh()
       }
@@ -45,7 +45,7 @@ export default function ProductTable({
   const handleToggleVisibility = async (id: string, hide: boolean) => {
     setIsLoading(id)
     try {
-      const response = await toggleVisibility(id, hide)
+      const response = await toggleVisibility({ id, state: hide })
       if (response.success) {
         router.refresh()
       }

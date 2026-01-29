@@ -83,12 +83,15 @@ export async function getProductById(
   }
 }
 
-export async function deleteProduct(
-  id: string,
-  images: string[],
-): Promise<ActionResponse<Product | null>> {
+export async function deleteProduct({
+  id,
+  images,
+}: {
+  id: string
+  images: string[]
+}): Promise<ActionResponse<Product | null>> {
   try {
-    Promise.all(
+    await Promise.all(
       images.map(async (img) => {
         await deleteBlob(img)
       }),
@@ -100,11 +103,11 @@ export async function deleteProduct(
 
     return {
       success: true,
-      message: 'Fecthed Category successfully',
+      message: 'Deleted product successfully',
       data: product,
     }
   } catch (error) {
-    console.error('getCategoryById_ERROR:', error)
+    console.error('deleteProduct_ERROR:', error)
     return {
       success: false,
       message:
@@ -113,10 +116,13 @@ export async function deleteProduct(
     }
   }
 }
-export async function toggleVisibility(
-  id: string,
-  state: boolean,
-): Promise<ActionResponse<Product | null>> {
+export async function toggleVisibility({
+  id,
+  state,
+}: {
+  id: string
+  state: boolean
+}): Promise<ActionResponse<Product>> {
   try {
     const product = await prisma.product.update({
       where: { id },
@@ -127,11 +133,11 @@ export async function toggleVisibility(
 
     return {
       success: true,
-      message: 'Fecthed Category successfully',
+      message: 'Toggled product visibility successfully',
       data: product,
     }
   } catch (error) {
-    console.error('getCategoryById_ERROR:', error)
+    console.error('toggleVisibility_ERROR:', error)
     return {
       success: false,
       message:
@@ -156,11 +162,11 @@ export async function getAllProducts(): Promise<
 
     return {
       success: true,
-      message: 'Fecthed Category successfully',
+      message: 'Fecthed products successfully',
       data: products,
     }
   } catch (error) {
-    console.error('getCategoryById_ERROR:', error)
+    console.error('getAllProducts_ERROR:', error)
     return {
       success: false,
       message:
@@ -192,11 +198,15 @@ export async function getRandomProducts(
     }
   }
 }
-export async function getRelatedProducts(
-  categories: Category[],
-  excludeId?: string,
-  limit: number = 12,
-): Promise<ActionResponse<Product[] | null>> {
+export async function getRelatedProducts({
+  categories,
+  excludeId,
+  limit = 12,
+}: {
+  categories: Category[]
+  excludeId?: string
+  limit?: number
+}): Promise<ActionResponse<Product[] | null>> {
   try {
     if (!categories.length)
       return {
@@ -257,23 +267,23 @@ export async function getRelatedProducts(
 export async function getProductsByCategorySlug(
   category: string | null,
 ): Promise<ActionResponse<ProductWithVariantsCategories[] | null>> {
-  if (!category) {
-    const products = await prisma.product.findMany({
-      where: {
-        hide: false,
-      },
-      include: {
-        variants: true,
-        categories: true,
-      },
-    })
-    return {
-      success: true,
-      message: 'Category slug not provided',
-      data: products,
-    }
-  }
   try {
+    if (!category) {
+      const products = await prisma.product.findMany({
+        where: {
+          hide: false,
+        },
+        include: {
+          variants: true,
+          categories: true,
+        },
+      })
+      return {
+        success: true,
+        message: 'Category slug not provided',
+        data: products,
+      }
+    }
     const products = await prisma.product.findMany({
       where: {
         hide: false,

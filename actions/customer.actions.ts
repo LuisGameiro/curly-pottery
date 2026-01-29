@@ -9,6 +9,8 @@ import {
   User,
 } from '@lib/types/types'
 import { cache } from 'react'
+import { registerSchema } from '@lib/form-validator'
+import { hashPassword } from '@lib/auth/password'
 
 export async function getAllCustomers(): Promise<
   ActionResponse<UserWithOrders[]>
@@ -91,10 +93,13 @@ export async function updateNotes(
   }
 }
 
-export async function updateUser(
-  id: string,
-  data: UserWithOrdersAddress,
-): Promise<ActionResponse<User | null>> {
+export async function updateUser({
+  id,
+  data,
+}: {
+  id: string
+  data: UserWithOrdersAddress
+}): Promise<ActionResponse<User | null>> {
   try {
     const { orders: _orders, addresses, ...updateData } = data
     const user = await prisma.user.update({
@@ -124,6 +129,66 @@ export async function updateUser(
       message:
         error instanceof Error ? error.message : 'A database error occurred',
       errors: error,
+    }
+  }
+}
+
+export async function registerUser(
+  formData: FormData,
+): Promise<ActionResponse<null>> {
+  const rawData = Object.fromEntries(formData.entries())
+
+  const validation = registerSchema.safeParse({
+    ...rawData,
+    acceptsMarketing: rawData.acceptsMarketing === 'on',
+  })
+
+  if (!validation.success) {
+    return {
+      success: false,
+      message: 'Validation error',
+      errors: validation.error.message,
+    }
+  }
+
+  try {
+    const { email, password, firstName, lastName, phone, acceptsMarketing } =
+      validation.data
+
+    const existingUser = await prisma.user.findUnique({ where: { email } })
+    if (existingUser) {
+      return {
+        success: false,
+        message: 'User already exists',
+        errors: 'User already exists',
+      }
+    }
+
+    await prisma.user.create({
+      data: {
+        email,
+        password: await hashPassword(password),
+        firstName,
+        lastName,
+        phone,
+        acceptsMarketing,
+        emailVerified: new Date(),
+        role: 'USER',
+      },
+    })
+
+    return {
+      success: true,
+      message: 'User registered successfully',
+      data: null,
+    }
+  } catch (error) {
+    console.error('Registration error:', error)
+    return {
+      success: false,
+      message: 'Internal server error',
+      errors:
+        error instanceof Error ? error.message : 'An unknown error occurred',
     }
   }
 }

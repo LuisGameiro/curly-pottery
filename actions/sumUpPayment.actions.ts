@@ -4,10 +4,13 @@ import { authOptions } from '@lib/auth/authOptions'
 import { ActionResponse } from '@lib/types/types'
 import { getServerSession } from 'next-auth'
 
-export async function createSumUpCheckout(
-  amount: number,
-  cartId: string,
-): Promise<ActionResponse<string | null>> {
+export async function createSumUpCheckout({
+  amount,
+  cartId,
+}: {
+  amount: number
+  cartId: string
+}): Promise<ActionResponse<string | null>> {
   try {
     const session = await getServerSession(authOptions)
     const userEmail = session?.user?.email

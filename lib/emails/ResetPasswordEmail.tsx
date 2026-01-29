@@ -11,7 +11,6 @@ import {
   Hr,
   Img,
 } from '@react-email/components'
-import * as React from 'react'
 
 interface ResetPasswordEmailProps {
   userFirstname?: string

@@ -100,10 +100,10 @@ export default function ProductClient({
         return
       }
 
-      const productImages = await syncImages(
-        data.files || [],
-        product?.images ?? [],
-      )
+      const productImages = await syncImages({
+        currentItems: data.files || [],
+        existingUrls: product?.images ?? [],
+      })
       if (!productImages.success) throw new Error(productImages.message)
 
       const updatedVariants = await Promise.all(
@@ -112,7 +112,10 @@ export default function ProductClient({
             (v) => v.id === variant?.id,
           )
           const oldImages = originalVariant?.images ?? []
-          const variantImages = await syncImages(variant.files || [], oldImages)
+          const variantImages = await syncImages({
+            currentItems: variant.files || [],
+            existingUrls: oldImages,
+          })
           if (!variantImages.success) throw new Error(variantImages.message)
 
           return {

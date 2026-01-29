@@ -65,10 +65,10 @@ export default function CheckouClient() {
   const nextToPayment = async () => {
     try {
       setLoading(true)
-      const response = await createSumUpCheckout(
-        currentValues.totalPrice,
+      const response = await createSumUpCheckout({
+        amount: currentValues.totalPrice,
         cartId,
-      )
+      })
       trackEvent('before_purchase', {
         transaction_id: response.data,
         userId: currentValues?.userId,

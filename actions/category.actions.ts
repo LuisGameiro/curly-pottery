@@ -30,9 +30,11 @@ export async function getAllCategories(): Promise<ActionResponse<Category[]>> {
   }
 }
 
-export async function getCategoryById(
-  id: string,
-): Promise<ActionResponse<Category | null>> {
+export async function getCategoryById({
+  id,
+}: {
+  id: string
+}): Promise<ActionResponse<Category | null>> {
   try {
     const category = await prisma.category.findFirst({
       where: {
@@ -56,28 +58,32 @@ export async function getCategoryById(
   }
 }
 
-export async function upsertCategory(formData: {
+export async function upsertCategory({
+  id,
+  name,
+  image,
+}: {
   id?: string
   name: string
   image: string
-}) {
+}): Promise<ActionResponse<Category>> {
   try {
     let category
-    if (formData.id) {
+    if (id) {
       category = await prisma.category.update({
-        where: { id: formData.id },
+        where: { id },
         data: {
-          name: formData.name,
-          slug: slugify(formData.name),
-          image: formData.image,
+          name,
+          slug: slugify(name),
+          image,
         },
       })
     } else {
       category = await prisma.category.create({
         data: {
-          name: formData.name,
-          slug: slugify(formData.name),
-          image: formData.image,
+          name,
+          slug: slugify(name),
+          image,
         },
       })
     }
@@ -99,7 +105,13 @@ export async function upsertCategory(formData: {
   }
 }
 
-export async function deleteCategory(id: string, image: string) {
+export async function deleteCategory({
+  id,
+  image,
+}: {
+  id: string
+  image: string
+}): Promise<ActionResponse<Category>> {
   try {
     await deleteBlob(image)
 

@@ -45,25 +45,32 @@ export async function sendEmail({
     }
   }
 }
-export async function sendResetEmail(email: string) {
-  const user = await prisma.user.findUnique({ where: { email } })
-
-  if (!user) return { error: 'User not found' }
-
-  const token = crypto.randomUUID()
-  const expires = new Date(Date.now() + 3600000)
-
-  await prisma.user.update({
-    where: { email },
-    data: {
-      resetToken: token,
-      resetTokenExpiry: expires,
-    },
-  })
-
-  const resetLink = `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password?token=${token}`
-
+export async function sendResetEmail(
+  email: string,
+): Promise<ActionResponse<CreateEmailResponseSuccess>> {
   try {
+    const user = await prisma.user.findUnique({ where: { email } })
+
+    if (!user)
+      return {
+        success: false,
+        message: 'User not found',
+        errors: new Error('User not found'),
+      }
+
+    const token = crypto.randomUUID()
+    const expires = new Date(Date.now() + 3600000)
+
+    await prisma.user.update({
+      where: { email },
+      data: {
+        resetToken: token,
+        resetTokenExpiry: expires,
+      },
+    })
+
+    const resetLink = `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password?token=${token}`
+
     await resend.emails.send({
       from: 'Curly Pottery <noreply@curlypottery.com>',
       to: email,
@@ -73,16 +80,23 @@ export async function sendResetEmail(email: string) {
         resetPasswordLink: resetLink,
       }),
     })
-    return { success: true }
-  } catch {
-    return { error: 'Failed to send email' }
+    return {
+      success: true,
+      message: 'Email sent successfully!',
+      data: { id: token },
+    }
+  } catch (error) {
+    return { success: false, message: 'Failed to send email', errors: error }
   }
 }
 
-export async function resetPassword(
-  email: string,
-  newPassword: string,
-): Promise<ActionResponse<null>> {
+export async function resetPassword({
+  email,
+  newPassword,
+}: {
+  email: string
+  newPassword: string
+}): Promise<ActionResponse<null>> {
   try {
     const hashedPassword = await hashPassword(newPassword)
 

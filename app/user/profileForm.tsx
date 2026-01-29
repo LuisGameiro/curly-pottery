@@ -37,7 +37,7 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
 
   const onSubmit = async (data: UserWithOrdersAddress) => {
     try {
-      const response = await updateUser(user.id, data)
+      const response = await updateUser({ id: user.id, data })
 
       if (response.success) {
         toast.success('Profile updated successfully!')

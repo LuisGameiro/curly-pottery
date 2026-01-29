@@ -60,3 +60,12 @@ export const ProductSchema = z.object({
 
 export type ProductInput = z.infer<typeof ProductSchema>
 export type VariantInput = z.infer<typeof VariantSchema>
+
+export const registerSchema = z.object({
+  email: z.email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  phone: z.string().optional(),
+  acceptsMarketing: z.boolean().default(false),
+})

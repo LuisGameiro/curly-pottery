@@ -23,7 +23,7 @@ export default function CategoryTable({
 
     setIsDeleting(id)
     try {
-      const response = await deleteCategory(id, image)
+      const response = await deleteCategory({ id, image })
       if (response.success) {
         router.refresh()
       }

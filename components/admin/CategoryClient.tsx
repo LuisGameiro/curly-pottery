@@ -61,9 +61,10 @@ export default function CategoryClient({
         return
       }
 
-      const ResponsEmail = await syncImages(gallery.files, [
-        category?.image || '',
-      ])
+      const ResponsEmail = await syncImages({
+        currentItems: gallery.files,
+        existingUrls: [category?.image || ''],
+      })
       if (!ResponsEmail.success) {
         return toast(ResponsEmail.message)
       }

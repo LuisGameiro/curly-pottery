@@ -19,7 +19,7 @@ export default async function CategoryPage({
   let categoryData = null
 
   if (isEditMode) {
-    const response = await getCategoryById(id)
+    const response = await getCategoryById({ id })
     if (!response.success) {
       throw new Error(response.message)
     }
