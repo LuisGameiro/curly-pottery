@@ -43,7 +43,7 @@
 }
 
 .sliderContainer {
-  @apply flex items-center justify-center overflow-x-hidden bg-accent-2;
+  @apply flex-center overflow-x-hidden bg-accent-2;
 }
 
 .imageContainer {

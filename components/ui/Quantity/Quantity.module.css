@@ -2,7 +2,7 @@
 @reference "../../../globals.css";
 
 .actions {
-  @apply flex p-1 border-border border items-center justify-center
+  @apply flex p-1 border-border border flex-center flex-col
   w-12 text-muted;
   transition-property: border-color, background, color, transform, box-shadow;
 

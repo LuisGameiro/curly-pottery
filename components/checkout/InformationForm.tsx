@@ -49,7 +49,7 @@ export default function InformationForm({
 
   if (!isLoggedIn && !continueAsGuest) {
     return (
-      <div className="flex flex-col items-center justify-center space-y-6">
+      <div className="flex-center flex-col space-y-6">
         <div className="text-center space-y-2">
           <Text variant="sectionHeading">Already have an account?</Text>
           <Text className=" text-muted">

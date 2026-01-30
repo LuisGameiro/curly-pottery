@@ -16,7 +16,7 @@ const contacts = {
 
 export default function Contacts() {
   return (
-    <Container className="px-4 py-6 sm:py-10 sm:py-10">
+    <Container className="px-4 py-6 sm:px-10 sm:py-10">
       <header className="justify-center text-center mx-auto mb-8">
         <Text variant="heading">Contact Us</Text>
         <Text className="mx-auto">

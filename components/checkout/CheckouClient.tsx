@@ -151,7 +151,7 @@ export default function CheckouClient() {
 
   return (
     <FormProvider {...methods}>
-      <Container className="lg:max-w-5xl mx-auto p-10 grid grid-cols-1 lg:grid-cols-12 gap-20">
+      <Container className="px-4 py-6 sm:px-10 sm:py-10 mx-auto grid grid-cols-1 lg:max-w-5xl lg:grid-cols-12 gap-20">
         <div className="lg:col-span-8">
           <div className="flex items-center gap-4 mb-8 text-sm font-medium">
             <button

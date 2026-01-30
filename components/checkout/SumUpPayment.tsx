@@ -98,7 +98,7 @@ export default function SumUpPayment({
 
       <div
         id="sumup-card"
-        className="relative border p-4 rounded-xl bg-accent-1 min-h-[250px] flex flex-col items-center justify-center"
+        className="relative border p-4 rounded-xl bg-accent-1 min-h-[250px] flex-center flex-col"
       >
         {loading && !showRetry && (
           <div className="animate-pulse text-muted">

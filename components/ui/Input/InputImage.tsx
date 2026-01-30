@@ -68,7 +68,7 @@ const SortableImage = ({
       <div
         {...attributes}
         {...listeners}
-        className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-grab active:cursor-grabbing transition-opacity"
+        className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 flex-center cursor-grab active:cursor-grabbing transition-opacity"
       >
         <GripVertical className="text-white" size={20} />
       </div>
@@ -189,7 +189,7 @@ const InputImage = ({
           {(multiple || previews.length === 0) && (
             <label
               className={cn(
-                'w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer transition-all shrink-0 bg-accent-2 border-border text-muted hover:border-secondary hover:text-secondary',
+                'w-24 h-24 flex-center flex-col border-2 border-dashed rounded-lg cursor-pointer transition-all shrink-0 bg-accent-2 border-border text-muted hover:border-secondary hover:text-secondary',
               )}
             >
               <Plus size={24} />

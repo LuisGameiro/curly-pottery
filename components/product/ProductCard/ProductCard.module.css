@@ -80,7 +80,7 @@
 }
 
 .imageContainer {
-  @apply flex h-full w-full items-center justify-center overflow-hidden;
+  @apply flex h-full w-full flex-center flex-col overflow-hidden;
 
   & .productImage {
     @apply object-cover;

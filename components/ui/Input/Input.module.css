@@ -44,7 +44,7 @@
 
 .toggleButton {
   @apply absolute right-3 p-0;
-  @apply flex items-center justify-center;
+  @apply flex-center;
   @apply bg-transparent border-none cursor-pointer outline-none;
   @apply text-muted transition-colors duration-200;
 

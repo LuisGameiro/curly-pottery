@@ -10,7 +10,7 @@ export const metadata = constructMetadata({
 
 export default function RegisterPage() {
   return (
-    <Container className="px-4 py-6 sm:py-10 sm:py-10">
+    <Container className="px-4 py-6 sm:px-10 sm:py-10">
       <header className="justify-center text-center mx-auto mb-4">
         <Text variant="heading">Create Account</Text>
         <Text variant="subHeading">

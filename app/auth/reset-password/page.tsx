@@ -62,7 +62,7 @@ export default function ResetPasswordPage() {
 
   if (!token)
     return (
-      <Container className="p-10 text-center">
+      <Container className="px-4 py-6 sm:px-10 sm:py-10 text-center">
         <Text variant="heading">Invalid Link</Text>
         <Text>This password reset link is invalid or has expired.</Text>
       </Container>
@@ -70,7 +70,7 @@ export default function ResetPasswordPage() {
 
   if (isSuccess)
     return (
-      <Container className="p-10 text-center space-y-4">
+      <Container className="px-4 py-6 sm:px-10 sm:py-10 text-center space-y-4">
         <div className="flex justify-center text-green">
           <CheckCircle2 size={48} />
         </div>
@@ -81,7 +81,7 @@ export default function ResetPasswordPage() {
     )
 
   return (
-    <Container className="p-10 max-w-lg mx-auto">
+    <Container className="px-4 py-6 sm:px-10 sm:py-10 max-w-lg mx-auto">
       <header className="mb-8 text-center">
         <Text variant="heading">Set New Password</Text>
         <Text variant="subHeading">
