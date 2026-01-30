@@ -78,7 +78,9 @@ const ProductSidebar = ({
     <div className={cn(className, 'space-y-4')}>
       <section>
         <div className="flex justify-between items-center">
-          <p className="text-4xl font-bold text-secondary">{product.name}</p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-secondary">
+            {product.name}
+          </h2>
           <div className="flex items-center gap-2">
             <Link href={`/shop/`}>
               <Button variant="naked" color="primary">
@@ -104,7 +106,7 @@ const ProductSidebar = ({
       <section className="space-y-4">
         <Text variant="sectionHeading">
           {price.hasDiscount ? (
-            <div className="flex items-center gap-4 text-4xl font-semibold">
+            <div className="flex items-center gap-4 text-3xl sm:text-4xl font-semibold'">
               <span className="line-through opacity-40">
                 {showCurrency[variant.currency]}
                 {price.price.toFixed(2)}
@@ -119,8 +121,8 @@ const ProductSidebar = ({
               </span>
             </div>
           ) : (
-            <div>
-              <span className="text-4xl font-semibold">
+            <div className="text-3xl sm:text-4xl  font-semibold">
+              <span>
                 {showCurrency[variant.currency]}
                 {price.finalPrice.toFixed(2)}
               </span>
@@ -174,10 +176,10 @@ const ProductSidebar = ({
                 {variant?.availableForSale ? 'Add To Cart' : 'Not Available'}
               </Button>
             </div>
-            <p className="text-xs text-justify text-muted">
+            <Text variant="muted">
               VAT included for UK orders. Duties and import taxes are calculated
               at checkout for other customers Shipping calculated at checkout.
-            </p>
+            </Text>
           </div>
         )}
       </section>

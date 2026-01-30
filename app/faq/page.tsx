@@ -10,7 +10,7 @@ export const metadata = constructMetadata({
 
 export default function FAQ() {
   return (
-    <Container className="p-10">
+    <Container className="px-4 sm:py-10 py-10">
       <header className="justify-center text-center mx-auto mb-10">
         <Text variant="heading">Frequently Asked Questions</Text>
         <Text variant="body" className="mx-auto">

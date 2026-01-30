@@ -6,15 +6,15 @@
 }
 
 .heading {
-  @apply text-3xl sm:text-4xl pt-1 sm:pb-2 font-semibold tracking-wide  mb-2;
+  @apply text-2xl sm:text-3xl font-semibold tracking-wide  pt-1 sm:pb-2 mb-2;
 }
 
 .pageHeading {
-  @apply pt-1 pb-4 text-2xl leading-7 font-bold tracking-wide;
+  @apply text-xl sm:text-2xl  leading-7 font-bold tracking-wide pt-1 pb-4;
 }
 
 .sectionHeading {
-  @apply pt-1 pb-2 text-2xl font-bold tracking-wide cursor-default mb-2;
+  @apply text-xl sm:text-2xl  font-bold tracking-wide cursor-default pt-1 pb-2 mb-2;
 }
 
 .subHeading {
@@ -22,7 +22,7 @@
 }
 
 .boxTitle {
-  @apply font-bold sm:font-semibold text-lg  tracking-wide border-b pb-2 mb-4 block;
+  @apply font-bold sm:font-semibold text-lg  tracking-wide border-b pb-2 mb-2 block;
 }
 
 .bold {
@@ -31,6 +31,10 @@
 
 .error {
   @apply text-xs text-red font-medium animate-in fade-in slide-in-from-top-1;
+}
+
+.muted {
+  @apply text-xs text-muted text-justify;
 }
 
 .body :is(h1, h2, h3, h4, h5, h6, p, ul, ol) {
@@ -46,23 +50,23 @@
 }
 
 .body h1 {
-  @apply text-5xl;
+  @apply text-4xl sm:text-5xl;
 }
 
 .body h2 {
-  @apply text-4xl;
+  @apply text-3xl sm:text-4xl;
 }
 
 .body h3 {
-  @apply text-3xl;
+  @apply text-2xl sm:text-3xl;
 }
 
 .body h4 {
-  @apply text-2xl;
+  @apply text-xl sm:text-2xl;
 }
 
 .body h5 {
-  @apply text-xl;
+  @apply text-lg sm:text-xl;
 }
 
 .body h6 {

@@ -21,6 +21,8 @@ type Variant =
   | 'bold'
   | 'boxTitle'
   | 'error'
+  | 'muted'
+  | 'span'
 
 const Text = ({
   style,
@@ -40,6 +42,8 @@ const Text = ({
     subHeading: 'h5',
     bold: 'strong',
     error: 'p',
+    muted: 'p',
+    span: 'span',
   }
 
   const Component = componentsMap[variant]

@@ -21,8 +21,8 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
         We hit a little snag
       </Text>
       <div className="text-muted max-w-sm mx-auto">
-        <p>Something unexpected happened.</p>
-        <p>Try refreshing the page, or check back in a moment.</p>
+        <Text>Something unexpected happened.</Text>
+        <Text>Try refreshing the page, or check back in a moment.</Text>
       </div>
       {process.env.NEXT_PUBLIC_APP_ENV === 'dev' && (
         <>

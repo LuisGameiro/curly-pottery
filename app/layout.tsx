@@ -18,7 +18,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <PHProvider>
         <head />
-
         <body className="loading bg-primary">
           <SessionProvider>
             <ThemeProvider
@@ -30,20 +29,6 @@ export default function RootLayout({
               <GoogleAnalytics />
               <Layout>{children}</Layout>
             </ThemeProvider>
-
-            {/* <Script
-              src="https://www.googletagmanager.com/gtag/js?id=G-ZG8YLH673J"
-              strategy="afterInteractive"
-            />
-
-            <Script id="google-analytics" strategy="afterInteractive">
-              {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-ZG8YLH673J');
-          `}
-            </Script> */}
           </SessionProvider>
         </body>
       </PHProvider>

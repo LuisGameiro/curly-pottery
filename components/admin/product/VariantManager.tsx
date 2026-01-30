@@ -47,9 +47,7 @@ export function VariantManager() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h2 className="text-3xl font-bold tracking-wide cursor-default">
-            Variants
-          </h2>
+          <Text variant="sectionHeading">Variants</Text>
           <Text className="text-muted text-sm">({fields.length})</Text>
         </div>
         <button

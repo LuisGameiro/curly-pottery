@@ -2,15 +2,15 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply bg-secondary py-12 px-16;
+  @apply bg-secondary py-12 px-4 sm:px-8 lg:px-16;
 }
 
 .title {
-  @apply text-4xl text-background font-extrabold leading-none tracking-tight;
+  @apply text-background font-extrabold leading-none tracking-tight;
 }
 
 .description {
-  @apply mt-4 text-xl leading-8 text-background lg:max-w-4xl;
+  @apply mt-4 leading-8 text-background lg:max-w-4xl text-justify;
 }
 
 .link {
