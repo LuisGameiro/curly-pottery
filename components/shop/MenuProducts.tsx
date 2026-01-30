@@ -53,7 +53,7 @@ export default function MenuProducts({
 
         <div ref={containerSortRef} className="z-30">
           <button
-            className="w-full bg-accent-1 text-base border-2 border-border px-4 py-3 rounded-lg font-semibold flex justify-between items-center hover:bg-background transition-colors lg:cursor-default lg:hover:bg-accent-1 lg:hidden"
+            className="w-full bg-accent-1 text-base border-2 border-border px-4 py-1 sm:py-3 rounded-lg font-semibold flex justify-between items-center hover:bg-background transition-colors lg:cursor-default lg:hover:bg-accent-1 lg:hidden"
             onClick={() => setOpenSort((v) => !v)}
           >
             <span>{sortLabels[sortMethod]}</span>
@@ -96,7 +96,7 @@ export default function MenuProducts({
 
         <div ref={containerFilterRef} className="z-30">
           <button
-            className="w-full bg-accent-1 text-base border-2 border-border px-4 py-3 rounded-lg font-semibold flex justify-between items-center hover:bg-background transition-colors lg:cursor-default lg:hover:bg-accent-1 lg:hidden"
+            className="w-full bg-accent-1 text-base border-2 border-border px-4 py-1 sm:py-3 rounded-lg font-semibold flex justify-between items-center hover:bg-background transition-colors lg:cursor-default lg:hover:bg-accent-1 lg:hidden"
             onClick={() => setOpenFilter((v) => !v)}
           >
             <span>{activeCategory || 'All Categories'}</span>

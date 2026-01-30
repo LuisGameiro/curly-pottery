@@ -10,7 +10,7 @@ export default function PrivacyPolicy() {
   const lastUpdated = 'January 18, 2026'
 
   return (
-    <Container className="p-10">
+    <Container className="px-4 py-6 sm:py-10 sm:py-10">
       <header className="justify-center text-center mx-auto mb-10">
         <Text variant="heading">Privacy Policy</Text>
         <Text variant="body" className="mx-auto">

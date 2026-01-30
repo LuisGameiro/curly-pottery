@@ -154,7 +154,7 @@ const ProductSidebar = ({
                 >
                   -
                 </button>
-                <span className="px-6 ">{quantity}</span>
+                <span className="px-6">{quantity}</span>
                 <button
                   onClick={() =>
                     setQuantity(Math.min(variant.stock, quantity + 1))

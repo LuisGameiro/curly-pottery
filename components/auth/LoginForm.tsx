@@ -45,7 +45,7 @@ export default function LoginForm() {
   }
 
   return (
-    <Container className="p-10">
+    <Container className="px-4 py-6 sm:py-10 sm:py-10">
       {isRegistered && (
         <div className="bg-green/20 border border-green text-green px-4 py-3 rounded mb-4 text-center">
           Registration successful! Please log in.

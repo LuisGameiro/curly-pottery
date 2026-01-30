@@ -72,7 +72,7 @@ const ProductCard = ({
       {variant === 'simple' && (
         <>
           {!noNameTag && (
-            <h3 className="absolute bg-accent-3/60 top-0 left-0 z-20 px-2 py-1 text-sm md:text-md  lg:text-xl font-medium text-base">
+            <h3 className="absolute bg-accent-3/60 top-0 left-0 z-20 px-2 py-1 text-sm md:text-base  lg:text-xl font-medium text-base">
               {product.name}
             </h3>
           )}

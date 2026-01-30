@@ -2,7 +2,7 @@
 @reference "../../../globals.css";
 
 .body {
-  @apply text-base leading-7 max-w-6xl;
+  @apply text-sm sm:text-base leading-7 max-w-6xl;
 }
 
 .heading {

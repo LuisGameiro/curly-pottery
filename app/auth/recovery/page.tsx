@@ -41,7 +41,7 @@ export default function RecoveryForm() {
   }
 
   return (
-    <Container className="p-10">
+    <Container className="px-4 py-6 sm:py-10 sm:py-10">
       <header className="text-center mb-8 justify-center">
         <Text variant="heading">Reset Password</Text>
         <Text variant="subHeading">

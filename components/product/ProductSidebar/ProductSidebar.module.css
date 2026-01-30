@@ -2,7 +2,7 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply relative grid items-start gap-2 grid-cols-1 bg-background;
+  @apply pt-2 sm:pt-0 relative grid items-start gap-2 grid-cols-1 bg-background;
   min-height: auto;
 }
 

@@ -2,7 +2,7 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply bg-secondary py-12 px-4 sm:px-8 lg:px-16;
+  @apply bg-secondary py-6 sm:py-12 px-4 sm:px-8 lg:px-16;
 }
 
 .title {
