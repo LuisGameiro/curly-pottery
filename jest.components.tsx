@@ -67,11 +67,37 @@ jest.mock('@components/ui', () => ({
       {error && <span>{error}</span>}
     </div>
   ),
-
-  InputImage: ({ error }: { error?: string }) => (
-    <div data-testid="input-image">{error && <span>{error}</span>}</div>
+  InputImage: ({
+    label,
+    onImagesChange,
+    error,
+    ...props
+  }: {
+    label?: string
+    error?: string
+    onImagesChange?: (data: { files: File[]; previews: string[] }) => void
+  } & React.InputHTMLAttributes<HTMLInputElement>) => (
+    <div>
+      {label && <label>{label}</label>}
+      <input
+        data-testid="input-image"
+        placeholder={label}
+        type="file"
+        onChange={(e) => {
+          const file = e.target.files?.[0]
+          if (file && onImagesChange) {
+            const preview = URL.createObjectURL(file)
+            onImagesChange({
+              files: [file],
+              previews: [preview],
+            })
+          }
+        }}
+        {...props}
+      />
+      {error && <div className="error">{error}</div>}
+    </div>
   ),
-
   InputCheckbox: ({
     label,
     ...props

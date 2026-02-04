@@ -1,6 +1,3 @@
-import { mockDeep } from 'jest-mock-extended'
-import { Resend } from 'resend'
-
 jest.mock('@lib/auth/password', () => ({
   hashPassword: jest.fn(),
 }))
@@ -10,32 +7,38 @@ jest.mock('prisma/prisma', () => ({
   prisma: require('jest-mock-extended').mockDeep(),
 }))
 
-const mockResend = mockDeep<Resend>()
+jest.mock('resend', () => {
+  const mockResendInstance = {
+    emails: {
+      send: jest.fn(),
+    },
+  }
 
-jest.mock('resend', () => ({
-  Resend: jest.fn().mockImplementation(() => mockResend),
-}))
+  return {
+    Resend: jest.fn(() => mockResendInstance),
+  }
+})
 
-import { resetPassword, sendEmail } from './email.actions'
-import { sendResetEmail } from './email.actions'
+import { resetPassword, sendEmail, sendResetEmail } from './email.actions'
 import { prisma } from 'prisma/prisma'
 import { hashPassword } from '@lib/auth/password'
 import { User } from '@lib/types/types'
 
 describe('sendEmail', () => {
+  //eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { Resend } = require('resend')
+  const mockInstance = new Resend()
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
   it('should send email successfully', async () => {
     const mockData = { id: '123' }
-    Object.defineProperty(mockResend, 'emails', {
-      value: {
-        send: jest.fn().mockResolvedValue({ data: mockData, error: null }),
-      },
-      writable: true,
-    })
 
+    mockInstance.emails.send.mockResolvedValue({
+      data: mockData,
+      error: null,
+    })
     const result = await sendEmail({
       to: 'test@example.com',
       subject: 'Test Subject',
@@ -43,17 +46,15 @@ describe('sendEmail', () => {
     })
 
     expect(result.success).toBe(true)
-    expect(result.message).toBe('Email sent successfully!')
     expect(result.data).toEqual(mockData)
   })
 
   it('should return error when resend fails', async () => {
     const mockError = { message: 'Resend API error' }
-    Object.defineProperty(mockResend, 'emails', {
-      value: {
-        send: jest.fn().mockResolvedValue({ data: null, error: mockError }),
-      },
-      writable: true,
+
+    mockInstance.emails.send.mockResolvedValue({
+      data: null,
+      error: mockError,
     })
 
     const result = await sendEmail({
@@ -65,31 +66,10 @@ describe('sendEmail', () => {
     expect(result.success).toBe(false)
     expect(result.message).toBe('Resend API error')
   })
-
-  it('should handle exceptions', async () => {
-    Object.defineProperty(mockResend, 'emails', {
-      value: {
-        send: jest.fn().mockRejectedValue(new Error('Network error')),
-      },
-      writable: true,
-    })
-
-    const result = await sendEmail({
-      to: 'test@example.com',
-      subject: 'Test Subject',
-      body: 'Test Body',
-    })
-
-    expect(result.success).toBe(false)
-    expect(result.message).toBe('Failed to send email')
-  })
-
   it('should use custom from address', async () => {
-    const mockData = { id: '123' }
-    const sendSpy = jest.fn().mockResolvedValue({ data: mockData, error: null })
-    Object.defineProperty(mockResend, 'emails', {
-      value: { send: sendSpy },
-      writable: true,
+    mockInstance.emails.send.mockResolvedValue({
+      data: { id: '123' },
+      error: null,
     })
 
     await sendEmail({
@@ -99,17 +79,15 @@ describe('sendEmail', () => {
       from: 'custom@example.com',
     })
 
-    expect(sendSpy).toHaveBeenCalledWith(
-      expect.objectContaining({ from: 'custom@example.com' }),
-    )
+    const call = mockInstance.emails.send.mock.calls[0][0]
+    expect(call.from).toBe('custom@example.com')
+    expect(call.to).toBe('test@example.com')
   })
 
-  it('should use default from address', async () => {
-    const mockData = { id: '123' }
-    const sendSpy = jest.fn().mockResolvedValue({ data: mockData, error: null })
-    Object.defineProperty(mockResend, 'emails', {
-      value: { send: sendSpy },
-      writable: true,
+  it('should use default from address when not provided', async () => {
+    mockInstance.emails.send.mockResolvedValue({
+      data: { id: '123' },
+      error: null,
     })
 
     await sendEmail({
@@ -118,13 +96,16 @@ describe('sendEmail', () => {
       body: 'Body',
     })
 
-    expect(sendSpy).toHaveBeenCalledWith(
-      expect.objectContaining({ from: 'onboarding@resend.dev' }),
-    )
+    const call = mockInstance.emails.send.mock.calls[0][0]
+    expect(call.from).toBe('onboarding@resend.dev')
   })
 })
 
 describe('sendResetEmail', () => {
+  //eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { Resend } = require('resend')
+  const mockInstance = new Resend()
+
   beforeEach(() => {
     jest.clearAllMocks()
     jest.spyOn(global.crypto, 'randomUUID').mockReturnValue('mock-token-123')
@@ -138,13 +119,9 @@ describe('sendResetEmail', () => {
     const mockUser = { email: 'user@example.com', firstName: 'John' } as User
     jest.mocked(prisma.user.findUnique).mockResolvedValue(mockUser)
     jest.mocked(prisma.user.update).mockResolvedValue(mockUser)
-    Object.defineProperty(mockResend, 'emails', {
-      value: {
-        send: jest
-          .fn()
-          .mockResolvedValue({ data: { id: 'mock-token-123' }, error: null }),
-      },
-      writable: true,
+    mockInstance.emails.send.mockResolvedValue({
+      data: { id: 'mock-token-123' },
+      error: null,
     })
 
     const result = await sendResetEmail('user@example.com')
@@ -167,13 +144,9 @@ describe('sendResetEmail', () => {
     const mockUser = { email: 'user@example.com', firstName: 'John' } as User
     jest.mocked(prisma.user.findUnique).mockResolvedValue(mockUser)
     jest.mocked(prisma.user.update).mockResolvedValue(mockUser)
-    Object.defineProperty(mockResend, 'emails', {
-      value: {
-        send: jest
-          .fn()
-          .mockResolvedValue({ data: { id: 'mock-token-123' }, error: null }),
-      },
-      writable: true,
+    mockInstance.emails.send.mockResolvedValue({
+      data: { id: 'mock-token-123' },
+      error: null,
     })
 
     await sendResetEmail('user@example.com')

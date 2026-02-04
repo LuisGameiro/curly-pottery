@@ -1,4 +1,5 @@
-import nextJest from 'next/jest'
+//eslint-disable-next-line @typescript-eslint/no-require-imports
+const nextJest = require('next/jest')
 
 const createJestConfig = nextJest({
   dir: './',
@@ -10,7 +11,7 @@ const config = {
   // automock: false,
 
   // Stop running tests after `n` failures
-  // bail: 0,
+  bail: 0,
 
   // The directory where Jest should store its cached dependency information
   // cacheDirectory: "C:\\Users\\lgame\\AppData\\Local\\Temp\\jest",
@@ -98,7 +99,7 @@ const config = {
   // modulePathIgnorePatterns: [],
 
   // Activates notifications for test results
-  // notify: false,
+  // notify: true,
 
   // An enum that specifies notification mode. Requires { notify: true }
   // notifyMode: "failure-change",
@@ -195,6 +196,8 @@ const config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
+
+  silent: true,
   preset: 'ts-jest',
   setupFilesAfterEnv: [
     '<rootDir>/jest.setup.ts',

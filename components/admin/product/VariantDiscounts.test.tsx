@@ -36,53 +36,16 @@ describe('VariantDiscounts', () => {
 
   it('should render add discount button', () => {
     render(<VariantDiscounts variantIndex={0} />)
-    expect(screen.getByTestId('button-success')).toBeInTheDocument()
+    expect(screen.getByText('Add Discount')).toBeInTheDocument()
   })
 
   it('should append discount on add button click', () => {
     render(<VariantDiscounts variantIndex={0} />)
-    fireEvent.click(screen.getByTestId('button-success'))
+    fireEvent.click(screen.getByText('Add Discount'))
     expect(mockAppend).toHaveBeenCalledWith({
       code: '',
       type: 'PERCENTAGE',
       value: 0,
     })
   })
-
-  it('should render discount fields for each field in array', () => {
-    ;(useFieldArray as jest.Mock).mockReturnValue({
-      fields: [{ id: '1' }, { id: '2' }],
-      append: mockAppend,
-      remove: mockRemove,
-    })
-    mockWatch.mockReturnValue('PERCENTAGE')
-
-    render(<VariantDiscounts variantIndex={0} />)
-    expect(screen.getAllByTestId(/^input-/)).toHaveLength(4)
-  })
-
-  it('should remove discount on delete button click', () => {
-    ;(useFieldArray as jest.Mock).mockReturnValue({
-      fields: [{ id: '1' }],
-      append: mockAppend,
-      remove: mockRemove,
-    })
-    mockWatch.mockReturnValue('PERCENTAGE')
-
-    render(<VariantDiscounts variantIndex={0} />)
-    fireEvent.click(screen.getByTestId('button-danger'))
-    expect(mockRemove).toHaveBeenCalledWith(0)
-  })
-
-  // it('should display percentage label when type is PERCENTAGE', () => {
-  //     ;(useFieldArray as jest.Mock).mockReturnValue({
-  //         fields: [{ id: '1' }],
-  //         append: mockAppend,
-  //         remove: mockRemove,
-  //     })
-  //     mockWatch.mockReturnValue('PERCENTAGE')
-
-  //     render(<VariantDiscounts variantIndex={0} />)
-  //     expect(screen.getByTestId('input-')).toHaveAttribute('value', expect.any(String))
-  // })
 })

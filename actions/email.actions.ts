@@ -38,6 +38,7 @@ export async function sendEmail({
       data: data,
     }
   } catch (error) {
+    console.log('THE ACTUAL ERROR:', error) // See what's actually happening
     return {
       success: false,
       message: 'Failed to send email',
