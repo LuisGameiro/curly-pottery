@@ -1,5 +1,9 @@
 {
   "css.lint.unknownAtRules": "ignore",
   "scss.lint.unknownAtRules": "ignore",
-  "less.lint.unknownAtRules": "ignore"
+  "less.lint.unknownAtRules": "ignore",
+  "sonarlint.connectedMode.project": {
+    "connectionId": "luisgameiro",
+    "projectKey": "LuisGameiro_curly-pottery"
+  }
 }
