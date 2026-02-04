@@ -59,6 +59,14 @@ export async function sendResetEmail(
         errors: new Error('User not found'),
       }
 
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000)
+    if (user.resetTokenExpiry && user.resetTokenExpiry > fiveMinutesAgo) {
+      return {
+        success: false,
+        message: 'Please wait a few minutes before requesting another link.',
+      }
+    }
+
     const token = crypto.randomUUID()
     const expires = new Date(Date.now() + 3600000)
 
