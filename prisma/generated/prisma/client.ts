@@ -14,7 +14,7 @@ import * as path from 'node:path'
 import { fileURLToPath } from 'node:url'
 globalThis['__dirname'] = path.dirname(fileURLToPath(import.meta.url))
 
-import * as runtime from '@prisma/client/runtime/library'
+import * as runtime from '@prisma/client/runtime/client'
 import * as $Enums from './enums.ts'
 import * as $Class from './internal/class.ts'
 import * as Prisma from './internal/prismaNamespace.ts'
@@ -32,9 +32,9 @@ export * from './enums.ts'
  * const categories = await prisma.category.findMany()
  * ```
  *
- * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
+ * Read more in our [docs](https://pris.ly/d/client).
  */
-export const PrismaClient = $Class.getPrismaClientClass(__dirname)
+export const PrismaClient = $Class.getPrismaClientClass()
 export type PrismaClient<
   LogOpts extends Prisma.LogLevel = never,
   OmitOpts extends Prisma.PrismaClientOptions['omit'] =
@@ -43,13 +43,6 @@ export type PrismaClient<
     runtime.Types.Extensions.DefaultArgs,
 > = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>
 export { Prisma }
-
-// file annotations for bundling tools to include these files
-path.join(__dirname, 'query_engine-windows.dll.node')
-path.join(
-  process.cwd(),
-  'prisma/generated/prisma/query_engine-windows.dll.node',
-)
 
 /**
  * Model Category

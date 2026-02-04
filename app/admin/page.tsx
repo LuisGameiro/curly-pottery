@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { StatCard } from '@components/admin/StatCard'
 import constructMetadata from '@components/common/SEO'
 import { Container, Text } from '@components/ui'
