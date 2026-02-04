@@ -250,7 +250,7 @@ describe('createOrder', () => {
       callback(mockTx),
     )
 
-    const result = await createOrder({
+    const result = await createOrder('checkoutId123', {
       userId: 'user1',
       address: { street: '123 Main St' },
       firstName: 'John',
@@ -273,7 +273,12 @@ describe('createOrder', () => {
   })
 
   it('should create order without userId', async () => {
-    const mockOrder = { id: '2', userId: null, status: 'PENDING' }
+    const mockOrder = {
+      id: '2',
+      userId: null,
+      status: 'PENDING',
+      createdAt: new Date(),
+    }
 
     const mockTx = {
       productVariant: {
@@ -286,13 +291,16 @@ describe('createOrder', () => {
       order: {
         create: jest.fn().mockResolvedValue(mockOrder),
       },
+      user: {
+        update: jest.fn().mockResolvedValue({}),
+      },
     }
 
     ;(prisma.$transaction as jest.Mock).mockImplementation((callback) =>
       callback(mockTx),
     )
 
-    const result = await createOrder({
+    const result = await createOrder('checkoutId123', {
       userId: '',
       address: {},
       firstName: 'Jane',
@@ -324,7 +332,7 @@ describe('createOrder', () => {
       callback(mockTx),
     )
 
-    const result = await createOrder({
+    const result = await createOrder('checkoutId123', {
       userId: 'user1',
       address: {},
       firstName: 'John',
@@ -359,7 +367,7 @@ describe('createOrder', () => {
       callback(mockTx),
     )
 
-    const result = await createOrder({
+    const result = await createOrder('checkoutId123', {
       userId: 'user1',
       address: {},
       firstName: 'John',
@@ -384,7 +392,7 @@ describe('createOrder', () => {
     const mockError = new Error('Transaction failed')
     ;(prisma.$transaction as jest.Mock).mockRejectedValue(mockError)
 
-    const result = await createOrder({
+    const result = await createOrder('checkoutId123', {
       userId: 'user1',
       address: {},
       firstName: 'John',
@@ -408,7 +416,7 @@ describe('createOrder', () => {
   it('should handle non-Error exceptions', async () => {
     ;(prisma.$transaction as jest.Mock).mockRejectedValue('Unknown error')
 
-    const result = await createOrder({
+    const result = await createOrder('checkoutId123', {
       userId: 'user1',
       address: {},
       firstName: 'John',

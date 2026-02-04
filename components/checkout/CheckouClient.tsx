@@ -98,7 +98,7 @@ export default function CheckouClient() {
     try {
       setLoading(true)
 
-      const orderResponse = await createOrder(currentValues)
+      const orderResponse = await createOrder(checkoutId, currentValues)
 
       if (!orderResponse.success) {
         toast.error(orderResponse.message)

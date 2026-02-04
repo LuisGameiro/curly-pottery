@@ -97,23 +97,44 @@ export async function getOrderById(
   }
 }
 
-export async function createOrder({
-  userId,
-  address,
-  firstName,
-  lastName,
-  phone,
-  email,
-  lineItems,
-  discounts,
-  subtotalPrice,
-  totalPrice,
-  taxes,
-  currency,
-  shippingPrice,
-  shippingMethod,
-}: CreateOrder): Promise<ActionResponse<Order | null>> {
+export async function createOrder(
+  checkoutId: string,
+  {
+    userId,
+    address,
+    firstName,
+    lastName,
+    phone,
+    email,
+    lineItems,
+    discounts,
+    subtotalPrice,
+    totalPrice,
+    taxes,
+    currency,
+    shippingPrice,
+    shippingMethod,
+  }: CreateOrder,
+): Promise<ActionResponse<Order | null>> {
   try {
+    const verifyResponse = await fetch(
+      `https://api.sumup.com/v0.1/checkouts/${checkoutId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.SUMUP_API}`,
+        },
+      },
+    )
+
+    const paymentInfo = await verifyResponse.json()
+
+    if (paymentInfo.status !== 'PAID') {
+      return {
+        success: false,
+        message: 'Payment verification failed. Please contact support.',
+      }
+    }
+
     const order = await prisma.$transaction(async (tx) => {
       for (const item of lineItems) {
         const variant = await tx.productVariant.findUnique({
