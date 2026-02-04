@@ -42,7 +42,7 @@ export default function ResetPasswordPage() {
     setLoading(true)
     try {
       const result = await resetPassword({
-        email: token,
+        token: token,
         newPassword: data.password,
       })
 

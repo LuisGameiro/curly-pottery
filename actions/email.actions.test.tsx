@@ -182,7 +182,7 @@ describe('resetPassword', () => {
     jest.mocked(prisma.user.update).mockResolvedValue({} as User)
 
     const result = await resetPassword({
-      email: 'user@example.com',
+      token: '123reset-token',
       newPassword: 'newPassword123',
     })
 
@@ -198,7 +198,7 @@ describe('resetPassword', () => {
     jest.mocked(prisma.user.update).mockResolvedValue({} as User)
 
     await resetPassword({
-      email: 'user@example.com',
+      token: '123reset-token',
       newPassword: 'newPassword123',
     })
 
@@ -212,12 +212,12 @@ describe('resetPassword', () => {
       .mockResolvedValue({} as User)
 
     await resetPassword({
-      email: 'user@example.com',
+      token: '123reset-token',
       newPassword: 'newPassword123',
     })
 
     expect(updateSpy).toHaveBeenCalledWith({
-      where: { email: 'user@example.com' },
+      where: { token: '123reset-token' },
       data: {
         password: 'hashed-password-123',
         resetToken: null,
@@ -230,7 +230,7 @@ describe('resetPassword', () => {
     jest.mocked(hashPassword).mockRejectedValue(new Error('Hash error'))
 
     const result = await resetPassword({
-      email: 'user@example.com',
+      token: '123reset-token',
       newPassword: 'newPassword123',
     })
 
@@ -242,7 +242,7 @@ describe('resetPassword', () => {
     jest.mocked(hashPassword).mockRejectedValue('Unknown error')
 
     const result = await resetPassword({
-      email: 'user@example.com',
+      token: '123reset-token',
       newPassword: 'newPassword123',
     })
 

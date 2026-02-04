@@ -92,23 +92,35 @@ export async function sendResetEmail(
 }
 
 export async function resetPassword({
-  email,
+  token,
   newPassword,
 }: {
-  email: string
+  token: string
   newPassword: string
 }): Promise<ActionResponse<null>> {
   try {
     const hashedPassword = await hashPassword(newPassword)
 
-    await prisma.user.update({
-      where: { email },
+    const updatedUser = await prisma.user.updateMany({
+      where: {
+        resetToken: token,
+        resetTokenExpiry: {
+          gt: new Date(),
+        },
+      },
       data: {
         password: hashedPassword,
         resetToken: null,
         resetTokenExpiry: null,
       },
     })
+    if (updatedUser.count === 0) {
+      return {
+        success: false,
+        message: 'Invalid or expired reset token.',
+        errors: null,
+      }
+    }
 
     return {
       success: true,

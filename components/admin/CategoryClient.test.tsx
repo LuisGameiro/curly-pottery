@@ -49,11 +49,11 @@ const mockRouter = {
   refresh: jest.fn(),
 }
 
-const mockUpsertCategory = jest.requireMock(
-  'actions/category.actions',
-).upsertCategory
-const mockSyncImages = jest.requireMock('actions/images.actions').syncImages
-const mockToast = jest.requireMock('sonner').toast
+// const mockUpsertCategory = jest.requireMock(
+//   'actions/category.actions',
+// ).upsertCategory
+// const mockSyncImages = jest.requireMock('actions/images.actions').syncImages
+// const mockToast = jest.requireMock('sonner').toast
 // const mockSlugify = jest.requireMock('@lib/slugify').slugify
 
 if (typeof window.URL.createObjectURL === 'undefined') {
