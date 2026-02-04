@@ -1,6 +1,7 @@
 import { CSSProperties, ElementType } from 'react'
 import s from './Text.module.css'
 import { cn } from '@lib/utils'
+import purify from 'dompurify'
 
 interface TextProps {
   variant?: Variant
@@ -50,7 +51,7 @@ const Text = ({
 
   const htmlContentProps = html
     ? {
-        dangerouslySetInnerHTML: { __html: html },
+        dangerouslySetInnerHTML: { __html: purify.sanitize(html) },
       }
     : {}
 
