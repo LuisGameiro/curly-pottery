@@ -27,7 +27,7 @@ const ProductOptions = ({ product, setVariant }: ProductOptionsProps) => {
   const allSizes = Object.keys(matrix)
   const allColors = Array.from(
     new Set(product.variants.flatMap((v: Variant) => v.colorName)),
-  )
+  ) as string[]
 
   return (
     <div className="flex flex-wrap gap-12">

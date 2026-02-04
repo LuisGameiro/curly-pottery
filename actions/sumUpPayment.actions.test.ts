@@ -36,10 +36,7 @@ describe('createSumUpCheckout', () => {
       json: async () => ({ id: 'checkout-123' }),
     })
 
-    const result = await createSumUpCheckout({
-      amount: 100,
-      cartId: 'cart-456',
-    })
+    const result = await createSumUpCheckout('cart-456')
 
     expect(result.success).toBe(true)
     expect(result.data).toBe('checkout-123')
@@ -58,10 +55,7 @@ describe('createSumUpCheckout', () => {
       json: async () => ({ message: 'Invalid amount' }),
     })
 
-    const result = await createSumUpCheckout({
-      amount: -50,
-      cartId: 'cart-456',
-    })
+    const result = await createSumUpCheckout('cart-456')
 
     expect(result.success).toBe(false)
     expect(result.message).toBe('Invalid amount')
@@ -73,10 +67,7 @@ describe('createSumUpCheckout', () => {
     } as Session)
     global.fetch = jest.fn().mockRejectedValue(new Error('Network error'))
 
-    const result = await createSumUpCheckout({
-      amount: 100,
-      cartId: 'cart-456',
-    })
+    const result = await createSumUpCheckout('cart-456')
 
     expect(result.success).toBe(false)
     expect(result.message).toBe('Network error')

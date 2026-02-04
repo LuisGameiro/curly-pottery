@@ -3,17 +3,19 @@
 import { authOptions } from '@lib/auth/authOptions'
 import { ActionResponse } from '@lib/types/types'
 import { getServerSession } from 'next-auth'
+import { prisma } from 'prisma/prisma'
 
-export async function createSumUpCheckout({
-  amount,
-  cartId,
-}: {
-  amount: number
-  cartId: string
-}): Promise<ActionResponse<string | null>> {
+export async function createSumUpCheckout(
+  cartId: string,
+): Promise<ActionResponse<string | null>> {
   try {
     const session = await getServerSession(authOptions)
     const userEmail = session?.user?.email
+    const cart = await prisma.cart.findUnique({
+      where: { id: cartId },
+    })
+
+    if (!cart) throw new Error('Cart not found')
 
     const response = await fetch('https://api.sumup.com/v0.1/checkouts', {
       method: 'POST',
@@ -23,8 +25,8 @@ export async function createSumUpCheckout({
       },
       body: JSON.stringify({
         checkout_reference: `ORDER-${cartId}-${Date.now()}`,
-        amount: amount,
-        currency: 'GBP',
+        amount: cart.totalPrice,
+        currency: cart.currency,
         merchant_code: process.env.SUMUP_MERCHANT_CODE,
         pay_to_email: userEmail,
       }),

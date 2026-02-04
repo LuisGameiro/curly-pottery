@@ -3,9 +3,9 @@ import Image from 'next/image'
 import { ArrowLeft, Package, MapPin, User } from 'lucide-react'
 import Link from 'next/link'
 import { getOrderById } from 'actions/order.actions'
-import OrderStatusUpdate from '../../../../components/admin/orderStatusUpdate'
+import OrderStatusUpdate from '@components/admin/orderStatusUpdate'
 import { showCurrency } from '@lib/calculate-price'
-import { Address, CartLineItem, Order } from '@lib/types/types'
+import { Address, CartLineItem, CurrencyCode, Order } from '@lib/types/types'
 import notFound from 'app/not-found'
 import Loading from 'app/loading'
 import { Suspense } from 'react'
@@ -100,7 +100,7 @@ export default async function OrderDetailsPage({
                     </div>
                     <div className="text-right">
                       <Text className="text-sm font-medium">
-                        {showCurrency[order.currency]}{' '}
+                        {showCurrency[order.currency as CurrencyCode]}{' '}
                         {Number(item.price).toFixed(2)}
                       </Text>
                       <Text className="text-xs text-muted">
@@ -114,7 +114,7 @@ export default async function OrderDetailsPage({
                 <div className="flex justify-between text-sm">
                   <span className="text-muted">Subtotal</span>
                   <span>
-                    {showCurrency[order.currency]}{' '}
+                    {showCurrency[order.currency as CurrencyCode]}{' '}
                     {order.subtotalPrice.toFixed(2)}
                   </span>
                 </div>
@@ -123,14 +123,15 @@ export default async function OrderDetailsPage({
                     Shipping {order.taxesIncluded && '(Included)'}
                   </span>
                   <span>
-                    {showCurrency[order.currency]}{' '}
+                    {showCurrency[order.currency as CurrencyCode]}{' '}
                     {Number(order.shippingPrice).toFixed(2) || 0.0}
                   </span>
                 </div>
                 <div className="flex justify-between text-lg font-bold pt-2 border-t">
                   <span>Total</span>
                   <span>
-                    {showCurrency[order.currency]} {order.totalPrice.toFixed(2)}
+                    {showCurrency[order.currency as CurrencyCode]}{' '}
+                    {order.totalPrice.toFixed(2)}
                   </span>
                 </div>
               </div>

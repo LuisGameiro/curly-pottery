@@ -7,6 +7,7 @@ import {
   OrderWithUser,
   ActionResponse,
   CreateOrder,
+  ProductWithVariantsCategories,
 } from '@lib/types/types'
 import { revalidatePath } from 'next/cache'
 
@@ -135,63 +136,65 @@ export async function createOrder(
       }
     }
 
-    const order = await prisma.$transaction(async (tx) => {
-      for (const item of lineItems) {
-        const variant = await tx.productVariant.findUnique({
-          where: { id: item.variantId },
-          select: { stock: true, product: { select: { name: true } } },
-        })
+    const order = await prisma.$transaction(
+      async (tx: ProductWithVariantsCategories) => {
+        for (const item of lineItems) {
+          const variant = await tx.productVariant.findUnique({
+            where: { id: item.variantId },
+            select: { stock: true, product: { select: { name: true } } },
+          })
 
-        if (!variant) {
-          throw new Error(`Variant not found for ID: ${item.variantId}`)
+          if (!variant) {
+            throw new Error(`Variant not found for ID: ${item.variantId}`)
+          }
+
+          if (variant.stock < item.quantity) {
+            throw new Error(
+              `Insufficient stock for ${variant.product.name}. Available: ${variant.stock}`,
+            )
+          }
+
+          await tx.productVariant.update({
+            where: { id: item.variantId },
+            data: {
+              stock: { decrement: item.quantity },
+            },
+          })
         }
 
-        if (variant.stock < item.quantity) {
-          throw new Error(
-            `Insufficient stock for ${variant.product.name}. Available: ${variant.stock}`,
-          )
-        }
-
-        await tx.productVariant.update({
-          where: { id: item.variantId },
+        const newOrder = await tx.order.create({
           data: {
-            stock: { decrement: item.quantity },
+            lineItems: lineItems,
+            lastName,
+            firstName,
+            email,
+            phone,
+            discounts: discounts || [],
+            currency: currency || 'GBP',
+            shippingAddress: address || {},
+            billingAddress: address || {},
+            status: 'PENDING',
+            taxes,
+            shippingPrice,
+            subtotalPrice: Number(subtotalPrice) || 0,
+            totalPrice: Number(totalPrice) || 0,
+            shippingMethod,
+            ...(userId && {
+              user: { connect: { id: userId } },
+            }),
           },
         })
-      }
 
-      const newOrder = await tx.order.create({
-        data: {
-          lineItems: lineItems,
-          lastName,
-          firstName,
-          email,
-          phone,
-          discounts: discounts || [],
-          currency: currency || 'GBP',
-          shippingAddress: address || {},
-          billingAddress: address || {},
-          status: 'PENDING',
-          taxes,
-          shippingPrice,
-          subtotalPrice: Number(subtotalPrice) || 0,
-          totalPrice: Number(totalPrice) || 0,
-          shippingMethod,
-          ...(userId && {
-            user: { connect: { id: userId } },
-          }),
-        },
-      })
+        if (userId) {
+          await tx.user.update({
+            where: { id: userId },
+            data: { cart: {} },
+          })
+        }
 
-      if (userId) {
-        await tx.user.update({
-          where: { id: userId },
-          data: { cart: {} },
-        })
-      }
-
-      return newOrder
-    })
+        return newOrder
+      },
+    )
 
     return {
       success: true,

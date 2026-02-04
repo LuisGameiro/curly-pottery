@@ -14,6 +14,7 @@ import {
   ProductWithVariantsCategories,
   Variant,
   Discount,
+  CurrencyCode,
 } from '@lib/types/types'
 import { toast } from 'sonner'
 import { Undo2 } from 'lucide-react'
@@ -108,11 +109,11 @@ const ProductSidebar = ({
           {price.hasDiscount ? (
             <div className="flex items-center gap-4 text-3xl sm:text-4xl font-semibold'">
               <span className="line-through opacity-40">
-                {showCurrency[variant.currency]}
+                {showCurrency[variant.currency as CurrencyCode]}
                 {price.price.toFixed(2)}
               </span>
               <span>
-                {showCurrency[variant.currency]}
+                {showCurrency[variant.currency as CurrencyCode]}
                 {price.finalPrice.toFixed(2)}
               </span>
 
@@ -123,7 +124,7 @@ const ProductSidebar = ({
           ) : (
             <div className="text-3xl sm:text-4xl  font-semibold">
               <span>
-                {showCurrency[variant.currency]}
+                {showCurrency[variant.currency as CurrencyCode]}
                 {price.finalPrice.toFixed(2)}
               </span>
             </div>
@@ -184,10 +185,9 @@ const ProductSidebar = ({
         )}
       </section>
 
-      <Text
-        className="wrap-break-word w-full max-w-xl text-justify"
-        html={product.description}
-      />
+      <Text className="wrap-break-word w-full max-w-xl text-justify">
+        {product.description}
+      </Text>
 
       <section>
         <Collapse title={'Product Details'}>

@@ -109,7 +109,7 @@ export default function ProductClient({
       const updatedVariants = await Promise.all(
         data.variants.map(async (variant) => {
           const originalVariant = initialVariants.find(
-            (v) => v.id === variant?.id,
+            (v: Variant) => v.id === variant?.id,
           )
           const oldImages = originalVariant?.images ?? []
           const variantImages = await syncImages({

@@ -26,8 +26,10 @@ export default function ProductTable({
 
     setIsLoading(id)
     try {
-      const productToDelete = products.find((p) => p.id === id)!
-      const images = productToDelete.variants.flatMap((v) => v.images)
+      const productToDelete = products.find(
+        (p: ProductWithVariantsCategories) => p.id === id,
+      )!
+      const images = productToDelete.variants.flatMap((v: Variant) => v.images)
       images.push(...productToDelete.images)
 
       const response = await deleteProduct({ id, images })

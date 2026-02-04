@@ -39,3 +39,21 @@ export async function deleteCart(cartId: string) {
     where: { id: cartId },
   })
 }
+
+export async function updateCartPrice(
+  cartId: string,
+  subtotalPrice: number,
+  totalPrice: number,
+  taxes: number,
+  shippingPrice: number,
+) {
+  await prisma.cart.update({
+    where: { id: cartId },
+    data: {
+      subtotalPrice,
+      totalPrice: totalPrice + taxes + shippingPrice,
+      taxes,
+      shippingPrice,
+    },
+  })
+}

@@ -19,6 +19,7 @@ import { ClientOrderEmail } from '@lib/emails/ClientOrderEmail'
 import { showCurrency } from '@lib/calculate-price'
 import { AdminOrderEmail } from '@lib/emails/AdminOrderEmail'
 import { trackEvent } from '@lib/analytics/trackEvents'
+import { updateCartPrice } from 'actions/cart.actions'
 
 export default function CheckouClient() {
   const { data, deleteAll } = useCart()
@@ -60,15 +61,19 @@ export default function CheckouClient() {
     ),
   })
 
-  const onInformationSubmit = () => setStep(2)
+  const onInformationSubmit = async () => setStep(2)
 
   const nextToPayment = async () => {
     try {
       setLoading(true)
-      const response = await createSumUpCheckout({
-        amount: currentValues.totalPrice,
+      await updateCartPrice(
         cartId,
-      })
+        currentValues.subtotalPrice,
+        currentValues.totalPrice,
+        currentValues.taxes,
+        currentValues.shippingPrice,
+      )
+      const response = await createSumUpCheckout(cartId)
       trackEvent('before_purchase', {
         transaction_id: response.data,
         userId: currentValues?.userId,

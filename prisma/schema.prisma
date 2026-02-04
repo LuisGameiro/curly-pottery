@@ -13,6 +13,7 @@ generator client {
 }
 
 datasource db {
+  url= env("DB_DATABASE_URL")
   provider = "postgresql"
 }
 
@@ -121,6 +122,7 @@ model Cart {
   discounts              Json?
   subtotalPrice          Float        @default(0)
   totalPrice             Float        @default(0)
+  shippingPrice          Float        @default(0)
   taxes                  Float        @default(0)
 
   createdAt              DateTime     @default(now())
