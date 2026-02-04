@@ -9,6 +9,7 @@ import {
 } from '@lib/types/types'
 import { prisma } from 'prisma/prisma'
 import { deleteBlob } from './serverImages.action'
+import { auth } from 'app/api/auth/[...nextauth]/route'
 
 export async function getProductBySlug(
   slug: string | null,
@@ -91,6 +92,16 @@ export async function deleteProduct({
   images: string[]
 }): Promise<ActionResponse<Product | null>> {
   try {
+    const session = await auth()
+
+    if (!session || session.user.role !== 'ADMIN') {
+      return {
+        success: false,
+        message: 'Unauthorized: Administrative privileges required.',
+        errors: null,
+      }
+    }
+
     await Promise.all(
       images.map(async (img) => {
         await deleteBlob(img)
@@ -124,6 +135,16 @@ export async function toggleVisibility({
   state: boolean
 }): Promise<ActionResponse<Product>> {
   try {
+    const session = await auth()
+
+    if (!session || session.user.role !== 'ADMIN') {
+      return {
+        success: false,
+        message: 'Unauthorized: Administrative privileges required.',
+        errors: null,
+      }
+    }
+
     const product = await prisma.product.update({
       where: { id },
       data: {
@@ -318,6 +339,15 @@ export async function upsertProduct(
   payload: ProductInput,
 ): Promise<ActionResponse<Product | null>> {
   try {
+    const session = await auth()
+
+    if (!session || session.user.role !== 'ADMIN') {
+      return {
+        success: false,
+        message: 'Unauthorized: Administrative privileges required.',
+        errors: null,
+      }
+    }
     const {
       categoryIds,
       variants,

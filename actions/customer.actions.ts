@@ -11,6 +11,7 @@ import {
 import { cache } from 'react'
 import { registerSchema } from '@lib/form-validator'
 import { hashPassword } from '@lib/auth/password'
+import { auth } from 'app/api/auth/[...nextauth]/route'
 
 export async function getAllCustomers(): Promise<
   ActionResponse<UserWithOrders[]>
@@ -73,6 +74,15 @@ export async function updateNotes(
   notes: string,
 ): Promise<ActionResponse<User | null>> {
   try {
+    const session = await auth()
+
+    if (!session || session.user.role !== 'ADMIN') {
+      return {
+        success: false,
+        message: 'Unauthorized: Administrative privileges required.',
+        errors: null,
+      }
+    }
     const user = await prisma.user.update({
       where: { id },
       data: { notes },

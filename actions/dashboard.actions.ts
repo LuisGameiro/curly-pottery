@@ -1,6 +1,7 @@
 'use server'
 
 import { ActionResponse } from '@lib/types/types'
+import { auth } from 'app/api/auth/[...nextauth]/route'
 import { prisma } from 'prisma/prisma'
 
 export interface DashboardStats {
@@ -18,6 +19,16 @@ export async function getDashboardStats(): Promise<
   ActionResponse<DashboardStats>
 > {
   try {
+    const session = await auth()
+
+    if (!session || session.user.role !== 'ADMIN') {
+      return {
+        success: false,
+        message: 'Unauthorized: Administrative privileges required.',
+        errors: null,
+      }
+    }
+
     const [
       totalCategories,
       totalProducts,

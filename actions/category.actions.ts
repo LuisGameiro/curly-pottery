@@ -5,6 +5,7 @@ import { prisma } from 'prisma/prisma'
 import { Category, ActionResponse } from '@lib/types/types'
 import { slugify } from '@lib/slugify'
 import { deleteBlob } from './serverImages.action'
+import { auth } from 'app/api/auth/[...nextauth]/route'
 
 export async function getAllCategories(): Promise<ActionResponse<Category[]>> {
   try {
@@ -68,6 +69,15 @@ export async function upsertCategory({
   image: string
 }): Promise<ActionResponse<Category>> {
   try {
+    const session = await auth()
+
+    if (!session || session.user.role !== 'ADMIN') {
+      return {
+        success: false,
+        message: 'Unauthorized: Administrative privileges required.',
+        errors: null,
+      }
+    }
     let category
     if (id) {
       category = await prisma.category.update({
@@ -113,6 +123,15 @@ export async function deleteCategory({
   image: string
 }): Promise<ActionResponse<Category>> {
   try {
+    const session = await auth()
+
+    if (!session || session.user.role !== 'ADMIN') {
+      return {
+        success: false,
+        message: 'Unauthorized: Administrative privileges required.',
+        errors: null,
+      }
+    }
     await deleteBlob(image)
 
     const category = await prisma.category.delete({
