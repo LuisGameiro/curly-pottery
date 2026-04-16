@@ -38,7 +38,7 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
         <div className={s.main}>
           <ProductSlider key={variant.id}>
             {variant.images.map((image: string, i: number) => (
-              <div key={i} className={s.imageContainer}>
+              <div key={image} className={s.imageContainer}>
                 <Image
                   className={s.img}
                   src={image}
@@ -47,10 +47,6 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
                   width={1000}
                   height={1000}
                   quality={100}
-                  style={{
-                    aspectRatio: '1/1',
-                    objectFit: 'cover',
-                  }}
                   placeholder="blur"
                   blurDataURL={shimmerDataUrl(500, 500)}
                 />

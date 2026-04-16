@@ -1,7 +1,8 @@
 'use server'
 
+import { authOptions } from '@lib/auth/authOptions'
 import { ActionResponse } from '@lib/types/types'
-import { auth } from 'app/api/auth/[...nextauth]/route'
+import { getServerSession } from 'next-auth'
 import { prisma } from 'prisma/prisma'
 
 export interface DashboardStats {
@@ -19,9 +20,9 @@ export async function getDashboardStats(): Promise<
   ActionResponse<DashboardStats>
 > {
   try {
-    const session = await auth()
+    const session = await getServerSession(authOptions)
 
-    if (!session || session.user.role !== 'ADMIN') {
+    if (session?.user?.role !== 'ADMIN') {
       return {
         success: false,
         message: 'Unauthorized: Administrative privileges required.',

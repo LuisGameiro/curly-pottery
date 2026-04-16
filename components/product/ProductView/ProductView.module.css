@@ -46,3 +46,15 @@
     @apply col-span-4;
   }
 }
+
+.img {
+  object-fit: contain;
+  object-position: center;
+  height: 100%;
+}
+
+@media (min-width: 768px) {
+  .img {
+    object-fit: contain !important;
+  }
+}

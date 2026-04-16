@@ -61,9 +61,9 @@ export async function generateMetadata({
 
 export default async function ProductPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ slug: string }>
-}) {
+}>) {
   const { slug } = await params
   const response = await getProductBySlug(slug)
 

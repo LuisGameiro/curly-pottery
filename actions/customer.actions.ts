@@ -11,7 +11,8 @@ import {
 import { cache } from 'react'
 import { registerSchema } from '@lib/form-validator'
 import { hashPassword } from '@lib/auth/password'
-import { auth } from 'app/api/auth/[...nextauth]/route'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@lib/auth/authOptions'
 
 export async function getAllCustomers(): Promise<
   ActionResponse<UserWithOrders[]>
@@ -74,9 +75,9 @@ export async function updateNotes(
   notes: string,
 ): Promise<ActionResponse<User | null>> {
   try {
-    const session = await auth()
+    const session = await getServerSession(authOptions)
 
-    if (!session || session.user.role !== 'ADMIN') {
+    if (session?.user?.role !== 'ADMIN') {
       return {
         success: false,
         message: 'Unauthorized: Administrative privileges required.',

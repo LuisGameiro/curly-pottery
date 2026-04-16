@@ -9,7 +9,8 @@ import {
 } from '@lib/types/types'
 import { prisma } from 'prisma/prisma'
 import { deleteBlob } from './serverImages.action'
-import { auth } from 'app/api/auth/[...nextauth]/route'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@lib/auth/authOptions'
 
 export async function getProductBySlug(
   slug: string | null,
@@ -92,9 +93,9 @@ export async function deleteProduct({
   images: string[]
 }): Promise<ActionResponse<Product | null>> {
   try {
-    const session = await auth()
+    const session = await getServerSession(authOptions)
 
-    if (!session || session.user.role !== 'ADMIN') {
+    if (session?.user?.role !== 'ADMIN') {
       return {
         success: false,
         message: 'Unauthorized: Administrative privileges required.',
@@ -135,7 +136,7 @@ export async function toggleVisibility({
   state: boolean
 }): Promise<ActionResponse<Product>> {
   try {
-    const session = await auth()
+    const session = await getServerSession(authOptions)
 
     if (!session || session.user.role !== 'ADMIN') {
       return {
@@ -339,9 +340,9 @@ export async function upsertProduct(
   payload: ProductInput,
 ): Promise<ActionResponse<Product | null>> {
   try {
-    const session = await auth()
+    const session = await getServerSession(authOptions)
 
-    if (!session || session.user.role !== 'ADMIN') {
+    if (session?.user?.role !== 'ADMIN') {
       return {
         success: false,
         message: 'Unauthorized: Administrative privileges required.',
