@@ -5,6 +5,7 @@ export const metadata = constructMetadata({
   title: 'Privacy Policy',
   description:
     'Learn about Curly Pottery’s commitment to protecting your personal data and privacy. Read our comprehensive Privacy Policy to understand how we handle your information in compliance with GDPR regulations.',
+  canonical: '/privacy',
 })
 export default function PrivacyPolicy() {
   const lastUpdated = 'January 18, 2026'

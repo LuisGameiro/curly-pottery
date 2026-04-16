@@ -43,6 +43,33 @@ enum SizeNames {
   XXL
 }
 
+enum NewsletterSubscriberStatus {
+  SUBSCRIBED
+  UNSUBSCRIBED
+  BOUNCED
+}
+
+enum NewsletterSubscriberSource {
+  GUEST
+  REGISTER
+  ADMIN_SYNC
+  ADMIN_MANUAL
+}
+
+enum NewsletterCampaignStatus {
+  DRAFT
+  QUEUED
+  COMPLETED
+  CANCELLED
+}
+
+enum NewsletterDeliveryStatus {
+  PENDING
+  SENT
+  FAILED
+  SKIPPED
+}
+
 /**
  * -------------------- CATEGORY --------------------
  */
@@ -69,6 +96,7 @@ model Product {
   images            String[]
   variants          ProductVariant[] 
   categories        Category[]
+  newsletterCampaignProducts NewsletterCampaignProduct[]
   requiresShipping  Boolean     @default(true)
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
@@ -205,6 +233,7 @@ model User {
     addresses       Address[]
     orders          Order[]
     cart            Cart? 
+    newsletterSubscriber NewsletterSubscriber?
 
     createdAt       DateTime  @default(now())
     updatedAt       DateTime  @updatedAt
@@ -212,4 +241,103 @@ model User {
     resetToken       String?  @unique
     resetTokenExpiry DateTime?
 }
+
+  model NewsletterSubscriber {
+    id                String                     @id @default(cuid())
+    email             String                     @unique
+    firstName         String?
+    lastName          String?
+    status            NewsletterSubscriberStatus @default(SUBSCRIBED)
+    source            NewsletterSubscriberSource @default(GUEST)
+    unsubscribeToken  String                     @unique @default(cuid())
+    subscribedAt      DateTime                   @default(now())
+    unsubscribedAt    DateTime?
+    userId            String?                    @unique
+    user              User?                      @relation(fields: [userId], references: [id], onDelete: SetNull)
+    deliveries        NewsletterDelivery[]
+    clicks            NewsletterLinkClick[]
+    createdAt         DateTime                   @default(now())
+    updatedAt         DateTime                   @updatedAt
+
+    @@index([status, createdAt])
+  }
+
+  model NewsletterCampaign {
+    id             String                   @id @default(cuid())
+    name           String
+    subject        String
+    previewText    String?
+    heading        String
+    message        String
+    ctaLabel       String?
+    ctaUrl         String?
+    status         NewsletterCampaignStatus @default(DRAFT)
+    dailySendLimit Int                      @default(50)
+    recipientCount Int                      @default(0)
+    sentCount      Int                      @default(0)
+    failedCount    Int                      @default(0)
+    openedCount    Int                      @default(0)
+    clickedCount   Int                      @default(0)
+    queuedAt       DateTime?
+    completedAt    DateTime?
+    deliveries     NewsletterDelivery[]
+    products       NewsletterCampaignProduct[]
+    clicks         NewsletterLinkClick[]
+    createdAt      DateTime                 @default(now())
+    updatedAt      DateTime                 @updatedAt
+
+    @@index([status, queuedAt])
+  }
+
+  model NewsletterCampaignProduct {
+    id         String             @id @default(cuid())
+    campaignId String
+    productId  String
+    sortOrder  Int                @default(0)
+    campaign   NewsletterCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+    product    Product            @relation(fields: [productId], references: [id], onDelete: Cascade)
+    createdAt  DateTime           @default(now())
+
+    @@unique([campaignId, productId])
+    @@index([campaignId, sortOrder])
+  }
+
+  model NewsletterDelivery {
+    id                String                   @id @default(cuid())
+    campaignId        String
+    subscriberId      String
+    status            NewsletterDeliveryStatus @default(PENDING)
+    providerMessageId String?
+    errorMessage      String?
+    trackingToken     String                   @unique @default(cuid())
+    sentAt            DateTime?
+    openedAt          DateTime?
+    openCount         Int                      @default(0)
+    clickedCount      Int                      @default(0)
+    campaign          NewsletterCampaign       @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+    subscriber        NewsletterSubscriber     @relation(fields: [subscriberId], references: [id], onDelete: Cascade)
+    clicks            NewsletterLinkClick[]
+    createdAt         DateTime                 @default(now())
+    updatedAt         DateTime                 @updatedAt
+
+    @@unique([campaignId, subscriberId])
+    @@index([status, campaignId, createdAt])
+  }
+
+  model NewsletterLinkClick {
+    id           String               @id @default(cuid())
+    deliveryId   String
+    campaignId   String
+    subscriberId String
+    productId    String?
+    label        String?
+    url          String
+    createdAt    DateTime             @default(now())
+    delivery     NewsletterDelivery   @relation(fields: [deliveryId], references: [id], onDelete: Cascade)
+    campaign     NewsletterCampaign   @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+    subscriber   NewsletterSubscriber @relation(fields: [subscriberId], references: [id], onDelete: Cascade)
+
+    @@index([campaignId, createdAt])
+    @@index([subscriberId, createdAt])
+  }
 

@@ -93,12 +93,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.3.0
- * Query Engine version: 9d6ad21cbbceab97458517b147a6a09ff43aa735
+ * Prisma Client JS version: 7.7.0
+ * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
  */
 export const prismaVersion: PrismaVersion = {
-  client: '7.3.0',
-  engine: '9d6ad21cbbceab97458517b147a6a09ff43aa735',
+  client: '7.7.0',
+  engine: '75cbdc1eb7150937890ad5465d861175c6624711',
 }
 
 /**
@@ -421,6 +421,11 @@ export const ModelName = {
   Account: 'Account',
   Session: 'Session',
   User: 'User',
+  NewsletterSubscriber: 'NewsletterSubscriber',
+  NewsletterCampaign: 'NewsletterCampaign',
+  NewsletterCampaignProduct: 'NewsletterCampaignProduct',
+  NewsletterDelivery: 'NewsletterDelivery',
+  NewsletterLinkClick: 'NewsletterLinkClick',
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -452,6 +457,11 @@ export type TypeMap<
       | 'account'
       | 'session'
       | 'user'
+      | 'newsletterSubscriber'
+      | 'newsletterCampaign'
+      | 'newsletterCampaignProduct'
+      | 'newsletterDelivery'
+      | 'newsletterLinkClick'
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1139,6 +1149,386 @@ export type TypeMap<
         }
       }
     }
+    NewsletterSubscriber: {
+      payload: Prisma.$NewsletterSubscriberPayload<ExtArgs>
+      fields: Prisma.NewsletterSubscriberFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NewsletterSubscriberFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterSubscriberPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NewsletterSubscriberFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterSubscriberPayload>
+        }
+        findFirst: {
+          args: Prisma.NewsletterSubscriberFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterSubscriberPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NewsletterSubscriberFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterSubscriberPayload>
+        }
+        findMany: {
+          args: Prisma.NewsletterSubscriberFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterSubscriberPayload>[]
+        }
+        create: {
+          args: Prisma.NewsletterSubscriberCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterSubscriberPayload>
+        }
+        createMany: {
+          args: Prisma.NewsletterSubscriberCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NewsletterSubscriberCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterSubscriberPayload>[]
+        }
+        delete: {
+          args: Prisma.NewsletterSubscriberDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterSubscriberPayload>
+        }
+        update: {
+          args: Prisma.NewsletterSubscriberUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterSubscriberPayload>
+        }
+        deleteMany: {
+          args: Prisma.NewsletterSubscriberDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NewsletterSubscriberUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NewsletterSubscriberUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterSubscriberPayload>[]
+        }
+        upsert: {
+          args: Prisma.NewsletterSubscriberUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterSubscriberPayload>
+        }
+        aggregate: {
+          args: Prisma.NewsletterSubscriberAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNewsletterSubscriber>
+        }
+        groupBy: {
+          args: Prisma.NewsletterSubscriberGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NewsletterSubscriberGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NewsletterSubscriberCountArgs<ExtArgs>
+          result:
+            | runtime.Types.Utils.Optional<Prisma.NewsletterSubscriberCountAggregateOutputType>
+            | number
+        }
+      }
+    }
+    NewsletterCampaign: {
+      payload: Prisma.$NewsletterCampaignPayload<ExtArgs>
+      fields: Prisma.NewsletterCampaignFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NewsletterCampaignFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NewsletterCampaignFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignPayload>
+        }
+        findFirst: {
+          args: Prisma.NewsletterCampaignFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NewsletterCampaignFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignPayload>
+        }
+        findMany: {
+          args: Prisma.NewsletterCampaignFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignPayload>[]
+        }
+        create: {
+          args: Prisma.NewsletterCampaignCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignPayload>
+        }
+        createMany: {
+          args: Prisma.NewsletterCampaignCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NewsletterCampaignCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignPayload>[]
+        }
+        delete: {
+          args: Prisma.NewsletterCampaignDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignPayload>
+        }
+        update: {
+          args: Prisma.NewsletterCampaignUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignPayload>
+        }
+        deleteMany: {
+          args: Prisma.NewsletterCampaignDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NewsletterCampaignUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NewsletterCampaignUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignPayload>[]
+        }
+        upsert: {
+          args: Prisma.NewsletterCampaignUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignPayload>
+        }
+        aggregate: {
+          args: Prisma.NewsletterCampaignAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNewsletterCampaign>
+        }
+        groupBy: {
+          args: Prisma.NewsletterCampaignGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NewsletterCampaignGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NewsletterCampaignCountArgs<ExtArgs>
+          result:
+            | runtime.Types.Utils.Optional<Prisma.NewsletterCampaignCountAggregateOutputType>
+            | number
+        }
+      }
+    }
+    NewsletterCampaignProduct: {
+      payload: Prisma.$NewsletterCampaignProductPayload<ExtArgs>
+      fields: Prisma.NewsletterCampaignProductFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NewsletterCampaignProductFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignProductPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NewsletterCampaignProductFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignProductPayload>
+        }
+        findFirst: {
+          args: Prisma.NewsletterCampaignProductFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignProductPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NewsletterCampaignProductFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignProductPayload>
+        }
+        findMany: {
+          args: Prisma.NewsletterCampaignProductFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignProductPayload>[]
+        }
+        create: {
+          args: Prisma.NewsletterCampaignProductCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignProductPayload>
+        }
+        createMany: {
+          args: Prisma.NewsletterCampaignProductCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NewsletterCampaignProductCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignProductPayload>[]
+        }
+        delete: {
+          args: Prisma.NewsletterCampaignProductDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignProductPayload>
+        }
+        update: {
+          args: Prisma.NewsletterCampaignProductUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignProductPayload>
+        }
+        deleteMany: {
+          args: Prisma.NewsletterCampaignProductDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NewsletterCampaignProductUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NewsletterCampaignProductUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignProductPayload>[]
+        }
+        upsert: {
+          args: Prisma.NewsletterCampaignProductUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterCampaignProductPayload>
+        }
+        aggregate: {
+          args: Prisma.NewsletterCampaignProductAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNewsletterCampaignProduct>
+        }
+        groupBy: {
+          args: Prisma.NewsletterCampaignProductGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NewsletterCampaignProductGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NewsletterCampaignProductCountArgs<ExtArgs>
+          result:
+            | runtime.Types.Utils.Optional<Prisma.NewsletterCampaignProductCountAggregateOutputType>
+            | number
+        }
+      }
+    }
+    NewsletterDelivery: {
+      payload: Prisma.$NewsletterDeliveryPayload<ExtArgs>
+      fields: Prisma.NewsletterDeliveryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NewsletterDeliveryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterDeliveryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NewsletterDeliveryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterDeliveryPayload>
+        }
+        findFirst: {
+          args: Prisma.NewsletterDeliveryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterDeliveryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NewsletterDeliveryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterDeliveryPayload>
+        }
+        findMany: {
+          args: Prisma.NewsletterDeliveryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterDeliveryPayload>[]
+        }
+        create: {
+          args: Prisma.NewsletterDeliveryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterDeliveryPayload>
+        }
+        createMany: {
+          args: Prisma.NewsletterDeliveryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NewsletterDeliveryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterDeliveryPayload>[]
+        }
+        delete: {
+          args: Prisma.NewsletterDeliveryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterDeliveryPayload>
+        }
+        update: {
+          args: Prisma.NewsletterDeliveryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterDeliveryPayload>
+        }
+        deleteMany: {
+          args: Prisma.NewsletterDeliveryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NewsletterDeliveryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NewsletterDeliveryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterDeliveryPayload>[]
+        }
+        upsert: {
+          args: Prisma.NewsletterDeliveryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterDeliveryPayload>
+        }
+        aggregate: {
+          args: Prisma.NewsletterDeliveryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNewsletterDelivery>
+        }
+        groupBy: {
+          args: Prisma.NewsletterDeliveryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NewsletterDeliveryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NewsletterDeliveryCountArgs<ExtArgs>
+          result:
+            | runtime.Types.Utils.Optional<Prisma.NewsletterDeliveryCountAggregateOutputType>
+            | number
+        }
+      }
+    }
+    NewsletterLinkClick: {
+      payload: Prisma.$NewsletterLinkClickPayload<ExtArgs>
+      fields: Prisma.NewsletterLinkClickFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NewsletterLinkClickFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterLinkClickPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NewsletterLinkClickFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterLinkClickPayload>
+        }
+        findFirst: {
+          args: Prisma.NewsletterLinkClickFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterLinkClickPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NewsletterLinkClickFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterLinkClickPayload>
+        }
+        findMany: {
+          args: Prisma.NewsletterLinkClickFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterLinkClickPayload>[]
+        }
+        create: {
+          args: Prisma.NewsletterLinkClickCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterLinkClickPayload>
+        }
+        createMany: {
+          args: Prisma.NewsletterLinkClickCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NewsletterLinkClickCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterLinkClickPayload>[]
+        }
+        delete: {
+          args: Prisma.NewsletterLinkClickDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterLinkClickPayload>
+        }
+        update: {
+          args: Prisma.NewsletterLinkClickUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterLinkClickPayload>
+        }
+        deleteMany: {
+          args: Prisma.NewsletterLinkClickDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NewsletterLinkClickUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NewsletterLinkClickUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterLinkClickPayload>[]
+        }
+        upsert: {
+          args: Prisma.NewsletterLinkClickUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterLinkClickPayload>
+        }
+        aggregate: {
+          args: Prisma.NewsletterLinkClickAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNewsletterLinkClick>
+        }
+        groupBy: {
+          args: Prisma.NewsletterLinkClickGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NewsletterLinkClickGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NewsletterLinkClickCountArgs<ExtArgs>
+          result:
+            | runtime.Types.Utils.Optional<Prisma.NewsletterLinkClickCountAggregateOutputType>
+            | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1339,6 +1729,93 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum =
   (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
+export const NewsletterSubscriberScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  status: 'status',
+  source: 'source',
+  unsubscribeToken: 'unsubscribeToken',
+  subscribedAt: 'subscribedAt',
+  unsubscribedAt: 'unsubscribedAt',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const
+
+export type NewsletterSubscriberScalarFieldEnum =
+  (typeof NewsletterSubscriberScalarFieldEnum)[keyof typeof NewsletterSubscriberScalarFieldEnum]
+
+export const NewsletterCampaignScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  subject: 'subject',
+  previewText: 'previewText',
+  heading: 'heading',
+  message: 'message',
+  ctaLabel: 'ctaLabel',
+  ctaUrl: 'ctaUrl',
+  status: 'status',
+  dailySendLimit: 'dailySendLimit',
+  recipientCount: 'recipientCount',
+  sentCount: 'sentCount',
+  failedCount: 'failedCount',
+  openedCount: 'openedCount',
+  clickedCount: 'clickedCount',
+  queuedAt: 'queuedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const
+
+export type NewsletterCampaignScalarFieldEnum =
+  (typeof NewsletterCampaignScalarFieldEnum)[keyof typeof NewsletterCampaignScalarFieldEnum]
+
+export const NewsletterCampaignProductScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  productId: 'productId',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+} as const
+
+export type NewsletterCampaignProductScalarFieldEnum =
+  (typeof NewsletterCampaignProductScalarFieldEnum)[keyof typeof NewsletterCampaignProductScalarFieldEnum]
+
+export const NewsletterDeliveryScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  subscriberId: 'subscriberId',
+  status: 'status',
+  providerMessageId: 'providerMessageId',
+  errorMessage: 'errorMessage',
+  trackingToken: 'trackingToken',
+  sentAt: 'sentAt',
+  openedAt: 'openedAt',
+  openCount: 'openCount',
+  clickedCount: 'clickedCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const
+
+export type NewsletterDeliveryScalarFieldEnum =
+  (typeof NewsletterDeliveryScalarFieldEnum)[keyof typeof NewsletterDeliveryScalarFieldEnum]
+
+export const NewsletterLinkClickScalarFieldEnum = {
+  id: 'id',
+  deliveryId: 'deliveryId',
+  campaignId: 'campaignId',
+  subscriberId: 'subscriberId',
+  productId: 'productId',
+  label: 'label',
+  url: 'url',
+  createdAt: 'createdAt',
+} as const
+
+export type NewsletterLinkClickScalarFieldEnum =
+  (typeof NewsletterLinkClickScalarFieldEnum)[keyof typeof NewsletterLinkClickScalarFieldEnum]
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc',
@@ -1509,6 +1986,54 @@ export type ListEnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
 >
 
 /**
+ * Reference to a field of type 'NewsletterSubscriberStatus'
+ */
+export type EnumNewsletterSubscriberStatusFieldRefInput<$PrismaModel> =
+  FieldRefInputType<$PrismaModel, 'NewsletterSubscriberStatus'>
+
+/**
+ * Reference to a field of type 'NewsletterSubscriberStatus[]'
+ */
+export type ListEnumNewsletterSubscriberStatusFieldRefInput<$PrismaModel> =
+  FieldRefInputType<$PrismaModel, 'NewsletterSubscriberStatus[]'>
+
+/**
+ * Reference to a field of type 'NewsletterSubscriberSource'
+ */
+export type EnumNewsletterSubscriberSourceFieldRefInput<$PrismaModel> =
+  FieldRefInputType<$PrismaModel, 'NewsletterSubscriberSource'>
+
+/**
+ * Reference to a field of type 'NewsletterSubscriberSource[]'
+ */
+export type ListEnumNewsletterSubscriberSourceFieldRefInput<$PrismaModel> =
+  FieldRefInputType<$PrismaModel, 'NewsletterSubscriberSource[]'>
+
+/**
+ * Reference to a field of type 'NewsletterCampaignStatus'
+ */
+export type EnumNewsletterCampaignStatusFieldRefInput<$PrismaModel> =
+  FieldRefInputType<$PrismaModel, 'NewsletterCampaignStatus'>
+
+/**
+ * Reference to a field of type 'NewsletterCampaignStatus[]'
+ */
+export type ListEnumNewsletterCampaignStatusFieldRefInput<$PrismaModel> =
+  FieldRefInputType<$PrismaModel, 'NewsletterCampaignStatus[]'>
+
+/**
+ * Reference to a field of type 'NewsletterDeliveryStatus'
+ */
+export type EnumNewsletterDeliveryStatusFieldRefInput<$PrismaModel> =
+  FieldRefInputType<$PrismaModel, 'NewsletterDeliveryStatus'>
+
+/**
+ * Reference to a field of type 'NewsletterDeliveryStatus[]'
+ */
+export type ListEnumNewsletterDeliveryStatusFieldRefInput<$PrismaModel> =
+  FieldRefInputType<$PrismaModel, 'NewsletterDeliveryStatus[]'>
+
+/**
  * Batch Payload for updateMany & deleteMany & createMany
  */
 export type BatchPayload = {
@@ -1620,6 +2145,11 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   session?: Prisma.SessionOmit
   user?: Prisma.UserOmit
+  newsletterSubscriber?: Prisma.NewsletterSubscriberOmit
+  newsletterCampaign?: Prisma.NewsletterCampaignOmit
+  newsletterCampaignProduct?: Prisma.NewsletterCampaignProductOmit
+  newsletterDelivery?: Prisma.NewsletterDeliveryOmit
+  newsletterLinkClick?: Prisma.NewsletterLinkClickOmit
 }
 
 /* Types for Logging */

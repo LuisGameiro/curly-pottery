@@ -63,6 +63,11 @@ export const ModelName = {
   Account: 'Account',
   Session: 'Session',
   User: 'User',
+  NewsletterSubscriber: 'NewsletterSubscriber',
+  NewsletterCampaign: 'NewsletterCampaign',
+  NewsletterCampaignProduct: 'NewsletterCampaignProduct',
+  NewsletterDelivery: 'NewsletterDelivery',
+  NewsletterLinkClick: 'NewsletterLinkClick',
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -241,6 +246,93 @@ export const UserScalarFieldEnum = {
 
 export type UserScalarFieldEnum =
   (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+export const NewsletterSubscriberScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  status: 'status',
+  source: 'source',
+  unsubscribeToken: 'unsubscribeToken',
+  subscribedAt: 'subscribedAt',
+  unsubscribedAt: 'unsubscribedAt',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const
+
+export type NewsletterSubscriberScalarFieldEnum =
+  (typeof NewsletterSubscriberScalarFieldEnum)[keyof typeof NewsletterSubscriberScalarFieldEnum]
+
+export const NewsletterCampaignScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  subject: 'subject',
+  previewText: 'previewText',
+  heading: 'heading',
+  message: 'message',
+  ctaLabel: 'ctaLabel',
+  ctaUrl: 'ctaUrl',
+  status: 'status',
+  dailySendLimit: 'dailySendLimit',
+  recipientCount: 'recipientCount',
+  sentCount: 'sentCount',
+  failedCount: 'failedCount',
+  openedCount: 'openedCount',
+  clickedCount: 'clickedCount',
+  queuedAt: 'queuedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const
+
+export type NewsletterCampaignScalarFieldEnum =
+  (typeof NewsletterCampaignScalarFieldEnum)[keyof typeof NewsletterCampaignScalarFieldEnum]
+
+export const NewsletterCampaignProductScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  productId: 'productId',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+} as const
+
+export type NewsletterCampaignProductScalarFieldEnum =
+  (typeof NewsletterCampaignProductScalarFieldEnum)[keyof typeof NewsletterCampaignProductScalarFieldEnum]
+
+export const NewsletterDeliveryScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  subscriberId: 'subscriberId',
+  status: 'status',
+  providerMessageId: 'providerMessageId',
+  errorMessage: 'errorMessage',
+  trackingToken: 'trackingToken',
+  sentAt: 'sentAt',
+  openedAt: 'openedAt',
+  openCount: 'openCount',
+  clickedCount: 'clickedCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const
+
+export type NewsletterDeliveryScalarFieldEnum =
+  (typeof NewsletterDeliveryScalarFieldEnum)[keyof typeof NewsletterDeliveryScalarFieldEnum]
+
+export const NewsletterLinkClickScalarFieldEnum = {
+  id: 'id',
+  deliveryId: 'deliveryId',
+  campaignId: 'campaignId',
+  subscriberId: 'subscriberId',
+  productId: 'productId',
+  label: 'label',
+  url: 'url',
+  createdAt: 'createdAt',
+} as const
+
+export type NewsletterLinkClickScalarFieldEnum =
+  (typeof NewsletterLinkClickScalarFieldEnum)[keyof typeof NewsletterLinkClickScalarFieldEnum]
 
 export const SortOrder = {
   asc: 'asc',

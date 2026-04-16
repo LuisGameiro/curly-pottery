@@ -7,9 +7,10 @@ import { getAllCategories } from 'actions/category.actions'
 import { getRandomProducts } from 'actions/product.actions'
 
 export const metadata = constructMetadata({
-  title: 'HomePage - Curly Pottery',
+  title: 'Handcrafted Pottery',
   description:
     'Discover unique, handcrafted pottery at Curly Pottery. Explore our collection of artisanal ceramics, perfect for adding a touch of elegance to your home or gifting to loved ones.',
+  canonical: '/',
 })
 
 export default async function Home() {

@@ -37,3 +37,42 @@ export const SizeNames = {
 } as const
 
 export type SizeNames = (typeof SizeNames)[keyof typeof SizeNames]
+
+export const NewsletterSubscriberStatus = {
+  SUBSCRIBED: 'SUBSCRIBED',
+  UNSUBSCRIBED: 'UNSUBSCRIBED',
+  BOUNCED: 'BOUNCED',
+} as const
+
+export type NewsletterSubscriberStatus =
+  (typeof NewsletterSubscriberStatus)[keyof typeof NewsletterSubscriberStatus]
+
+export const NewsletterSubscriberSource = {
+  GUEST: 'GUEST',
+  REGISTER: 'REGISTER',
+  ADMIN_SYNC: 'ADMIN_SYNC',
+  ADMIN_MANUAL: 'ADMIN_MANUAL',
+} as const
+
+export type NewsletterSubscriberSource =
+  (typeof NewsletterSubscriberSource)[keyof typeof NewsletterSubscriberSource]
+
+export const NewsletterCampaignStatus = {
+  DRAFT: 'DRAFT',
+  QUEUED: 'QUEUED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+} as const
+
+export type NewsletterCampaignStatus =
+  (typeof NewsletterCampaignStatus)[keyof typeof NewsletterCampaignStatus]
+
+export const NewsletterDeliveryStatus = {
+  PENDING: 'PENDING',
+  SENT: 'SENT',
+  FAILED: 'FAILED',
+  SKIPPED: 'SKIPPED',
+} as const
+
+export type NewsletterDeliveryStatus =
+  (typeof NewsletterDeliveryStatus)[keyof typeof NewsletterDeliveryStatus]

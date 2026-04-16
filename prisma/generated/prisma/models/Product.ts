@@ -189,7 +189,7 @@ export type ProductGroupByOutputType = {
   _max: ProductMaxAggregateOutputType | null
 }
 
-type GetProductGroupByPayload<T extends ProductGroupByArgs> =
+export type GetProductGroupByPayload<T extends ProductGroupByArgs> =
   Prisma.PrismaPromise<
     Array<
       Prisma.PickEnumerable<ProductGroupByOutputType, T['by']> & {
@@ -217,6 +217,7 @@ export type ProductWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<'Product'> | Date | string
   variants?: Prisma.ProductVariantListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
+  newsletterCampaignProducts?: Prisma.NewsletterCampaignProductListRelationFilter
 }
 
 export type ProductOrderByWithRelationInput = {
@@ -231,6 +232,7 @@ export type ProductOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   variants?: Prisma.ProductVariantOrderByRelationAggregateInput
   categories?: Prisma.CategoryOrderByRelationAggregateInput
+  newsletterCampaignProducts?: Prisma.NewsletterCampaignProductOrderByRelationAggregateInput
 }
 
 export type ProductWhereUniqueInput = Prisma.AtLeast<
@@ -249,6 +251,7 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<
     updatedAt?: Prisma.DateTimeFilter<'Product'> | Date | string
     variants?: Prisma.ProductVariantListRelationFilter
     categories?: Prisma.CategoryListRelationFilter
+    newsletterCampaignProducts?: Prisma.NewsletterCampaignProductListRelationFilter
   },
   'id' | 'name' | 'slug'
 >
@@ -299,6 +302,7 @@ export type ProductCreateInput = {
   updatedAt?: Date | string
   variants?: Prisma.ProductVariantCreateNestedManyWithoutProductInput
   categories?: Prisma.CategoryCreateNestedManyWithoutProductsInput
+  newsletterCampaignProducts?: Prisma.NewsletterCampaignProductCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateInput = {
@@ -313,6 +317,7 @@ export type ProductUncheckedCreateInput = {
   updatedAt?: Date | string
   variants?: Prisma.ProductVariantUncheckedCreateNestedManyWithoutProductInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutProductsInput
+  newsletterCampaignProducts?: Prisma.NewsletterCampaignProductUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductUpdateInput = {
@@ -327,6 +332,7 @@ export type ProductUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.ProductVariantUpdateManyWithoutProductNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutProductsNestedInput
+  newsletterCampaignProducts?: Prisma.NewsletterCampaignProductUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateInput = {
@@ -341,6 +347,7 @@ export type ProductUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.ProductVariantUncheckedUpdateManyWithoutProductNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutProductsNestedInput
+  newsletterCampaignProducts?: Prisma.NewsletterCampaignProductUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductCreateManyInput = {
@@ -557,6 +564,33 @@ export type ProductUpdateOneRequiredWithoutVariantsNestedInput = {
   >
 }
 
+export type ProductCreateNestedOneWithoutNewsletterCampaignProductsInput = {
+  create?: Prisma.XOR<
+    Prisma.ProductCreateWithoutNewsletterCampaignProductsInput,
+    Prisma.ProductUncheckedCreateWithoutNewsletterCampaignProductsInput
+  >
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutNewsletterCampaignProductsInput
+  connect?: Prisma.ProductWhereUniqueInput
+}
+
+export type ProductUpdateOneRequiredWithoutNewsletterCampaignProductsNestedInput =
+  {
+    create?: Prisma.XOR<
+      Prisma.ProductCreateWithoutNewsletterCampaignProductsInput,
+      Prisma.ProductUncheckedCreateWithoutNewsletterCampaignProductsInput
+    >
+    connectOrCreate?: Prisma.ProductCreateOrConnectWithoutNewsletterCampaignProductsInput
+    upsert?: Prisma.ProductUpsertWithoutNewsletterCampaignProductsInput
+    connect?: Prisma.ProductWhereUniqueInput
+    update?: Prisma.XOR<
+      Prisma.XOR<
+        Prisma.ProductUpdateToOneWithWhereWithoutNewsletterCampaignProductsInput,
+        Prisma.ProductUpdateWithoutNewsletterCampaignProductsInput
+      >,
+      Prisma.ProductUncheckedUpdateWithoutNewsletterCampaignProductsInput
+    >
+  }
+
 export type ProductCreateWithoutCategoriesInput = {
   id?: string
   name: string
@@ -568,6 +602,7 @@ export type ProductCreateWithoutCategoriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.ProductVariantCreateNestedManyWithoutProductInput
+  newsletterCampaignProducts?: Prisma.NewsletterCampaignProductCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutCategoriesInput = {
@@ -581,6 +616,7 @@ export type ProductUncheckedCreateWithoutCategoriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.ProductVariantUncheckedCreateNestedManyWithoutProductInput
+  newsletterCampaignProducts?: Prisma.NewsletterCampaignProductUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutCategoriesInput = {
@@ -645,6 +681,7 @@ export type ProductCreateWithoutVariantsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   categories?: Prisma.CategoryCreateNestedManyWithoutProductsInput
+  newsletterCampaignProducts?: Prisma.NewsletterCampaignProductCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutVariantsInput = {
@@ -658,6 +695,7 @@ export type ProductUncheckedCreateWithoutVariantsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutProductsInput
+  newsletterCampaignProducts?: Prisma.NewsletterCampaignProductUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutVariantsInput = {
@@ -699,6 +737,7 @@ export type ProductUpdateWithoutVariantsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.CategoryUpdateManyWithoutProductsNestedInput
+  newsletterCampaignProducts?: Prisma.NewsletterCampaignProductUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutVariantsInput = {
@@ -711,6 +750,92 @@ export type ProductUncheckedUpdateWithoutVariantsInput = {
   requiresShipping?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutProductsNestedInput
+  newsletterCampaignProducts?: Prisma.NewsletterCampaignProductUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type ProductCreateWithoutNewsletterCampaignProductsInput = {
+  id?: string
+  name: string
+  slug: string
+  description: string
+  hide?: boolean
+  images?: Prisma.ProductCreateimagesInput | string[]
+  requiresShipping?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  variants?: Prisma.ProductVariantCreateNestedManyWithoutProductInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutProductsInput
+}
+
+export type ProductUncheckedCreateWithoutNewsletterCampaignProductsInput = {
+  id?: string
+  name: string
+  slug: string
+  description: string
+  hide?: boolean
+  images?: Prisma.ProductCreateimagesInput | string[]
+  requiresShipping?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  variants?: Prisma.ProductVariantUncheckedCreateNestedManyWithoutProductInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutProductsInput
+}
+
+export type ProductCreateOrConnectWithoutNewsletterCampaignProductsInput = {
+  where: Prisma.ProductWhereUniqueInput
+  create: Prisma.XOR<
+    Prisma.ProductCreateWithoutNewsletterCampaignProductsInput,
+    Prisma.ProductUncheckedCreateWithoutNewsletterCampaignProductsInput
+  >
+}
+
+export type ProductUpsertWithoutNewsletterCampaignProductsInput = {
+  update: Prisma.XOR<
+    Prisma.ProductUpdateWithoutNewsletterCampaignProductsInput,
+    Prisma.ProductUncheckedUpdateWithoutNewsletterCampaignProductsInput
+  >
+  create: Prisma.XOR<
+    Prisma.ProductCreateWithoutNewsletterCampaignProductsInput,
+    Prisma.ProductUncheckedCreateWithoutNewsletterCampaignProductsInput
+  >
+  where?: Prisma.ProductWhereInput
+}
+
+export type ProductUpdateToOneWithWhereWithoutNewsletterCampaignProductsInput =
+  {
+    where?: Prisma.ProductWhereInput
+    data: Prisma.XOR<
+      Prisma.ProductUpdateWithoutNewsletterCampaignProductsInput,
+      Prisma.ProductUncheckedUpdateWithoutNewsletterCampaignProductsInput
+    >
+  }
+
+export type ProductUpdateWithoutNewsletterCampaignProductsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  hide?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  images?: Prisma.ProductUpdateimagesInput | string[]
+  requiresShipping?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  variants?: Prisma.ProductVariantUpdateManyWithoutProductNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutProductsNestedInput
+}
+
+export type ProductUncheckedUpdateWithoutNewsletterCampaignProductsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  hide?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  images?: Prisma.ProductUpdateimagesInput | string[]
+  requiresShipping?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  variants?: Prisma.ProductVariantUncheckedUpdateManyWithoutProductNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutProductsNestedInput
 }
 
@@ -725,6 +850,7 @@ export type ProductUpdateWithoutCategoriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.ProductVariantUpdateManyWithoutProductNestedInput
+  newsletterCampaignProducts?: Prisma.NewsletterCampaignProductUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutCategoriesInput = {
@@ -738,6 +864,7 @@ export type ProductUncheckedUpdateWithoutCategoriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.ProductVariantUncheckedUpdateManyWithoutProductNestedInput
+  newsletterCampaignProducts?: Prisma.NewsletterCampaignProductUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateManyWithoutCategoriesInput = {
@@ -759,6 +886,7 @@ export type ProductUncheckedUpdateManyWithoutCategoriesInput = {
 export type ProductCountOutputType = {
   variants: number
   categories: number
+  newsletterCampaignProducts: number
 }
 
 export type ProductCountOutputTypeSelect<
@@ -767,6 +895,9 @@ export type ProductCountOutputTypeSelect<
 > = {
   variants?: boolean | ProductCountOutputTypeCountVariantsArgs
   categories?: boolean | ProductCountOutputTypeCountCategoriesArgs
+  newsletterCampaignProducts?:
+    | boolean
+    | ProductCountOutputTypeCountNewsletterCampaignProductsArgs
 }
 
 /**
@@ -802,6 +933,16 @@ export type ProductCountOutputTypeCountCategoriesArgs<
   where?: Prisma.CategoryWhereInput
 }
 
+/**
+ * ProductCountOutputType without action
+ */
+export type ProductCountOutputTypeCountNewsletterCampaignProductsArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs =
+    runtime.Types.Extensions.DefaultArgs,
+> = {
+  where?: Prisma.NewsletterCampaignProductWhereInput
+}
+
 export type ProductSelect<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
@@ -818,6 +959,9 @@ export type ProductSelect<
     updatedAt?: boolean
     variants?: boolean | Prisma.Product$variantsArgs<ExtArgs>
     categories?: boolean | Prisma.Product$categoriesArgs<ExtArgs>
+    newsletterCampaignProducts?:
+      | boolean
+      | Prisma.Product$newsletterCampaignProductsArgs<ExtArgs>
     _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
   },
   ExtArgs['result']['product']
@@ -892,6 +1036,9 @@ export type ProductInclude<
 > = {
   variants?: boolean | Prisma.Product$variantsArgs<ExtArgs>
   categories?: boolean | Prisma.Product$categoriesArgs<ExtArgs>
+  newsletterCampaignProducts?:
+    | boolean
+    | Prisma.Product$newsletterCampaignProductsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProductIncludeCreateManyAndReturn<
@@ -911,6 +1058,7 @@ export type $ProductPayload<
   objects: {
     variants: Prisma.$ProductVariantPayload<ExtArgs>[]
     categories: Prisma.$CategoryPayload<ExtArgs>[]
+    newsletterCampaignProducts: Prisma.$NewsletterCampaignProductPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<
     {
@@ -1495,6 +1643,22 @@ export interface Prisma__ProductClient<
       >
     | Null
   >
+  newsletterCampaignProducts<
+    T extends Prisma.Product$newsletterCampaignProductsArgs<ExtArgs> = {},
+  >(
+    args?: Prisma.Subset<
+      T,
+      Prisma.Product$newsletterCampaignProductsArgs<ExtArgs>
+    >,
+  ): Prisma.PrismaPromise<
+    | runtime.Types.Result.GetResult<
+        Prisma.$NewsletterCampaignProductPayload<ExtArgs>,
+        T,
+        'findMany',
+        GlobalOmitOptions
+      >
+    | Null
+  >
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1762,6 +1926,11 @@ export type ProductFindManyArgs<
    * Skip the first `n` Products.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   *
+   * Filter by unique combinations of Products.
+   */
   distinct?: Prisma.ProductScalarFieldEnum | Prisma.ProductScalarFieldEnum[]
 }
 
@@ -2056,6 +2225,37 @@ export type Product$categoriesArgs<
   take?: number
   skip?: number
   distinct?: Prisma.CategoryScalarFieldEnum | Prisma.CategoryScalarFieldEnum[]
+}
+
+/**
+ * Product.newsletterCampaignProducts
+ */
+export type Product$newsletterCampaignProductsArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs =
+    runtime.Types.Extensions.DefaultArgs,
+> = {
+  /**
+   * Select specific fields to fetch from the NewsletterCampaignProduct
+   */
+  select?: Prisma.NewsletterCampaignProductSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NewsletterCampaignProduct
+   */
+  omit?: Prisma.NewsletterCampaignProductOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NewsletterCampaignProductInclude<ExtArgs> | null
+  where?: Prisma.NewsletterCampaignProductWhereInput
+  orderBy?:
+    | Prisma.NewsletterCampaignProductOrderByWithRelationInput
+    | Prisma.NewsletterCampaignProductOrderByWithRelationInput[]
+  cursor?: Prisma.NewsletterCampaignProductWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?:
+    | Prisma.NewsletterCampaignProductScalarFieldEnum
+    | Prisma.NewsletterCampaignProductScalarFieldEnum[]
 }
 
 /**

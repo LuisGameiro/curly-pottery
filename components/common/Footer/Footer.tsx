@@ -3,6 +3,7 @@ import { Logo } from '@components/ui'
 import { I18nWidget } from '@components/common'
 import ThemeSwitcher from '@components/ui/ThemeSwitcher'
 import s from './Footer.module.css'
+import NewsletterSignup from './NewsletterSignup'
 
 type Page = {
   name: string
@@ -36,10 +37,14 @@ const Footer = () => {
   return (
     <footer className={s.root}>
       <div className={s.menuContainer}>
-        <Link href="/" className={s.logoContainer}>
-          <Logo className={s.logo} />
-          <span>Curly Pottery</span>
-        </Link>
+        <div className={s.brandColumn}>
+          <Link href="/" className={s.logoContainer}>
+            <Logo className={s.logo} />
+            <span>Curly Pottery</span>
+          </Link>
+
+          <NewsletterSignup />
+        </div>
 
         <div className={s.menu}>
           <nav className={s.navlist}>

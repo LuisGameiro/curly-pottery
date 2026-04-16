@@ -234,17 +234,18 @@ export type UserGroupByOutputType = {
   _max: UserMaxAggregateOutputType | null
 }
 
-type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<
-  Array<
-    Prisma.PickEnumerable<UserGroupByOutputType, T['by']> & {
-      [P in keyof T & keyof UserGroupByOutputType]: P extends '_count'
-        ? T[P] extends boolean
-          ? number
+export type GetUserGroupByPayload<T extends UserGroupByArgs> =
+  Prisma.PrismaPromise<
+    Array<
+      Prisma.PickEnumerable<UserGroupByOutputType, T['by']> & {
+        [P in keyof T & keyof UserGroupByOutputType]: P extends '_count'
+          ? T[P] extends boolean
+            ? number
+            : Prisma.GetScalarType<T[P], UserGroupByOutputType[P]>
           : Prisma.GetScalarType<T[P], UserGroupByOutputType[P]>
-        : Prisma.GetScalarType<T[P], UserGroupByOutputType[P]>
-    }
+      }
+    >
   >
->
 
 export type UserWhereInput = {
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
@@ -277,6 +278,10 @@ export type UserWhereInput = {
     Prisma.CartNullableScalarRelationFilter,
     Prisma.CartWhereInput
   > | null
+  newsletterSubscriber?: Prisma.XOR<
+    Prisma.NewsletterSubscriberNullableScalarRelationFilter,
+    Prisma.NewsletterSubscriberWhereInput
+  > | null
 }
 
 export type UserOrderByWithRelationInput = {
@@ -300,6 +305,7 @@ export type UserOrderByWithRelationInput = {
   addresses?: Prisma.AddressOrderByRelationAggregateInput
   orders?: Prisma.OrderOrderByRelationAggregateInput
   cart?: Prisma.CartOrderByWithRelationInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberOrderByWithRelationInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<
@@ -333,6 +339,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
     cart?: Prisma.XOR<
       Prisma.CartNullableScalarRelationFilter,
       Prisma.CartWhereInput
+    > | null
+    newsletterSubscriber?: Prisma.XOR<
+      Prisma.NewsletterSubscriberNullableScalarRelationFilter,
+      Prisma.NewsletterSubscriberWhereInput
     > | null
   },
   'id' | 'email' | 'resetToken'
@@ -413,6 +423,7 @@ export type UserCreateInput = {
   addresses?: Prisma.AddressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   cart?: Prisma.CartCreateNestedOneWithoutUserInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -436,6 +447,7 @@ export type UserUncheckedCreateInput = {
   addresses?: Prisma.AddressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   cart?: Prisma.CartUncheckedCreateNestedOneWithoutUserInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -467,6 +479,7 @@ export type UserUpdateInput = {
   addresses?: Prisma.AddressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   cart?: Prisma.CartUpdateOneWithoutUserNestedInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -498,6 +511,7 @@ export type UserUncheckedUpdateInput = {
   addresses?: Prisma.AddressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   cart?: Prisma.CartUncheckedUpdateOneWithoutUserNestedInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -774,6 +788,34 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
+export type UserCreateNestedOneWithoutNewsletterSubscriberInput = {
+  create?: Prisma.XOR<
+    Prisma.UserCreateWithoutNewsletterSubscriberInput,
+    Prisma.UserUncheckedCreateWithoutNewsletterSubscriberInput
+  >
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNewsletterSubscriberInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutNewsletterSubscriberNestedInput = {
+  create?: Prisma.XOR<
+    Prisma.UserCreateWithoutNewsletterSubscriberInput,
+    Prisma.UserUncheckedCreateWithoutNewsletterSubscriberInput
+  >
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNewsletterSubscriberInput
+  upsert?: Prisma.UserUpsertWithoutNewsletterSubscriberInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<
+    Prisma.XOR<
+      Prisma.UserUpdateToOneWithWhereWithoutNewsletterSubscriberInput,
+      Prisma.UserUpdateWithoutNewsletterSubscriberInput
+    >,
+    Prisma.UserUncheckedUpdateWithoutNewsletterSubscriberInput
+  >
+}
+
 export type UserCreateWithoutAddressesInput = {
   id?: string
   email: string
@@ -794,6 +836,7 @@ export type UserCreateWithoutAddressesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   cart?: Prisma.CartCreateNestedOneWithoutUserInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAddressesInput = {
@@ -816,6 +859,7 @@ export type UserUncheckedCreateWithoutAddressesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   cart?: Prisma.CartUncheckedCreateNestedOneWithoutUserInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAddressesInput = {
@@ -874,6 +918,7 @@ export type UserUpdateWithoutAddressesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   cart?: Prisma.CartUpdateOneWithoutUserNestedInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAddressesInput = {
@@ -904,6 +949,7 @@ export type UserUncheckedUpdateWithoutAddressesInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   cart?: Prisma.CartUncheckedUpdateOneWithoutUserNestedInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCartInput = {
@@ -926,6 +972,7 @@ export type UserCreateWithoutCartInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   addresses?: Prisma.AddressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCartInput = {
@@ -948,6 +995,7 @@ export type UserUncheckedCreateWithoutCartInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   addresses?: Prisma.AddressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCartInput = {
@@ -1006,6 +1054,7 @@ export type UserUpdateWithoutCartInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   addresses?: Prisma.AddressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCartInput = {
@@ -1036,6 +1085,7 @@ export type UserUncheckedUpdateWithoutCartInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   addresses?: Prisma.AddressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOrdersInput = {
@@ -1058,6 +1108,7 @@ export type UserCreateWithoutOrdersInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   addresses?: Prisma.AddressCreateNestedManyWithoutUserInput
   cart?: Prisma.CartCreateNestedOneWithoutUserInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOrdersInput = {
@@ -1080,6 +1131,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   addresses?: Prisma.AddressUncheckedCreateNestedManyWithoutUserInput
   cart?: Prisma.CartUncheckedCreateNestedOneWithoutUserInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOrdersInput = {
@@ -1138,6 +1190,7 @@ export type UserUpdateWithoutOrdersInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   addresses?: Prisma.AddressUpdateManyWithoutUserNestedInput
   cart?: Prisma.CartUpdateOneWithoutUserNestedInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -1168,6 +1221,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   addresses?: Prisma.AddressUncheckedUpdateManyWithoutUserNestedInput
   cart?: Prisma.CartUncheckedUpdateOneWithoutUserNestedInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -1190,6 +1244,7 @@ export type UserCreateWithoutAccountsInput = {
   addresses?: Prisma.AddressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   cart?: Prisma.CartCreateNestedOneWithoutUserInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -1212,6 +1267,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   addresses?: Prisma.AddressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   cart?: Prisma.CartUncheckedCreateNestedOneWithoutUserInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -1270,6 +1326,7 @@ export type UserUpdateWithoutAccountsInput = {
   addresses?: Prisma.AddressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   cart?: Prisma.CartUpdateOneWithoutUserNestedInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -1300,6 +1357,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   addresses?: Prisma.AddressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   cart?: Prisma.CartUncheckedUpdateOneWithoutUserNestedInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -1322,6 +1380,7 @@ export type UserCreateWithoutSessionsInput = {
   addresses?: Prisma.AddressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   cart?: Prisma.CartCreateNestedOneWithoutUserInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -1344,6 +1403,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   addresses?: Prisma.AddressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   cart?: Prisma.CartUncheckedCreateNestedOneWithoutUserInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -1402,6 +1462,7 @@ export type UserUpdateWithoutSessionsInput = {
   addresses?: Prisma.AddressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   cart?: Prisma.CartUpdateOneWithoutUserNestedInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -1429,6 +1490,143 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
     | string
     | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  addresses?: Prisma.AddressUncheckedUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  cart?: Prisma.CartUncheckedUpdateOneWithoutUserNestedInput
+  newsletterSubscriber?: Prisma.NewsletterSubscriberUncheckedUpdateOneWithoutUserNestedInput
+}
+
+export type UserCreateWithoutNewsletterSubscriberInput = {
+  id?: string
+  email: string
+  password?: string | null
+  emailVerified?: Date | string | null
+  firstName: string
+  lastName: string
+  role?: string | null
+  phone?: string | null
+  company?: string | null
+  notes?: string | null
+  acceptsMarketing?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  resetToken?: string | null
+  resetTokenExpiry?: Date | string | null
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  addresses?: Prisma.AddressCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  cart?: Prisma.CartCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutNewsletterSubscriberInput = {
+  id?: string
+  email: string
+  password?: string | null
+  emailVerified?: Date | string | null
+  firstName: string
+  lastName: string
+  role?: string | null
+  phone?: string | null
+  company?: string | null
+  notes?: string | null
+  acceptsMarketing?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  resetToken?: string | null
+  resetTokenExpiry?: Date | string | null
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  addresses?: Prisma.AddressUncheckedCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  cart?: Prisma.CartUncheckedCreateNestedOneWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutNewsletterSubscriberInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<
+    Prisma.UserCreateWithoutNewsletterSubscriberInput,
+    Prisma.UserUncheckedCreateWithoutNewsletterSubscriberInput
+  >
+}
+
+export type UserUpsertWithoutNewsletterSubscriberInput = {
+  update: Prisma.XOR<
+    Prisma.UserUpdateWithoutNewsletterSubscriberInput,
+    Prisma.UserUncheckedUpdateWithoutNewsletterSubscriberInput
+  >
+  create: Prisma.XOR<
+    Prisma.UserCreateWithoutNewsletterSubscriberInput,
+    Prisma.UserUncheckedCreateWithoutNewsletterSubscriberInput
+  >
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutNewsletterSubscriberInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<
+    Prisma.UserUpdateWithoutNewsletterSubscriberInput,
+    Prisma.UserUncheckedUpdateWithoutNewsletterSubscriberInput
+  >
+}
+
+export type UserUpdateWithoutNewsletterSubscriberInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  company?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  addresses?: Prisma.AddressUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  cart?: Prisma.CartUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutNewsletterSubscriberInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  company?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   addresses?: Prisma.AddressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   cart?: Prisma.CartUncheckedUpdateOneWithoutUserNestedInput
@@ -1533,6 +1731,9 @@ export type UserSelect<
     addresses?: boolean | Prisma.User$addressesArgs<ExtArgs>
     orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
     cart?: boolean | Prisma.User$cartArgs<ExtArgs>
+    newsletterSubscriber?:
+      | boolean
+      | Prisma.User$newsletterSubscriberArgs<ExtArgs>
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
   },
   ExtArgs['result']['user']
@@ -1634,6 +1835,7 @@ export type UserInclude<
   addresses?: boolean | Prisma.User$addressesArgs<ExtArgs>
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
   cart?: boolean | Prisma.User$cartArgs<ExtArgs>
+  newsletterSubscriber?: boolean | Prisma.User$newsletterSubscriberArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<
@@ -1656,6 +1858,7 @@ export type $UserPayload<
     addresses: Prisma.$AddressPayload<ExtArgs>[]
     orders: Prisma.$OrderPayload<ExtArgs>[]
     cart: Prisma.$CartPayload<ExtArgs> | null
+    newsletterSubscriber: Prisma.$NewsletterSubscriberPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<
     {
@@ -2281,6 +2484,21 @@ export interface Prisma__UserClient<
     ExtArgs,
     GlobalOmitOptions
   >
+  newsletterSubscriber<
+    T extends Prisma.User$newsletterSubscriberArgs<ExtArgs> = {},
+  >(
+    args?: Prisma.Subset<T, Prisma.User$newsletterSubscriberArgs<ExtArgs>>,
+  ): Prisma.Prisma__NewsletterSubscriberClient<
+    runtime.Types.Result.GetResult<
+      Prisma.$NewsletterSubscriberPayload<ExtArgs>,
+      T,
+      'findUniqueOrThrow',
+      GlobalOmitOptions
+    > | null,
+    null,
+    ExtArgs,
+    GlobalOmitOptions
+  >
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2554,6 +2772,11 @@ export type UserFindManyArgs<
    * Skip the first `n` Users.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   *
+   * Filter by unique combinations of Users.
+   */
   distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
 }
 
@@ -2914,6 +3137,28 @@ export type User$cartArgs<
    */
   include?: Prisma.CartInclude<ExtArgs> | null
   where?: Prisma.CartWhereInput
+}
+
+/**
+ * User.newsletterSubscriber
+ */
+export type User$newsletterSubscriberArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs =
+    runtime.Types.Extensions.DefaultArgs,
+> = {
+  /**
+   * Select specific fields to fetch from the NewsletterSubscriber
+   */
+  select?: Prisma.NewsletterSubscriberSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NewsletterSubscriber
+   */
+  omit?: Prisma.NewsletterSubscriberOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NewsletterSubscriberInclude<ExtArgs> | null
+  where?: Prisma.NewsletterSubscriberWhereInput
 }
 
 /**

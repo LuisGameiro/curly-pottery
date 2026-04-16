@@ -493,6 +493,146 @@ export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
 }
 
+export type EnumNewsletterSubscriberStatusFilter<$PrismaModel = never> = {
+  equals?:
+    | $Enums.NewsletterSubscriberStatus
+    | Prisma.EnumNewsletterSubscriberStatusFieldRefInput<$PrismaModel>
+  in?:
+    | $Enums.NewsletterSubscriberStatus[]
+    | Prisma.ListEnumNewsletterSubscriberStatusFieldRefInput<$PrismaModel>
+  notIn?:
+    | $Enums.NewsletterSubscriberStatus[]
+    | Prisma.ListEnumNewsletterSubscriberStatusFieldRefInput<$PrismaModel>
+  not?:
+    | Prisma.NestedEnumNewsletterSubscriberStatusFilter<$PrismaModel>
+    | $Enums.NewsletterSubscriberStatus
+}
+
+export type EnumNewsletterSubscriberSourceFilter<$PrismaModel = never> = {
+  equals?:
+    | $Enums.NewsletterSubscriberSource
+    | Prisma.EnumNewsletterSubscriberSourceFieldRefInput<$PrismaModel>
+  in?:
+    | $Enums.NewsletterSubscriberSource[]
+    | Prisma.ListEnumNewsletterSubscriberSourceFieldRefInput<$PrismaModel>
+  notIn?:
+    | $Enums.NewsletterSubscriberSource[]
+    | Prisma.ListEnumNewsletterSubscriberSourceFieldRefInput<$PrismaModel>
+  not?:
+    | Prisma.NestedEnumNewsletterSubscriberSourceFilter<$PrismaModel>
+    | $Enums.NewsletterSubscriberSource
+}
+
+export type EnumNewsletterSubscriberStatusWithAggregatesFilter<
+  $PrismaModel = never,
+> = {
+  equals?:
+    | $Enums.NewsletterSubscriberStatus
+    | Prisma.EnumNewsletterSubscriberStatusFieldRefInput<$PrismaModel>
+  in?:
+    | $Enums.NewsletterSubscriberStatus[]
+    | Prisma.ListEnumNewsletterSubscriberStatusFieldRefInput<$PrismaModel>
+  notIn?:
+    | $Enums.NewsletterSubscriberStatus[]
+    | Prisma.ListEnumNewsletterSubscriberStatusFieldRefInput<$PrismaModel>
+  not?:
+    | Prisma.NestedEnumNewsletterSubscriberStatusWithAggregatesFilter<$PrismaModel>
+    | $Enums.NewsletterSubscriberStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumNewsletterSubscriberStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumNewsletterSubscriberStatusFilter<$PrismaModel>
+}
+
+export type EnumNewsletterSubscriberSourceWithAggregatesFilter<
+  $PrismaModel = never,
+> = {
+  equals?:
+    | $Enums.NewsletterSubscriberSource
+    | Prisma.EnumNewsletterSubscriberSourceFieldRefInput<$PrismaModel>
+  in?:
+    | $Enums.NewsletterSubscriberSource[]
+    | Prisma.ListEnumNewsletterSubscriberSourceFieldRefInput<$PrismaModel>
+  notIn?:
+    | $Enums.NewsletterSubscriberSource[]
+    | Prisma.ListEnumNewsletterSubscriberSourceFieldRefInput<$PrismaModel>
+  not?:
+    | Prisma.NestedEnumNewsletterSubscriberSourceWithAggregatesFilter<$PrismaModel>
+    | $Enums.NewsletterSubscriberSource
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumNewsletterSubscriberSourceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumNewsletterSubscriberSourceFilter<$PrismaModel>
+}
+
+export type EnumNewsletterCampaignStatusFilter<$PrismaModel = never> = {
+  equals?:
+    | $Enums.NewsletterCampaignStatus
+    | Prisma.EnumNewsletterCampaignStatusFieldRefInput<$PrismaModel>
+  in?:
+    | $Enums.NewsletterCampaignStatus[]
+    | Prisma.ListEnumNewsletterCampaignStatusFieldRefInput<$PrismaModel>
+  notIn?:
+    | $Enums.NewsletterCampaignStatus[]
+    | Prisma.ListEnumNewsletterCampaignStatusFieldRefInput<$PrismaModel>
+  not?:
+    | Prisma.NestedEnumNewsletterCampaignStatusFilter<$PrismaModel>
+    | $Enums.NewsletterCampaignStatus
+}
+
+export type EnumNewsletterCampaignStatusWithAggregatesFilter<
+  $PrismaModel = never,
+> = {
+  equals?:
+    | $Enums.NewsletterCampaignStatus
+    | Prisma.EnumNewsletterCampaignStatusFieldRefInput<$PrismaModel>
+  in?:
+    | $Enums.NewsletterCampaignStatus[]
+    | Prisma.ListEnumNewsletterCampaignStatusFieldRefInput<$PrismaModel>
+  notIn?:
+    | $Enums.NewsletterCampaignStatus[]
+    | Prisma.ListEnumNewsletterCampaignStatusFieldRefInput<$PrismaModel>
+  not?:
+    | Prisma.NestedEnumNewsletterCampaignStatusWithAggregatesFilter<$PrismaModel>
+    | $Enums.NewsletterCampaignStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumNewsletterCampaignStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumNewsletterCampaignStatusFilter<$PrismaModel>
+}
+
+export type EnumNewsletterDeliveryStatusFilter<$PrismaModel = never> = {
+  equals?:
+    | $Enums.NewsletterDeliveryStatus
+    | Prisma.EnumNewsletterDeliveryStatusFieldRefInput<$PrismaModel>
+  in?:
+    | $Enums.NewsletterDeliveryStatus[]
+    | Prisma.ListEnumNewsletterDeliveryStatusFieldRefInput<$PrismaModel>
+  notIn?:
+    | $Enums.NewsletterDeliveryStatus[]
+    | Prisma.ListEnumNewsletterDeliveryStatusFieldRefInput<$PrismaModel>
+  not?:
+    | Prisma.NestedEnumNewsletterDeliveryStatusFilter<$PrismaModel>
+    | $Enums.NewsletterDeliveryStatus
+}
+
+export type EnumNewsletterDeliveryStatusWithAggregatesFilter<
+  $PrismaModel = never,
+> = {
+  equals?:
+    | $Enums.NewsletterDeliveryStatus
+    | Prisma.EnumNewsletterDeliveryStatusFieldRefInput<$PrismaModel>
+  in?:
+    | $Enums.NewsletterDeliveryStatus[]
+    | Prisma.ListEnumNewsletterDeliveryStatusFieldRefInput<$PrismaModel>
+  notIn?:
+    | $Enums.NewsletterDeliveryStatus[]
+    | Prisma.ListEnumNewsletterDeliveryStatusFieldRefInput<$PrismaModel>
+  not?:
+    | Prisma.NestedEnumNewsletterDeliveryStatusWithAggregatesFilter<$PrismaModel>
+    | $Enums.NewsletterDeliveryStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumNewsletterDeliveryStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumNewsletterDeliveryStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -879,4 +1019,144 @@ export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumNewsletterSubscriberStatusFilter<$PrismaModel = never> = {
+  equals?:
+    | $Enums.NewsletterSubscriberStatus
+    | Prisma.EnumNewsletterSubscriberStatusFieldRefInput<$PrismaModel>
+  in?:
+    | $Enums.NewsletterSubscriberStatus[]
+    | Prisma.ListEnumNewsletterSubscriberStatusFieldRefInput<$PrismaModel>
+  notIn?:
+    | $Enums.NewsletterSubscriberStatus[]
+    | Prisma.ListEnumNewsletterSubscriberStatusFieldRefInput<$PrismaModel>
+  not?:
+    | Prisma.NestedEnumNewsletterSubscriberStatusFilter<$PrismaModel>
+    | $Enums.NewsletterSubscriberStatus
+}
+
+export type NestedEnumNewsletterSubscriberSourceFilter<$PrismaModel = never> = {
+  equals?:
+    | $Enums.NewsletterSubscriberSource
+    | Prisma.EnumNewsletterSubscriberSourceFieldRefInput<$PrismaModel>
+  in?:
+    | $Enums.NewsletterSubscriberSource[]
+    | Prisma.ListEnumNewsletterSubscriberSourceFieldRefInput<$PrismaModel>
+  notIn?:
+    | $Enums.NewsletterSubscriberSource[]
+    | Prisma.ListEnumNewsletterSubscriberSourceFieldRefInput<$PrismaModel>
+  not?:
+    | Prisma.NestedEnumNewsletterSubscriberSourceFilter<$PrismaModel>
+    | $Enums.NewsletterSubscriberSource
+}
+
+export type NestedEnumNewsletterSubscriberStatusWithAggregatesFilter<
+  $PrismaModel = never,
+> = {
+  equals?:
+    | $Enums.NewsletterSubscriberStatus
+    | Prisma.EnumNewsletterSubscriberStatusFieldRefInput<$PrismaModel>
+  in?:
+    | $Enums.NewsletterSubscriberStatus[]
+    | Prisma.ListEnumNewsletterSubscriberStatusFieldRefInput<$PrismaModel>
+  notIn?:
+    | $Enums.NewsletterSubscriberStatus[]
+    | Prisma.ListEnumNewsletterSubscriberStatusFieldRefInput<$PrismaModel>
+  not?:
+    | Prisma.NestedEnumNewsletterSubscriberStatusWithAggregatesFilter<$PrismaModel>
+    | $Enums.NewsletterSubscriberStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumNewsletterSubscriberStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumNewsletterSubscriberStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumNewsletterSubscriberSourceWithAggregatesFilter<
+  $PrismaModel = never,
+> = {
+  equals?:
+    | $Enums.NewsletterSubscriberSource
+    | Prisma.EnumNewsletterSubscriberSourceFieldRefInput<$PrismaModel>
+  in?:
+    | $Enums.NewsletterSubscriberSource[]
+    | Prisma.ListEnumNewsletterSubscriberSourceFieldRefInput<$PrismaModel>
+  notIn?:
+    | $Enums.NewsletterSubscriberSource[]
+    | Prisma.ListEnumNewsletterSubscriberSourceFieldRefInput<$PrismaModel>
+  not?:
+    | Prisma.NestedEnumNewsletterSubscriberSourceWithAggregatesFilter<$PrismaModel>
+    | $Enums.NewsletterSubscriberSource
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumNewsletterSubscriberSourceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumNewsletterSubscriberSourceFilter<$PrismaModel>
+}
+
+export type NestedEnumNewsletterCampaignStatusFilter<$PrismaModel = never> = {
+  equals?:
+    | $Enums.NewsletterCampaignStatus
+    | Prisma.EnumNewsletterCampaignStatusFieldRefInput<$PrismaModel>
+  in?:
+    | $Enums.NewsletterCampaignStatus[]
+    | Prisma.ListEnumNewsletterCampaignStatusFieldRefInput<$PrismaModel>
+  notIn?:
+    | $Enums.NewsletterCampaignStatus[]
+    | Prisma.ListEnumNewsletterCampaignStatusFieldRefInput<$PrismaModel>
+  not?:
+    | Prisma.NestedEnumNewsletterCampaignStatusFilter<$PrismaModel>
+    | $Enums.NewsletterCampaignStatus
+}
+
+export type NestedEnumNewsletterCampaignStatusWithAggregatesFilter<
+  $PrismaModel = never,
+> = {
+  equals?:
+    | $Enums.NewsletterCampaignStatus
+    | Prisma.EnumNewsletterCampaignStatusFieldRefInput<$PrismaModel>
+  in?:
+    | $Enums.NewsletterCampaignStatus[]
+    | Prisma.ListEnumNewsletterCampaignStatusFieldRefInput<$PrismaModel>
+  notIn?:
+    | $Enums.NewsletterCampaignStatus[]
+    | Prisma.ListEnumNewsletterCampaignStatusFieldRefInput<$PrismaModel>
+  not?:
+    | Prisma.NestedEnumNewsletterCampaignStatusWithAggregatesFilter<$PrismaModel>
+    | $Enums.NewsletterCampaignStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumNewsletterCampaignStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumNewsletterCampaignStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumNewsletterDeliveryStatusFilter<$PrismaModel = never> = {
+  equals?:
+    | $Enums.NewsletterDeliveryStatus
+    | Prisma.EnumNewsletterDeliveryStatusFieldRefInput<$PrismaModel>
+  in?:
+    | $Enums.NewsletterDeliveryStatus[]
+    | Prisma.ListEnumNewsletterDeliveryStatusFieldRefInput<$PrismaModel>
+  notIn?:
+    | $Enums.NewsletterDeliveryStatus[]
+    | Prisma.ListEnumNewsletterDeliveryStatusFieldRefInput<$PrismaModel>
+  not?:
+    | Prisma.NestedEnumNewsletterDeliveryStatusFilter<$PrismaModel>
+    | $Enums.NewsletterDeliveryStatus
+}
+
+export type NestedEnumNewsletterDeliveryStatusWithAggregatesFilter<
+  $PrismaModel = never,
+> = {
+  equals?:
+    | $Enums.NewsletterDeliveryStatus
+    | Prisma.EnumNewsletterDeliveryStatusFieldRefInput<$PrismaModel>
+  in?:
+    | $Enums.NewsletterDeliveryStatus[]
+    | Prisma.ListEnumNewsletterDeliveryStatusFieldRefInput<$PrismaModel>
+  notIn?:
+    | $Enums.NewsletterDeliveryStatus[]
+    | Prisma.ListEnumNewsletterDeliveryStatusFieldRefInput<$PrismaModel>
+  not?:
+    | Prisma.NestedEnumNewsletterDeliveryStatusWithAggregatesFilter<$PrismaModel>
+    | $Enums.NewsletterDeliveryStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumNewsletterDeliveryStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumNewsletterDeliveryStatusFilter<$PrismaModel>
 }

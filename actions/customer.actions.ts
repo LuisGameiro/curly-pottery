@@ -7,12 +7,14 @@ import {
   ActionResponse,
   Address,
   User,
+  NewsletterSubscriberSource,
 } from '@lib/types/types'
 import { cache } from 'react'
 import { registerSchema } from '@lib/form-validator'
 import { hashPassword } from '@lib/auth/password'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@lib/auth/authOptions'
+import { subscribeEmailToNewsletter } from '@lib/newsletter/service'
 
 export async function getAllCustomers(): Promise<
   ActionResponse<UserWithOrders[]>
@@ -175,7 +177,7 @@ export async function registerUser(
       }
     }
 
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         email,
         password: await hashPassword(password),
@@ -187,6 +189,20 @@ export async function registerUser(
         role: 'USER',
       },
     })
+
+    if (acceptsMarketing) {
+      try {
+        await subscribeEmailToNewsletter({
+          email,
+          firstName,
+          lastName,
+          source: NewsletterSubscriberSource.REGISTER,
+          userId: user.id,
+        })
+      } catch (newsletterError) {
+        console.error('Newsletter sync error:', newsletterError)
+      }
+    }
 
     return {
       success: true,

@@ -5,6 +5,7 @@ export const metadata = constructMetadata({
   title: 'About',
   description:
     'Learn about Curly Pottery, our story, mission, and why we are passionate about handcrafted ceramics.',
+  canonical: '/about',
 })
 
 export default function About() {

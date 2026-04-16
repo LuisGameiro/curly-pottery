@@ -18,6 +18,31 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+## Newsletter Setup
+
+This project now includes a newsletter system with:
+
+- Guest email capture from the footer
+- Registered-user opt-in syncing from the registration flow
+- An admin composer at `/admin/newsletter`
+- Queued delivery with tracked opens, tracked clicks, and unsubscribe links
+
+Set these environment variables before using the newsletter features:
+
+- `RESEND_API_KEY` for delivery through Resend
+- `NEXT_PUBLIC_APP_URL` for unsubscribe, click, and open tracking URLs
+- `NEWSLETTER_FROM_EMAIL` optional custom sender override
+- `NEWSLETTER_DISPATCH_SECRET` or `CRON_SECRET` to protect `/api/newsletter/dispatch`
+
+To process the next queued newsletter batch manually, send an authorized request to:
+
+```bash
+POST /api/newsletter/dispatch
+Authorization: Bearer <NEWSLETTER_DISPATCH_SECRET>
+```
+
+In production, this endpoint is intended to be called by a daily cron job.
+
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More

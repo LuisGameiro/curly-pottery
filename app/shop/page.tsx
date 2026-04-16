@@ -9,13 +9,14 @@ export const metadata = constructMetadata({
   title: 'Shop',
   description:
     'Explore our unique collection of handcrafted pottery at Curly Pottery. Discover artisanal ceramics perfect for your home or as thoughtful gifts.',
+  canonical: '/shop',
 })
 
 export default async function ShopPage({
   searchParams,
-}: {
+}: Readonly<{
   searchParams: Promise<{ category?: string; sort?: string }>
-}) {
+}>) {
   const { category, sort } = await searchParams
 
   const categorySlug = category || null

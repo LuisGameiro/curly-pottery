@@ -1,18 +1,9 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+set -e
 
-echo "🚀 Starting pre-commit checks..."
+echo "Starting pre-commit checks..."
 
-# 1. Run Typecheck on the whole project
-npm run typecheck || {
-  echo "❌ Typecheck failed. Fix types before committing."
-  exit 1
-}
+npm run lint:fix
+npm run format:fix
+npm run typecheck
 
-# 2. Run Lint-staged (Eslint + Prettier on changed files only)
-npx lint-staged || {
-  echo "❌ Linting/Formatting failed."
-  exit 1
-}
-
-echo "✅ All checks passed! Committing..."
+echo "All pre-commit checks passed."

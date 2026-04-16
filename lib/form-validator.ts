@@ -1,5 +1,18 @@
 import { z } from 'zod'
 
+const isValidSiteOrAbsoluteUrl = (value: string) => {
+  if (value.startsWith('/')) {
+    return true
+  }
+
+  try {
+    const parsed = new URL(value)
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
 export const CategorySchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(50),
   image: z.url('Please enter a valid image URL'),
@@ -68,4 +81,88 @@ export const registerSchema = z.object({
   lastName: z.string().min(1, 'Last name is required'),
   phone: z.string().optional(),
   acceptsMarketing: z.boolean().default(false),
+})
+
+export const newsletterSubscriptionSchema = z.object({
+  email: z.email('Invalid email address'),
+  firstName: z.string().trim().max(50).optional().or(z.literal('')),
+  lastName: z.string().trim().max(50).optional().or(z.literal('')),
+})
+
+export type NewsletterSubscriptionInput = z.infer<
+  typeof newsletterSubscriptionSchema
+>
+
+export const newsletterCampaignSchema = z
+  .object({
+    name: z
+      .string()
+      .trim()
+      .min(2, 'Campaign name must be at least 2 characters')
+      .max(120, 'Campaign name must be 120 characters or less'),
+    subject: z
+      .string()
+      .trim()
+      .min(3, 'Subject must be at least 3 characters')
+      .max(140, 'Subject must be 140 characters or less'),
+    previewText: z.string().trim().max(180).optional().or(z.literal('')),
+    heading: z
+      .string()
+      .trim()
+      .min(3, 'Heading must be at least 3 characters')
+      .max(120, 'Heading must be 120 characters or less'),
+    message: z
+      .string()
+      .trim()
+      .min(20, 'Message must be at least 20 characters')
+      .max(3000, 'Message must be 3000 characters or less'),
+    ctaLabel: z.string().trim().max(60).optional().or(z.literal('')),
+    ctaUrl: z
+      .string()
+      .trim()
+      .refine(
+        (value) => value.length === 0 || isValidSiteOrAbsoluteUrl(value),
+        'Please enter a valid URL or site path',
+      )
+      .optional()
+      .or(z.literal('')),
+    productIds: z
+      .array(z.string())
+      .min(1, 'Select at least one product')
+      .max(6, 'You can feature up to 6 products'),
+    dailySendLimit: z
+      .number()
+      .int('Daily send limit must be a whole number')
+      .min(1, 'Daily send limit must be at least 1')
+      .max(500, 'Daily send limit must be 500 or less')
+      .default(50),
+  })
+  .refine(
+    ({ ctaLabel, ctaUrl }) =>
+      (!ctaLabel && !ctaUrl) || (Boolean(ctaLabel) && Boolean(ctaUrl)),
+    {
+      message: 'CTA label and URL must be provided together',
+      path: ['ctaUrl'],
+    },
+  )
+
+export type NewsletterCampaignInput = z.infer<typeof newsletterCampaignSchema>
+
+export const newsletterTokenSchema = z.object({
+  token: z.string().trim().min(1, 'Token is required'),
+})
+
+export const newsletterCampaignIdSchema = z.object({
+  campaignId: z.string().trim().min(1, 'Campaign ID is required'),
+})
+
+export const newsletterTrackedLinkSchema = z.object({
+  token: z.string().trim().min(1, 'Tracking token is required'),
+  url: z
+    .string()
+    .trim()
+    .refine(isValidSiteOrAbsoluteUrl, 'Please enter a valid URL or site path'),
+  signature: z.string().trim().min(1, 'Signature is required'),
+  label: z.string().trim().max(120).optional().or(z.literal('')),
+  productId: z.string().trim().optional().or(z.literal('')),
 })

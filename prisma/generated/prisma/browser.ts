@@ -65,3 +65,28 @@ export type Session = Prisma.SessionModel
  *
  */
 export type User = Prisma.UserModel
+/**
+ * Model NewsletterSubscriber
+ *
+ */
+export type NewsletterSubscriber = Prisma.NewsletterSubscriberModel
+/**
+ * Model NewsletterCampaign
+ *
+ */
+export type NewsletterCampaign = Prisma.NewsletterCampaignModel
+/**
+ * Model NewsletterCampaignProduct
+ *
+ */
+export type NewsletterCampaignProduct = Prisma.NewsletterCampaignProductModel
+/**
+ * Model NewsletterDelivery
+ *
+ */
+export type NewsletterDelivery = Prisma.NewsletterDeliveryModel
+/**
+ * Model NewsletterLinkClick
+ *
+ */
+export type NewsletterLinkClick = Prisma.NewsletterLinkClickModel

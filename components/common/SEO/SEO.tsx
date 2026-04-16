@@ -1,15 +1,52 @@
 import { Metadata } from 'next'
 import config from '../config/seo_meta.json'
+import { getAppUrl, resolveSiteUrl } from '@lib/site-url'
 
 type OGImage = {
-  url: string
-  width?: number
-  height?: number
+  url: string | URL
+  width?: number | string
+  height?: number | string
   alt?: string
 }
 
-const storeUrl = process.env.NEXT_PUBLIC_APP_URL
-const storeBaseUrl = storeUrl ? `https://${storeUrl}` : ''
+type MetadataImage = string | URL | OGImage
+
+const metadataBase = new URL(getAppUrl())
+
+const normalizeImageDimension = (value?: number | string) => {
+  if (typeof value === 'number') {
+    return value
+  }
+
+  if (typeof value !== 'string') {
+    return undefined
+  }
+
+  const parsedValue = Number.parseInt(value, 10)
+
+  return Number.isNaN(parsedValue) ? undefined : parsedValue
+}
+
+const normalizeImage = (image: MetadataImage) => {
+  if (typeof image === 'string' || image instanceof URL) {
+    return { url: resolveSiteUrl(image) }
+  }
+
+  return {
+    url: resolveSiteUrl(image.url),
+    width: normalizeImageDimension(image.width),
+    height: normalizeImageDimension(image.height),
+    alt: image.alt,
+  }
+}
+
+const resolveMetadataUrl = (value?: string | URL | null) => {
+  if (!value) {
+    return undefined
+  }
+
+  return resolveSiteUrl(value)
+}
 
 export default function constructMetadata({
   title,
@@ -20,42 +57,41 @@ export default function constructMetadata({
 }: {
   title?: string
   description?: string
-  robots?: string
-  canonical?: string
+  robots?: Metadata['robots']
+  canonical?: string | URL
   openGraph?: Metadata['openGraph']
 } = {}): Metadata {
   const seoTitle = title
-    ? config.titleTemplate.replace(/%s/g, title)
+    ? config.titleTemplate.replaceAll('%s', title)
     : config.title
 
   const seoDescription = description || config.description
+  const canonicalUrl = resolveMetadataUrl(canonical)
+  const openGraphUrl = resolveMetadataUrl(
+    openGraph?.url?.toString() || canonicalUrl || config.openGraph.url,
+  )
+  const openGraphType =
+    openGraph && 'type' in openGraph ? openGraph.type : undefined
 
   const images = (openGraph?.images || config.openGraph.images) as
-    | OGImage
-    | OGImage[]
+    | MetadataImage
+    | MetadataImage[]
   const ogImages = Array.isArray(images)
-    ? images.map((img: OGImage) => ({
-        url: img.url.startsWith('http') ? img.url : `${storeBaseUrl}${img.url}`,
-        width: img.width,
-        height: img.height,
-        alt: img.alt,
-      }))
-    : [images]
+    ? images.map((img) => normalizeImage(img))
+    : [normalizeImage(images)]
 
   return {
     title: seoTitle,
     description: seoDescription,
-    alternates: {
-      canonical: canonical || storeBaseUrl,
-    },
-    metadataBase: new URL(storeBaseUrl),
+    alternates: canonicalUrl ? { canonical: canonicalUrl } : undefined,
+    metadataBase,
     openGraph: {
       title: openGraph?.title || seoTitle,
       description: openGraph?.description || seoDescription,
-      url: openGraph?.url || storeBaseUrl,
+      url: openGraphUrl,
       siteName: openGraph?.siteName || config.openGraph.site_name,
-      locale: openGraph?.locale || 'en_US',
-      type: config.openGraph.type,
+      locale: openGraph?.locale || 'en_GB',
+      type: openGraphType || config.openGraph.type,
       images: ogImages,
     } as Metadata['openGraph'],
     twitter: {
@@ -66,6 +102,9 @@ export default function constructMetadata({
       site: config.twitter.site,
       creator: config.twitter.handle,
     } as Metadata['twitter'],
-    robots: robots ?? 'index, follow',
+    robots: robots ?? {
+      index: true,
+      follow: true,
+    },
   }
 }

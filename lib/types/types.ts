@@ -155,6 +155,132 @@ export type UserWithOrdersAddress = Prisma.UserGetPayload<{
   include: { orders: true; addresses: true }
 }>
 
+export const NewsletterSubscriberStatus = {
+  SUBSCRIBED: 'SUBSCRIBED',
+  UNSUBSCRIBED: 'UNSUBSCRIBED',
+  BOUNCED: 'BOUNCED',
+} as const
+
+export type NewsletterSubscriberStatus =
+  (typeof NewsletterSubscriberStatus)[keyof typeof NewsletterSubscriberStatus]
+
+export const NewsletterSubscriberSource = {
+  GUEST: 'GUEST',
+  REGISTER: 'REGISTER',
+  ADMIN_SYNC: 'ADMIN_SYNC',
+  ADMIN_MANUAL: 'ADMIN_MANUAL',
+} as const
+
+export type NewsletterSubscriberSource =
+  (typeof NewsletterSubscriberSource)[keyof typeof NewsletterSubscriberSource]
+
+export const NewsletterCampaignStatus = {
+  DRAFT: 'DRAFT',
+  QUEUED: 'QUEUED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+} as const
+
+export type NewsletterCampaignStatus =
+  (typeof NewsletterCampaignStatus)[keyof typeof NewsletterCampaignStatus]
+
+export const NewsletterDeliveryStatus = {
+  PENDING: 'PENDING',
+  SENT: 'SENT',
+  FAILED: 'FAILED',
+  SKIPPED: 'SKIPPED',
+} as const
+
+export type NewsletterDeliveryStatus =
+  (typeof NewsletterDeliveryStatus)[keyof typeof NewsletterDeliveryStatus]
+
+export type NewsletterSubscriber = Prisma.NewsletterSubscriberGetPayload<null>
+
+export type NewsletterSubscriberWithUser =
+  Prisma.NewsletterSubscriberGetPayload<{
+    include: { user: true }
+  }>
+
+export type NewsletterCampaign = Prisma.NewsletterCampaignGetPayload<null>
+
+export type NewsletterCampaignProduct =
+  Prisma.NewsletterCampaignProductGetPayload<{
+    include: {
+      product: {
+        include: {
+          variants: true
+          categories: true
+        }
+      }
+    }
+  }>
+
+export type NewsletterDelivery = Prisma.NewsletterDeliveryGetPayload<null>
+
+export type NewsletterLinkClick = Prisma.NewsletterLinkClickGetPayload<null>
+
+export type NewsletterCampaignWithProducts =
+  Prisma.NewsletterCampaignGetPayload<{
+    include: {
+      products: {
+        include: {
+          product: {
+            include: {
+              variants: true
+              categories: true
+            }
+          }
+        }
+      }
+    }
+  }>
+
+export type NewsletterCampaignWithProductsAndDeliveries =
+  Prisma.NewsletterCampaignGetPayload<{
+    include: {
+      products: {
+        include: {
+          product: {
+            include: {
+              variants: true
+              categories: true
+            }
+          }
+        }
+      }
+      deliveries: true
+    }
+  }>
+
+export interface NewsletterSubscriberStats {
+  total: number
+  active: number
+  unsubscribed: number
+  registered: number
+  guests: number
+}
+
+export interface NewsletterCampaignStats {
+  total: number
+  drafts: number
+  queued: number
+  completed: number
+}
+
+export interface NewsletterAdminOverview {
+  subscriberStats: NewsletterSubscriberStats
+  campaignStats: NewsletterCampaignStats
+  subscribers: NewsletterSubscriberWithUser[]
+  campaigns: NewsletterCampaignWithProducts[]
+}
+
+export interface NewsletterDispatchSummary {
+  processed: number
+  sent: number
+  failed: number
+  remaining: number
+}
+
 export type ActionResponse<T> =
   | {
       success: true

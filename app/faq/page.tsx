@@ -3,9 +3,10 @@ import ClientFAQ from './ClientFaq'
 import constructMetadata from '@components/common/SEO/SEO'
 
 export const metadata = constructMetadata({
-  title: 'FAQ - Frequently Asked Questions',
+  title: 'FAQ',
   description:
     'Find answers to frequently asked questions about Curly Pottery, including shipping, returns, care instructions, and more. We are here to help you with any inquiries you may have.',
+  canonical: '/faq',
 })
 
 export default function FAQ() {
