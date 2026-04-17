@@ -1,13 +1,15 @@
 'use client'
 
-import Link from 'next/link'
 import { Eye } from 'lucide-react'
 import { Button } from '@components/ui'
 import DataTable from '@components/ui/Table/DataTable'
 import { CartLineItem, Order, OrderWithUser } from '@lib/types/types'
 import { StatusBadge } from '@components/admin/StatusBadge'
+import { useRouter } from 'next/navigation'
 
 export default function OrderTable({ orders }: { orders: OrderWithUser[] }) {
+  const router = useRouter()
+
   const orderColumns = [
     {
       header: 'Order ID',
@@ -34,11 +36,14 @@ export default function OrderTable({ orders }: { orders: OrderWithUser[] }) {
       header: 'View',
       align: 'center' as const,
       render: (o: Order) => (
-        <Link href={`/user/orders/${o.id}`}>
-          <Button variant="naked">
-            <Eye size={18} />
-          </Button>
-        </Link>
+        <Button
+          variant="naked"
+          type="button"
+          aria-label={`View order ${o.id.slice(-6).toUpperCase()}`}
+          onClick={() => router.push(`/user/orders/${o.id}`)}
+        >
+          <Eye size={18} />
+        </Button>
       ),
     },
   ]

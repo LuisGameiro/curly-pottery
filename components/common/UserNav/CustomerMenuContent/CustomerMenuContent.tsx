@@ -43,19 +43,22 @@ export default function CustomerMenuContent() {
     >
       {LINKS.map(({ name, href }) => (
         <DropdownMenuItem key={href}>
-          <a
+          <button
+            type="button"
             className={cn(s.link, {
               [s.active]: pathname === href,
             })}
             onClick={() => handleClick(href)}
           >
             {name}
-          </a>
+          </button>
         </DropdownMenuItem>
       ))}
       <DropdownMenuItem>
-        <a
+        <button
+          type="button"
           className={cn(s.link, 'justify-between')}
+          aria-pressed={theme === 'dark'}
           onClick={() => {
             setTheme(theme === 'dark' ? 'light' : 'dark')
           }}
@@ -70,29 +73,41 @@ export default function CustomerMenuContent() {
               <Sun width={20} height={20} />
             )}
           </div>
-        </a>
+        </button>
       </DropdownMenuItem>
       <DropdownMenuItem>
         {isAuthenticated ? (
           <div className={s.auth}>
             {isAdmin && (
-              <a className={s.link} onClick={() => handleClick('/admin')}>
+              <button
+                type="button"
+                className={s.link}
+                onClick={() => handleClick('/admin')}
+              >
                 Admin
-              </a>
+              </button>
             )}
-            <a className={s.link} onClick={() => handleClick('/user')}>
+            <button
+              type="button"
+              className={s.link}
+              onClick={() => handleClick('/user')}
+            >
               My Account
-            </a>
+            </button>
 
-            <a className={s.link} onClick={() => signOut()}>
+            <button type="button" className={s.link} onClick={() => signOut()}>
               Logout
-            </a>
+            </button>
           </div>
         ) : (
           <div className={s.auth}>
-            <a className={s.link} onClick={() => handleClick('/auth/login')}>
+            <button
+              type="button"
+              className={s.link}
+              onClick={() => handleClick('/auth/login')}
+            >
               Login
-            </a>
+            </button>
           </div>
         )}
       </DropdownMenuItem>

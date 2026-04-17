@@ -12,12 +12,16 @@
   @apply border-border shadow-sm;
 }
 
-.button:focus {
-  @apply outline-none;
+.button:focus-visible {
+  @apply outline-2 outline-offset-2 outline-secondary;
+}
+
+.button:disabled {
+  @apply cursor-not-allowed opacity-70;
 }
 
 .dropdownMenu {
-  @apply fixed right-0 top-12 mt-2 origin-top-right outline-none bg-primary z-40 w-full h-full;
+  @apply fixed right-0 top-12 mt-2 origin-top-right bg-primary z-40 w-full h-full;
 }
 
 .item {

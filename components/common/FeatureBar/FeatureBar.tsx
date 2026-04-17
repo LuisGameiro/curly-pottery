@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import cn from 'clsx'
 import s from './FeatureBar.module.css'
 import { Text, Button } from '@components/ui'
+import Link from 'next/link'
 
 interface FeatureBarProps {
   className?: string
@@ -48,18 +49,29 @@ const FeatureBar = ({ className }: FeatureBarProps) => {
             We use cookies to enhance your experience. Essential cookies are
             necessary for the site to function. Others help us analyze traffic.
             View our{' '}
-            <a href="/privacy" className="underline">
+            <Link href="/privacy" className="underline">
               Privacy Policy
-            </a>
+            </Link>
             .
           </Text>
         </div>
 
-        <div className="flex  sm:flex-row gap-2 shrink-0">
-          <Button variant="slim" onClick={handleAcceptEssential}>
+        <div className="flex flex-col sm:flex-row gap-2 shrink-0 w-full sm:w-auto">
+          <Button
+            type="button"
+            variant="slim"
+            className="w-full sm:w-auto"
+            onClick={handleAcceptEssential}
+          >
             Essential Only
           </Button>
-          <Button color="success" variant="slim" onClick={handleAcceptAll}>
+          <Button
+            type="button"
+            color="success"
+            variant="slim"
+            className="w-full sm:w-auto"
+            onClick={handleAcceptAll}
+          >
             Accept All
           </Button>
         </div>

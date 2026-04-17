@@ -6,7 +6,7 @@ import { LoadingDots } from '@components/ui'
 import { Toaster } from 'sonner'
 
 const Loading = () => (
-  <div className="w-80 h-80 flex items-center text-center justify-center p-3">
+  <div className="w-full min-h-[40vh] flex items-center text-center justify-center p-3">
     <LoadingDots />
   </div>
 )
@@ -31,9 +31,9 @@ export default function Layout({ children }: Props) {
   ]
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       <Navbar links={navBarlinks} />
-      <main className="bg-background w-full h-full min-h-[calc(100vh-310px)] flex flex-col">
+      <main className="bg-background w-full flex-1 flex flex-col">
         {children}
       </main>
       <Footer />

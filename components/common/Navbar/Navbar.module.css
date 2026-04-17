@@ -10,7 +10,7 @@
   @apply relative flex flex-row items-center justify-between py-4 max-w-10/12 mx-auto;
 }
 
-.nav h1 {
+.brandName {
   @apply ml-4 mr-8 text-on-primary hidden lg:block;
 }
 

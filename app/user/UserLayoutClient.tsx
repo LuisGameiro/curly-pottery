@@ -50,7 +50,10 @@ export default function UserLayoutClient({
         </Text>
         <div ref={containerRef} className="relative w-full z-30">
           <button
+            type="button"
             onClick={() => setIsOpen((s) => !s)}
+            aria-expanded={isOpen}
+            aria-controls="user-nav-links"
             className="w-full lg:hidden flex items-center justify-between px-4 py-3 bg-accent-2 border-2 border-border rounded-lg font-semibold text-secondary"
           >
             <div className="flex items-center gap-2">
@@ -64,6 +67,7 @@ export default function UserLayoutClient({
           </button>
 
           <ul
+            id="user-nav-links"
             className={cn(
               'space-y-1 mt-2 p-2 bg-accent-2 border-2 border-border rounded-xl shadow-xl absolute left-0 right-0 top-full z-50',
               'lg:shadow-none lg:border-0 lg:bg-transparent lg:p-0 lg:mt-0 lg:block  lg:static transition-all',
@@ -73,20 +77,21 @@ export default function UserLayoutClient({
             {navItems.map((item) => {
               const isActive = pathname === item.href
               return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className={cn(
-                    'flex items-center gap-2 px-4 py-2 rounded-lg transition-colors font-medium',
-                    isActive
-                      ? 'bg-secondary text-background'
-                      : 'text-secondary hover:bg-secondary/60',
-                  )}
-                >
-                  <item.icon size={20} />
-                  {item.name}
-                </Link>
+                <li key={item.name}>
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className={cn(
+                      'flex items-center gap-2 px-4 py-2 rounded-lg transition-colors font-medium',
+                      isActive
+                        ? 'bg-secondary text-background'
+                        : 'text-secondary hover:bg-secondary/60',
+                    )}
+                  >
+                    <item.icon size={20} />
+                    {item.name}
+                  </Link>
+                </li>
               )
             })}
           </ul>

@@ -14,20 +14,19 @@
 }
 
 .item > button {
-  @apply cursor-pointer transition ease-in-out duration-100 outline-none;
+  @apply cursor-pointer transition ease-in-out duration-100;
 }
 
 .item > button:hover {
-  @apply transition scale-110 outline-none;
+  @apply transition scale-110;
+}
+
+.item > button:focus-visible {
+  @apply outline-2 outline-offset-2 outline-secondary rounded-md;
 }
 
 .item:first-child {
   @apply ml-0;
-}
-
-.item:focus,
-.item:active {
-  @apply outline-none;
 }
 
 .bagCount {
@@ -48,7 +47,7 @@
 
 .avatarButton:focus,
 .mobileMenu:focus {
-  @apply outline-none;
+  @apply outline-2 outline-offset-2 outline-secondary;
 }
 
 .dropdownDesktop {

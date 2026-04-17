@@ -6,7 +6,7 @@ import { signOut } from 'next-auth/react'
 import { cn } from '@lib/utils'
 import useCart from '@lib/hooks/useCart'
 import { Menu, ShoppingBasket } from 'lucide-react'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useUser } from '@lib/hooks/useUser'
 import CustomerMenuContent from './CustomerMenuContent'
 
@@ -16,6 +16,7 @@ type UserNavProps = {
 
 export default function UserNav({ className }: UserNavProps) {
   const { isAdmin, isAuthenticated } = useUser()
+  const router = useRouter()
 
   const { data } = useCart()
   const itemsCount = data?.lineItems.length ?? 0
@@ -26,37 +27,58 @@ export default function UserNav({ className }: UserNavProps) {
         <li className="hidden gap-4 md:block">
           {isAuthenticated ? (
             <div>
-              <Link href="/admin">
-                {isAdmin && <Button variant="naked">Admin Panel</Button>}
-              </Link>
-              <Link href="/user">
-                <Button variant="naked">My Account</Button>
-              </Link>
-              <Button color="danger" variant="naked" onClick={() => signOut()}>
+              {isAdmin && (
+                <Button
+                  variant="naked"
+                  type="button"
+                  onClick={() => router.push('/admin')}
+                >
+                  Admin Panel
+                </Button>
+              )}
+              <Button
+                variant="naked"
+                type="button"
+                onClick={() => router.push('/user')}
+              >
+                My Account
+              </Button>
+              <Button
+                color="danger"
+                variant="naked"
+                type="button"
+                onClick={() => signOut()}
+              >
                 Logout
               </Button>
             </div>
           ) : (
-            <Link href="/auth/login">
-              <Button variant="naked">Login</Button>
-            </Link>
+            <Button
+              variant="naked"
+              type="button"
+              onClick={() => router.push('/auth/login')}
+            >
+              Login
+            </Button>
           )}
         </li>
         <li className={s.item}>
-          <Link href="/cart">
-            <Button variant="naked" aria-label={`Cart items: ${itemsCount}`}>
-              <ShoppingBasket size={28} />
-              {itemsCount > 0 && (
-                <span className={s.bagCount}>{itemsCount}</span>
-              )}
-            </Button>
-          </Link>
+          <Button
+            variant="naked"
+            type="button"
+            aria-label={`Cart items: ${itemsCount}`}
+            onClick={() => router.push('/cart')}
+          >
+            <ShoppingBasket size={28} />
+            {itemsCount > 0 && <span className={s.bagCount}>{itemsCount}</span>}
+          </Button>
         </li>
         <li className={s.mobileMenu}>
           <Dropdown modal={false}>
             <DropdownTrigger
               id="user-nav-mobile-trigger"
               aria-label="Open Navigation Menu"
+              aria-haspopup="menu"
             >
               <Menu size={28} />
             </DropdownTrigger>

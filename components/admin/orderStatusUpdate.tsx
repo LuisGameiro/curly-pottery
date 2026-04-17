@@ -42,7 +42,7 @@ const OrderStatusUpdate = ({ orderId, currentStatus }: OrderStatusProps) => {
 
       <select
         className={cn(
-          'w-full border-border text-sm font-medium rounded-lg px-3 py-2 outline-none border-none cursor-pointer transition-opacity',
+          'w-full border border-border text-sm font-medium rounded-lg px-3 py-2 bg-background cursor-pointer transition-opacity focus-visible:outline-2 focus-visible:outline-secondary focus-visible:outline-offset-2',
           isPending && 'opacity-50 pointer-events-none',
         )}
         value={localStatus}

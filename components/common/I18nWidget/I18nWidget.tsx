@@ -49,18 +49,28 @@ const I18nWidget = () => {
   // const currentPath =
   //   typeof window !== "undefined" ? window.location.pathname : "/";
   const currentLocale = 'en-UK' //locale || defaultLocale;
-  const options = null //locales.filter((val) => val !== currentLocale);
+  const options: string[] = [] //locales.filter((val) => val !== currentLocale);
+  const hasOptions = options.length > 0
   const containerRef = useClickOutside<HTMLDivElement>(() => {
     setDisplay(false)
   }, display)
 
   return (
     <nav ref={containerRef} className={s.root}>
-      <div
-        className="flex items-center relative"
-        onClick={() => setDisplay(!display)}
-      >
-        <button className={s.button} aria-label="Language selector">
+      <div className="flex items-center relative">
+        <button
+          type="button"
+          className={s.button}
+          aria-label="Language selector"
+          aria-haspopup={hasOptions ? 'menu' : undefined}
+          aria-expanded={hasOptions ? display : false}
+          disabled={!hasOptions}
+          onClick={() => {
+            if (hasOptions) {
+              setDisplay((current) => !current)
+            }
+          }}
+        >
           <Image
             width="20"
             height="20"
@@ -69,7 +79,7 @@ const I18nWidget = () => {
             alt={LOCALES_MAP[currentLocale].img.alt}
             unoptimized
           />
-          {options && (
+          {hasOptions && (
             <span className="cursor-pointer ml-1">
               <ChevronRight className={cn(s.icon, { [s.active]: display })} />
             </span>

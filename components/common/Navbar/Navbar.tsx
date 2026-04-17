@@ -17,9 +17,9 @@ const Navbar = ({ links }: NavbarProps) => (
   <NavbarRoot>
     <div className={s.nav}>
       <div className="flex items-center">
-        <Link href="/" className={s.logo} aria-label="Logo">
+        <Link href="/" className={s.logo} aria-label="Curly Pottery home">
           <Logo />
-          <h1>Curly Pottery</h1>
+          <span className={s.brandName}>Curly Pottery</span>
         </Link>
 
         {links && (

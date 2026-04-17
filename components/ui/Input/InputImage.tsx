@@ -52,6 +52,8 @@ const SortableImage = ({
     transition,
     zIndex: isDragging ? 10 : 1,
     opacity: isDragging ? 0.5 : 1,
+    width: `${Math.max(1, size) / 4}rem`,
+    height: `${Math.max(1, size) / 4}rem`,
   }
 
   return (
@@ -60,7 +62,6 @@ const SortableImage = ({
       style={style}
       className={cn(
         'relative rounded-lg border overflow-hidden bg-accent-2 shrink-0 group',
-        `w-${size} h-${size}`,
         className,
       )}
     >
@@ -78,14 +79,15 @@ const SortableImage = ({
         width={100}
         height={100}
         quality={100}
-        alt="Preview"
+        alt={`Image preview ${index + 1}`}
         className="object-cover w-full h-full"
       />
 
       <button
         type="button"
         onClick={() => onRemove(index)}
-        className="absolute top-1 right-1 bg-white/80 hover:bg-red hover:text-white p-1 rounded-full transition-colors z-20"
+        className="absolute top-1 right-1 bg-white/80 hover:bg-red hover:text-white p-1 rounded-full transition-colors z-20 focus-visible:outline-2 focus-visible:outline-secondary"
+        aria-label={`Remove image ${index + 1}`}
       >
         <X size={14} />
       </button>
@@ -123,6 +125,7 @@ const InputImage = ({
   className?: string
 }) => {
   const generatedId = useId()
+  const errorId = `${generatedId}-error`
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, {
@@ -191,6 +194,10 @@ const InputImage = ({
               className={cn(
                 'w-24 h-24 flex-center flex-col border-2 border-dashed rounded-lg cursor-pointer transition-all shrink-0 bg-accent-2 border-border text-muted hover:border-secondary hover:text-secondary',
               )}
+              style={{
+                width: `${Math.max(1, size) / 4}rem`,
+                height: `${Math.max(1, size) / 4}rem`,
+              }}
             >
               <Plus size={24} />
               <span className="font-medium mt-1">
@@ -203,13 +210,18 @@ const InputImage = ({
                 accept="image/*"
                 onChange={handleFileChange}
                 className="hidden"
+                aria-describedby={error ? errorId : undefined}
               />
             </label>
           )}
         </div>
       </DndContext>
 
-      {error && <p className={s.errorMessage}>{error}</p>}
+      {error && (
+        <p id={errorId} className={s.errorMessage} role="alert">
+          {error}
+        </p>
+      )}
     </div>
   )
 }

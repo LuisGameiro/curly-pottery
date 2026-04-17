@@ -53,49 +53,58 @@ export default function DataTable<T extends { id: string }>({
             <tr className="bg-accent-1 border-b border-border">
               {renderExpansion && <th className="w-10 px-4" />}
               {columns.map((col, i) => (
-                <th key={i} className="p-1font-semibold text-sm">
+                <th key={i} className="px-3 py-2 font-semibold text-sm">
                   {col.header}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {data.map((item) => (
-              <Fragment key={item.id}>
-                <tr className="hover:bg-accent-2 transition-colors">
-                  {renderExpansion && (
-                    <td className="">
-                      <Button
-                        variant="naked"
-                        onClick={() => toggleRow(item.id)}
-                      >
-                        <ChevronRight
-                          size={16}
-                          className={
-                            expandedRows === item.id ? 'rotate-90' : ''
-                          }
-                        />
-                      </Button>
-                    </td>
-                  )}
-                  {columns.map((col, i) => (
-                    <td key={i} className={'px-2 py-1 text-sm text-center'}>
-                      {col.render(item)}
-                    </td>
-                  ))}
-                </tr>
-                {expandedRows === item.id && renderExpansion && (
-                  <tr>
-                    <td
-                      colSpan={columns.length + 1}
-                      className="bg-accent-1 p-0"
-                    >
-                      {renderExpansion(item)}
-                    </td>
+            {data.map((item) => {
+              const expansionId = `expansion-row-${item.id}`
+
+              return (
+                <Fragment key={item.id}>
+                  <tr className="hover:bg-accent-2 transition-colors">
+                    {renderExpansion && (
+                      <td className="">
+                        <Button
+                          variant="naked"
+                          type="button"
+                          aria-label="Toggle row details"
+                          aria-expanded={expandedRows === item.id}
+                          aria-controls={expansionId}
+                          onClick={() => toggleRow(item.id)}
+                        >
+                          <ChevronRight
+                            size={16}
+                            className={
+                              expandedRows === item.id ? 'rotate-90' : ''
+                            }
+                          />
+                        </Button>
+                      </td>
+                    )}
+                    {columns.map((col, i) => (
+                      <td key={i} className={'px-2 py-1 text-sm text-center'}>
+                        {col.render(item)}
+                      </td>
+                    ))}
                   </tr>
-                )}
-              </Fragment>
-            ))}
+                  {expandedRows === item.id && renderExpansion && (
+                    <tr>
+                      <td
+                        id={expansionId}
+                        colSpan={columns.length + 1}
+                        className="bg-accent-1 p-0"
+                      >
+                        {renderExpansion(item)}
+                      </td>
+                    </tr>
+                  )}
+                </Fragment>
+              )
+            })}
           </tbody>
         </table>
       </div>
