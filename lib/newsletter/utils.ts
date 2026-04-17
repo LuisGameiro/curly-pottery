@@ -8,10 +8,22 @@ export const resolveSiteUrl = resolveSiteUrlFromSiteUrl
 
 export const NEWSLETTER_DEFAULT_DAILY_LIMIT = 50
 
-const getTrackingSecret = () =>
-  process.env.NEWSLETTER_LINK_SECRET ||
-  process.env.NEXTAUTH_SECRET ||
-  'newsletter-dev-secret'
+const getTrackingSecret = () => {
+  const secret =
+    process.env.NEWSLETTER_LINK_SECRET || process.env.NEXTAUTH_SECRET
+
+  if (secret) {
+    return secret
+  }
+
+  if (process.env.NODE_ENV !== 'production') {
+    return 'newsletter-dev-secret'
+  }
+
+  throw new Error(
+    'NEWSLETTER_LINK_SECRET or NEXTAUTH_SECRET must be configured in production.',
+  )
+}
 
 export const normalizeNewsletterEmail = (email: string) =>
   email.trim().toLowerCase()

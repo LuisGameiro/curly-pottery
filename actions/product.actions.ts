@@ -12,6 +12,29 @@ import { deleteBlob } from './serverImages.action'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@lib/auth/authOptions'
 
+const pickRandomItems = <T>(items: T[], limit: number) => {
+  const sanitizedLimit = Math.max(0, Math.floor(limit))
+
+  if (sanitizedLimit >= items.length) {
+    return [...items]
+  }
+
+  const shuffledItems = [...items]
+
+  for (
+    let currentIndex = shuffledItems.length - 1;
+    currentIndex > 0;
+    currentIndex -= 1
+  ) {
+    const randomIndex = Math.floor(Math.random() * (currentIndex + 1))
+    const currentItem = shuffledItems[currentIndex]
+    shuffledItems[currentIndex] = shuffledItems[randomIndex]
+    shuffledItems[randomIndex] = currentItem
+  }
+
+  return shuffledItems.slice(0, sanitizedLimit)
+}
+
 export async function getProductBySlug(
   slug: string | null,
 ): Promise<ActionResponse<ProductWithVariantsCategories | null>> {
@@ -138,7 +161,7 @@ export async function toggleVisibility({
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session || session.user.role !== 'ADMIN') {
+    if (session?.user?.role !== 'ADMIN') {
       return {
         success: false,
         message: 'Unauthorized: Administrative privileges required.',
@@ -208,7 +231,7 @@ export async function getRandomProducts(
     return {
       success: true,
       message: 'Fecthed random products successfully',
-      data: products.sort(() => 0.5 - Math.random()).slice(0, limit),
+      data: pickRandomItems(products, limit),
     }
   } catch (error) {
     console.error('getRandomProducts_ERROR:', error)

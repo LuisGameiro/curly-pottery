@@ -1,0 +1,7 @@
+set -e
+
+echo "Starting pre-push checks..."
+
+npm run check
+
+echo "All pre-push checks passed."

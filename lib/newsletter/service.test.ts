@@ -87,12 +87,10 @@ describe('newsletter service', () => {
       id: 'campaign-1',
       status: NewsletterCampaignStatus.DRAFT,
     } as never)
-    jest
-      .mocked(prisma.newsletterSubscriber.findMany)
-      .mockResolvedValue([
-        { id: 'subscriber-1' },
-        { id: 'subscriber-2' },
-      ] as never)
+    jest.mocked(prisma.newsletterSubscriber.findMany).mockResolvedValue([
+      { id: 'subscriber-1' },
+      { id: 'subscriber-2' },
+    ] as never)
     jest.mocked(prisma.newsletterDelivery.createMany).mockResolvedValue({
       count: 2,
     } as never)
@@ -270,9 +268,9 @@ describe('newsletter service', () => {
         email: 'collector@example.com',
         status: NewsletterSubscriberStatus.UNSUBSCRIBED,
       } as never)
-    jest
-      .mocked(prisma.newsletterDelivery.findMany)
-      .mockResolvedValue([{ campaignId: 'campaign-1' }] as never)
+    jest.mocked(prisma.newsletterDelivery.findMany).mockResolvedValue([
+      { campaignId: 'campaign-1' },
+    ] as never)
     jest.mocked(prisma.newsletterSubscriber.update).mockResolvedValue({
       id: 'subscriber-1',
     } as never)
