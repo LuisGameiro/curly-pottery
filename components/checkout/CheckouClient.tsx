@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useState } from 'react'
+import { useState } from 'react'
 import InformationForm from '@components/checkout/InformationForm'
 import ShippingMethod from '@components/checkout/ShippingMethod'
 import SumUpPayment from '@components/checkout/SumUpPayment'
@@ -27,7 +27,6 @@ export default function CheckouClient() {
   const [step, setStep] = useState(1)
   const [checkoutId, setCheckoutId] = useState('')
   const [loading, setLoading] = useState(false)
-  const cartId = useId()
 
   const methods = useForm<CreateOrder>({
     defaultValues: {
@@ -67,13 +66,12 @@ export default function CheckouClient() {
     try {
       setLoading(true)
       await updateCartPrice(
-        cartId,
         currentValues.subtotalPrice,
         currentValues.totalPrice,
         currentValues.taxes,
         currentValues.shippingPrice,
       )
-      const response = await createSumUpCheckout(cartId)
+      const response = await createSumUpCheckout()
       trackEvent('before_purchase', {
         transaction_id: response.data,
         userId: currentValues?.userId,
@@ -105,9 +103,7 @@ export default function CheckouClient() {
 
       const orderResponse = await createOrder(checkoutId, currentValues)
 
-      if (!orderResponse.success) {
-        toast.error(orderResponse.message)
-      } else {
+      if (orderResponse.success) {
         red = true
         await sendEmail({
           to: currentValues.email,
@@ -140,6 +136,8 @@ export default function CheckouClient() {
         })
 
         deleteAll()
+      } else {
+        toast.error(orderResponse.message)
       }
     } catch (error) {
       console.error(error)

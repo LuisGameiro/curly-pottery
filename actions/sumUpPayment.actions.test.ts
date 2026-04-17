@@ -1,5 +1,5 @@
-import { Session } from '@sentry/nextjs'
 import { createSumUpCheckout } from './sumUpPayment.actions'
+import { prisma } from 'prisma/prisma'
 
 jest.mock('next-auth', () => ({
   getServerSession: jest.fn(),
@@ -27,35 +27,71 @@ describe('createSumUpCheckout', () => {
     jest.restoreAllMocks()
   })
 
+  it('should return unauthorized when user is not authenticated', async () => {
+    mockGetServerSession.mockResolvedValue(null as never)
+
+    const result = await createSumUpCheckout()
+
+    expect(result.success).toBe(false)
+    expect(result.message).toBe('Unauthorized: Please sign in before checkout.')
+    expect(prisma.cart.findUnique).not.toHaveBeenCalled()
+  })
+
   it('should return success with checkout id when API call succeeds', async () => {
     mockGetServerSession.mockResolvedValue({
-      user: { email: 'test@example.com' },
-    } as Session)
+      user: { id: 'user-1', email: 'test@example.com' },
+    } as never)
+    ;(prisma.cart.findUnique as jest.Mock).mockResolvedValue({
+      id: 'cart-123',
+      totalPrice: 123.45,
+      currency: 'GBP',
+    })
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       json: async () => ({ id: 'checkout-123' }),
     })
 
-    const result = await createSumUpCheckout('cart-456')
+    const result = await createSumUpCheckout()
 
     expect(result.success).toBe(true)
     expect(result.data).toBe('checkout-123')
+    expect(prisma.cart.findUnique).toHaveBeenCalledWith({
+      where: { userId: 'user-1' },
+    })
     expect(global.fetch).toHaveBeenCalledWith(
       'https://api.sumup.com/v0.1/checkouts',
       expect.any(Object),
     )
   })
 
+  it('should return error when cart does not exist', async () => {
+    mockGetServerSession.mockResolvedValue({
+      user: { id: 'user-1', email: 'test@example.com' },
+    } as never)
+    ;(prisma.cart.findUnique as jest.Mock).mockResolvedValue(null)
+
+    const result = await createSumUpCheckout()
+
+    expect(result.success).toBe(false)
+    expect(result.message).toBe('Cart not found')
+    expect(global.fetch).not.toHaveBeenCalled()
+  })
+
   it('should return error when API response is not ok', async () => {
     mockGetServerSession.mockResolvedValue({
-      user: { email: 'test@example.com' },
-    } as Session)
+      user: { id: 'user-1', email: 'test@example.com' },
+    } as never)
+    ;(prisma.cart.findUnique as jest.Mock).mockResolvedValue({
+      id: 'cart-123',
+      totalPrice: 123.45,
+      currency: 'GBP',
+    })
     global.fetch = jest.fn().mockResolvedValue({
       ok: false,
       json: async () => ({ message: 'Invalid amount' }),
     })
 
-    const result = await createSumUpCheckout('cart-456')
+    const result = await createSumUpCheckout()
 
     expect(result.success).toBe(false)
     expect(result.message).toBe('Invalid amount')
@@ -63,11 +99,16 @@ describe('createSumUpCheckout', () => {
 
   it('should return error when fetch throws exception', async () => {
     mockGetServerSession.mockResolvedValue({
-      user: { email: 'test@example.com' },
-    } as Session)
+      user: { id: 'user-1', email: 'test@example.com' },
+    } as never)
+    ;(prisma.cart.findUnique as jest.Mock).mockResolvedValue({
+      id: 'cart-123',
+      totalPrice: 123.45,
+      currency: 'GBP',
+    })
     global.fetch = jest.fn().mockRejectedValue(new Error('Network error'))
 
-    const result = await createSumUpCheckout('cart-456')
+    const result = await createSumUpCheckout()
 
     expect(result.success).toBe(false)
     expect(result.message).toBe('Network error')

@@ -1,4 +1,9 @@
-import { getCartFromDbAction, syncCartAction, deleteCart } from './cart.actions'
+import {
+  getCartFromDbAction,
+  syncCartAction,
+  deleteCart,
+  updateCartPrice,
+} from './cart.actions'
 import { PrismaClient } from 'prisma/generated/prisma/client'
 import { prisma } from 'prisma/prisma'
 import { mockReset, DeepMockProxy } from 'jest-mock-extended'
@@ -171,6 +176,40 @@ describe('deleteCart', () => {
 
     expect(prisma.cart.delete).toHaveBeenCalledWith({
       where: { id: 'cart-123' },
+    })
+  })
+})
+
+describe('updateCartPrice', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
+  it('should reject unauthenticated updates', async () => {
+    ;(getServerSession as jest.Mock).mockResolvedValue(null)
+
+    await expect(updateCartPrice(100, 120, 20, 10)).rejects.toThrow(
+      'Unauthorized: Please sign in before checkout.',
+    )
+
+    expect(prisma.cart.update).not.toHaveBeenCalled()
+  })
+
+  it('should update cart price for authenticated user', async () => {
+    ;(getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: 'user-123' },
+    })
+
+    await updateCartPrice(100, 120, 20, 10)
+
+    expect(prisma.cart.update).toHaveBeenCalledWith({
+      where: { userId: 'user-123' },
+      data: {
+        subtotalPrice: 100,
+        totalPrice: 150,
+        taxes: 20,
+        shippingPrice: 10,
+      },
     })
   })
 })

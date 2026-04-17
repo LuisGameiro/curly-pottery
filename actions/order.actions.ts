@@ -9,11 +9,26 @@ import {
   CreateOrder,
 } from '@lib/types/types'
 import { revalidatePath } from 'next/cache'
+import { authOptions } from '@lib/auth/authOptions'
+import { getServerSession } from 'next-auth'
+
+const isAdmin = (role: string | null | undefined) =>
+  role?.toUpperCase() === 'ADMIN'
 
 export async function getAllOrders(): Promise<
   ActionResponse<OrderWithUser[] | null>
 > {
   try {
+    const session = await getServerSession(authOptions)
+
+    if (!session?.user?.id || !isAdmin(session.user.role)) {
+      return {
+        success: false,
+        message: 'Unauthorized: Administrative privileges required.',
+        errors: null,
+      }
+    }
+
     const order = await prisma.order.findMany({
       orderBy: {
         createdAt: 'desc',
@@ -43,6 +58,24 @@ export async function getOrdersById(
   id: string,
 ): Promise<ActionResponse<OrderWithUser[] | null>> {
   try {
+    const session = await getServerSession(authOptions)
+
+    if (!session?.user?.id) {
+      return {
+        success: false,
+        message: 'Unauthorized: Please sign in first.',
+        errors: null,
+      }
+    }
+
+    if (!isAdmin(session.user.role) && session.user.id !== id) {
+      return {
+        success: false,
+        message: 'Unauthorized: You can only access your own orders.',
+        errors: null,
+      }
+    }
+
     const order = await prisma.order.findMany({
       where: { userId: id },
       orderBy: {
@@ -73,8 +106,23 @@ export async function getOrderById(
   id: string,
 ): Promise<ActionResponse<OrderWithUser | null>> {
   try {
-    const order = await prisma.order.findUnique({
-      where: { id },
+    const session = await getServerSession(authOptions)
+
+    if (!session?.user?.id) {
+      return {
+        success: false,
+        message: 'Unauthorized: Please sign in first.',
+        errors: null,
+      }
+    }
+
+    const order = await prisma.order.findFirst({
+      where: isAdmin(session.user.role)
+        ? { id }
+        : {
+            id,
+            userId: session.user.id,
+          },
 
       include: {
         user: true,
@@ -117,6 +165,28 @@ export async function createOrder(
   }: CreateOrder,
 ): Promise<ActionResponse<Order | null>> {
   try {
+    const session = await getServerSession(authOptions)
+    const sessionUserId = session?.user?.id ?? null
+
+    if (userId && (!sessionUserId || sessionUserId !== userId)) {
+      return {
+        success: false,
+        message: 'Unauthorized: Invalid user context for order creation.',
+        errors: null,
+      }
+    }
+
+    const resolvedUserId = sessionUserId || userId || null
+    const resolvedEmail = session?.user?.email || email
+
+    if (!resolvedEmail) {
+      return {
+        success: false,
+        message: 'Email is required to create an order.',
+        errors: null,
+      }
+    }
+
     const verifyResponse = await fetch(
       `https://api.sumup.com/v0.1/checkouts/${checkoutId}`,
       {
@@ -127,6 +197,13 @@ export async function createOrder(
     )
 
     const paymentInfo = await verifyResponse.json()
+
+    if (!verifyResponse.ok) {
+      throw new Error(
+        paymentInfo?.message ||
+          'Payment verification failed. Please contact support.',
+      )
+    }
 
     if (paymentInfo.status !== 'PAID') {
       return {
@@ -165,7 +242,7 @@ export async function createOrder(
           lineItems: lineItems,
           lastName,
           firstName,
-          email,
+          email: resolvedEmail,
           phone,
           discounts: discounts || [],
           currency: currency || 'GBP',
@@ -177,15 +254,15 @@ export async function createOrder(
           subtotalPrice: Number(subtotalPrice) || 0,
           totalPrice: Number(totalPrice) || 0,
           shippingMethod,
-          ...(userId && {
-            user: { connect: { id: userId } },
+          ...(resolvedUserId && {
+            user: { connect: { id: resolvedUserId } },
           }),
         },
       })
 
-      if (userId) {
+      if (resolvedUserId) {
         await tx.user.update({
-          where: { id: userId },
+          where: { id: resolvedUserId },
           data: { cart: {} },
         })
       }
@@ -214,6 +291,16 @@ export async function updateOrderStatus(
   newStatus: string,
 ): Promise<ActionResponse<Order | null>> {
   try {
+    const session = await getServerSession(authOptions)
+
+    if (!session?.user?.id || !isAdmin(session.user.role)) {
+      return {
+        success: false,
+        message: 'Unauthorized: Administrative privileges required.',
+        errors: null,
+      }
+    }
+
     const status = newStatus.toUpperCase() as OrderStatus
 
     const order = await prisma.order.update({

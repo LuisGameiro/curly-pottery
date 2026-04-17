@@ -41,14 +41,19 @@ export async function deleteCart(cartId: string) {
 }
 
 export async function updateCartPrice(
-  cartId: string,
   subtotalPrice: number,
   totalPrice: number,
   taxes: number,
   shippingPrice: number,
 ) {
+  const session = await getServerSession(authOptions)
+
+  if (!session?.user?.id) {
+    throw new Error('Unauthorized: Please sign in before checkout.')
+  }
+
   await prisma.cart.update({
-    where: { id: cartId },
+    where: { userId: session.user.id },
     data: {
       subtotalPrice,
       totalPrice: totalPrice + taxes + shippingPrice,

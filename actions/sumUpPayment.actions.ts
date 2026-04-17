@@ -5,14 +5,24 @@ import { ActionResponse } from '@lib/types/types'
 import { getServerSession } from 'next-auth'
 import { prisma } from 'prisma/prisma'
 
-export async function createSumUpCheckout(
-  cartId: string,
-): Promise<ActionResponse<string | null>> {
+export async function createSumUpCheckout(): Promise<
+  ActionResponse<string | null>
+> {
   try {
     const session = await getServerSession(authOptions)
+    const userId = session?.user?.id
     const userEmail = session?.user?.email
+
+    if (!userId || !userEmail) {
+      return {
+        success: false,
+        message: 'Unauthorized: Please sign in before checkout.',
+        errors: null,
+      }
+    }
+
     const cart = await prisma.cart.findUnique({
-      where: { id: cartId },
+      where: { userId },
     })
 
     if (!cart) throw new Error('Cart not found')
@@ -24,7 +34,7 @@ export async function createSumUpCheckout(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        checkout_reference: `ORDER-${cartId}-${Date.now()}`,
+        checkout_reference: `ORDER-${cart.id}-${Date.now()}`,
         amount: cart.totalPrice,
         currency: cart.currency,
         merchant_code: process.env.SUMUP_MERCHANT_CODE,
