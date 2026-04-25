@@ -3,7 +3,11 @@ const rateLimitStore = new Map<string, { count: number; resetAt: number }>()
 const WINDOW_MS = 60 * 1000
 const MAX_REQUESTS = 5
 
-export function checkRateLimit(key: string): { success: boolean; remaining: number; resetIn: number } {
+export function checkRateLimit(key: string): {
+  success: boolean
+  remaining: number
+  resetIn: number
+} {
   const now = Date.now()
   const record = rateLimitStore.get(key)
 
@@ -17,7 +21,11 @@ export function checkRateLimit(key: string): { success: boolean; remaining: numb
   }
 
   record.count++
-  return { success: true, remaining: MAX_REQUESTS - record.count, resetIn: record.resetAt - now }
+  return {
+    success: true,
+    remaining: MAX_REQUESTS - record.count,
+    resetIn: record.resetAt - now,
+  }
 }
 
 export function getRateLimitKey(identifier: string, action: string): string {
@@ -27,7 +35,7 @@ export function getRateLimitKey(identifier: string, action: string): string {
 export async function rateLimitMiddleware(
   identifier: string,
   action: string,
-  onRateLimited?: () => void
+  onRateLimited?: () => void,
 ): Promise<boolean> {
   const key = getRateLimitKey(identifier, action)
   const result = checkRateLimit(key)

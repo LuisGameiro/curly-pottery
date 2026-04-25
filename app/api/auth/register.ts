@@ -29,20 +29,24 @@ export default async function handler(
     return res.status(405).end(`Method ${req.method} Not Allowed`)
   }
 
-  const clientIp = req.headers['x-forwarded-for']?.toString().split(',')[0] 
-    || req.socket?.remoteAddress 
-    || 'unknown'
+  const clientIp =
+    req.headers['x-forwarded-for']?.toString().split(',')[0] ||
+    req.socket?.remoteAddress ||
+    'unknown'
   const rateKey = getRateLimitKey(clientIp, 'register')
   const rateLimit = checkRateLimit(rateKey)
 
   res.setHeader('X-RateLimit-Limit', '5')
   res.setHeader('X-RateLimit-Remaining', rateLimit.remaining.toString())
-  res.setHeader('X-RateLimit-Reset', Math.ceil(rateLimit.resetIn / 1000).toString())
+  res.setHeader(
+    'X-RateLimit-Reset',
+    Math.ceil(rateLimit.resetIn / 1000).toString(),
+  )
 
   if (!rateLimit.success) {
-    return res.status(429).json({ 
+    return res.status(429).json({
       error: 'Too many registration attempts. Please try again later.',
-      retryAfter: Math.ceil(rateLimit.resetIn / 1000)
+      retryAfter: Math.ceil(rateLimit.resetIn / 1000),
     })
   }
 

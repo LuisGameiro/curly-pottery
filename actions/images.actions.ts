@@ -48,9 +48,11 @@ export async function syncImages({
             console.error('Failed to delete blob:', url, error)
             return { success: false, url, error }
           }
-        })
+        }),
       )
-      const failed = deleteResults.filter(r => r.status === 'rejected' || !r.value.success)
+      const failed = deleteResults.filter(
+        (r) => r.status === 'rejected' || !r.value.success,
+      )
       if (failed.length > 0) {
         console.error('Some blobs failed to delete:', failed.length)
       }

@@ -11,12 +11,7 @@ import {
 import { revalidatePath } from 'next/cache'
 import { authOptions } from '@lib/auth/authOptions'
 import { getServerSession } from 'next-auth'
-import {
-  AppError,
-  DatabaseError,
-  NetworkError,
-  formatError,
-} from '@lib/errors'
+import { AppError, DatabaseError, NetworkError, formatError } from '@lib/errors'
 import { withFetch } from '@lib/errors-utils'
 
 const isAdmin = (role: string | null | undefined) =>
@@ -183,71 +178,74 @@ export async function createOrder(
       }
     }
 
-const resolvedUserId = sessionUserId || userId || null
-  const resolvedEmail = session?.user?.email || email
+    const resolvedUserId = sessionUserId || userId || null
+    const resolvedEmail = session?.user?.email || email
 
-  if (!resolvedEmail) {
-    return {
-      success: false,
-      message: 'Email is required to create an order.',
-      errors: new DatabaseError('Email missing', 'createOrder'),
-    }
-  }
-
-  const fetchResult = await withFetch<{ status: string }>(
-    `https://api.sumup.com/v0.1/checkouts/${checkoutId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.SUMUP_API}`,
-      },
-      timeout: 10000,
-    }
-  )
-
-  if (!fetchResult.success) {
-    return {
-      success: false,
-      message: `Payment verification failed: ${fetchResult.message}`,
-      errors: fetchResult.errors,
-    }
-  }
-
-  if (fetchResult.data?.status !== 'PAID') {
-    return {
-      success: false,
-      message: 'Payment not completed. Please complete payment first.',
-      errors: new NetworkError('Payment not completed'),
-    }
-  }
-
-  const order = await prisma.$transaction(async (tx) => {
-    for (const item of lineItems) {
-      const variant = await tx.productVariant.findUnique({
-        where: { id: item.variantId },
-        select: { stock: true, product: { select: { name: true } } },
-      })
-
-      if (!variant) {
-        throw new DatabaseError(`Variant not found: ${item.variantId}`, 'createOrder')
+    if (!resolvedEmail) {
+      return {
+        success: false,
+        message: 'Email is required to create an order.',
+        errors: new DatabaseError('Email missing', 'createOrder'),
       }
+    }
 
-      if (variant.stock < item.quantity) {
-        throw new AppError(
-          `Insufficient stock for ${variant.product.name}. Requested: ${item.quantity}, Available: ${variant.stock}`,
-          'INSUFFICIENT_STOCK',
-          409
-        )
-      }
-
-      await tx.productVariant.update({
-        where: { id: item.variantId },
-        data: {
-          stock: { decrement: item.quantity },
+    const fetchResult = await withFetch<{ status: string }>(
+      `https://api.sumup.com/v0.1/checkouts/${checkoutId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.SUMUP_API}`,
         },
-      })
+        timeout: 10000,
+      },
+    )
+
+    if (!fetchResult.success) {
+      return {
+        success: false,
+        message: `Payment verification failed: ${fetchResult.message}`,
+        errors: fetchResult.errors,
+      }
     }
 
-    const newOrder = await tx.order.create({
+    if (fetchResult.data?.status !== 'PAID') {
+      return {
+        success: false,
+        message: 'Payment not completed. Please complete payment first.',
+        errors: new NetworkError('Payment not completed'),
+      }
+    }
+
+    const order = await prisma.$transaction(async (tx) => {
+      for (const item of lineItems) {
+        const variant = await tx.productVariant.findUnique({
+          where: { id: item.variantId },
+          select: { stock: true, product: { select: { name: true } } },
+        })
+
+        if (!variant) {
+          throw new DatabaseError(
+            `Variant not found: ${item.variantId}`,
+            'createOrder',
+          )
+        }
+
+        if (variant.stock < item.quantity) {
+          throw new AppError(
+            `Insufficient stock for ${variant.product.name}. Requested: ${item.quantity}, Available: ${variant.stock}`,
+            'INSUFFICIENT_STOCK',
+            409,
+          )
+        }
+
+        await tx.productVariant.update({
+          where: { id: item.variantId },
+          data: {
+            stock: { decrement: item.quantity },
+          },
+        })
+      }
+
+      const newOrder = await tx.order.create({
         data: {
           lineItems: lineItems,
           lastName,

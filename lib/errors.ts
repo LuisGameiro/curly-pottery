@@ -3,7 +3,7 @@ export class AppError extends Error {
     message: string,
     public code: string = 'INTERNAL_ERROR',
     public statusCode: number = 500,
-    public isOperational: boolean = true
+    public isOperational: boolean = true,
   ) {
     super(message)
     this.name = 'AppError'
@@ -12,29 +12,45 @@ export class AppError extends Error {
 }
 
 export class NetworkError extends AppError {
-  constructor(message: string, public originalError?: Error) {
+  constructor(
+    message: string,
+    public originalError?: Error,
+  ) {
     super(message, 'NETWORK_ERROR', 502)
     this.name = 'NetworkError'
   }
 }
 
 export class DatabaseError extends AppError {
-  constructor(message: string, public operation?: string) {
+  constructor(
+    message: string,
+    public operation?: string,
+  ) {
     super(message, 'DATABASE_ERROR', 500)
     this.name = 'DatabaseError'
   }
 }
 
 export class ValidationError extends AppError {
-  constructor(message: string, public field?: string) {
+  constructor(
+    message: string,
+    public field?: string,
+  ) {
     super(message, 'VALIDATION_ERROR', 400)
     this.name = 'ValidationError'
   }
 }
 
 export class NotFoundError extends AppError {
-  constructor(resource: string, public id?: string) {
-    super(`${resource}${id ? ` with ID: ${id}` : ''} not found`, 'NOT_FOUND', 404)
+  constructor(
+    resource: string,
+    public id?: string,
+  ) {
+    super(
+      `${resource}${id ? ` with ID: ${id}` : ''} not found`,
+      'NOT_FOUND',
+      404,
+    )
     this.name = 'NotFoundError'
   }
 }
@@ -43,12 +59,12 @@ export class InsufficientStockError extends AppError {
   constructor(
     public productName: string,
     public requested: number,
-    public available: number
+    public available: number,
   ) {
     super(
       `Insufficient stock for ${productName}. Requested: ${requested}, Available: ${available}`,
       'INSUFFICIENT_STOCK',
-      409
+      409,
     )
     this.name = 'InsufficientStockError'
   }

@@ -23,7 +23,12 @@ export const emailStyles = {
     borderRadius: '4px',
   },
   link: { color: '#0000EE', textDecoration: 'underline' as const },
-  logo: { width: '120px', height: 'auto', display: 'block', margin: '0 auto 16px' },
+  logo: {
+    width: '120px',
+    height: 'auto',
+    display: 'block',
+    margin: '0 auto 16px',
+  },
   adminButton: {
     background: '#fde372',
     color: '#000000',

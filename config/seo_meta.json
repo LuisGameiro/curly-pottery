@@ -22,7 +22,14 @@
     "site": "@curlypottery",
     "cardType": "summary_large_image"
   },
-  "keywords": ["pottery", "ceramics", "handcrafted", "artisan", "home decor", "gifts"],
+  "keywords": [
+    "pottery",
+    "ceramics",
+    "handcrafted",
+    "artisan",
+    "home decor",
+    "gifts"
+  ],
   "authors": [{ "name": "Curly Pottery" }],
   "creator": "@curlypottery"
 }

@@ -4,7 +4,7 @@ import { authOptions } from '@lib/auth/authOptions'
 import { ActionResponse } from '@lib/types/types'
 import { getServerSession } from 'next-auth'
 import { prisma } from 'prisma/prisma'
-import { NetworkError, DatabaseError, formatError } from '@lib/errors'
+import { DatabaseError } from '@lib/errors'
 import { withFetch } from '@lib/errors-utils'
 
 interface SumUpCheckoutResponse {
@@ -60,7 +60,7 @@ export async function createSumUpCheckout(): Promise<
         pay_to_email: userEmail,
       }),
       timeout: 15000,
-    }
+    },
   )
 
   if (!fetchResult.success) {

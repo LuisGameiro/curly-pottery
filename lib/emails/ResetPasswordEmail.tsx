@@ -22,7 +22,8 @@ export const ResetPasswordEmail = ({
   userFirstname = 'Customer',
   resetPasswordLink = 'https://yourstore.com/auth/reset-password?token=123',
 }: ResetPasswordEmailProps) => {
-  const { main, container, h1, text, section, hr, footer, button, link } = emailStyles
+  const { main, container, h1, text, section, hr, footer, button, link } =
+    emailStyles
 
   return (
     <Html>

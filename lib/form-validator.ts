@@ -16,7 +16,9 @@ const isValidSiteOrAbsoluteUrl = (value: string) => {
 export const isInternalUrl = (url: string): boolean => {
   try {
     const parsed = new URL(url)
-    const appUrl = new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://example.com')
+    const appUrl = new URL(
+      process.env.NEXT_PUBLIC_APP_URL || 'https://example.com',
+    )
     return parsed.hostname === appUrl.hostname
   } catch {
     return url.startsWith('/')

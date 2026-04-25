@@ -46,9 +46,10 @@ export async function generateMetadata({
     sku: product.slug,
     price: product.variants[0]?.price || 0,
     currency: product.variants[0]?.currency || 'GBP',
-    availability: product.variants[0]?.stock && product.variants[0].stock > 0
-      ? 'https://schema.org/InStock'
-      : 'https://schema.org/OutOfStock',
+    availability:
+      product.variants[0]?.stock && product.variants[0].stock > 0
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
     images: product.images || [],
     url,
   })

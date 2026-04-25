@@ -30,7 +30,9 @@ export const ClientOrderEmail = ({
       <Preview>We have received your order!</Preview>
       <Body style={main}>
         <Container style={container}>
-          <Heading style={h1}>Thank you for your order, {customerName}!</Heading>
+          <Heading style={h1}>
+            Thank you for your order, {customerName}!
+          </Heading>
           <Text style={text}>
             Your pottery is being prepared for shipment. We will notify you once
             it is on the way.

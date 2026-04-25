@@ -17,7 +17,7 @@ export default function useCart() {
   } = useCartStore()
 
   const prevAuthRef = useRef(isAuthenticated)
-  
+
   useEffect(() => {
     if (prevAuthRef.current !== isAuthenticated) {
       prevAuthRef.current = isAuthenticated

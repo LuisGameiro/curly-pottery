@@ -84,11 +84,13 @@ export function generateOrganizationSchema({
     url,
     logo,
     description,
-    contactPoint: email ? {
-      '@type': 'ContactPoint',
-      email,
-      telephone,
-      contactType: 'customer service',
-    } : undefined,
+    contactPoint: email
+      ? {
+          '@type': 'ContactPoint',
+          email,
+          telephone,
+          contactType: 'customer service',
+        }
+      : undefined,
   })
 }

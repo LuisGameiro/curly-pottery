@@ -10,7 +10,7 @@ import type { ActionResponse } from './types/types'
 
 export async function withDatabase<T>(
   operation: string,
-  fn: (tx: typeof prisma) => Promise<T>
+  fn: (tx: typeof prisma) => Promise<T>,
 ): Promise<ActionResponse<T>> {
   try {
     const result = await prisma.$transaction(async (tx) => {
@@ -25,10 +25,7 @@ export async function withDatabase<T>(
     return {
       success: false,
       message: formatError(error),
-      errors: new DatabaseError(
-        `Failed to ${operation}`,
-        operation
-      ),
+      errors: new DatabaseError(`Failed to ${operation}`, operation),
     }
   }
 }
@@ -39,7 +36,7 @@ interface FetchOptions extends RequestInit {
 
 export async function withFetch<T>(
   url: string,
-  options: FetchOptions = {}
+  options: FetchOptions = {},
 ): Promise<ActionResponse<T>> {
   const { timeout = 10000, ...fetchOptions } = options
   const controller = new AbortController()
@@ -56,8 +53,7 @@ export async function withFetch<T>(
     const data = await response.json().catch(() => null)
 
     if (!response.ok) {
-      const message =
-        data?.message || `HTTP error ${response.status}`
+      const message = data?.message || `HTTP error ${response.status}`
       throw new NetworkError(message)
     }
 
@@ -96,24 +92,20 @@ export async function withFetch<T>(
 export function handleStockError(
   productName: string,
   requested: number,
-  available: number
+  available: number,
 ): { success: false; message: string; errors: InsufficientStockError } {
-  const error = new InsufficientStockError(
-    productName,
-    requested,
-    available
-  )
+  const error = new InsufficientStockError(productName, requested, available)
   return { success: false, message: error.message, errors: error }
 }
 
 export function handleNotFound(
   resource: string,
-  id?: string
+  id?: string,
 ): { success: false; message: string; errors: AppError } {
   const error = new AppError(
     `${resource}${id ? ` with ID: ${id}` : ''} not found`,
     'NOT_FOUND',
-    404
+    404,
   )
   return { success: false, message: error.message, errors: error }
 }
