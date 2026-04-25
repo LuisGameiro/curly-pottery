@@ -19,6 +19,7 @@ import {
 import { toast } from 'sonner'
 import { Undo2 } from 'lucide-react'
 import { trackEvent } from '@lib/analytics/trackEvents'
+import FavouriteButton from '../../common/FavouriteButton/FavouriteButton'
 
 interface ProductSidebarProps {
   product: ProductWithVariantsCategories
@@ -93,6 +94,7 @@ const ProductSidebar = ({
               text={product.description || ''}
               url={`${process.env.NEXT_PUBLIC_APP_URL}/shop/${product.slug}`}
             />
+            <FavouriteButton productId={product.id} />
           </div>
         </div>
         <div className="flex flex-wrap gap-2">

@@ -20,6 +20,13 @@ const FeatureBar = dynamic(() => import('@components/common/FeatureBar'), {
   ...dynamicProps,
 })
 
+const NewsletterBanner = dynamic(
+  () => import('../NewsletterBanner/NewsletterBanner'),
+  {
+    ...dynamicProps,
+  },
+)
+
 interface Props {
   children?: React.ReactNode
 }
@@ -33,6 +40,7 @@ export default function Layout({ children }: Props) {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar links={navBarlinks} />
+      <NewsletterBanner />
       <main className="bg-background w-full flex-1 flex flex-col">
         {children}
       </main>

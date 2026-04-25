@@ -94,12 +94,13 @@ model Product {
   description       String
   hide              Boolean     @default(false)
   images            String[]
-  variants          ProductVariant[] 
+  variants          ProductVariant[]
   categories        Category[]
   newsletterCampaignProducts NewsletterCampaignProduct[]
   requiresShipping  Boolean     @default(true)
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
+  favourites        Favourite[]
 }
 
 model ProductVariant {
@@ -232,8 +233,9 @@ model User {
     sessions        Session[]
     addresses       Address[]
     orders          Order[]
-    cart            Cart? 
+    cart            Cart?
     newsletterSubscriber NewsletterSubscriber?
+    favourites      Favourite[]
 
     createdAt       DateTime  @default(now())
     updatedAt       DateTime  @updatedAt
@@ -340,4 +342,15 @@ model User {
     @@index([campaignId, createdAt])
     @@index([subscriberId, createdAt])
   }
+
+model Favourite {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+}
 

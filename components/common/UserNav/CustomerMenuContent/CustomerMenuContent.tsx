@@ -11,6 +11,7 @@ import {
 import { Moon, Sun } from 'lucide-react'
 import { useUser } from '@lib/hooks/useUser'
 import { signOut } from 'next-auth/react'
+import { Heart } from 'lucide-react'
 
 const LINKS = [
   {
@@ -94,7 +95,14 @@ export default function CustomerMenuContent() {
             >
               My Account
             </button>
-
+            <button
+              type="button"
+              className={s.link}
+              onClick={() => handleClick('/user/favourites')}
+            >
+              <Heart size={16} className="mr-2" />
+              Favourites
+            </button>
             <button type="button" className={s.link} onClick={() => signOut()}>
               Logout
             </button>

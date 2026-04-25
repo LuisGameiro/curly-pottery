@@ -62,3 +62,11 @@
     @apply hidden;
   }
 }
+
+.dropdownItem {
+  @apply flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-secondary hover:bg-accent-2 transition-colors cursor-pointer;
+}
+
+.dropdownItem:focus {
+  @apply outline-2 outline-offset-2 outline-secondary;
+}

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import s from './Navbar.module.css'
 import NavbarRoot from './NavbarRoot'
 import { Logo } from '@components/ui'
-import { UserNav } from '@components/common'
+import { UserNav, SearchBar } from '@components/common'
 
 interface Link {
   href: string
@@ -16,7 +16,7 @@ interface NavbarProps {
 const Navbar = ({ links }: NavbarProps) => (
   <NavbarRoot>
     <div className={s.nav}>
-      <div className="flex items-center">
+      <div className="flex items-center gap-6">
         <Link href="/" className={s.logo} aria-label="Curly Pottery home">
           <Logo />
           <span className={s.brandName}>Curly Pottery</span>
@@ -31,9 +31,16 @@ const Navbar = ({ links }: NavbarProps) => (
             ))}
           </nav>
         )}
+
+        <div className="hidden md:block">
+          <SearchBar />
+        </div>
       </div>
 
-      <UserNav />
+      <div className="flex items-center gap-4">
+        <SearchBar className="md:hidden" />
+        <UserNav />
+      </div>
     </div>
   </NavbarRoot>
 )

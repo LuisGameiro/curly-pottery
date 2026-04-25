@@ -9,11 +9,13 @@ import { cn } from '@lib/utils'
 import { useUser } from '@lib/hooks/useUser'
 import Loading from 'app/loading'
 import { useClickOutside } from '@lib/hooks/useClickOutside'
+import { Heart } from 'lucide-react'
 
 const navItems = [
   { name: 'Profile', href: '/user', icon: User },
   { name: 'Cart', href: '/user/cart', icon: Package },
   { name: 'Orders', href: '/user/orders', icon: Van },
+  { name: 'Favourites', href: '/user/favourites', icon: Heart },
 ]
 
 export default function UserLayoutClient({
