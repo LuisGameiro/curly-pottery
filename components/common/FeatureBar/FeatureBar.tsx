@@ -1,58 +1,46 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import cn from 'clsx'
+import Link from 'next/link'
 import s from './FeatureBar.module.css'
 import { Text, Button } from '@components/ui'
-import Link from 'next/link'
+import { useConsent } from '@lib/hooks/useConsent'
+import { trackEvent } from '@lib/analytics/trackEvents'
 
 interface FeatureBarProps {
   className?: string
 }
 
-const FeatureBar = ({ className }: FeatureBarProps) => {
-  const [showBanner, setShowBanner] = useState(false)
-
-  useEffect(() => {
-    const consent = localStorage.getItem('cookie-consent')
-    if (!consent) {
-      setTimeout(() => {
-        setShowBanner(true)
-      }, 0)
-    }
-  }, [])
+export default function FeatureBar({ className }: FeatureBarProps) {
+  const {
+    showBanner,
+    acceptAll,
+    acceptEssential,
+  } = useConsent()
 
   const handleAcceptAll = () => {
-    localStorage.setItem(
-      'cookie-consent',
-      JSON.stringify({ analytics: true, marketing: true }),
-    )
-    setShowBanner(false)
+    acceptAll()
+    trackEvent('consent_accepted', { type: 'all' })
   }
 
   const handleAcceptEssential = () => {
-    localStorage.setItem(
-      'cookie-consent',
-      JSON.stringify({ analytics: false, marketing: false }),
-    )
-    setShowBanner(false)
+    acceptEssential()
+    trackEvent('consent_accepted', { type: 'essential' })
   }
 
   if (!showBanner) return null
 
   return (
-    <div className={cn(s.root, className)}>
+    <div className={`${s.root} ${className || ''}`}>
       <div className="max-w-screen mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-on-primary">
         <div className="text-sm">
           <Text variant="bold">We value your privacy</Text>
           <Text>
             We use cookies to enhance your experience. Essential cookies are
-            necessary for the site to function. Others help us analyze traffic.
-            View our{' '}
-            <Link href="/privacy" className="underline">
+            necessary for the site to function. Others help us analyze traffic
+            and provide personalized content.
+            <Link href="/privacy" className="underline ml-1">
               Privacy Policy
             </Link>
-            .
           </Text>
         </div>
 
@@ -80,4 +68,4 @@ const FeatureBar = ({ className }: FeatureBarProps) => {
   )
 }
 
-export default FeatureBar
+export { hasAnalyticsConsent, hasMarketingConsent } from '@lib/hooks/useConsent'

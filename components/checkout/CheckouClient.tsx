@@ -2,13 +2,12 @@
 
 import { useState } from 'react'
 import InformationForm from '@components/checkout/InformationForm'
-import ShippingMethod from '@components/checkout/ShippingMethod'
 import SumUpPayment from '@components/checkout/SumUpPayment'
 import { CheckoutSummary } from '@components/checkout/CheckoutSummary'
 import useCart from '@lib/hooks/useCart'
 import { createSumUpCheckout } from 'actions/sumUpPayment.actions'
 import { createOrder } from 'actions/order.actions'
-import { Container } from '@components/ui'
+import { Container, Text, Button } from '@components/ui'
 import { toast } from 'sonner'
 import { CreateOrder, CurrencyCode } from '@lib/types/types'
 import { useUser } from '@lib/hooks/useUser'
@@ -27,6 +26,7 @@ export default function CheckouClient() {
   const [step, setStep] = useState(1)
   const [checkoutId, setCheckoutId] = useState('')
   const [loading, setLoading] = useState(false)
+  const [paymentProvider, setPaymentProvider] = useState<'sumup' | 'klarna'>('sumup')
 
   const methods = useForm<CreateOrder>({
     defaultValues: {
@@ -71,23 +71,41 @@ export default function CheckouClient() {
         currentValues.taxes,
         currentValues.shippingPrice,
       )
-      const response = await createSumUpCheckout()
-      trackEvent('before_purchase', {
-        transaction_id: response.data,
-        userId: currentValues?.userId,
-        total_value: currentValues.totalPrice,
-        currency: currentValues.currency,
-        item_count: currentValues.lineItems.length,
-        items: currentValues.lineItems.map(
-          (item) => item.quantity + ' * ' + item.sku,
-        ),
-      })
-      if (!response.success && !response.data) {
-        setLoading(false)
-        toast(response.message)
+
+      if (paymentProvider === 'klarna') {
+        const klarnaResponse = await fetch('/api/payments/klarna/create-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            orderId: `ORDER-${Date.now()}`,
+            amount: currentValues.totalPrice,
+            currency: currentValues.currency,
+          }),
+        })
+        const klarnaData = await klarnaResponse.json()
+        if (klarnaData.success) {
+          setStep(3)
+        } else {
+          toast(klarnaData.message || 'Failed to initialize Klarna')
+        }
       } else {
-        setCheckoutId(response.data || '')
-        setStep(3)
+        const response = await createSumUpCheckout()
+        trackEvent('before_purchase', {
+          transaction_id: response.data,
+          userId: currentValues?.userId,
+          total_value: currentValues.totalPrice,
+          currency: currentValues.currency,
+          item_count: currentValues.lineItems.length,
+          items: currentValues.lineItems.map(
+            (item) => item.quantity + ' * ' + item.sku,
+          ),
+        })
+        if (!response.success && !response.data) {
+          toast(response.message)
+        } else {
+          setCheckoutId(response.data || '')
+          setStep(3)
+        }
       }
     } catch (error) {
       console.error(error)
@@ -201,12 +219,69 @@ export default function CheckouClient() {
               isLoggedIn={isAuthenticated}
             />
           )}
-          {step === 2 && <ShippingMethod onComplete={nextToPayment} />}
+          {step === 2 && (
+            <div className="space-y-4">
+              <Text variant="bold">Select Payment Method</Text>
+              
+              <div className="space-y-3">
+                <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors">
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="sumup"
+                    checked={paymentProvider === 'sumup'}
+                    onChange={() => setPaymentProvider('sumup')}
+                    className="mr-3"
+                  />
+                  <div>
+                    <Text variant="bold">Credit/Debit Card (SumUp)</Text>
+                    <Text variant="muted" className="text-sm">Secure payment via SumUp</Text>
+                  </div>
+                </label>
+                
+                <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors">
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="klarna"
+                    checked={paymentProvider === 'klarna'}
+                    onChange={() => {
+                      setPaymentProvider('klarna')
+                    }}
+                    className="mr-3"
+                  />
+                  <div>
+                    <Text variant="bold">Klarna</Text>
+                    <Text variant="muted" className="text-sm">Pay now, pay later or in installments</Text>
+                  </div>
+                </label>
+              </div>
+
+              <Button
+                type="button"
+                width="100%"
+                loading={loading}
+                color="success"
+                onClick={nextToPayment}
+              >
+                Continue to {paymentProvider === 'klarna' ? 'Klarna' : 'Payment'}
+              </Button>
+            </div>
+          )}
           {step === 3 && (
-            <SumUpPayment
-              checkoutId={checkoutId}
-              onComplete={onPaymentComplete}
-            />
+            <div className="space-y-4">
+              <Text variant="bold">Complete Your Payment</Text>
+              {paymentProvider === 'sumup' ? (
+                <SumUpPayment
+                  checkoutId={checkoutId}
+                  onComplete={onPaymentComplete}
+                />
+              ) : (
+                <div className="p-4 border rounded-lg">
+                  <Text variant="muted">Redirecting to Klarna...</Text>
+                </div>
+              )}
+            </div>
           )}
         </div>
 

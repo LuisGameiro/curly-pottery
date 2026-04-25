@@ -31,5 +31,8 @@
     "gifts"
   ],
   "authors": [{ "name": "Curly Pottery" }],
-  "creator": "@curlypottery"
+  "creator": "@curlypottery",
+  "notes": {
+    "IMPORTANT": "Replace YOUR_DOMAIN_HERE with your actual domain (e.g., curlypottery.co.uk) before deploying to production"
+  }
 }

@@ -7,7 +7,6 @@ import {
   getRelatedProducts,
 } from 'actions/product.actions'
 import constructMetadata from '@components/common/SEO/SEO'
-import { generateProductSchema } from '@lib/seo/schema'
 
 export async function generateStaticParams() {
   try {
@@ -39,20 +38,6 @@ export async function generateMetadata({
   const product = response.data
   const url = `${process.env.NEXT_PUBLIC_APP_URL}/product/${slug}`
   const productImage = product.images?.[0] || '/logo.png'
-
-  const productSchema = generateProductSchema({
-    name: product.name,
-    description: product.description || `Hand-crafted ${product.name}`,
-    sku: product.slug,
-    price: product.variants[0]?.price || 0,
-    currency: product.variants[0]?.currency || 'GBP',
-    availability:
-      product.variants[0]?.stock && product.variants[0].stock > 0
-        ? 'https://schema.org/InStock'
-        : 'https://schema.org/OutOfStock',
-    images: product.images || [],
-    url,
-  })
 
   return {
     ...constructMetadata({

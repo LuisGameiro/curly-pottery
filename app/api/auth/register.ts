@@ -14,11 +14,11 @@ const registerSchema = z
     phone: z.string().optional(),
     acceptsMarketing: z.boolean().default(false),
   })
-  .refine((data) => data.password === data.password2, {
+  .refine((data) => data.password2 === data.password, {
     message: 'Passwords do not match',
     path: ['password2'],
   })
-  .transform(({ password2, ...data }) => data)
+  .transform(({ password2: _password2, ...data }) => data)
 
 export default async function handler(
   req: NextApiRequest,

@@ -31,6 +31,10 @@ const links: Page[] = [
     name: 'Privacy Policy',
     url: '/privacy',
   },
+  {
+    name: 'Cookie Settings',
+    url: '/cookies',
+  },
 ]
 
 const Footer = () => {

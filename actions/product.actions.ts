@@ -11,6 +11,7 @@ import { prisma } from 'prisma/prisma'
 import { deleteBlob } from './serverImages.action'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@lib/auth/authOptions'
+import { revalidatePath } from 'next/cache'
 
 const pickRandomItems = <T>(items: T[], limit: number) => {
   const sanitizedLimit = Math.max(0, Math.floor(limit))
@@ -136,6 +137,9 @@ export async function deleteProduct({
       where: { id },
     })
 
+    revalidatePath('/shop')
+    revalidatePath('/admin/products')
+
     return {
       success: true,
       message: 'Deleted product successfully',
@@ -175,6 +179,10 @@ export async function toggleVisibility({
         hide: !state,
       },
     })
+
+    revalidatePath('/shop')
+    revalidatePath('/admin/products')
+    revalidatePath(`/shop/${product.slug}`)
 
     return {
       success: true,
@@ -385,9 +393,6 @@ export async function upsertProduct(
       .map((v) => v.id)
       .filter((id) => id && !id.startsWith('temp-'))
 
-    const productId =
-      id && !id.startsWith('temp-') ? id : '000000000000000000000000'
-
     const prepareVariant = (v: VariantInput) => {
       const {
         id: _vId,
@@ -405,28 +410,34 @@ export async function upsertProduct(
       }
     }
 
+    const existingProduct = id
+      ? await prisma.product.findUnique({
+          where: { id },
+          select: { id: true },
+        })
+      : null
+
+    const variantsToKeep = existingVariantIds.filter((id) => id !== '')
+    const variantUpserts = variants.map((v) => {
+      const isTemp = v.id.startsWith('temp-')
+      const variantData = prepareVariant(v)
+      return {
+        where: { id: isTemp ? '000000000000000000000000' : v.id },
+        update: variantData,
+        create: variantData,
+      }
+    })
+
     const product = await prisma.product.upsert({
-      where: { id: productId },
+      where: { id: existingProduct?.id || 'new' },
       update: {
         ...productData,
         categories: {
           set: categoryIds.map((catId) => ({ id: catId })),
         },
         variants: {
-          deleteMany: {
-            productId: id,
-            id: { notIn: existingVariantIds },
-          },
-          upsert: variants.map((v) => {
-            const isTemp = !v.id || v.id.startsWith('temp-')
-            const variantData = prepareVariant(v)
-
-            return {
-              where: { id: isTemp ? '000000000000000000000000' : v.id },
-              update: variantData,
-              create: variantData,
-            }
-          }),
+          deleteMany: { id: { notIn: variantsToKeep } },
+          upsert: variantUpserts,
         },
       },
       create: {
@@ -439,6 +450,10 @@ export async function upsertProduct(
         },
       },
     })
+
+    revalidatePath('/shop')
+    revalidatePath('/admin/products')
+    revalidatePath(`/shop/${product.slug}`)
 
     return {
       success: true,

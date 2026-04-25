@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Curly Pottery - E-commerce Website
+
+A Next.js 16 e-commerce platform for handmade pottery and ceramics.
 
 ## Getting Started
 
@@ -6,56 +8,162 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-## Newsletter Setup
+## Environment Setup
 
-This project now includes a newsletter system with:
-
-- Guest email capture from the footer
-- Registered-user opt-in syncing from the registration flow
-- An admin composer at `/admin/newsletter`
-- Queued delivery with tracked opens, tracked clicks, and unsubscribe links
-
-Set these environment variables before using the newsletter features:
-
-- `RESEND_API_KEY` for delivery through Resend
-- `NEXT_PUBLIC_APP_URL` for unsubscribe, click, and open tracking URLs
-- `NEWSLETTER_FROM_EMAIL` optional custom sender override
-- `NEWSLETTER_DISPATCH_SECRET` or `CRON_SECRET` to protect `/api/newsletter/dispatch`
-
-To process the next queued newsletter batch manually, send an authorized request to:
+Copy `.env.local.example` to `.env.local` and fill in your values:
 
 ```bash
-POST /api/newsletter/dispatch
-Authorization: Bearer <NEWSLETTER_DISPATCH_SECRET>
+cp .env.local.example .env.local
 ```
 
-In production, this endpoint is intended to be called by a daily cron job.
+### Required Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+#### Database
+```env
+DATABASE_URL=postgresql://user:password@host:5432/database
+```
 
-## Learn More
+#### Authentication (NextAuth.js)
+```env
+NEXTAUTH_SECRET=your_generated_secret_key
+NEXTAUTH_URL=http://localhost:3000
 
-To learn more about Next.js, take a look at the following resources:
+# Google OAuth (optional)
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### App Configuration
+```env
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_APP_ENV=development
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+#### Payment Providers
 
-## Deploy on Vercel
+**SumUp** (required for checkout):
+```env
+SUMUP_API=your_sumup_api_key
+SUMUP_MERCHANT_CODE=your_merchant_code
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Klarna** (optional - add for buy now, pay later):
+```env
+# Get credentials from merchantportal.klarna.com
+KLANA_API_URL=https://api.klarna.com
+KLANA_MERCHANT_ID=your_merchant_id
+KLANA_SHARED_SECRET=your_shared_secret
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# For testing, use sandbox:
+# KLANA_API_URL=https://api-sandbox.klarna.com
+```
+
+#### Email (Resend)
+```env
+RESEND_API_KEY=re_123456789
+```
+
+#### Analytics (optional)
+```env
+NEXT_PUBLIC_POSTHOG_KEY=your_posthog_key
+NEXT_PUBLIC_POSTHOG_HOST=eu.i.posthog.com
+GA_MEASUREMENT_ID=G-XXXXXXXXXX
+```
+
+#### Image Storage
+```env
+BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
+```
+
+---
+
+## Features
+
+### Admin Panel (`/admin`)
+
+- **Products**: Create, edit, delete products with variants
+- **Categories**: Manage product categories
+- **Orders**: View and manage customer orders
+- **Newsletter**: Compose and send newsletters
+
+### Payment Options
+
+1. **SumUp** (default) - Credit/debit card payments
+2. **Klarna** - Buy now, pay later or in installments
+
+### Newsletter System
+
+- Guest email capture from footer
+- Registered-user opt-in syncing
+- Admin composer at `/admin/newsletter`
+- Tracked opens, clicks, and unsubscribe links
+
+### Cache Revalidation
+
+Product updates in the admin panel automatically refresh:
+- `/shop` - Public shop page
+- `/admin/products` - Admin product list
+- Product detail pages
+
+---
+
+## Development Scripts
+
+```bash
+npm run dev        # Start development server
+npm run build     # Build for production
+npm run start     # Start production server
+npm run lint      # Run ESLint
+npm run test      # Run tests
+npm run typecheck # TypeScript check
+```
+
+---
+
+## Deployment
+
+### Vercel (Recommended)
+
+1. Connect your repository to Vercel
+2. Add environment variables in Vercel dashboard
+3. Deploy
+
+### Environment Variables for Production
+
+Ensure these are set in your deployment platform:
+- `DATABASE_URL` - PostgreSQL database URL
+- `NEXTAUTH_SECRET` - Generated secret key
+- `SUMUP_API` / `SUMUP_MERCHANT_CODE` - SumUp credentials
+- `NEXT_PUBLIC_APP_URL` - Your production URL
+- `BLOB_READ_WRITE_TOKEN` - Vercel Blob token
+
+---
+
+## API Routes
+
+| Endpoint | Purpose |
+|----------|---------|
+| `/api/auth/*` | Authentication routes |
+| `/api/payments/sumup/*` | SumUp payment processing |
+| `/api/payments/klarna/*` | Klarna payment processing |
+| `/api/newsletter/*` | Newsletter management |
+| `/api/images` | Image upload handling |
+
+---
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Database**: PostgreSQL via Prisma ORM
+- **Authentication**: NextAuth.js
+- **Styling**: Tailwind CSS 4
+- **Payments**: SumUp, Klarna
+- **Email**: Resend + React Email
+- **Analytics**: PostHog, Google Analytics
+- **Error Tracking**: Sentry

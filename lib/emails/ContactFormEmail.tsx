@@ -8,7 +8,7 @@ interface ContactProps {
 }
 
 export const ContactFormEmail = ({ name, email, message }: ContactProps) => {
-  const { main, h1, container, text, section } = emailStyles
+  const { main, h1, text, section } = emailStyles
 
   return (
     <Html>
