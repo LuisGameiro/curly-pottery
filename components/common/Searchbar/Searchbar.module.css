@@ -1,3 +1,6 @@
+@reference "tailwindcss";
+@reference "../../../globals.css";
+
 .root {
   @apply relative text-sm bg-background text-base w-full transition-colors duration-150 border border-border;
 }

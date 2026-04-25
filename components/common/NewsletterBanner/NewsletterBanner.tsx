@@ -38,10 +38,7 @@ const NewsletterBanner = () => {
           </Text>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className={s.form}
-        >
+        <form onSubmit={handleSubmit} className={s.form}>
           <label className="sr-only" htmlFor="newsletter-banner-email">
             Email address
           </label>
@@ -56,11 +53,7 @@ const NewsletterBanner = () => {
             placeholder="Enter your email"
             className={s.input}
           />
-          <Button
-            type="submit"
-            variant="secondary"
-            disabled={isPending}
-          >
+          <Button type="submit" variant="secondary" disabled={isPending}>
             {isPending ? 'Joining...' : 'Join'}
           </Button>
         </form>

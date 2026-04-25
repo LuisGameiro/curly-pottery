@@ -1,11 +1,25 @@
 'use client'
 
 import s from './UserNav.module.css'
-import { Button, Dropdown, DropdownTrigger, DropdownContent, DropdownMenuItem, DropdownMenuLabel } from '@components/ui'
+import {
+  Button,
+  Dropdown,
+  DropdownTrigger,
+  DropdownContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+} from '@components/ui'
 import { signOut } from 'next-auth/react'
 import { cn } from '@lib/utils'
 import useCart from '@lib/hooks/useCart'
-import { Menu, ShoppingBasket, Heart, User, Package, LogOut } from 'lucide-react'
+import {
+  Menu,
+  ShoppingBasket,
+  Heart,
+  User,
+  Package,
+  LogOut,
+} from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useUser } from '@lib/hooks/useUser'
 import CustomerMenuContent from './CustomerMenuContent'
@@ -19,7 +33,8 @@ export default function UserNav({ className }: UserNavProps) {
   const router = useRouter()
 
   const { data } = useCart()
-  const itemsCount = data?.lineItems.reduce((sum, item) => sum + item.quantity, 0) ?? 0
+  const itemsCount =
+    data?.lineItems.reduce((sum, item) => sum + item.quantity, 0) ?? 0
 
   return (
     <nav className={cn(s.root, className)}>

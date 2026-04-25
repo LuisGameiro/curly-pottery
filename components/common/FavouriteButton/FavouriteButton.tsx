@@ -37,7 +37,9 @@ export default function FavouriteButton({
       }}
       className={cn(
         'transition-colors duration-200',
-        filled ? 'text-red-500 hover:text-red-600' : 'text-neutral-400 hover:text-red-500',
+        filled
+          ? 'text-red-500 hover:text-red-600'
+          : 'text-neutral-400 hover:text-red-500',
         className,
       )}
     >

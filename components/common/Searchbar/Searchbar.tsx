@@ -11,7 +11,10 @@ interface SearchBarProps {
   id?: string
 }
 
-export default function SearchBar({ className, id = 'search' }: SearchBarProps) {
+export default function SearchBar({
+  className,
+  id = 'search',
+}: SearchBarProps) {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')

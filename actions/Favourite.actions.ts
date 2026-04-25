@@ -41,9 +41,7 @@ export async function addFavouriteAction(productId: string): Promise<void> {
   revalidatePath('/')
 }
 
-export async function removeFavouriteAction(
-  productId: string,
-): Promise<void> {
+export async function removeFavouriteAction(productId: string): Promise<void> {
   const session = await getServerSession(authOptions)
 
   if (!session?.user?.id) return
