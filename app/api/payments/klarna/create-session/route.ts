@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createKlarnaSession, isKlarnaConfigured } from '@lib/payments/klarna-client'
+import {
+  createKlarnaSession,
+  isKlarnaConfigured,
+} from '@lib/payments/klarna-client'
 import { getAppUrl } from '@lib/site-url'
 
 export async function POST(request: NextRequest) {
   if (!isKlarnaConfigured()) {
     return NextResponse.json(
       { success: false, message: 'Klarna is not configured' },
-      { status: 503 }
+      { status: 503 },
     )
   }
 
@@ -17,7 +20,7 @@ export async function POST(request: NextRequest) {
     if (!orderId || !amount) {
       return NextResponse.json(
         { success: false, message: 'Missing orderId or amount' },
-        { status: 400 }
+        { status: 400 },
       )
     }
 
@@ -38,7 +41,7 @@ export async function POST(request: NextRequest) {
     if (!result.success) {
       return NextResponse.json(
         { success: false, message: result.message },
-        { status: 400 }
+        { status: 400 },
       )
     }
 
@@ -52,7 +55,7 @@ export async function POST(request: NextRequest) {
     console.error('Klarna session API error:', error)
     return NextResponse.json(
       { success: false, message: 'Internal server error' },
-      { status: 500 }
+      { status: 500 },
     )
   }
 }
@@ -60,6 +63,6 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   return NextResponse.json(
     { success: false, message: 'Method not allowed' },
-    { status: 405 }
+    { status: 405 },
   )
 }

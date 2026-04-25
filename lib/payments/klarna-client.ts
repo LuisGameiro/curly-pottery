@@ -37,7 +37,7 @@ interface AuthorizeResponse {
 
 function getKlarnaAuth(): string {
   const credentials = Buffer.from(
-    `${KLANA_MERCHANT_ID}:${KLANA_SHARED_SECRET}`
+    `${KLANA_MERCHANT_ID}:${KLANA_SHARED_SECRET}`,
   ).toString('base64')
   return `Basic ${credentials}`
 }
@@ -157,7 +157,7 @@ export async function authorizeKlarnaPayment({
         body: JSON.stringify({
           payment_method_category: paymentMethodCategory,
         }),
-      }
+      },
     )
 
     if (!response.ok) {
@@ -184,7 +184,8 @@ export async function authorizeKlarnaPayment({
     console.error('Klarna authorize API error:', error)
     return {
       success: false,
-      message: error instanceof Error ? error.message : 'Klarna authorize error',
+      message:
+        error instanceof Error ? error.message : 'Klarna authorize error',
       errors: error instanceof Error ? error : new Error(String(error)),
     }
   }
@@ -196,7 +197,8 @@ export const KlarnaPaymentMethods = {
   PAY_OVER_TIME: 'pay_over_time',
 } as const
 
-export type KlarnaPaymentMethod = (typeof KlarnaPaymentMethods)[keyof typeof KlarnaPaymentMethods]
+export type KlarnaPaymentMethod =
+  (typeof KlarnaPaymentMethods)[keyof typeof KlarnaPaymentMethods]
 
 export function getKlarnaPaymentMethodName(identifier: string): string {
   const names: Record<string, string> = {

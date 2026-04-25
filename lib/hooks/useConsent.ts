@@ -17,7 +17,9 @@ const DEFAULT_CONSENT: ConsentPreferences = {
 const CONSENT_COOKIE_NAME = 'cookie-consent'
 const CONSENT_COOKIE_MAX_AGE = 365 * 24 * 60 * 60
 
-function parseCookieValue(value: string | undefined): ConsentPreferences | null {
+function parseCookieValue(
+  value: string | undefined,
+): ConsentPreferences | null {
   if (!value) return null
   try {
     return JSON.parse(value) as ConsentPreferences
@@ -36,7 +38,7 @@ function setCookieClient(
   name: string,
   value: string,
   maxAge: number,
-  sameSite: 'strict' | 'lax' | 'none' = 'lax'
+  sameSite: 'strict' | 'lax' | 'none' = 'lax',
 ): void {
   const expires = new Date(Date.now() + maxAge * 1000).toUTCString()
   document.cookie = `${name}=${value};expires=${expires};path=/;max-age=${maxAge};SameSite=${sameSite}`
@@ -73,7 +75,11 @@ export function useConsent() {
       marketing: true,
     }
     setConsent(newConsent)
-    setCookieClient(CONSENT_COOKIE_NAME, JSON.stringify(newConsent), CONSENT_COOKIE_MAX_AGE)
+    setCookieClient(
+      CONSENT_COOKIE_NAME,
+      JSON.stringify(newConsent),
+      CONSENT_COOKIE_MAX_AGE,
+    )
     setHasConsented(true)
   }, [isClient])
 
@@ -85,7 +91,11 @@ export function useConsent() {
       marketing: false,
     }
     setConsent(newConsent)
-    setCookieClient(CONSENT_COOKIE_NAME, JSON.stringify(newConsent), CONSENT_COOKIE_MAX_AGE)
+    setCookieClient(
+      CONSENT_COOKIE_NAME,
+      JSON.stringify(newConsent),
+      CONSENT_COOKIE_MAX_AGE,
+    )
     setHasConsented(true)
   }, [isClient])
 
@@ -98,9 +108,13 @@ export function useConsent() {
         necessary: true,
       }
       setConsent(newConsent)
-      setCookieClient(CONSENT_COOKIE_NAME, JSON.stringify(newConsent), CONSENT_COOKIE_MAX_AGE)
+      setCookieClient(
+        CONSENT_COOKIE_NAME,
+        JSON.stringify(newConsent),
+        CONSENT_COOKIE_MAX_AGE,
+      )
     },
-    [consent, isClient]
+    [consent, isClient],
   )
 
   const resetConsent = useCallback(() => {

@@ -2,11 +2,17 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { Text, Button } from '@components/ui'
-import { getKlarnaPaymentMethodName, isKlarnaConfigured } from '@lib/payments/klarna-client'
+import {
+  getKlarnaPaymentMethodName,
+  isKlarnaConfigured,
+} from '@lib/payments/klarna-client'
 
 interface KlarnaPaymentWidgetProps {
   clientToken: string
-  onPaymentAuthorized: (result: { orderId: string; redirectUrl?: string }) => void
+  onPaymentAuthorized: (result: {
+    orderId: string
+    redirectUrl?: string
+  }) => void
   onError: (error: string) => void
   onCancelled: () => void
   returnUrl: string
@@ -17,11 +23,14 @@ interface KlarnaWidget {
   load: () => void
   authorize: (
     paymentMethodCategory: string,
-    callback: (result: { authorization_token: string; redirect_url?: string }) => void
+    callback: (result: {
+      authorization_token: string
+      redirect_url?: string
+    }) => void,
   ) => void
   on: (
     event: string,
-    callback: (data: { code: string; message: string }) => void
+    callback: (data: { code: string; message: string }) => void,
   ) => void
   resume: () => void
 }
@@ -146,7 +155,9 @@ export default function KlarnaPaymentWidget({
       }
     } catch (error) {
       console.error('Authorization error:', error)
-      onError(error instanceof Error ? error.message : 'Payment authorization failed')
+      onError(
+        error instanceof Error ? error.message : 'Payment authorization failed',
+      )
     } finally {
       setIsLoading(false)
     }
@@ -155,7 +166,9 @@ export default function KlarnaPaymentWidget({
   if (!isKlarnaConfigured()) {
     return (
       <div className="p-4 bg-yellow-50 border border-yellow-200 rounded">
-        <Text variant="error">Klarna is not configured. Please contact support.</Text>
+        <Text variant="error">
+          Klarna is not configured. Please contact support.
+        </Text>
       </div>
     )
   }

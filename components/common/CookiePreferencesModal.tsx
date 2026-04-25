@@ -1,12 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import {
-  Button,
-  Container,
-  Text,
-  InputCheckbox,
-} from '@components/ui'
+import { Button, Container, Text, InputCheckbox } from '@components/ui'
 import { ConsentPreferences, useConsent } from '@lib/hooks/useConsent'
 import { X } from 'lucide-react'
 
@@ -44,10 +39,7 @@ export default function CookiePreferencesModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div
-        className="absolute inset-0 bg-black/50"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
 
       <Container className="relative bg-background p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
         <div className="flex items-center justify-between mb-4">
@@ -69,11 +61,7 @@ export default function CookiePreferencesModal({
                 Required for the site to function. Cannot be disabled.
               </Text>
             </div>
-            <InputCheckbox
-              checked={true}
-              disabled
-              onChange={() => {}}
-            />
+            <InputCheckbox checked={true} disabled onChange={() => {}} />
           </div>
 
           <div className="flex items-center justify-between py-2 border-b">

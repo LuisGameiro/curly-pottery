@@ -65,7 +65,10 @@ export default function PaymentSelector({
     }
   }
 
-  const handleKlarnaSuccess = (result: { orderId: string; redirectUrl?: string }) => {
+  const handleKlarnaSuccess = (result: {
+    orderId: string
+    redirectUrl?: string
+  }) => {
     onKlarnaSuccess({ orderId: result.orderId })
   }
 

@@ -7,7 +7,8 @@ import { hasAnalyticsConsent, hasMarketingConsent } from '@lib/hooks/useConsent'
 import Link from 'next/link'
 
 export default function CookieSettingsPage() {
-  const { consent, updateConsent, acceptAll, acceptEssential, hasConsented } = useConsent()
+  const { consent, updateConsent, acceptAll, acceptEssential, hasConsented } =
+    useConsent()
   const [localConsent, setLocalConsent] = useState<ConsentPreferences>(consent)
   const [isSaved, setIsSaved] = useState(false)
 
@@ -44,8 +45,8 @@ export default function CookieSettingsPage() {
         <div>
           <Text variant="pageHeading">Cookie Settings</Text>
           <Text>
-            Manage your cookie preferences. Essential cookies are required for the
-            site to function and cannot be disabled.
+            Manage your cookie preferences. Essential cookies are required for
+            the site to function and cannot be disabled.
           </Text>
         </div>
 
@@ -64,8 +65,8 @@ export default function CookieSettingsPage() {
             <div>
               <Text variant="bold">Analytics Cookies</Text>
               <Text variant="muted" className="text-sm">
-                Help us understand how visitors interact with our website through
-                PostHog and Google Analytics.
+                Help us understand how visitors interact with our website
+                through PostHog and Google Analytics.
               </Text>
             </div>
             <InputCheckbox
@@ -99,8 +100,8 @@ export default function CookieSettingsPage() {
 
         {isSaved && (
           <Text variant="muted" className="text-green">
-            Your preferences have been saved. Some analytics may take a few minutes to
-            update.
+            Your preferences have been saved. Some analytics may take a few
+            minutes to update.
           </Text>
         )}
 

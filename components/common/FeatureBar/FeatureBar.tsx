@@ -11,11 +11,7 @@ interface FeatureBarProps {
 }
 
 export default function FeatureBar({ className }: FeatureBarProps) {
-  const {
-    showBanner,
-    acceptAll,
-    acceptEssential,
-  } = useConsent()
+  const { showBanner, acceptAll, acceptEssential } = useConsent()
 
   const handleAcceptAll = () => {
     acceptAll()

@@ -25,11 +25,13 @@ cp .env.local.example .env.local
 ### Required Environment Variables
 
 #### Database
+
 ```env
 DATABASE_URL=postgresql://user:password@host:5432/database
 ```
 
 #### Authentication (NextAuth.js)
+
 ```env
 NEXTAUTH_SECRET=your_generated_secret_key
 NEXTAUTH_URL=http://localhost:3000
@@ -40,6 +42,7 @@ GOOGLE_CLIENT_SECRET=your_google_client_secret
 ```
 
 #### App Configuration
+
 ```env
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 NEXT_PUBLIC_APP_ENV=development
@@ -48,12 +51,14 @@ NEXT_PUBLIC_APP_ENV=development
 #### Payment Providers
 
 **SumUp** (required for checkout):
+
 ```env
 SUMUP_API=your_sumup_api_key
 SUMUP_MERCHANT_CODE=your_merchant_code
 ```
 
 **Klarna** (optional - add for buy now, pay later):
+
 ```env
 # Get credentials from merchantportal.klarna.com
 KLANA_API_URL=https://api.klarna.com
@@ -65,11 +70,13 @@ KLANA_SHARED_SECRET=your_shared_secret
 ```
 
 #### Email (Resend)
+
 ```env
 RESEND_API_KEY=re_123456789
 ```
 
 #### Analytics (optional)
+
 ```env
 NEXT_PUBLIC_POSTHOG_KEY=your_posthog_key
 NEXT_PUBLIC_POSTHOG_HOST=eu.i.posthog.com
@@ -77,6 +84,7 @@ GA_MEASUREMENT_ID=G-XXXXXXXXXX
 ```
 
 #### Image Storage
+
 ```env
 BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
 ```
@@ -107,6 +115,7 @@ BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
 ### Cache Revalidation
 
 Product updates in the admin panel automatically refresh:
+
 - `/shop` - Public shop page
 - `/admin/products` - Admin product list
 - Product detail pages
@@ -137,6 +146,7 @@ npm run typecheck # TypeScript check
 ### Environment Variables for Production
 
 Ensure these are set in your deployment platform:
+
 - `DATABASE_URL` - PostgreSQL database URL
 - `NEXTAUTH_SECRET` - Generated secret key
 - `SUMUP_API` / `SUMUP_MERCHANT_CODE` - SumUp credentials
@@ -147,13 +157,13 @@ Ensure these are set in your deployment platform:
 
 ## API Routes
 
-| Endpoint | Purpose |
-|----------|---------|
-| `/api/auth/*` | Authentication routes |
-| `/api/payments/sumup/*` | SumUp payment processing |
+| Endpoint                 | Purpose                   |
+| ------------------------ | ------------------------- |
+| `/api/auth/*`            | Authentication routes     |
+| `/api/payments/sumup/*`  | SumUp payment processing  |
 | `/api/payments/klarna/*` | Klarna payment processing |
-| `/api/newsletter/*` | Newsletter management |
-| `/api/images` | Image upload handling |
+| `/api/newsletter/*`      | Newsletter management     |
+| `/api/images`            | Image upload handling     |
 
 ---
 

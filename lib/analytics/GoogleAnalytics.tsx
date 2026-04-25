@@ -19,7 +19,7 @@ export function GoogleAnalytics() {
 
   useEffect(() => {
     const shouldTrack = hasAnalyticsConsent(consent)
-    
+
     if (shouldTrack && GA_ID && !isInitialized.current) {
       window.dataLayer = window.dataLayer || []
       window.gtag = function gtagFn(...args: unknown[]) {

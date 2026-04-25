@@ -11,7 +11,7 @@ export function PHProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const shouldTrack = hasAnalyticsConsent(consent)
-    
+
     if (shouldTrack && !isInitialized.current) {
       try {
         posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY || '', {

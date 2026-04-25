@@ -29,14 +29,18 @@ export async function POST(request: NextRequest) {
       console.error('Invalid Klarna webhook signature')
       return NextResponse.json(
         { success: false, message: 'Invalid signature' },
-        { status: 401 }
+        { status: 401 },
       )
     }
 
     const payload: KlarnaWebhookPayload = JSON.parse(rawBody)
     console.log('Klarna webhook received:', payload.event_type)
 
-    const { event_type, merchant_reference1, klarna_order_id: _klarnaOrderId } = payload
+    const {
+      event_type,
+      merchant_reference1,
+      klarna_order_id: _klarnaOrderId,
+    } = payload
     const orderId = merchant_reference1
 
     switch (event_type) {
@@ -73,7 +77,7 @@ export async function POST(request: NextRequest) {
     console.error('Klarna webhook error:', error)
     return NextResponse.json(
       { success: false, message: 'Webhook processing failed' },
-      { status: 500 }
+      { status: 500 },
     )
   }
 }
@@ -81,6 +85,6 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   return NextResponse.json(
     { success: false, message: 'Method not allowed' },
-    { status: 405 }
+    { status: 405 },
   )
 }

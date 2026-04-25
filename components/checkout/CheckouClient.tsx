@@ -26,7 +26,9 @@ export default function CheckouClient() {
   const [step, setStep] = useState(1)
   const [checkoutId, setCheckoutId] = useState('')
   const [loading, setLoading] = useState(false)
-  const [paymentProvider, setPaymentProvider] = useState<'sumup' | 'klarna'>('sumup')
+  const [paymentProvider, setPaymentProvider] = useState<'sumup' | 'klarna'>(
+    'sumup',
+  )
 
   const methods = useForm<CreateOrder>({
     defaultValues: {
@@ -73,15 +75,18 @@ export default function CheckouClient() {
       )
 
       if (paymentProvider === 'klarna') {
-        const klarnaResponse = await fetch('/api/payments/klarna/create-session', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            orderId: `ORDER-${Date.now()}`,
-            amount: currentValues.totalPrice,
-            currency: currentValues.currency,
-          }),
-        })
+        const klarnaResponse = await fetch(
+          '/api/payments/klarna/create-session',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              orderId: `ORDER-${Date.now()}`,
+              amount: currentValues.totalPrice,
+              currency: currentValues.currency,
+            }),
+          },
+        )
         const klarnaData = await klarnaResponse.json()
         if (klarnaData.success) {
           setStep(3)
@@ -222,7 +227,7 @@ export default function CheckouClient() {
           {step === 2 && (
             <div className="space-y-4">
               <Text variant="bold">Select Payment Method</Text>
-              
+
               <div className="space-y-3">
                 <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors">
                   <input
@@ -235,10 +240,12 @@ export default function CheckouClient() {
                   />
                   <div>
                     <Text variant="bold">Credit/Debit Card (SumUp)</Text>
-                    <Text variant="muted" className="text-sm">Secure payment via SumUp</Text>
+                    <Text variant="muted" className="text-sm">
+                      Secure payment via SumUp
+                    </Text>
                   </div>
                 </label>
-                
+
                 <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors">
                   <input
                     type="radio"
@@ -252,7 +259,9 @@ export default function CheckouClient() {
                   />
                   <div>
                     <Text variant="bold">Klarna</Text>
-                    <Text variant="muted" className="text-sm">Pay now, pay later or in installments</Text>
+                    <Text variant="muted" className="text-sm">
+                      Pay now, pay later or in installments
+                    </Text>
                   </div>
                 </label>
               </div>
@@ -264,7 +273,8 @@ export default function CheckouClient() {
                 color="success"
                 onClick={nextToPayment}
               >
-                Continue to {paymentProvider === 'klarna' ? 'Klarna' : 'Payment'}
+                Continue to{' '}
+                {paymentProvider === 'klarna' ? 'Klarna' : 'Payment'}
               </Button>
             </div>
           )}
