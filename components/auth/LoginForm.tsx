@@ -35,6 +35,7 @@ export default function LoginForm() {
       setError('Invalid email or password')
       setLoading(false)
     } else {
+      setLoading(false)
       router.push(redirectTo)
       router.refresh()
     }

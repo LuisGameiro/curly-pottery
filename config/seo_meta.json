@@ -1,25 +1,28 @@
 {
-  "title": "ACME Storefront | Powered by Next.js Commerce",
-  "titleTemplate": "%s - ACME Storefront",
-  "description": "Next.js Commerce - https://www.nextjs.org/commerce",
+  "title": "Curly Pottery | Handcrafted Ceramics",
+  "titleTemplate": "%s | Curly Pottery",
+  "description": "Discover unique handcrafted pottery and ceramics. Each piece is carefully crafted with love, bringing warmth and artistry to your home.",
   "openGraph": {
-    "title": "ACME Storefront | Powered by Next.js Commerce",
-    "description": "Next.js Commerce - https://www.nextjs.org/commerce",
+    "title": "Curly Pottery | Handcrafted Ceramics",
+    "description": "Discover unique handcrafted pottery and ceramics. Each piece is carefully crafted with love.",
     "type": "website",
-    "url": "https://nextjs.org/commerce",
-    "site_name": "Next.js Commerce",
+    "url": "https://YOUR_DOMAIN_HERE",
+    "site_name": "Curly Pottery",
     "images": [
       {
-        "url": "/card.png",
-        "width": "800",
-        "height": "600",
-        "alt": "Next.js Commerce"
+        "url": "/og-image.png",
+        "width": "1200",
+        "height": "630",
+        "alt": "Curly Pottery - Handcrafted Ceramics"
       }
     ]
   },
   "twitter": {
-    "handle": "@nextjs",
-    "site": "@nextjs",
+    "handle": "@curlypottery",
+    "site": "@curlypottery",
     "cardType": "summary_large_image"
-  }
+  },
+  "keywords": ["pottery", "ceramics", "handcrafted", "artisan", "home decor", "gifts"],
+  "authors": [{ "name": "Curly Pottery" }],
+  "creator": "@curlypottery"
 }

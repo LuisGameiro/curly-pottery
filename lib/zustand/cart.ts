@@ -39,14 +39,19 @@ export const useCartStore = create<CartStore>()(
         quantity: number,
       ) => {
         const { cartItems } = get()
+        const firstVariant = item.variants?.[0]
+        if (!firstVariant) {
+          console.error('No variant available for this product')
+          return
+        }
         const existing = cartItems.find(
-          (i: CartLineItem) => i.variantId === item.variants[0].id,
+          (i: CartLineItem) => i.variantId === firstVariant.id,
         )
         let newItems: CartLineItem[]
 
         if (existing) {
           newItems = cartItems.map((i: CartLineItem) =>
-            i.variantId === item.variants[0].id
+            i.variantId === firstVariant.id
               ? { ...i, quantity: i.quantity + quantity }
               : i,
           )
@@ -56,17 +61,17 @@ export const useCartStore = create<CartStore>()(
             {
               quantity,
               images: item.images[0] || '',
-              variantId: item.variants[0].id,
-              sku: item.variants[0].sku || '',
-              stock: item.variants[0].stock || 0,
-              price: item.variants[0].price || 0,
-              currency: item.variants[0].currency || 'GBP',
-              discounts: (item.variants[0].discounts ?? []) as Discount[],
+              variantId: firstVariant.id,
+              sku: firstVariant.sku || '',
+              stock: firstVariant.stock || 0,
+              price: firstVariant.price || 0,
+              currency: firstVariant.currency || 'GBP',
+              discounts: (firstVariant.discounts ?? []) as Discount[],
               id: item.id,
               slug: item.slug,
               name: item.name,
-              colorName: item.variants[0].colorName ?? '',
-              sizeName: item.variants[0].sizeName ?? '',
+              colorName: firstVariant.colorName ?? '',
+              sizeName: firstVariant.sizeName ?? '',
             },
           ]
         }

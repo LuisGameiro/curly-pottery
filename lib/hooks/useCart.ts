@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useUser } from './useUser'
 import { calculateDiscount } from '@lib/calculate-price'
 import { useCartStore } from '@lib/zustand/cart'
@@ -16,9 +16,14 @@ export default function useCart() {
     deleteAll,
   } = useCartStore()
 
+  const prevAuthRef = useRef(isAuthenticated)
+  
   useEffect(() => {
-    syncWithDatabase()
-  }, [isAuthenticated, syncWithDatabase, cartItems])
+    if (prevAuthRef.current !== isAuthenticated) {
+      prevAuthRef.current = isAuthenticated
+      syncWithDatabase()
+    }
+  }, [isAuthenticated, syncWithDatabase])
 
   const subtotal = useMemo(
     () =>

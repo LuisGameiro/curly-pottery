@@ -15,6 +15,7 @@ export function calculateDiscount(
         finalPrice -= finalPrice * discount.value
       }
     })
+    finalPrice = Math.max(0, finalPrice)
   }
 
   return {
@@ -26,6 +27,6 @@ export function calculateDiscount(
 
 export const showCurrency: Record<CurrencyCode, string> = {
   GBP: '£',
-  EUR: '$',
+  EUR: '€',
   USD: '$',
 }

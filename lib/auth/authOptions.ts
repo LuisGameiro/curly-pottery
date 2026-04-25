@@ -32,12 +32,12 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       async profile(profile) {
+        const nameParts = (profile.given_name || profile.name || '').split(' ')
         return {
           id: profile.sub,
           email: profile.email,
-          firstName: profile.given_name || profile.name.split(' ')[0],
-          lastName:
-            profile.family_name || profile.name.split(' ').slice(1).join(' '),
+          firstName: nameParts[0] || '',
+          lastName: nameParts.slice(1).join(' ') || '',
           role: 'USER',
         }
       },
@@ -87,6 +87,8 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = token.id as string
         session.user.role = token.role as string
+        session.user.firstName = token.name?.split(' ')[0] || ''
+        session.user.lastName = token.name?.split(' ').slice(1).join(' ') || ''
       }
       return session
     },

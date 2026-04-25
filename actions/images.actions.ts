@@ -39,7 +39,21 @@ export async function syncImages({
       .filter((url) => typeof url === 'string' && url.length > 0)
 
     if (urlsToDelete.length > 0) {
-      Promise.all(urlsToDelete.map(async (url) => deleteBlob(url)))
+      const deleteResults = await Promise.allSettled(
+        urlsToDelete.map(async (url) => {
+          try {
+            await deleteBlob(url)
+            return { success: true, url }
+          } catch (error) {
+            console.error('Failed to delete blob:', url, error)
+            return { success: false, url, error }
+          }
+        })
+      )
+      const failed = deleteResults.filter(r => r.status === 'rejected' || !r.value.success)
+      if (failed.length > 0) {
+        console.error('Some blobs failed to delete:', failed.length)
+      }
     }
 
     const finalUrls = await Promise.all(

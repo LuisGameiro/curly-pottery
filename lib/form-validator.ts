@@ -13,6 +13,16 @@ const isValidSiteOrAbsoluteUrl = (value: string) => {
   }
 }
 
+export const isInternalUrl = (url: string): boolean => {
+  try {
+    const parsed = new URL(url)
+    const appUrl = new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://example.com')
+    return parsed.hostname === appUrl.hostname
+  } catch {
+    return url.startsWith('/')
+  }
+}
+
 export const CategorySchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(50),
   image: z.url('Please enter a valid image URL'),
@@ -75,7 +85,7 @@ export type ProductInput = z.infer<typeof ProductSchema>
 export type VariantInput = z.infer<typeof VariantSchema>
 
 export const registerSchema = z.object({
-  email: z.email('Invalid email address'),
+  email: z.string().email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
@@ -84,7 +94,7 @@ export const registerSchema = z.object({
 })
 
 export const newsletterSubscriptionSchema = z.object({
-  email: z.email('Invalid email address'),
+  email: z.string().email('Invalid email address'),
   firstName: z.string().trim().max(50).optional().or(z.literal('')),
   lastName: z.string().trim().max(50).optional().or(z.literal('')),
 })
@@ -161,7 +171,8 @@ export const newsletterTrackedLinkSchema = z.object({
   url: z
     .string()
     .trim()
-    .refine(isValidSiteOrAbsoluteUrl, 'Please enter a valid URL or site path'),
+    .refine(isValidSiteOrAbsoluteUrl, 'Please enter a valid URL or site path')
+    .refine(isInternalUrl, 'External URLs are not allowed'),
   signature: z.string().trim().min(1, 'Signature is required'),
   label: z.string().trim().max(120).optional().or(z.literal('')),
   productId: z.string().trim().optional().or(z.literal('')),

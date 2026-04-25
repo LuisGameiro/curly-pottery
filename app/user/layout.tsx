@@ -1,18 +1,8 @@
 import type { Metadata } from 'next'
 import UserLayoutClient from './UserLayoutClient'
+import { noIndexMetadata } from '@lib/constants/metadata'
 
-export const metadata: Metadata = {
-  robots: {
-    index: false,
-    follow: false,
-    nocache: true,
-    googleBot: {
-      index: false,
-      follow: false,
-      noimageindex: true,
-    },
-  },
-}
+export const metadata: Metadata = noIndexMetadata
 
 export default function UserLayout({
   children,

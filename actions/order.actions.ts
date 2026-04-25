@@ -11,6 +11,13 @@ import {
 import { revalidatePath } from 'next/cache'
 import { authOptions } from '@lib/auth/authOptions'
 import { getServerSession } from 'next-auth'
+import {
+  AppError,
+  DatabaseError,
+  NetworkError,
+  formatError,
+} from '@lib/errors'
+import { withFetch } from '@lib/errors-utils'
 
 const isAdmin = (role: string | null | undefined) =>
   role?.toUpperCase() === 'ADMIN'
@@ -176,68 +183,71 @@ export async function createOrder(
       }
     }
 
-    const resolvedUserId = sessionUserId || userId || null
-    const resolvedEmail = session?.user?.email || email
+const resolvedUserId = sessionUserId || userId || null
+  const resolvedEmail = session?.user?.email || email
 
-    if (!resolvedEmail) {
-      return {
-        success: false,
-        message: 'Email is required to create an order.',
-        errors: null,
-      }
+  if (!resolvedEmail) {
+    return {
+      success: false,
+      message: 'Email is required to create an order.',
+      errors: new DatabaseError('Email missing', 'createOrder'),
     }
+  }
 
-    const verifyResponse = await fetch(
-      `https://api.sumup.com/v0.1/checkouts/${checkoutId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.SUMUP_API}`,
-        },
+  const fetchResult = await withFetch<{ status: string }>(
+    `https://api.sumup.com/v0.1/checkouts/${checkoutId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.SUMUP_API}`,
       },
-    )
-
-    const paymentInfo = await verifyResponse.json()
-
-    if (!verifyResponse.ok) {
-      throw new Error(
-        paymentInfo?.message ||
-          'Payment verification failed. Please contact support.',
-      )
+      timeout: 10000,
     }
+  )
 
-    if (paymentInfo.status !== 'PAID') {
-      return {
-        success: false,
-        message: 'Payment verification failed. Please contact support.',
-      }
+  if (!fetchResult.success) {
+    return {
+      success: false,
+      message: `Payment verification failed: ${fetchResult.message}`,
+      errors: fetchResult.errors,
     }
+  }
 
-    const order = await prisma.$transaction(async (tx) => {
-      for (const item of lineItems) {
-        const variant = await tx.productVariant.findUnique({
-          where: { id: item.variantId },
-          select: { stock: true, product: { select: { name: true } } },
-        })
+  if (fetchResult.data?.status !== 'PAID') {
+    return {
+      success: false,
+      message: 'Payment not completed. Please complete payment first.',
+      errors: new NetworkError('Payment not completed'),
+    }
+  }
 
-        if (!variant) {
-          throw new Error(`Variant not found for ID: ${item.variantId}`)
-        }
+  const order = await prisma.$transaction(async (tx) => {
+    for (const item of lineItems) {
+      const variant = await tx.productVariant.findUnique({
+        where: { id: item.variantId },
+        select: { stock: true, product: { select: { name: true } } },
+      })
 
-        if (variant.stock < item.quantity) {
-          throw new Error(
-            `Insufficient stock for ${variant.product.name}. Available: ${variant.stock}`,
-          )
-        }
-
-        await tx.productVariant.update({
-          where: { id: item.variantId },
-          data: {
-            stock: { decrement: item.quantity },
-          },
-        })
+      if (!variant) {
+        throw new DatabaseError(`Variant not found: ${item.variantId}`, 'createOrder')
       }
 
-      const newOrder = await tx.order.create({
+      if (variant.stock < item.quantity) {
+        throw new AppError(
+          `Insufficient stock for ${variant.product.name}. Requested: ${item.quantity}, Available: ${variant.stock}`,
+          'INSUFFICIENT_STOCK',
+          409
+        )
+      }
+
+      await tx.productVariant.update({
+        where: { id: item.variantId },
+        data: {
+          stock: { decrement: item.quantity },
+        },
+      })
+    }
+
+    const newOrder = await tx.order.create({
         data: {
           lineItems: lineItems,
           lastName,
@@ -277,11 +287,15 @@ export async function createOrder(
     }
   } catch (error) {
     console.error('createOrder_ERROR:', error)
+
+    if (error instanceof AppError) {
+      return { success: false, message: error.message, errors: error }
+    }
+
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : 'Failed to create order',
-      errors: error,
+      message: formatError(error),
+      errors: new DatabaseError('Failed to create order', 'createOrder'),
     }
   }
 }

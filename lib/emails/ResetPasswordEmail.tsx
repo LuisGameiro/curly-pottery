@@ -11,6 +11,7 @@ import {
   Hr,
   Img,
 } from '@react-email/components'
+import { emailStyles } from './emailStyles'
 
 interface ResetPasswordEmailProps {
   userFirstname?: string
@@ -21,6 +22,8 @@ export const ResetPasswordEmail = ({
   userFirstname = 'Customer',
   resetPasswordLink = 'https://yourstore.com/auth/reset-password?token=123',
 }: ResetPasswordEmailProps) => {
+  const { main, container, h1, text, section, hr, footer, button, link } = emailStyles
+
   return (
     <Html>
       <Head />
@@ -28,7 +31,7 @@ export const ResetPasswordEmail = ({
       <Body style={main}>
         <Container style={container}>
           <Section style={section}>
-            <Img src={'logo.png'} />
+            <Img src={'logo.png'} style={emailStyles.logo} />
 
             <Text style={h1}>
               <strong>Curly Pottery</strong>
@@ -63,30 +66,3 @@ export const ResetPasswordEmail = ({
 }
 
 export default ResetPasswordEmail
-
-const main = { backgroundColor: '#f1fbff', fontFamily: 'sans-serif' }
-const container = { margin: '0 auto', padding: '20px 0 48px', width: '580px' }
-const h1 = {
-  color: '#fde372',
-  fontSize: '24px',
-  fontWeight: 'bold',
-  textAlign: 'center' as const,
-}
-const text = { color: '#000000', fontSize: '16px', lineHeight: '24px' }
-const section = {
-  padding: '24px',
-  backgroundColor: '#f1fbff',
-  borderRadius: '8px',
-  border: '1px solid #e6e6e6',
-}
-
-const hr = { borderColor: '#e6e6e6', margin: '20px 0' }
-const footer = { color: '#fde372', fontSize: '12px' }
-
-const button = {
-  background: '#3b67d4',
-  color: '#000000',
-  padding: '12px 20px',
-  borderRadius: '4px',
-}
-const link = { color: '#0000EE', stTextDecoration: 'underline' as const }

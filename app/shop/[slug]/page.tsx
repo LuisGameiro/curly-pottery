@@ -7,6 +7,7 @@ import {
   getRelatedProducts,
 } from 'actions/product.actions'
 import constructMetadata from '@components/common/SEO/SEO'
+import { generateProductSchema } from '@lib/seo/schema'
 
 export async function generateStaticParams() {
   try {
@@ -39,24 +40,43 @@ export async function generateMetadata({
   const url = `${process.env.NEXT_PUBLIC_APP_URL}/product/${slug}`
   const productImage = product.images?.[0] || '/logo.png'
 
-  return constructMetadata({
-    title: product.name,
-    description:
-      product.description?.slice(0, 160) ||
-      `Unique hand-crafted ${product.name} by Curly Pottery.`,
-    canonical: url,
-    openGraph: {
-      title: product.name,
-      description: product.description || 'Beautiful hand-crafted pottery.',
-      url: url,
-      siteName: 'Curly Pottery',
-      images: [
-        { url: productImage, width: 500, height: 500, alt: product.name },
-      ],
-      locale: 'en_GB',
-      type: 'website',
-    },
+  const productSchema = generateProductSchema({
+    name: product.name,
+    description: product.description || `Hand-crafted ${product.name}`,
+    sku: product.slug,
+    price: product.variants[0]?.price || 0,
+    currency: product.variants[0]?.currency || 'GBP',
+    availability: product.variants[0]?.stock && product.variants[0].stock > 0
+      ? 'https://schema.org/InStock'
+      : 'https://schema.org/OutOfStock',
+    images: product.images || [],
+    url,
   })
+
+  return {
+    ...constructMetadata({
+      title: product.name,
+      description:
+        product.description?.slice(0, 160) ||
+        `Unique hand-crafted ${product.name} by Curly Pottery.`,
+      canonical: url,
+      openGraph: {
+        title: product.name,
+        description: product.description || 'Beautiful hand-crafted pottery.',
+        url: url,
+        siteName: 'Curly Pottery',
+        images: [
+          { url: productImage, width: 500, height: 500, alt: product.name },
+        ],
+        locale: 'en_GB',
+        type: 'website',
+      },
+    }),
+    other: {
+      'product:price': product.variants[0]?.price?.toString() || '0',
+      'product:currency': product.variants[0]?.currency || 'GBP',
+    },
+  }
 }
 
 export default async function ProductPage({
