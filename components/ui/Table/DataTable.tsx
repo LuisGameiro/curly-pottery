@@ -10,7 +10,7 @@ interface Column<T> {
 }
 
 interface DataTableProps<T> {
-  data: T[]
+  data?: T[] | null
   columns: Column<T>[]
   isLoading?: boolean
   renderExpansion?: (item: T) => ReactNode
@@ -86,7 +86,7 @@ export default function DataTable<T extends { id: string }>({
                       </td>
                     )}
                     {columns.map((col, i) => (
-                      <td key={i} className={'px-2 py-1 text-sm text-center'}>
+                      <td key={i} data-testid={`cell-${item.id}-${i}`} className={'px-2 py-1 text-sm text-center'}>
                         {col.render(item)}
                       </td>
                     ))}

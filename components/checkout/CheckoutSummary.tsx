@@ -1,8 +1,8 @@
 'use client'
 
 import { Container, Text } from '@components/ui'
-import { calculateDiscount } from '@lib/calculate-price'
-import { CartLineItem } from '@lib/types/types'
+import { calculateDiscount, showCurrency } from '@lib/calculate-price'
+import { CartLineItem, CurrencyCode } from '@lib/types/types'
 import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
@@ -18,6 +18,8 @@ export function CheckoutSummary() {
     setValue('totalPrice', total.toFixed(2))
   }, [order.subtotalPrice, order.shippingPrice, order.taxes, setValue])
 
+  const currencySymbol = showCurrency[(order?.currency as CurrencyCode) || 'GBP']
+
   return (
     <Container variant="box" className="lg:col-span-4">
       <Text variant="boxTitle">Order Summary</Text>
@@ -29,7 +31,7 @@ export function CheckoutSummary() {
                 {item.quantity} x {item.name}
               </Text>
               <Text className="font-medium">
-                £
+                {currencySymbol}
                 {(
                   calculateDiscount(item.price, item.discounts).finalPrice *
                   item.quantity
@@ -41,12 +43,12 @@ export function CheckoutSummary() {
       <div className="space-y-1 pb-4 border-b">
         <div className="flex justify-between">
           <Text>Subtotal</Text>
-          <Text>£{order?.subtotalPrice.toFixed(2)}</Text>
+          <Text>{currencySymbol}{order?.subtotalPrice.toFixed(2)}</Text>
         </div>
         <div className="flex justify-between">
           <Text>Taxes</Text>
           <Text className="text-green">
-            {order?.taxes === 0 ? 'Included' : `£${order?.taxes.toFixed(2)}`}
+            {order?.taxes === 0 ? 'Included' : `${currencySymbol}${order?.taxes.toFixed(2)}`}
           </Text>
         </div>
         <div className="flex justify-between">
@@ -54,13 +56,13 @@ export function CheckoutSummary() {
           <Text className="text-green">
             {order?.shippingPrice === 0
               ? 'FREE'
-              : `£${order?.shippingPrice.toFixed(2)}`}
+              : `${currencySymbol}${order?.shippingPrice.toFixed(2)}`}
           </Text>
         </div>
       </div>
       <div className="text-lg flex justify-between pt-2">
         <Text variant="bold">Total</Text>
-        <Text variant="bold">£{order.totalPrice}</Text>
+        <Text variant="bold">{currencySymbol}{order.totalPrice}</Text>
       </div>
     </Container>
   )

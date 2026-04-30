@@ -1,6 +1,6 @@
 import { prisma } from 'prisma/prisma'
 import { z } from 'zod'
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextResponse } from 'next/server'
 import { hashPassword } from '@lib/auth/password'
 import { checkRateLimit, getRateLimitKey } from '@lib/rate-limit'
 
@@ -20,43 +20,32 @@ const registerSchema = z
   })
   .transform(({ password2: _password2, ...data }) => data)
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
-  if (req.method !== 'POST') {
-    res.setHeader('Allow', ['POST'])
-    return res.status(405).end(`Method ${req.method} Not Allowed`)
-  }
-
-  const clientIp =
-    req.headers['x-forwarded-for']?.toString().split(',')[0] ||
-    req.socket?.remoteAddress ||
-    'unknown'
+export async function POST(req: Request) {
+  const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown'
+  
   const rateKey = getRateLimitKey(clientIp, 'register')
   const rateLimit = checkRateLimit(rateKey)
 
-  res.setHeader('X-RateLimit-Limit', '5')
-  res.setHeader('X-RateLimit-Remaining', rateLimit.remaining.toString())
-  res.setHeader(
-    'X-RateLimit-Reset',
-    Math.ceil(rateLimit.resetIn / 1000).toString(),
-  )
+  const headers = new Headers({
+    'X-RateLimit-Limit': '5',
+    'X-RateLimit-Remaining': rateLimit.remaining.toString(),
+    'X-RateLimit-Reset': Math.ceil(rateLimit.resetIn / 1000).toString(),
+  })
 
   if (!rateLimit.success) {
-    return res.status(429).json({
+    return NextResponse.json({
       error: 'Too many registration attempts. Please try again later.',
       retryAfter: Math.ceil(rateLimit.resetIn / 1000),
-    })
+    }, { status: 429, headers })
   }
 
   try {
-    const body = req.body
+    const body = await req.json()
     const validation = registerSchema.safeParse(body)
     if (!validation.success) {
-      return res.status(400).json({
-        error: validation.error.message[0],
-      })
+      return NextResponse.json({
+        error: validation.error.issues[0]?.message || 'Invalid input',
+      }, { status: 400, headers })
     }
 
     const { email, password, firstName, lastName, phone, acceptsMarketing } =
@@ -64,7 +53,8 @@ export default async function handler(
 
     const existingUser = await prisma.user.findUnique({ where: { email } })
     if (existingUser) {
-      return res.status(400).json({ error: 'User already exists' })
+      // Return a generic message to prevent user enumeration
+      return NextResponse.json({ error: 'If the email is valid, an account has been created' }, { status: 400, headers })
     }
 
     const customer = await prisma.user.create({
@@ -82,12 +72,12 @@ export default async function handler(
 
     const { password: _, ...customerWithoutPassword } = customer
 
-    return res.status(201).json({
+    return NextResponse.json({
       message: 'User created successfully',
       user: customerWithoutPassword,
-    })
+    }, { status: 201, headers })
   } catch (error) {
     console.error('Registration error:', error)
-    return res.status(500).json({ error: 'Internal server error' })
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500, headers })
   }
 }

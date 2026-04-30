@@ -1,12 +1,8 @@
-'use client'
-
 import '../globals.css'
 import 'keen-slider/keen-slider.min.css'
 
 import { Layout } from '@components/common'
-import { SessionProvider } from 'next-auth/react'
-import { ThemeProvider } from 'next-themes'
-import { PHProvider } from '@lib/analytics/posthogProvider'
+import { Providers } from '@components/common/Providers/Providers'
 import { GoogleAnalytics } from '@lib/analytics/GoogleAnalytics'
 
 export default function RootLayout({
@@ -16,22 +12,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <PHProvider>
-        <head />
-        <body className="loading bg-primary">
-          <SessionProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              themes={['light', 'dark']}
-            >
-              <GoogleAnalytics />
-              <Layout>{children}</Layout>
-            </ThemeProvider>
-          </SessionProvider>
-        </body>
-      </PHProvider>
+      <head />
+      <body className="loading bg-primary">
+        <Providers>
+          <GoogleAnalytics />
+          <Layout>{children}</Layout>
+        </Providers>
+      </body>
     </html>
   )
 }

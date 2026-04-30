@@ -1,8 +1,8 @@
 import { ActionResponse } from '@lib/types/types'
 
-const KLANA_API_URL = process.env.KLANA_API_URL || 'https://api.klarna.com'
-const KLANA_MERCHANT_ID = process.env.KLANA_MERCHANT_ID!
-const KLANA_SHARED_SECRET = process.env.KLANA_SHARED_SECRET!
+const KLARNA_API_URL = process.env.KLARNA_API_URL || 'https://api.klarna.com'
+const KLARNA_MERCHANT_ID = process.env.KLARNA_MERCHANT_ID!
+const KLARNA_SHARED_SECRET = process.env.KLARNA_SHARED_SECRET!
 
 interface CreateSessionParams {
   orderId: string
@@ -37,7 +37,7 @@ interface AuthorizeResponse {
 
 function getKlarnaAuth(): string {
   const credentials = Buffer.from(
-    `${KLANA_MERCHANT_ID}:${KLANA_SHARED_SECRET}`,
+    `${KLARNA_MERCHANT_ID}:${KLARNA_SHARED_SECRET}`,
   ).toString('base64')
   return `Basic ${credentials}`
 }
@@ -51,7 +51,7 @@ export async function createKlarnaSession({
   countryCode = 'GB',
   locale = 'en-GB',
 }: CreateSessionParams): Promise<ActionResponse<SessionResponse>> {
-  if (!KLANA_MERCHANT_ID || !KLANA_SHARED_SECRET) {
+  if (!KLARNA_MERCHANT_ID || !KLARNA_SHARED_SECRET) {
     return {
       success: false,
       message: 'Klarna API credentials not configured',
@@ -60,7 +60,7 @@ export async function createKlarnaSession({
   }
 
   try {
-    const response = await fetch(`${KLANA_API_URL}/payments/v1/sessions`, {
+    const response = await fetch(`${KLARNA_API_URL}/payments/v1/sessions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -137,7 +137,7 @@ export async function authorizeKlarnaPayment({
   sessionId,
   paymentMethodCategory,
 }: AuthorizeParams): Promise<ActionResponse<AuthorizeResponse>> {
-  if (!KLANA_MERCHANT_ID || !KLANA_SHARED_SECRET) {
+  if (!KLARNA_MERCHANT_ID || !KLARNA_SHARED_SECRET) {
     return {
       success: false,
       message: 'Klarna API credentials not configured',
@@ -147,7 +147,7 @@ export async function authorizeKlarnaPayment({
 
   try {
     const response = await fetch(
-      `${KLANA_API_URL}/payments/v1/sessions/${sessionId}/authorize`,
+      `${KLARNA_API_URL}/payments/v1/sessions/${sessionId}/authorize`,
       {
         method: 'POST',
         headers: {
@@ -210,5 +210,5 @@ export function getKlarnaPaymentMethodName(identifier: string): string {
 }
 
 export function isKlarnaConfigured(): boolean {
-  return !!(KLANA_MERCHANT_ID && KLANA_SHARED_SECRET)
+  return !!(KLARNA_MERCHANT_ID && KLARNA_SHARED_SECRET)
 }

@@ -20,7 +20,7 @@ import { AdminOrderEmail } from '@lib/emails/AdminOrderEmail'
 import { trackEvent } from '@lib/analytics/trackEvents'
 import { updateCartPrice } from 'actions/cart.actions'
 
-export default function CheckouClient() {
+export default function CheckoutClient() {
   const { data, deleteAll } = useCart()
   const { user, isAuthenticated } = useUser()
   const [step, setStep] = useState(1)

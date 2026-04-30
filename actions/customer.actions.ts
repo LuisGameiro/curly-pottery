@@ -114,6 +114,24 @@ export async function updateUser({
   data: UserWithOrdersAddress
 }): Promise<ActionResponse<User | null>> {
   try {
+    const session = await getServerSession(authOptions)
+
+    if (!session?.user?.id) {
+      return {
+        success: false,
+        message: 'Unauthorized: Please sign in first.',
+        errors: null,
+      }
+    }
+
+    if (session.user.role !== 'ADMIN' && session.user.id !== id) {
+      return {
+        success: false,
+        message: 'Unauthorized: You can only update your own profile.',
+        errors: null,
+      }
+    }
+
     const { orders: _orders, addresses, ...updateData } = data
     const user = await prisma.user.update({
       where: { id },
@@ -132,11 +150,11 @@ export async function updateUser({
     })
     return {
       success: true,
-      message: 'User note updated successfully',
+      message: 'User updated successfully',
       data: user,
     }
   } catch (error) {
-    console.error('updateNotes_ERROR:', error)
+    console.error('updateUser_ERROR:', error)
     return {
       success: false,
       message:

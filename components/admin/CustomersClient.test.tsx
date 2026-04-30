@@ -47,22 +47,26 @@ jest.mock('@components/tables/CustomerTable', () => {
 })
 
 describe('CustomersClient', () => {
+  const createMockUser = (overrides: Partial<UserWithOrders>): UserWithOrders => ({
+    id: 'mock-id',
+    firstName: 'Test',
+    lastName: 'User',
+    email: 'test@example.com',
+    password: 'hashedpassword',
+    role: 'USER',
+    acceptsMarketing: false,
+    emailVerified: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    phone: null,
+    orders: [],
+    ...overrides,
+  } as unknown as UserWithOrders)
+
   const mockCustomers: UserWithOrders[] = [
-    {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@example.com',
-    } as UserWithOrders,
-    {
-      firstName: 'Jane',
-      lastName: 'Smith',
-      email: 'jane@example.com',
-    } as UserWithOrders,
-    {
-      firstName: 'Bob',
-      lastName: 'Johnson',
-      email: 'bob@example.com',
-    } as UserWithOrders,
+    createMockUser({ id: '1', firstName: 'John', lastName: 'Doe', email: 'john@example.com' }),
+    createMockUser({ id: '2', firstName: 'Jane', lastName: 'Smith', email: 'jane@example.com' }),
+    createMockUser({ id: '3', firstName: 'Bob', lastName: 'Johnson', email: 'bob@example.com' }),
   ]
 
   it('renders customers heading', () => {

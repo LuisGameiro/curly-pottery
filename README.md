@@ -61,12 +61,12 @@ SUMUP_MERCHANT_CODE=your_merchant_code
 
 ```env
 # Get credentials from merchantportal.klarna.com
-KLANA_API_URL=https://api.klarna.com
-KLANA_MERCHANT_ID=your_merchant_id
-KLANA_SHARED_SECRET=your_shared_secret
+KLARNA_API_URL=https://api.klarna.com
+KLARNA_MERCHANT_ID=your_merchant_id
+KLARNA_SHARED_SECRET=your_shared_secret
 
 # For testing, use sandbox:
-# KLANA_API_URL=https://api-sandbox.klarna.com
+# KLARNA_API_URL=https://api-sandbox.klarna.com
 ```
 
 #### Email (Resend)

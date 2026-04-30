@@ -25,10 +25,18 @@ export default async function ShopClient({
   const ProductsSort = sortProducts(products.data || [], sortMethod || 'newest')
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 4xl:grid-cols-6">
-      {ProductsSort.map((product) => (
-        <ProductCard key={product.id} product={product} variant="simple" />
-      ))}
+    <div className="flex flex-col gap-4">
+      <div className="flex justify-end items-center">
+        <Text variant="muted" className="text-sm font-medium">
+          Showing {ProductsSort.length}{' '}
+          {ProductsSort.length === 1 ? 'product' : 'products'}
+        </Text>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 4xl:grid-cols-6">
+        {ProductsSort.map((product) => (
+          <ProductCard key={product.id} product={product} variant="simple" />
+        ))}
+      </div>
     </div>
   )
 }

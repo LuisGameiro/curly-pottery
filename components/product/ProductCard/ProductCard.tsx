@@ -70,13 +70,8 @@ const ProductCard = ({
       )}
 
       {variant === 'simple' && (
-        <>
-          {!noNameTag && (
-            <h3 className="absolute bg-accent-3/60 top-0 left-0 z-20 px-2 py-1 text-sm md:text-base  lg:text-xl font-medium text-base">
-              {product.name}
-            </h3>
-          )}
-          <div className={s.imageContainer}>
+        <div className="flex flex-col h-full">
+          <div className={cn(s.imageContainer, 'relative')}>
             {product?.images && (
               <Image
                 alt={product.name || 'Product Image'}
@@ -96,7 +91,7 @@ const ProductCard = ({
                 blurDataURL={shimmerDataUrl(500, 500)}
               />
             )}
-            <div className="absolute bottom-2 right-2 z-20 rounded-md bg-background/20  px-2 py-1 text-sm font-medium text-base backdrop-blur">
+            <div className="absolute bottom-2 right-2 z-20 rounded-md bg-background/20 px-2 py-1 text-sm font-medium text-base backdrop-blur">
               {hasDiscount ? (
                 <>
                   <span className="line-through opacity-40 mr-1">
@@ -109,7 +104,12 @@ const ProductCard = ({
               )}
             </div>
           </div>
-        </>
+          {!noNameTag && (
+            <h3 className="mt-2 text-sm md:text-base font-medium text-base">
+              {product.name}
+            </h3>
+          )}
+        </div>
       )}
 
       {variant === 'default' && (

@@ -1,5 +1,5 @@
 import constructMetadata from '@components/common/SEO/SEO'
-import CheckouClient from '../../components/checkout/CheckouClient'
+import CheckoutClient from '../../components/checkout/CheckoutClient'
 
 export const metadata = constructMetadata({
   title: 'Checkout',
@@ -8,5 +8,5 @@ export const metadata = constructMetadata({
 })
 
 export default function CheckoutPage() {
-  return <CheckouClient />
+  return <CheckoutClient />
 }

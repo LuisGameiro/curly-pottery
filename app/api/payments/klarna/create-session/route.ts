@@ -5,6 +5,10 @@ import {
 } from '@lib/payments/klarna-client'
 import { getAppUrl } from '@lib/site-url'
 
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@lib/auth/authOptions'
+import { prisma } from 'prisma/prisma'
+
 export async function POST(request: NextRequest) {
   if (!isKlarnaConfigured()) {
     return NextResponse.json(
@@ -14,15 +18,31 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const body = await request.json()
-    const { orderId, amount, currency = 'GBP', countryCode = 'GB' } = body
-
-    if (!orderId || !amount) {
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.id) {
       return NextResponse.json(
-        { success: false, message: 'Missing orderId or amount' },
-        { status: 400 },
+        { success: false, message: 'Unauthorized: Please sign in.' },
+        { status: 401 },
       )
     }
+
+    const cart = await prisma.cart.findUnique({
+      where: { userId: session.user.id },
+    })
+
+    if (!cart) {
+      return NextResponse.json(
+        { success: false, message: 'Cart not found.' },
+        { status: 404 },
+      )
+    }
+
+    const body = await request.json()
+    const { currency = 'GBP', countryCode = 'GB' } = body
+    
+    // Always use the server-validated price and Order ID (Cart ID)
+    const amount = cart.totalPrice
+    const orderId = `KLARNA-${cart.id}-${Date.now()}`
 
     const baseUrl = getAppUrl()
     const returnUrl = `${baseUrl}/checkout/success?order=${orderId}&provider=klarna`

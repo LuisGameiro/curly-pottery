@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from 'prisma/prisma'
 import crypto from 'crypto'
 
-const KLANA_WEBHOOK_SECRET = process.env.KLANA_SHARED_SECRET!
+const KLARNA_WEBHOOK_SECRET = process.env.KLARNA_SHARED_SECRET!
 
 interface KlarnaWebhookPayload {
   event_id: string
@@ -14,7 +14,7 @@ interface KlarnaWebhookPayload {
 
 function verifyKlarnaSignature(payload: string, signature: string): boolean {
   const expectedSignature = crypto
-    .createHmac('sha256', KLANA_WEBHOOK_SECRET)
+    .createHmac('sha256', KLARNA_WEBHOOK_SECRET)
     .update(payload)
     .digest('base64')
   return expectedSignature === signature

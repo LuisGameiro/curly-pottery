@@ -68,7 +68,7 @@ export default function constructMetadata({
   const seoDescription = description || config.description
   const canonicalUrl = resolveMetadataUrl(canonical)
   const openGraphUrl = resolveMetadataUrl(
-    openGraph?.url?.toString() || canonicalUrl || config.openGraph.url,
+    openGraph?.url?.toString() || canonicalUrl || getAppUrl(),
   )
   const openGraphType =
     openGraph && 'type' in openGraph ? openGraph.type : undefined

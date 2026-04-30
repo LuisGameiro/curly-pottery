@@ -99,7 +99,7 @@ export async function upsertCategory({
       })
     }
 
-    revalidatePath('/admin/categories')
+    revalidatePath('/', 'layout')
     return {
       success: true,
       message: 'Updated category successfully',
@@ -139,7 +139,7 @@ export async function deleteCategory({
       where: { id },
     })
 
-    revalidatePath('/admin/categories')
+    revalidatePath('/', 'layout')
     return {
       success: true,
       message: 'Deleted category successfully',

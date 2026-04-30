@@ -137,8 +137,7 @@ export async function deleteProduct({
       where: { id },
     })
 
-    revalidatePath('/shop')
-    revalidatePath('/admin/products')
+    revalidatePath('/', 'layout')
 
     return {
       success: true,
@@ -180,9 +179,7 @@ export async function toggleVisibility({
       },
     })
 
-    revalidatePath('/shop')
-    revalidatePath('/admin/products')
-    revalidatePath(`/shop/${product.slug}`)
+    revalidatePath('/', 'layout')
 
     return {
       success: true,
@@ -451,9 +448,7 @@ export async function upsertProduct(
       },
     })
 
-    revalidatePath('/shop')
-    revalidatePath('/admin/products')
-    revalidatePath(`/shop/${product.slug}`)
+    revalidatePath('/', 'layout')
 
     return {
       success: true,

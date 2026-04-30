@@ -91,7 +91,7 @@ export default function MenuProducts({
 
       <div className="relative w-full">
         <label className="text-xs font-bold uppercase tracking-wider text-muted ml-1 mb-1 block">
-          Browse
+          Filter
         </label>
 
         <div ref={containerFilterRef} className="z-30">

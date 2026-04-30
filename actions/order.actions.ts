@@ -189,7 +189,27 @@ export async function createOrder(
       }
     }
 
-    const fetchResult = await withFetch<{ status: string }>(
+    // Load validated data from cart to prevent payload tampering
+    let finalLineItems = lineItems
+    let finalSubtotalPrice = Number(subtotalPrice) || 0
+    let finalTotalPrice = Number(totalPrice) || 0
+    let finalTaxes = taxes || 0
+    let finalShippingPrice = shippingPrice || 0
+    let finalCurrency = currency || 'GBP'
+
+    if (resolvedUserId) {
+      const cart = await prisma.cart.findUnique({ where: { userId: resolvedUserId } })
+      if (cart) {
+        finalLineItems = cart.lineItems as any[]
+        finalSubtotalPrice = cart.subtotalPrice
+        finalTotalPrice = cart.totalPrice
+        finalTaxes = cart.taxes
+        finalShippingPrice = cart.shippingPrice
+        finalCurrency = cart.currency as any
+      }
+    }
+
+    const fetchResult = await withFetch<{ status: string; amount: number }>(
       `https://api.sumup.com/v0.1/checkouts/${checkoutId}`,
       {
         headers: {
@@ -215,8 +235,17 @@ export async function createOrder(
       }
     }
 
+    // Strict validation to ensure the paid amount matches the database cart total
+    if (fetchResult.data?.amount !== finalTotalPrice) {
+      return {
+        success: false,
+        message: 'Payment amount mismatch. Order creation aborted to prevent tampering.',
+        errors: new Error('Payment mismatch'),
+      }
+    }
+
     const order = await prisma.$transaction(async (tx) => {
-      for (const item of lineItems) {
+      for (const item of finalLineItems) {
         const variant = await tx.productVariant.findUnique({
           where: { id: item.variantId },
           select: { stock: true, product: { select: { name: true } } },
@@ -247,20 +276,20 @@ export async function createOrder(
 
       const newOrder = await tx.order.create({
         data: {
-          lineItems: lineItems,
+          lineItems: finalLineItems,
           lastName,
           firstName,
           email: resolvedEmail,
           phone,
           discounts: discounts || [],
-          currency: currency || 'GBP',
+          currency: finalCurrency,
           shippingAddress: address || {},
           billingAddress: address || {},
           status: 'PENDING',
-          taxes,
-          shippingPrice,
-          subtotalPrice: Number(subtotalPrice) || 0,
-          totalPrice: Number(totalPrice) || 0,
+          taxes: finalTaxes,
+          shippingPrice: finalShippingPrice,
+          subtotalPrice: finalSubtotalPrice,
+          totalPrice: finalTotalPrice,
           shippingMethod,
           ...(resolvedUserId && {
             user: { connect: { id: resolvedUserId } },

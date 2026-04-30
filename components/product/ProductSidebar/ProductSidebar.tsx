@@ -104,6 +104,11 @@ const ProductSidebar = ({
             </Text>
           ))}
         </div>
+        {variant.stock > 0 && variant.stock < 3 && (
+          <div className="mt-2 text-red font-bold animate-pulse">
+            Only {variant.stock} left!
+          </div>
+        )}
       </section>
 
       <section className="space-y-4">
@@ -187,8 +192,9 @@ const ProductSidebar = ({
         )}
       </section>
 
-      <Text className="wrap-break-word w-full max-w-xl text-justify">
-        {product.description}
+      <Text className="wrap-break-word w-full max-w-xl text-justify leading-relaxed">
+        {product.description ||
+          'Because each ceramic piece is individually hand-made, you may notice slight variations in shape and size. These unique differences are what make every ceramic piece special and full of character.'}
       </Text>
 
       <section>
@@ -222,30 +228,35 @@ const ProductSidebar = ({
           )}
         </Collapse>
 
-        <Collapse title={'Care Instructions'}>
-          {/* <Text variant="bold">Care Instructions</Text> */}
-          <Text className="text-justify">
-            Gently rinse with warm water and mild soap after use. Avoid soaking
-            for long periods to preserve the bamboo natural beauty. Dry
-            thoroughly before storing.
-          </Text>
-        </Collapse>
-
-        <Collapse title={'About Pottery'}>
-          {/* <Text variant="bold">About Pottery</Text> */}
-          <Text className="text-justify">
-            Please expect some slight inperfections as every piece is hand made
-            and hand glazed which makes it unique to you.
+        <Collapse title={'How to love your uniquely made pottery'}>
+          <Text className="text-justify leading-relaxed">
+            To keep your ceramics looking their best, we recommend hand washing
+            with warm, soapy water. While most pieces are dishwasher safe, hand
+            washing helps preserve the unique glazes and finishes for years to
+            come. Avoid sudden temperature changes to prevent thermal shock.
           </Text>
         </Collapse>
 
         <Collapse title={"Let's Stay Connected"}>
-          {/* <Text variant="bold">Lets Stay connected</Text> */}
-          <Text className="text-justify">
-            I’d love to see how you style your tea strainer alongside my
-            ceramics! Tag me on Instagram @curlypottery to share your photos, or
-            follow along for behind-the-scenes updates and inspiration.
-          </Text>
+          <div className="space-y-4">
+            <Text className="text-justify">
+              I’d love to see how you style your pieces! Tag me on Instagram
+              @curlypottery to share your photos, or enter your email below to
+              get first notice of new collections and small-batch restocks.
+            </Text>
+            <div className="pt-2">
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input
+                  type="email"
+                  placeholder="Your email address"
+                  className="flex-1 px-4 py-2 bg-accent-1 border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-secondary text-sm"
+                />
+                <Button variant="slim" className="whitespace-nowrap">
+                  Sign Up
+                </Button>
+              </div>
+            </div>
+          </div>
         </Collapse>
       </section>
     </div>

@@ -6,6 +6,7 @@ export const sortLabels: Record<string, string> = {
   'price-desc': 'Price: High to Low',
   'name-asc': 'Alphabetically: A-Z',
   'name-desc': 'Alphabetically: Z-A',
+  availability: 'Availability (In Stock)',
 }
 
 export type SortLabels = keyof typeof sortLabels
@@ -19,6 +20,14 @@ export const sortProducts = (
   const list = [...products]
 
   switch (sortMethod) {
+    case 'availability':
+      return list.sort((a, b) => {
+        const aStock = a.variants.reduce((acc, v) => acc + v.stock, 0)
+        const bStock = b.variants.reduce((acc, v) => acc + v.stock, 0)
+        if (aStock > 0 && bStock === 0) return -1
+        if (aStock === 0 && bStock > 0) return 1
+        return 0
+      })
     case 'price-asc':
       return list.sort(
         (a, b) =>

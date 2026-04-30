@@ -6,7 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Quantity from '@components/ui/Quantity'
 import useCart from '@lib/hooks/useCart'
-import { calculateDiscount } from '@lib/calculate-price'
+import { calculateDiscount, showCurrency } from '@lib/calculate-price'
 import { Trash } from 'lucide-react'
 import { Button, Text } from '@components/ui'
 import { CartLineItem } from '@lib/types/types'
@@ -21,11 +21,12 @@ const CartItem = ({
   variant?: 'default' | 'display'
   item: CartLineItem
 }) => {
-  const { removeItem, updateItem } = useCart()
+  const { removeItem, updateItem, data } = useCart()
   const [removing, setRemoving] = useState(false)
   const [quantity, setQuantity] = useState<number>(item.quantity)
 
   const price = calculateDiscount(item.price, item.discounts)
+  const currencySymbol = showCurrency[data?.currency || 'GBP']
 
   const handleChange = async ({
     target: { value },
@@ -124,12 +125,12 @@ const CartItem = ({
 
         {price.hasDiscount && (
           <span className="font-semibold text-sm ml-4 text-red line-through">
-            x {price.price} £
+            x {currencySymbol} {price.price.toFixed(2)}
           </span>
         )}
 
         <span className="font-semibold text-sm mx-4">
-          x {price.finalPrice} £ = {quantity * price.finalPrice} £
+          x {currencySymbol} {price.finalPrice.toFixed(2)} = {currencySymbol} {(quantity * price.finalPrice).toFixed(2)}
         </span>
         <Button
           type="button"

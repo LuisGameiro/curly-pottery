@@ -8,12 +8,15 @@ import { ArrowRight } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 
+import { isInternalUrl } from '@lib/form-validator'
+
 export default function LoginForm() {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
   const [error, setError] = useState('')
-  const redirectTo = searchParams.get('redirect') || '/shop'
+  const rawRedirect = searchParams.get('redirect')
+  const redirectTo = rawRedirect && isInternalUrl(rawRedirect) ? rawRedirect : '/shop'
   const isRegistered = searchParams.get('registered') === 'true'
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

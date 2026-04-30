@@ -4,7 +4,7 @@ import Image from 'next/image'
 import s from './ProductView.module.css'
 import { useState } from 'react'
 import { ProductSlider, ProductCard } from '@components/product'
-import { Container, Marquee } from '@components/ui'
+import { Container, Marquee, Text } from '@components/ui'
 import ProductSidebar from '../ProductSidebar'
 import {
   Discount,
@@ -65,19 +65,24 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
       </section>
 
       {relatedProducts.length > 0 && (
-        <Marquee variant="secondary">
-          {relatedProducts.map((p) => (
-            <ProductCard
-              key={p.slug}
-              noNameTag
-              product={p}
-              variant="slim"
-              imgProps={{
-                alt: p.name,
-              }}
-            />
-          ))}
-        </Marquee>
+        <section className="py-12 border-t border-border mt-12">
+          <Text variant="sectionHeading" className="mb-8 text-center">
+            You Might Also Like
+          </Text>
+          <Marquee variant="secondary">
+            {relatedProducts.map((p) => (
+              <ProductCard
+                key={p.slug}
+                noNameTag
+                product={p}
+                variant="slim"
+                imgProps={{
+                  alt: p.name,
+                }}
+              />
+            ))}
+          </Marquee>
+        </section>
       )}
     </Container>
   )
