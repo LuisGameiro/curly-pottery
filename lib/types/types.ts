@@ -21,11 +21,20 @@ export interface CreateProduct extends EditProduct {
 }
 
 export type Product = Prisma.ProductGetPayload<null>
+export type Option = Prisma.OptionGetPayload<{ include: { values: true } }>
+export type OptionValue = Prisma.OptionValueGetPayload<{
+  include: { option: true }
+}>
 
-export type Variant = Prisma.ProductVariantGetPayload<null>
+export type Variant = Prisma.ProductVariantGetPayload<{
+  include: { optionValues: { include: { option: true } } }
+}>
 
 export type ProductWithVariantsCategories = Prisma.ProductGetPayload<{
-  include: { categories: true; variants: true }
+  include: {
+    categories: true
+    variants: { include: { optionValues: { include: { option: true } } } }
+  }
 }>
 export const CurrencyCode: Record<CurrencyCode, CurrencyCode> = {
   USD: 'USD',

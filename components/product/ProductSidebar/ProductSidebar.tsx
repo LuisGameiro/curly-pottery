@@ -44,14 +44,14 @@ const ProductSidebar = ({
   const [loading, setLoading] = useState(false)
   const [quantity, setQuantity] = useState(1)
 
-  // Reset quantity if it exceeds remaining stock when variant changes
+  // Reset quantity to 1 when variant changes
   useEffect(() => {
-    if (quantity > remainingStock && remainingStock > 0) {
-      setQuantity(remainingStock)
-    } else if (remainingStock <= 0) {
+    if (remainingStock > 0) {
+      setQuantity(1)
+    } else {
       setQuantity(0)
     }
-  }, [variant.id, remainingStock, quantity])
+  }, [variant.id, remainingStock])
 
   const forSale = variant?.stock !== 0 && variant?.availableForSale
   const addToCart = async () => {

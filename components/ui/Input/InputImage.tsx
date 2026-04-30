@@ -26,12 +26,14 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 
 const SortableImage = ({
+  id,
   src,
   index,
   onRemove,
   size,
   className,
 }: {
+  id: string
   src: string
   index: number
   onRemove: (index: number) => void
@@ -45,7 +47,7 @@ const SortableImage = ({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: src })
+  } = useSortable({ id })
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -133,11 +135,13 @@ const InputImage = ({
     }),
   )
 
+  const previewIds = previews.map((src, index) => `${src}-${index}`)
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
     if (over && active.id !== over.id) {
-      const oldIndex = previews.indexOf(active.id as string)
-      const newIndex = previews.indexOf(over.id as string)
+      const oldIndex = previewIds.indexOf(active.id as string)
+      const newIndex = previewIds.indexOf(over.id as string)
 
       onImagesChange({
         files: arrayMove(files, oldIndex, newIndex),
@@ -176,10 +180,11 @@ const InputImage = ({
         onDragEnd={handleDragEnd}
       >
         <div className="flex flex-wrap gap-2">
-          <SortableContext items={previews} strategy={rectSortingStrategy}>
+          <SortableContext items={previewIds} strategy={rectSortingStrategy}>
             {previews.map((src, index) => (
               <SortableImage
-                key={src}
+                key={`${src}-${index}`}
+                id={`${src}-${index}`}
                 src={src}
                 index={index}
                 size={size}

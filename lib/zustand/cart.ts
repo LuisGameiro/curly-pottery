@@ -55,7 +55,9 @@ export const useCartStore = create<CartStore>()(
             firstVariant.stock,
           )
           newItems = cartItems.map((i: CartLineItem) =>
-            i.variantId === firstVariant.id ? { ...i, quantity: newQuantity } : i,
+            i.variantId === firstVariant.id
+              ? { ...i, quantity: newQuantity }
+              : i,
           )
         } else {
           newItems = [

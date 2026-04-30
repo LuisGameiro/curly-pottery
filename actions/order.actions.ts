@@ -250,6 +250,31 @@ export async function createOrder(
     }
 
     const order = await prisma.$transaction(async (tx) => {
+      // 1. Create the Order first to get the ID
+      const newOrder = await tx.order.create({
+        data: {
+          lineItems: finalLineItems as unknown as Prisma.InputJsonValue,
+          lastName,
+          firstName,
+          email: resolvedEmail,
+          phone,
+          discounts: (discounts || []) as unknown as Prisma.InputJsonValue,
+          currency: finalCurrency,
+          shippingAddress: (address || {}) as unknown as Prisma.InputJsonValue,
+          billingAddress: (address || {}) as unknown as Prisma.InputJsonValue,
+          status: 'PENDING',
+          taxes: new Prisma.Decimal(finalTaxes),
+          shippingPrice: new Prisma.Decimal(finalShippingPrice),
+          subtotalPrice: new Prisma.Decimal(finalSubtotalPrice),
+          totalPrice: new Prisma.Decimal(finalTotalPrice),
+          shippingMethod,
+          ...(resolvedUserId && {
+            user: { connect: { id: resolvedUserId } },
+          }),
+        },
+      })
+
+      // 2. Process each line item for stock and tracking
       for (const item of finalLineItems) {
         const variant = await tx.productVariant.findUnique({
           where: { id: item.variantId },
@@ -271,36 +296,26 @@ export async function createOrder(
           )
         }
 
+        // Decrement stock
         await tx.productVariant.update({
           where: { id: item.variantId },
           data: {
             stock: { decrement: item.quantity },
           },
         })
-      }
 
-      const newOrder = await tx.order.create({
-        data: {
-          lineItems: finalLineItems,
-          lastName,
-          firstName,
-          email: resolvedEmail,
-          phone,
-          discounts: discounts || [],
-          currency: finalCurrency,
-          shippingAddress: address || {},
-          billingAddress: address || {},
-          status: 'PENDING',
-          taxes: finalTaxes,
-          shippingPrice: finalShippingPrice,
-          subtotalPrice: finalSubtotalPrice,
-          totalPrice: finalTotalPrice,
-          shippingMethod,
-          ...(resolvedUserId && {
-            user: { connect: { id: resolvedUserId } },
-          }),
-        },
-      })
+        // Record stock movement
+        await tx.stockMovement.create({
+          data: {
+            variantId: item.variantId,
+            quantity: -item.quantity, // Sale is a reduction
+            type: 'SALE',
+            orderId: newOrder.id,
+            userId: resolvedUserId,
+            note: `Order #${newOrder.id.slice(-6).toUpperCase()}`,
+          },
+        })
+      }
 
       if (resolvedUserId) {
         await tx.user.update({

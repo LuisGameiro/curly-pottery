@@ -6,6 +6,7 @@ import {
   ActionResponse,
   ProductWithVariantsCategories,
   Category,
+  Variant,
 } from '@lib/types/types'
 import { prisma } from 'prisma/prisma'
 import { deleteBlob } from './serverImages.action'
@@ -52,15 +53,21 @@ export async function getProductBySlug(
         hide: false,
       },
       include: {
-        variants: true,
+        variants: { include: { optionValues: { include: { option: true } } } },
         categories: true,
       },
     })
+    if (product) {
+      product.variants = product.variants.map((v) => ({
+        ...v,
+        price: Number(v.price),
+      })) as unknown as Variant[]
+    }
 
     return {
       success: true,
       message: 'Fecthed product successfully',
-      data: product,
+      data: product as unknown as ProductWithVariantsCategories,
     }
   } catch (error) {
     console.error('getProductBySlugd_ERROR:', error)
@@ -88,15 +95,22 @@ export async function getProductById(
         id,
       },
       include: {
-        variants: true,
+        variants: { include: { optionValues: { include: { option: true } } } },
         categories: true,
       },
     })
 
+    if (product) {
+      product.variants = product.variants.map((v) => ({
+        ...v,
+        price: Number(v.price),
+      })) as unknown as Variant[]
+    }
+
     return {
       success: true,
       message: 'Fecthed product successfully',
-      data: product,
+      data: product as unknown as ProductWithVariantsCategories,
     }
   } catch (error) {
     console.error('getProductById_ERROR:', error)
@@ -202,7 +216,7 @@ export async function getAllProducts(): Promise<
   try {
     const products = await prisma.product.findMany({
       include: {
-        variants: true,
+        variants: { include: { optionValues: { include: { option: true } } } },
         categories: true,
       },
       orderBy: {
@@ -210,10 +224,18 @@ export async function getAllProducts(): Promise<
       },
     })
 
+    const formattedProducts = products.map((product) => ({
+      ...product,
+      variants: product.variants.map((v) => ({
+        ...v,
+        price: Number(v.price),
+      })),
+    }))
+
     return {
       success: true,
       message: 'Fecthed products successfully',
-      data: products,
+      data: formattedProducts as unknown as ProductWithVariantsCategories[],
     }
   } catch (error) {
     console.error('getAllProducts_ERROR:', error)
@@ -227,16 +249,30 @@ export async function getAllProducts(): Promise<
 }
 export async function getRandomProducts(
   limit = 3,
-): Promise<ActionResponse<Product[] | null>> {
+): Promise<ActionResponse<ProductWithVariantsCategories[] | null>> {
   try {
     const products = await prisma.product.findMany({
       where: { variants: { some: { stock: { gt: 0 } } }, hide: false },
+      include: {
+        variants: { include: { optionValues: { include: { option: true } } } },
+        categories: true,
+      },
     })
+
+    const randomProducts = pickRandomItems(products, limit)
+
+    const formattedProducts = randomProducts.map((product) => ({
+      ...product,
+      variants: product.variants.map((v) => ({
+        ...v,
+        price: Number(v.price),
+      })),
+    }))
 
     return {
       success: true,
-      message: 'Fecthed random products successfully',
-      data: pickRandomItems(products, limit),
+      message: 'Fetched random products successfully',
+      data: formattedProducts as unknown as ProductWithVariantsCategories[],
     }
   } catch (error) {
     console.error('getRandomProducts_ERROR:', error)
@@ -256,7 +292,7 @@ export async function getRelatedProducts({
   categories: Category[]
   excludeId?: string
   limit?: number
-}): Promise<ActionResponse<Product[] | null>> {
+}): Promise<ActionResponse<ProductWithVariantsCategories[] | null>> {
   try {
     if (!categories.length)
       return {
@@ -295,13 +331,26 @@ export async function getRelatedProducts({
         },
         ...(excludeId && { id: { not: excludeId } }),
       },
+      include: {
+        variants: { include: { optionValues: { include: { option: true } } } },
+        categories: true,
+      },
       take: limit,
       skip,
     })
+
+    const formattedProducts = relatedProducts.map((product) => ({
+      ...product,
+      variants: product.variants.map((v) => ({
+        ...v,
+        price: Number(v.price),
+      })),
+    }))
+
     return {
       success: true,
-      message: 'Fecthed Category successfully',
-      data: relatedProducts,
+      message: 'Fetched Related successfully',
+      data: formattedProducts as unknown as ProductWithVariantsCategories[],
     }
   } catch (error) {
     console.error('getCategoryById_ERROR:', error)
@@ -324,14 +373,21 @@ export async function getProductsByCategorySlug(
           hide: false,
         },
         include: {
-          variants: true,
+          variants: { include: { optionValues: { include: { option: true } } } },
           categories: true,
         },
       })
+      const formattedProducts = products.map((product) => ({
+        ...product,
+        variants: product.variants.map((v) => ({
+          ...v,
+          price: Number(v.price),
+        })),
+      }))
       return {
         success: true,
         message: 'Category slug not provided',
-        data: products,
+        data: formattedProducts as unknown as ProductWithVariantsCategories[],
       }
     }
     const products = await prisma.product.findMany({
@@ -344,15 +400,23 @@ export async function getProductsByCategorySlug(
         },
       },
       include: {
-        variants: true,
+        variants: { include: { optionValues: { include: { option: true } } } },
         categories: true,
       },
     })
 
+    const formattedProducts = products.map((product) => ({
+      ...product,
+      variants: product.variants.map((v) => ({
+        ...v,
+        price: Number(v.price),
+      })),
+    }))
+
     return {
       success: true,
       message: 'Fetched products successfully',
-      data: products,
+      data: formattedProducts as unknown as ProductWithVariantsCategories[],
     }
   } catch (error) {
     console.error('getRelatedProducts_ERROR:', error)
@@ -460,6 +524,54 @@ export async function upsertProduct(
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Database error',
+    }
+  }
+}
+
+export async function searchProducts(
+  query: string,
+): Promise<ActionResponse<ProductWithVariantsCategories[] | null>> {
+  try {
+    const products = await prisma.product.findMany({
+      where: {
+        hide: false,
+        OR: [
+          { name: { contains: query, mode: 'insensitive' } },
+          {
+            categories: {
+              some: { name: { contains: query, mode: 'insensitive' } },
+            },
+          },
+        ],
+      },
+      include: {
+        variants: { include: { optionValues: { include: { option: true } } } },
+        categories: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+
+    const formattedProducts = products.map((product) => ({
+      ...product,
+      variants: product.variants.map((v) => ({
+        ...v,
+        price: Number(v.price),
+      })),
+    }))
+
+    return {
+      success: true,
+      message: 'Searched products successfully',
+      data: formattedProducts as unknown as ProductWithVariantsCategories[],
+    }
+  } catch (error) {
+    console.error('searchProducts_ERROR:', error)
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : 'A database error occurred',
       errors: error,
     }
   }

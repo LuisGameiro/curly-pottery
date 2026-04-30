@@ -30,7 +30,7 @@ const ProductOptions = ({ product, setVariant }: ProductOptionsProps) => {
   ) as string[]
 
   return (
-    <div className="flex flex-wrap gap-12">
+    <div className="flex flex-wrap justify-between gap-4">
       {allSizes.length > 1 && (
         <div>
           <Text variant="bold">Size</Text>

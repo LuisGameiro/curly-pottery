@@ -18,7 +18,20 @@ export async function getCartFromDbAction(): Promise<Cart | null> {
     },
   })
 
-  return user?.cart ? (user.cart as Cart) : null
+  if (!user?.cart) return null
+
+  // Convert Decimals to numbers for frontend compatibility
+  return {
+    ...user.cart,
+    subtotalPrice: Number(user.cart.subtotalPrice),
+    totalPrice: Number(user.cart.totalPrice),
+    shippingPrice: Number(user.cart.shippingPrice),
+    taxes: Number(user.cart.taxes),
+    lineItems: (user.cart.lineItems as unknown as CartLineItem[]).map((item) => ({
+      ...item,
+      price: Number(item.price),
+    })),
+  } as unknown as Cart
 }
 
 export async function syncCartAction(items: CartLineItem[]) {

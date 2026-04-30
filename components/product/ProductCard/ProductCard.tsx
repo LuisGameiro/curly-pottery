@@ -95,12 +95,12 @@ const ProductCard = ({
               {hasDiscount ? (
                 <>
                   <span className="line-through opacity-40 mr-1">
-                    £ {price}
+                    £ {typeof price === 'number' ? price : price.toString()}
                   </span>
-                  <span>£ {finalPrice}</span>
+                  <span>£ {typeof finalPrice === 'number' ? finalPrice : finalPrice.toString()}</span>
                 </>
               ) : (
-                <span>£ {price}</span>
+                <span>£ {typeof price === 'number' ? price : price.toString()}</span>
               )}
             </div>
           </div>
