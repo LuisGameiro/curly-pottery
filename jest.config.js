@@ -181,9 +181,9 @@ const config = {
   // transform: undefined,
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
-  // transformIgnorePatterns: [
-  //   '/node_modules/(?!react-merge-refs/',
-  // ],
+  transformIgnorePatterns: [
+    '/node_modules/(?!(next-auth|openid-client|jose|react-merge-refs)/)',
+  ],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,

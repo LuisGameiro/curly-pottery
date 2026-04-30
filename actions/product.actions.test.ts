@@ -23,6 +23,16 @@ jest.mock('next/cache', () => ({
   revalidateTag: jest.fn(),
 }))
 
+jest.mock('./serverImages.action', () => ({
+  deleteBlob: jest.fn().mockResolvedValue(undefined),
+}))
+
+import { getServerSession } from 'next-auth'
+
+jest.mock('next-auth', () => ({
+  getServerSession: jest.fn(),
+}))
+
 describe('getProductBySlug', () => {
   afterEach(() => {
     jest.clearAllMocks()
@@ -68,7 +78,10 @@ describe('getProductBySlug', () => {
     })
     expect(prisma.product.findUnique).toHaveBeenCalledWith({
       where: { slug: 'test-product', hide: false },
-      include: { variants: true, categories: true },
+      include: {
+        variants: { include: { optionValues: { include: { option: true } } } },
+        categories: true,
+      },
     })
   })
 
@@ -143,7 +156,10 @@ describe('getProductById', () => {
     })
     expect(prisma.product.findUnique).toHaveBeenCalledWith({
       where: { id: '1' },
-      include: { variants: true, categories: true },
+      include: {
+        variants: { include: { optionValues: { include: { option: true } } } },
+        categories: true,
+      },
     })
   })
 
@@ -186,6 +202,9 @@ describe('getProductById', () => {
 describe('deleteProduct', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: 'admin-1', role: 'ADMIN' },
+    })
   })
 
   it('should delete product successfully', async () => {
@@ -247,6 +266,9 @@ describe('deleteProduct', () => {
 describe('toggleVisibility', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: 'admin-1', role: 'ADMIN' },
+    })
   })
 
   it('should toggle visibility to hide product when state is true', async () => {
@@ -325,7 +347,10 @@ describe('getAllProducts', () => {
       data: mockProducts,
     })
     expect(prisma.product.findMany).toHaveBeenCalledWith({
-      include: { variants: true, categories: true },
+      include: {
+        variants: { include: { optionValues: { include: { option: true } } } },
+        categories: true,
+      },
       orderBy: { createdAt: 'desc' },
     })
   })
@@ -373,30 +398,34 @@ describe('getRandomProducts', () => {
 
   it('should return random products with default limit of 3', async () => {
     const mockProducts = [
-      { id: '1', name: 'Product 1' },
-      { id: '2', name: 'Product 2' },
-      { id: '3', name: 'Product 3' },
-      { id: '4', name: 'Product 4' },
+      { id: '1', name: 'Product 1', variants: [], categories: [] },
+      { id: '2', name: 'Product 2', variants: [], categories: [] },
+      { id: '3', name: 'Product 3', variants: [], categories: [] },
+      { id: '4', name: 'Product 4', variants: [], categories: [] },
     ]
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
 
     const result = await getRandomProducts()
 
     expect(result.success).toBe(true)
-    expect(result.message).toBe('Fecthed random products successfully')
+    expect(result.message).toBe('Fetched random products successfully')
     expect(result.data).toHaveLength(3)
     expect(prisma.product.findMany).toHaveBeenCalledWith({
       where: { variants: { some: { stock: { gt: 0 } } }, hide: false },
+      include: {
+        variants: { include: { optionValues: { include: { option: true } } } },
+        categories: true,
+      },
     })
   })
 
   it('should return random products with custom limit', async () => {
     const mockProducts = [
-      { id: '1', name: 'Product 1' },
-      { id: '2', name: 'Product 2' },
-      { id: '3', name: 'Product 3' },
-      { id: '4', name: 'Product 4' },
-      { id: '5', name: 'Product 5' },
+      { id: '1', name: 'Product 1', variants: [], categories: [] },
+      { id: '2', name: 'Product 2', variants: [], categories: [] },
+      { id: '3', name: 'Product 3', variants: [], categories: [] },
+      { id: '4', name: 'Product 4', variants: [], categories: [] },
+      { id: '5', name: 'Product 5', variants: [], categories: [] },
     ]
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
 
@@ -407,7 +436,9 @@ describe('getRandomProducts', () => {
   })
 
   it('should return empty array when fewer products than limit', async () => {
-    const mockProducts = [{ id: '1', name: 'Product 1' }]
+    const mockProducts = [
+      { id: '1', name: 'Product 1', variants: [], categories: [] },
+    ]
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
 
     const result = await getRandomProducts(3)
@@ -450,9 +481,9 @@ describe('getRandomProducts', () => {
 
   it('should randomize product order', async () => {
     const mockProducts = [
-      { id: '1', name: 'Product 1' },
-      { id: '2', name: 'Product 2' },
-      { id: '3', name: 'Product 3' },
+      { id: '1', name: 'Product 1', variants: [], categories: [] },
+      { id: '2', name: 'Product 2', variants: [], categories: [] },
+      { id: '3', name: 'Product 3', variants: [], categories: [] },
     ]
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
 
@@ -508,8 +539,8 @@ describe('getRelatedProducts', () => {
       { id: '1', name: 'Category 1', slug: 'category-1' },
     ] as Category[]
     const mockProducts = [
-      { id: '1', name: 'Product 1' },
-      { id: '2', name: 'Product 2' },
+      { id: '1', name: 'Product 1', variants: [], categories: [] },
+      { id: '2', name: 'Product 2', variants: [], categories: [] },
     ] as Product[]
     ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(10)
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
@@ -525,7 +556,9 @@ describe('getRelatedProducts', () => {
     const mockCategories = [
       { id: '1', name: 'Category 1', slug: 'category-1' },
     ] as Category[]
-    const mockProducts = [{ id: '2', name: 'Product 2' }] as Product[]
+    const mockProducts = [
+      { id: '2', name: 'Product 2', variants: [], categories: [] },
+    ] as Product[]
     ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(5)
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
 
@@ -543,6 +576,10 @@ describe('getRelatedProducts', () => {
           },
         },
         id: { not: '1' },
+      },
+      include: {
+        variants: { include: { optionValues: { include: { option: true } } } },
+        categories: true,
       },
       take: 12,
       skip: expect.any(Number),
@@ -567,6 +604,10 @@ describe('getRelatedProducts', () => {
           },
         },
       },
+      include: {
+        variants: { include: { optionValues: { include: { option: true } } } },
+        categories: true,
+      },
       take: 5,
       skip: expect.any(Number),
     })
@@ -577,7 +618,7 @@ describe('getRelatedProducts', () => {
       { id: '1', name: 'Category 1', slug: 'category-1' },
       { id: '2', name: 'Category 2', slug: 'category-2' },
     ] as Category[]
-    const mockProducts = [{ id: '1', name: 'Product 1' }] as Product[]
+    const mockProducts = [{ id: '1', name: 'Product 1', variants: [], categories: [] }] as Product[]
     ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(10)
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
 
@@ -659,7 +700,10 @@ describe('getProductsByCategorySlug', () => {
     })
     expect(prisma.product.findMany).toHaveBeenCalledWith({
       where: { hide: false },
-      include: { variants: true, categories: true },
+      include: {
+        variants: { include: { optionValues: { include: { option: true } } } },
+        categories: true,
+      },
     })
   })
 
@@ -707,7 +751,10 @@ describe('getProductsByCategorySlug', () => {
         hide: false,
         categories: { some: { slug: 'pottery' } },
       },
-      include: { variants: true, categories: true },
+      include: {
+        variants: { include: { optionValues: { include: { option: true } } } },
+        categories: true,
+      },
     })
   })
 
@@ -788,6 +835,9 @@ describe('getProductsByCategorySlug', () => {
 describe('upsertProduct', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: 'admin-1', role: 'ADMIN' },
+    })
   })
 
   it('should create a new product successfully', async () => {
@@ -893,7 +943,7 @@ describe('upsertProduct', () => {
     expect(result.success).toBe(true)
     expect(prisma.product.upsert).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: { id: '1' },
+        where: { id: 'new' },
       }),
     )
   })
@@ -1068,7 +1118,7 @@ describe('upsertProduct', () => {
     await upsertProduct(payload)
 
     const callArgs = (prisma.product.upsert as jest.Mock).mock.calls[0][0]
-    expect(callArgs.where.id).toBe('000000000000000000000000')
+    expect(callArgs.where.id).toBe('new')
   })
 
   it('should filter out temporary variant IDs from existingVariantIds', async () => {

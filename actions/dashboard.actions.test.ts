@@ -6,9 +6,18 @@ jest.mock('prisma/prisma', () => ({
   prisma: require('jest-mock-extended').mockDeep(),
 }))
 
+import { getServerSession } from 'next-auth'
+
+jest.mock('next-auth', () => ({
+  getServerSession: jest.fn(),
+}))
+
 describe('getDashboardStats', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: 'admin-1', role: 'ADMIN' },
+    })
   })
 
   it('should return dashboard stats successfully', async () => {

@@ -179,7 +179,7 @@ describe('resetPassword', () => {
 
   it('should reset password successfully', async () => {
     jest.mocked(hashPassword).mockResolvedValue('123hashedpassword ')
-    jest.mocked(prisma.user.update).mockResolvedValue({} as User)
+    jest.mocked(prisma.user.updateMany).mockResolvedValue({ count: 1 })
 
     const result = await resetPassword({
       token: '123reset-token',
@@ -195,7 +195,7 @@ describe('resetPassword', () => {
     const hashSpy = jest
       .mocked(hashPassword)
       .mockResolvedValue('hashed-password-123')
-    jest.mocked(prisma.user.update).mockResolvedValue({} as User)
+    jest.mocked(prisma.user.updateMany).mockResolvedValue({ count: 1 })
 
     await resetPassword({
       token: '123reset-token',
@@ -208,8 +208,8 @@ describe('resetPassword', () => {
   it('should update user with hashed password and clear reset tokens', async () => {
     jest.mocked(hashPassword).mockResolvedValue('hashed-password-123')
     const updateSpy = jest
-      .mocked(prisma.user.update)
-      .mockResolvedValue({} as User)
+      .mocked(prisma.user.updateMany)
+      .mockResolvedValue({ count: 1 })
 
     await resetPassword({
       token: '123reset-token',
@@ -217,7 +217,12 @@ describe('resetPassword', () => {
     })
 
     expect(updateSpy).toHaveBeenCalledWith({
-      where: { token: '123reset-token' },
+      where: {
+        resetToken: '123reset-token',
+        resetTokenExpiry: {
+          gt: expect.any(Date),
+        },
+      },
       data: {
         password: 'hashed-password-123',
         resetToken: null,

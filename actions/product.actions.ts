@@ -526,6 +526,7 @@ export async function upsertProduct(
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Database error',
+      errors: error,
     }
   }
 }

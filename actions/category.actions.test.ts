@@ -5,10 +5,15 @@ import {
   upsertCategory,
 } from './category.actions'
 import { prisma } from 'prisma/prisma'
+import { getServerSession } from 'next-auth'
 
 jest.mock('prisma/prisma', () => ({
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   prisma: require('jest-mock-extended').mockDeep(),
+}))
+
+jest.mock('next-auth', () => ({
+  getServerSession: jest.fn(),
 }))
 
 jest.mock('next/cache', () => ({
@@ -16,9 +21,16 @@ jest.mock('next/cache', () => ({
   revalidateTag: jest.fn(),
 }))
 
+jest.mock('./serverImages.action', () => ({
+  deleteBlob: jest.fn().mockResolvedValue(undefined),
+}))
+
 describe('getAllCategories', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: 'admin-1', role: 'ADMIN' },
+    })
   })
 
   it('should return all categories sorted by name', async () => {
@@ -72,6 +84,9 @@ describe('getAllCategories', () => {
 describe('getCategoryById', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: 'admin-1', role: 'ADMIN' },
+    })
   })
 
   it('should return a category by id', async () => {
@@ -126,6 +141,9 @@ describe('getCategoryById', () => {
 describe('upsertCategory', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: 'admin-1', role: 'ADMIN' },
+    })
   })
 
   it('should create a new category when id is not provided', async () => {
@@ -226,6 +244,9 @@ describe('upsertCategory', () => {
 describe('deleteCategory', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: 'admin-1', role: 'ADMIN' },
+    })
   })
 
   it('should delete a category and its image', async () => {

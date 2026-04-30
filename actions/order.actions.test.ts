@@ -281,10 +281,16 @@ describe('createOrder', () => {
     mockGetServerSession.mockResolvedValue({
       user: { id: 'user1', role: 'USER', email: 'john@example.com' },
     } as never)
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({ status: 'PAID' }),
-    } as never)
+    global.fetch = jest.fn().mockImplementation((url) => {
+      const checkoutId = url.split('/').pop()
+      let amount = 120
+      if (checkoutId === 'checkoutId123') amount = 120
+      if (checkoutId === 'checkoutId50') amount = 60
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({ status: 'PAID', amount }),
+      })
+    })
   })
 
   it('should create order successfully with all fields', async () => {
@@ -308,6 +314,9 @@ describe('createOrder', () => {
       },
       user: {
         update: jest.fn().mockResolvedValue({}),
+      },
+      stockMovement: {
+        create: jest.fn().mockResolvedValue({}),
       },
     }
 
@@ -361,13 +370,16 @@ describe('createOrder', () => {
       user: {
         update: jest.fn().mockResolvedValue({}),
       },
+      stockMovement: {
+        create: jest.fn().mockResolvedValue({}),
+      },
     }
 
     ;(prisma.$transaction as jest.Mock).mockImplementation((callback) =>
       callback(mockTx),
     )
 
-    const result = await createOrder('checkoutId123', {
+    const result = await createOrder('checkoutId50', {
       userId: '',
       address: {},
       firstName: 'Jane',
@@ -392,6 +404,12 @@ describe('createOrder', () => {
     const mockTx = {
       productVariant: {
         findUnique: jest.fn().mockResolvedValue(null),
+      },
+      order: {
+        create: jest.fn().mockResolvedValue({ id: 'temp-order' }),
+      },
+      stockMovement: {
+        create: jest.fn(),
       },
     }
 
@@ -427,6 +445,12 @@ describe('createOrder', () => {
           stock: 2,
           product: { name: 'Plate' },
         }),
+      },
+      order: {
+        create: jest.fn().mockResolvedValue({ id: 'temp-order' }),
+      },
+      stockMovement: {
+        create: jest.fn(),
       },
     }
 
@@ -501,7 +525,7 @@ describe('createOrder', () => {
     } as unknown as CreateOrder)
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Failed to create order')
+    expect(result.message).toBe('An unexpected error occurred')
   })
 
   it('should reject spoofed user context', async () => {

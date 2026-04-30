@@ -1,12 +1,21 @@
 import { deleteBlob } from './serverImages.action'
 import { del } from '@vercel/blob'
+import { getServerSession } from 'next-auth'
 
 jest.mock('@vercel/blob', () => ({
   del: jest.fn(),
 }))
+
+jest.mock('next-auth', () => ({
+  getServerSession: jest.fn(),
+}))
+
 describe('deleteBlob', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: 'admin-1', role: 'ADMIN' },
+    })
   })
 
   it('should handle errors gracefully', async () => {

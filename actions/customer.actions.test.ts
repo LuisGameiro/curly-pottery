@@ -12,9 +12,18 @@ jest.mock('prisma/prisma', () => ({
   prisma: require('jest-mock-extended').mockDeep(),
 }))
 
+import { getServerSession } from 'next-auth'
+
+jest.mock('next-auth', () => ({
+  getServerSession: jest.fn(),
+}))
+
 describe('getAllCustomers', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: 'admin-1', role: 'ADMIN' },
+    })
   })
 
   it('should return all customers successfully', async () => {
@@ -69,6 +78,9 @@ describe('getAllCustomers', () => {
 describe('updateNotes', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: 'admin-1', role: 'ADMIN' },
+    })
   })
 
   it('should update user notes successfully', async () => {
@@ -109,6 +121,9 @@ describe('updateNotes', () => {
 describe('updateUser', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: 'admin-1', role: 'ADMIN' },
+    })
   })
 
   it('should update user successfully with addresses', async () => {
@@ -129,7 +144,7 @@ describe('updateUser', () => {
     const result = await updateUser({ id: mockUser.id, data: mockData })
 
     expect(result.success).toBe(true)
-    expect(result.message).toBe('User note updated successfully')
+    expect(result.message).toBe('User updated successfully')
     expect(result.data).toEqual(mockUser)
     expect(prisma.user.update).toHaveBeenCalledWith({
       where: { id: '1' },

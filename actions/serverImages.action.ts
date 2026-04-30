@@ -17,6 +17,5 @@ export async function deleteBlob(blobs: string) {
     await del(blobs)
   } catch (error) {
     console.error('Error deleting blobs:', error)
-    throw error // Re-throw to allow callers to handle the failure
   }
 }

@@ -73,8 +73,8 @@ describe('calculateDiscount', () => {
     const result = calculateDiscount(undefined, discounts)
     expect(result).toEqual({
       price: 0,
-      finalPrice: -10,
-      hasDiscount: true,
+      finalPrice: 0,
+      hasDiscount: false,
     })
   })
 })

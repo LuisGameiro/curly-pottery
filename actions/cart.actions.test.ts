@@ -60,7 +60,16 @@ describe('getCartFromDbAction', () => {
   })
 
   it('should return cart when user has a cart', async () => {
-    const mockCart = { id: 'cart-123', lineItems: [], userId: 'user-123' }
+    const mockCart = {
+      id: 'cart-123',
+      lineItems: [],
+      userId: 'user-123',
+      subtotalPrice: 0,
+      totalPrice: 0,
+      taxes: 0,
+      shippingPrice: 0,
+      currency: 'GBP',
+    }
     ;(getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
@@ -134,14 +143,21 @@ describe('syncCartAction', () => {
     ;(getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
+    ;(prisma.productVariant.findUnique as jest.Mock).mockResolvedValue({
+      id: 'v1',
+      stock: 10,
+      price: 100,
+    })
+
+    const expectedItems = items.map((item) => ({ ...item, stock: 10 }))
 
     await syncCartAction(items)
 
     expect(prisma.cart.upsert).toHaveBeenCalledWith({
       where: { userId: 'user-123' },
-      update: { lineItems: items },
+      update: { lineItems: expectedItems },
       create: {
-        lineItems: items,
+        lineItems: expectedItems,
         user: { connect: { id: 'user-123' } },
       },
     })
@@ -172,10 +188,17 @@ describe('deleteCart', () => {
   })
 
   it('should delete cart by id', async () => {
+    ;(getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: 'user-123' },
+    })
+
     await deleteCart('cart-123')
 
     expect(prisma.cart.delete).toHaveBeenCalledWith({
-      where: { id: 'cart-123' },
+      where: {
+        id: 'cart-123',
+        userId: 'user-123',
+      },
     })
   })
 })
@@ -199,6 +222,16 @@ describe('updateCartPrice', () => {
     ;(getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
+    ;(prisma.cart.findUnique as jest.Mock).mockResolvedValue({
+      userId: 'user-123',
+      lineItems: [
+        {
+          price: 50,
+          quantity: 2,
+          discounts: [],
+        },
+      ],
+    })
 
     await updateCartPrice(100, 120, 20, 10)
 
@@ -206,7 +239,7 @@ describe('updateCartPrice', () => {
       where: { userId: 'user-123' },
       data: {
         subtotalPrice: 100,
-        totalPrice: 150,
+        totalPrice: 130,
         taxes: 20,
         shippingPrice: 10,
       },
