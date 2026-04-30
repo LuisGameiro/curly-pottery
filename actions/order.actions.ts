@@ -7,6 +7,8 @@ import {
   OrderWithUser,
   ActionResponse,
   CreateOrder,
+  CartLineItem,
+  CurrencyCode,
 } from '@lib/types/types'
 import { revalidatePath } from 'next/cache'
 import { authOptions } from '@lib/auth/authOptions'
@@ -198,14 +200,16 @@ export async function createOrder(
     let finalCurrency = currency || 'GBP'
 
     if (resolvedUserId) {
-      const cart = await prisma.cart.findUnique({ where: { userId: resolvedUserId } })
+      const cart = await prisma.cart.findUnique({
+        where: { userId: resolvedUserId },
+      })
       if (cart) {
-        finalLineItems = cart.lineItems as any[]
+        finalLineItems = cart.lineItems as unknown as CartLineItem[]
         finalSubtotalPrice = cart.subtotalPrice
         finalTotalPrice = cart.totalPrice
         finalTaxes = cart.taxes
         finalShippingPrice = cart.shippingPrice
-        finalCurrency = cart.currency as any
+        finalCurrency = cart.currency as CurrencyCode
       }
     }
 
@@ -239,7 +243,8 @@ export async function createOrder(
     if (fetchResult.data?.amount !== finalTotalPrice) {
       return {
         success: false,
-        message: 'Payment amount mismatch. Order creation aborted to prevent tampering.',
+        message:
+          'Payment amount mismatch. Order creation aborted to prevent tampering.',
         errors: new Error('Payment mismatch'),
       }
     }

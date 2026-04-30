@@ -123,6 +123,7 @@ export type CreateOrder = {
   currency: CurrencyCode
   shippingPrice: number
   shippingMethod: string
+  billingAddress: InputAddress
 }
 
 type PrismaOrderWithUser = Prisma.OrderGetPayload<{

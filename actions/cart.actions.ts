@@ -27,7 +27,7 @@ export async function syncCartAction(items: CartLineItem[]) {
 
   // Securely validate items against the database to prevent quantity/price manipulation
   const validatedItems: CartLineItem[] = []
-  
+
   for (const item of items) {
     const variant = await prisma.productVariant.findUnique({
       where: { id: item.variantId },
@@ -36,7 +36,7 @@ export async function syncCartAction(items: CartLineItem[]) {
     if (variant) {
       // Prevent exceeding stock limit (solves the Quantity Bug)
       const maxQuantity = Math.min(item.quantity, variant.stock)
-      
+
       if (maxQuantity > 0) {
         validatedItems.push({
           ...item,
@@ -66,9 +66,9 @@ export async function deleteCart(cartId: string) {
   }
 
   await prisma.cart.delete({
-    where: { 
+    where: {
       id: cartId,
-      userId: session.user.id
+      userId: session.user.id,
     },
   })
 }

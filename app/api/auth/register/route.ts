@@ -21,8 +21,9 @@ const registerSchema = z
   .transform(({ password2: _password2, ...data }) => data)
 
 export async function POST(req: Request) {
-  const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown'
-  
+  const clientIp =
+    req.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown'
+
   const rateKey = getRateLimitKey(clientIp, 'register')
   const rateLimit = checkRateLimit(rateKey)
 
@@ -33,19 +34,25 @@ export async function POST(req: Request) {
   })
 
   if (!rateLimit.success) {
-    return NextResponse.json({
-      error: 'Too many registration attempts. Please try again later.',
-      retryAfter: Math.ceil(rateLimit.resetIn / 1000),
-    }, { status: 429, headers })
+    return NextResponse.json(
+      {
+        error: 'Too many registration attempts. Please try again later.',
+        retryAfter: Math.ceil(rateLimit.resetIn / 1000),
+      },
+      { status: 429, headers },
+    )
   }
 
   try {
     const body = await req.json()
     const validation = registerSchema.safeParse(body)
     if (!validation.success) {
-      return NextResponse.json({
-        error: validation.error.issues[0]?.message || 'Invalid input',
-      }, { status: 400, headers })
+      return NextResponse.json(
+        {
+          error: validation.error.issues[0]?.message || 'Invalid input',
+        },
+        { status: 400, headers },
+      )
     }
 
     const { email, password, firstName, lastName, phone, acceptsMarketing } =
@@ -54,7 +61,10 @@ export async function POST(req: Request) {
     const existingUser = await prisma.user.findUnique({ where: { email } })
     if (existingUser) {
       // Return a generic message to prevent user enumeration
-      return NextResponse.json({ error: 'If the email is valid, an account has been created' }, { status: 400, headers })
+      return NextResponse.json(
+        { error: 'If the email is valid, an account has been created' },
+        { status: 400, headers },
+      )
     }
 
     const customer = await prisma.user.create({
@@ -72,12 +82,18 @@ export async function POST(req: Request) {
 
     const { password: _, ...customerWithoutPassword } = customer
 
-    return NextResponse.json({
-      message: 'User created successfully',
-      user: customerWithoutPassword,
-    }, { status: 201, headers })
+    return NextResponse.json(
+      {
+        message: 'User created successfully',
+        user: customerWithoutPassword,
+      },
+      { status: 201, headers },
+    )
   } catch (error) {
     console.error('Registration error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500, headers })
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500, headers },
+    )
   }
 }

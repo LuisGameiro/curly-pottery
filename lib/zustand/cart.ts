@@ -50,16 +50,18 @@ export const useCartStore = create<CartStore>()(
         let newItems: CartLineItem[]
 
         if (existing) {
+          const newQuantity = Math.min(
+            existing.quantity + quantity,
+            firstVariant.stock,
+          )
           newItems = cartItems.map((i: CartLineItem) =>
-            i.variantId === firstVariant.id
-              ? { ...i, quantity: i.quantity + quantity }
-              : i,
+            i.variantId === firstVariant.id ? { ...i, quantity: newQuantity } : i,
           )
         } else {
           newItems = [
             ...cartItems,
             {
-              quantity,
+              quantity: Math.min(quantity, firstVariant.stock),
               images: item.images[0] || '',
               variantId: firstVariant.id,
               sku: firstVariant.sku || '',
@@ -89,8 +91,12 @@ export const useCartStore = create<CartStore>()(
       },
 
       updateItem: async (variantId: string, q: number) => {
+        const item = get().cartItems.find((i) => i.variantId === variantId)
+        if (!item) return
+
+        const cappedQuantity = Math.min(q, item.stock)
         const newItems = get().cartItems.map((i: CartLineItem) =>
-          i.variantId === variantId ? { ...i, quantity: q } : i,
+          i.variantId === variantId ? { ...i, quantity: cappedQuantity } : i,
         )
         set({ cartItems: newItems })
         await syncCartAction(newItems)

@@ -1,4 +1,3 @@
-
 ⚙️ Global / System Level
 [ ] Fix Vercel Syncing Issue: Investigate why updates (new products/categories) from the admin panel are not reflecting on the live site. (Likely a caching or revalidation issue).
 [ ] GDPR & Cookies: Review and improve the existing cookie consent pop-out.
@@ -7,7 +6,6 @@
 [ ] Header Redesign: Update to match the Figma design.
 . Shop link bug: Can you describe exactly what happens? Does the link not navigate at all, navigate to the wrong page, or something else?
 Search function implementation? Give suggestions from the website ? or should show products
-
 
 [ ] Header Link Bug: Fix the "Shop" button in the header so it navigates correctly.
 [ ] Search Bar: Add a search bar to the header specifically for finding products.
@@ -20,7 +18,6 @@ Search function implementation? Give suggestions from the website ? or should sh
 [ ] Footer Update: Remove the curly pottery logo image and replace it with just the text/letters.
 [ ] Footer Socials: Add the Instagram logo linking to the page, add the title "Follow Along on Instagram," and feature a picture of a recent post.
 [ ] Footer Payments: Add payment provider logos (e.g., Klarna) to the footer.
-
 
 🏡 Home Page
 [ ] Hero Section: Add a "View Shop" introduction image that links directly to the shop.
@@ -55,12 +52,13 @@ Search function implementation? Give suggestions from the website ? or should sh
 ⚙️ Admin / Database
 [ ] Sync/Cache Bug: Investigate and fix the critical bug where categories and product names changed in the admin panel are not updating on the frontend (carousel, shop page, cart).
 
-
 2. GDPR Cookie Consent
-The existing banner needs improvement. Would you like me to:
+   The existing banner needs improvement. Would you like me to:
+
 - Add persistent cookie consent (vs localStorage)
 - Add "Manage Preferences" in footer
 - Block analytics until consent granted?
+
 3. Replace Domain Placeholder
-Update config/seo_meta.json:
-"url": "https://your-actual-domain.com"
+   Update config/seo_meta.json:
+   "url": "https://your-actual-domain.com"

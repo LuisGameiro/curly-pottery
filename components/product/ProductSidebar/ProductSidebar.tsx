@@ -1,7 +1,7 @@
 'use client'
 
 import s from './ProductSidebar.module.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button, Collapse, ShareButton, Text } from '@components/ui'
 import Link from 'next/link'
 import { cn } from '@lib/utils'
@@ -34,13 +34,28 @@ const ProductSidebar = ({
   variant,
   setVariant,
 }: ProductSidebarProps) => {
-  const { addItem } = useCart()
+  const { addItem, data: cartData } = useCart()
+  const existingInCart = cartData.lineItems.find(
+    (i) => i.variantId === variant.id,
+  )
+  const inCartQuantity = existingInCart?.quantity || 0
+  const remainingStock = variant.stock - inCartQuantity
 
   const [loading, setLoading] = useState(false)
   const [quantity, setQuantity] = useState(1)
 
+  // Reset quantity if it exceeds remaining stock when variant changes
+  useEffect(() => {
+    if (quantity > remainingStock && remainingStock > 0) {
+      setQuantity(remainingStock)
+    } else if (remainingStock <= 0) {
+      setQuantity(0)
+    }
+  }, [variant.id, remainingStock, quantity])
+
   const forSale = variant?.stock !== 0 && variant?.availableForSale
   const addToCart = async () => {
+    if (remainingStock <= 0) return
     setLoading(true)
     try {
       addItem(
@@ -56,6 +71,7 @@ const ProductSidebar = ({
         },
         quantity,
       )
+      toast.success(`Added ${quantity} to cart`)
       trackEvent('add_to_cart', {
         name: product.name,
         currency: variant.currency,
@@ -65,7 +81,7 @@ const ProductSidebar = ({
         quantity: quantity,
       })
     } catch {
-      toast('Error adding item to cart')
+      toast.error('Error adding item to cart')
     } finally {
       setLoading(false)
     }
@@ -97,18 +113,18 @@ const ProductSidebar = ({
             <FavouriteButton productId={product.id} />
           </div>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 items-center">
           {product.categories.map((category: Category) => (
             <Text key={category.id} variant="subHeading">
               {category.name}
             </Text>
           ))}
+          {variant.stock > 0 && variant.stock < 3 && (
+            <div className="text-red font-bold animate-pulse text-sm">
+              • Only {variant.stock} left!
+            </div>
+          )}
         </div>
-        {variant.stock > 0 && variant.stock < 3 && (
-          <div className="mt-2 text-red font-bold animate-pulse">
-            Only {variant.stock} left!
-          </div>
-        )}
       </section>
 
       <section className="space-y-4">
@@ -157,18 +173,18 @@ const ProductSidebar = ({
               <div className="flex h-16 flex-1 text-2xl font-semibold items-center">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  disabled={quantity <= 1}
-                  className="flex px-4 h-full  hover:bg-accent-1 transition items-center"
+                  disabled={quantity <= 1 || remainingStock <= 0}
+                  className="flex px-4 h-full  hover:bg-accent-1 transition items-center disabled:opacity-30"
                 >
                   -
                 </button>
                 <span className="px-6">{quantity}</span>
                 <button
                   onClick={() =>
-                    setQuantity(Math.min(variant.stock, quantity + 1))
+                    setQuantity(Math.min(remainingStock, quantity + 1))
                   }
-                  disabled={quantity >= variant.stock}
-                  className="flex px-4 h-full  hover:bg-accent-1 transition items-center"
+                  disabled={quantity >= remainingStock || remainingStock <= 0}
+                  className="flex px-4 h-full  hover:bg-accent-1 transition items-center disabled:opacity-30"
                 >
                   +
                 </button>
@@ -179,12 +195,24 @@ const ProductSidebar = ({
                 className={s.button}
                 onClick={addToCart}
                 loading={loading}
-                disabled={!variant.availableForSale}
+                disabled={!variant.availableForSale || remainingStock <= 0}
               >
-                {variant?.availableForSale ? 'Add To Cart' : 'Not Available'}
+                {remainingStock <= 0
+                  ? 'OUT OF STOCK'
+                  : variant?.availableForSale
+                    ? 'Add To Cart'
+                    : 'Not Available'}
               </Button>
             </div>
-            <Text variant="muted">
+            {inCartQuantity > 0 && (
+              <Text variant="muted" className="mt-2 text-sm">
+                You have {inCartQuantity} of this item in your cart.{' '}
+                {remainingStock > 0
+                  ? `You can add ${remainingStock} more.`
+                  : 'You have reached the stock limit.'}
+              </Text>
+            )}
+            <Text variant="muted" className="mt-2">
               VAT included for UK orders. Duties and import taxes are calculated
               at checkout for other customers Shipping calculated at checkout.
             </Text>

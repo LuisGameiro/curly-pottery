@@ -20,32 +20,77 @@ interface ShippingMethodProps {
 }
 
 export default function ShippingMethod({ onComplete }: ShippingMethodProps) {
-  const { setValue } = useFormContext()
+  const { setValue, watch } = useFormContext()
+  const selectedMethod = watch('shippingMethod')
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <Text variant="sectionHeading">Select Shipping</Text>
 
-      {shippingOptions.map((o) => (
+      <div className="space-y-3">
+        {shippingOptions.map((o) => {
+          const isSelected = selectedMethod === o.method
+          return (
+            <button
+              key={o.method}
+              type="button"
+              onClick={() => {
+                setValue('shippingPrice', o.price)
+                setValue('shippingMethod', o.method)
+              }}
+              className={cn(
+                'w-full flex justify-between items-center p-4 border rounded-lg transition-all duration-200 text-left',
+                isSelected
+                  ? 'border-secondary bg-secondary/5 ring-1 ring-secondary'
+                  : 'border-border hover:border-secondary/40 hover:bg-accent/5',
+              )}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className={cn(
+                    'w-4 h-4 rounded-full border flex items-center justify-center',
+                    isSelected ? 'border-secondary' : 'border-muted',
+                  )}
+                >
+                  {isSelected && (
+                    <div className="w-2 h-2 rounded-full bg-secondary" />
+                  )}
+                </div>
+                <Text
+                  variant="bold"
+                  className={isSelected ? 'text-secondary' : ''}
+                >
+                  {o.conditions}
+                </Text>
+              </div>
+              <Text
+                className={cn(
+                  'font-bold',
+                  o.price === 0
+                    ? 'text-green'
+                    : isSelected
+                      ? 'text-secondary'
+                      : '',
+                )}
+              >
+                {o.price === 0 ? 'FREE' : `£${o.price.toFixed(2)}`}
+              </Text>
+            </button>
+          )
+        })}
+      </div>
+
+      <div className="pt-4">
         <Button
-          key={o.method}
-          variant="secondary"
-          className="w-full"
           type="button"
-          onClick={() => {
-            setValue('shippingPrice', o.price)
-            setValue('shippingMethod', o.method)
-            onComplete()
-          }}
+          variant="secondary"
+          className="w-full sm:w-auto"
+          disabled={!selectedMethod}
+          onClick={onComplete}
         >
-          <div className="w-full flex justify-between gap-4">
-            <Text>{o.conditions}</Text>
-            <Text className={cn('font-bold ', o.price === 0 && 'text-green')}>
-              {o.price === 0 ? 'FREE' : o.price}
-            </Text>
-          </div>
+          Continue to Payment
         </Button>
-      ))}
+      </div>
     </div>
   )
 }

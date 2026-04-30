@@ -130,7 +130,8 @@ const CartItem = ({
         )}
 
         <span className="font-semibold text-sm mx-4">
-          x {currencySymbol} {price.finalPrice.toFixed(2)} = {currencySymbol} {(quantity * price.finalPrice).toFixed(2)}
+          x {currencySymbol} {price.finalPrice.toFixed(2)} = {currencySymbol}{' '}
+          {(quantity * price.finalPrice).toFixed(2)}
         </span>
         <Button
           type="button"

@@ -43,7 +43,9 @@ export default function CartClient() {
           <div className="space-y-1 pb-4 border-b">
             <div className="flex justify-between">
               <Text className="text-muted">Subtotal</Text>
-              <Text>{currencySymbol} {data?.subtotalPrice.toFixed(2)}</Text>
+              <Text>
+                {currencySymbol} {data?.subtotalPrice.toFixed(2)}
+              </Text>
             </div>
             <div className="flex justify-between">
               <Text className="text-muted">Shipping</Text>
@@ -52,7 +54,9 @@ export default function CartClient() {
           </div>
           <div className="text-lg flex justify-between py-2">
             <Text variant="bold">Total</Text>
-            <Text variant="bold">{currencySymbol} {data?.totalPrice.toFixed(2)}</Text>
+            <Text variant="bold">
+              {currencySymbol} {data?.totalPrice.toFixed(2)}
+            </Text>
           </div>
           <Link href="/checkout">
             <Button variant="slim">Checkout Now</Button>

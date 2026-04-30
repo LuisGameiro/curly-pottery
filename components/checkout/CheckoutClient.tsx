@@ -3,11 +3,12 @@
 import { useState } from 'react'
 import InformationForm from '@components/checkout/InformationForm'
 import SumUpPayment from '@components/checkout/SumUpPayment'
+import ShippingMethod from '@components/checkout/ShippingMethod'
 import { CheckoutSummary } from '@components/checkout/CheckoutSummary'
 import useCart from '@lib/hooks/useCart'
 import { createSumUpCheckout } from 'actions/sumUpPayment.actions'
 import { createOrder } from 'actions/order.actions'
-import { Container, Text, Button } from '@components/ui'
+import { Container, Text, Button, Input } from '@components/ui'
 import { toast } from 'sonner'
 import { CreateOrder, CurrencyCode } from '@lib/types/types'
 import { useUser } from '@lib/hooks/useUser'
@@ -29,6 +30,7 @@ export default function CheckoutClient() {
   const [paymentProvider, setPaymentProvider] = useState<'sumup' | 'klarna'>(
     'sumup',
   )
+  const [sameAsShipping, setSameAsShipping] = useState(true)
 
   const methods = useForm<CreateOrder>({
     defaultValues: {
@@ -89,7 +91,7 @@ export default function CheckoutClient() {
         )
         const klarnaData = await klarnaResponse.json()
         if (klarnaData.success) {
-          setStep(3)
+          setStep(4)
         } else {
           toast(klarnaData.message || 'Failed to initialize Klarna')
         }
@@ -109,7 +111,7 @@ export default function CheckoutClient() {
           toast(response.message)
         } else {
           setCheckoutId(response.data || '')
-          setStep(3)
+          setStep(4)
         }
       }
     } catch (error) {
@@ -224,61 +226,128 @@ export default function CheckoutClient() {
               isLoggedIn={isAuthenticated}
             />
           )}
-          {step === 2 && (
-            <div className="space-y-4">
-              <Text variant="bold">Select Payment Method</Text>
+          {step === 2 && <ShippingMethod onComplete={() => setStep(3)} />}
+          {step === 3 && (
+            <div className="space-y-6">
+              <section className="space-y-4">
+                <Text variant="bold">Billing Address</Text>
+                <div className="space-y-3">
+                  <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors">
+                    <input
+                      type="radio"
+                      name="billingType"
+                      checked={sameAsShipping}
+                      onChange={() => setSameAsShipping(true)}
+                      className="mr-3"
+                    />
+                    <Text>Same as shipping address</Text>
+                  </label>
 
-              <div className="space-y-3">
-                <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors">
-                  <input
-                    type="radio"
-                    name="payment"
-                    value="sumup"
-                    checked={paymentProvider === 'sumup'}
-                    onChange={() => setPaymentProvider('sumup')}
-                    className="mr-3"
-                  />
-                  <div>
-                    <Text variant="bold">Credit/Debit Card (SumUp)</Text>
-                    <Text variant="muted" className="text-sm">
-                      Secure payment via SumUp
-                    </Text>
-                  </div>
-                </label>
+                  <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors">
+                    <input
+                      type="radio"
+                      name="billingType"
+                      checked={!sameAsShipping}
+                      onChange={() => setSameAsShipping(false)}
+                      className="mr-3"
+                    />
+                    <Text>Use a different billing address</Text>
+                  </label>
+                </div>
 
-                <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors">
-                  <input
-                    type="radio"
-                    name="payment"
-                    value="klarna"
-                    checked={paymentProvider === 'klarna'}
-                    onChange={() => {
-                      setPaymentProvider('klarna')
-                    }}
-                    className="mr-3"
-                  />
-                  <div>
-                    <Text variant="bold">Klarna</Text>
-                    <Text variant="muted" className="text-sm">
-                      Pay now, pay later or in installments
-                    </Text>
+                {!sameAsShipping && (
+                  <div className="grid grid-cols-2 gap-4 p-4 border rounded-lg bg-accent/5 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div className="col-span-2">
+                      <Input
+                        placeholder="Address"
+                        {...methods.register('billingAddress.address', {
+                          required: !sameAsShipping,
+                        })}
+                      />
+                    </div>
+                    <Input
+                      placeholder="City"
+                      {...methods.register('billingAddress.city', {
+                        required: !sameAsShipping,
+                      })}
+                    />
+                    <Input
+                      placeholder="Postal code"
+                      {...methods.register('billingAddress.postalCode', {
+                        required: !sameAsShipping,
+                      })}
+                    />
+                    <Input
+                      placeholder="Country"
+                      {...methods.register('billingAddress.country', {
+                        required: !sameAsShipping,
+                      })}
+                    />
                   </div>
-                </label>
-              </div>
+                )}
+              </section>
+
+              <section className="space-y-4">
+                <Text variant="bold">Select Payment Method</Text>
+
+                <div className="space-y-3">
+                  <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors">
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="sumup"
+                      checked={paymentProvider === 'sumup'}
+                      onChange={() => setPaymentProvider('sumup')}
+                      className="mr-3"
+                    />
+                    <div>
+                      <Text variant="bold">Credit/Debit Card (SumUp)</Text>
+                      <Text variant="muted" className="text-sm">
+                        Secure payment via SumUp
+                      </Text>
+                    </div>
+                  </label>
+
+                  <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors">
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="klarna"
+                      checked={paymentProvider === 'klarna'}
+                      onChange={() => {
+                        setPaymentProvider('klarna')
+                      }}
+                      className="mr-3"
+                    />
+                    <div>
+                      <Text variant="bold">Klarna</Text>
+                      <Text variant="muted" className="text-sm">
+                        Pay now, pay later or in installments
+                      </Text>
+                    </div>
+                  </label>
+                </div>
+              </section>
 
               <Button
                 type="button"
                 width="100%"
                 loading={loading}
                 color="success"
-                onClick={nextToPayment}
+                onClick={async () => {
+                  if (sameAsShipping) {
+                    const shipping = methods.getValues('address')
+                    methods.setValue('billingAddress', shipping)
+                  }
+                  await nextToPayment()
+                }}
               >
                 Continue to{' '}
                 {paymentProvider === 'klarna' ? 'Klarna' : 'Payment'}
               </Button>
             </div>
           )}
-          {step === 3 && (
+          {step === 4 && (
             <div className="space-y-4">
               <Text variant="bold">Complete Your Payment</Text>
               {paymentProvider === 'sumup' ? (

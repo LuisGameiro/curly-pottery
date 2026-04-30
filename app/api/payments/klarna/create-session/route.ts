@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json()
     const { currency = 'GBP', countryCode = 'GB' } = body
-    
+
     // Always use the server-validated price and Order ID (Cart ID)
     const amount = cart.totalPrice
     const orderId = `KLARNA-${cart.id}-${Date.now()}`

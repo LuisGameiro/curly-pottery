@@ -37,8 +37,8 @@ export default function FeatureBar({ className }: FeatureBarProps) {
               <Text variant="bold">We value your privacy</Text>
               <Text>
                 We use cookies to enhance your experience. Essential cookies are
-                necessary for the site to function. Others help us analyze traffic
-                and provide personalized content.
+                necessary for the site to function. Others help us analyze
+                traffic and provide personalized content.
                 <Link href="/privacy" className="underline ml-1">
                   Privacy Policy
                 </Link>
@@ -75,9 +75,9 @@ export default function FeatureBar({ className }: FeatureBarProps) {
           </div>
         </div>
       )}
-      <CookiePreferencesModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+      <CookiePreferencesModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
       />
     </>
   )

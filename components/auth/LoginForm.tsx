@@ -16,7 +16,8 @@ export default function LoginForm() {
   const searchParams = useSearchParams()
   const [error, setError] = useState('')
   const rawRedirect = searchParams.get('redirect')
-  const redirectTo = rawRedirect && isInternalUrl(rawRedirect) ? rawRedirect : '/shop'
+  const redirectTo =
+    rawRedirect && isInternalUrl(rawRedirect) ? rawRedirect : '/shop'
   const isRegistered = searchParams.get('registered') === 'true'
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
