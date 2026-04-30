@@ -11,7 +11,7 @@ import {
 } from './product.actions'
 import { prisma } from 'prisma/prisma'
 import { ProductInput } from '@lib/form-validator'
-import { Category, Product } from '@lib/types/types'
+import { Category, ProductWithVariantsCategories } from '@lib/types/types'
 
 jest.mock('prisma/prisma', () => ({
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -541,7 +541,7 @@ describe('getRelatedProducts', () => {
     const mockProducts = [
       { id: '1', name: 'Product 1', variants: [], categories: [] },
       { id: '2', name: 'Product 2', variants: [], categories: [] },
-    ] as Product[]
+    ] as unknown as ProductWithVariantsCategories[]
     ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(10)
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
 
@@ -558,7 +558,7 @@ describe('getRelatedProducts', () => {
     ] as Category[]
     const mockProducts = [
       { id: '2', name: 'Product 2', variants: [], categories: [] },
-    ] as Product[]
+    ] as unknown as ProductWithVariantsCategories[]
     ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(5)
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
 
@@ -590,7 +590,9 @@ describe('getRelatedProducts', () => {
     const mockCategories = [
       { id: '1', name: 'Category 1', slug: 'category-1' },
     ] as Category[]
-    const mockProducts = [{ id: '1', name: 'Product 1' }] as Product[]
+    const mockProducts = [
+      { id: '1', name: 'Product 1', variants: [], categories: [] },
+    ] as unknown as ProductWithVariantsCategories[]
     ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(20)
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
 
@@ -618,7 +620,9 @@ describe('getRelatedProducts', () => {
       { id: '1', name: 'Category 1', slug: 'category-1' },
       { id: '2', name: 'Category 2', slug: 'category-2' },
     ] as Category[]
-    const mockProducts = [{ id: '1', name: 'Product 1', variants: [], categories: [] }] as Product[]
+    const mockProducts = [
+      { id: '1', name: 'Product 1', variants: [], categories: [] },
+    ] as unknown as ProductWithVariantsCategories[]
     ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(10)
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
 

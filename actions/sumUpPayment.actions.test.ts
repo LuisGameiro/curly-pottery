@@ -73,7 +73,9 @@ describe('createSumUpCheckout', () => {
     const result = await createSumUpCheckout()
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Cart not found. Please add items to your cart.')
+    expect(result.message).toBe(
+      'Cart not found. Please add items to your cart.',
+    )
     expect(global.fetch).not.toHaveBeenCalled()
   })
 
