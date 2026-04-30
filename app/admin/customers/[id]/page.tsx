@@ -43,7 +43,7 @@ export default async function CustomerDetailsPage({
   const user = response.data
 
   const totalSpend = user!.orders.reduce(
-    (acc: number, order: Order) => acc + order.totalPrice,
+    (acc: number, order: Order) => acc + Number(order.totalPrice),
     0,
   )
 

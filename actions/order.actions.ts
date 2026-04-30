@@ -1,6 +1,7 @@
 'use server'
 
 import { prisma } from 'prisma/prisma'
+import { Prisma } from '../prisma/generated/prisma/client'
 import {
   Order,
   OrderStatus,
@@ -205,10 +206,10 @@ export async function createOrder(
       })
       if (cart) {
         finalLineItems = cart.lineItems as unknown as CartLineItem[]
-        finalSubtotalPrice = cart.subtotalPrice
-        finalTotalPrice = cart.totalPrice
-        finalTaxes = cart.taxes
-        finalShippingPrice = cart.shippingPrice
+        finalSubtotalPrice = Number(cart.subtotalPrice)
+        finalTotalPrice = Number(cart.totalPrice)
+        finalTaxes = Number(cart.taxes)
+        finalShippingPrice = Number(cart.shippingPrice)
         finalCurrency = cart.currency as CurrencyCode
       }
     }

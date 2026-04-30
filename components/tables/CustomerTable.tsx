@@ -51,7 +51,7 @@ export default function CustomerTable({
       render: (user: UserWithOrders) => {
         const total =
           user.orders?.reduce(
-            (sum: number, o: Order) => sum + o.totalPrice,
+            (sum: number, o: Order) => sum + Number(o.totalPrice),
             0,
           ) || 0
         return `£${total.toFixed(2)}`

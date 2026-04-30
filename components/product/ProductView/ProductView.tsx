@@ -28,8 +28,10 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
     name: product.name,
     currency: variant.currency,
     sku: variant.sku,
-    price: calculateDiscount(variant.price, variant.discounts as Discount[])
-      .finalPrice,
+    price: calculateDiscount(
+      Number(variant.price),
+      variant.discounts as Discount[],
+    ).finalPrice,
   })
 
   return (

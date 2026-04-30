@@ -33,7 +33,8 @@ export default async function SearchPage({
           Search Results for &quot;{query}&quot;
         </Text>
         <Text variant="muted" className="mt-2">
-          Found {products.length} {products.length === 1 ? 'product' : 'products'}
+          Found {products.length}{' '}
+          {products.length === 1 ? 'product' : 'products'}
         </Text>
       </div>
 

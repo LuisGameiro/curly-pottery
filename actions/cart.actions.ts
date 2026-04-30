@@ -27,10 +27,12 @@ export async function getCartFromDbAction(): Promise<Cart | null> {
     totalPrice: Number(user.cart.totalPrice),
     shippingPrice: Number(user.cart.shippingPrice),
     taxes: Number(user.cart.taxes),
-    lineItems: (user.cart.lineItems as unknown as CartLineItem[]).map((item) => ({
-      ...item,
-      price: Number(item.price),
-    })),
+    lineItems: (user.cart.lineItems as unknown as CartLineItem[]).map(
+      (item) => ({
+        ...item,
+        price: Number(item.price),
+      }),
+    ),
   } as unknown as Cart
 }
 
@@ -53,7 +55,7 @@ export async function syncCartAction(items: CartLineItem[]) {
       if (maxQuantity > 0) {
         validatedItems.push({
           ...item,
-          price: variant.price, // Force server price (solves price manipulation)
+          price: Number(variant.price), // Force server price (solves price manipulation)
           quantity: maxQuantity,
           stock: variant.stock,
         })

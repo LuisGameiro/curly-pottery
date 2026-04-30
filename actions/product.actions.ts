@@ -373,7 +373,9 @@ export async function getProductsByCategorySlug(
           hide: false,
         },
         include: {
-          variants: { include: { optionValues: { include: { option: true } } } },
+          variants: {
+            include: { optionValues: { include: { option: true } } },
+          },
           categories: true,
         },
       })

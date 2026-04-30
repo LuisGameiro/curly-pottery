@@ -111,7 +111,7 @@ export default function ProductTable({
     {
       header: 'Price Range',
       render: (p: ProductWithVariantsCategories) => {
-        const prices = p.variants.map((v: Variant) => v.price)
+        const prices = p.variants.map((v: Variant) => Number(v.price))
         const minPrice = Math.min(...prices)
         const maxPrice = Math.max(...prices)
 

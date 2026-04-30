@@ -31,7 +31,7 @@ export default function ProductClient({
   const initialVariants = product?.variants.map((v: Variant) => ({
     id: v.id,
     sku: v.sku ?? '',
-    price: v.price ?? 0,
+    price: Number(v.price) ?? 0,
     stock: v.stock ?? 0,
     sizeName: v.sizeName ?? '',
     colorName: v.colorName ?? '',

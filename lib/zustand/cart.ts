@@ -68,7 +68,7 @@ export const useCartStore = create<CartStore>()(
               variantId: firstVariant.id,
               sku: firstVariant.sku || '',
               stock: firstVariant.stock || 0,
-              price: firstVariant.price || 0,
+              price: Number(firstVariant.price) || 0,
               currency: firstVariant.currency || 'GBP',
               discounts: (firstVariant.discounts ?? []) as Discount[],
               id: item.id,

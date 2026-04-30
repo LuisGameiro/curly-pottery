@@ -57,11 +57,11 @@ const getProductPriceLabel = (
   }
 
   const lowestPriceVariant = [...product.variants].sort(
-    (left, right) => left.price - right.price,
+    (left, right) => Number(left.price) - Number(right.price),
   )[0]
 
   return `From ${formatCurrency(
-    lowestPriceVariant.price,
+    Number(lowestPriceVariant.price),
     lowestPriceVariant.currency,
   )}`
 }

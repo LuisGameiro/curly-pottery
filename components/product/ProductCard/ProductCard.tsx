@@ -36,7 +36,7 @@ const ProductCard = ({
   const { finalPrice, price, hasDiscount } =
     product && 'variants' in product && product.variants.length > 0
       ? calculateDiscount(
-          product.variants[0].price,
+          Number(product.variants[0].price),
           product.variants[0].discounts as Discount[],
         )
       : { price: '0', finalPrice: '0', hasDiscount: false }
@@ -97,10 +97,17 @@ const ProductCard = ({
                   <span className="line-through opacity-40 mr-1">
                     £ {typeof price === 'number' ? price : price.toString()}
                   </span>
-                  <span>£ {typeof finalPrice === 'number' ? finalPrice : finalPrice.toString()}</span>
+                  <span>
+                    £{' '}
+                    {typeof finalPrice === 'number'
+                      ? finalPrice
+                      : finalPrice.toString()}
+                  </span>
                 </>
               ) : (
-                <span>£ {typeof price === 'number' ? price : price.toString()}</span>
+                <span>
+                  £ {typeof price === 'number' ? price : price.toString()}
+                </span>
               )}
             </div>
           </div>

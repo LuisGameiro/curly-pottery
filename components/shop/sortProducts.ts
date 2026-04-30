@@ -31,14 +31,14 @@ export const sortProducts = (
     case 'price-asc':
       return list.sort(
         (a, b) =>
-          Math.min(...a.variants.map((v: Variant) => v.price)) -
-          Math.min(...b.variants.map((v: Variant) => v.price)),
+          Math.min(...a.variants.map((v: Variant) => Number(v.price))) -
+          Math.min(...b.variants.map((v: Variant) => Number(v.price))),
       )
     case 'price-desc':
       return list.sort(
         (a, b) =>
-          Math.max(...b.variants.map((v: Variant) => v.price)) -
-          Math.max(...a.variants.map((v: Variant) => v.price)),
+          Math.max(...b.variants.map((v: Variant) => Number(v.price))) -
+          Math.max(...a.variants.map((v: Variant) => Number(v.price))),
       )
     case 'name-asc':
       return list.sort((a, b) => a.name.localeCompare(b.name))

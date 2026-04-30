@@ -76,8 +76,10 @@ const ProductSidebar = ({
         name: product.name,
         currency: variant.currency,
         sku: variant.sku,
-        price: calculateDiscount(variant.price, variant.discounts as Discount[])
-          .finalPrice,
+        price: calculateDiscount(
+          Number(variant.price),
+          variant.discounts as Discount[],
+        ).finalPrice,
         quantity: quantity,
       })
     } catch {
@@ -88,7 +90,7 @@ const ProductSidebar = ({
   }
 
   const price = calculateDiscount(
-    variant.price,
+    Number(variant.price),
     variant.discounts as Discount[],
   )
 
