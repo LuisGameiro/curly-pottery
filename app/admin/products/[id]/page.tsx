@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { getProductById } from 'actions/product.actions'
 import { getAllCategories } from 'actions/category.actions'
 import notFound from 'app/not-found'

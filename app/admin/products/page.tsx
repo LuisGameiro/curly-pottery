@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { Suspense } from 'react'
 import ProductsCLient from '../../../components/admin/ProductsClient'
 import { getAllProducts } from 'actions/product.actions'

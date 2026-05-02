@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import constructMetadata from '@components/common/SEO'
 import NewsletterClient from '@components/admin/NewsletterClient'
 import { getNewsletterAdminOverview } from 'actions/newsletter.actions'

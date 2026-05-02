@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { Container, Text } from '@components/ui'
 import Image from 'next/image'
 import { ArrowLeft, Package, MapPin, User } from 'lucide-react'

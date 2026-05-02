@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { getAllCustomers } from 'actions/customer.actions'
 import CustomersClient from '../../../components/admin/CustomersClient'
 import { Suspense } from 'react'

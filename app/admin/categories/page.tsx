@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { Button, Container } from '@components/ui'
 import { getAllCategories } from 'actions/category.actions'
 import Link from 'next/link'

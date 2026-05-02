@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { getCategoryById } from 'actions/category.actions'
 import CategoryClient from '../../../../components/admin/CategoryClient'
 import notFound from 'app/not-found'
