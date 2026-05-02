@@ -53,7 +53,10 @@ export default function FavouriteButton({
       <Heart
         size={iconSize}
         fill={filled ? 'currentColor' : 'rgba(0,0,0,0.1)'}
-        className={cn('transition-all duration-200', !filled && 'hover:scale-110')}
+        className={cn(
+          'transition-all duration-200',
+          !filled && 'hover:scale-110',
+        )}
       />
     </button>
   )
