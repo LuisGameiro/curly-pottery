@@ -4,6 +4,7 @@ import { Heart } from 'lucide-react'
 import { cn } from '@lib/utils'
 import useFavourites from '@lib/hooks/useFavourites'
 import { useUser } from '@lib/hooks/useUser'
+import { useRouter } from 'next/navigation'
 
 type FavouriteButtonProps = {
   productId: string
@@ -18,11 +19,22 @@ export default function FavouriteButton({
 }: FavouriteButtonProps) {
   const { isAuthenticated } = useUser()
   const { isFavourite, toggleFavourite, isLoading } = useFavourites()
-
-  if (!isAuthenticated) return null
+  const router = useRouter()
 
   const filled = isFavourite(productId)
   const iconSize = size === 'sm' ? 16 : size === 'lg' ? 28 : 22
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (!isAuthenticated) {
+      router.push('/auth/login')
+      return
+    }
+
+    toggleFavourite(productId)
+  }
 
   return (
     <button
@@ -30,11 +42,7 @@ export default function FavouriteButton({
       aria-label={filled ? 'Remove from favourites' : 'Add to favourites'}
       aria-pressed={filled}
       disabled={isLoading}
-      onClick={(e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        toggleFavourite(productId)
-      }}
+      onClick={handleClick}
       className={cn(
         'transition-colors duration-200',
         filled

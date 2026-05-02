@@ -44,14 +44,21 @@ export async function addFavouriteAction(productId: string): Promise<void> {
 export async function removeFavouriteAction(productId: string): Promise<void> {
   const session = await getServerSession(authOptions)
 
-  if (!session?.user?.id) return
+  if (!session?.user?.id) {
+    console.error('[REMOVE_FAVOURITE] No session found')
+    return
+  }
 
-  await prisma.favourite.deleteMany({
+  console.log(`[REMOVE_FAVOURITE] User ${session.user.id} removing product ${productId}`)
+
+  const result = await prisma.favourite.deleteMany({
     where: {
       userId: session.user.id,
       productId,
     },
   })
+
+  console.log(`[REMOVE_FAVOURITE] Deleted ${result.count} records`)
 
   revalidatePath('/user/favourites')
   revalidatePath('/')
@@ -75,5 +82,11 @@ export async function getFavouritesWithProductsAction() {
     orderBy: { createdAt: 'desc' },
   })
 
-  return favourites.map((f) => f.product)
+  return favourites.map((f) => ({
+    ...f.product,
+    variants: f.product.variants.map((v) => ({
+      ...v,
+      price: Number(v.price),
+    })),
+  }))
 }

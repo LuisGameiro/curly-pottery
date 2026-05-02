@@ -41,7 +41,7 @@ const CategoriesCard = ({ cat, imgProps }: Props) => {
       )}
 
       <div className="absolute bottom-0 left-0 right-0 z-20  ">
-        <p className="bg-background/40 text backdrop-blur-sm px-4 capitalize">
+        <p className="bg-background/60 text backdrop-blur-sm px-4 capitalize">
           {cat.name}
         </p>
       </div>

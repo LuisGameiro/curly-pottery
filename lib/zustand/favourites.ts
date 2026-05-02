@@ -7,6 +7,7 @@ import {
   removeFavouriteAction,
   getFavouritesAction,
 } from 'actions/Favourite.actions'
+import { toast } from 'sonner'
 
 interface FavouritesStore {
   favouriteIds: string[]
@@ -33,8 +34,10 @@ export const useFavouritesStore = create<FavouritesStore>()(
         set({ favouriteIds: [...favouriteIds, productId] })
         try {
           await addFavouriteAction(productId)
+          toast.success('Added to favourites')
         } catch (error) {
           set({ favouriteIds })
+          toast.error('Failed to add to favourites')
           console.error('Failed to add favourite', error)
         }
       },
@@ -46,8 +49,10 @@ export const useFavouritesStore = create<FavouritesStore>()(
         set({ favouriteIds: newIds })
         try {
           await removeFavouriteAction(productId)
+          toast.success('Removed from favourites')
         } catch (error) {
           set({ favouriteIds })
+          toast.error('Failed to remove from favourites')
           console.error('Failed to remove favourite', error)
         }
       },

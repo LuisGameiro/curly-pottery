@@ -11,8 +11,7 @@ import {
   ProductWithVariantsCategories,
 } from '@lib/types/types'
 import { shimmerDataUrl } from '@lib/shimmer'
-import { Heart } from 'lucide-react'
-import useFavourites from '@lib/hooks/useFavourites'
+import FavouriteButton from '@components/common/FavouriteButton/FavouriteButton'
 
 interface Props {
   className?: string
@@ -31,7 +30,6 @@ const ProductCard = ({
   noNameTag = false,
   variant = 'default',
 }: Props) => {
-  const { isFavourite, toggleFavourite } = useFavourites()
   const rootClassName = cn(
     s.root,
     { [s.slim]: variant === 'slim', [s.simple]: variant === 'simple' },
@@ -97,33 +95,11 @@ const ProductCard = ({
                 blurDataURL={shimmerDataUrl(500, 500)}
               />
             )}
-            <button
-              type="button"
-              className={cn(
-                'absolute top-2 right-2 z-30 p-2 rounded-full transition-all duration-200',
-                'bg-background/20 backdrop-blur-md hover:bg-background/40 group/heart',
-              )}
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                toggleFavourite(product.id)
-              }}
-              aria-label={
-                isFavourite(product.id)
-                  ? 'Remove from favourites'
-                  : 'Add to favourites'
-              }
-            >
-              <Heart
-                size={20}
-                className={cn(
-                  'transition-colors duration-200',
-                  isFavourite(product.id)
-                    ? 'fill-red-500 text-red-500'
-                    : 'text-primary group-hover/heart:text-red-500',
-                )}
-              />
-            </button>
+            <FavouriteButton
+              productId={product.id}
+              size="md"
+              className="absolute top-2 right-2 z-30 p-2 rounded-full  hover:bg-background/40"
+            />
             <div className="absolute bottom-2 right-2 z-20 rounded-md bg-background/20 px-2 py-1 text-sm font-medium text-base backdrop-blur">
               {hasDiscount ? (
                 <>
@@ -171,6 +147,11 @@ const ProductCard = ({
               blurDataURL={shimmerDataUrl(500, 500)}
             />
           )}
+          <FavouriteButton
+            productId={product.id}
+            size="lg"
+            className="absolute top-4 right-4 z-30 p-2 rounded-full bg-background/20 backdrop-blur-md hover:bg-background/40"
+          />
         </div>
       )}
     </Link>
