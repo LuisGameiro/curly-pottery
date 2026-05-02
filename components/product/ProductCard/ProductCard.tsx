@@ -39,9 +39,9 @@ const ProductCard = ({
   const { finalPrice, price, hasDiscount } =
     product && 'variants' in product && product.variants.length > 0
       ? calculateDiscount(
-        Number(product.variants[0].price),
-        product.variants[0].discounts as Discount[],
-      )
+          Number(product.variants[0].price),
+          product.variants[0].discounts as Discount[],
+        )
       : { price: '0', finalPrice: '0', hasDiscount: false }
 
   return (
@@ -63,7 +63,6 @@ const ProductCard = ({
               style={{
                 aspectRatio: '1/1',
                 objectFit: 'cover',
-
               }}
               {...imgProps}
               placeholder="blur"

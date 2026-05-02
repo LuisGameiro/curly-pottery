@@ -97,7 +97,10 @@ export default function MenuProducts({
           </div>
         </div>
 
-        <div className="relative flex items-center gap-4 p-1" ref={containerSortRef}>
+        <div
+          className="relative flex items-center gap-4 p-1"
+          ref={containerSortRef}
+        >
           {/* Item count will be handled by ProductList but we can leave a gap here if needed */}
           <div className="relative">
             <button
