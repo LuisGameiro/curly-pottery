@@ -16,7 +16,7 @@
 }
 
 .menuContainer {
-  @apply max-w-10/12 mx-auto py-8 flex flex-col lg:flex-row gap-8;
+  @apply max-w-screen-lg mx-auto py-12 flex flex-col lg:flex-row items-start justify-center gap-12 lg:gap-24;
 }
 
 .menu {
@@ -48,5 +48,5 @@
 }
 
 .signature {
-  @apply border-t border-border pt-2 pb-4 flex flex-col md:flex-row justify-around items-center text-muted text-sm gap-2;
+  @apply border-t border-secondary/10 px-10 py-6 flex flex-col md:flex-row justify-between items-center text-secondary/60 text-sm gap-4;
 }

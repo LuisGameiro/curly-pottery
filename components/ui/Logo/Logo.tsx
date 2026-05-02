@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 const Logo = ({ className = '', ...props }) => (
   <Image
-    src="/logo.png"
+    src="/Curly Logo Final 1.png"
     alt="Logo"
     width={64}
     height={64}

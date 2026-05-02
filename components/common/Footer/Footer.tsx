@@ -16,59 +16,70 @@ const links: Page[] = [
     url: '/faq',
   },
   {
-    name: 'Contacts',
-    url: '/contacts',
+    name: 'Contact',
+    url: '/contact',
   },
   {
     name: 'About',
     url: '/about',
   },
   {
-    name: 'Terms of Service',
+    name: 'Terms of service',
     url: '/terms',
   },
   {
     name: 'Privacy Policy',
     url: '/privacy',
   },
-  {
-    name: 'Cookie Settings',
-    url: '/cookies',
-  },
 ]
+
+import Image from 'next/image'
 
 const Footer = () => {
   return (
     <footer className={s.root}>
-      <div className={s.menuContainer}>
-        <div className={s.brandColumn}>
-          <Link href="/" className={s.logoContainer}>
-            <Logo className={s.logo} />
-            <span>Curly Pottery</span>
-          </Link>
 
-          <NewsletterSignup />
+      <div className={s.menuContainer}>
+        {/* Instagram Column */}
+        <div className="flex flex-col items-center gap-4 flex-1">
+          <h3 className="text-secondary font-bold text-xl text-center leading-tight">
+            Follow me<br />on Instagram
+          </h3>
+          <div className="w-32 h-40 relative rounded-lg overflow-hidden border-2 border-secondary/20 shadow-lg">
+            <Image
+              src="/instagram.jpg"
+              alt="Instagram feed"
+              fill
+              className="object-cover"
+            />
+          </div>
         </div>
 
-        <div className={s.menu}>
-          <nav className={s.navlist}>
-            {links.map((item) => (
-              <Link key={item.name} href={item.url}>
-                {item.name}
-              </Link>
-            ))}
-          </nav>
+        {/* Divider */}
+        <div className="hidden lg:block w-[1px] bg-secondary/20 h-40 self-center"></div>
 
-          <div className={s.widgetContainer}>
-            <ThemeSwitcher />
-            <I18nWidget />
-          </div>
+        {/* Links Column */}
+        <div className="flex flex-col gap-2 flex-1 lg:pl-10">
+          {links.map((item) => (
+            <Link
+              key={item.name}
+              href={item.url}
+              className="text-secondary font-medium text-lg hover:underline transition-all"
+            >
+              {item.name}
+            </Link>
+          ))}
         </div>
       </div>
 
       <div className={s.signature}>
-        <span>&copy; 2025 Curly Pottery, Inc. All rights reserved.</span>
-        <span>Created by Luis Gameiro</span>
+        <div className="flex-1">
+          <span>&copy; 2025 Curly Pottery. Created by Luis Gameiro</span>
+        </div>
+        <div className="flex items-center gap-6">
+          <ThemeSwitcher />
+          <I18nWidget />
+        </div>
       </div>
     </footer>
   )

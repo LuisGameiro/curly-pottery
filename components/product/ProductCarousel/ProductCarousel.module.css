@@ -1,0 +1,39 @@
+@reference "../../../globals.css";
+
+.root {
+  @apply bg-black text-white py-12 w-full overflow-hidden;
+}
+
+.header {
+  @apply px-10 mb-8;
+}
+
+.title {
+  @apply text-2xl font-bold mb-1;
+}
+
+.subtitle {
+  @apply text-white/60 text-sm;
+}
+
+.carouselContainer {
+  @apply w-full overflow-x-auto;
+}
+
+.carousel {
+  @apply flex gap-4 px-10 min-w-max pb-4;
+}
+
+.item {
+  @apply w-64 flex-shrink-0;
+}
+
+/* Hide scrollbar but allow scrolling */
+.carouselContainer {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.carouselContainer::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}

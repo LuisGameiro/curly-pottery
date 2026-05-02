@@ -15,32 +15,34 @@ interface NavbarProps {
 
 const Navbar = ({ links }: NavbarProps) => (
   <NavbarRoot>
-    <div className={s.nav}>
-      <div className="flex items-center gap-6">
-        <Link href="/" className={s.logo} aria-label="Curly Pottery home">
-          <Logo />
-          <span className={s.brandName}>Curly Pottery</span>
-        </Link>
+    <div className="flex flex-col w-full ">
+      <div className={s.nav}>
+        <div className="flex items-center">
+          <Link href="/" className={s.logo} aria-label="Curly Pottery home">
+            <Logo width={120} height={40} />
+          </Link>
 
-        {links && (
-          <nav className={s.navMenu}>
-            {links.map((link) => (
-              <Link key={link.href} href={link.href} className={s.link}>
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-        )}
+          {links && (
+            <nav className={s.navMenu}>
+              {links.map((link) => (
+                <Link key={link.href} href={link.href} className={s.link}>
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          )}
+        </div>
 
-        <div className="hidden md:block">
-          <SearchBar />
+        <div className="flex items-center gap-6">
+          <div className="hidden md:block">
+            <SearchBar />
+          </div>
+          <SearchBar className="md:hidden" />
+          <UserNav />
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
-        <SearchBar className="md:hidden" />
-        <UserNav />
-      </div>
+
     </div>
   </NavbarRoot>
 )

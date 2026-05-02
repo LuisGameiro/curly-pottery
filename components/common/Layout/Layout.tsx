@@ -34,13 +34,12 @@ interface Props {
 export default function Layout({ children }: Props) {
   const navBarlinks = [
     { label: 'Shop', href: '/shop' },
-    { label: 'Contacts', href: '/contacts' },
+    { label: 'About', href: '/about' },
   ]
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar links={navBarlinks} />
-      <NewsletterBanner />
       <main className="bg-background w-full flex-1 flex flex-col">
         {children}
       </main>

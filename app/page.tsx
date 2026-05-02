@@ -13,6 +13,9 @@ export const metadata = constructMetadata({
   canonical: '/',
 })
 
+import HomeHero from '@components/ui/HomeHero/HomeHero'
+import ProductCarousel from '@components/product/ProductCarousel/ProductCarousel'
+
 export default async function Home() {
   const responseProducts = await getRandomProducts(13)
   const responseCategories = await getAllCategories()
@@ -25,6 +28,9 @@ export default async function Home() {
 
   return (
     <main className="flex flex-col bg-background">
+      <HomeHero />
+      <ProductCarousel products={products.slice(0, 7)} />
+      
       <Grid variant="filled" layout="A">
         {products.map((product: Product) => (
           <ProductCard

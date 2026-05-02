@@ -60,11 +60,11 @@ export default function SearchBar({
         />
         <button
           type="button"
-          className={cn(s.iconContainer, 'md:hidden')}
+          className={cn(s.iconContainer, 'md:hidden relative inset-auto p-2')}
           aria-label="Open search"
           onClick={() => setIsOpen(true)}
         >
-          <Search size={20} />
+          <Search size={24} className="text-secondary" />
         </button>
         <div className={cn(s.iconContainer, 'hidden md:flex')}>
           <svg className={s.icon} fill="currentColor" viewBox="0 0 20 20">
