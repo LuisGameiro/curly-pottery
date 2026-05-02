@@ -34,11 +34,12 @@ export default async function Home() {
         <p className="text-sm">Everything that&apos;s hot right now</p>
       </div>
 
-      <Grid variant="filled" layout="A">
+      <Grid variant="filled" layout="B">
         {products.map((product: Product) => (
           <ProductCard
             key={product.id}
             product={product}
+            variant="slim"
             imgProps={{
               alt: product.name,
               width: 1200,
@@ -53,7 +54,7 @@ export default async function Home() {
         <h2 className="text-2xl font-bold mb-1">Explore Categories</h2>
         <p className="text-sm">Find the perfect piece for your home</p>
       </div>
-      <Marquee variant="secondary">
+      <Marquee>
         {categories.map((cat) => (
           <CategoriesCard key={cat.id} cat={cat} />
         ))}

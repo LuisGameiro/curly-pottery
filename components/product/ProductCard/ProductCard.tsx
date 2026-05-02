@@ -48,7 +48,7 @@ const ProductCard = ({
       aria-label={product.name}
     >
       {variant === 'slim' && (
-        <div className="relative w-full h-full">
+        <div className="relative w-full h-full p-2 gap-2">
           {product?.images && (
             <Image
               src={product.images[0] || placeholderImg}
@@ -60,6 +60,7 @@ const ProductCard = ({
               style={{
                 aspectRatio: '1/1',
                 objectFit: 'cover',
+                padding: '2px',
               }}
               {...imgProps}
               placeholder="blur"

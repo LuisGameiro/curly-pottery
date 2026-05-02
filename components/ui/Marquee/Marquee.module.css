@@ -2,7 +2,7 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply w-full min-w-full relative flex flex-row items-center overflow-hidden py-0;
+  @apply w-full min-w-full relative flex flex-row items-center overflow-hidden gap-2 p-2;
   max-height: 320px;
 }
 
@@ -14,12 +14,4 @@
 
 .root > div > * > *:nth-child(2) * {
   max-height: 100%;
-}
-
-.primary {
-  @apply bg-background;
-}
-
-.secondary {
-  @apply bg-accent-9;
 }

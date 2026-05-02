@@ -71,7 +71,7 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
           <Text variant="sectionHeading" className="mb-8 text-center">
             You Might Also Like
           </Text>
-          <Marquee variant="secondary">
+          <Marquee>
             {relatedProducts.map((p) => (
               <ProductCard
                 key={p.slug}

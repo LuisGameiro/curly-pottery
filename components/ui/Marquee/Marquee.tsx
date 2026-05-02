@@ -14,22 +14,10 @@ import { default as FastMarquee } from 'react-fast-marquee'
 interface MarqueeProps {
   className?: string
   children?: ReactNode
-  variant?: 'primary' | 'secondary'
 }
 
-const Marquee = ({
-  children = [],
-  className = '',
-  variant = 'primary',
-}: MarqueeProps) => {
-  const rootClassName = cn(
-    s.root,
-    {
-      [s.primary]: variant === 'primary',
-      [s.secondary]: variant === 'secondary',
-    },
-    className,
-  )
+const Marquee = ({ children = [], className = '' }: MarqueeProps) => {
+  const rootClassName = cn(s.root, className)
 
   return (
     <FastMarquee gradient={false} className={rootClassName} autoFill={true}>
@@ -39,7 +27,7 @@ const Marquee = ({
         const element = child as ReactElement<{ className?: string }>
 
         return cloneElement(element, {
-          className: cn(element.props.className, variant),
+          className: cn(element.props.className),
         })
       })}
     </FastMarquee>

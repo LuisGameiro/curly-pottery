@@ -38,27 +38,31 @@ const Footer = () => {
     <footer className={s.root}>
       <div className={s.menuContainer}>
         {/* Instagram Column */}
-        <div className="flex flex-col items-center gap-4 flex-1">
+        <div className="flex flex-col items-end gap-4 flex-1">
           <h3 className="text-secondary font-bold text-xl text-center leading-tight">
             Follow me
             <br />
             on Instagram
           </h3>
-          <div className="w-32 h-40 relative rounded-lg overflow-hidden border-2 border-secondary/20 shadow-lg">
-            <Image
-              src="/instagram.jpg"
-              alt="Instagram feed"
-              fill
-              className="object-cover"
-            />
-          </div>
+          <a
+            href="https://www.instagram.com/curly_pottery/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-80 transition-opacity"
+          >
+            <div className="w-32 h-40 relative overflow-hidden ">
+              <Image
+                src="/instagram.jpg"
+                alt="Instagram feed"
+                fill
+                className="object-contain"
+              />
+            </div>
+          </a>
         </div>
 
-        {/* Divider */}
-        <div className="hidden lg:block w-[1px] bg-secondary/20 h-40 self-center"></div>
-
         {/* Links Column */}
-        <div className="flex flex-col gap-2 flex-1 lg:pl-10">
+        <div className="flex flex-col gap-6 flex-1">
           {links.map((item) => (
             <Link
               key={item.name}
