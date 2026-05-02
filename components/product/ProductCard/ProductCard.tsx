@@ -39,9 +39,9 @@ const ProductCard = ({
   const { finalPrice, price, hasDiscount } =
     product && 'variants' in product && product.variants.length > 0
       ? calculateDiscount(
-          Number(product.variants[0].price),
-          product.variants[0].discounts as Discount[],
-        )
+        Number(product.variants[0].price),
+        product.variants[0].discounts as Discount[],
+      )
       : { price: '0', finalPrice: '0', hasDiscount: false }
 
   return (
@@ -51,7 +51,7 @@ const ProductCard = ({
       aria-label={product.name}
     >
       {variant === 'slim' && (
-        <div className="relative w-full h-full p-2 gap-2">
+        <div className="relative w-full h-full">
           {product?.images && (
             <Image
               src={product.images[0] || placeholderImg}
@@ -63,7 +63,7 @@ const ProductCard = ({
               style={{
                 aspectRatio: '1/1',
                 objectFit: 'cover',
-                padding: '2px',
+
               }}
               {...imgProps}
               placeholder="blur"

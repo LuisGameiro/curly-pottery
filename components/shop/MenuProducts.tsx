@@ -49,9 +49,9 @@ export default function MenuProducts({
 
   return (
     <div className="flex  items-center gap-4  ">
-      <div className="relative" ref={containerFilterRef}>
+      <div className="relative p-1" ref={containerFilterRef}>
         <button
-          className="rounded-full px-2 py-0.5 font-bold text-secondary flex items-center gap-2 hover:bg-primary transition-colors"
+          className="rounded-full px-3 py-0.5 font-bold text-secondary flex items-center gap-2 hover:bg-primary transition-colors"
           onClick={() => setOpenFilter((v) => !v)}
         >
           <Image src="/Filter.svg" alt="Filter" width={16} height={16} />
@@ -59,15 +59,15 @@ export default function MenuProducts({
         </button>
         <ul
           className={cn(
-            'absolute left-0 top-full mt-2 p-2 bg-white border-2 border-secondary rounded-2xl shadow-xl min-w-[200px] z-50 transition-all',
+            'absolute left-0 top-full mt-2 p-2 bg-background border-2 border-secondary rounded-2xl shadow-xl min-w-[200px] z-50 transition-all',
             { hidden: !openFilter },
           )}
         >
           <li
             className={cn(
-              'px-4 py-2 rounded-lg cursor-pointer transition-colors',
+              'px-4 py-2 rounded-lg c ursor-pointer transition-colors ',
               !activeCategory
-                ? 'bg-secondary text-white font-bold'
+                ? 'bg-secondary text-primary font-bold'
                 : 'hover:bg-primary',
             )}
             onClick={() => handleCategoryChange()}
@@ -80,7 +80,7 @@ export default function MenuProducts({
               className={cn(
                 'px-4 py-2 rounded-lg cursor-pointer transition-colors',
                 activeCategory === cat.slug
-                  ? 'bg-secondary text-white font-bold'
+                  ? 'bg-secondary text-primary font-bold'
                   : 'hover:bg-primary',
               )}
               onClick={() => handleCategoryChange(cat.slug)}
@@ -90,47 +90,48 @@ export default function MenuProducts({
           ))}
         </ul>
       </div>
-
-      <div className="flex  ml-auto justify-end items-center">
-        <div className="text-secondary font-bold text-sm">
-          {productCount} {productCount === 1 ? 'item' : 'items'}
+      <div className="ml-auto flex items-center gap-2">
+        <div className="flex hidden lg:block ml-auto justify-end items-center">
+          <div className="text-secondary font-bold text-sm">
+            {productCount} {productCount === 1 ? 'item' : 'items'}
+          </div>
         </div>
-      </div>
 
-      <div className="relative flex items-center gap-4" ref={containerSortRef}>
-        {/* Item count will be handled by ProductList but we can leave a gap here if needed */}
-        <div className="relative">
-          <button
-            className="rounded-full px-2 py-0.5 font-bold text-secondary flex items-center gap-2 hover:bg-primary transition-colors justify-between"
-            onClick={() => setOpenSort((v) => !v)}
-          >
-            <span>{sortLabels[sortMethod]}</span>
-            <ChevronUp
-              size={18}
-              className={cn('transition-transform', openSort && 'rotate-180')}
-            />
-          </button>
-          <ul
-            className={cn(
-              'absolute right-0 top-full mt-2 p-2 bg-white border-2 border-secondary rounded-2xl shadow-xl min-w-[200px] z-50 transition-all',
-              { hidden: !openSort },
-            )}
-          >
-            {Object.entries(sortLabels).map(([key, label]) => (
-              <li
-                key={key}
-                className={cn(
-                  'px-4 py-2 rounded-lg cursor-pointer transition-colors',
-                  sortMethod === key
-                    ? 'bg-secondary text-white font-bold'
-                    : 'hover:bg-primary',
-                )}
-                onClick={() => handleSortMethodChange(key as SortLabels)}
-              >
-                {label}
-              </li>
-            ))}
-          </ul>
+        <div className="relative flex items-center gap-4 p-1" ref={containerSortRef}>
+          {/* Item count will be handled by ProductList but we can leave a gap here if needed */}
+          <div className="relative">
+            <button
+              className="rounded-full px-3 py-0.5 font-bold text-secondary flex items-center gap-2 hover:bg-primary transition-colors justify-between"
+              onClick={() => setOpenSort((v) => !v)}
+            >
+              <span>{sortLabels[sortMethod]}</span>
+              <ChevronUp
+                size={18}
+                className={cn('transition-transform', openSort && 'rotate-180')}
+              />
+            </button>
+            <ul
+              className={cn(
+                'absolute right-0 top-full mt-2 p-2 bg-background border-2 border-secondary rounded-2xl shadow-xl min-w-[200px] z-50 transition-all',
+                { hidden: !openSort },
+              )}
+            >
+              {Object.entries(sortLabels).map(([key, label]) => (
+                <li
+                  key={key}
+                  className={cn(
+                    'px-4 py-2 rounded-lg cursor-pointer transition-colors',
+                    sortMethod === key
+                      ? 'bg-secondary text-primary font-bold'
+                      : 'hover:bg-primary',
+                  )}
+                  onClick={() => handleSortMethodChange(key as SortLabels)}
+                >
+                  {label}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
