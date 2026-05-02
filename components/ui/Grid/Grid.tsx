@@ -21,6 +21,7 @@ const Grid = ({
     s.root,
     {
       [s.layoutA]: layout === 'A',
+      [s.layoutB]: layout === 'B',
       [s.filled]: variant === 'filled',
     },
     className,

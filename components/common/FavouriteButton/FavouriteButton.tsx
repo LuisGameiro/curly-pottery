@@ -41,17 +41,20 @@ export default function FavouriteButton({
       type="button"
       aria-label={filled ? 'Remove from favourites' : 'Add to favourites'}
       aria-pressed={filled}
-      disabled={isLoading}
       onClick={handleClick}
       className={cn(
-        'transition-colors duration-200',
+        'transition-all duration-200 rounded-full',
         filled
           ? 'text-red-500 hover:text-red-600'
-          : 'text-neutral-400 hover:text-red-500',
+          : 'text-white/80 hover:text-red-500',
         className,
       )}
     >
-      <Heart size={iconSize} fill={filled ? 'currentColor' : 'none'} />
+      <Heart
+        size={iconSize}
+        fill={filled ? 'currentColor' : 'rgba(0,0,0,0.1)'}
+        className={cn('transition-all duration-200', !filled && 'hover:scale-110')}
+      />
     </button>
   )
 }

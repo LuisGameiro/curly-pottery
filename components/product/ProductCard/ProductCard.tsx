@@ -98,7 +98,7 @@ const ProductCard = ({
             <FavouriteButton
               productId={product.id}
               size="md"
-              className="absolute top-2 right-2 z-30 p-2 rounded-full  hover:bg-background/40"
+              className="absolute top-2 right-2 z-30 p-2 rounded-full bg-background/20 backdrop-blur-md hover:bg-background/40"
             />
             <div className="absolute bottom-2 right-2 z-20 rounded-md bg-background/20 px-2 py-1 text-sm font-medium text-base backdrop-blur">
               {hasDiscount ? (

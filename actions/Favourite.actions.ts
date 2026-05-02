@@ -49,7 +49,9 @@ export async function removeFavouriteAction(productId: string): Promise<void> {
     return
   }
 
-  console.log(`[REMOVE_FAVOURITE] User ${session.user.id} removing product ${productId}`)
+  console.log(
+    `[REMOVE_FAVOURITE] User ${session.user.id} removing product ${productId}`,
+  )
 
   const result = await prisma.favourite.deleteMany({
     where: {
