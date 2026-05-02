@@ -26,7 +26,7 @@ export default async function Home() {
   const categories = responseCategories.data ?? []
 
   return (
-    <main className="flex flex-col bg-background">
+    <main className="flex flex-col  bg-linear-to-r from-background to-accent-2">
       <HomeHero />
 
       <div className="px-10 my-8">

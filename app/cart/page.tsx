@@ -9,7 +9,7 @@ export const metadata = constructMetadata({
 
 export default function CartPage() {
   return (
-    <div className="py-10 md:px-10">
+    <div className="py-10 md:px-10 bg-linear-to-r from-background to-accent-2">
       <CartClient />
     </div>
   )

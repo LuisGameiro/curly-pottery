@@ -19,7 +19,7 @@ const CategoriesCard = ({ cat, imgProps }: Props) => {
     <Link
       href={`/shop?category=${cat?.slug}`}
       aria-label={cat?.name}
-      className="relative w-full h-full p-2 gap-2"
+      className="relative h-full flex"
     >
       {cat.image && (
         <Image
@@ -32,7 +32,7 @@ const CategoriesCard = ({ cat, imgProps }: Props) => {
           style={{
             aspectRatio: '1/1',
             objectFit: 'cover',
-            padding: '8px',
+            paddingRight: '16px',
           }}
           {...imgProps}
           placeholder="blur"
@@ -40,8 +40,8 @@ const CategoriesCard = ({ cat, imgProps }: Props) => {
         />
       )}
 
-      <div className="absolute bottom-0 left-0 right-0 z-20 px-4 ">
-        <p className="bg-background/40 text-2xl px-5 py-1 text-center text backdrop-blur-sm">
+      <div className="absolute bottom-0 left-0 right-0 z-20  ">
+        <p className="bg-background/40 text backdrop-blur-sm px-4 capitalize">
           {cat.name}
         </p>
       </div>
