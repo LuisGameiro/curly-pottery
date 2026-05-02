@@ -7,7 +7,7 @@
 }
 
 .nav {
-  @apply relative flex flex-row items-center justify-between py-4 px-4 md:px-6 w-full h-24;
+  @apply relative flex flex-row items-center justify-between py-4 px-4 md:px-6 w-full h-20;
 }
 
 .brandName {
