@@ -22,18 +22,6 @@ const LINKS = [
     name: 'About',
     href: '/about',
   },
-  {
-    name: 'Mugs',
-    href: '/search?q=mugs',
-  },
-  {
-    name: 'Vases',
-    href: '/search?q=vases',
-  },
-  {
-    name: 'Plates',
-    href: '/search?q=plates',
-  },
 ]
 
 export default function CustomerMenuContent() {

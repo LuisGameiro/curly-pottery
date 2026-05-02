@@ -8,6 +8,7 @@ interface ShopClientProps {
   sortMethod: SortLabels
   categories: Category[]
   activeCategory: string | null
+  productCount: number
   children: React.ReactNode
 }
 
@@ -15,6 +16,7 @@ export default function ShopClient({
   sortMethod,
   categories,
   activeCategory,
+  productCount,
   children,
 }: ShopClientProps) {
   return (
@@ -30,13 +32,14 @@ export default function ShopClient({
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
+      <div className="flex flex-col">
         <MenuProducts
           sortMethod={sortMethod}
           categories={categories}
           activeCategory={activeCategory}
+          productCount={productCount}
         />
-        <section className="col-span-1 lg:col-span-9">{children}</section>
+        <section className="w-full">{children}</section>
       </div>
     </main>
   )

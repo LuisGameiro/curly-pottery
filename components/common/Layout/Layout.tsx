@@ -20,13 +20,6 @@ const FeatureBar = dynamic(() => import('@components/common/FeatureBar'), {
   ...dynamicProps,
 })
 
-const NewsletterBanner = dynamic(
-  () => import('../NewsletterBanner/NewsletterBanner'),
-  {
-    ...dynamicProps,
-  },
-)
-
 interface Props {
   children?: React.ReactNode
 }

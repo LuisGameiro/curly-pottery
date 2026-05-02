@@ -16,7 +16,7 @@
 }
 
 .menuContainer {
-  @apply max-w-screen-lg mx-auto py-12 flex flex-col lg:flex-row items-start justify-center gap-12 lg:gap-24;
+  @apply max-w-screen-lg mx-auto py-12 flex flex-row sm:flex-row items-start justify-center gap-12 lg:gap-24;
 }
 
 .menu {

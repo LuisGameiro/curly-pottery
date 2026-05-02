@@ -21,7 +21,7 @@
 }
 
 .carousel {
-  @apply flex gap-4 px-10 min-w-max pb-4;
+  @apply flex gap-4 px-10 min-w-max pb-12;
 }
 
 .item {
@@ -30,8 +30,8 @@
 
 /* Hide scrollbar but allow scrolling */
 .carouselContainer {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .carouselContainer::-webkit-scrollbar {

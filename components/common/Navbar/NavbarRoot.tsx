@@ -39,8 +39,7 @@ const NavbarRoot = ({ children }: { children?: ReactNode }) => {
         { 'shadow-magical': hasScrolled },
         { [s.hidden]: hidden },
 
-        'h-24'
-
+        'h-24',
       )}
     >
       {children}

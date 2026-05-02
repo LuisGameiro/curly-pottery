@@ -103,10 +103,11 @@
   @apply relative box-border overflow-hidden bg-transparent;
 
   & .header {
-    @apply absolute inset-0 z-20 mr-8 flex items-center justify-end;
+    @apply absolute bottom-4 left-0 right-0 z-20 flex justify-center pr-0;
   }
 
   & span {
-    @apply bg-accent-9 text-muted inline-block p-3 text-xl font-bold wrap-anywhere;
+    @apply text-white text-sm font-bold tracking-wide uppercase;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   }
 }

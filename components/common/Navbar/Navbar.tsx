@@ -37,12 +37,9 @@ const Navbar = ({ links }: NavbarProps) => (
           <div className="hidden md:block">
             <SearchBar />
           </div>
-          <SearchBar className="md:hidden" />
           <UserNav />
         </div>
       </div>
-
-
     </div>
   </NavbarRoot>
 )

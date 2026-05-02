@@ -29,8 +29,12 @@ export default async function Home() {
   return (
     <main className="flex flex-col bg-background">
       <HomeHero />
-      <ProductCarousel products={products.slice(0, 7)} />
-      
+
+      <div className='px-10 my-8'>
+        <h2 className='text-2xl font-bold mb-1'>New in</h2>
+        <p className='text-sm'>Everything that&apos;s hot right now</p>
+      </div>
+
       <Grid variant="filled" layout="A">
         {products.map((product: Product) => (
           <ProductCard
@@ -46,11 +50,10 @@ export default async function Home() {
         ))}
       </Grid>
 
-      <Hero
-        headline="About Curly Pottery"
-        description="We're dedicated to producing sustainable, artisanal pottery..."
-      />
-
+      <div className='px-10 my-8'>
+        <h2 className='text-2xl font-bold mb-1'>Explore Categories</h2>
+        <p className='text-sm'>Find the perfect piece for your home</p>
+      </div>
       <Marquee variant="secondary">
         {categories.map((cat) => (
           <CategoriesCard key={cat.id} cat={cat} />

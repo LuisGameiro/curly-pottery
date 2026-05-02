@@ -3,18 +3,26 @@ import { SortLabels, sortProducts } from './sortProducts'
 import { getProductsByCategorySlug } from 'actions/product.actions'
 import { Text } from '@components/ui'
 
-export default async function ShopClient({
+import { ProductWithVariantsCategories } from '@lib/types/types'
+
+export default async function ProductList({
   categorySlug,
   sortMethod,
+  products: initialProducts,
 }: {
   categorySlug: string | null
   sortMethod: SortLabels
+  products?: ProductWithVariantsCategories[]
 }) {
-  const products = await getProductsByCategorySlug(categorySlug)
+  let products: ProductWithVariantsCategories[] = initialProducts || []
 
-  if (!products.success) throw new Error(products.message)
+  if (!initialProducts) {
+    const response = await getProductsByCategorySlug(categorySlug)
+    if (!response.success) throw new Error(response.message)
+    products = response.data || []
+  }
 
-  if (!products.data || products.data.length === 0) {
+  if (products.length === 0) {
     return (
       <div className="py-10 text-center">
         <Text variant="bold">No products found!</Text>
@@ -22,17 +30,11 @@ export default async function ShopClient({
     )
   }
 
-  const ProductsSort = sortProducts(products.data || [], sortMethod || 'newest')
+  const ProductsSort = sortProducts(products, sortMethod || 'newest')
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex justify-end items-center">
-        <Text variant="muted" className="text-sm font-medium">
-          Showing {ProductsSort.length}{' '}
-          {ProductsSort.length === 1 ? 'product' : 'products'}
-        </Text>
-      </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 4xl:grid-cols-6">
+    <div className="flex flex-col gap-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 sm:gap-4">
         {ProductsSort.map((product) => (
           <ProductCard key={product.id} product={product} variant="simple" />
         ))}

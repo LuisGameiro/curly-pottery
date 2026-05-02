@@ -16,24 +16,28 @@ const HomeHero = () => {
 
       {/* Center Image (Pottery Hands) */}
       <div className={s.centerImage}>
-        <Image
-          src="/Homepage 2.jpg"
-          alt="Hands making pottery"
-          fill
-          className="object-cover"
-          priority
-        />
+        <div className={s.imageWrapper}>
+          <Image
+            src="/Homepage 2.jpg"
+            alt="Hands making pottery"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
       </div>
 
       {/* Right Image (Artist) */}
       <div className={s.rightImage}>
-        <Image
-          src="/Homepage 1.jpg"
-          alt="Curly Pottery Artist"
-          fill
-          className="object-cover"
-          priority
-        />
+        <div className={s.imageWrapper}>
+          <Image
+            src="/Homepage 1.jpg"
+            alt="Curly Pottery Artist"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
       </div>
     </section>
   )

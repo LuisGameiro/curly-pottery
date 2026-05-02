@@ -1,15 +1,7 @@
 'use client'
 
 import s from './UserNav.module.css'
-import {
-  Button,
-  Dropdown,
-  DropdownTrigger,
-  DropdownContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-} from '@components/ui'
-import { signOut } from 'next-auth/react'
+import { Button, Dropdown, DropdownTrigger } from '@components/ui'
 import { cn } from '@lib/utils'
 import useCart from '@lib/hooks/useCart'
 import Image from 'next/image'
@@ -33,7 +25,7 @@ export default function UserNav({ className }: UserNavProps) {
   return (
     <nav className={cn(s.root, className)}>
       <ul className={s.list}>
-        <li className="flex items-center gap-6">
+        <li className="flex-row md:flex items-center gap-6 md:block hidden">
           <Button
             variant="naked"
             type="button"

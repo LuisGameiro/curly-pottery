@@ -48,7 +48,7 @@ const ProductCard = ({
       aria-label={product.name}
     >
       {variant === 'slim' && (
-        <>
+        <div className="relative w-full h-full">
           {product?.images && (
             <Image
               src={product.images[0] || placeholderImg}
@@ -66,7 +66,10 @@ const ProductCard = ({
               blurDataURL={shimmerDataUrl(250, 250)}
             />
           )}
-        </>
+          <div className={s.header}>
+            <span>{product.name}</span>
+          </div>
+        </div>
       )}
 
       {variant === 'simple' && (

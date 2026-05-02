@@ -1,9 +1,7 @@
 import Link from 'next/link'
-import { Logo } from '@components/ui'
 import { I18nWidget } from '@components/common'
 import ThemeSwitcher from '@components/ui/ThemeSwitcher'
 import s from './Footer.module.css'
-import NewsletterSignup from './NewsletterSignup'
 
 type Page = {
   name: string
@@ -38,12 +36,13 @@ import Image from 'next/image'
 const Footer = () => {
   return (
     <footer className={s.root}>
-
       <div className={s.menuContainer}>
         {/* Instagram Column */}
         <div className="flex flex-col items-center gap-4 flex-1">
           <h3 className="text-secondary font-bold text-xl text-center leading-tight">
-            Follow me<br />on Instagram
+            Follow me
+            <br />
+            on Instagram
           </h3>
           <div className="w-32 h-40 relative rounded-lg overflow-hidden border-2 border-secondary/20 shadow-lg">
             <Image

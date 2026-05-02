@@ -13,7 +13,7 @@ const ProductCarousel = ({ products }: ProductCarouselProps) => {
     <section className={s.root}>
       <div className={s.header}>
         <h2 className={s.title}>New in</h2>
-        <p className={s.subtitle}>Everything that's hot right now</p>
+        <p className={s.subtitle}>Everything that&apos;s hot right now</p>
       </div>
 
       <div className={s.carouselContainer}>
