@@ -1,7 +1,8 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { Navbar, Footer } from '@components/common'
+import Navbar from '../Navbar'
+import Footer from '../Footer'
 import { LoadingDots } from '@components/ui'
 import { Toaster } from 'sonner'
 

@@ -2,7 +2,8 @@ import Link from 'next/link'
 import s from './Navbar.module.css'
 import NavbarRoot from './NavbarRoot'
 import { Logo } from '@components/ui'
-import { UserNav, SearchBar } from '@components/common'
+import UserNav from '../UserNav'
+import SearchBar from '../SearchBar/SearchBar'
 
 interface Link {
   href: string

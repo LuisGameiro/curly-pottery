@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { I18nWidget } from '@components/common'
+import I18nWidget from '../I18nWidget'
 import ThemeSwitcher from '@components/ui/ThemeSwitcher'
 import s from './Footer.module.css'
 
