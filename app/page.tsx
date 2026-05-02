@@ -1,7 +1,7 @@
 import constructMetadata from '@components/common/SEO'
 import { ProductCard } from '@components/product'
 import CategoriesCard from '@components/product/categoriesCard'
-import { Grid, Marquee, Hero } from '@components/ui'
+import { Grid, Marquee } from '@components/ui'
 import { Product } from '@lib/types/types'
 import { getAllCategories } from 'actions/category.actions'
 import { getRandomProducts } from 'actions/product.actions'
@@ -14,7 +14,6 @@ export const metadata = constructMetadata({
 })
 
 import HomeHero from '@components/ui/HomeHero/HomeHero'
-import ProductCarousel from '@components/product/ProductCarousel/ProductCarousel'
 
 export default async function Home() {
   const responseProducts = await getRandomProducts(13)
@@ -30,9 +29,9 @@ export default async function Home() {
     <main className="flex flex-col bg-background">
       <HomeHero />
 
-      <div className='px-10 my-8'>
-        <h2 className='text-2xl font-bold mb-1'>New in</h2>
-        <p className='text-sm'>Everything that&apos;s hot right now</p>
+      <div className="px-10 my-8">
+        <h2 className="text-2xl font-bold mb-1">New in</h2>
+        <p className="text-sm">Everything that&apos;s hot right now</p>
       </div>
 
       <Grid variant="filled" layout="A">
@@ -50,9 +49,9 @@ export default async function Home() {
         ))}
       </Grid>
 
-      <div className='px-10 my-8'>
-        <h2 className='text-2xl font-bold mb-1'>Explore Categories</h2>
-        <p className='text-sm'>Find the perfect piece for your home</p>
+      <div className="px-10 my-8">
+        <h2 className="text-2xl font-bold mb-1">Explore Categories</h2>
+        <p className="text-sm">Find the perfect piece for your home</p>
       </div>
       <Marquee variant="secondary">
         {categories.map((cat) => (
