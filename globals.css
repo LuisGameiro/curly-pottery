@@ -4,7 +4,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant light (&:where(.light, .light *));
 
-@font-face {
+/* @font-face {
   font-family: 'Aptos';
   src: url('/Aptos.ttf') format('truetype');
   font-weight: normal;
@@ -18,7 +18,7 @@
   font-weight: normal;
   font-style: normal;
   font-display: swap;
-}
+} */
 
 @font-face {
   font-family: 'Grand Hotel';
@@ -60,24 +60,31 @@
   th {
     @apply py-4 text-center justify-center items-center font-semibold;
   }
+
   td {
     @apply py-3 text-center justify-center items-center content-center;
   }
+
   tr {
     @apply hover:bg-accent-2 transition-colors;
   }
+
   thead {
     @apply border-2 border-border;
   }
+
   table {
     @apply w-full border-collapse;
   }
+
   tbody {
     @apply divide-y divide-border text-center;
   }
+
   header {
     @apply flex flex-col border-b pb-4 mb-8;
   }
+
   label {
     @apply font-semibold mb-2;
   }
@@ -185,7 +192,8 @@
   --secondary: #3b67d4;
 
   /* UI Elements */
-  --border: #d1e5f0; /* Soft blue border */
+  --border: #d1e5f0;
+  /* Soft blue border */
 
   /* Accent Scale (Lightest to Darkest) 
      Based on your #f1fbff background */
@@ -205,6 +213,7 @@
   --red: #dc2626;
   --amber: #d97706;
 }
+
 .dark {
   --radius: 0.625rem;
 
@@ -229,8 +238,10 @@
   /* Accent Scale (OLED to Steel) */
   --accent-0: #05070a;
   --accent-1: #0a0f16;
-  --accent-2: #111823; /* Perfect for Card backgrounds */
-  --accent-3: #1a222e; /* For elevated elements like Modals */
+  --accent-2: #111823;
+  /* Perfect for Card backgrounds */
+  --accent-3: #1a222e;
+  /* For elevated elements like Modals */
   --accent-4: #242e3d;
   --accent-5: #334155;
   --accent-6: #475569;

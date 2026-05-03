@@ -4,7 +4,7 @@ import { Heart } from 'lucide-react'
 import { cn } from '@lib/utils'
 import useFavourites from '@lib/hooks/useFavourites'
 import { useUser } from '@lib/hooks/useUser'
-import { useRouter } from 'next/navigation'
+
 
 type FavouriteButtonProps = {
   productId: string
@@ -17,9 +17,13 @@ export default function FavouriteButton({
   className,
   size = 'md',
 }: FavouriteButtonProps) {
-  const { isAuthenticated } = useUser()
-  const { isFavourite, toggleFavourite, isLoading } = useFavourites()
-  const router = useRouter()
+  const { isAuthenticated, isLoading } = useUser()
+  const { isFavourite, toggleFavourite } = useFavourites()
+
+
+  if (isLoading || !isAuthenticated) {
+    return null
+  }
 
   const filled = isFavourite(productId)
   const iconSize = size === 'sm' ? 16 : size === 'lg' ? 28 : 22
@@ -27,11 +31,6 @@ export default function FavouriteButton({
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-
-    if (!isAuthenticated) {
-      router.push('/auth/login')
-      return
-    }
 
     toggleFavourite(productId)
   }

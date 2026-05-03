@@ -9,8 +9,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        header: ['"Arial Rounded MT Bold"', 'Arial', 'sans-serif'],
-        body: ['Aptos', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        header: ['Josefin Sans"', 'Arial', 'sans-serif'],
+        body: ['Josefin Sans', 'Aptos', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
     },
   },

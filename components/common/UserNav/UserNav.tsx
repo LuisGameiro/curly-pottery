@@ -44,22 +44,27 @@ export default function UserNav({ className }: UserNavProps) {
             />
           </Button>
 
-          <Button
-            variant="naked"
-            type="button"
-            aria-label="Favourites"
-            onClick={() => router.push('/user/favourites')}
-            className="p-0"
-          >
-            <Image
-              src="/Favourite.svg"
-              alt="Favourite"
-              width={30}
-              height={30}
-              className="text-secondary"
-            />
-          </Button>
+          {isAuthenticated && (
+            <Button
+              variant="naked"
+              type="button"
+              aria-label="Favourites"
+              onClick={() => router.push('/user/favourites')}
+              className="p-0"
+            >
+              <Image
+                src="/Favourite.svg"
+                alt="Favourite"
+                width={30}
+                height={30}
+                className="text-secondary"
+              />
+            </Button>
+          )}
 
+
+        </li>
+        <li>
           <div className="relative">
             <Button
               variant="naked"

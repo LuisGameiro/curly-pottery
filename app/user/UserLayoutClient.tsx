@@ -3,13 +3,14 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { redirect, usePathname } from 'next/navigation'
-import { Package, ChevronDown, User, Van } from 'lucide-react'
+import { Package, ChevronDown, User, Van, LogOut, Heart } from 'lucide-react'
 import { Text } from '@components/ui'
 import { cn } from '@lib/utils'
 import { useUser } from '@lib/hooks/useUser'
 import Loading from 'app/loading'
 import { useClickOutside } from '@lib/hooks/useClickOutside'
-import { Heart } from 'lucide-react'
+
+import { signOut } from 'next-auth/react'
 
 const navItems = [
   { name: 'Profile', href: '/user', icon: User },
@@ -96,6 +97,16 @@ export default function UserLayoutClient({
                 </li>
               )
             })}
+            <li>
+              <button
+                type="button"
+                onClick={() => signOut()}
+                className="w-full flex items-center gap-2 px-4 py-2 rounded-lg transition-colors font-medium text-red-500 hover:bg-red-500/10 mt-2"
+              >
+                <LogOut size={20} />
+                Logout
+              </button>
+            </li>
           </ul>
         </div>
       </aside>

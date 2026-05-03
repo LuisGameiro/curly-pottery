@@ -100,7 +100,6 @@ export default function CustomerMenuContent() {
               className={s.link}
               onClick={() => handleClick('/user/favourites')}
             >
-              <Heart size={16} className="mr-2" />
               Favourites
             </button>
             <button type="button" className={s.link} onClick={() => signOut()}>
