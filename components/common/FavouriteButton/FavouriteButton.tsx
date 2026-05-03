@@ -5,7 +5,6 @@ import { cn } from '@lib/utils'
 import useFavourites from '@lib/hooks/useFavourites'
 import { useUser } from '@lib/hooks/useUser'
 
-
 type FavouriteButtonProps = {
   productId: string
   className?: string
@@ -19,7 +18,6 @@ export default function FavouriteButton({
 }: FavouriteButtonProps) {
   const { isAuthenticated, isLoading } = useUser()
   const { isFavourite, toggleFavourite } = useFavourites()
-
 
   if (isLoading || !isAuthenticated) {
     return null

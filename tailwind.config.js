@@ -10,7 +10,13 @@ module.exports = {
     extend: {
       fontFamily: {
         header: ['Josefin Sans"', 'Arial', 'sans-serif'],
-        body: ['Josefin Sans', 'Aptos', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        body: [
+          'Josefin Sans',
+          'Aptos',
+          'ui-sans-serif',
+          'system-ui',
+          'sans-serif',
+        ],
       },
     },
   },

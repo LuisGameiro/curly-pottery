@@ -61,8 +61,6 @@ export default function UserNav({ className }: UserNavProps) {
               />
             </Button>
           )}
-
-
         </li>
         <li>
           <div className="relative">

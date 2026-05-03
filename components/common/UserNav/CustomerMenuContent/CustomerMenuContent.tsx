@@ -11,7 +11,6 @@ import {
 import { Moon, Sun } from 'lucide-react'
 import { useUser } from '@lib/hooks/useUser'
 import { signOut } from 'next-auth/react'
-import { Heart } from 'lucide-react'
 
 const LINKS = [
   {
