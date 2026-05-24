@@ -2,6 +2,7 @@ import { withSentryConfig } from '@sentry/nextjs'
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ['@prisma/client'],
   images: {
     qualities: [75, 85, 100],
     remotePatterns: [
