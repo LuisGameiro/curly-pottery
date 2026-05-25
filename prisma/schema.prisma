@@ -109,6 +109,8 @@ model Product {
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
   favourites        Favourite[]
+
+  @@index([hide, createdAt])
 }
 
 model ProductVariant {
@@ -131,6 +133,7 @@ model ProductVariant {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
   @@unique([productId, sizeName, colorName])
+  @@index([productId, stock])
 }
 
 model Option {
@@ -169,6 +172,8 @@ model Address {
   userId       String?
   user         User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt    DateTime @default(now())
+
+  @@index([userId])
 }
 
 model Cart {
@@ -213,6 +218,9 @@ model Order {
   stockMovements  StockMovement[]
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
 }
 
 
@@ -384,6 +392,7 @@ model Favourite {
   createdAt DateTime @default(now())
 
   @@unique([userId, productId])
+  @@index([userId, createdAt])
 }
 
 model StockMovement {
@@ -398,5 +407,8 @@ model StockMovement {
   orderId          String?           // Link to order if type is SALE or RETURN
   order            Order?            @relation(fields: [orderId], references: [id])
   createdAt        DateTime          @default(now())
+
+  @@index([variantId])
+  @@index([orderId])
 }
 

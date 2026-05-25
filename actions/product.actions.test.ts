@@ -73,7 +73,7 @@ describe('getProductBySlug', () => {
 
     expect(result).toEqual({
       success: true,
-      message: 'Fecthed product successfully',
+      message: 'Fetched product successfully',
       data: mockProduct,
     })
     expect(prisma.product.findUnique).toHaveBeenCalledWith({
@@ -92,7 +92,7 @@ describe('getProductBySlug', () => {
 
     expect(result).toEqual({
       success: true,
-      message: 'Fecthed product successfully',
+      message: 'Fetched product successfully',
       data: null,
     })
   })
@@ -151,7 +151,7 @@ describe('getProductById', () => {
 
     expect(result).toEqual({
       success: true,
-      message: 'Fecthed product successfully',
+      message: 'Fetched product successfully',
       data: mockProduct,
     })
     expect(prisma.product.findUnique).toHaveBeenCalledWith({
@@ -170,7 +170,7 @@ describe('getProductById', () => {
 
     expect(result).toEqual({
       success: true,
-      message: 'Fecthed product successfully',
+      message: 'Fetched product successfully',
       data: null,
     })
   })
@@ -343,7 +343,7 @@ describe('getAllProducts', () => {
 
     expect(result).toEqual({
       success: true,
-      message: 'Fecthed products successfully',
+      message: 'Fetched products successfully',
       data: mockProducts,
     })
     expect(prisma.product.findMany).toHaveBeenCalledWith({
@@ -362,7 +362,7 @@ describe('getAllProducts', () => {
 
     expect(result).toEqual({
       success: true,
-      message: 'Fecthed products successfully',
+      message: 'Fetched products successfully',
       data: [],
     })
   })
@@ -831,8 +831,8 @@ describe('getProductsByCategorySlug', () => {
     expect(result.success).toBe(true)
 
     if (!result.data) throw new Error('No data returned')
-    expect(result.data[0].variants).toHaveLength(1)
-    expect(result.data[0].categories).toHaveLength(1)
+    expect(result.data.items[0].variants).toHaveLength(1)
+    expect(result.data.items[0].categories).toHaveLength(1)
   })
 })
 

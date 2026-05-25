@@ -1,9 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import InformationForm from '@components/checkout/InformationForm'
 import SumUpPayment from '@components/checkout/SumUpPayment'
-import ShippingMethod from '@components/checkout/ShippingMethod'
 import { CheckoutSummary } from '@components/checkout/CheckoutSummary'
 import useCart from '@lib/hooks/useCart'
 import { createSumUpCheckout } from 'actions/sumUpPayment.actions'
@@ -20,6 +19,7 @@ import { showCurrency } from '@lib/calculate-price'
 import { AdminOrderEmail } from '@lib/emails/AdminOrderEmail'
 import { trackEvent } from '@lib/analytics/trackEvents'
 import { updateCartPrice } from 'actions/cart.actions'
+import * as Sentry from '@sentry/nextjs'
 
 export default function CheckoutClient() {
   const { data, deleteAll } = useCart()
@@ -27,9 +27,9 @@ export default function CheckoutClient() {
   const [step, setStep] = useState(1)
   const [checkoutId, setCheckoutId] = useState('')
   const [loading, setLoading] = useState(false)
-  const [paymentProvider, setPaymentProvider] = useState<'sumup' | 'klarna'>(
-    'sumup',
-  )
+  const [paymentProvider, setPaymentProvider] = useState<
+    'sumup' | 'klarna' | 'googlepay'
+  >('sumup')
   const [sameAsShipping, setSameAsShipping] = useState(true)
 
   const methods = useForm<CreateOrder>({
@@ -42,27 +42,32 @@ export default function CheckoutClient() {
       lineItems: data.lineItems ?? [],
       subtotalPrice: data.subtotalPrice,
       totalPrice: data.totalPrice,
-      shippingMethod: '',
-      shippingPrice: 0,
+      shippingMethod: 'standard',
+      shippingPrice: 5.95,
       taxes: 0,
     },
   })
 
-  if (!data || data.lineItems.length === 0) {
-    return redirect('/cart')
-  }
   const { watch } = methods
   const currentValues = watch()
 
-  trackEvent('begin_checkout', {
-    userId: currentValues?.userId,
-    total_value: currentValues.totalPrice,
-    currency: currentValues.currency,
-    item_count: currentValues.lineItems.length,
-    items: currentValues.lineItems.map(
-      (item) => item.quantity + ' * ' + item.sku,
-    ),
-  })
+  useEffect(() => {
+    if (!data || data.lineItems.length === 0) return
+    trackEvent('begin_checkout', {
+      userId: currentValues?.userId,
+      total_value: currentValues.totalPrice,
+      currency: currentValues.currency,
+      item_count: currentValues.lineItems.length,
+      items: currentValues.lineItems.map(
+        (item) => item.quantity + ' * ' + item.sku,
+      ),
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  if (!data || data.lineItems.length === 0) {
+    return redirect('/cart')
+  }
 
   const onInformationSubmit = async () => setStep(2)
 
@@ -91,8 +96,12 @@ export default function CheckoutClient() {
         )
         const klarnaData = await klarnaResponse.json()
         if (klarnaData.success) {
-          setStep(4)
+          setStep(3)
         } else {
+          Sentry.captureMessage(
+            `Klarna init failed: ${klarnaData.message}`,
+            'error',
+          )
           toast(klarnaData.message || 'Failed to initialize Klarna')
         }
       } else {
@@ -108,13 +117,18 @@ export default function CheckoutClient() {
           ),
         })
         if (!response.success && !response.data) {
+          Sentry.captureMessage(
+            `SumUp init failed: ${response.message}`,
+            'error',
+          )
           toast(response.message)
         } else {
           setCheckoutId(response.data || '')
-          setStep(4)
+          setStep(3)
         }
       }
     } catch (error) {
+      Sentry.captureException(error)
       console.error(error)
     } finally {
       setLoading(false)
@@ -140,8 +154,8 @@ export default function CheckoutClient() {
           }),
         })
         await sendEmail({
-          to: currentValues.email,
-          subject: 'Order Confirmation',
+          to: process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'admin@curlypottery.com',
+          subject: `New Order: ${orderResponse.data?.id?.slice(-6).toUpperCase() || ''}`,
           body: AdminOrderEmail({
             customerEmail: currentValues.email,
             orderId: orderResponse.data?.id || '',
@@ -162,9 +176,14 @@ export default function CheckoutClient() {
 
         deleteAll()
       } else {
+        Sentry.captureMessage(
+          `Order creation failed: ${orderResponse.message}`,
+          'error',
+        )
         toast.error(orderResponse.message)
       }
     } catch (error) {
+      Sentry.captureException(error)
       console.error(error)
     } finally {
       setLoading(false)
@@ -173,7 +192,6 @@ export default function CheckoutClient() {
   }
 
   const goBack = (goStep: number) => {
-    console.error(goStep)
     if (step > goStep) setStep(goStep)
   }
 
@@ -203,18 +221,6 @@ export default function CheckoutClient() {
               onClick={() => goBack(2)}
               disabled={loading}
             >
-              Shipping
-            </button>
-            <div className="h-px w-8 bg-accent-2" />
-            <button
-              className={
-                step >= 3
-                  ? 'text-secondary hover:text-secondary/60 cursor-pointer'
-                  : 'text-muted'
-              }
-              onClick={() => goBack(3)}
-              disabled={loading}
-            >
               Payment
             </button>
           </div>
@@ -226,8 +232,7 @@ export default function CheckoutClient() {
               isLoggedIn={isAuthenticated}
             />
           )}
-          {step === 2 && <ShippingMethod onComplete={() => setStep(3)} />}
-          {step === 3 && (
+          {step === 2 && (
             <div className="space-y-6">
               <section className="space-y-4">
                 <Text variant="bold">Billing Address</Text>
@@ -312,6 +317,23 @@ export default function CheckoutClient() {
                     <input
                       type="radio"
                       name="payment"
+                      value="googlepay"
+                      checked={paymentProvider === 'googlepay'}
+                      onChange={() => setPaymentProvider('googlepay')}
+                      className="mr-3"
+                    />
+                    <div>
+                      <Text variant="bold">Google Pay / Apple Pay (SumUp)</Text>
+                      <Text variant="muted" className="text-sm">
+                        Fast and secure checkout via Google Pay/Apple Pay
+                      </Text>
+                    </div>
+                  </label>
+
+                  <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors">
+                    <input
+                      type="radio"
+                      name="payment"
                       value="klarna"
                       checked={paymentProvider === 'klarna'}
                       onChange={() => {
@@ -343,14 +365,19 @@ export default function CheckoutClient() {
                 }}
               >
                 Continue to{' '}
-                {paymentProvider === 'klarna' ? 'Klarna' : 'Payment'}
+                {paymentProvider === 'klarna'
+                  ? 'Klarna'
+                  : paymentProvider === 'googlepay'
+                    ? 'Google Pay'
+                    : 'Payment'}
               </Button>
             </div>
           )}
-          {step === 4 && (
+          {step === 3 && (
             <div className="space-y-4">
               <Text variant="bold">Complete Your Payment</Text>
-              {paymentProvider === 'sumup' ? (
+              {paymentProvider === 'sumup' ||
+              paymentProvider === 'googlepay' ? (
                 <SumUpPayment
                   checkoutId={checkoutId}
                   onComplete={onPaymentComplete}

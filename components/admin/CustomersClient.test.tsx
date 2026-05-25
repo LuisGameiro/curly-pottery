@@ -1,8 +1,8 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import CustomersClient from './CustomersClient'
 import { UserWithOrders } from '@lib/types/types'
-import { User } from '@sentry/nextjs'
+import { PaginatedResult } from '@lib/pagination'
 
 jest.mock('@components/ui', () => ({
   Container: ({ children }: { children: React.ReactNode }) => (
@@ -41,10 +41,18 @@ jest.mock('@components/ui/Input/InputSearch', () => {
 })
 
 jest.mock('@components/tables/CustomerTable', () => {
-  return function MockCustomerTable({ customers }: { customers: User[] }) {
+  return function MockCustomerTable({
+    customers,
+  }: {
+    customers: UserWithOrders[]
+  }) {
     return <div data-testid="customer-table">{customers.length} customers</div>
   }
 })
+
+jest.mock('actions/customer.actions', () => ({
+  getAllCustomers: jest.fn(),
+}))
 
 describe('CustomersClient', () => {
   const createMockUser = (overrides: Partial<UserWithOrders>): UserWithOrders =>
@@ -85,48 +93,54 @@ describe('CustomersClient', () => {
     }),
   ]
 
+  const createInitialData = (
+    items: UserWithOrders[],
+  ): PaginatedResult<UserWithOrders> => ({
+    items,
+    nextCursor: null,
+    hasMore: false,
+    total: items.length,
+  })
+
   it('renders customers heading', () => {
-    render(<CustomersClient customers={mockCustomers} />)
+    render(
+      <CustomersClient
+        initialData={createInitialData(mockCustomers)}
+        initialSearch=""
+      />,
+    )
     expect(screen.getByText('Customers')).toBeInTheDocument()
   })
 
   it('renders search input with correct placeholder', () => {
-    render(<CustomersClient customers={mockCustomers} />)
+    render(
+      <CustomersClient
+        initialData={createInitialData(mockCustomers)}
+        initialSearch=""
+      />,
+    )
     expect(
       screen.getByPlaceholderText('Search by name or email...'),
     ).toBeInTheDocument()
   })
 
   it('renders all customers initially', () => {
-    render(<CustomersClient customers={mockCustomers} />)
+    render(
+      <CustomersClient
+        initialData={createInitialData(mockCustomers)}
+        initialSearch=""
+      />,
+    )
     expect(screen.getByText('3 customers')).toBeInTheDocument()
   })
 
-  it('filters customers by first name', () => {
-    render(<CustomersClient customers={mockCustomers} />)
-    const input = screen.getByTestId('search-input') as HTMLInputElement
-    fireEvent.change(input, { target: { value: 'jane smi' } })
-    expect(screen.getByText('1 customers')).toBeInTheDocument()
-  })
-
-  it('filters customers by email', () => {
-    render(<CustomersClient customers={mockCustomers} />)
-    const input = screen.getByTestId('search-input') as HTMLInputElement
-    fireEvent.change(input, { target: { value: 'jane@example.com' } })
-    expect(screen.getByText('1 customers')).toBeInTheDocument()
-  })
-
-  it('handles case-insensitive search', () => {
-    render(<CustomersClient customers={mockCustomers} />)
-    const input = screen.getByTestId('search-input') as HTMLInputElement
-    fireEvent.change(input, { target: { value: 'Jane' } })
-    expect(screen.getByText('1 customers')).toBeInTheDocument()
-  })
-
-  it('returns no results for non-matching search', () => {
-    render(<CustomersClient customers={mockCustomers} />)
-    const input = screen.getByTestId('search-input') as HTMLInputElement
-    fireEvent.change(input, { target: { value: 'nonexistent' } })
-    expect(screen.getByText('0 customers')).toBeInTheDocument()
+  it('shows total count in subtitle', () => {
+    render(
+      <CustomersClient
+        initialData={createInitialData(mockCustomers)}
+        initialSearch=""
+      />,
+    )
+    expect(screen.getByText(/Showing 3 of 3 customers/)).toBeInTheDocument()
   })
 })

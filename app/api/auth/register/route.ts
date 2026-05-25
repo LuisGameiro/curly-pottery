@@ -60,14 +60,13 @@ export async function POST(req: Request) {
 
     const existingUser = await prisma.user.findUnique({ where: { email } })
     if (existingUser) {
-      // Return a generic message to prevent user enumeration
       return NextResponse.json(
-        { error: 'If the email is valid, an account has been created' },
-        { status: 400, headers },
+        { message: 'If the email is valid, an account has been created' },
+        { status: 200, headers },
       )
     }
 
-    const customer = await prisma.user.create({
+    await prisma.user.create({
       data: {
         email,
         password: await hashPassword(password),
@@ -75,19 +74,13 @@ export async function POST(req: Request) {
         lastName,
         phone,
         acceptsMarketing: !!acceptsMarketing,
-        emailVerified: new Date(),
         role: 'USER',
       },
     })
 
-    const { password: _, ...customerWithoutPassword } = customer
-
     return NextResponse.json(
-      {
-        message: 'User created successfully',
-        user: customerWithoutPassword,
-      },
-      { status: 201, headers },
+      { message: 'If the email is valid, an account has been created' },
+      { status: 200, headers },
     )
   } catch (error) {
     console.error('Registration error:', error)

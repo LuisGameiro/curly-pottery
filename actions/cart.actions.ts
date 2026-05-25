@@ -5,6 +5,7 @@ import { CartLineItem, Cart } from '@lib/types/types'
 import { getServerSession } from 'next-auth'
 import { prisma } from 'prisma/prisma'
 import { calculateDiscount } from '@lib/calculate-price'
+import { AppError } from '@lib/errors'
 
 export async function getCartFromDbAction(): Promise<Cart | null> {
   const session = await getServerSession(authOptions)
@@ -43,10 +44,14 @@ export async function syncCartAction(items: CartLineItem[]) {
   // Securely validate items against the database to prevent quantity/price manipulation
   const validatedItems: CartLineItem[] = []
 
+  const variantIds = items.map((item) => item.variantId)
+  const variants = await prisma.productVariant.findMany({
+    where: { id: { in: variantIds } },
+  })
+  const variantMap = new Map(variants.map((v) => [v.id, v]))
+
   for (const item of items) {
-    const variant = await prisma.productVariant.findUnique({
-      where: { id: item.variantId },
-    })
+    const variant = variantMap.get(item.variantId)
 
     if (variant) {
       // Prevent exceeding stock limit (solves the Quantity Bug)
@@ -77,7 +82,7 @@ export async function deleteCart(cartId: string) {
   const session = await getServerSession(authOptions)
 
   if (!session?.user?.id) {
-    throw new Error('Unauthorized: Please sign in.')
+    throw new AppError('Unauthorized: Please sign in.', 'UNAUTHORIZED', 401)
   }
 
   await prisma.cart.delete({
@@ -97,7 +102,11 @@ export async function updateCartPrice(
   const session = await getServerSession(authOptions)
 
   if (!session?.user?.id) {
-    throw new Error('Unauthorized: Please sign in before checkout.')
+    throw new AppError(
+      'Unauthorized: Please sign in before checkout.',
+      'UNAUTHORIZED',
+      401,
+    )
   }
 
   const cart = await prisma.cart.findUnique({

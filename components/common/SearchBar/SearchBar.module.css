@@ -2,14 +2,12 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply relative text-sm bg-white text-secondary w-full transition-colors duration-150 border-2 border-secondary rounded-lg overflow-hidden
-  md:bg-white md:border-2;
+  @apply relative text-sm bg-white text-secondary w-full transition-colors duration-150 border-2 border-secondary rounded-lg overflow-hidden md:bg-white md:border-2;
   @apply max-md:bg-transparent max-md:border-none max-md:w-auto;
 }
 
 .input {
-  @apply bg-transparent px-4 py-2 appearance-none w-full transition duration-150 ease-in-out pr-12 text-lg font-medium
-  hidden md:block;
+  @apply bg-transparent px-4 py-2 appearance-none w-full transition duration-150 ease-in-out pr-12 text-base font-medium hidden md:block justify-center;
 }
 
 .input::placeholder {

@@ -31,7 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return staticEntries
   }
 
-  const productEntries: MetadataRoute.Sitemap = productsResponse.data
+  const productEntries: MetadataRoute.Sitemap = productsResponse.data.items
     .filter((product) => !product.hide)
     .map((product) => ({
       url: resolveSiteUrl(`/shop/${product.slug}`),

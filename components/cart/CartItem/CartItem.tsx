@@ -1,6 +1,6 @@
 'use client'
 
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import cn from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -25,6 +25,11 @@ const CartItem = ({
   const [removing, setRemoving] = useState(false)
   const [quantity, setQuantity] = useState<number>(item.quantity)
 
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setQuantity(item.quantity)
+  }, [item.quantity])
+
   const price = calculateDiscount(item.price, item.discounts)
   const currencySymbol = showCurrency[data?.currency || 'GBP']
 
@@ -38,7 +43,7 @@ const CartItem = ({
   const increaseQuantity = async (n = 1) => {
     const val = Number(quantity) + n
     setQuantity(val)
-    await updateItem(item.variantId, Number(val))
+    await updateItem(item.variantId, val)
   }
 
   const handleRemove = async () => {

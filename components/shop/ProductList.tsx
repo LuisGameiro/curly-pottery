@@ -1,27 +1,16 @@
 import { ProductCard } from '@components/product'
 import { SortLabels, sortProducts } from './sortProducts'
-import { getProductsByCategorySlug } from 'actions/product.actions'
 import { Text } from '@components/ui'
 
 import { ProductWithVariantsCategories } from '@lib/types/types'
 
-export default async function ProductList({
-  categorySlug,
+export default function ProductList({
   sortMethod,
-  products: initialProducts,
+  products,
 }: {
-  categorySlug: string | null
   sortMethod: SortLabels
-  products?: ProductWithVariantsCategories[]
+  products: ProductWithVariantsCategories[]
 }) {
-  let products: ProductWithVariantsCategories[] = initialProducts || []
-
-  if (!initialProducts) {
-    const response = await getProductsByCategorySlug(categorySlug)
-    if (!response.success) throw new Error(response.message)
-    products = response.data || []
-  }
-
   if (products.length === 0) {
     return (
       <div className="py-10 text-center">

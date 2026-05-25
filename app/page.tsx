@@ -2,6 +2,7 @@ import constructMetadata from '@components/common/SEO'
 import { ProductCard } from '@components/product'
 import CategoriesCard from '@components/product/categoriesCard'
 import { Grid, Marquee } from '@components/ui'
+import HomeHero from '@components/ui/HomeHero/HomeHero'
 import { Product } from '@lib/types/types'
 import { getAllCategories } from 'actions/category.actions'
 import { getRandomProducts } from 'actions/product.actions'
@@ -13,10 +14,8 @@ export const metadata = constructMetadata({
   canonical: '/',
 })
 
-import HomeHero from '@components/ui/HomeHero/HomeHero'
-
 export default async function Home() {
-  const responseProducts = await getRandomProducts(13)
+  const responseProducts = await getRandomProducts(6)
   const responseCategories = await getAllCategories()
 
   if (!responseProducts.success || !responseCategories.success)

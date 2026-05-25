@@ -37,7 +37,7 @@ describe('getAllCustomers', () => {
     const result = await getAllCustomers()
 
     expect(result.success).toBe(true)
-    expect(result.message).toBe('Fecthed all user successfully')
+    expect(result.message).toBe('Fetched all user successfully')
     expect(result.data).toEqual(mockUsers)
     expect(prisma.user.findMany).toHaveBeenCalledWith({
       orderBy: { createdAt: 'desc' },

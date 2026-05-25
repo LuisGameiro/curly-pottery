@@ -43,7 +43,8 @@ export default function UserNav({ className }: UserNavProps) {
               className="text-secondary"
             />
           </Button>
-
+        </li>
+        <li>
           {isAuthenticated && (
             <Button
               variant="naked"

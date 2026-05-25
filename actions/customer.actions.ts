@@ -15,24 +15,65 @@ import { hashPassword } from '@lib/auth/password'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@lib/auth/authOptions'
 import { subscribeEmailToNewsletter } from '@lib/newsletter/service'
+import { revalidatePath } from 'next/cache'
+import {
+  PaginationInput,
+  PaginatedResult,
+  ADMIN_PAGE_SIZE,
+  encodeCursor,
+  decodeCursor,
+} from '@lib/pagination'
+import { Prisma } from 'prisma/generated/prisma/client'
 
-export async function getAllCustomers(): Promise<
-  ActionResponse<UserWithOrders[]>
-> {
+export async function getAllCustomers(
+  pagination?: PaginationInput,
+): Promise<ActionResponse<PaginatedResult<UserWithOrders>>> {
   try {
-    const user = await prisma.user.findMany({
-      orderBy: {
-        createdAt: 'desc',
-      },
-      include: {
-        orders: true,
-      },
-    })
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.id || session.user.role !== 'ADMIN') {
+      return {
+        success: false,
+        message: 'Unauthorized: Administrative privileges required.',
+        errors: null,
+      }
+    }
+
+    const take = pagination?.take ?? ADMIN_PAGE_SIZE
+    const search = pagination?.search?.trim()
+
+    const where: Prisma.UserWhereInput = {}
+
+    if (search) {
+      where.OR = [
+        { firstName: { contains: search, mode: 'insensitive' } },
+        { lastName: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } },
+      ]
+    }
+
+    const cursor = pagination?.cursor
+      ? decodeCursor(pagination.cursor)
+      : undefined
+
+    const [users, total] = await Promise.all([
+      prisma.user.findMany({
+        where,
+        orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
+        include: { orders: true },
+        ...(cursor ? { cursor: { id: cursor.id }, skip: 1 } : {}),
+        take: take + 1,
+      }),
+      prisma.user.count({ where }),
+    ])
+
+    const hasMore = users.length > take
+    const items = users.slice(0, take) as unknown as UserWithOrders[]
+    const nextCursor = hasMore ? encodeCursor(items[items.length - 1].id) : null
 
     return {
       success: true,
-      message: 'Fecthed all user successfully',
-      data: user,
+      message: 'Fetched all users successfully',
+      data: { items, nextCursor, hasMore, total },
     }
   } catch (error) {
     console.error('getAllCustomers_ERROR:', error)
@@ -48,6 +89,22 @@ export async function getAllCustomers(): Promise<
 export const getUserById = cache(
   async (id: string): Promise<ActionResponse<UserWithOrdersAddress | null>> => {
     try {
+      const session = await getServerSession(authOptions)
+      if (!session?.user?.id) {
+        return {
+          success: false,
+          message: 'Unauthorized: Please sign in first.',
+          errors: null,
+        }
+      }
+      if (session.user.role !== 'ADMIN' && session.user.id !== id) {
+        return {
+          success: false,
+          message: 'Unauthorized: You can only access your own profile.',
+          errors: null,
+        }
+      }
+
       const user = await prisma.user.findUnique({
         where: { id },
         include: {
@@ -57,7 +114,7 @@ export const getUserById = cache(
       })
       return {
         success: true,
-        message: 'Fecthed user successfully',
+        message: 'Fetched user successfully',
         data: user,
       }
     } catch (error) {
@@ -90,6 +147,7 @@ export async function updateNotes(
       where: { id },
       data: { notes },
     })
+    revalidatePath('/admin/customers')
     return {
       success: true,
       message: 'User note updated successfully',
@@ -148,6 +206,8 @@ export async function updateUser({
         },
       },
     })
+    revalidatePath('/admin/customers')
+    revalidatePath('/user')
     return {
       success: true,
       message: 'User updated successfully',

@@ -5,6 +5,7 @@ import Navbar from '../Navbar'
 import Footer from '../Footer'
 import { LoadingDots } from '@components/ui'
 import { Toaster } from 'sonner'
+import NewsletterBanner from '../NewsletterBanner/NewsletterBanner'
 
 const Loading = () => (
   <div className="w-full min-h-[40vh] flex items-center text-center justify-center p-3">
@@ -26,14 +27,10 @@ interface Props {
 }
 
 export default function Layout({ children }: Props) {
-  const navBarlinks = [
-    { label: 'Shop', href: '/shop' },
-    { label: 'About', href: '/about' },
-  ]
-
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar links={navBarlinks} />
+      <Navbar />
+      <NewsletterBanner />
       <main className="bg-background w-full flex-1 flex flex-col">
         {children}
       </main>

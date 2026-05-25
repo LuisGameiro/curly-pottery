@@ -1,13 +1,15 @@
 import { searchProducts } from 'actions/product.actions'
 import { ProductCard } from '@components/product'
 import { Text } from '@components/ui'
+import { SEARCH_PAGE_SIZE } from '@lib/pagination'
+import Link from 'next/link'
 
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>
+  searchParams: Promise<{ q?: string; cursor?: string }>
 }) {
-  const { q } = await searchParams
+  const { q, cursor } = await searchParams
   const query = q || ''
 
   if (!query) {
@@ -20,11 +22,11 @@ export default async function SearchPage({
     )
   }
 
-  const result = await searchProducts(query)
+  const result = await searchProducts(query, { cursor, take: SEARCH_PAGE_SIZE })
 
   if (!result.success) throw new Error(result.message)
 
-  const products = result.data || []
+  const { items: products, total, nextCursor, hasMore } = result.data!
 
   return (
     <div className="container mx-auto py-10 px-4">
@@ -33,8 +35,7 @@ export default async function SearchPage({
           Search Results for &quot;{query}&quot;
         </Text>
         <Text variant="muted" className="mt-2">
-          Found {products.length}{' '}
-          {products.length === 1 ? 'product' : 'products'}
+          Found {total} {total === 1 ? 'product' : 'products'}
         </Text>
       </div>
 
@@ -45,11 +46,28 @@ export default async function SearchPage({
           </Text>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} variant="simple" />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+            {products.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                variant="simple"
+              />
+            ))}
+          </div>
+
+          {hasMore && (
+            <div className="flex justify-center py-8">
+              <Link
+                href={`/search?q=${encodeURIComponent(query)}&cursor=${encodeURIComponent(nextCursor!)}`}
+                className="px-6 py-2 rounded-full border border-border hover:bg-accent-1 transition-colors"
+              >
+                Next page
+              </Link>
+            </div>
+          )}
+        </>
       )}
     </div>
   )

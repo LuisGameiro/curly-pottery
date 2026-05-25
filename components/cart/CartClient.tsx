@@ -10,7 +10,18 @@ import Link from 'next/link'
 import { showCurrency } from '@lib/calculate-price'
 
 export default function CartClient() {
-  const { data, isEmpty } = useCart()
+  const { data, isEmpty, isLoading } = useCart()
+
+  if (isLoading) {
+    return (
+      <Container className="py-20 flex-col flex-center">
+        <div className="animate-pulse space-y-4">
+          <div className="w-16 h-16 mx-auto rounded-full bg-accent-2" />
+          <div className="h-6 w-48 mx-auto rounded bg-accent-2" />
+        </div>
+      </Container>
+    )
+  }
 
   if (isEmpty) {
     return (

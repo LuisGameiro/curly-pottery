@@ -2,7 +2,7 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply w-full min-w-full relative flex flex-row items-center overflow-hidden gap-2 p-2;
+  @apply w-full min-w-full relative flex flex-row items-center overflow-hidden;
   max-height: 320px;
 }
 

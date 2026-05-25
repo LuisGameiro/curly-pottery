@@ -63,7 +63,7 @@ export async function getDashboardStats(): Promise<
 
     return {
       success: true,
-      message: 'Fecthed dashboard data successfully',
+      message: 'Fetched dashboard data successfully',
       data: {
         totalCategories,
         totalProducts,

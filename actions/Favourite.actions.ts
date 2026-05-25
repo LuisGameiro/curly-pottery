@@ -4,6 +4,13 @@ import { authOptions } from '@lib/auth/authOptions'
 import { getServerSession } from 'next-auth'
 import { prisma } from 'prisma/prisma'
 import { revalidatePath } from 'next/cache'
+import {
+  PaginationInput,
+  FAVOURITES_PAGE_SIZE,
+  encodeCursor,
+  decodeCursor,
+} from '@lib/pagination'
+import { Prisma } from 'prisma/generated/prisma/client'
 
 export async function getFavouritesAction(): Promise<string[]> {
   const session = await getServerSession(authOptions)
@@ -66,29 +73,60 @@ export async function removeFavouriteAction(productId: string): Promise<void> {
   revalidatePath('/')
 }
 
-export async function getFavouritesWithProductsAction() {
+export async function getFavouritesWithProductsAction(
+  pagination?: PaginationInput,
+) {
   const session = await getServerSession(authOptions)
 
-  if (!session?.user?.id) return []
+  if (!session?.user?.id) {
+    return { items: [], nextCursor: null, hasMore: false, total: 0 }
+  }
 
-  const favourites = await prisma.favourite.findMany({
-    where: { userId: session.user.id },
-    include: {
-      product: {
-        include: {
-          variants: true,
-          categories: true,
+  const take = pagination?.take ?? FAVOURITES_PAGE_SIZE
+  const cursor = pagination?.cursor
+    ? decodeCursor(pagination.cursor)
+    : undefined
+
+  const where = { userId: session.user.id }
+
+  const [favourites, total] = await Promise.all([
+    prisma.favourite.findMany({
+      where,
+      include: {
+        product: {
+          include: {
+            variants: true,
+            categories: true,
+          },
         },
       },
-    },
-    orderBy: { createdAt: 'desc' },
-  })
+      orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
+      ...(cursor ? { cursor: { id: cursor.id }, skip: 1 } : {}),
+      take: take + 1,
+    }),
+    prisma.favourite.count({ where }),
+  ])
 
-  return favourites.map((f) => ({
+  const hasMore = favourites.length > take
+  const items = favourites.slice(0, take).map(formatFavouriteProduct)
+  const nextCursor = hasMore ? encodeCursor(items[items.length - 1].id) : null
+
+  return { items, nextCursor, hasMore, total }
+}
+
+function formatFavouriteProduct(
+  f: Prisma.FavouriteGetPayload<{
+    include: {
+      product: { include: { variants: true; categories: true } }
+    }
+  }>,
+) {
+  return {
     ...f.product,
+    id: f.product.id,
     variants: f.product.variants.map((v) => ({
       ...v,
       price: Number(v.price),
     })),
-  }))
+  }
 }

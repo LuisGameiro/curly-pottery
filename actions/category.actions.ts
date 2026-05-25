@@ -18,7 +18,7 @@ export async function getAllCategories(): Promise<ActionResponse<Category[]>> {
 
     return {
       success: true,
-      message: 'Fecthed all Categories successfully',
+      message: 'Fetched all Categories successfully',
       data: categories,
     }
   } catch (error) {
@@ -46,7 +46,7 @@ export async function getCategoryById({
 
     return {
       success: true,
-      message: 'Fecthed Category successfully',
+      message: 'Fetched Category successfully',
       data: category,
     }
   } catch (error) {

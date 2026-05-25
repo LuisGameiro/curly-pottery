@@ -280,6 +280,7 @@ export async function getNewsletterAdminOverviewData(): Promise<NewsletterAdminO
       orderBy: {
         createdAt: 'desc',
       },
+      take: 100,
     }),
     prisma.newsletterCampaign.findMany({
       include: {
@@ -300,6 +301,7 @@ export async function getNewsletterAdminOverviewData(): Promise<NewsletterAdminO
       orderBy: {
         createdAt: 'desc',
       },
+      take: 50,
     }),
   ])
 

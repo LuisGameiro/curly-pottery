@@ -10,11 +10,13 @@ import {
 interface CartStore {
   cartItems: CartLineItem[]
   isLoading: boolean
+  isHydrated: boolean
   addItem: (item: ProductWithVariantsCategories, quantity: number) => void
   removeItem: (id: string) => void
   updateItem: (id: string, q: number) => void
   deleteAll: () => void
   syncWithDatabase: () => Promise<void>
+  setHydrated: (state: boolean) => void
 }
 
 /**
@@ -33,6 +35,7 @@ export const useCartStore = create<CartStore>()(
     (set, get) => ({
       cartItems: [],
       isLoading: false,
+      isHydrated: false,
 
       addItem: async (
         item: ProductWithVariantsCategories,
@@ -121,10 +124,17 @@ export const useCartStore = create<CartStore>()(
           set({ isLoading: false })
         }
       },
+
+      setHydrated: (state: boolean) => {
+        set({ isHydrated: state })
+      },
     }),
     {
       name: 'cart-storage',
       storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => (state) => {
+        state?.setHydrated(true)
+      },
     },
   ),
 )

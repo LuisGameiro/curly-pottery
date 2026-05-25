@@ -15,7 +15,7 @@ const links: Page[] = [
   },
   {
     name: 'Contact',
-    url: '/contact',
+    url: '/contacts',
   },
   {
     name: 'About',
@@ -77,7 +77,10 @@ const Footer = () => {
 
       <div className={s.signature}>
         <div className="flex-1">
-          <span>&copy; 2025 Curly Pottery. Created by Luis Gameiro</span>
+          <span>
+            &copy; {new Date().getFullYear()} Curly Pottery. Created by Luis
+            Gameiro
+          </span>
         </div>
         <div className="flex items-center gap-6">
           <ThemeSwitcher />

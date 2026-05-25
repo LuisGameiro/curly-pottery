@@ -15,16 +15,18 @@ import { toast } from 'sonner'
 
 export default function ProductTable({
   products,
+  isLoading,
 }: {
   products: ProductWithVariantsCategories[]
+  isLoading?: boolean
 }) {
-  const [isLoading, setIsLoading] = useState<string | null>(null)
+  const [deleteLoadingId, setDeleteLoadingId] = useState<string | null>(null)
   const router = useRouter()
 
   const handleDelete = async (id: string, name: string) => {
     if (!confirm(`Are you sure you want to delete "${name}"?`)) return
 
-    setIsLoading(id)
+    setDeleteLoadingId(id)
     try {
       const productToDelete = products.find(
         (p: ProductWithVariantsCategories) => p.id === id,
@@ -40,14 +42,14 @@ export default function ProductTable({
       console.error('Delete failed', error)
       toast.error('Delete failed')
     } finally {
-      setIsLoading(null)
+      setDeleteLoadingId(null)
     }
   }
 
   const handleToggleVisibility = async (id: string, hide: boolean) => {
-    setIsLoading(id)
+    setDeleteLoadingId(id)
     try {
-      const response = await toggleVisibility({ id, state: hide })
+      const response = await toggleVisibility({ id, state: !hide })
       if (response.success) {
         router.refresh()
       }
@@ -56,7 +58,7 @@ export default function ProductTable({
 
       console.error('Delete failed', error)
     } finally {
-      setIsLoading(null)
+      setDeleteLoadingId(null)
     }
   }
 
@@ -146,7 +148,7 @@ export default function ProductTable({
           <Button
             variant="naked"
             color="danger"
-            disabled={!!isLoading}
+            disabled={!!deleteLoadingId}
             onClick={() => handleDelete(p.id, p.name)}
             aria-label={`Delete ${p.name}`}
             title={`Delete ${p.name}`}
@@ -157,7 +159,7 @@ export default function ProductTable({
           <Button
             variant="naked"
             color="warning"
-            disabled={!!isLoading}
+            disabled={!!deleteLoadingId}
             aria-label={p.hide ? 'Show Product' : 'Hide Product'}
             title={p.hide ? 'Show Product' : 'Hide Product'}
             onClick={() => handleToggleVisibility(p.id, p.hide)}
@@ -173,6 +175,7 @@ export default function ProductTable({
     <DataTable
       data={products}
       columns={productColumns}
+      isLoading={isLoading}
       renderExpansion={(product) => (
         <VariantTable variants={product.variants} />
       )}

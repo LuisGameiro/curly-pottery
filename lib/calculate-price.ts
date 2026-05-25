@@ -17,6 +17,9 @@ export function calculateDiscount(
     })
     finalPrice = Math.max(0, finalPrice)
   }
+  // Note: Discounts are applied sequentially in array order.
+  // PERCENTAGE applies to the price after any earlier FIXED_AMOUNT discounts.
+  // Re-order the array if compounded vs. isolated discounting is desired.
 
   return {
     price: price,

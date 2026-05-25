@@ -90,17 +90,12 @@ export default function MenuProducts({
           ))}
         </ul>
       </div>
-      <div className="ml-auto flex items-center gap-2">
-        <div className="flex hidden lg:block ml-auto justify-end items-center">
-          <div className="text-secondary font-bold text-sm">
-            {productCount} {productCount === 1 ? 'item' : 'items'}
-          </div>
+      <div className="ml-auto flex flex-col items-end gap-1">
+        <div className="text-secondary font-bold text-sm px-3">
+          {productCount} {productCount === 1 ? 'item' : 'items'}
         </div>
 
-        <div
-          className="relative flex items-center gap-4 p-1"
-          ref={containerSortRef}
-        >
+        <div className="relative flex items-center p-1" ref={containerSortRef}>
           {/* Item count will be handled by ProductList but we can leave a gap here if needed */}
           <div className="relative">
             <button

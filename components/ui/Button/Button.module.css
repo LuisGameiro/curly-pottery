@@ -2,16 +2,12 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply bg-primary text-on-primary cursor-pointer inline-flex
-  px-5 py-5 leading-6 transition ease-in-out duration-150
-  shadow-sm text-center justify-center uppercase
-  border border-transparent items-center text-sm font-semibold
-  tracking-wide;
+  @apply bg-primary text-on-primary cursor-pointer inline-flex px-5 py-5 leading-6 transition ease-in-out duration-150 shadow-sm text-center justify-center uppercase items-center text-sm font-semibold tracking-wide;
   max-height: 64px;
 }
 
 .root:hover {
-  @apply border-border bg-primary/20;
+  @apply border-none bg-primary/20;
 }
 
 .root:focus {
@@ -23,7 +19,7 @@
 }
 
 .loading {
-  @apply bg-accent-1 text-muted border-border cursor-not-allowed;
+  @apply bg-accent-1 text-muted cursor-not-allowed;
 }
 
 .slim {
@@ -39,15 +35,15 @@
 }
 
 .naked {
-  @apply bg-transparent font-semibold border-none shadow-none outline-none p-2   rounded-lg transition;
+  @apply bg-transparent font-semibold border-none shadow-none outline-none p-2 rounded-lg transition;
 }
 
 .naked:hover {
-  @apply text-on-secondary bg-secondary/20;
+  @apply text-on-secondary bg-secondary/20 border-none;
 }
 
 .naked:focus {
-  @apply bg-transparent border-none;
+  @apply bg-transparent border-none outline-none shadow-none;
 }
 
 .sm {

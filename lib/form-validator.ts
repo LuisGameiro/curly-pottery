@@ -53,7 +53,6 @@ export const VariantSchema = z.object({
       code: z.string().optional(),
       type: z.string(),
       value: z.number(),
-      percentage: z.number(),
     }),
   ),
   images: z.any(),

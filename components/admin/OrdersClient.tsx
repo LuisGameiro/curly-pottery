@@ -3,16 +3,17 @@
 import { Button, Container, Text } from '@components/ui'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import InputSearch from '@components/ui/Input/InputSearch'
-import CustomerTable from '@components/tables/CustomerTable'
-import { UserWithOrders } from '@lib/types/types'
-import { getAllCustomers } from 'actions/customer.actions'
+import OrderTable from '@components/tables/OrderTable'
+import { OrderWithUser } from '@lib/types/types'
+import { getAllOrders } from 'actions/order.actions'
 import { PaginatedResult, ADMIN_PAGE_SIZE } from '@lib/pagination'
+import { CheckCircle2, AlertCircle } from 'lucide-react'
 
-export default function CustomersClient({
+export default function OrdersClient({
   initialData,
   initialSearch,
 }: {
-  initialData: PaginatedResult<UserWithOrders>
+  initialData: PaginatedResult<OrderWithUser>
   initialSearch: string
 }) {
   const [items, setItems] = useState(initialData.items)
@@ -31,7 +32,7 @@ export default function CustomersClient({
     async (opts: { search?: string; cursor?: string | null }) => {
       setIsLoading(true)
       try {
-        const response = await getAllCustomers({
+        const response = await getAllOrders({
           search: opts.search,
           cursor: opts.cursor,
           take: ADMIN_PAGE_SIZE,
@@ -74,41 +75,61 @@ export default function CustomersClient({
     setSearchTerm(initialSearch)
   }, [initialData, initialSearch])
 
+  const pendingOrders = items.filter((o) => o.status === 'PENDING')
+  const otherOrders = items.filter((o) => o.status !== 'PENDING')
+
   return (
     <Container>
       <header>
-        <div className="w-full flex flex-row justify-between">
-          <Text variant="heading" className="w-full">
-            Customers
-          </Text>
-
+        <Text variant="heading">Order Management</Text>
+        <Text variant="subHeading">
+          Review and process your store transactions.
+        </Text>
+        <div className="mt-4 max-w-md">
           <InputSearch
-            placeholder="Search by name or email..."
+            placeholder="Search by name, email or order ID..."
             value={searchTerm}
             onValueChange={handleSearch}
           />
         </div>
-        <Text variant="subHeading">
-          {total > 0
-            ? `Showing ${items.length} of ${total} customers`
-            : 'View and manage your customer relationships.'}
-        </Text>
       </header>
 
-      <CustomerTable customers={items} isLoading={isLoading} />
+      <main>
+        {pendingOrders.length > 0 && (
+          <>
+            <div className="flex items-center gap-2 w-full md:w-auto mt-6">
+              <AlertCircle size={24} />
+              <Text variant="sectionHeading" className="mt-2">
+                Pending Orders ({pendingOrders.length})
+              </Text>
+            </div>
+            <OrderTable orders={pendingOrders} isLoading={isLoading} />
+          </>
+        )}
 
-      {hasMore && !isLoading && (
-        <div className="flex justify-center py-6">
-          <Button
-            variant="secondary"
-            onClick={() =>
-              fetchPage({ search: searchTerm, cursor: nextCursor })
-            }
-          >
-            Next page
-          </Button>
+        <div className="flex items-center gap-2 w-full md:w-auto mt-6">
+          <CheckCircle2 size={24} />
+          <Text variant="sectionHeading" className="mt-2">
+            {pendingOrders.length > 0
+              ? `Order History (${otherOrders.length})`
+              : `Orders (${total})`}
+          </Text>
         </div>
-      )}
+        <OrderTable orders={otherOrders} isLoading={isLoading} />
+
+        {hasMore && !isLoading && (
+          <div className="flex justify-center py-6">
+            <Button
+              variant="secondary"
+              onClick={() =>
+                fetchPage({ search: searchTerm, cursor: nextCursor })
+              }
+            >
+              Next page
+            </Button>
+          </div>
+        )}
+      </main>
     </Container>
   )
 }

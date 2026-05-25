@@ -9,12 +9,14 @@ type FavouriteButtonProps = {
   productId: string
   className?: string
   size?: 'sm' | 'md' | 'lg'
+  color?: string
 }
 
 export default function FavouriteButton({
   productId,
   className,
   size = 'md',
+  color = 'rgba(0,0,0,0.1)',
 }: FavouriteButtonProps) {
   const { isAuthenticated, isLoading } = useUser()
   const { isFavourite, toggleFavourite } = useFavourites()
@@ -43,13 +45,17 @@ export default function FavouriteButton({
         'transition-all duration-200 rounded-full',
         filled
           ? 'text-red-500 hover:text-red-600'
-          : 'text-white/80 hover:text-red-500',
+          : color === 'primary'
+            ? 'text-on-primary hover:text-red-500'
+            : 'text-white/80 hover:text-red-500',
         className,
       )}
     >
       <Heart
         size={iconSize}
-        fill={filled ? 'currentColor' : 'rgba(0,0,0,0.1)'}
+        fill={
+          filled ? 'currentColor' : color === 'primary' ? 'transparent' : color
+        }
         className={cn(
           'transition-all duration-200',
           !filled && 'hover:scale-110',

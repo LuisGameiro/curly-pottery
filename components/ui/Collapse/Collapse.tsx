@@ -25,14 +25,14 @@ const Collapse = ({ title, children }: CollapseProps) => {
   const toggle = () => setActive((x) => !x)
 
   return (
-    <div
-      className={s.root}
-      role="button"
-      tabIndex={0}
-      aria-expanded={isActive}
-      onClick={toggle}
-    >
-      <div className={s.header}>
+    <div className={s.root}>
+      <div
+        className={s.header}
+        role="button"
+        tabIndex={0}
+        aria-expanded={isActive}
+        onClick={toggle}
+      >
         <ChevronRight
           className={cn(s.icon, { [s.open]: isActive })}
           size={22}

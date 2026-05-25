@@ -1,37 +1,125 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply grid grid-cols-2 lg:grid-cols-4 w-full bg-primary/80 overflow-hidden;
+  @apply grid grid-cols-2 w-full bg-primary/80 overflow-hidden;
+}
+
+@media (min-width: 1024px) {
+  .root {
+    @apply grid-cols-4;
+  }
 }
 
 .textBlock {
-  @apply col-span-2 lg:col-span-1 flex flex-col items-center md:items-start justify-center p-10 md:p-16 lg:p-12 xl:p-20 text-center md:text-left;
+  @apply col-span-2 min-w-[200px] flex flex-col items-center justify-center text-center py-10 gap-4;
   @apply animate-in fade-in slide-in-from-left-8 duration-1000;
 }
 
+@media (min-width: 1024px) {
+  .textBlock {
+    @apply col-span-1;
+  }
+}
+
 .everyday {
-  @apply text-4xl sm:text-5xl lg:text-4xl xl:text-5xl font-bold text-black leading-tight mb-2;
+  @apply text-5xl font-bold text-black leading-tight mb-2;
   font-family: var(--font-header), sans-serif;
   letter-spacing: -0.02em;
 }
 
+@media (min-width: 640px) {
+  .everyday {
+    @apply text-6xl;
+  }
+}
+
+@media (min-width: 1024px) {
+  .everyday {
+    @apply text-5xl;
+  }
+}
+
+@media (min-width: 1280px) {
+  .everyday {
+    @apply text-6xl;
+  }
+}
+
 .studio {
-  @apply text-6xl sm:text-7xl lg:text-6xl xl:text-7xl text-secondary mb-10 lg:mb-12;
+  @apply text-6xl text-secondary mb-10;
   font-family: var(--font-cursive), cursive;
 }
 
+@media (min-width: 640px) {
+  .studio {
+    @apply text-7xl;
+  }
+}
+
+@media (min-width: 1024px) {
+  .studio {
+    @apply text-6xl mb-12;
+  }
+}
+
+@media (min-width: 1280px) {
+  .studio {
+    @apply text-7xl;
+  }
+}
+
 .viewShop {
-  @apply border-2 border-secondary text-secondary px-10 py-3.5 rounded-full font-bold text-lg lg:text-xl hover:bg-secondary hover:text-primary transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-1;
+  @apply border-2 border-secondary text-center text-secondary px-10 py-3.5 rounded-full font-bold text-lg hover:bg-secondary hover:text-primary transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-1;
+}
+
+@media (min-width: 1024px) {
+  .viewShop {
+    @apply text-xl;
+  }
 }
 
 .centerImage {
-  @apply relative h-[250px] sm:h-[400px] md:h-[500px] lg:h-full col-span-1 lg:col-span-2 overflow-hidden order-2 lg:order-none;
-  @apply border-t-2 lg:border-t-0 lg:border-l-2 border-white/20;
+  @apply relative h-[250px] col-span-1 overflow-hidden order-2;
+}
+
+@media (min-width: 640px) {
+  .centerImage {
+    @apply h-[400px];
+  }
+}
+
+@media (min-width: 768px) {
+  .centerImage {
+    @apply h-[500px];
+  }
+}
+
+@media (min-width: 1024px) {
+  .centerImage {
+    @apply h-full col-span-2 order-none;
+  }
 }
 
 .rightImage {
-  @apply relative h-[250px] sm:h-[400px] md:h-[500px] lg:h-full col-span-1 lg:col-span-1 overflow-hidden order-3 lg:order-none;
-  @apply border-t-2 border-l-2 lg:border-t-0 border-white/20;
+  @apply relative h-[250px] col-span-1 overflow-hidden order-3;
+}
+
+@media (min-width: 640px) {
+  .rightImage {
+    @apply h-[400px];
+  }
+}
+
+@media (min-width: 768px) {
+  .rightImage {
+    @apply h-[500px];
+  }
+}
+
+@media (min-width: 1024px) {
+  .rightImage {
+    @apply h-full col-span-1 order-none border-t-0;
+  }
 }
 
 .imageWrapper {

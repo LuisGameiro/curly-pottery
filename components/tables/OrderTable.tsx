@@ -7,7 +7,13 @@ import { CartLineItem, Order } from '@lib/types/types'
 import { StatusBadge } from '@components/admin/StatusBadge'
 import { useRouter } from 'next/navigation'
 
-export default function OrderTable({ orders }: { orders: Order[] }) {
+export default function OrderTable({
+  orders,
+  isLoading,
+}: {
+  orders: Order[]
+  isLoading?: boolean
+}) {
   const router = useRouter()
 
   const orderColumns = [
@@ -63,6 +69,7 @@ export default function OrderTable({ orders }: { orders: Order[] }) {
     <DataTable
       data={orders}
       columns={orderColumns}
+      isLoading={isLoading}
       emptyMessage="No orders found"
     />
   )

@@ -1,7 +1,7 @@
 import Script from 'next/script'
 import { Button, Text } from '@components/ui'
 import { toast } from 'sonner'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { CurrencyCode } from '@lib/types/types'
 import { Loader2 } from 'lucide-react'
 
@@ -22,6 +22,8 @@ declare global {
         locale: string
         country: string
         showFooter: boolean
+        showApplePay?: boolean
+        showGooglePay?: boolean
         onLoad: () => void
 
         onResponse: (type: string, body: SumUpResponse) => void
@@ -40,17 +42,7 @@ export default function SumUpPayment({
   const [loading, setLoading] = useState(false)
   const [showRetry, setShowRetry] = useState(false)
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (loading) {
-        setShowRetry(true)
-      }
-    }, 10000)
-
-    return () => clearTimeout(timer)
-  }, [loading])
-
-  const mountSumUp = () => {
+  const mountSumUp = useCallback(() => {
     setShowRetry(false)
     setLoading(true)
 
@@ -63,20 +55,19 @@ export default function SumUpPayment({
       locale: 'en_GB',
       country: 'GB',
       showFooter: false,
+      showApplePay: true,
+      showGooglePay: true,
       onLoad: () => {
         setLoading(false)
       },
       onResponse: function (type: string, body: SumUpResponse) {
         if (type === 'success' || body.status === 'PAID') {
           onComplete()
-        }
-        if (type === 'error' || body.status === 'FAILED') {
+        } else if (type === 'error' || body.status === 'FAILED') {
           toast.error('Payment failed. Please try again.')
-        }
-        if (body.status === 'PENDING') {
+        } else if (body.status === 'PENDING') {
           toast.warning('Payment is pending. Please complete the payment.')
-        }
-        if (body.status === 'EXPIRED') {
+        } else if (body.status === 'EXPIRED') {
           toast.error('Payment session expired. Please try again.')
         } else {
           toast.error('An unexpected error occurred. Please try again.')
@@ -84,7 +75,24 @@ export default function SumUpPayment({
         window.SumUpCard.unmount()
       },
     })
-  }
+  }, [checkoutId, onComplete])
+
+  useEffect(() => {
+    if (window.SumUpCard) {
+      setLoading(true) // eslint-disable-line react-hooks/set-state-in-effect
+      mountSumUp()
+    }
+  }, [mountSumUp])
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (loading) {
+        setShowRetry(true)
+      }
+    }, 10000)
+
+    return () => clearTimeout(timer)
+  }, [loading])
 
   return (
     <div className="space-y-8">

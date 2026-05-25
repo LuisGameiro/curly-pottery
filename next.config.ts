@@ -100,5 +100,3 @@ export default withSentryConfig(nextConfig, {
   tunnelRoute: '/monitoring-sentry',
   // hideSourceMaps: true,
 })
-
-module.exports = nextConfig

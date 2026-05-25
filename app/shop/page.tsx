@@ -1,11 +1,8 @@
-import ShopClient from '../../components/shop/ShopClient'
 import { getAllCategories } from 'actions/category.actions'
 import { getProductsByCategorySlug } from 'actions/product.actions'
-import { SortLabels } from '@components/shop/sortProducts'
-import ProductListWrapper from '@components/shop/ProductList'
-import ProductsLoading from '@components/shop/ProductsLoading'
-import { Suspense } from 'react'
+import ShopClient from '../../components/shop/ShopClient'
 import constructMetadata from '@components/common/SEO'
+import { SHOP_PAGE_SIZE } from '@lib/pagination'
 
 export const metadata = constructMetadata({
   title: 'Shop',
@@ -17,36 +14,38 @@ export const metadata = constructMetadata({
 export default async function ShopPage({
   searchParams,
 }: Readonly<{
-  searchParams: Promise<{ category?: string; sort?: string }>
+  searchParams: Promise<{ category?: string; sort?: string; cursor?: string }>
 }>) {
-  const { category, sort } = await searchParams
+  const { category, sort, cursor } = await searchParams
 
   const categorySlug = category || null
   const [categories, productsResponse] = await Promise.all([
     getAllCategories(),
-    getProductsByCategorySlug(categorySlug),
+    getProductsByCategorySlug(categorySlug, { cursor, take: SHOP_PAGE_SIZE }),
   ])
 
   if (!categories.success) throw new Error(categories.message)
   if (!productsResponse.success) throw new Error(productsResponse.message)
 
-  const products = productsResponse.data || []
-  const sortMethod = category || 'newest'
+  const { items, total, nextCursor, hasMore } = productsResponse.data!
 
   return (
     <ShopClient
-      sortMethod={sort || 'newest'}
+      sortMethod={
+        (sort || 'newest') as
+          | 'newest'
+          | 'price-asc'
+          | 'price-desc'
+          | 'name-asc'
+          | 'name-desc'
+      }
       categories={categories.data || []}
       activeCategory={categorySlug}
-      productCount={products.length}
-    >
-      <Suspense key={categorySlug} fallback={<ProductsLoading />}>
-        <ProductListWrapper
-          sortMethod={sortMethod as SortLabels}
-          categorySlug={categorySlug}
-          products={products}
-        />
-      </Suspense>
-    </ShopClient>
+      productCount={total}
+      categorySlug={categorySlug}
+      initialProducts={items}
+      initialCursor={nextCursor}
+      initialHasMore={hasMore}
+    />
   )
 }

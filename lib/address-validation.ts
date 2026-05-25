@@ -9,7 +9,8 @@ export async function validateUKPostcode(postcode: string): Promise<boolean> {
   } catch (error) {
     console.error('Postcode validation error:', error)
     // Fallback to basic regex if API is down
-    const ukPostcodeRegex = /^[A-Z]{1,2}[0-9][A-Z0-9]? ?[0-9][A-Z]{2}$/i
+    const ukPostcodeRegex =
+      /^[A-Z]{1,2}[0-9R][0-9A-Z]? ?[0-9][ABDEFGHJLNPQRSTUWXYZ]{2}$/i
     return ukPostcodeRegex.test(postcode)
   }
 }

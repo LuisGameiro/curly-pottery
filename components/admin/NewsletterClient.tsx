@@ -20,6 +20,7 @@ import {
   NewsletterAdminOverview,
   ProductWithVariantsCategories,
 } from '@lib/types/types'
+import { PaginatedResult } from '@lib/pagination'
 import {
   CheckCircle2,
   Clock3,
@@ -88,7 +89,7 @@ export default function NewsletterClient({
   products,
 }: Readonly<{
   overview: NewsletterAdminOverview
-  products: ProductWithVariantsCategories[]
+  products: PaginatedResult<ProductWithVariantsCategories>
 }>) {
   const router = useRouter()
   const [subscriberSearch, setSubscriberSearch] = useState('')
@@ -465,7 +466,7 @@ export default function NewsletterClient({
                 </Text>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-80 overflow-y-auto rounded-xl border border-border p-3">
-                {products.map((product) => (
+                {products.items.map((product) => (
                   <label
                     key={product.id}
                     className="flex items-start gap-3 rounded-xl border border-border px-3 py-3 text-sm hover:bg-accent-2 transition-colors"
@@ -548,8 +549,8 @@ export default function NewsletterClient({
           <div>
             <Text variant="sectionHeading">Subscribers</Text>
             <Text variant="subHeading">
-              Search guest and registered subscribers across the canonical
-              newsletter list.
+              Showing {filteredSubscribers.length} of{' '}
+              {overview.subscriberStats.active} active subscribers
             </Text>
           </div>
           <InputSearch

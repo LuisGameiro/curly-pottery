@@ -44,7 +44,7 @@ describe('getAllCategories', () => {
     const result = await getAllCategories()
 
     expect(result.success).toBe(true)
-    expect(result.message).toBe('Fecthed all Categories successfully')
+    expect(result.message).toBe('Fetched all Categories successfully')
     expect(result.data).toEqual(mockCategories)
     expect(prisma.category.findMany).toHaveBeenCalledWith({
       orderBy: { name: 'asc' },
@@ -101,7 +101,7 @@ describe('getCategoryById', () => {
     const result = await getCategoryById({ id: '1' })
 
     expect(result.success).toBe(true)
-    expect(result.message).toBe('Fecthed Category successfully')
+    expect(result.message).toBe('Fetched Category successfully')
     expect(result.data).toEqual(mockCategory)
     expect(prisma.category.findFirst).toHaveBeenCalledWith({
       where: { id: '1' },

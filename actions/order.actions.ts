@@ -16,13 +16,21 @@ import { authOptions } from '@lib/auth/authOptions'
 import { getServerSession } from 'next-auth'
 import { AppError, DatabaseError, NetworkError, formatError } from '@lib/errors'
 import { withFetch } from '@lib/errors-utils'
+import {
+  PaginationInput,
+  PaginatedResult,
+  ADMIN_PAGE_SIZE,
+  USER_ORDERS_PAGE_SIZE,
+  encodeCursor,
+  decodeCursor,
+} from '@lib/pagination'
 
 const isAdmin = (role: string | null | undefined) =>
   role?.toUpperCase() === 'ADMIN'
 
-export async function getAllOrders(): Promise<
-  ActionResponse<OrderWithUser[] | null>
-> {
+export async function getAllOrders(
+  pagination?: PaginationInput,
+): Promise<ActionResponse<PaginatedResult<OrderWithUser> | null>> {
   try {
     const session = await getServerSession(authOptions)
 
@@ -34,19 +42,43 @@ export async function getAllOrders(): Promise<
       }
     }
 
-    const order = await prisma.order.findMany({
-      orderBy: {
-        createdAt: 'desc',
-      },
-      include: {
-        user: true,
-      },
-    })
+    const take = pagination?.take ?? ADMIN_PAGE_SIZE
+    const search = pagination?.search?.trim()
+
+    const where: Prisma.OrderWhereInput = {}
+
+    if (search) {
+      where.OR = [
+        { firstName: { contains: search, mode: 'insensitive' } },
+        { lastName: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } },
+        { id: { contains: search, mode: 'insensitive' } },
+      ]
+    }
+
+    const cursor = pagination?.cursor
+      ? decodeCursor(pagination.cursor)
+      : undefined
+
+    const [orders, total] = await Promise.all([
+      prisma.order.findMany({
+        where,
+        orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
+        include: { user: true },
+        ...(cursor ? { cursor: { id: cursor.id }, skip: 1 } : {}),
+        take: take + 1,
+      }),
+      prisma.order.count({ where }),
+    ])
+
+    const hasMore = orders.length > take
+    const items = orders.slice(0, take) as unknown as OrderWithUser[]
+    const nextCursor = hasMore ? encodeCursor(items[items.length - 1].id) : null
 
     return {
       success: true,
       message: 'Fetched all orders successfully',
-      data: order,
+      data: { items, nextCursor, hasMore, total },
     }
   } catch (error) {
     console.error('getAllOrders_ERROR:', error)
@@ -61,7 +93,8 @@ export async function getAllOrders(): Promise<
 
 export async function getOrdersById(
   id: string,
-): Promise<ActionResponse<OrderWithUser[] | null>> {
+  pagination?: PaginationInput,
+): Promise<ActionResponse<PaginatedResult<OrderWithUser> | null>> {
   try {
     const session = await getServerSession(authOptions)
 
@@ -81,20 +114,32 @@ export async function getOrdersById(
       }
     }
 
-    const order = await prisma.order.findMany({
-      where: { userId: id },
-      orderBy: {
-        createdAt: 'desc',
-      },
-      include: {
-        user: true,
-      },
-    })
+    const take = pagination?.take ?? USER_ORDERS_PAGE_SIZE
+    const cursor = pagination?.cursor
+      ? decodeCursor(pagination.cursor)
+      : undefined
+
+    const where: Prisma.OrderWhereInput = { userId: id }
+
+    const [orders, total] = await Promise.all([
+      prisma.order.findMany({
+        where,
+        orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
+        include: { user: true },
+        ...(cursor ? { cursor: { id: cursor.id }, skip: 1 } : {}),
+        take: take + 1,
+      }),
+      prisma.order.count({ where }),
+    ])
+
+    const hasMore = orders.length > take
+    const items = orders.slice(0, take) as unknown as OrderWithUser[]
+    const nextCursor = hasMore ? encodeCursor(items[items.length - 1].id) : null
 
     return {
       success: true,
       message: 'Fetched order successfully',
-      data: order,
+      data: { items, nextCursor, hasMore, total },
     }
   } catch (error) {
     console.error('getOrderById_ERROR:', error)
@@ -327,6 +372,9 @@ export async function createOrder(
 
       return newOrder
     })
+
+    revalidatePath('/admin/orders')
+    revalidatePath('/user/orders')
 
     return {
       success: true,

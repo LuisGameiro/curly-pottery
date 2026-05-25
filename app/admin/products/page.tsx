@@ -1,26 +1,27 @@
 export const dynamic = 'force-dynamic'
 
-import { Suspense } from 'react'
-import ProductsCLient from '../../../components/admin/ProductsClient'
+import ProductsClient from '../../../components/admin/ProductsClient'
 import { getAllProducts } from 'actions/product.actions'
-import Loading from 'app/loading'
-import constructMetadata from '@components/common/SEO'
+import { ADMIN_PAGE_SIZE } from '@lib/pagination'
 
-export const metadata = constructMetadata({
-  title: 'Products Admin',
-  description: 'Manage your store products at Curly Pottery.',
-})
+export default async function ProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ search?: string; cursor?: string }>
+}) {
+  const { search, cursor } = await searchParams
 
-export default async function ProductsPage() {
-  const response = await getAllProducts()
+  const response = await getAllProducts({
+    search,
+    cursor,
+    take: ADMIN_PAGE_SIZE,
+  })
 
   if (!response.success) {
     throw new Error(response.message)
   }
 
   return (
-    <Suspense fallback={<Loading />}>
-      <ProductsCLient products={response.data || []} />
-    </Suspense>
+    <ProductsClient initialData={response.data!} initialSearch={search || ''} />
   )
 }

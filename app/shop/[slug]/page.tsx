@@ -1,21 +1,18 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import ProductView from '@components/product/ProductView/ProductView'
-import {
-  getAllProducts,
-  getProductBySlug,
-  getRelatedProducts,
-} from 'actions/product.actions'
+import { getProductBySlug, getRelatedProducts } from 'actions/product.actions'
+import { prisma } from 'prisma/prisma'
 import constructMetadata from '@components/common/SEO/SEO'
 
 export async function generateStaticParams() {
   try {
-    const response = await getAllProducts()
-    if (!response?.success || !Array.isArray(response?.data)) {
-      console.error('Failed to fetch products for static params')
-      return []
-    }
-    return response.data.map((product) => ({
+    const slugs = await prisma.product.findMany({
+      where: { hide: false },
+      select: { slug: true },
+      take: 50,
+    })
+    return slugs.map((product) => ({
       slug: product.slug,
     }))
   } catch (error) {
@@ -23,6 +20,9 @@ export async function generateStaticParams() {
     return []
   }
 }
+
+export const revalidate = 3600
+
 export async function generateMetadata({
   params,
 }: {

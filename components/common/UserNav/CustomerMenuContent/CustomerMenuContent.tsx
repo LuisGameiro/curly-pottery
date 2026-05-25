@@ -2,7 +2,7 @@
 
 import cn from 'clsx'
 import { useTheme } from 'next-themes'
-import { useParams, useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import s from './CustomerMenuContent.module.css'
 import {
   DropdownContent,
@@ -24,11 +24,9 @@ const LINKS = [
 ]
 
 export default function CustomerMenuContent() {
-  const params = useParams()
+  const pathname = usePathname()
   const router = useRouter()
   const { isAdmin, isAuthenticated } = useUser()
-
-  const pathname = params?.slug ? `/${params.slug}` : '/'
   const { theme, setTheme } = useTheme()
 
   function handleClick(href: string) {

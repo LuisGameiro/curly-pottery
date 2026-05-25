@@ -5,44 +5,53 @@ import { Logo } from '@components/ui'
 import UserNav from '../UserNav'
 import SearchBar from '../SearchBar/SearchBar'
 
-interface Link {
-  href: string
-  label: string
-}
+import { useUser } from '@lib/hooks/useUser'
+import { cn } from '@lib/utils'
 
-interface NavbarProps {
-  links?: Link[]
-}
+const navBarLinks = [
+  { label: 'Shop', href: '/shop' },
+  { label: 'About', href: '/about' },
+]
 
-const Navbar = ({ links }: NavbarProps) => (
-  <NavbarRoot>
-    <div className="flex flex-col w-full ">
-      <div className={s.nav}>
-        <div className="flex items-center">
-          <Link href="/" className={s.logo} aria-label="Curly Pottery home">
-            <Logo width={120} height={40} />
-          </Link>
+const Navbar = () => {
+  const { isAdmin } = useUser()
 
-          {links && (
+  return (
+    <NavbarRoot>
+      <div className="flex flex-col w-full ">
+        <div className={s.nav}>
+          <div className="flex items-center">
+            <Link href="/" className={s.logo} aria-label="Curly Pottery home">
+              <Logo width={120} height={40} />
+            </Link>
+
             <nav className={s.navMenu}>
-              {links.map((link) => (
+              {navBarLinks.map((link) => (
                 <Link key={link.href} href={link.href} className={s.link}>
                   {link.label}
                 </Link>
               ))}
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  className={cn(s.link, 'hidden lg:inline-flex')}
+                >
+                  Admin
+                </Link>
+              )}
             </nav>
-          )}
-        </div>
-
-        <div className="flex items-center gap-6">
-          <div className="hidden md:block">
-            <SearchBar />
           </div>
-          <UserNav />
+
+          <div className="flex items-center gap-6">
+            <div className="hidden md:block">
+              <SearchBar />
+            </div>
+            <UserNav />
+          </div>
         </div>
       </div>
-    </div>
-  </NavbarRoot>
-)
+    </NavbarRoot>
+  )
+}
 
 export default Navbar

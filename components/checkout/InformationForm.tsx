@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useFormContext, FieldErrors } from 'react-hook-form'
 import { validateUKPostcode } from '@lib/address-validation'
+import { ChevronDown } from 'lucide-react'
 
 interface InformationFormProps {
   onComplete: () => void
@@ -21,6 +22,7 @@ export default function InformationForm({
 
   const {
     register,
+    getValues,
     setValue,
     handleSubmit,
     formState: { errors },
@@ -64,11 +66,7 @@ export default function InformationForm({
 
   const onSubmit = async () => {
     setIsValidating(true)
-    const postalCode = (
-      document.querySelector(
-        'input[name="address.postalCode"]',
-      ) as HTMLInputElement
-    )?.value
+    const postalCode = getValues('address.postalCode') as string
     const isPostcodeValid = await validateUKPostcode(postalCode)
 
     if (!isPostcodeValid) {
@@ -139,14 +137,36 @@ export default function InformationForm({
             )}
           </div>
           <div className="space-y-1">
-            <Input
-              title="Phone"
-              type="phone"
-              {...register('phone', { required: 'Phone is required' })}
-              placeholder="Phone"
-            />
+            <div className="flex border border-border rounded-lg bg-background focus-within:ring-1 focus-within:ring-secondary transition-all overflow-hidden h-[42px]">
+              <div className="flex items-center gap-1 pl-3 pr-2 border-r border-border bg-accent/5">
+                <span className="text-lg leading-none">🇬🇧</span>
+                <select
+                  className="bg-transparent text-sm font-bold focus:outline-hidden appearance-none cursor-pointer pl-1 pr-0"
+                  {...register('countryCode')}
+                >
+                  <option value="+44">+44</option>
+                  <option value="+1">+1</option>
+                  <option value="+33">+33</option>
+                  <option value="+49">+49</option>
+                </select>
+                <ChevronDown size={14} className="text-muted ml-1" />
+              </div>
+              <input
+                type="tel"
+                className="flex-1 bg-transparent px-3 py-2 focus:outline-hidden text-sm"
+                placeholder="07400 123456"
+                {...register('phone', {
+                  required: 'Phone is required',
+                  pattern: {
+                    value:
+                      /^(?:(?:0(?:0|11)\)?[\s-]?\(?|\+)44\)?[\s-]?(?:\(?0\)?[\s-]?)?|(?:\(?0))(?:(?:\d{5}\)?[\s-]?\d{4,5})|(?:\d{4}\)?[\s-]?(?:\d{5}|\d{3}[\s-]?\d{3}))|(?:\d{3}\)?[\s-]?\d{3}[\s-]?\d{3,4})|(?:\d{2}\)?[\s-]?\d{4}[\s-]?\d{4}))(?:[\s-]?(?:x|ext\.?|#)\d{3,4})?$/i,
+                    message: 'Please provide a valid phone number.',
+                  },
+                })}
+              />
+            </div>
             {errors.phone && (
-              <Text variant="error" className="text-xs ml-1">
+              <Text variant="error" className="text-xs ml-1 text-red">
                 {errors.phone.message as string}
               </Text>
             )}
@@ -213,6 +233,33 @@ export default function InformationForm({
                 required: 'Postal code is required',
                 validate: async (value) =>
                   (await validateUKPostcode(value)) || 'Invalid UK postal code',
+                onBlur: async (e) => {
+                  const val = e.target.value
+                  if (val && (await validateUKPostcode(val))) {
+                    try {
+                      const res = await fetch(
+                        `https://api.postcodes.io/postcodes/${val.replace(/\s/g, '')}`,
+                      )
+                      const data = await res.json()
+                      if (
+                        data.result &&
+                        (data.result.admin_district ||
+                          data.result.primary_care_trust ||
+                          data.result.parish)
+                      ) {
+                        setValue(
+                          'address.city',
+                          data.result.admin_district ||
+                            data.result.primary_care_trust ||
+                            data.result.parish,
+                          { shouldValidate: true },
+                        )
+                      }
+                    } catch (err) {
+                      console.error('Postcode auto-fill error:', err)
+                    }
+                  }
+                },
               })}
             />
             {addressErrors?.postalCode && (
@@ -229,11 +276,29 @@ export default function InformationForm({
           />
         </div>
         <Text variant="muted" className="text-sm">
-          Currently we only ship for uk, if you are outside the uk please
-          contact us directly for us to try to help you how to send you the
-          required products.
+          Currently we only ship for UK, if you are outside the UK please
+          contact us directly and check with us for any other available shops.
         </Text>
       </section>
+
+      {!isLoggedIn && (
+        <section className="space-y-4 pt-4 border-t border-border">
+          <Text variant="sectionHeading" className="text-xl">
+            Save Details for Next Time?
+          </Text>
+          <div className="space-y-1 max-w-sm">
+            <Input
+              type="password"
+              placeholder="Create a password (Optional)"
+              {...register('password')}
+            />
+            <Text variant="muted" className="text-xs">
+              Enter a password to securely save your information for a faster
+              checkout next time.
+            </Text>
+          </div>
+        </section>
+      )}
 
       <Button
         type="submit"
@@ -241,7 +306,7 @@ export default function InformationForm({
         className="w-full sm:w-auto"
         loading={isValidating}
       >
-        Continue to Shipping
+        Continue to Payment
       </Button>
     </form>
   )

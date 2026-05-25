@@ -17,9 +17,9 @@ import {
   CurrencyCode,
 } from '@lib/types/types'
 import { toast } from 'sonner'
-import { Undo2 } from 'lucide-react'
 import { trackEvent } from '@lib/analytics/trackEvents'
 import FavouriteButton from '../../common/FavouriteButton/FavouriteButton'
+import { subscribeToNewsletter } from 'actions/newsletter.actions'
 
 interface ProductSidebarProps {
   product: ProductWithVariantsCategories
@@ -35,11 +35,11 @@ const ProductSidebar = ({
   setVariant,
 }: ProductSidebarProps) => {
   const { addItem, data: cartData } = useCart()
-  const existingInCart = cartData.lineItems.find(
+  const existingInCart = cartData.lineItems?.find(
     (i) => i.variantId === variant.id,
   )
   const inCartQuantity = existingInCart?.quantity || 0
-  const remainingStock = variant.stock - inCartQuantity
+  const remainingStock = Math.max(0, variant.stock - inCartQuantity)
 
   const [loading, setLoading] = useState(false)
   const [quantity, setQuantity] = useState(1)
@@ -58,7 +58,7 @@ const ProductSidebar = ({
     if (remainingStock <= 0) return
     setLoading(true)
     try {
-      addItem(
+      await addItem(
         {
           ...product,
           variants: [
@@ -97,35 +97,33 @@ const ProductSidebar = ({
   return (
     <div className={cn(className, 'space-y-4')}>
       <section>
-        <div className="flex justify-between items-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-secondary">
-            {product.name}
-          </h2>
-          <div className="flex items-center gap-2">
-            <Link href={`/shop/`}>
-              <Button variant="naked" color="primary">
-                <Undo2 size={24} />
-              </Button>
-            </Link>
+        <div className="flex justify-between items-start gap-4">
+          <div className="flex-1">
+            <h2 className="text-3xl sm:text-4xl font-bold text-secondary tracking-tighter mb-2">
+              {product.name}
+            </h2>
+            <div className="flex flex-wrap gap-2 items-center">
+              {product.categories.map((category: Category) => (
+                <Text key={category.id} variant="subHeading">
+                  {category.name}
+                </Text>
+              ))}
+              {variant.stock > 0 && variant.stock < 3 && (
+                <div className="text-red font-bold animate-pulse text-sm">
+                  • Only {variant.stock} left!
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2 items-center">
+            <FavouriteButton productId={product.id} color="primary" />
             <ShareButton
               title={product.name}
               text={product.description || ''}
               url={`${process.env.NEXT_PUBLIC_APP_URL}/shop/${product.slug}`}
             />
-            <FavouriteButton productId={product.id} />
           </div>
-        </div>
-        <div className="flex flex-wrap gap-2 items-center">
-          {product.categories.map((category: Category) => (
-            <Text key={category.id} variant="subHeading">
-              {category.name}
-            </Text>
-          ))}
-          {variant.stock > 0 && variant.stock < 3 && (
-            <div className="text-red font-bold animate-pulse text-sm">
-              • Only {variant.stock} left!
-            </div>
-          )}
         </div>
       </section>
 
@@ -170,23 +168,23 @@ const ProductSidebar = ({
             </Link>
           </div>
         ) : (
-          <div>
-            <div className="flex flex-row gap-4 items-center border border-border">
-              <div className="flex h-16 flex-1 text-2xl font-semibold items-center">
+          <div className="fixed bottom-0 left-0 w-full p-4 bg-background border-t border-border z-[100] lg:relative lg:border-none lg:p-0 lg:bg-transparent shadow-[0_-4px_10px_rgba(0,0,0,0.05)] lg:shadow-none pb-8 lg:pb-0">
+            <div className="flex flex-row gap-4 items-center lg:border lg:border-border max-w-5xl mx-auto">
+              <div className="flex h-12 lg:h-16 flex-1 text-xl lg:text-2xl font-semibold items-center border border-border lg:border-none justify-between lg:justify-start rounded-lg lg:rounded-none overflow-hidden">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   disabled={quantity <= 1 || remainingStock <= 0}
-                  className="flex px-4 h-full  hover:bg-accent-1 transition items-center disabled:opacity-30"
+                  className="flex px-4 h-full hover:bg-accent-1 transition items-center disabled:opacity-30"
                 >
                   -
                 </button>
-                <span className="px-6">{quantity}</span>
+                <span className="px-4 lg:px-6">{quantity}</span>
                 <button
                   onClick={() =>
                     setQuantity(Math.min(remainingStock, quantity + 1))
                   }
                   disabled={quantity >= remainingStock || remainingStock <= 0}
-                  className="flex px-4 h-full  hover:bg-accent-1 transition items-center disabled:opacity-30"
+                  className="flex px-4 h-full hover:bg-accent-1 transition items-center disabled:opacity-30"
                 >
                   +
                 </button>
@@ -194,7 +192,7 @@ const ProductSidebar = ({
               <Button
                 aria-label="Add to Cart"
                 type="button"
-                className={s.button}
+                className="flex-[2] lg:flex-none h-12 lg:h-16 text-lg rounded-lg lg:rounded-none !m-0"
                 onClick={addToCart}
                 loading={loading}
                 disabled={!variant.availableForSale || remainingStock <= 0}
@@ -207,14 +205,20 @@ const ProductSidebar = ({
               </Button>
             </div>
             {inCartQuantity > 0 && (
-              <Text variant="muted" className="mt-2 text-sm">
+              <Text
+                variant="muted"
+                className="mt-2 text-xs lg:text-sm text-center lg:text-left"
+              >
                 You have {inCartQuantity} of this item in your cart.{' '}
                 {remainingStock > 0
                   ? `You can add ${remainingStock} more.`
                   : 'You have reached the stock limit.'}
               </Text>
             )}
-            <Text variant="muted" className="mt-2">
+            <Text
+              variant="muted"
+              className="mt-2 text-xs lg:text-sm text-center lg:text-left hidden lg:block"
+            >
               VAT included for UK orders. Duties and import taxes are calculated
               at checkout for other customers Shipping calculated at checkout.
             </Text>
@@ -275,16 +279,45 @@ const ProductSidebar = ({
               get first notice of new collections and small-batch restocks.
             </Text>
             <div className="pt-2">
-              <div className="flex flex-col sm:flex-row gap-2">
+              <form
+                className="flex flex-col sm:flex-row gap-2"
+                onSubmit={async (e) => {
+                  e.preventDefault()
+                  const form = e.currentTarget
+                  const input = form.elements.namedItem(
+                    'newsletter-email',
+                  ) as HTMLInputElement
+                  if (!input?.value) return
+                  try {
+                    const result = await subscribeToNewsletter({
+                      email: input.value,
+                    })
+                    if (result.success) {
+                      toast.success('Subscribed successfully!')
+                      input.value = ''
+                    } else {
+                      toast.error(result.message)
+                    }
+                  } catch {
+                    toast.error('Failed to subscribe. Please try again.')
+                  }
+                }}
+              >
                 <input
+                  name="newsletter-email"
                   type="email"
                   placeholder="Your email address"
+                  required
                   className="flex-1 px-4 py-2 bg-accent-1 border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-secondary text-sm"
                 />
-                <Button variant="slim" className="whitespace-nowrap">
+                <Button
+                  type="submit"
+                  variant="slim"
+                  className="whitespace-nowrap"
+                >
                   Sign Up
                 </Button>
-              </div>
+              </form>
             </div>
           </div>
         </Collapse>

@@ -15,7 +15,7 @@ const HomeHero = () => {
       </div>
 
       {/* Center Image (Pottery Hands) */}
-      <div className={s.centerImage}>
+      <Link href="/about" className={s.centerImage}>
         <div className={s.imageWrapper}>
           <Image
             src="/Homepage 2.jpg"
@@ -25,10 +25,10 @@ const HomeHero = () => {
             priority
           />
         </div>
-      </div>
+      </Link>
 
       {/* Right Image (Artist) */}
-      <div className={s.rightImage}>
+      <Link href="/about" className={s.rightImage}>
         <div className={s.imageWrapper}>
           <Image
             src="/Homepage 1.jpg"
@@ -38,7 +38,7 @@ const HomeHero = () => {
             priority
           />
         </div>
-      </div>
+      </Link>
     </section>
   )
 }

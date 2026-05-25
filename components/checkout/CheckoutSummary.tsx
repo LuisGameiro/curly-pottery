@@ -11,11 +11,17 @@ export function CheckoutSummary() {
   const order = watch()
 
   useEffect(() => {
-    const total =
-      (order.subtotalPrice || 0) +
-      (order.shippingPrice || 0) +
-      (order.taxes || 0)
-    setValue('totalPrice', total.toFixed(2))
+    const subtotal = order.subtotalPrice || 0
+    const shipping = order.shippingPrice || 0
+
+    const calculatedVat = subtotal - subtotal / 1.2
+
+    if (Math.abs((order.taxes || 0) - calculatedVat) > 0.01) {
+      setValue('taxes', calculatedVat)
+    }
+
+    const total = Number((subtotal + shipping).toFixed(2))
+    setValue('totalPrice', total)
   }, [order.subtotalPrice, order.shippingPrice, order.taxes, setValue])
 
   const currencySymbol =
@@ -50,8 +56,8 @@ export function CheckoutSummary() {
           </Text>
         </div>
         <div className="flex justify-between">
-          <Text>Taxes</Text>
-          <Text className="text-green">
+          <Text>VAT (included)</Text>
+          <Text className="text-muted">
             {order?.taxes === 0
               ? 'Included'
               : `${currencySymbol}${order?.taxes.toFixed(2)}`}
@@ -59,10 +65,10 @@ export function CheckoutSummary() {
         </div>
         <div className="flex justify-between">
           <Text>Shipping</Text>
-          <Text className="text-green">
+          <Text className={order?.shippingPrice === 0 ? 'text-green' : ''}>
             {order?.shippingPrice === 0
               ? 'FREE'
-              : `${currencySymbol}${order?.shippingPrice.toFixed(2)}`}
+              : `${currencySymbol}${(order?.shippingPrice || 0).toFixed(2)}`}
           </Text>
         </div>
       </div>

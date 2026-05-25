@@ -8,8 +8,10 @@ import { Order, UserWithOrders } from '@lib/types/types'
 
 export default function CustomerTable({
   customers,
+  isLoading,
 }: {
   customers: UserWithOrders[]
+  isLoading?: boolean
 }) {
   const customerColumns = [
     {
@@ -70,5 +72,11 @@ export default function CustomerTable({
     },
   ]
 
-  return <DataTable data={customers} columns={customerColumns} />
+  return (
+    <DataTable
+      data={customers}
+      columns={customerColumns}
+      isLoading={isLoading}
+    />
+  )
 }

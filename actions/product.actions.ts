@@ -6,36 +6,44 @@ import {
   ActionResponse,
   ProductWithVariantsCategories,
   Category,
-  Variant,
 } from '@lib/types/types'
 import { prisma } from 'prisma/prisma'
 import { deleteBlob } from './serverImages.action'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@lib/auth/authOptions'
 import { revalidatePath } from 'next/cache'
+import {
+  PaginationInput,
+  PaginatedResult,
+  ADMIN_PAGE_SIZE,
+  SHOP_PAGE_SIZE,
+  SEARCH_PAGE_SIZE,
+  encodeCursor,
+  decodeCursor,
+} from '@lib/pagination'
 
-const pickRandomItems = <T>(items: T[], limit: number) => {
-  const sanitizedLimit = Math.max(0, Math.floor(limit))
+import { Prisma } from 'prisma/generated/prisma/client'
 
-  if (sanitizedLimit >= items.length) {
-    return [...items]
-  }
+const formatVariant = (
+  v: Prisma.ProductVariantGetPayload<{
+    include: { optionValues: { include: { option: true } } }
+  }>,
+) => ({
+  ...v,
+  price: Number(v.price),
+})
 
-  const shuffledItems = [...items]
-
-  for (
-    let currentIndex = shuffledItems.length - 1;
-    currentIndex > 0;
-    currentIndex -= 1
-  ) {
-    const randomIndex = Math.floor(Math.random() * (currentIndex + 1))
-    const currentItem = shuffledItems[currentIndex]
-    shuffledItems[currentIndex] = shuffledItems[randomIndex]
-    shuffledItems[randomIndex] = currentItem
-  }
-
-  return shuffledItems.slice(0, sanitizedLimit)
-}
+const formatProduct = (
+  product: Prisma.ProductGetPayload<{
+    include: {
+      variants: { include: { optionValues: { include: { option: true } } } }
+      categories: true
+    }
+  }>,
+) => ({
+  ...product,
+  variants: product.variants.map(formatVariant),
+})
 
 export async function getProductBySlug(
   slug: string | null,
@@ -58,19 +66,22 @@ export async function getProductBySlug(
       },
     })
     if (product) {
-      product.variants = product.variants.map((v) => ({
-        ...v,
-        price: Number(v.price),
-      })) as unknown as Variant[]
+      return {
+        success: true,
+        message: 'Fetched product successfully',
+        data: formatProduct(
+          product,
+        ) as unknown as ProductWithVariantsCategories,
+      }
     }
 
     return {
       success: true,
-      message: 'Fecthed product successfully',
-      data: product as unknown as ProductWithVariantsCategories,
+      message: 'Fetched product successfully',
+      data: null,
     }
   } catch (error) {
-    console.error('getProductBySlugd_ERROR:', error)
+    console.error('getProductBySlug_ERROR:', error)
     return {
       success: false,
       message:
@@ -101,16 +112,19 @@ export async function getProductById(
     })
 
     if (product) {
-      product.variants = product.variants.map((v) => ({
-        ...v,
-        price: Number(v.price),
-      })) as unknown as Variant[]
+      return {
+        success: true,
+        message: 'Fetched product successfully',
+        data: formatProduct(
+          product,
+        ) as unknown as ProductWithVariantsCategories,
+      }
     }
 
     return {
       success: true,
-      message: 'Fecthed product successfully',
-      data: product as unknown as ProductWithVariantsCategories,
+      message: 'Fetched product successfully',
+      data: null,
     }
   } catch (error) {
     console.error('getProductById_ERROR:', error)
@@ -210,32 +224,58 @@ export async function toggleVisibility({
     }
   }
 }
-export async function getAllProducts(): Promise<
-  ActionResponse<ProductWithVariantsCategories[] | null>
+export async function getAllProducts(
+  pagination?: PaginationInput,
+): Promise<
+  ActionResponse<PaginatedResult<ProductWithVariantsCategories> | null>
 > {
   try {
-    const products = await prisma.product.findMany({
-      include: {
-        variants: { include: { optionValues: { include: { option: true } } } },
-        categories: true,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    })
+    const take = pagination?.take ?? ADMIN_PAGE_SIZE
+    const search = pagination?.search?.trim()
 
-    const formattedProducts = products.map((product) => ({
-      ...product,
-      variants: product.variants.map((v) => ({
-        ...v,
-        price: Number(v.price),
-      })),
-    }))
+    const where: Prisma.ProductWhereInput = {}
+
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        {
+          variants: {
+            some: { sku: { contains: search, mode: 'insensitive' } },
+          },
+        },
+      ]
+    }
+
+    const cursor = pagination?.cursor
+      ? decodeCursor(pagination.cursor)
+      : undefined
+
+    const [products, total] = await Promise.all([
+      prisma.product.findMany({
+        where,
+        include: {
+          variants: {
+            include: { optionValues: { include: { option: true } } },
+          },
+          categories: true,
+        },
+        orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
+        ...(cursor ? { cursor: { id: cursor.id }, skip: 1 } : {}),
+        take: take + 1,
+      }),
+      prisma.product.count({ where }),
+    ])
+
+    const hasMore = products.length > take
+    const items = products
+      .slice(0, take)
+      .map(formatProduct) as unknown as ProductWithVariantsCategories[]
+    const nextCursor = hasMore ? encodeCursor(items[items.length - 1].id) : null
 
     return {
       success: true,
-      message: 'Fecthed products successfully',
-      data: formattedProducts as unknown as ProductWithVariantsCategories[],
+      message: 'Fetched products successfully',
+      data: { items, nextCursor, hasMore, total },
     }
   } catch (error) {
     console.error('getAllProducts_ERROR:', error)
@@ -251,23 +291,31 @@ export async function getRandomProducts(
   limit = 3,
 ): Promise<ActionResponse<ProductWithVariantsCategories[] | null>> {
   try {
+    const raw = await prisma.$queryRaw<Array<{ id: string }>>`
+      SELECT id FROM "Product"
+      WHERE hide = false
+        AND EXISTS (SELECT 1 FROM "ProductVariant" WHERE "productId" = "Product".id AND stock > 0)
+      ORDER BY RANDOM()
+      LIMIT ${limit}
+    `
+
+    if (raw.length === 0) {
+      return {
+        success: true,
+        message: 'No products found',
+        data: [],
+      }
+    }
+
     const products = await prisma.product.findMany({
-      where: { variants: { some: { stock: { gt: 0 } } }, hide: false },
+      where: { id: { in: raw.map((r) => r.id) } },
       include: {
         variants: { include: { optionValues: { include: { option: true } } } },
         categories: true,
       },
     })
 
-    const randomProducts = pickRandomItems(products, limit)
-
-    const formattedProducts = randomProducts.map((product) => ({
-      ...product,
-      variants: product.variants.map((v) => ({
-        ...v,
-        price: Number(v.price),
-      })),
-    }))
+    const formattedProducts = products.map(formatProduct)
 
     return {
       success: true,
@@ -339,13 +387,7 @@ export async function getRelatedProducts({
       skip,
     })
 
-    const formattedProducts = relatedProducts.map((product) => ({
-      ...product,
-      variants: product.variants.map((v) => ({
-        ...v,
-        price: Number(v.price),
-      })),
-    }))
+    const formattedProducts = relatedProducts.map(formatProduct)
 
     return {
       success: true,
@@ -365,63 +407,52 @@ export async function getRelatedProducts({
 
 export async function getProductsByCategorySlug(
   category: string | null,
-): Promise<ActionResponse<ProductWithVariantsCategories[] | null>> {
+  pagination?: PaginationInput,
+): Promise<
+  ActionResponse<PaginatedResult<ProductWithVariantsCategories> | null>
+> {
   try {
-    if (!category) {
-      const products = await prisma.product.findMany({
-        where: {
-          hide: false,
-        },
+    const take = pagination?.take ?? SHOP_PAGE_SIZE
+
+    const where: Prisma.ProductWhereInput = { hide: false }
+
+    if (category) {
+      where.categories = { some: { slug: category } }
+    }
+
+    const cursor = pagination?.cursor
+      ? decodeCursor(pagination.cursor)
+      : undefined
+
+    const [products, total] = await Promise.all([
+      prisma.product.findMany({
+        where,
         include: {
           variants: {
             include: { optionValues: { include: { option: true } } },
           },
           categories: true,
         },
-      })
-      const formattedProducts = products.map((product) => ({
-        ...product,
-        variants: product.variants.map((v) => ({
-          ...v,
-          price: Number(v.price),
-        })),
-      }))
-      return {
-        success: true,
-        message: 'Category slug not provided',
-        data: formattedProducts as unknown as ProductWithVariantsCategories[],
-      }
-    }
-    const products = await prisma.product.findMany({
-      where: {
-        hide: false,
-        categories: {
-          some: {
-            slug: category,
-          },
-        },
-      },
-      include: {
-        variants: { include: { optionValues: { include: { option: true } } } },
-        categories: true,
-      },
-    })
+        orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
+        ...(cursor ? { cursor: { id: cursor.id }, skip: 1 } : {}),
+        take: take + 1,
+      }),
+      prisma.product.count({ where }),
+    ])
 
-    const formattedProducts = products.map((product) => ({
-      ...product,
-      variants: product.variants.map((v) => ({
-        ...v,
-        price: Number(v.price),
-      })),
-    }))
+    const hasMore = products.length > take
+    const items = products
+      .slice(0, take)
+      .map(formatProduct) as unknown as ProductWithVariantsCategories[]
+    const nextCursor = hasMore ? encodeCursor(items[items.length - 1].id) : null
 
     return {
       success: true,
       message: 'Fetched products successfully',
-      data: formattedProducts as unknown as ProductWithVariantsCategories[],
+      data: { items, nextCursor, hasMore, total },
     }
   } catch (error) {
-    console.error('getRelatedProducts_ERROR:', error)
+    console.error('getProductsByCategorySlug_ERROR:', error)
     return {
       success: false,
       message:
@@ -533,41 +564,55 @@ export async function upsertProduct(
 
 export async function searchProducts(
   query: string,
-): Promise<ActionResponse<ProductWithVariantsCategories[] | null>> {
+  pagination?: PaginationInput,
+): Promise<
+  ActionResponse<PaginatedResult<ProductWithVariantsCategories> | null>
+> {
   try {
-    const products = await prisma.product.findMany({
-      where: {
-        hide: false,
-        OR: [
-          { name: { contains: query, mode: 'insensitive' } },
-          {
-            categories: {
-              some: { name: { contains: query, mode: 'insensitive' } },
-            },
-          },
-        ],
-      },
-      include: {
-        variants: { include: { optionValues: { include: { option: true } } } },
-        categories: true,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    })
+    const take = pagination?.take ?? SEARCH_PAGE_SIZE
 
-    const formattedProducts = products.map((product) => ({
-      ...product,
-      variants: product.variants.map((v) => ({
-        ...v,
-        price: Number(v.price),
-      })),
-    }))
+    const where: Prisma.ProductWhereInput = {
+      hide: false,
+      OR: [
+        { name: { contains: query, mode: 'insensitive' } },
+        {
+          categories: {
+            some: { name: { contains: query, mode: 'insensitive' } },
+          },
+        },
+      ],
+    }
+
+    const cursor = pagination?.cursor
+      ? decodeCursor(pagination.cursor)
+      : undefined
+
+    const [products, total] = await Promise.all([
+      prisma.product.findMany({
+        where,
+        include: {
+          variants: {
+            include: { optionValues: { include: { option: true } } },
+          },
+          categories: true,
+        },
+        orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
+        ...(cursor ? { cursor: { id: cursor.id }, skip: 1 } : {}),
+        take: take + 1,
+      }),
+      prisma.product.count({ where }),
+    ])
+
+    const hasMore = products.length > take
+    const items = products
+      .slice(0, take)
+      .map(formatProduct) as unknown as ProductWithVariantsCategories[]
+    const nextCursor = hasMore ? encodeCursor(items[items.length - 1].id) : null
 
     return {
       success: true,
       message: 'Searched products successfully',
-      data: formattedProducts as unknown as ProductWithVariantsCategories[],
+      data: { items, nextCursor, hasMore, total },
     }
   } catch (error) {
     console.error('searchProducts_ERROR:', error)

@@ -4,8 +4,6 @@ import constructMetadata from '@components/common/SEO'
 import NewsletterClient from '@components/admin/NewsletterClient'
 import { getNewsletterAdminOverview } from 'actions/newsletter.actions'
 import { getAllProducts } from 'actions/product.actions'
-import Loading from 'app/loading'
-import { Suspense } from 'react'
 
 export const metadata = constructMetadata({
   title: 'Newsletter Admin',
@@ -16,7 +14,7 @@ export const metadata = constructMetadata({
 export default async function NewsletterPage() {
   const [newsletterResponse, productResponse] = await Promise.all([
     getNewsletterAdminOverview(),
-    getAllProducts(),
+    getAllProducts({ take: 200 }),
   ])
 
   if (!newsletterResponse.success || !newsletterResponse.data) {
@@ -28,11 +26,9 @@ export default async function NewsletterPage() {
   }
 
   return (
-    <Suspense fallback={<Loading />}>
-      <NewsletterClient
-        overview={newsletterResponse.data}
-        products={productResponse.data}
-      />
-    </Suspense>
+    <NewsletterClient
+      overview={newsletterResponse.data}
+      products={productResponse.data}
+    />
   )
 }
