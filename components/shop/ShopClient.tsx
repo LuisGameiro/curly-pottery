@@ -4,8 +4,8 @@ import { Container, Text } from '@components/ui'
 import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Category, ProductWithVariantsCategories } from '@lib/types/types'
-import { getProductsByCategorySlug } from 'actions/product.actions'
 import { ProductCard } from '@components/product'
+import { getProductsByCategorySlug as getProductsByCategorySlugAction } from 'actions/product.actions'
 import { sortProducts, SortLabels } from './sortProducts'
 import MenuProducts from './MenuProducts'
 import { SHOP_PAGE_SIZE } from '@lib/pagination'
@@ -43,7 +43,9 @@ export default function ShopClient({
     if (!nextCursor || isLoading) return
     setIsLoading(true)
     try {
-      const response = await getProductsByCategorySlug(categorySlug, {
+
+
+      const response = await getProductsByCategorySlugAction(categorySlug, {
         cursor: nextCursor,
         take: SHOP_PAGE_SIZE,
       })
@@ -78,7 +80,9 @@ export default function ShopClient({
           Welcome to My Shop
         </Text>
         <Text variant="muted" className="max-w-2xl">
-        Discover my handmade ceramic pieces made with love in North London. All have been crafted to bring warmth, charm and a little everyday joy to your home.
+          Discover my handmade ceramic pieces made with love in North London.
+          All have been crafted to bring warmth, charm and a little everyday joy
+          to your home.
         </Text>
       </div>
 

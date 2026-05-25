@@ -1,6 +1,6 @@
 import { getAllCategories } from 'actions/category.actions'
-import { getProductsByCategorySlug } from 'actions/product.actions'
 import ShopClient from '../../components/shop/ShopClient'
+import { getProductsByCategorySlug as getProductsByCategorySlugAction } from 'actions/product.actions'
 import constructMetadata from '@components/common/SEO'
 import { SHOP_PAGE_SIZE } from '@lib/pagination'
 
@@ -21,7 +21,7 @@ export default async function ShopPage({
   const categorySlug = category || null
   const [categories, productsResponse] = await Promise.all([
     getAllCategories(),
-    getProductsByCategorySlug(categorySlug, { cursor, take: SHOP_PAGE_SIZE }),
+    getProductsByCategorySlugAction(categorySlug, { cursor, take: SHOP_PAGE_SIZE }),
   ])
 
   if (!categories.success) throw new Error(categories.message)

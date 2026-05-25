@@ -37,7 +37,7 @@ const NewsletterBanner = () => {
             Be the first to know
           </span>
           <span className="text-xs">
-Enter your email and I&apos;ll let you know when they drop.
+I am working on new pieces. Enter your email and I&apos;ll let you know when they drop.
           </span>
         </div>
 
