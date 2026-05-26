@@ -305,7 +305,7 @@ export async function createOrder(
           phone,
           discounts: discounts || [],
           currency: finalCurrency,
-          shippingAddress: (address || {}) as unknown as Prisma.InputJsonValue,
+          shippingAddress: address || {},
           billingAddress: address || {},
           status: 'PENDING',
           taxes: new Prisma.Decimal(finalTaxes),

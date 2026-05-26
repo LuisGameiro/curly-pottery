@@ -32,7 +32,7 @@ describe('getAllOrders', () => {
     jest.clearAllMocks()
     mockGetServerSession.mockResolvedValue({
       user: { id: 'admin-1', role: 'ADMIN' },
-    } as never)
+    })
   })
 
   it('should fetch all orders successfully', async () => {
@@ -98,7 +98,7 @@ describe('getAllOrders', () => {
   it('should reject non-admin users', async () => {
     mockGetServerSession.mockResolvedValue({
       user: { id: 'user-1', role: 'USER' },
-    } as never)
+    })
 
     const result = await getAllOrders()
 
@@ -115,7 +115,7 @@ describe('getOrdersById', () => {
     jest.clearAllMocks()
     mockGetServerSession.mockResolvedValue({
       user: { id: 'user1', role: 'USER' },
-    } as never)
+    })
   })
 
   it('should fetch orders by user id successfully', async () => {
@@ -199,7 +199,7 @@ describe('getOrderById', () => {
     jest.clearAllMocks()
     mockGetServerSession.mockResolvedValue({
       user: { id: 'user1', role: 'USER' },
-    } as never)
+    })
   })
 
   it('should fetch order by id successfully', async () => {
@@ -260,7 +260,7 @@ describe('getOrderById', () => {
   it('should allow admin to fetch any order by id', async () => {
     mockGetServerSession.mockResolvedValue({
       user: { id: 'admin-1', role: 'ADMIN' },
-    } as never)
+    })
     ;(prisma.order.findFirst as jest.Mock).mockResolvedValue({
       id: 'order-1',
       userId: 'user2',
@@ -280,8 +280,8 @@ describe('createOrder', () => {
     jest.clearAllMocks()
     mockGetServerSession.mockResolvedValue({
       user: { id: 'user1', role: 'USER', email: 'john@example.com' },
-    } as never)
-    global.fetch = jest.fn().mockImplementation((url) => {
+    })
+    globalThis.fetch = jest.fn().mockImplementation((url) => {
       const checkoutId = url.split('/').pop()
       let amount = 120
       if (checkoutId === 'checkoutId123') amount = 120
@@ -347,7 +347,7 @@ describe('createOrder', () => {
   })
 
   it('should create order without userId', async () => {
-    mockGetServerSession.mockResolvedValue(null as never)
+    mockGetServerSession.mockResolvedValue(null)
 
     const mockOrder = {
       id: '2',
@@ -559,7 +559,7 @@ describe('updateOrderStatus', () => {
     jest.clearAllMocks()
     mockGetServerSession.mockResolvedValue({
       user: { id: 'admin-1', role: 'ADMIN' },
-    } as never)
+    })
   })
 
   it('should update order status successfully', async () => {
@@ -623,7 +623,7 @@ describe('updateOrderStatus', () => {
   it('should reject non-admin status updates', async () => {
     mockGetServerSession.mockResolvedValue({
       user: { id: 'user-1', role: 'USER' },
-    } as never)
+    })
 
     const result = await updateOrderStatus('1', 'cancelled')
 
