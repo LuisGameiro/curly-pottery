@@ -1,6 +1,6 @@
 'use client'
 
-import { subscribeToNewsletter } from 'actions/newsletter.actions'
+import { subscribeToNewsletter } from '@actions/newsletter.actions'
 import { Button, Text } from '@components/ui'
 import { useState, useTransition } from 'react'
 import { toast } from 'sonner'

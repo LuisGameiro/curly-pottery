@@ -1,6 +1,6 @@
 'use client'
 
-import { subscribeToNewsletter } from 'actions/newsletter.actions'
+import { subscribeToNewsletter } from '@actions/newsletter.actions'
 import { useState, useTransition } from 'react'
 import { toast } from 'sonner'
 import { X } from 'lucide-react'
@@ -33,11 +33,10 @@ const NewsletterBanner = () => {
     <section className="flex flex-row bg-secondary/10 border-b border-secondary/20 px-2">
       <div className="relative w-full py-1 px-4 lg:px-8 flex flex-row items-center justify-center gap-4">
         <div className="flex flex-col lg:flex-row items-center md:gap-2">
-          <span className="font-bold text-sm">
-            Be the first to know
-          </span>
+          <span className="font-bold text-sm">Be the first to know</span>
           <span className="text-xs">
-I am working on new pieces. Enter your email and I&apos;ll let you know when they drop.
+            I am working on new pieces. Enter your email and I&apos;ll let you
+            know when they drop.
           </span>
         </div>
 
@@ -62,8 +61,6 @@ I am working on new pieces. Enter your email and I&apos;ll let you know when the
               {isPending ? 'Joining...' : 'Join'}
             </button>
           </form>
-
-
         </div>
       </div>
 
@@ -72,9 +69,11 @@ I am working on new pieces. Enter your email and I&apos;ll let you know when the
         className="md:right-1 hover:bg-secondary/10 transition-colors z-50 mb-4"
         aria-label="Close banner"
       >
-        <X size={18} className="text-secondary/60 hover:text-secondary transition-colors" />
+        <X
+          size={18}
+          className="text-secondary/60 hover:text-secondary transition-colors"
+        />
       </button>
-
     </section>
   )
 }

@@ -1,4 +1,4 @@
-import { searchProducts } from 'actions/product.actions'
+import { searchProducts } from '@actions/product.actions'
 import { ProductCard } from '@components/product'
 import { Text } from '@components/ui'
 import { SEARCH_PAGE_SIZE } from '@lib/pagination'
@@ -6,9 +6,9 @@ import Link from 'next/link'
 
 export default async function SearchPage({
   searchParams,
-}: {
+}: Readonly<{
   searchParams: Promise<{ q?: string; cursor?: string }>
-}) {
+}>) {
   const { q, cursor } = await searchParams
   const query = q || ''
 

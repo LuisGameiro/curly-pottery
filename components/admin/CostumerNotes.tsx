@@ -2,7 +2,7 @@
 
 import { Button } from '@components/ui'
 import InputTextArea from '@components/ui/Input/InputTextArea'
-import { updateNotes } from 'actions/customer.actions'
+import { updateNotes } from '@actions/customer.actions'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 

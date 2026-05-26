@@ -8,7 +8,7 @@ import { useState } from 'react'
 import DataTable from '@components/ui/Table/DataTable'
 import { useRouter } from 'next/navigation'
 import { cn } from '@lib/utils'
-import { deleteProduct, toggleVisibility } from 'actions/product.actions'
+import { deleteProduct, toggleVisibility } from '@actions/product.actions'
 import { ProductWithVariantsCategories, Variant } from '@lib/types/types'
 import VariantTable from './VariantTable'
 import { toast } from 'sonner'
@@ -16,10 +16,10 @@ import { toast } from 'sonner'
 export default function ProductTable({
   products,
   isLoading,
-}: {
+}: Readonly<{
   products: ProductWithVariantsCategories[]
   isLoading?: boolean
-}) {
+}>) {
   const [deleteLoadingId, setDeleteLoadingId] = useState<string | null>(null)
   const router = useRouter()
 
@@ -133,7 +133,7 @@ export default function ProductTable({
       },
     },
     {
-      header: 'Actions',
+      header: '@actions',
       render: (p: ProductWithVariantsCategories) => (
         <div className="flex gap-2 justify-center">
           <Link href={`/admin/products/${p.id}`}>

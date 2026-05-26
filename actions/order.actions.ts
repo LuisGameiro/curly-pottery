@@ -9,7 +9,6 @@ import {
   ActionResponse,
   CreateOrder,
   CartLineItem,
-  CurrencyCode,
 } from '@lib/types/types'
 import { revalidatePath } from 'next/cache'
 import { authOptions } from '@lib/auth/authOptions'
@@ -73,7 +72,7 @@ export async function getAllOrders(
 
     const hasMore = orders.length > take
     const items = orders.slice(0, take) as unknown as OrderWithUser[]
-    const nextCursor = hasMore ? encodeCursor(items[items.length - 1].id) : null
+    const nextCursor = hasMore ? encodeCursor(items.at(-1)!.id) : null
 
     return {
       success: true,
@@ -134,7 +133,7 @@ export async function getOrdersById(
 
     const hasMore = orders.length > take
     const items = orders.slice(0, take) as unknown as OrderWithUser[]
-    const nextCursor = hasMore ? encodeCursor(items[items.length - 1].id) : null
+    const nextCursor = hasMore ? encodeCursor(items.at(-1)!.id) : null
 
     return {
       success: true,
@@ -255,7 +254,7 @@ export async function createOrder(
         finalTotalPrice = Number(cart.totalPrice)
         finalTaxes = Number(cart.taxes)
         finalShippingPrice = Number(cart.shippingPrice)
-        finalCurrency = cart.currency as CurrencyCode
+        finalCurrency = cart.currency
       }
     }
 
@@ -299,15 +298,15 @@ export async function createOrder(
       // 1. Create the Order first to get the ID
       const newOrder = await tx.order.create({
         data: {
-          lineItems: finalLineItems as unknown as Prisma.InputJsonValue,
+          lineItems: finalLineItems,
           lastName,
           firstName,
           email: resolvedEmail,
           phone,
-          discounts: (discounts || []) as unknown as Prisma.InputJsonValue,
+          discounts: discounts || [],
           currency: finalCurrency,
           shippingAddress: (address || {}) as unknown as Prisma.InputJsonValue,
-          billingAddress: (address || {}) as unknown as Prisma.InputJsonValue,
+          billingAddress: address || {},
           status: 'PENDING',
           taxes: new Prisma.Decimal(finalTaxes),
           shippingPrice: new Prisma.Decimal(finalShippingPrice),

@@ -5,7 +5,7 @@ import { Container, Text, Button, Input } from '@components/ui'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'sonner'
-import { sendResetEmail } from 'actions/email.actions'
+import { sendResetEmail } from '@actions/email.actions'
 import zod from 'zod'
 
 export default function RecoveryForm() {

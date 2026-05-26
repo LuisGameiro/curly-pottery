@@ -68,7 +68,7 @@ export async function getAllCustomers(
 
     const hasMore = users.length > take
     const items = users.slice(0, take) as unknown as UserWithOrders[]
-    const nextCursor = hasMore ? encodeCursor(items[items.length - 1].id) : null
+    const nextCursor = hasMore ? encodeCursor(items.at(-1)!.id) : null
 
     return {
       success: true,

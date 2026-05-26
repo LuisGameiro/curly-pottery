@@ -16,8 +16,8 @@ import { CategorySchema } from '@lib/form-validator'
 import { useRouter } from 'next/navigation'
 import { Category } from '@lib/types/types'
 import { toast } from 'sonner'
-import { syncImages } from 'actions/images.actions'
-import { upsertCategory } from 'actions/category.actions'
+import { syncImages } from '@actions/images.actions'
+import { upsertCategory } from '@actions/category.actions'
 
 export default function CategoryClient({
   category,

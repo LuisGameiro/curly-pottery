@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Category, ProductWithVariantsCategories } from '@lib/types/types'
 import { ProductCard } from '@components/product'
-import { getProductsByCategorySlug as getProductsByCategorySlugAction } from 'actions/product.actions'
+import { getProductsByCategorySlug as getProductsByCategorySlugAction } from '@actions/product.actions'
 import { sortProducts, SortLabels } from './sortProducts'
 import MenuProducts from './MenuProducts'
 import { SHOP_PAGE_SIZE } from '@lib/pagination'
@@ -43,8 +43,6 @@ export default function ShopClient({
     if (!nextCursor || isLoading) return
     setIsLoading(true)
     try {
-
-
       const response = await getProductsByCategorySlugAction(categorySlug, {
         cursor: nextCursor,
         take: SHOP_PAGE_SIZE,

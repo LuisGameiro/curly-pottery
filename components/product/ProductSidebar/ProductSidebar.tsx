@@ -19,7 +19,7 @@ import {
 import { toast } from 'sonner'
 import { trackEvent } from '@lib/analytics/trackEvents'
 import FavouriteButton from '../../common/FavouriteButton/FavouriteButton'
-import { subscribeToNewsletter } from 'actions/newsletter.actions'
+import { subscribeToNewsletter } from '@actions/newsletter.actions'
 
 interface ProductSidebarProps {
   product: ProductWithVariantsCategories
@@ -58,7 +58,7 @@ const ProductSidebar = ({
     if (remainingStock <= 0) return
     setLoading(true)
     try {
-      await addItem(
+      addItem(
         {
           ...product,
           variants: [

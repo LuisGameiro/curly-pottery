@@ -2,8 +2,8 @@ export const dynamic = 'force-dynamic'
 
 import constructMetadata from '@components/common/SEO'
 import NewsletterClient from '@components/admin/NewsletterClient'
-import { getNewsletterAdminOverview } from 'actions/newsletter.actions'
-import { getAllProducts } from 'actions/product.actions'
+import { getNewsletterAdminOverview } from '@actions/newsletter.actions'
+import { getAllProducts } from '@actions/product.actions'
 
 export const metadata = constructMetadata({
   title: 'Newsletter Admin',

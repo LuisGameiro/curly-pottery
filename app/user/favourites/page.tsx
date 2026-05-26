@@ -1,14 +1,14 @@
 import constructMetadata from '@components/common/SEO/SEO'
 import { Container, Text } from '@components/ui'
 import { authOptions } from '@lib/auth/authOptions'
-import { getFavouritesWithProductsAction } from 'actions/Favourite.actions'
-import Loading from 'app/loading'
+import { getFavouritesWithProductsAction } from '@actions/Favourite.actions'
 import { Heart } from 'lucide-react'
 import { getServerSession } from 'next-auth'
 import ProductCard from '@components/product/ProductCard/ProductCard'
 import { Suspense } from 'react'
 import { FAVOURITES_PAGE_SIZE } from '@lib/pagination'
 import Link from 'next/link'
+import Loading from '../../loading'
 
 export const metadata = constructMetadata({
   title: 'Your Favourites',
@@ -18,9 +18,9 @@ export const metadata = constructMetadata({
 
 export default async function FavouritesPage({
   searchParams,
-}: {
+}: Readonly<{
   searchParams: Promise<{ cursor?: string }>
-}) {
+}>) {
   const { cursor } = await searchParams
   const session = await getServerSession(authOptions)
   const user = session?.user

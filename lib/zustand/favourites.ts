@@ -6,7 +6,7 @@ import {
   addFavouriteAction,
   removeFavouriteAction,
   getFavouritesAction,
-} from 'actions/Favourite.actions'
+} from '@actions/Favourite.actions'
 import { toast } from 'sonner'
 
 interface FavouritesStore {

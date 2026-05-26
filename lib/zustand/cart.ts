@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { getCartFromDbAction, syncCartAction } from 'actions/cart.actions'
+import { getCartFromDbAction, syncCartAction } from '@actions/cart.actions'
 import {
   CartLineItem,
   Discount,

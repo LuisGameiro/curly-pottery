@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 import { StatCard } from '@components/admin/StatCard'
 import constructMetadata from '@components/common/SEO'
 import { Container, Text } from '@components/ui'
-import { getDashboardStats } from 'actions/dashboard.actions'
+import { getDashboardStats } from '@actions/dashboard.actions'
 import Loading from 'app/loading'
 import {
   Users,

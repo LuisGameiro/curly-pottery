@@ -13,8 +13,8 @@ import { ProductInput, ProductSchema } from '@lib/form-validator'
 import GeneralInformationSection from './GeneralInformationSection'
 import { toast } from 'sonner'
 import { slugify } from '@lib/slugify'
-import { upsertProduct } from 'actions/product.actions'
-import { syncImages } from 'actions/images.actions'
+import { upsertProduct } from '@actions/product.actions'
+import { syncImages } from '@actions/images.actions'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 interface ProductFormProps {

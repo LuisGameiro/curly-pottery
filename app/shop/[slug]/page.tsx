@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import ProductView from '@components/product/ProductView/ProductView'
-import { getProductBySlug, getRelatedProducts } from 'actions/product.actions'
+import { getProductBySlug, getRelatedProducts } from '@actions/product.actions'
 import { prisma } from 'prisma/prisma'
 import constructMetadata from '@components/common/SEO/SEO'
 

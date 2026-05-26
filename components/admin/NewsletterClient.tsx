@@ -15,7 +15,7 @@ import {
   queueNewsletterCampaignAction,
   runNewsletterDispatchAction,
   syncNewsletterSubscribersAction,
-} from 'actions/newsletter.actions'
+} from '@actions/newsletter.actions'
 import {
   NewsletterAdminOverview,
   ProductWithVariantsCategories,
@@ -268,7 +268,7 @@ export default function NewsletterClient({
         formatDate(campaign.queuedAt),
     },
     {
-      header: 'Actions',
+      header: '@actions',
       render: (campaign: NewsletterAdminOverview['campaigns'][number]) => (
         <div className="flex justify-center">
           {campaign.status === 'DRAFT' ? (

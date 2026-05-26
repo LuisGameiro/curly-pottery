@@ -47,14 +47,14 @@ Server action files live in `actions/` directory and use **bare paths** (no `@` 
 
 ```typescript
 // ✅ Correct
-import { getCartFromDbAction } from 'actions/cart.actions'
-import { addFavouriteAction } from 'actions/Favourite.actions'
+import { getCartFromDbAction } from '@actions/cart.actions'
+import { addFavouriteAction } from '@actions/Favourite.actions'
 
 // ❌ Incorrect — using @ alias for actions
 import { getCartFromDbAction } from '@actions/cart.actions'
 ```
 
-**Rule:** Import from `actions/` using `'actions/Foo.actions'` — no `@actions` prefix.
+**Rule:** Import from `actions/` using `'@actions/Foo.actions'` — no `@actions` prefix.
 
 ---
 

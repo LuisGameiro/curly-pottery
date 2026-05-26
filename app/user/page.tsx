@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import ProfileForm from './profileForm'
 import { authOptions } from '@lib/auth/authOptions'
-import { getUserById } from 'actions/customer.actions'
+import { getUserById } from '@actions/customer.actions'
 import constructMetadata from '@components/common/SEO/SEO'
 
 export const metadata = constructMetadata({

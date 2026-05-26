@@ -9,10 +9,10 @@ import { Order, UserWithOrders } from '@lib/types/types'
 export default function CustomerTable({
   customers,
   isLoading,
-}: {
+}: Readonly<{
   customers: UserWithOrders[]
   isLoading?: boolean
-}) {
+}>) {
   const customerColumns = [
     {
       header: 'Customer',
@@ -60,7 +60,7 @@ export default function CustomerTable({
       },
     },
     {
-      header: 'Actions',
+      header: '@actions',
       align: 'center' as const,
       render: (user: UserWithOrders) => (
         <Link href={`/admin/customers/${user.id}`}>

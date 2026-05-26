@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import { Container, Text } from '@components/ui'
-import { getUserById } from 'actions/customer.actions'
+import { getUserById } from '@actions/customer.actions'
 import Link from 'next/link'
 import {
   ArrowLeft,

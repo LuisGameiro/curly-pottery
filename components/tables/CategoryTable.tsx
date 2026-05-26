@@ -6,7 +6,7 @@ import { Pencil, Trash2 } from 'lucide-react'
 import { Button } from '@components/ui'
 import { useState } from 'react'
 import DataTable from '@components/ui/Table/DataTable'
-import { deleteCategory } from 'actions/category.actions'
+import { deleteCategory } from '@actions/category.actions'
 import { useRouter } from 'next/navigation'
 import { Category } from '@lib/types/types'
 
@@ -64,7 +64,7 @@ export default function CategoryTable({
       render: (cat: Category) => <span>/{cat.slug}</span>,
     },
     {
-      header: 'Actions',
+      header: '@actions',
       render: (cat: Category) => (
         <div className="flex gap-2 sm:gap-4 justify-center">
           <Link href={`/admin/categories/${cat.id}`}>

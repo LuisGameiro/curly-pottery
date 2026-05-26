@@ -109,7 +109,7 @@ export async function getFavouritesWithProductsAction(
 
   const hasMore = favourites.length > take
   const items = favourites.slice(0, take).map(formatFavouriteProduct)
-  const nextCursor = hasMore ? encodeCursor(items[items.length - 1].id) : null
+  const nextCursor = hasMore ? encodeCursor(items.at(-1)!.id) : null
 
   return { items, nextCursor, hasMore, total }
 }

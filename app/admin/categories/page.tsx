@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import { Button, Container } from '@components/ui'
-import { getAllCategories } from 'actions/category.actions'
+import { getAllCategories } from '@actions/category.actions'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import { Text } from '@components/ui'

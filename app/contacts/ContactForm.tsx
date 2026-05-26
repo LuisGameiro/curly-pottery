@@ -3,7 +3,7 @@
 import { Text, Button, Input } from '@components/ui'
 import InputTextArea from '@components/ui/Input/InputTextArea'
 import { ContactFormEmail } from '@lib/emails/ContactFormEmail'
-import { sendEmail } from 'actions/email.actions'
+import { sendEmail } from '@actions/email.actions'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 

@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import InputCheckbox from '@components/ui/Input/InputCheckbox'
 import { useRouter } from 'next/navigation'
-import { registerUser } from 'actions/customer.actions'
+import { registerUser } from '@actions/customer.actions'
 export default function RegisterForm() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)

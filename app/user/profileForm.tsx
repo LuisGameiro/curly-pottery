@@ -6,9 +6,11 @@ import { Container, Text, Button, Input } from '@components/ui'
 import { Mail, MapPin, Phone, Plus, Trash2, UserIcon } from 'lucide-react'
 import { Address, UserWithOrdersAddress } from '@lib/types/types'
 import { toast } from 'sonner'
-import { updateUser } from 'actions/customer.actions'
+import { updateUser } from '@actions/customer.actions'
 
-export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
+export default function ProfileForm({
+  user,
+}: Readonly<{ user: UserWithOrdersAddress }>) {
   const [isEditing, setIsEditing] = useState(false)
 
   const { register, control, handleSubmit, reset, watch } =
@@ -79,7 +81,7 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
-          <label className="text-sm font-semibold">Email</label>
+          <div className="text-sm font-semibold mb-1">Email</div>
           <div className="flex items-center mt-1 text-muted">
             <Mail size={18} className="mr-2" />
             <span>{user?.email}</span>
@@ -87,7 +89,7 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
         </div>
 
         <div>
-          <label className="text-sm font-semibold">Full Name</label>
+          <div className="text-sm font-semibold mb-1">Full Name</div>
           {isEditing ? (
             <div className="gap-2 grid grid-cols-2 py-2">
               <Input
@@ -108,7 +110,7 @@ export default function ProfileForm({ user }: { user: UserWithOrdersAddress }) {
         </div>
 
         <div>
-          <label className="text-sm font-semibold">Phone</label>
+          <div className="text-sm font-semibold mb-1">Phone</div>
           {isEditing ? (
             <div className="py-2">
               <Input {...register('phone')} placeholder="Phone Number" />

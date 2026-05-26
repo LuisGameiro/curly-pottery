@@ -270,7 +270,7 @@ export async function getAllProducts(
     const items = products
       .slice(0, take)
       .map(formatProduct) as unknown as ProductWithVariantsCategories[]
-    const nextCursor = hasMore ? encodeCursor(items[items.length - 1].id) : null
+    const nextCursor = hasMore ? encodeCursor(items.at(-1)!.id) : null
 
     return {
       success: true,
@@ -444,7 +444,7 @@ export async function getProductsByCategorySlug(
     const items = products
       .slice(0, take)
       .map(formatProduct) as unknown as ProductWithVariantsCategories[]
-    const nextCursor = hasMore ? encodeCursor(items[items.length - 1].id) : null
+    const nextCursor = hasMore ? encodeCursor(items.at(-1)!.id) : null
 
     return {
       success: true,
@@ -607,7 +607,7 @@ export async function searchProducts(
     const items = products
       .slice(0, take)
       .map(formatProduct) as unknown as ProductWithVariantsCategories[]
-    const nextCursor = hasMore ? encodeCursor(items[items.length - 1].id) : null
+    const nextCursor = hasMore ? encodeCursor(items.at(-1)!.id) : null
 
     return {
       success: true,

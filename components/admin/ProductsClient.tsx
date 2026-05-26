@@ -7,16 +7,16 @@ import { ProductWithVariantsCategories } from '@lib/types/types'
 import InputSearch from '@components/ui/Input/InputSearch'
 import ProductTable from '@components/tables/ProductTable'
 import { Plus } from 'lucide-react'
-import { getAllProducts } from 'actions/product.actions'
+import { getAllProducts } from '@actions/product.actions'
 import { PaginatedResult, ADMIN_PAGE_SIZE } from '@lib/pagination'
 
 export default function ProductsClient({
   initialData,
   initialSearch,
-}: {
+}: Readonly<{
   initialData: PaginatedResult<ProductWithVariantsCategories>
   initialSearch: string
-}) {
+}>) {
   const [items, setItems] = useState(initialData.items)
   const [nextCursor, setNextCursor] = useState<string | null>(
     initialData.nextCursor,

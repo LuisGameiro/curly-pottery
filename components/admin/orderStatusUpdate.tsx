@@ -5,7 +5,7 @@ import { BellIcon, Loader2 } from 'lucide-react'
 import { Text, Container } from '@components/ui'
 import { cn } from '@lib/utils'
 import { OrderStatus } from '@lib/types/types'
-import { updateOrderStatus } from 'actions/order.actions'
+import { updateOrderStatus } from '@actions/order.actions'
 
 interface OrderStatusProps {
   orderId: string

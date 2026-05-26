@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { getAllProducts } from 'actions/product.actions'
+import { getAllProducts } from '@actions/product.actions'
 import { resolveSiteUrl } from '@lib/site-url'
 
 const staticRoutes: Array<{

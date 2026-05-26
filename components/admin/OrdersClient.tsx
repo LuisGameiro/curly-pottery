@@ -5,17 +5,17 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import InputSearch from '@components/ui/Input/InputSearch'
 import OrderTable from '@components/tables/OrderTable'
 import { OrderWithUser } from '@lib/types/types'
-import { getAllOrders } from 'actions/order.actions'
+import { getAllOrders } from '@actions/order.actions'
 import { PaginatedResult, ADMIN_PAGE_SIZE } from '@lib/pagination'
 import { CheckCircle2, AlertCircle } from 'lucide-react'
 
 export default function OrdersClient({
   initialData,
   initialSearch,
-}: {
+}: Readonly<{
   initialData: PaginatedResult<OrderWithUser>
   initialSearch: string
-}) {
+}>) {
   const [items, setItems] = useState(initialData.items)
   const [nextCursor, setNextCursor] = useState<string | null>(
     initialData.nextCursor,

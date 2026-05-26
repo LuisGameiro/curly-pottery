@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { Container, Text, Button, Input } from '@components/ui'
 import { CheckCircle2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { resetPassword } from 'actions/email.actions'
+import { resetPassword } from '@actions/email.actions'
 
 export default function ResetPasswordPage() {
   const [loading, setLoading] = useState(false)

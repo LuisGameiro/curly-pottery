@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 
-import { getAllCustomers } from 'actions/customer.actions'
+import { getAllCustomers } from '@actions/customer.actions'
 import CustomersClient from '../../../components/admin/CustomersClient'
 import { ADMIN_PAGE_SIZE } from '@lib/pagination'
 

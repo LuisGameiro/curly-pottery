@@ -27,7 +27,8 @@
       "@config/*": ["config/*"],
       "@assets/*": ["assets/*"],
       "@public/*": ["public/*"],
-      "@components/*": ["components/*"]
+      "@components/*": ["components/*"],
+      "@actions/*": ["actions/*"]
     }
   },
   "include": [

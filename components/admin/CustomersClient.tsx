@@ -5,16 +5,16 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import InputSearch from '@components/ui/Input/InputSearch'
 import CustomerTable from '@components/tables/CustomerTable'
 import { UserWithOrders } from '@lib/types/types'
-import { getAllCustomers } from 'actions/customer.actions'
+import { getAllCustomers } from '@actions/customer.actions'
 import { PaginatedResult, ADMIN_PAGE_SIZE } from '@lib/pagination'
 
 export default function CustomersClient({
   initialData,
   initialSearch,
-}: {
+}: Readonly<{
   initialData: PaginatedResult<UserWithOrders>
   initialSearch: string
-}) {
+}>) {
   const [items, setItems] = useState(initialData.items)
   const [nextCursor, setNextCursor] = useState<string | null>(
     initialData.nextCursor,

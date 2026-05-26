@@ -50,7 +50,7 @@ jest.mock('@components/tables/CustomerTable', () => {
   }
 })
 
-jest.mock('actions/customer.actions', () => ({
+jest.mock('@actions/customer.actions', () => ({
   getAllCustomers: jest.fn(),
 }))
 
