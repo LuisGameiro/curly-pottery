@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import s from './Navbar.module.css'
+// Removed CSS module import
 import NavbarRoot from './NavbarRoot'
 import { Logo } from '@components/ui'
 import UserNav from '../UserNav'
@@ -19,22 +19,36 @@ const Navbar = () => {
   return (
     <NavbarRoot>
       <div className="flex flex-col w-full ">
-        <div className={s.nav}>
+        <div className="relative flex flex-row items-center justify-between py-4 p-0 md:px-6 w-full h-20">
           <div className="flex items-center">
-            <Link href="/" className={s.logo} aria-label="Curly Pottery home">
+            <Link
+              href="/"
+              className="flex items-center flex-row cursor-pointer transform duration-100 ease-in-out"
+              aria-label="Curly Pottery home"
+            >
               <Logo width={120} height={40} />
             </Link>
 
-            <nav className={s.navMenu}>
+            <nav
+              className="hidden ml-10 space-x-8 sm:flex items-center"
+              aria-label="Main navigation"
+            >
               {navBarLinks.map((link) => (
-                <Link key={link.href} href={link.href} className={s.link}>
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="inline-flex items-center leading-6 text-xl font-semibold transition ease-in-out duration-75 cursor-pointer text-on-primary hover:text-on-primary/60 focus:outline-none focus:text-on-primary/60"
+                >
                   {link.label}
                 </Link>
               ))}
               {isAdmin && (
                 <Link
                   href="/admin"
-                  className={cn(s.link, 'hidden lg:inline-flex')}
+                  className={cn(
+                    'inline-flex items-center leading-6 text-xl font-semibold transition ease-in-out duration-75 cursor-pointer text-on-primary hover:text-on-primary/60 focus:outline-none focus:text-on-primary/60',
+                    'hidden lg:inline-flex',
+                  )}
                 >
                   Admin
                 </Link>

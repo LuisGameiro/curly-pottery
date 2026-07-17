@@ -14,12 +14,12 @@ import {
 import { emailStyles } from './emailStyles'
 
 interface ResetPasswordEmailProps {
-  userFirstname?: string
+  userFirstName?: string
   resetPasswordLink?: string
 }
 
 export const ResetPasswordEmail = ({
-  userFirstname = 'Customer',
+  userFirstName = 'Customer',
   resetPasswordLink = 'https://yourstore.com/auth/reset-password?token=123',
 }: ResetPasswordEmailProps) => {
   const { main, container, h1, text, section, hr, footer, button, link } =
@@ -38,11 +38,11 @@ export const ResetPasswordEmail = ({
               <strong>Curly Pottery</strong>
             </Text>
           </Section>
-          <Text style={text}>Hello {userFirstname},</Text>
+          <Text style={text}>Hello {userFirstName},</Text>
           <Text style={text}>
             Someone requested a password reset for your account. If this was
-            you, click the button below to set a new password. **This link will
-            expire in 1 hour.**
+            you, click the button below to set a new password. This link will
+            expire in 1 hour.
           </Text>
           <Section style={section}>
             <Button style={button} href={resetPasswordLink}>

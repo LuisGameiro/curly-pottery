@@ -2,7 +2,7 @@
 
 import { useState, useEffect, ReactNode, useRef } from 'react'
 import throttle from 'lodash.throttle'
-import s from './Navbar.module.css'
+// Removed CSS module import
 import { cn } from '@lib/utils'
 
 const NavbarRoot = ({ children }: { children?: ReactNode }) => {
@@ -35,11 +35,9 @@ const NavbarRoot = ({ children }: { children?: ReactNode }) => {
   return (
     <div
       className={cn(
-        s.root,
+        'sticky top-0 bg-primary z-40 transition-all duration-150 min-h-[34px] h-20',
         { 'shadow-magical': hasScrolled },
-        { [s.hidden]: hidden },
-
-        'h-20',
+        { 'transform -translate-y-full': hidden },
       )}
     >
       {children}

@@ -1,3 +1,5 @@
+'use client'
+
 import { cn } from '@lib/utils'
 import s from './Input.module.css'
 import React, { InputHTMLAttributes, useId } from 'react'

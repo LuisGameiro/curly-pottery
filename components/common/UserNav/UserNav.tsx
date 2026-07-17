@@ -1,6 +1,6 @@
 'use client'
 
-import s from './UserNav.module.css'
+// Removed CSS module import
 import { Button, Dropdown, DropdownTrigger } from '@components/ui'
 import { cn } from '@lib/utils'
 import useCart from '@lib/hooks/useCart'
@@ -23,9 +23,9 @@ export default function UserNav({ className }: UserNavProps) {
     data?.lineItems.reduce((sum, item) => sum + item.quantity, 0) ?? 0
 
   return (
-    <nav className={cn(s.root, className)}>
-      <ul className={s.list}>
-        <li className="flex-row md:flex items-center gap-6 md:block hidden">
+    <nav className={cn('relative flex items-center', className)}>
+      <ul className="flex flex-row items-center justify-items-end h-full">
+        <li className="ml-0 flex items-center relative flex-row items-center gap-6 md:block hidden">
           <Button
             variant="naked"
             type="button"
@@ -44,7 +44,7 @@ export default function UserNav({ className }: UserNavProps) {
             />
           </Button>
         </li>
-        <li>
+        <li className="ml-6 flex items-center relative">
           {isAuthenticated && (
             <Button
               variant="naked"
@@ -56,14 +56,14 @@ export default function UserNav({ className }: UserNavProps) {
               <Image
                 src="/Favourite.svg"
                 alt="Favourite"
-                width={30}
-                height={30}
+                width={32}
+                height={32}
                 className="text-secondary"
               />
             </Button>
           )}
         </li>
-        <li>
+        <li className="ml-6 flex items-center relative">
           <div className="relative">
             <Button
               variant="naked"
@@ -77,13 +77,17 @@ export default function UserNav({ className }: UserNavProps) {
                 alt="Cart"
                 width={32}
                 height={32}
-                className="text-secondary"
+                className="text-secondary scale-50 sm:scale-0"
               />
             </Button>
-            {itemsCount > 0 && <span className={s.bagCount}>{itemsCount}</span>}
+            {itemsCount > 0 && (
+              <span className="absolute right-0 bottom-0 bg-secondary/60 text-primary rounded-full flex items-center justify-center text-xs pl-[2.5px] pr-[2.5px] min-w-[1.25rem] min-h-[1.25rem]">
+                {itemsCount}
+              </span>
+            )}
           </div>
         </li>
-        <li className={cn(s.mobileMenu, 'md:hidden')}>
+        <li className="p-2 rounded-lg flex md:hidden ml-6 text-on-primary hover:text-on-secondary hover:bg-secondary/20 focus:outline-2 focus:outline-offset-2 focus:outline-secondary">
           <Dropdown modal={false}>
             <DropdownTrigger
               id="user-nav-mobile-trigger"

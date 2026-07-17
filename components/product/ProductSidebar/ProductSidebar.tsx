@@ -130,7 +130,7 @@ const ProductSidebar = ({
       <section className="space-y-4">
         <Text variant="sectionHeading">
           {price.hasDiscount ? (
-            <div className="flex items-center gap-4 text-3xl sm:text-4xl font-semibold'">
+            <div className="flex items-center gap-4 text-3xl sm:text-4xl font-semibold">
               <span className="line-through opacity-40">
                 {showCurrency[variant.currency as CurrencyCode]}
                 {price.price.toFixed(2)}

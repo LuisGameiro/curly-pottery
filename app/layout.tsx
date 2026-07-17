@@ -12,7 +12,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
       <body className="bg-linear-to-r from-background to-accent-2">
         <Providers>
           <GoogleAnalytics />

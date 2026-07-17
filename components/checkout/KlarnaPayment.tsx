@@ -51,6 +51,7 @@ export default function KlarnaPaymentWidget({
   returnUrl,
 }: KlarnaPaymentWidgetProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const widgetRef = useRef<KlarnaWidget | null>(null)
   const [selectedMethod, setSelectedMethod] = useState<string>('')
   const [isReady, setIsReady] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -71,6 +72,9 @@ export default function KlarnaPaymentWidget({
   }, [])
 
   useEffect(() => {
+    // Prevent re-initialisation if widget is already mounted
+    if (widgetRef.current) return
+
     async function initKlarna() {
       if (!clientToken || !containerRef.current) return
 
@@ -108,6 +112,7 @@ export default function KlarnaPaymentWidget({
           onCancelled()
         })
 
+        widgetRef.current = klarna
         setIsReady(true)
       } catch (error) {
         console.error('Klarna init error:', error)

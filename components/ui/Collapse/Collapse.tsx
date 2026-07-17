@@ -32,6 +32,12 @@ const Collapse = ({ title, children }: CollapseProps) => {
         tabIndex={0}
         aria-expanded={isActive}
         onClick={toggle}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            toggle()
+          }
+        }}
       >
         <ChevronRight
           className={cn(s.icon, { [s.open]: isActive })}

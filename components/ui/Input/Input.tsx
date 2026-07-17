@@ -53,7 +53,7 @@ const Input = (props: InputProps) => {
           id={inputId}
           className={rootClassName}
           onChange={handleOnChange}
-          autoComplete="off"
+          autoComplete={rest.autoComplete || 'off'}
           autoCorrect="off"
           autoCapitalize="none"
           spellCheck="false"

@@ -66,18 +66,20 @@ export default function CategoryClient({
         return
       }
 
-      const ResponsEmail = await syncImages({
+      const responseImage = await syncImages({
         currentItems: gallery.files,
         existingUrls: [category?.image || ''],
       })
-      if (!ResponsEmail.success) {
-        return toast(ResponsEmail.message)
+      if (!responseImage.success) {
+        return toast(responseImage.message)
       }
 
       const response = await upsertCategory({
         id: formData.id,
         name: formData.name,
-        image: ResponsEmail.data ? ResponsEmail.data[0] : category?.image || '',
+        image: responseImage.data
+          ? responseImage.data[0]
+          : category?.image || '',
       })
 
       if (response.success) {
@@ -85,7 +87,7 @@ export default function CategoryClient({
         router.refresh()
       } else {
         setErrors({ from: response?.message || 'Failed to save category' })
-        return toast(ResponsEmail.message)
+        return toast(responseImage.message)
       }
     } catch (err) {
       console.error('Submit error:', err)

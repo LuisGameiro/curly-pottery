@@ -1,5 +1,8 @@
 'use client'
 
+// UK VAT rate (20%). Update this if the rate changes or for different regions.
+const VAT_RATE = 0.2
+
 import { Container, Text } from '@components/ui'
 import { calculateDiscount, showCurrency } from '@lib/calculate-price'
 import { CartLineItem, CurrencyCode } from '@lib/types/types'
@@ -14,7 +17,7 @@ export function CheckoutSummary() {
     const subtotal = order.subtotalPrice || 0
     const shipping = order.shippingPrice || 0
 
-    const calculatedVat = subtotal - subtotal / 1.2
+    const calculatedVat = subtotal - subtotal / (1 + VAT_RATE)
 
     if (Math.abs((order.taxes || 0) - calculatedVat) > 0.01) {
       setValue('taxes', calculatedVat)

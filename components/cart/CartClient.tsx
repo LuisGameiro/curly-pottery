@@ -55,7 +55,7 @@ export default function CartClient() {
             <div className="flex justify-between">
               <Text className="text-muted">Subtotal</Text>
               <Text>
-                {currencySymbol} {data?.subtotalPrice.toFixed(2)}
+                {currencySymbol} {data?.subtotalPrice?.toFixed(2) ?? ''}
               </Text>
             </div>
             <div className="flex justify-between">

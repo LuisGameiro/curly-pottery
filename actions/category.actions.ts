@@ -126,7 +126,7 @@ export async function deleteCategory({
   try {
     const session = await getServerSession(authOptions)
 
-    if (session?.user.role !== 'ADMIN') {
+    if (session?.user?.role !== 'ADMIN') {
       return {
         success: false,
         message: 'Unauthorized: Administrative privileges required.',

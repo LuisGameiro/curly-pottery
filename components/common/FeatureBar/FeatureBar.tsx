@@ -74,10 +74,9 @@ export default function FeatureBar({ className }: FeatureBarProps) {
           </div>
         </div>
       )}
-      <CookiePreferencesModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+      {isModalOpen && (
+        <CookiePreferencesModal onClose={() => setIsModalOpen(false)} />
+      )}
     </>
   )
 }

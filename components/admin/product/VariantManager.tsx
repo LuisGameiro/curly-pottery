@@ -28,7 +28,7 @@ export function VariantManager() {
       colorName: '',
       availableForSale: true,
       isExpanded: true,
-      currency: 'USD',
+      currency: 'GBP',
       colorHex: 'FFFFFF',
       images: [],
     })

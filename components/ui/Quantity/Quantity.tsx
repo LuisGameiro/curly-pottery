@@ -5,7 +5,6 @@ export interface QuantityProps {
   value: number
   increase: () => void
   decrease: () => void
-  handleRemove: React.MouseEventHandler<HTMLButtonElement>
   handleChange: React.ChangeEventHandler<HTMLInputElement>
   max?: number
 }

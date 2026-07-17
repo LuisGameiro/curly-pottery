@@ -20,7 +20,7 @@ const Hero = ({ headline, description }: HeroProps) => {
           <Text variant="body">{description}</Text>
           <Link href="/about" className={s.link}>
             Read it here
-            <ArrowRight slope="18" />
+            <ArrowRight size={18} />
           </Link>
         </div>
       </div>

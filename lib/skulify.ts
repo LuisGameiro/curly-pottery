@@ -12,16 +12,14 @@ export function skulify({
   const safeColor = String(colorName || '')
   const namePart = safeName
     .trim()
+    .toLowerCase()
     .split(' ')
     .map((word) => word.slice(0, 3))
     .join('-')
-    .toLowerCase()
     .replace(/[^\w-]+/g, '')
     .replace(/--+/g, '-')
-    .trim()
-    .toLowerCase()
 
   return `${namePart}-${safeSize}-${safeColor}`
     .replace(/\s+/g, '-')
-    .replace('--', '-')
+    .replace(/--+/g, '-')
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import { Share2 } from 'lucide-react'
+import { toast } from 'sonner'
 import Button from '../Button'
 
 interface ShareButtonProps {
@@ -26,7 +27,7 @@ export default function ShareButton({ title, text, url }: ShareButtonProps) {
     } else {
       try {
         await navigator.clipboard.writeText(shareUrl)
-        alert('Link copied to clipboard!')
+        toast.success('Link copied to clipboard!')
       } catch (err) {
         console.error('Could not copy text: ', err)
       }

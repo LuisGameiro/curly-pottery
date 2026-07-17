@@ -17,11 +17,11 @@ const ProductOptions = ({ product, setVariant }: ProductOptionsProps) => {
   )
 
   const [selectedSize, setSelectedSize] = useState<string>(
-    product.variants[0].sizeName!,
+    product.variants[0]?.sizeName || '',
   )
 
   const [selectedColor, setSelectedColor] = useState<string>(
-    product.variants[0].colorName!,
+    product.variants[0]?.colorName || '',
   )
 
   const allSizes = Object.keys(matrix)

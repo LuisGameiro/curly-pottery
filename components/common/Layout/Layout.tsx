@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic'
 import Navbar from '../Navbar'
 import Footer from '../Footer'
 import { LoadingDots } from '@components/ui'
-import { Toaster } from 'sonner'
 import NewsletterBanner from '../NewsletterBanner/NewsletterBanner'
 
 const Loading = () => (
@@ -35,7 +34,6 @@ export default function Layout({ children }: Props) {
         {children}
       </main>
       <Footer />
-      <Toaster position="top-right" richColors />
       <FeatureBar />
     </div>
   )

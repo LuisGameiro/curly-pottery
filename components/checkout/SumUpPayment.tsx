@@ -124,10 +124,6 @@ export default function SumUpPayment({
           </div>
         )}
       </div>
-
-      <Button variant="secondary" onClick={onComplete}>
-        test button
-      </Button>
     </div>
   )
 }

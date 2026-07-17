@@ -17,7 +17,7 @@ import {
 } from 'lucide-react'
 import notFound from 'app/not-found'
 import OrderTable from '@components/tables/OrderTable'
-import CustomerNotes from '../../../../components/admin/CostumerNotes'
+import CustomerNotes from '@components/admin/CustomerNotes'
 import { showCurrency } from '@lib/calculate-price'
 import { Address, Order } from '@lib/types/types'
 import constructMetadata from '@components/common/SEO/SEO'

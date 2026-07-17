@@ -42,7 +42,7 @@ const ProductCard = ({
           Number(product.variants[0].price),
           product.variants[0].discounts as Discount[],
         )
-      : { price: '0', finalPrice: '0', hasDiscount: false }
+      : { price: null, finalPrice: null, hasDiscount: false }
 
   return (
     <Link
@@ -99,25 +99,20 @@ const ProductCard = ({
               size="md"
               className="absolute top-2 right-2 z-30 p-2 rounded-full bg-background/20 backdrop-blur-md hover:bg-background/40"
             />
-            <div className="absolute bottom-2 right-2 z-20 rounded-md bg-background/20 px-2 py-1 text-sm font-medium text-base backdrop-blur">
-              {hasDiscount ? (
-                <>
-                  <span className="line-through opacity-40 mr-1">
-                    £ {typeof price === 'number' ? price : price.toString()}
-                  </span>
-                  <span>
-                    £{' '}
-                    {typeof finalPrice === 'number'
-                      ? finalPrice
-                      : finalPrice.toString()}
-                  </span>
-                </>
-              ) : (
-                <span>
-                  £ {typeof price === 'number' ? price : price.toString()}
-                </span>
-              )}
-            </div>
+            {price != null && (
+              <div className="absolute bottom-2 right-2 z-20 rounded-md bg-background/20 px-2 py-1 text-sm font-medium text-base backdrop-blur">
+                {hasDiscount ? (
+                  <>
+                    <span className="line-through opacity-40 mr-1">
+                      £ {String(price)}
+                    </span>
+                    <span>£ {String(finalPrice)}</span>
+                  </>
+                ) : (
+                  <span>£ {String(price)}</span>
+                )}
+              </div>
+            )}
           </div>
           {!noNameTag && (
             <h3 className="mt-2 text-base capitalize font-medium text-base">

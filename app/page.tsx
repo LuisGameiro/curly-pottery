@@ -19,13 +19,15 @@ export default async function Home() {
   const responseCategories = await getAllCategories()
 
   if (!responseProducts.success || !responseCategories.success)
-    throw new Error(responseProducts.message + responseCategories.message)
+    throw new Error(
+      `${responseProducts.message} | ${responseCategories.message}`,
+    )
 
   const products = responseProducts.data ?? []
   const categories = responseCategories.data ?? []
 
   return (
-    <main className="flex flex-col  bg-linear-to-r from-background to-accent-2">
+    <main className="flex flex-col bg-linear-to-r from-background to-accent-2">
       <HomeHero />
 
       <div className="px-10 my-8">

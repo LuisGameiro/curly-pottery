@@ -30,6 +30,17 @@ export async function createSumUpCheckout(): Promise<
     }
   }
 
+  if (!process.env.SUMUP_API || !process.env.SUMUP_MERCHANT_CODE) {
+    return {
+      success: false,
+      message: 'Server configuration error: Payment gateway not configured.',
+      errors: new DatabaseError(
+        'Missing SumUp configuration',
+        'createSumUpCheckout',
+      ),
+    }
+  }
+
   const cart = await prisma.cart.findUnique({
     where: { userId },
   })
@@ -54,10 +65,10 @@ export async function createSumUpCheckout(): Promise<
       },
       body: JSON.stringify({
         checkout_reference: checkoutRef,
-        amount: cart.totalPrice,
+        amount: Number(cart.totalPrice),
         currency: cart.currency,
         merchant_code: process.env.SUMUP_MERCHANT_CODE,
-        pay_to_email: userEmail,
+        pay_to_email: process.env.SUMUP_MERCHANT_EMAIL || userEmail,
       }),
       timeout: 15000,
     },

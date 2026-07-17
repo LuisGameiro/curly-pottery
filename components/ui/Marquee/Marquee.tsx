@@ -21,10 +21,25 @@ interface MarqueeProps {
 const Marquee = ({ children = [], className = '' }: MarqueeProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [isHovered, setIsHovered] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
   const isDragging = useRef(false)
   const startX = useRef(0)
   const scrollLeftStart = useRef(0)
   const [cursor, setCursor] = useState('grab')
+
+  // Pause the animation loop when the marquee scrolls off-screen
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { threshold: 0 },
+    )
+
+    observer.observe(container)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     const container = containerRef.current
@@ -33,6 +48,8 @@ const Marquee = ({ children = [], className = '' }: MarqueeProps) => {
     let animationId: number
 
     const scroll = () => {
+      if (!isVisible) return
+
       if (!isHovered && !isDragging.current) {
         container.scrollLeft += 1
 
@@ -47,7 +64,7 @@ const Marquee = ({ children = [], className = '' }: MarqueeProps) => {
     animationId = requestAnimationFrame(scroll)
 
     return () => cancelAnimationFrame(animationId)
-  }, [isHovered])
+  }, [isHovered, isVisible])
 
   const handleMouseDown = (e: React.MouseEvent) => {
     isDragging.current = true

@@ -1,39 +1,4 @@
-@reference "tailwindcss";
-@reference "../../../globals.css";
-
-.root {
-  @apply sticky top-0 bg-primary z-40 transition-all duration-150;
-  min-height: 34px;
-}
-
-.nav {
-  @apply relative flex flex-row items-center justify-between py-4 px-4 md:px-6 w-full h-20;
-}
-
-.brandName {
-  @apply hidden;
-}
-
-.navMenu {
-  @apply hidden ml-10 space-x-8 sm:flex items-center;
-}
-
-.link {
-  @apply inline-flex items-center leading-6 text-xl font-semibold transition ease-in-out duration-75 cursor-pointer text-on-primary;
-}
-
-.link:hover {
-  @apply text-on-primary/60;
-}
-
-.link:focus {
-  @apply outline-none text-on-primary/60;
-}
-
-.logo {
-  @apply flex items-center flex-row cursor-pointer transform duration-100 ease-in-out;
-}
-
-.hidden {
-  transform: translateY(-100%);
-}
+/*
+  This file is now unused. All styles have been migrated to inline Tailwind classes in Navbar.tsx and NavbarRoot.tsx.
+  Safe to delete.
+*/

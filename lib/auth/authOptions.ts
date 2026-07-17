@@ -24,6 +24,13 @@ declare module 'next-auth' {
   }
 }
 
+declare module 'next-auth/jwt' {
+  interface JWT {
+    firstName: string
+    lastName: string
+  }
+}
+
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
@@ -78,6 +85,8 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id
         token.role = user.role
+        token.firstName = user.firstName
+        token.lastName = user.lastName
         token.name = user.firstName + ' ' + user.lastName
         token.email = user.email
       }
@@ -87,8 +96,8 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = token.id as string
         session.user.role = token.role as string
-        session.user.firstName = token.name?.split(' ')[0] || ''
-        session.user.lastName = token.name?.split(' ').slice(1).join(' ') || ''
+        session.user.firstName = (token.firstName as string) || ''
+        session.user.lastName = (token.lastName as string) || ''
       }
       return session
     },

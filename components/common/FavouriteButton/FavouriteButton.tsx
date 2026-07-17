@@ -47,7 +47,7 @@ export default function FavouriteButton({
           ? 'text-red-500 hover:text-red-600'
           : color === 'primary'
             ? 'text-on-primary hover:text-red-500'
-            : 'text-white/80 hover:text-red-500',
+            : 'text-black/80 hover:text-red-500',
         className,
       )}
     >

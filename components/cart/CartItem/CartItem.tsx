@@ -115,7 +115,6 @@ const CartItem = ({
           <div className="flex items-center">
             <Quantity
               value={quantity}
-              handleRemove={handleRemove}
               handleChange={handleChange}
               increase={() => increaseQuantity(1)}
               decrease={() => increaseQuantity(-1)}

@@ -19,7 +19,10 @@ export const WelcomeEmail = ({ firstName }: WelcomeEmailProps) => {
     <Html>
       <Body style={main}>
         <Container style={container}>
-          <Img src={'logo.png'} style={emailStyles.logo} />
+          <Img
+            src={`${process.env.NEXT_PUBLIC_APP_URL || 'https://curlypottery.com'}/logo.png`}
+            style={emailStyles.logo}
+          />
           <Text style={h1}>Hi {firstName},</Text>
           <Text style={text}>Thank you for reaching out to Curly Pottery!</Text>
           <Button href={`${process.env.NEXT_PUBLIC_APP_URL}`} style={button}>

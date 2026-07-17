@@ -31,7 +31,7 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
               System ID: {error.digest}
             </code>
           )}
-          <Text>{JSON.stringify(error)}</Text>
+          <Text>{error?.message || 'Unknown error'}</Text>
         </>
       )}
       <Button onClick={() => reset()} variant="secondary">

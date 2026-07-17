@@ -1,29 +1,19 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Button, Container, Text, InputCheckbox } from '@components/ui'
 import { ConsentPreferences, useConsent } from '@lib/hooks/useConsent'
 import { X } from 'lucide-react'
 
 interface CookiePreferencesModalProps {
-  isOpen: boolean
   onClose: () => void
 }
 
 export default function CookiePreferencesModal({
-  isOpen,
   onClose,
 }: CookiePreferencesModalProps) {
   const { consent, updateConsent, acceptAll, acceptEssential } = useConsent()
   const [localConsent, setLocalConsent] = useState<ConsentPreferences>(consent)
-
-  useEffect(() => {
-    if (isOpen) {
-      setLocalConsent(consent)
-    }
-  }, [isOpen, consent])
-
-  if (!isOpen) return null
 
   const handleSave = () => {
     if (localConsent.analytics && localConsent.marketing) {

@@ -104,13 +104,9 @@ const ProductSlider = ({ children, className = '' }: ProductSliderProps) => {
         {slider && <ProductSliderControl onPrev={onPrev} onNext={onNext} />}
         {Children.map(children, (child) => {
           if (isValidElement<HTMLElement>(child)) {
-            return {
-              ...child,
-              props: {
-                ...child.props,
-                className: `keen-slider__slide object-contain sm:max-h-[calc(100vh-274px)] sm:max-w-[calc(100vh-274px)]`,
-              },
-            }
+            return React.cloneElement(child, {
+              className: `keen-slider__slide object-contain sm:max-h-[calc(100vh-274px)] sm:max-w-[calc(100vh-274px)]`,
+            })
           }
           return child
         })}
@@ -119,25 +115,27 @@ const ProductSlider = ({ children, className = '' }: ProductSliderProps) => {
       <a.div className={cn(s.album, 'keen-slider')} ref={thumbnailRef}>
         {slider &&
           Children.map(children, (child, idx) => {
-            if (isValidElement<HTMLElement>(child)) {
-              return {
-                ...child,
-                props: {
-                  ...child.props,
-                  className: cn(
-                    child.props.className,
-                    s.thumb,
-                    'keen-slider__slide',
-                    {
-                      [s.selected]: currentSlide === idx,
-                    },
-                  ),
-                  id: `thumb-${idx}`,
-                  onClick: () => {
-                    slider.current?.moveToIdx(idx)
+            if (isValidElement(child)) {
+              const extraProps: Record<string, unknown> = {
+                className: cn(
+                  (child.props as Record<string, unknown>).className as
+                    | string
+                    | undefined,
+                  s.thumb,
+                  'keen-slider__slide',
+                  {
+                    [s.selected]: currentSlide === idx,
                   },
+                ),
+                id: `thumb-${idx}`,
+                onClick: () => {
+                  slider.current?.moveToIdx(idx)
                 },
               }
+              return React.cloneElement(
+                child as React.ReactElement<Record<string, unknown>>,
+                extraProps,
+              )
             }
             return child
           })}

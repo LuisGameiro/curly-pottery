@@ -78,8 +78,8 @@ const NewsletterEmail = ({
             <Text style={headingText}>{heading}</Text>
           </Section>
 
-          {paragraphs.map((paragraph) => (
-            <Text key={paragraph} style={bodyText}>
+          {paragraphs.map((paragraph, index) => (
+            <Text key={index} style={bodyText}>
               {paragraph}
             </Text>
           ))}

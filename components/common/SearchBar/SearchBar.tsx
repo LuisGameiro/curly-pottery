@@ -47,7 +47,7 @@ export default function SearchBar({
   return (
     <>
       <div className={cn(s.root, className)}>
-        <label className="hidden" htmlFor={id}>
+        <label className="sr-only" htmlFor={id}>
           Search
         </label>
         <input
