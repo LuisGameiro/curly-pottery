@@ -64,7 +64,6 @@ export default function FeatureBar({ className }: FeatureBarProps) {
               </Button>
               <Button
                 type="button"
-                color="success"
                 variant="slim"
                 className="w-full sm:w-auto"
                 onClick={handleAcceptAll}

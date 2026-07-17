@@ -237,7 +237,8 @@ export default function CheckoutClient() {
               <section className="space-y-4">
                 <Text variant="bold">Billing Address</Text>
                 <div className="space-y-3">
-                  <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors">
+                  <div 
+                    className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors"                  >
                     <input
                       type="radio"
                       name="billingType"
@@ -246,9 +247,11 @@ export default function CheckoutClient() {
                       className="mr-3"
                     />
                     <Text>Same as shipping address</Text>
-                  </label>
+                  </div>
 
-                  <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors">
+                  <div 
+                    className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors"
+                  >
                     <input
                       type="radio"
                       name="billingType"
@@ -257,7 +260,7 @@ export default function CheckoutClient() {
                       className="mr-3"
                     />
                     <Text>Use a different billing address</Text>
-                  </label>
+                  </div>
                 </div>
 
                 {!sameAsShipping && (
@@ -296,7 +299,9 @@ export default function CheckoutClient() {
                 <Text variant="bold">Select Payment Method</Text>
 
                 <div className="space-y-3">
-                  <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors">
+                  <div 
+                    className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors"
+                  >
                     <input
                       type="radio"
                       name="payment"
@@ -311,9 +316,11 @@ export default function CheckoutClient() {
                         Secure payment via SumUp
                       </Text>
                     </div>
-                  </label>
+                  </div>
 
-                  <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors">
+                  <div 
+                    className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors"
+                  >
                     <input
                       type="radio"
                       name="payment"
@@ -328,9 +335,11 @@ export default function CheckoutClient() {
                         Fast and secure checkout via Google Pay/Apple Pay
                       </Text>
                     </div>
-                  </label>
+                  </div>
 
-                  <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors">
+                  <div 
+                    className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors"
+                  >
                     <input
                       type="radio"
                       name="payment"
@@ -347,7 +356,7 @@ export default function CheckoutClient() {
                         Pay now, pay later or in installments
                       </Text>
                     </div>
-                  </label>
+                  </div>
                 </div>
               </section>
 
