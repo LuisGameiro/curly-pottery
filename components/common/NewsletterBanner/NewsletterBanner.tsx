@@ -12,7 +12,9 @@ const NewsletterBanner = () => {
   const { isAuthenticated, isLoading } = useUser()
   const [email, setEmail] = useState('')
   const [isPending, startTransition] = useTransition()
-  const [state, setState] = useState<'signup' | 'success' | 'dismissed'>('signup')
+  const [state, setState] = useState<'signup' | 'success' | 'dismissed'>(
+    'signup',
+  )
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
@@ -63,7 +65,10 @@ const NewsletterBanner = () => {
           <div className="font-bold text-sm whitespace-nowrap shrink-0">
             Be the first to know
           </div>
-          <form onSubmit={handleSubmit} className="flex items-center gap-1 shrink min-w-0">
+          <form
+            onSubmit={handleSubmit}
+            className="flex items-center gap-1 shrink min-w-0"
+          >
             <input
               id="newsletter-banner-email"
               type="email"

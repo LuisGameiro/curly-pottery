@@ -46,7 +46,7 @@
   @apply text-secondary/40;
 }
 
-@screen sm {
+@media (width >= 640px) {
   .input {
     min-width: 300px;
   }

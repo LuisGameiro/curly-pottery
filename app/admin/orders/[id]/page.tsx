@@ -85,8 +85,7 @@ export default async function OrderDetailsPage({
                         src={item.images}
                         alt={item.name}
                         fill
-                        height={125}
-                        width={125}
+                        sizes="64px"
                         quality={85}
                         style={{
                           aspectRatio: '1/1',

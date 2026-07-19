@@ -7,6 +7,7 @@ import { slugify } from '@lib/slugify'
 import { deleteBlob } from './serverImages.action'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@lib/auth/authOptions'
+import { CategorySchema } from '@lib/form-validator'
 
 export async function getAllCategories(): Promise<ActionResponse<Category[]>> {
   try {
@@ -70,6 +71,15 @@ export async function upsertCategory({
   image: string
 }): Promise<ActionResponse<Category>> {
   try {
+    const validation = CategorySchema.safeParse({ name, image })
+    if (!validation.success) {
+      return {
+        success: false,
+        message: 'Validation error',
+        errors: validation.error.flatten(),
+      }
+    }
+
     const session = await getServerSession(authOptions)
 
     if (session?.user?.role !== 'ADMIN') {

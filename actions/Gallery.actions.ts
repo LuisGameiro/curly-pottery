@@ -7,7 +7,9 @@ import { deleteBlob } from './serverImages.action'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@lib/auth/authOptions'
 
-export async function getGalleryImages(): Promise<ActionResponse<GalleryImage[]>> {
+export async function getGalleryImages(): Promise<
+  ActionResponse<GalleryImage[]>
+> {
   try {
     const images = await prisma.galleryImage.findMany({
       orderBy: {

@@ -58,12 +58,7 @@ export default function ShopClient({
     setProducts(initialProducts)
     setNextCursor(initialCursor)
     setHasMore(initialHasMore)
-  }, [
-    categorySlug,
-    initialCursor,
-    initialHasMore,
-    initialProducts,
-  ])
+  }, [categorySlug, initialCursor, initialHasMore, initialProducts])
 
   return (
     <Container>
@@ -72,7 +67,9 @@ export default function ShopClient({
           Welcome to My Shop
         </Text>
         <Text variant="muted" className="max-w-2xl whitespace-nowrap">
-          Discover my handmade ceramic pieces made with love in North London. All have been crafted to bring warmth, charm and a little everyday joy to your home.
+          Discover my handmade ceramic pieces made with love in North London.
+          All have been crafted to bring warmth, charm and a little everyday joy
+          to your home.
         </Text>
       </div>
 

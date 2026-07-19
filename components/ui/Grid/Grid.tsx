@@ -1,5 +1,3 @@
-'use client'
-
 import { ReactNode } from 'react'
 import s from './Grid.module.css'
 import { cn } from '@lib/utils'

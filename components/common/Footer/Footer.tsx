@@ -59,6 +59,7 @@ const Footer = () => {
                 src="/instagram.jpg"
                 alt="Instagram feed"
                 fill
+                sizes="128px"
                 className="object-contain"
               />
             </div>

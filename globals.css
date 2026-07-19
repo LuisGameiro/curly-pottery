@@ -4,50 +4,10 @@
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant light (&:where(.light, .light *));
 
-/* @font-face {
-  font-family: 'Aptos';
-  src: url('/Aptos.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Arial Rounded MT Bold';
-  src: url('/arialroundedmtbold.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-} */
-
-@font-face {
-  font-family: 'Grand Hotel';
-  src: url('/GrandHotel-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Josefin Sans';
-  src: url('/JosefinSans-VariableFont_wght.ttf') format('truetype');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Josefin Sans';
-  src: url('/JosefinSans-Italic-VariableFont_wght.ttf') format('truetype');
-  font-weight: 100 900;
-  font-style: italic;
-  font-display: swap;
-}
-
 @theme {
-  --font-header: 'Josefin Sans', 'Arial Rounded MT Bold', sans-serif;
-  --font-body: 'Josefin Sans', 'Aptos', sans-serif;
-  --font-cursive: 'Grand Hotel', cursive;
+  --font-header: var(--font-josefin-sans), sans-serif;
+  --font-body: var(--font-josefin-sans), sans-serif;
+  --font-cursive: var(--font-grand-hotel), cursive;
   --breakpoint-xs: 400px;
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
@@ -148,10 +108,10 @@
     rgba(0, 0, 0, 0.02) 0px 30px 30px, rgba(0, 0, 0, 0.03) 0px 0px 8px,
     rgba(0, 0, 0, 0.05) 0px 1px 0px;
 
-  --font-mono: var(--font-geist-mono);
-  --font-body: 'Josefin Sans', sans-serif;
-  --font-header: 'Josefin Sans', sans-serif;
-  --font-cursive: 'Grand Hotel', cursive;
+  --font-mono: 'Courier New', monospace;
+  --font-body: var(--font-josefin-sans), sans-serif;
+  --font-header: var(--font-josefin-sans), sans-serif;
+  --font-cursive: var(--font-grand-hotel), cursive;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

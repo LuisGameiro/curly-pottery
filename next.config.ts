@@ -18,6 +18,9 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     ppr: false,
+    serverActions: {
+      allowedOrigins: [process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'].filter(Boolean) as string[],
+    },
   },
   async rewrites() {
     return [
@@ -45,6 +48,8 @@ const nextConfig: NextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
+              "base-uri 'self'",
+              "object-src 'none'",
               "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://eu.i.posthog.com",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' blob: data: https://*.public.blob.vercel-storage.com https://picsum.photos",
@@ -52,6 +57,7 @@ const nextConfig: NextConfig = {
               "connect-src 'self' https://eu.i.posthog.com",
               "frame-ancestors 'none'",
               "form-action 'self'",
+              "upgrade-insecure-requests",
             ].join('; '),
           },
         ],

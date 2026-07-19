@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useMemo, useRef } from 'react'
 import { useUser } from './useUser'
 import { calculateDiscount } from '@lib/calculate-price'

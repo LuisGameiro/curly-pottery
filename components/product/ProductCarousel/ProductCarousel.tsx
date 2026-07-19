@@ -1,5 +1,3 @@
-'use client'
-
 import s from './ProductCarousel.module.css'
 import { ProductCard } from '@components/product'
 import { Product } from '@lib/types/types'

@@ -6,7 +6,7 @@ const Logo = ({ className = '', ...props }) => (
     alt="Logo"
     width={64}
     height={64}
-    quality={100}
+    quality={85}
     loading="eager"
     className={className}
     {...props}

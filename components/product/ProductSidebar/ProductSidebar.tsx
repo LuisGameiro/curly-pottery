@@ -109,9 +109,7 @@ const ProductSidebar = ({
                   href={`/shop?category=${category.slug}`}
                   className="ml-4 hover:underline"
                 >
-                  <Text variant="subHeading">
-                    {category.name}
-                  </Text>
+                  <Text variant="subHeading">{category.name}</Text>
                 </Link>
               ))}
               {variant.stock > 0 && variant.stock < 3 && (

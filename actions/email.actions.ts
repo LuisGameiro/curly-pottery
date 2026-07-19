@@ -1,6 +1,15 @@
 'use server'
 
 import { hashPassword } from '@lib/auth/password'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@lib/auth/authOptions'
+import { z } from 'zod'
+
+const passwordSchema = z
+  .string()
+  .min(8, 'Password must be at least 8 characters')
+  .regex(/[A-Za-z]/, 'Password must contain at least one letter')
+  .regex(/[0-9]/, 'Password must contain at least one number')
 import ResetPasswordEmail from '@lib/emails/ResetPasswordEmail'
 import { ActionResponse } from '@lib/types/types'
 import { prisma } from 'prisma/prisma'
@@ -21,6 +30,14 @@ export async function sendEmail({
   from?: string
 }): Promise<ActionResponse<CreateEmailResponseSuccess>> {
   try {
+    const session = await getServerSession(authOptions)
+    if (session?.user?.role !== 'ADMIN') {
+      return {
+        success: false,
+        message: 'Unauthorized: Administrative privileges required.',
+      }
+    }
+
     const { data, error } = await resend.emails.send({
       from,
       to,
@@ -107,6 +124,14 @@ export async function resetPassword({
   newPassword: string
 }): Promise<ActionResponse<null>> {
   try {
+    const passwordValidation = passwordSchema.safeParse(newPassword)
+    if (!passwordValidation.success) {
+      return {
+        success: false,
+        message: passwordValidation.error.issues[0]?.message || 'Invalid password',
+      }
+    }
+
     const hashedPassword = await hashPassword(newPassword)
 
     const updatedUser = await prisma.user.updateMany({

@@ -9,13 +9,19 @@ export async function deleteBlob(blobs: string) {
     const session = await getServerSession(authOptions)
 
     if (session?.user?.role !== 'ADMIN') {
-      throw new Error(
-        'Unauthorized: Administrative privileges required to delete images.',
-      )
+      return {
+        success: false,
+        message: 'Unauthorized: Administrative privileges required to delete images.',
+      }
     }
 
     await del(blobs)
+    return { success: true, message: 'Blob deleted successfully.' }
   } catch (error) {
     console.error('Error deleting blobs:', error)
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Failed to delete blob.',
+    }
   }
 }

@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 import s from './ProductCard.module.css'
 import Image, { ImageProps } from 'next/image'

@@ -9,7 +9,7 @@ import {
   User,
   NewsletterSubscriberSource,
 } from '@lib/types/types'
-import { cache } from 'react'
+
 import { registerSchema } from '@lib/form-validator'
 import { hashPassword } from '@lib/auth/password'
 import { getServerSession } from 'next-auth'
@@ -86,38 +86,39 @@ export async function getAllCustomers(
   }
 }
 
-export const getUserById = cache(
-  async (id: string): Promise<ActionResponse<UserWithOrdersAddress | null>> => {
-    try {
-      const session = await getServerSession(authOptions)
-      if (!session?.user?.id) {
-        return {
-          success: false,
-          message: 'Unauthorized: Please sign in first.',
-          errors: null,
-        }
-      }
-      if (session.user.role !== 'ADMIN' && session.user.id !== id) {
-        return {
-          success: false,
-          message: 'Unauthorized: You can only access your own profile.',
-          errors: null,
-        }
-      }
-
-      const user = await prisma.user.findUnique({
-        where: { id },
-        include: {
-          orders: true,
-          addresses: true,
-        },
-      })
+export async function getUserById(
+  id: string,
+): Promise<ActionResponse<UserWithOrdersAddress | null>> {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.id) {
       return {
-        success: true,
-        message: 'Fetched user successfully',
-        data: user,
+        success: false,
+        message: 'Unauthorized: Please sign in first.',
+        errors: null,
       }
-    } catch (error) {
+    }
+    if (session.user.role !== 'ADMIN' && session.user.id !== id) {
+      return {
+        success: false,
+        message: 'Unauthorized: You can only access your own profile.',
+        errors: null,
+      }
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id },
+      include: {
+        orders: true,
+        addresses: true,
+      },
+    })
+    return {
+      success: true,
+      message: 'Fetched user successfully',
+      data: user,
+    }
+  } catch (error) {
       console.error('getUserById:', error)
       return {
         success: false,
@@ -126,8 +127,7 @@ export const getUserById = cache(
         errors: error,
       }
     }
-  },
-)
+  }
 
 export async function updateNotes(
   id: string,

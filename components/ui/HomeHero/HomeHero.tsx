@@ -21,6 +21,7 @@ const HomeHero = () => {
             src="/Homepage 2.jpg"
             alt="Hands making pottery"
             fill
+            sizes="(max-width: 768px) 50vw, 33vw"
             className="object-cover"
             priority
           />
@@ -34,6 +35,7 @@ const HomeHero = () => {
             src="/Homepage 1.jpg"
             alt="Curly Pottery Artist"
             fill
+            sizes="(max-width: 768px) 50vw, 33vw"
             className="object-cover"
             priority
           />

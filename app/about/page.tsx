@@ -55,7 +55,6 @@ export default function About() {
             </Text>
           </div>
         </section>
-
       </div>
     </Container>
   )

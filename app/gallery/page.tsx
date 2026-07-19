@@ -1,5 +1,6 @@
 import constructMetadata from '@components/common/SEO'
 import { Container, Text } from '@components/ui'
+import Image from 'next/image'
 import { getGalleryImages } from '@actions/Gallery.actions'
 
 export const metadata = constructMetadata({
@@ -47,20 +48,21 @@ export default async function GalleryPage() {
                 key={image.id}
                 className="break-inside-avoid overflow-hidden rounded-lg bg-accent-1 group"
               >
-                <img
+                <Image
                   src={image.url}
                   alt={image.alt || `Gallery image ${index + 1}`}
+                  width={800}
+                  height={600}
                   className="w-full h-auto block transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 />
               </div>
             ))}
           </div>
         ) : (
           <div className="text-center py-20">
-            <Text variant="muted">
-              Gallery coming soon. Check back later!
-            </Text>
+            <Text variant="muted">Gallery coming soon. Check back later!</Text>
           </div>
         )}
       </div>

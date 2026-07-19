@@ -25,7 +25,7 @@ async function assertAdminAccess() {
   const session = await getServerSession(authOptions)
 
   if (session?.user?.role !== 'ADMIN') {
-    throw new Error('Unauthorized: Administrative privileges required.')
+    return { success: false, message: 'Unauthorized: Administrative privileges required.' } as const
   }
 
   return session
@@ -101,7 +101,8 @@ export async function getNewsletterAdminOverview(): Promise<
   ActionResponse<NewsletterAdminOverview>
 > {
   try {
-    await assertAdminAccess()
+    const access = await assertAdminAccess()
+    if (!access || 'success' in access && !access.success) return access
 
     const overview = await getNewsletterAdminOverviewData()
 
@@ -134,7 +135,8 @@ export async function createNewsletterCampaignAction(
   }
 
   try {
-    await assertAdminAccess()
+    const access = await assertAdminAccess()
+    if (!access || 'success' in access && !access.success) return access
     const campaign = await createNewsletterCampaign(validation.data)
 
     revalidatePath('/admin/newsletter')
@@ -168,7 +170,8 @@ export async function queueNewsletterCampaignAction(
   }
 
   try {
-    await assertAdminAccess()
+    const access = await assertAdminAccess()
+    if (!access || 'success' in access && !access.success) return access
     const recipients = await queueNewsletterCampaignById(
       validation.data.campaignId,
     )
@@ -199,7 +202,8 @@ export async function runNewsletterDispatchAction(): Promise<
   }>
 > {
   try {
-    await assertAdminAccess()
+    const access = await assertAdminAccess()
+    if (!access || 'success' in access && !access.success) return access
     const result = await dispatchQueuedNewsletterBatch()
 
     revalidatePath('/admin/newsletter')
@@ -223,7 +227,8 @@ export async function syncNewsletterSubscribersAction(): Promise<
   ActionResponse<{ synced: number }>
 > {
   try {
-    await assertAdminAccess()
+    const access = await assertAdminAccess()
+    if (!access || 'success' in access && !access.success) return access
     const synced = await syncOptedInUsersToNewsletter()
 
     revalidatePath('/admin/newsletter')

@@ -1,6 +1,6 @@
 'use server'
 
-import { ProductInput, VariantInput } from '@lib/form-validator'
+import { ProductInput, VariantInput, ProductSchema } from '@lib/form-validator'
 import {
   Product,
   ActionResponse,
@@ -230,10 +230,16 @@ export async function getAllProducts(
   ActionResponse<PaginatedResult<ProductWithVariantsCategories> | null>
 > {
   try {
+    const session = await getServerSession(authOptions)
+    const isAdmin = session?.user?.role === 'ADMIN'
+
     const take = pagination?.take ?? ADMIN_PAGE_SIZE
     const search = pagination?.search?.trim()
 
     const where: Prisma.ProductWhereInput = {}
+    if (!isAdmin) {
+      where.hide = false
+    }
 
     if (search) {
       where.OR = [
@@ -465,6 +471,15 @@ export async function upsertProduct(
   payload: ProductInput,
 ): Promise<ActionResponse<Product | null>> {
   try {
+    const validation = ProductSchema.safeParse(payload)
+    if (!validation.success) {
+      return {
+        success: false,
+        message: 'Validation error',
+        errors: validation.error.flatten(),
+      }
+    }
+
     const session = await getServerSession(authOptions)
 
     if (session?.user?.role !== 'ADMIN') {

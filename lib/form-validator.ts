@@ -55,8 +55,8 @@ export const VariantSchema = z.object({
       value: z.number(),
     }),
   ),
-  images: z.any(),
-  files: z.array(z.any()).min(1, 'At least one image is required'),
+  images: z.array(z.string()).default([]),
+  files: z.array(z.string()).min(1, 'At least one image is required'),
   previews: z.array(z.string()).min(1, 'At least one preview is required'),
 })
 
@@ -72,8 +72,8 @@ export const ProductSchema = z.object({
     .string()
     .min(10, 'Description must be at least 10 characters')
     .max(1000),
-  files: z.array(z.any()).min(1, 'At least one image is required'),
-  images: z.any(),
+  files: z.array(z.string()).min(1, 'At least one image is required'),
+  images: z.array(z.string()).default([]),
   previews: z
     .array(z.url('Please provide a valid image URL'))
     .min(1, 'At least one variant is required'),

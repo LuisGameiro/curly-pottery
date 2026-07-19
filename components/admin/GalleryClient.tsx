@@ -1,7 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Button, Container, Text, InputImage, LoadingDots } from '@components/ui'
+import {
+  Button,
+  Container,
+  Text,
+  InputImage,
+  LoadingDots,
+} from '@components/ui'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { Trash2, GripVertical, Plus } from 'lucide-react'
@@ -39,8 +45,14 @@ function SortableImage({
   image: GalleryImage
   onDelete: (id: string) => void
 }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-    useSortable({ id: image.id })
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: image.id })
 
   const style = {
     transform: CSS.Transform.toString(transform),
