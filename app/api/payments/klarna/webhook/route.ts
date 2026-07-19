@@ -2,11 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from 'prisma/prisma'
 import crypto from 'crypto'
 
-const klarnaSecret = process.env.KLARNA_SHARED_SECRET
-if (!klarnaSecret) {
-  throw new Error('Server configuration error: KLARNA_SHARED_SECRET not set')
-}
-
 interface KlarnaWebhookPayload {
   event_id: string
   event_type: string
@@ -15,9 +10,13 @@ interface KlarnaWebhookPayload {
   klarna_order_id?: string
 }
 
-function verifyKlarnaSignature(payload: string, signature: string): boolean {
+function verifyKlarnaSignature(
+  payload: string,
+  signature: string,
+  secret: string,
+): boolean {
   const expectedSignature = crypto
-    .createHmac('sha256', klarnaSecret!)
+    .createHmac('sha256', secret)
     .update(payload)
     .digest('base64')
   return expectedSignature === signature
@@ -25,10 +24,18 @@ function verifyKlarnaSignature(payload: string, signature: string): boolean {
 
 export async function POST(request: NextRequest) {
   try {
+    const klarnaSecret = process.env.KLARNA_SHARED_SECRET
+    if (!klarnaSecret) {
+      return NextResponse.json(
+        { success: false, message: 'Server configuration error' },
+        { status: 500 },
+      )
+    }
+
     const signature = request.headers.get('x-klarna-signature') || ''
     const rawBody = await request.text()
 
-    if (!verifyKlarnaSignature(rawBody, signature)) {
+    if (!verifyKlarnaSignature(rawBody, signature, klarnaSecret)) {
       console.error('Invalid Klarna webhook signature')
       return NextResponse.json(
         { success: false, message: 'Invalid signature' },

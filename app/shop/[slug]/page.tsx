@@ -36,7 +36,7 @@ export async function generateMetadata({
   }
 
   const product = response.data
-  const url = `${process.env.NEXT_PUBLIC_APP_URL}/product/${slug}`
+  const url = `${process.env.NEXT_PUBLIC_APP_URL}/shop/${slug}`
   const productImage = product.images?.[0] || '/logo.png'
 
   return {

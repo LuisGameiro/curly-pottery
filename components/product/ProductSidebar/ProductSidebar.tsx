@@ -104,9 +104,15 @@ const ProductSidebar = ({
             </h2>
             <div className="flex flex-wrap gap-2 items-center">
               {product.categories.map((category: Category) => (
-                <Text key={category.id} variant="subHeading">
-                  {category.name}
-                </Text>
+                <Link
+                  key={category.id}
+                  href={`/shop?category=${category.slug}`}
+                  className="ml-4 hover:underline"
+                >
+                  <Text variant="subHeading">
+                    {category.name}
+                  </Text>
+                </Link>
               ))}
               {variant.stock > 0 && variant.stock < 3 && (
                 <div className="text-red font-bold animate-pulse text-sm">
@@ -170,21 +176,21 @@ const ProductSidebar = ({
         ) : (
           <div className="fixed bottom-0 left-0 w-full p-4 bg-background border-t border-border z-[100] lg:relative lg:border-none lg:p-0 lg:bg-transparent shadow-[0_-4px_10px_rgba(0,0,0,0.05)] lg:shadow-none pb-8 lg:pb-0">
             <div className="flex flex-row gap-4 items-center lg:border lg:border-border max-w-5xl mx-auto">
-              <div className="flex h-12 lg:h-16 flex-1 text-xl lg:text-2xl font-semibold items-center border border-border lg:border-none justify-between lg:justify-start rounded-lg lg:rounded-none overflow-hidden">
+              <div className="flex h-10 lg:h-12 flex-1 text-base lg:text-lg font-semibold items-center border border-border lg:border-none justify-between lg:justify-start rounded-lg lg:rounded-none overflow-hidden">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   disabled={quantity <= 1 || remainingStock <= 0}
-                  className="flex px-4 h-full hover:bg-accent-1 transition items-center disabled:opacity-30"
+                  className="flex px-3 h-full hover:bg-accent-1 transition items-center disabled:opacity-30"
                 >
                   -
                 </button>
-                <span className="px-4 lg:px-6">{quantity}</span>
+                <span className="px-3 lg:px-4">{quantity}</span>
                 <button
                   onClick={() =>
                     setQuantity(Math.min(remainingStock, quantity + 1))
                   }
                   disabled={quantity >= remainingStock || remainingStock <= 0}
-                  className="flex px-4 h-full hover:bg-accent-1 transition items-center disabled:opacity-30"
+                  className="flex px-3 h-full hover:bg-accent-1 transition items-center disabled:opacity-30"
                 >
                   +
                 </button>
@@ -192,7 +198,7 @@ const ProductSidebar = ({
               <Button
                 aria-label="Add to Cart"
                 type="button"
-                className="flex-[2] lg:flex-none h-12 lg:h-16 text-lg rounded-lg lg:rounded-none !m-0"
+                className="flex-[2] lg:flex-none h-10 lg:h-12 text-sm lg:text-base rounded-lg lg:rounded-none !m-0"
                 onClick={addToCart}
                 loading={loading}
                 disabled={!variant.availableForSale || remainingStock <= 0}
@@ -204,23 +210,11 @@ const ProductSidebar = ({
                     : 'Not Available'}
               </Button>
             </div>
-            {inCartQuantity > 0 && (
-              <Text
-                variant="muted"
-                className="mt-2 text-xs lg:text-sm text-center lg:text-left"
-              >
-                You have {inCartQuantity} of this item in your cart.{' '}
-                {remainingStock > 0
-                  ? `You can add ${remainingStock} more.`
-                  : 'You have reached the stock limit.'}
-              </Text>
-            )}
             <Text
               variant="muted"
-              className="mt-2 text-xs lg:text-sm text-center lg:text-left hidden lg:block"
+              className="mt-2 text-xs lg:text-sm text-center lg:text-left"
             >
-              VAT included for UK orders. Duties and import taxes are calculated
-              at checkout for other customers Shipping calculated at checkout.
+              Taxes included. Shipping calculated at checkout.
             </Text>
           </div>
         )}
@@ -308,7 +302,7 @@ const ProductSidebar = ({
                   type="email"
                   placeholder="Your email address"
                   required
-                  className="flex-1 px-4 py-2 bg-accent-1 border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-secondary text-sm"
+                  className="flex-1 min-w-0 px-4 py-2 bg-accent-1 border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-secondary text-sm"
                 />
                 <Button
                   type="submit"

@@ -11,6 +11,7 @@ import {
   Users,
   ChartBarIcon,
   Mail,
+  Image,
 } from 'lucide-react'
 import { Text } from '@components/ui'
 import { cn } from '@lib/utils'
@@ -25,6 +26,7 @@ const navItems = [
   { name: 'Orders', href: '/admin/orders', icon: Van },
   { name: 'Customers', href: '/admin/customers', icon: Users },
   { name: 'Newsletter', href: '/admin/newsletter', icon: Mail },
+  { name: 'Gallery', href: '/admin/gallery', icon: Image },
 ]
 
 export default function AdminLayoutClient({

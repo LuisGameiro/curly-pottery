@@ -93,7 +93,7 @@ export default function ClientFAQ() {
             </div>
 
             {openIndex === index && (
-              <Text className="pt-4  text-justify  text-">{item.answer}</Text>
+              <Text className="pt-2 text-justify leading-snug">{item.answer}</Text>
             )}
           </Container>
         </button>

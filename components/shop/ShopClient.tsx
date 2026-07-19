@@ -14,7 +14,6 @@ export default function ShopClient({
   sortMethod: _initialSort,
   categories,
   activeCategory,
-  productCount: initialCount,
   categorySlug,
   initialProducts,
   initialCursor,
@@ -23,7 +22,6 @@ export default function ShopClient({
   sortMethod: SortLabels
   categories: Category[]
   activeCategory: string | null
-  productCount: number
   categorySlug: string | null
   initialProducts: ProductWithVariantsCategories[]
   initialCursor: string | null
@@ -33,7 +31,6 @@ export default function ShopClient({
   const [products, setProducts] = useState(initialProducts)
   const [nextCursor, setNextCursor] = useState<string | null>(initialCursor)
   const [hasMore, setHasMore] = useState(initialHasMore)
-  const [productCount, setProductCount] = useState(initialCount)
   const [isLoading, setIsLoading] = useState(false)
 
   const sort = searchParams.get('sort') || 'newest'
@@ -51,7 +48,6 @@ export default function ShopClient({
         setProducts((prev) => [...prev, ...response.data!.items])
         setNextCursor(response.data.nextCursor)
         setHasMore(response.data.hasMore)
-        setProductCount(response.data.total)
       }
     } finally {
       setIsLoading(false)
@@ -62,25 +58,21 @@ export default function ShopClient({
     setProducts(initialProducts)
     setNextCursor(initialCursor)
     setHasMore(initialHasMore)
-    setProductCount(initialCount)
   }, [
     categorySlug,
     initialCursor,
     initialHasMore,
-    initialCount,
     initialProducts,
   ])
 
   return (
     <Container>
-      <div className="flex flex-col mt-4 lg:mt-8 mb-4">
+      <div className="flex flex-col mt-4 lg:mt-8 mb-4 ml-0 lg:ml-8">
         <Text variant="heading" className="text-3xl font-bold mb-2">
           Welcome to My Shop
         </Text>
-        <Text variant="muted" className="max-w-2xl">
-          Discover my handmade ceramic pieces made with love in North London.
-          All have been crafted to bring warmth, charm and a little everyday joy
-          to your home.
+        <Text variant="muted" className="max-w-2xl whitespace-nowrap">
+          Discover my handmade ceramic pieces made with love in North London. All have been crafted to bring warmth, charm and a little everyday joy to your home.
         </Text>
       </div>
 
@@ -89,7 +81,6 @@ export default function ShopClient({
           sortMethod={sort}
           categories={categories}
           activeCategory={activeCategory}
-          productCount={productCount}
         />
       </div>
 

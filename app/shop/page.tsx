@@ -30,14 +30,13 @@ export default async function ShopPage({
   if (!categories.success) throw new Error(categories.message)
   if (!productsResponse.success) throw new Error(productsResponse.message)
 
-  const { items, total, nextCursor, hasMore } = productsResponse.data!
+  const { items, nextCursor, hasMore } = productsResponse.data!
 
   return (
     <ShopClient
       sortMethod={sort || 'newest'}
       categories={categories.data || []}
       activeCategory={categorySlug}
-      productCount={total}
       categorySlug={categorySlug}
       initialProducts={items}
       initialCursor={nextCursor}

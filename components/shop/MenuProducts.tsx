@@ -11,14 +11,12 @@ interface MenuProductsProps {
   sortMethod: SortLabels
   categories: Category[]
   activeCategory: string | null
-  productCount: number
 }
 
 export default function MenuProducts({
   sortMethod,
   categories,
   activeCategory,
-  productCount,
 }: MenuProductsProps) {
   const router = useRouter()
 
@@ -59,7 +57,7 @@ export default function MenuProducts({
         </button>
         <ul
           className={cn(
-            'absolute left-0 top-full mt-2 p-2 bg-background border-2 border-secondary rounded-2xl shadow-xl min-w-[200px] z-50 transition-all',
+            'absolute left-0 top-full mt-2 p-2 bg-background border-2 border-secondary rounded-2xl shadow-xl min-w-[200px] z-60 transition-all',
             { hidden: !openFilter },
           )}
         >
@@ -91,10 +89,6 @@ export default function MenuProducts({
         </ul>
       </div>
       <div className="ml-auto flex flex-col items-end gap-1">
-        <div className="text-secondary font-bold text-sm px-3">
-          {productCount} {productCount === 1 ? 'item' : 'items'}
-        </div>
-
         <div className="relative flex items-center p-1" ref={containerSortRef}>
           {/* Item count will be handled by ProductList but we can leave a gap here if needed */}
           <div className="relative">
@@ -110,7 +104,7 @@ export default function MenuProducts({
             </button>
             <ul
               className={cn(
-                'absolute right-0 top-full mt-2 p-2 bg-background border-2 border-secondary rounded-2xl shadow-xl min-w-[200px] z-50 transition-all',
+                'absolute right-0 top-full mt-2 p-2 bg-background border-2 border-secondary rounded-2xl shadow-xl min-w-[200px] z-60 transition-all',
                 { hidden: !openSort },
               )}
             >

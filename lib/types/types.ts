@@ -291,6 +291,15 @@ export interface NewsletterDispatchSummary {
   remaining: number
 }
 
+export interface GalleryImage {
+  id: string
+  url: string
+  alt: string | null
+  sortOrder: number
+  createdAt: Date
+  updatedAt: Date
+}
+
 export type ActionResponse<T> =
   | {
       success: true

@@ -10,16 +10,20 @@ type Page = {
 
 const links: Page[] = [
   {
+    name: 'About',
+    url: '/about',
+  },
+  {
+    name: 'Gallery',
+    url: '/gallery',
+  },
+  {
     name: 'FAQ',
     url: '/faq',
   },
   {
     name: 'Contact',
     url: '/contacts',
-  },
-  {
-    name: 'About',
-    url: '/about',
   },
   {
     name: 'Terms of service',
