@@ -1,6 +1,6 @@
 'use server'
 
-import { auth } from '@/auth'
+import { assertAdmin } from '@lib/auth/admin'
 import { ActionResponse } from '@lib/types/types'
 import { prisma } from 'prisma/prisma'
 import * as Sentry from '@sentry/nextjs'
@@ -20,15 +20,8 @@ export async function getDashboardStats(): Promise<
   ActionResponse<DashboardStats>
 > {
   try {
-    const session = await auth()
-
-    if (session?.user?.role !== 'ADMIN') {
-      return {
-        success: false,
-        message: 'Unauthorized: Administrative privileges required.',
-        errors: null,
-      }
-    }
+    const admin = await assertAdmin()
+    if (!admin || 'success' in admin) return admin
 
     const [
       totalCategories,

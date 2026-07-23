@@ -1,72 +1,14 @@
 'use server'
 
-import { revalidatePath, unstable_cache, revalidateTag } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { prisma } from 'prisma/prisma'
 import { Category, ActionResponse } from '@lib/types/types'
 import { slugify } from '@lib/slugify'
 import { deleteBlob } from './serverImages.action'
-import { auth } from '@/auth'
+import { assertAdmin } from '@lib/auth/admin'
 import { CategorySchema } from '@lib/form-validator'
 import { z } from 'zod'
 import * as Sentry from '@sentry/nextjs'
-
-export const getAllCategories = unstable_cache(
-  async (): Promise<ActionResponse<Category[]>> => {
-    try {
-      const categories = await prisma.category.findMany({
-        orderBy: {
-          name: 'asc',
-        },
-      })
-
-      return {
-        success: true,
-        message: 'Fetched all Categories successfully',
-        data: categories,
-      }
-    } catch (error) {
-      console.error('getAllCustomers_ERROR:', error)
-      Sentry.captureException(error)
-      return {
-        success: false,
-        message:
-          error instanceof Error ? error.message : 'A database error occurred',
-        errors: error,
-      }
-    }
-  },
-  ['categories'],
-  { revalidate: 3600, tags: ['categories'] },
-)
-
-export const getCategoryById = unstable_cache(
-  async ({ id }: { id: string }): Promise<ActionResponse<Category | null>> => {
-    try {
-      const category = await prisma.category.findFirst({
-        where: {
-          id,
-        },
-      })
-
-      return {
-        success: true,
-        message: 'Fetched Category successfully',
-        data: category,
-      }
-    } catch (error) {
-      console.error('getCategoryById_ERROR:', error)
-      Sentry.captureException(error)
-      return {
-        success: false,
-        message:
-          error instanceof Error ? error.message : 'A database error occurred',
-        errors: error,
-      }
-    }
-  },
-  ['category-by-id'],
-  { revalidate: 3600, tags: ['categories'] },
-)
 
 export async function upsertCategory({
   id,
@@ -78,15 +20,8 @@ export async function upsertCategory({
   image: string
 }): Promise<ActionResponse<Category>> {
   try {
-    const session = await auth()
-
-    if (session?.user?.role !== 'ADMIN') {
-      return {
-        success: false,
-        message: 'Unauthorized: Administrative privileges required.',
-        errors: null,
-      }
-    }
+    const admin = await assertAdmin()
+    if (!admin || 'success' in admin) return admin
 
     const validation = CategorySchema.safeParse({ name, image })
     if (!validation.success) {
@@ -143,15 +78,8 @@ export async function deleteCategory({
   image: string
 }): Promise<ActionResponse<Category>> {
   try {
-    const session = await auth()
-
-    if (session?.user?.role !== 'ADMIN') {
-      return {
-        success: false,
-        message: 'Unauthorized: Administrative privileges required.',
-        errors: null,
-      }
-    }
+    const admin = await assertAdmin()
+    if (!admin || 'success' in admin) return admin
     await deleteBlob(image)
 
     const category = await prisma.category.delete({

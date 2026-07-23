@@ -6,10 +6,10 @@ const nextConfig: NextConfig = {
   images: {
     qualities: [75, 85, 100],
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos',
-      },
+      // Dev-only placeholder images — remove for production
+      ...(process.env.NODE_ENV === 'development'
+        ? [{ protocol: 'https' as const, hostname: 'picsum.photos' }]
+        : []),
       {
         protocol: 'https',
         hostname: '*.public.blob.vercel-storage.com',
@@ -56,8 +56,8 @@ const nextConfig: NextConfig = {
             value: 'camera=(), microphone=(), geolocation=()',
           },
           {
-          key: 'Cross-Origin-Embedder-Policy',
-          value: 'credentialless',
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'credentialless',
           },
           {
             key: 'Cross-Origin-Opener-Policy',

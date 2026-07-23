@@ -2,7 +2,7 @@
 
 import { del } from '@vercel/blob'
 import { revalidatePath } from 'next/cache'
-import { auth } from '@/auth'
+import { assertAdmin } from '@lib/auth/admin'
 import * as Sentry from '@sentry/nextjs'
 
 export async function deleteBlob(blobs: string) {
@@ -14,15 +14,8 @@ export async function deleteBlob(blobs: string) {
   }
 
   try {
-    const session = await auth()
-
-    if (session?.user?.role !== 'ADMIN') {
-      return {
-        success: false,
-        message:
-          'Unauthorized: Administrative privileges required to delete images.',
-      }
-    }
+    const admin = await assertAdmin()
+    if (!admin || 'success' in admin) return admin
 
     await del(blobs)
     revalidatePath('/admin/gallery')

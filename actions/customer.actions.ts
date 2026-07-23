@@ -13,6 +13,7 @@ import {
 import { registerSchema } from '@lib/form-validator'
 import { hashPassword } from '@lib/auth/password'
 import { auth } from '@/auth'
+import { isAdminRole } from '@lib/auth/admin'
 import { subscribeEmailToNewsletter } from '@lib/newsletter/service'
 import { revalidatePath } from 'next/cache'
 import {
@@ -32,7 +33,7 @@ export async function getAllCustomers(
 ): Promise<ActionResponse<PaginatedResult<UserWithOrders>>> {
   try {
     const session = await auth()
-    if (!session?.user?.id || session.user.role !== 'ADMIN') {
+    if (!session?.user?.id || !isAdminRole(session.user.role)) {
       return {
         success: false,
         message: 'Unauthorized: Administrative privileges required.',
@@ -101,7 +102,7 @@ export async function getUserById(
         errors: null,
       }
     }
-    if (session.user.role !== 'ADMIN' && session.user.id !== id) {
+    if (!isAdminRole(session.user.role) && session.user.id !== id) {
       return {
         success: false,
         message: 'Unauthorized: You can only access your own profile.',
@@ -140,7 +141,7 @@ export async function updateNotes(
   try {
     const session = await auth()
 
-    if (session?.user?.role !== 'ADMIN') {
+    if (!isAdminRole(session?.user?.role)) {
       return {
         success: false,
         message: 'Unauthorized: Administrative privileges required.',
@@ -202,7 +203,7 @@ export async function updateUser({
       }
     }
 
-    if (session.user.role !== 'ADMIN' && session.user.id !== id) {
+    if (!isAdminRole(session.user.role) && session.user.id !== id) {
       return {
         success: false,
         message: 'Unauthorized: You can only update your own profile.',

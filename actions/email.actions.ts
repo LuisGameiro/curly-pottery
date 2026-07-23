@@ -1,7 +1,7 @@
 'use server'
 
 import { hashPassword } from '@lib/auth/password'
-import { auth } from '@/auth'
+import { assertAdmin } from '@lib/auth/admin'
 import { z } from 'zod'
 
 const passwordSchema = z
@@ -48,13 +48,8 @@ export async function sendEmail({
   }
 
   try {
-    const session = await auth()
-    if (session?.user?.role !== 'ADMIN') {
-      return {
-        success: false,
-        message: 'Unauthorized: Administrative privileges required.',
-      }
-    }
+    const admin = await assertAdmin()
+    if (!admin || 'success' in admin) return admin
 
     const { data, error } = await resend.emails.send({
       from: validation.data.from,
@@ -90,10 +85,15 @@ export async function sendResetEmail(
     headersList.get('x-forwarded-for')?.split(',')[0] ??
     headersList.get('x-real-ip') ??
     'unknown'
-  const rateResult = await checkRateLimit(
-    getRateLimitKey(ip, 'password-reset'),
-    { windowMs: 60 * 1000, maxRequests: 2 },
-  )
+  let rateResult: { success: boolean; remaining: number; resetIn: number }
+  try {
+    rateResult = await checkRateLimit(
+      getRateLimitKey(ip, 'password-reset'),
+      { windowMs: 60 * 1000, maxRequests: 2 },
+    )
+  } catch {
+    rateResult = { success: true, remaining: 999, resetIn: 0 }
+  }
   if (!rateResult.success) {
     return {
       success: false,
@@ -171,10 +171,15 @@ export async function resetPassword({
     headersList.get('x-forwarded-for')?.split(',')[0] ??
     headersList.get('x-real-ip') ??
     'unknown'
-  const rateResult = await checkRateLimit(
-    getRateLimitKey(ip, 'reset-password'),
-    { windowMs: 60 * 1000, maxRequests: 5 },
-  )
+  let rateResult: { success: boolean; remaining: number; resetIn: number }
+  try {
+    rateResult = await checkRateLimit(
+      getRateLimitKey(ip, 'reset-password'),
+      { windowMs: 60 * 1000, maxRequests: 5 },
+    )
+  } catch {
+    rateResult = { success: true, remaining: 999, resetIn: 0 }
+  }
   if (!rateResult.success) {
     return {
       success: false,

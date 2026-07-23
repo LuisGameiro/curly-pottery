@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 
-import { getCategoryById } from '@actions/category.actions'
+import { getCategoryById } from '@lib/data/categories'
 import CategoryClient from '../../../../components/admin/CategoryClient'
 import notFound from 'app/not-found'
 import constructMetadata from '@components/common/SEO/SEO'

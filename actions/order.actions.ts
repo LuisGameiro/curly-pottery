@@ -26,9 +26,7 @@ import {
 
 import { z } from 'zod'
 import * as Sentry from '@sentry/nextjs'
-
-const isAdmin = (role: string | null | undefined) =>
-  role?.toUpperCase() === 'ADMIN'
+import { isAdminRole } from '@lib/auth/admin'
 
 export async function getAllOrders(
   pagination?: PaginationInput,
@@ -36,7 +34,7 @@ export async function getAllOrders(
   try {
     const session = await auth()
 
-    if (!session?.user?.id || !isAdmin(session.user.role)) {
+    if (!session?.user?.id || !isAdminRole(session.user.role)) {
       return {
         success: false,
         message: 'Unauthorized: Administrative privileges required.',
@@ -109,7 +107,7 @@ export async function getOrdersById(
       }
     }
 
-    if (!isAdmin(session.user.role) && session.user.id !== id) {
+    if (!isAdminRole(session.user.role) && session.user.id !== id) {
       return {
         success: false,
         message: 'Unauthorized: You can only access your own orders.',
@@ -171,7 +169,7 @@ export async function getOrderById(
     }
 
     const order = await prisma.order.findFirst({
-      where: isAdmin(session.user.role)
+      where: isAdminRole(session.user.role)
         ? { id }
         : {
             id,
@@ -303,7 +301,7 @@ export async function createOrder(
         select: { id: true, price: true, stock: true },
       })
       const variantMap = new Map(variants.map((v) => [v.id, v]))
-      
+
       const validatedItems: CartLineItem[] = []
       for (const item of finalLineItems) {
         const variant = variantMap.get(item.variantId)
@@ -318,7 +316,11 @@ export async function createOrder(
           return {
             success: false,
             message: `Insufficient stock for ${item.name}. Available: ${variant.stock}`,
-            errors: new AppError('Insufficient stock', 'INSUFFICIENT_STOCK', 409),
+            errors: new AppError(
+              'Insufficient stock',
+              'INSUFFICIENT_STOCK',
+              409,
+            ),
           }
         }
         validatedItems.push({
@@ -330,16 +332,40 @@ export async function createOrder(
       }
       finalLineItems = validatedItems
       // Recalculate totals from validated items
-      finalSubtotalPrice = validatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+      finalSubtotalPrice = validatedItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0,
+      )
       finalTotalPrice = finalSubtotalPrice + finalTaxes + finalShippingPrice
     }
 
     if (resolvedUserId) {
       const cart = await prisma.cart.findUnique({
         where: { userId: resolvedUserId },
+        include: {
+          lineItems: {
+            include: {
+              variant: { include: { product: true } },
+            },
+          },
+        },
       })
       if (cart) {
-        finalLineItems = cart.lineItems as unknown as CartLineItem[]
+        finalLineItems = cart.lineItems.map((li) => ({
+          id: li.variant.product.id,
+          variantId: li.variantId,
+          slug: li.variant.product.slug,
+          sku: li.variant.sku,
+          name: li.variant.product.name,
+          images: li.variant.product.images[0] || '',
+          quantity: li.quantity,
+          stock: li.variant.stock,
+          price: Number(li.price),
+          currency: li.currency as CurrencyCode,
+          colorName: li.variant.colorName,
+          sizeName: li.variant.sizeName,
+          discounts: [],
+        })) as CartLineItem[]
         finalSubtotalPrice = Number(cart.subtotalPrice)
         finalTotalPrice = Number(cart.totalPrice)
         finalTaxes = Number(cart.taxes)
@@ -493,7 +519,7 @@ export async function updateOrderStatus(
   try {
     const session = await auth()
 
-    if (!session?.user?.id || !isAdmin(session.user.role)) {
+    if (!session?.user?.id || !isAdminRole(session.user.role)) {
       return {
         success: false,
         message: 'Unauthorized: Administrative privileges required.',

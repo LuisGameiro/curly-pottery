@@ -77,7 +77,7 @@ export default function UserNav({ className }: UserNavProps) {
                 alt="Cart"
                 width={32}
                 height={32}
-                className="text-secondary scale-50 sm:scale-0"
+                className="text-secondary scale-50 sm:scale-100"
               />
             </Button>
             {itemsCount > 0 && (

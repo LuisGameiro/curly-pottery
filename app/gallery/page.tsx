@@ -1,7 +1,7 @@
 import constructMetadata from '@components/common/SEO'
 import { Container, Text } from '@components/ui'
 import Image from 'next/image'
-import { getGalleryImages } from '@actions/Gallery.actions'
+import { getGalleryImages } from '@lib/data/gallery'
 
 export const revalidate = 3600
 

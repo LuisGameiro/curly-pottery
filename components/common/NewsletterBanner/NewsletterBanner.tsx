@@ -60,14 +60,14 @@ const NewsletterBanner = () => {
 
   return (
     <section className="relative bg-secondary/10 border-b border-secondary/20">
-      <div className="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 py-2 pl-2 pr-14 md:pr-14">
-        <div className="flex flex-row items-center justify-center gap-1 md:gap-2">
-          <div className="font-bold text-sm whitespace-nowrap shrink-0">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-1 md:gap-2 py-2 pl-2 pr-14 md:pr-14">
+        <div className="flex flex-row md:contents items-center justify-around md:justify-normal gap-1 md:gap-2">
+          <div className="font-bold text-sm whitespace-nowrap shrink-0 md:order-1">
             Be the first to know
           </div>
           <form
             onSubmit={handleSubmit}
-            className="flex items-center gap-1 shrink min-w-0"
+            className="flex items-center gap-1 shrink min-w-0 md:order-3"
           >
             <input
               id="newsletter-banner-email"
@@ -89,11 +89,7 @@ const NewsletterBanner = () => {
             </button>
           </form>
         </div>
-        <span className="text-xs text-center md:hidden px-1">
-          I am working on new pieces. Enter your email and I&apos;ll let you
-          know when they drop.
-        </span>
-        <span className="text-xs hidden md:inline">
+        <span className="text-xs text-center md:text-left md:order-2">
           I am working on new pieces. Enter your email and I&apos;ll let you
           know when they drop.
         </span>

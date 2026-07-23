@@ -95,8 +95,11 @@ export const DiscountType = {
 
 export type DiscountType = (typeof DiscountType)[keyof typeof DiscountType]
 
+// Client-side cart line item with display data for zustand/localStorage.
+// Server persists CartLineItem model (variantId, quantity, price) and
+// returns the full display shape via JOIN on read.
 export type CartLineItem = {
-  id: string
+  id: string        // product id
   variantId: string
   slug: string
   sku: string
@@ -145,7 +148,7 @@ export type Order = PrismaOrder
 
 type PrismaCart = Prisma.CartGetPayload<null>
 
-export type Cart = PrismaCart
+export type Cart = PrismaCart & { lineItems: CartLineItem[] }
 
 export type Address = Prisma.AddressGetPayload<null>
 

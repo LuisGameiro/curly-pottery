@@ -25,7 +25,12 @@ export async function POST(req: Request) {
     req.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown'
 
   const rateKey = getRateLimitKey(clientIp, 'register')
-  const rateLimit = await checkRateLimit(rateKey)
+  let rateLimit: { success: boolean; remaining: number; resetIn: number }
+  try {
+    rateLimit = await checkRateLimit(rateKey)
+  } catch {
+    rateLimit = { success: true, remaining: 999, resetIn: 0 }
+  }
 
   const headers = new Headers({
     'X-RateLimit-Limit': '5',

@@ -1,40 +1,14 @@
 'use server'
 
-import { revalidatePath, unstable_cache, revalidateTag } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { prisma } from 'prisma/prisma'
 import { GalleryImage, ActionResponse } from '@lib/types/types'
 import { deleteBlob } from './serverImages.action'
-import { auth } from '@/auth'
+import { assertAdmin } from '@lib/auth/admin'
 import * as Sentry from '@sentry/nextjs'
 
-export const getGalleryImages = unstable_cache(
-  async (): Promise<ActionResponse<GalleryImage[]>> => {
-    try {
-      const images = await prisma.galleryImage.findMany({
-        orderBy: {
-          sortOrder: 'asc',
-        },
-      })
-
-      return {
-        success: true,
-        message: 'Fetched gallery images successfully',
-        data: images,
-      }
-    } catch (error) {
-      console.error('getGalleryImages_ERROR:', error)
-      Sentry.captureException(error)
-      return {
-        success: false,
-        message:
-          error instanceof Error ? error.message : 'A database error occurred',
-        errors: error,
-      }
-    }
-  },
-  ['gallery-images'],
-  { revalidate: 3600, tags: ['gallery'] },
-)
+// Re-export cached data function as server action for client-component callers
+export { getGalleryImages } from '@lib/data/gallery'
 
 export async function addGalleryImage(
   url: string,
@@ -55,15 +29,8 @@ export async function addGalleryImage(
   }
 
   try {
-    const session = await auth()
-
-    if (session?.user?.role !== 'ADMIN') {
-      return {
-        success: false,
-        message: 'Unauthorized: Administrative privileges required.',
-        errors: null,
-      }
-    }
+    const admin = await assertAdmin()
+    if (!admin || 'success' in admin) return admin
 
     // Get the current highest sort order
     const lastImage = await prisma.galleryImage.findFirst({
@@ -112,15 +79,8 @@ export async function deleteGalleryImage(
   }
 
   try {
-    const session = await auth()
-
-    if (session?.user?.role !== 'ADMIN') {
-      return {
-        success: false,
-        message: 'Unauthorized: Administrative privileges required.',
-        errors: null,
-      }
-    }
+    const admin = await assertAdmin()
+    if (!admin || 'success' in admin) return admin
 
     const image = await prisma.galleryImage.findUnique({
       where: { id },
@@ -175,15 +135,8 @@ export async function reorderGalleryImages(
   }
 
   try {
-    const session = await auth()
-
-    if (session?.user?.role !== 'ADMIN') {
-      return {
-        success: false,
-        message: 'Unauthorized: Administrative privileges required.',
-        errors: null,
-      }
-    }
+    const admin = await assertAdmin()
+    if (!admin || 'success' in admin) return admin
 
     const updates = ids.map((id, index) =>
       prisma.galleryImage.update({

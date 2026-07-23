@@ -39,11 +39,14 @@ export default function useCart() {
     [cartItems],
   )
 
+  // totalPrice equals subtotalPrice here — taxes/shipping are computed at checkout
+  const totalPrice = subtotal
+
   return {
     data: {
       lineItems: cartItems,
       subtotalPrice: subtotal,
-      totalPrice: subtotal,
+      totalPrice,
       currency: CurrencyCode.GBP,
     },
     isLoading,

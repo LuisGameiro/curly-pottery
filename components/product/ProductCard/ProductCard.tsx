@@ -59,6 +59,7 @@ const ProductCard = ({
               height={250}
               width={250}
               quality={85}
+              crossOrigin="anonymous"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               style={{
                 aspectRatio: '1/1',
@@ -84,6 +85,7 @@ const ProductCard = ({
                 height={500}
                 width={500}
                 quality={100}
+                crossOrigin="anonymous"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 loading={priority ? undefined : 'lazy'}
                 style={{

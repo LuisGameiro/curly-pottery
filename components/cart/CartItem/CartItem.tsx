@@ -78,6 +78,7 @@ const CartItem = ({
               height={125}
               width={125}
               quality={85}
+              crossOrigin="anonymous"
               style={{
                 aspectRatio: '1/1',
                 objectFit: 'cover',

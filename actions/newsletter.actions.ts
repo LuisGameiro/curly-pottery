@@ -6,7 +6,6 @@ import {
   newsletterSubscriptionSchema,
   newsletterTokenSchema,
 } from '@lib/form-validator'
-import { auth } from '@/auth'
 import { ActionResponse, NewsletterAdminOverview } from '@lib/types/types'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
@@ -21,19 +20,7 @@ import {
   syncOptedInUsersToNewsletter,
   unsubscribeNewsletterByToken,
 } from '@lib/newsletter/service'
-
-async function assertAdminAccess() {
-  const session = await auth()
-
-  if (session?.user?.role !== 'ADMIN') {
-    return {
-      success: false,
-      message: 'Unauthorized: Administrative privileges required.',
-    } as const
-  }
-
-  return session
-}
+import { assertAdmin } from '@lib/auth/admin'
 
 export async function subscribeToNewsletter(
   rawInput: unknown,
@@ -43,10 +30,15 @@ export async function subscribeToNewsletter(
     headersList.get('x-forwarded-for')?.split(',')[0] ??
     headersList.get('x-real-ip') ??
     'unknown'
-  const rateResult = await checkRateLimit(getRateLimitKey(ip, 'subscribe'), {
-    windowMs: 60 * 1000,
-    maxRequests: 5,
-  })
+  let rateResult: { success: boolean; remaining: number; resetIn: number }
+  try {
+    rateResult = await checkRateLimit(getRateLimitKey(ip, 'subscribe'), {
+      windowMs: 60 * 1000,
+      maxRequests: 5,
+    })
+  } catch {
+    rateResult = { success: true, remaining: 999, resetIn: 0 }
+  }
   if (!rateResult.success) {
     return {
       success: false,
@@ -123,7 +115,7 @@ export async function getNewsletterAdminOverview(): Promise<
   ActionResponse<NewsletterAdminOverview>
 > {
   try {
-    const access = await assertAdminAccess()
+    const access = await assertAdmin()
     if (!access || ('success' in access && !access.success)) return access
 
     const overview = await getNewsletterAdminOverviewData()
@@ -146,7 +138,7 @@ export async function getNewsletterAdminOverview(): Promise<
 export async function createNewsletterCampaignAction(
   rawInput: unknown,
 ): Promise<ActionResponse<{ id: string }>> {
-  const access = await assertAdminAccess()
+  const access = await assertAdmin()
   if (!access || ('success' in access && !access.success)) return access
 
   const validation = newsletterCampaignSchema.safeParse(rawInput)
@@ -182,7 +174,7 @@ export async function createNewsletterCampaignAction(
 export async function queueNewsletterCampaignAction(
   rawInput: unknown,
 ): Promise<ActionResponse<{ recipients: number }>> {
-  const access = await assertAdminAccess()
+  const access = await assertAdmin()
   if (!access || ('success' in access && !access.success)) return access
 
   const validation = newsletterCampaignIdSchema.safeParse(rawInput)
@@ -226,7 +218,7 @@ export async function runNewsletterDispatchAction(): Promise<
   }>
 > {
   try {
-    const access = await assertAdminAccess()
+    const access = await assertAdmin()
     if (!access || ('success' in access && !access.success)) return access
     const result = await dispatchQueuedNewsletterBatch()
 
@@ -251,7 +243,7 @@ export async function syncNewsletterSubscribersAction(): Promise<
   ActionResponse<{ synced: number }>
 > {
   try {
-    const access = await assertAdminAccess()
+    const access = await assertAdmin()
     if (!access || ('success' in access && !access.success)) return access
     const synced = await syncOptedInUsersToNewsletter()
 

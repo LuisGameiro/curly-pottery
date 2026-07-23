@@ -47,6 +47,9 @@ next-env.d.ts
 # Sentry Config File
 .env.sentry-build-plugin
 
+# Deepwork session state
+.slim/deepwork/
+
 # Playwright
 node_modules/
 /test-results/

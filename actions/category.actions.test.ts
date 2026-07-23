@@ -1,9 +1,5 @@
-import {
-  deleteCategory,
-  getAllCategories,
-  getCategoryById,
-  upsertCategory,
-} from './category.actions'
+import { deleteCategory, upsertCategory } from './category.actions'
+import { getAllCategories, getCategoryById } from '@lib/data/categories'
 import { prisma } from 'prisma/prisma'
 import { auth } from '@/auth'
 
@@ -15,6 +11,7 @@ jest.mock('prisma/prisma', () => ({
 jest.mock('next/cache', () => ({
   revalidatePath: jest.fn(),
   revalidateTag: jest.fn(),
+  unstable_cache: jest.fn((fn) => fn),
 }))
 
 jest.mock('./serverImages.action', () => ({

@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import { getProductById } from '@actions/product.actions'
-import { getAllCategories } from '@actions/category.actions'
+import { getAllCategories } from '@lib/data/categories'
 import notFound from 'app/not-found'
 import { Category, ProductWithVariantsCategories } from '@lib/types/types'
 import ProductClient from '@components/admin/product/ProductClient'

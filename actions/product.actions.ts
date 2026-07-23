@@ -9,13 +9,13 @@ import {
 import { prisma } from 'prisma/prisma'
 import { deleteBlob } from './serverImages.action'
 import { auth } from '@/auth'
-import { revalidatePath, unstable_cache, revalidateTag } from 'next/cache'
+import { isAdminRole } from '@lib/auth/admin'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import {
   PaginationInput,
   PaginatedResult,
   ADMIN_PAGE_SIZE,
   SHOP_PAGE_SIZE,
-  SEARCH_PAGE_SIZE,
   encodeCursor,
   decodeCursor,
 } from '@lib/pagination'
@@ -157,7 +157,7 @@ export async function deleteProduct({
   try {
     const session = await auth()
 
-    if (session?.user?.role !== 'ADMIN') {
+    if (!isAdminRole(session?.user?.role)) {
       return {
         success: false,
         message: 'Unauthorized: Administrative privileges required.',
@@ -212,7 +212,7 @@ export async function toggleVisibility({
   try {
     const session = await auth()
 
-    if (session?.user?.role !== 'ADMIN') {
+    if (!isAdminRole(session?.user?.role)) {
       return {
         success: false,
         message: 'Unauthorized: Administrative privileges required.',
@@ -253,7 +253,7 @@ export async function getAllProducts(
 > {
   try {
     const session = await auth()
-    const isAdmin = session?.user?.role === 'ADMIN'
+    const isAdmin = isAdminRole(session?.user?.role)
 
     const take = pagination?.take ?? ADMIN_PAGE_SIZE
     const search = pagination?.search?.trim()
@@ -498,7 +498,7 @@ export async function upsertProduct(
   try {
     const session = await auth()
 
-    if (session?.user?.role !== 'ADMIN') {
+    if (!isAdminRole(session?.user?.role)) {
       return {
         success: false,
         message: 'Unauthorized: Administrative privileges required.',
@@ -559,7 +559,9 @@ export async function upsertProduct(
           set: categoryIds.map((catId) => ({ id: catId })),
         },
         variants: {
-          deleteMany: { id: { notIn: existingVariantIds.filter((id) => id !== '') } },
+          deleteMany: {
+            id: { notIn: existingVariantIds.filter((id) => id !== '') },
+          },
           create: variants.map((v) => prepareVariant(v)),
         },
       },
@@ -593,70 +595,4 @@ export async function upsertProduct(
   }
 }
 
-export const searchProducts = unstable_cache(
-  async (
-    query: string,
-    pagination?: PaginationInput,
-  ): Promise<
-    ActionResponse<PaginatedResult<ProductWithVariantsCategories> | null>
-  > => {
-    try {
-      const take = pagination?.take ?? SEARCH_PAGE_SIZE
 
-      const where: Prisma.ProductWhereInput = {
-        hide: false,
-        OR: [
-          { name: { contains: query, mode: 'insensitive' } },
-          {
-            categories: {
-              some: { name: { contains: query, mode: 'insensitive' } },
-            },
-          },
-        ],
-      }
-
-      const cursor = pagination?.cursor
-        ? decodeCursor(pagination.cursor)
-        : undefined
-
-      const [products, total] = await Promise.all([
-        prisma.product.findMany({
-          where,
-          include: {
-            variants: {
-              include: { optionValues: { include: { option: true } } },
-            },
-            categories: true,
-          },
-          orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
-          ...(cursor ? { cursor: { id: cursor.id }, skip: 1 } : {}),
-          take: take + 1,
-        }),
-        prisma.product.count({ where }),
-      ])
-
-      const hasMore = products.length > take
-      const items = products
-        .slice(0, take)
-        .map(formatProduct) as unknown as ProductWithVariantsCategories[]
-      const nextCursor = hasMore ? encodeCursor(items.at(-1)!.id) : null
-
-      return {
-        success: true,
-        message: 'Searched products successfully',
-        data: { items, nextCursor, hasMore, total },
-      }
-    } catch (error) {
-      console.error('searchProducts_ERROR:', error)
-      Sentry.captureException(error)
-      return {
-        success: false,
-        message:
-          error instanceof Error ? error.message : 'A database error occurred',
-        errors: error,
-      }
-    }
-  },
-  ['search-products'],
-  { revalidate: 3600, tags: ['products'] },
-)

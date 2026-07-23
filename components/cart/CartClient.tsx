@@ -41,7 +41,7 @@ export default function CartClient() {
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
-        <div className="lg:col-span-8 order-2 lg:order-1">
+        <div className="lg:col-span-8">
           <ul className="divide-y border-b">
             {data?.lineItems.map((item: CartLineItem) => (
               <CartItem key={item.variantId} item={item} />
@@ -49,7 +49,7 @@ export default function CartClient() {
           </ul>
         </div>
 
-        <Container variant="box" className="lg:col-span-4 order-1 lg:order-2">
+        <Container variant="box" className="lg:col-span-4">
           <Text variant="boxTitle">Order Summary</Text>
           <div className="space-y-1 pb-4 border-b">
             <div className="flex justify-between">

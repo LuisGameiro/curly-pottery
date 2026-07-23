@@ -4,7 +4,7 @@ import CategoriesCard from '@components/product/categoriesCard'
 import { Grid, Marquee } from '@components/ui'
 import HomeHero from '@components/ui/HomeHero/HomeHero'
 import { Product } from '@lib/types/types'
-import { getAllCategories } from '@actions/category.actions'
+import { getAllCategories } from '@lib/data/categories'
 import { getRandomProducts } from '@actions/product.actions'
 
 export const metadata = constructMetadata({

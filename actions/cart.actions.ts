@@ -1,7 +1,7 @@
 'use server'
 
 import { auth } from '@/auth'
-import { CartLineItem, Cart } from '@lib/types/types'
+import { CartLineItem, Cart, CurrencyCode, Discount } from '@lib/types/types'
 import { prisma } from 'prisma/prisma'
 import { calculateDiscount } from '@lib/calculate-price'
 import { revalidatePath } from 'next/cache'
@@ -14,28 +14,45 @@ export async function getCartFromDbAction(): Promise<Cart | null> {
 
     if (!session?.user?.id) return null
 
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
+    const cart = await prisma.cart.findUnique({
+      where: { userId: session.user.id },
       include: {
-        cart: true,
+        lineItems: {
+          include: {
+            variant: {
+              include: { product: true },
+            },
+          },
+        },
       },
     })
 
-    if (!user?.cart) return null
+    if (!cart) return null
 
-    // Convert Decimals to numbers for frontend compatibility
+    // Map CartLineItem[] → client-side CartLineItem[] with display data from JOIN
+    const lineItems: CartLineItem[] = cart.lineItems.map((li) => ({
+      id: li.variant.product.id,
+      variantId: li.variantId,
+      slug: li.variant.product.slug,
+      sku: li.variant.sku,
+      name: li.variant.product.name,
+      images: li.variant.product.images[0] || '',
+      quantity: li.quantity,
+      stock: li.variant.stock,
+      price: Number(li.price),
+      currency: li.currency as CurrencyCode,
+      colorName: li.variant.colorName,
+      sizeName: li.variant.sizeName,
+      discounts: (li.variant.discounts ?? []) as Discount[],
+    }))
+
     return {
-      ...user.cart,
-      subtotalPrice: Number(user.cart.subtotalPrice),
-      totalPrice: Number(user.cart.totalPrice),
-      shippingPrice: Number(user.cart.shippingPrice),
-      taxes: Number(user.cart.taxes),
-      lineItems: (user.cart.lineItems as unknown as CartLineItem[]).map(
-        (item) => ({
-          ...item,
-          price: Number(item.price),
-        }),
-      ),
+      ...cart,
+      subtotalPrice: Number(cart.subtotalPrice),
+      totalPrice: Number(cart.totalPrice),
+      shippingPrice: Number(cart.shippingPrice),
+      taxes: Number(cart.taxes),
+      lineItems,
     } as unknown as Cart
   } catch (error) {
     console.error('getCartFromDbAction_ERROR:', error)
@@ -84,13 +101,34 @@ export async function syncCartAction(items: CartLineItem[]) {
       }
     }
 
-    await prisma.cart.upsert({
-      where: { userId: session.user.id },
-      update: { lineItems: validatedItems },
-      create: {
-        lineItems: validatedItems,
-        user: { connect: { id: session.user.id } },
-      },
+    // Delete existing line items and recreate (inside a transaction)
+    await prisma.$transaction(async (tx) => {
+      // First get or create the cart
+      const cart = await tx.cart.upsert({
+        where: { userId: session.user.id },
+        update: {},
+        create: {
+          user: { connect: { id: session.user.id } },
+        },
+      })
+
+      // Delete existing line items
+      await tx.cartLineItem.deleteMany({
+        where: { cartId: cart.id },
+      })
+
+      // Create new line items
+      if (validatedItems.length > 0) {
+        await tx.cartLineItem.createMany({
+          data: validatedItems.map((item) => ({
+            cartId: cart.id,
+            variantId: item.variantId,
+            quantity: item.quantity,
+            price: item.price,
+            currency: item.currency || 'GBP',
+          })),
+        })
+      }
     })
 
     revalidatePath('/cart')
@@ -124,10 +162,7 @@ export async function deleteCart(cartId: string) {
   }
 }
 
-export async function updateCartPrice(
-  taxes: number,
-  shippingPrice: number,
-) {
+export async function updateCartPrice(taxes: number, shippingPrice: number) {
   try {
     const session = await auth()
 
@@ -146,7 +181,25 @@ export async function updateCartPrice(
       return { success: false, message: 'Cart not found.' }
     }
 
-    const items = (cart.lineItems || []) as CartLineItem[]
+    const lineItemRows = await prisma.cartLineItem.findMany({
+      where: { cartId: cart.id },
+    })
+    const items: CartLineItem[] = lineItemRows.map((li) => ({
+      ...li,
+      id: '',
+      variantId: li.variantId,
+      quantity: li.quantity,
+      price: Number(li.price),
+      currency: li.currency as CurrencyCode,
+      slug: '',
+      sku: '',
+      name: '',
+      images: '',
+      stock: 0,
+      colorName: '',
+      sizeName: '',
+      discounts: [],
+    }))
     const trueSubtotal = items.reduce((total, item) => {
       const { finalPrice } = calculateDiscount(item.price, item.discounts || [])
       return total + finalPrice * item.quantity

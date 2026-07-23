@@ -1,4 +1,4 @@
-import { getAllCategories } from '@actions/category.actions'
+import { getAllCategories } from '@lib/data/categories'
 import ShopClient from '../../components/shop/ShopClient'
 import { getProductsByCategorySlug as getProductsByCategorySlugAction } from '@actions/product.actions'
 import constructMetadata from '@components/common/SEO'

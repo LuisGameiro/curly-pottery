@@ -74,10 +74,7 @@ export default function CheckoutClient() {
   const nextToPayment = async () => {
     try {
       setLoading(true)
-      await updateCartPrice(
-        currentValues.taxes,
-        currentValues.shippingPrice,
-      )
+      await updateCartPrice(currentValues.taxes, currentValues.shippingPrice)
 
       if (paymentProvider === 'klarna') {
         const klarnaResponse = await fetch(

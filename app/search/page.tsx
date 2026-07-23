@@ -1,4 +1,4 @@
-import { searchProducts } from '@actions/product.actions'
+import { searchProducts } from '@lib/data/products'
 import { ProductCard } from '@components/product'
 import { Text } from '@components/ui'
 import { SEARCH_PAGE_SIZE } from '@lib/pagination'

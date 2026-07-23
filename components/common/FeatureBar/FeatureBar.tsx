@@ -45,11 +45,11 @@ export default function FeatureBar({ className }: FeatureBarProps) {
               </Text>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-2 shrink-0 w-full sm:w-auto">
+            <div className="flex flex-row flex-wrap gap-1.5 sm:gap-2 shrink-0">
               <Button
                 type="button"
                 variant="flat"
-                className="w-full sm:w-auto bg-transparent border border-white hover:bg-white/10"
+                className="bg-transparent border border-white hover:bg-white/10 text-xs sm:text-sm px-3 py-1.5 sm:px-5 sm:py-5"
                 onClick={() => setIsModalOpen(true)}
               >
                 Manage Preferences
@@ -57,7 +57,7 @@ export default function FeatureBar({ className }: FeatureBarProps) {
               <Button
                 type="button"
                 variant="slim"
-                className="w-full sm:w-auto"
+                className="text-xs sm:text-sm"
                 onClick={handleAcceptEssential}
               >
                 Essential Only
@@ -65,7 +65,7 @@ export default function FeatureBar({ className }: FeatureBarProps) {
               <Button
                 type="button"
                 variant="slim"
-                className="w-full sm:w-auto"
+                className="text-xs sm:text-sm"
                 onClick={handleAcceptAll}
               >
                 Accept All
