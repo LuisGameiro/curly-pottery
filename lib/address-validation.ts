@@ -3,6 +3,7 @@ export async function validateUKPostcode(postcode: string): Promise<boolean> {
   try {
     const res = await fetch(
       `https://api.postcodes.io/postcodes/${postcode.replace(/\s/g, '')}/validate`,
+      { next: { revalidate: 86400 } },
     )
     const data = await res.json()
     return !!data.result

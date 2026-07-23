@@ -1,14 +1,14 @@
 import Image from 'next/image'
+import logoImage from '@public/Curly Logo Final 1.png'
 
 const Logo = ({ className = '', ...props }) => (
   <Image
-    src="/Curly Logo Final 1.png"
+    src={logoImage}
     alt="Logo"
-    width={64}
-    height={64}
     quality={85}
     loading="eager"
     className={className}
+    placeholder="blur"
     {...props}
   />
 )

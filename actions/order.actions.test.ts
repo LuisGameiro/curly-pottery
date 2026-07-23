@@ -7,7 +7,7 @@ import {
   updateOrderStatus,
 } from './order.actions'
 import { prisma } from 'prisma/prisma'
-import { getServerSession } from 'next-auth'
+import { auth } from '@/auth'
 
 jest.mock('prisma/prisma', () => ({
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -19,18 +19,12 @@ jest.mock('next/cache', () => ({
   revalidateTag: jest.fn(),
 }))
 
-jest.mock('next-auth', () => ({
-  getServerSession: jest.fn(),
-}))
-
-const mockGetServerSession = getServerSession as jest.MockedFunction<
-  typeof getServerSession
->
+const mockAuth = auth as jest.Mock
 
 describe('getAllOrders', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    mockGetServerSession.mockResolvedValue({
+    mockAuth.mockResolvedValue({
       user: { id: 'admin-1', role: 'ADMIN' },
     })
   })
@@ -96,7 +90,7 @@ describe('getAllOrders', () => {
   })
 
   it('should reject non-admin users', async () => {
-    mockGetServerSession.mockResolvedValue({
+    mockAuth.mockResolvedValue({
       user: { id: 'user-1', role: 'USER' },
     })
 
@@ -113,7 +107,7 @@ describe('getAllOrders', () => {
 describe('getOrdersById', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    mockGetServerSession.mockResolvedValue({
+    mockAuth.mockResolvedValue({
       user: { id: 'user1', role: 'USER' },
     })
   })
@@ -197,7 +191,7 @@ describe('getOrdersById', () => {
 describe('getOrderById', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    mockGetServerSession.mockResolvedValue({
+    mockAuth.mockResolvedValue({
       user: { id: 'user1', role: 'USER' },
     })
   })
@@ -258,7 +252,7 @@ describe('getOrderById', () => {
   })
 
   it('should allow admin to fetch any order by id', async () => {
-    mockGetServerSession.mockResolvedValue({
+    mockAuth.mockResolvedValue({
       user: { id: 'admin-1', role: 'ADMIN' },
     })
     ;(prisma.order.findFirst as jest.Mock).mockResolvedValue({
@@ -278,7 +272,7 @@ describe('getOrderById', () => {
 describe('createOrder', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    mockGetServerSession.mockResolvedValue({
+    mockAuth.mockResolvedValue({
       user: { id: 'user1', role: 'USER', email: 'john@example.com' },
     })
     globalThis.fetch = jest.fn().mockImplementation((url) => {
@@ -347,7 +341,7 @@ describe('createOrder', () => {
   })
 
   it('should create order without userId', async () => {
-    mockGetServerSession.mockResolvedValue(null)
+    mockAuth.mockResolvedValue(null)
 
     const mockOrder = {
       id: '2',
@@ -557,7 +551,7 @@ describe('createOrder', () => {
 describe('updateOrderStatus', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    mockGetServerSession.mockResolvedValue({
+    mockAuth.mockResolvedValue({
       user: { id: 'admin-1', role: 'ADMIN' },
     })
   })
@@ -621,7 +615,7 @@ describe('updateOrderStatus', () => {
   })
 
   it('should reject non-admin status updates', async () => {
-    mockGetServerSession.mockResolvedValue({
+    mockAuth.mockResolvedValue({
       user: { id: 'user-1', role: 'USER' },
     })
 

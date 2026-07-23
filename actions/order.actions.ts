@@ -9,10 +9,10 @@ import {
   ActionResponse,
   CreateOrder,
   CartLineItem,
+  CurrencyCode,
 } from '@lib/types/types'
 import { revalidatePath } from 'next/cache'
-import { authOptions } from '@lib/auth/authOptions'
-import { getServerSession } from 'next-auth'
+import { auth } from '@/auth'
 import { AppError, DatabaseError, NetworkError, formatError } from '@lib/errors'
 import { withFetch } from '@lib/errors-utils'
 import {
@@ -24,6 +24,9 @@ import {
   decodeCursor,
 } from '@lib/pagination'
 
+import { z } from 'zod'
+import * as Sentry from '@sentry/nextjs'
+
 const isAdmin = (role: string | null | undefined) =>
   role?.toUpperCase() === 'ADMIN'
 
@@ -31,7 +34,7 @@ export async function getAllOrders(
   pagination?: PaginationInput,
 ): Promise<ActionResponse<PaginatedResult<OrderWithUser> | null>> {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (!session?.user?.id || !isAdmin(session.user.role)) {
       return {
@@ -81,6 +84,7 @@ export async function getAllOrders(
     }
   } catch (error) {
     console.error('getAllOrders_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:
@@ -95,7 +99,7 @@ export async function getOrdersById(
   pagination?: PaginationInput,
 ): Promise<ActionResponse<PaginatedResult<OrderWithUser> | null>> {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (!session?.user?.id) {
       return {
@@ -142,6 +146,7 @@ export async function getOrdersById(
     }
   } catch (error) {
     console.error('getOrderById_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:
@@ -155,7 +160,7 @@ export async function getOrderById(
   id: string,
 ): Promise<ActionResponse<OrderWithUser | null>> {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (!session?.user?.id) {
       return {
@@ -185,6 +190,7 @@ export async function getOrderById(
     }
   } catch (error) {
     console.error('getOrderById_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:
@@ -194,11 +200,37 @@ export async function getOrderById(
   }
 }
 
+const createOrderSchema = z.object({
+  email: z.string().email().optional().or(z.literal('')),
+  phone: z.string().max(20).optional(),
+  firstName: z.string().min(1).max(100),
+  lastName: z.string().min(1).max(100),
+  address: z.object({
+    address: z.string().min(1).max(500),
+    postalCode: z.string().min(1).max(20),
+    city: z.string().min(1).max(100),
+    country: z.string().min(1).max(100),
+    company: z.string().max(200).optional(),
+  }),
+  billingAddress: z
+    .object({
+      address: z.string().min(1).max(500),
+      postalCode: z.string().min(1).max(20),
+      city: z.string().min(1).max(100),
+      country: z.string().min(1).max(100),
+      company: z.string().max(200).optional(),
+    })
+    .optional(),
+  shippingMethod: z.string().min(1).max(100),
+  currency: z.nativeEnum(CurrencyCode).default('GBP'),
+})
+
 export async function createOrder(
   checkoutId: string,
   {
     userId,
     address,
+    billingAddress,
     firstName,
     lastName,
     phone,
@@ -214,7 +246,26 @@ export async function createOrder(
   }: CreateOrder,
 ): Promise<ActionResponse<Order | null>> {
   try {
-    const session = await getServerSession(authOptions)
+    // Validate inputs to prevent arbitrary field injection
+    const inputValidation = createOrderSchema.safeParse({
+      email,
+      phone,
+      firstName,
+      lastName,
+      address,
+      billingAddress,
+      shippingMethod,
+    })
+    if (!inputValidation.success) {
+      return {
+        success: false,
+        message: 'Invalid order fields',
+        errors: z.flattenError(inputValidation.error),
+      }
+    }
+    const v = inputValidation.data
+
+    const session = await auth()
     const sessionUserId = session?.user?.id ?? null
 
     if (userId && (!sessionUserId || sessionUserId !== userId)) {
@@ -226,7 +277,7 @@ export async function createOrder(
     }
 
     const resolvedUserId = sessionUserId || userId || null
-    const resolvedEmail = session?.user?.email || email
+    const resolvedEmail = session?.user?.email || v.email
 
     if (!resolvedEmail) {
       return {
@@ -243,6 +294,45 @@ export async function createOrder(
     let finalTaxes = taxes || 0
     let finalShippingPrice = shippingPrice || 0
     let finalCurrency = currency || 'GBP'
+
+    // For guest users, still validate variant existence and server prices
+    if (!resolvedUserId && finalLineItems.length > 0) {
+      const variantIds = finalLineItems.map((item) => item.variantId)
+      const variants = await prisma.productVariant.findMany({
+        where: { id: { in: variantIds } },
+        select: { id: true, price: true, stock: true },
+      })
+      const variantMap = new Map(variants.map((v) => [v.id, v]))
+      
+      const validatedItems: CartLineItem[] = []
+      for (const item of finalLineItems) {
+        const variant = variantMap.get(item.variantId)
+        if (!variant) {
+          return {
+            success: false,
+            message: `Variant ${item.variantId} not found.`,
+            errors: new DatabaseError('Variant not found', 'createOrder'),
+          }
+        }
+        if (variant.stock < item.quantity) {
+          return {
+            success: false,
+            message: `Insufficient stock for ${item.name}. Available: ${variant.stock}`,
+            errors: new AppError('Insufficient stock', 'INSUFFICIENT_STOCK', 409),
+          }
+        }
+        validatedItems.push({
+          ...item,
+          price: Number(variant.price), // force server price
+          quantity: Math.min(item.quantity, variant.stock),
+          stock: variant.stock,
+        })
+      }
+      finalLineItems = validatedItems
+      // Recalculate totals from validated items
+      finalSubtotalPrice = validatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+      finalTotalPrice = finalSubtotalPrice + finalTaxes + finalShippingPrice
+    }
 
     if (resolvedUserId) {
       const cart = await prisma.cart.findUnique({
@@ -299,20 +389,20 @@ export async function createOrder(
       const newOrder = await tx.order.create({
         data: {
           lineItems: finalLineItems,
-          lastName,
-          firstName,
+          lastName: v.lastName,
+          firstName: v.firstName,
           email: resolvedEmail,
-          phone,
+          phone: v.phone,
           discounts: discounts || [],
           currency: finalCurrency,
-          shippingAddress: address || {},
-          billingAddress: address || {},
+          shippingAddress: v.address || {},
+          billingAddress: v.address || {},
           status: 'PENDING',
           taxes: new Prisma.Decimal(finalTaxes),
           shippingPrice: new Prisma.Decimal(finalShippingPrice),
           subtotalPrice: new Prisma.Decimal(finalSubtotalPrice),
           totalPrice: new Prisma.Decimal(finalTotalPrice),
-          shippingMethod,
+          shippingMethod: v.shippingMethod,
           ...(resolvedUserId && {
             user: { connect: { id: resolvedUserId } },
           }),
@@ -382,6 +472,7 @@ export async function createOrder(
     }
   } catch (error) {
     console.error('createOrder_ERROR:', error)
+    Sentry.captureException(error)
 
     if (error instanceof AppError) {
       return { success: false, message: error.message, errors: error }
@@ -400,7 +491,7 @@ export async function updateOrderStatus(
   newStatus: string,
 ): Promise<ActionResponse<Order | null>> {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (!session?.user?.id || !isAdmin(session.user.role)) {
       return {
@@ -410,7 +501,8 @@ export async function updateOrderStatus(
       }
     }
 
-    const status = newStatus.toUpperCase() as OrderStatus
+    const orderStatusSchema = z.nativeEnum(OrderStatus)
+    const status = orderStatusSchema.parse(newStatus.toUpperCase())
 
     const order = await prisma.order.update({
       where: { id: orderId },
@@ -425,6 +517,7 @@ export async function updateOrderStatus(
     }
   } catch (error) {
     console.error('updateOrderStatus_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:

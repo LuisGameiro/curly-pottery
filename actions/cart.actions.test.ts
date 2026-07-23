@@ -8,11 +8,7 @@ import { PrismaClient } from 'prisma/generated/prisma/client'
 import { prisma } from 'prisma/prisma'
 import { mockReset, DeepMockProxy } from 'jest-mock-extended'
 
-jest.mock('next-auth', () => ({
-  getServerSession: jest.fn(),
-}))
-
-import { getServerSession } from 'next-auth'
+import { auth } from '@/auth'
 import { CartLineItem } from '@lib/types/types'
 
 jest.mock('prisma/prisma', () => ({
@@ -30,7 +26,7 @@ describe('getCartFromDbAction', () => {
   })
 
   it('should return null when session is not available', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue(null)
+    ;(auth as jest.Mock).mockResolvedValue(null)
 
     const result = await getCartFromDbAction()
 
@@ -38,7 +34,7 @@ describe('getCartFromDbAction', () => {
   })
 
   it('should return null when session user id is not available', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({ user: {} })
+    ;(auth as jest.Mock).mockResolvedValue({ user: {} })
 
     const result = await getCartFromDbAction()
 
@@ -46,7 +42,7 @@ describe('getCartFromDbAction', () => {
   })
 
   it('should return null when user has no cart', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
@@ -70,7 +66,7 @@ describe('getCartFromDbAction', () => {
       shippingPrice: 0,
       currency: 'GBP',
     }
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
@@ -94,7 +90,7 @@ describe('getCartFromDbAction - additional', () => {
   })
 
   it('should return null when user is not found in DB', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue(null)
@@ -115,7 +111,7 @@ describe('syncCartAction', () => {
   })
 
   it('should not upsert when session is not available', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue(null)
+    ;(auth as jest.Mock).mockResolvedValue(null)
 
     await syncCartAction([])
 
@@ -140,7 +136,7 @@ describe('syncCartAction', () => {
         discounts: [],
       },
     ]
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.productVariant.findUnique as jest.Mock).mockResolvedValue({
@@ -165,7 +161,7 @@ describe('syncCartAction', () => {
 
   it('should upsert with empty items array', async () => {
     const items: CartLineItem[] = []
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
 
@@ -188,7 +184,7 @@ describe('deleteCart', () => {
   })
 
   it('should delete cart by id', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
 
@@ -209,17 +205,17 @@ describe('updateCartPrice', () => {
   })
 
   it('should reject unauthenticated updates', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue(null)
+    ;(auth as jest.Mock).mockResolvedValue(null)
 
-    await expect(updateCartPrice(100, 120, 20, 10)).rejects.toThrow(
-      'Unauthorized: Please sign in before checkout.',
-    )
+    const result = await updateCartPrice(20, 10)
+    expect(result.success).toBe(false)
+    expect(result.message).toBe('Unauthorized: Please sign in before checkout.')
 
     expect(prisma.cart.update).not.toHaveBeenCalled()
   })
 
   it('should update cart price for authenticated user', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.cart.findUnique as jest.Mock).mockResolvedValue({
@@ -233,7 +229,7 @@ describe('updateCartPrice', () => {
       ],
     })
 
-    await updateCartPrice(100, 120, 20, 10)
+    await updateCartPrice(20, 10)
 
     expect(prisma.cart.update).toHaveBeenCalledWith({
       where: { userId: 'user-123' },

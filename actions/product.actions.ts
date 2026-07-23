@@ -5,13 +5,11 @@ import {
   Product,
   ActionResponse,
   ProductWithVariantsCategories,
-  Category,
 } from '@lib/types/types'
 import { prisma } from 'prisma/prisma'
 import { deleteBlob } from './serverImages.action'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@lib/auth/authOptions'
-import { revalidatePath } from 'next/cache'
+import { auth } from '@/auth'
+import { revalidatePath, unstable_cache, revalidateTag } from 'next/cache'
 import {
   PaginationInput,
   PaginatedResult,
@@ -23,6 +21,8 @@ import {
 } from '@lib/pagination'
 
 import { Prisma } from 'prisma/generated/prisma/client'
+import { z } from 'zod'
+import * as Sentry from '@sentry/nextjs'
 
 const formatVariant = (
   v: Prisma.ProductVariantGetPayload<{
@@ -82,6 +82,7 @@ export async function getProductBySlug(
     }
   } catch (error) {
     console.error('getProductBySlug_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:
@@ -128,6 +129,7 @@ export async function getProductById(
     }
   } catch (error) {
     console.error('getProductById_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:
@@ -144,8 +146,16 @@ export async function deleteProduct({
   id: string
   images: string[]
 }): Promise<ActionResponse<Product | null>> {
+  if (!id || typeof id !== 'string' || !Array.isArray(images)) {
+    return {
+      success: false,
+      message:
+        'Invalid parameters: id must be a non-empty string and images must be an array.',
+      errors: null,
+    }
+  }
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (session?.user?.role !== 'ADMIN') {
       return {
@@ -166,6 +176,7 @@ export async function deleteProduct({
     })
 
     revalidatePath('/', 'layout')
+    revalidateTag('products', 'max')
 
     return {
       success: true,
@@ -174,6 +185,7 @@ export async function deleteProduct({
     }
   } catch (error) {
     console.error('deleteProduct_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:
@@ -189,8 +201,16 @@ export async function toggleVisibility({
   id: string
   state: boolean
 }): Promise<ActionResponse<Product>> {
+  if (!id || typeof id !== 'string' || typeof state !== 'boolean') {
+    return {
+      success: false,
+      message:
+        'Invalid parameters: id must be a non-empty string and state must be a boolean.',
+      errors: null,
+    }
+  }
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (session?.user?.role !== 'ADMIN') {
       return {
@@ -208,6 +228,7 @@ export async function toggleVisibility({
     })
 
     revalidatePath('/', 'layout')
+    revalidateTag('products', 'max')
 
     return {
       success: true,
@@ -216,6 +237,7 @@ export async function toggleVisibility({
     }
   } catch (error) {
     console.error('toggleVisibility_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:
@@ -230,7 +252,7 @@ export async function getAllProducts(
   ActionResponse<PaginatedResult<ProductWithVariantsCategories> | null>
 > {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
     const isAdmin = session?.user?.role === 'ADMIN'
 
     const take = pagination?.take ?? ADMIN_PAGE_SIZE
@@ -285,6 +307,7 @@ export async function getAllProducts(
     }
   } catch (error) {
     console.error('getAllProducts_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:
@@ -330,6 +353,7 @@ export async function getRandomProducts(
     }
   } catch (error) {
     console.error('getRandomProducts_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:
@@ -339,28 +363,27 @@ export async function getRandomProducts(
   }
 }
 export async function getRelatedProducts({
-  categories,
+  categoryNames,
   excludeId,
   limit = 12,
 }: {
-  categories: Category[]
+  categoryNames: string[]
   excludeId?: string
   limit?: number
-}): Promise<ActionResponse<ProductWithVariantsCategories[] | null>> {
+}): Promise<ActionResponse<ProductWithVariantsCategories[]>> {
   try {
-    if (!categories.length)
+    if (!categoryNames.length)
       return {
         success: true,
         message: 'No related Products',
         data: [],
       }
-    const categoriesName = categories.map((c) => c.name)
     const count = await prisma.product.count({
       where: {
         hide: false,
         categories: {
           some: {
-            name: { in: categoriesName },
+            name: { in: categoryNames },
           },
         },
         ...(excludeId && { id: { not: excludeId } }),
@@ -380,7 +403,7 @@ export async function getRelatedProducts({
       where: {
         categories: {
           some: {
-            name: { in: categoriesName },
+            name: { in: categoryNames },
           },
         },
         ...(excludeId && { id: { not: excludeId } }),
@@ -402,6 +425,7 @@ export async function getRelatedProducts({
     }
   } catch (error) {
     console.error('getCategoryById_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:
@@ -459,6 +483,7 @@ export async function getProductsByCategorySlug(
     }
   } catch (error) {
     console.error('getProductsByCategorySlug_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:
@@ -471,22 +496,22 @@ export async function upsertProduct(
   payload: ProductInput,
 ): Promise<ActionResponse<Product | null>> {
   try {
-    const validation = ProductSchema.safeParse(payload)
-    if (!validation.success) {
-      return {
-        success: false,
-        message: 'Validation error',
-        errors: validation.error.flatten(),
-      }
-    }
-
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (session?.user?.role !== 'ADMIN') {
       return {
         success: false,
         message: 'Unauthorized: Administrative privileges required.',
         errors: null,
+      }
+    }
+
+    const validation = ProductSchema.safeParse(payload)
+    if (!validation.success) {
+      return {
+        success: false,
+        message: 'Validation error',
+        errors: z.flattenError(validation.error),
       }
     }
     const {
@@ -526,17 +551,6 @@ export async function upsertProduct(
         })
       : null
 
-    const variantsToKeep = existingVariantIds.filter((id) => id !== '')
-    const variantUpserts = variants.map((v) => {
-      const isTemp = v.id.startsWith('temp-')
-      const variantData = prepareVariant(v)
-      return {
-        where: { id: isTemp ? '000000000000000000000000' : v.id },
-        update: variantData,
-        create: variantData,
-      }
-    })
-
     const product = await prisma.product.upsert({
       where: { id: existingProduct?.id || 'new' },
       update: {
@@ -545,8 +559,8 @@ export async function upsertProduct(
           set: categoryIds.map((catId) => ({ id: catId })),
         },
         variants: {
-          deleteMany: { id: { notIn: variantsToKeep } },
-          upsert: variantUpserts,
+          deleteMany: { id: { notIn: existingVariantIds.filter((id) => id !== '') } },
+          create: variants.map((v) => prepareVariant(v)),
         },
       },
       create: {
@@ -561,6 +575,7 @@ export async function upsertProduct(
     })
 
     revalidatePath('/', 'layout')
+    revalidateTag('products', 'max')
 
     return {
       success: true,
@@ -569,6 +584,7 @@ export async function upsertProduct(
     }
   } catch (error) {
     console.error('upsertProduct_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Database error',
@@ -577,65 +593,70 @@ export async function upsertProduct(
   }
 }
 
-export async function searchProducts(
-  query: string,
-  pagination?: PaginationInput,
-): Promise<
-  ActionResponse<PaginatedResult<ProductWithVariantsCategories> | null>
-> {
-  try {
-    const take = pagination?.take ?? SEARCH_PAGE_SIZE
+export const searchProducts = unstable_cache(
+  async (
+    query: string,
+    pagination?: PaginationInput,
+  ): Promise<
+    ActionResponse<PaginatedResult<ProductWithVariantsCategories> | null>
+  > => {
+    try {
+      const take = pagination?.take ?? SEARCH_PAGE_SIZE
 
-    const where: Prisma.ProductWhereInput = {
-      hide: false,
-      OR: [
-        { name: { contains: query, mode: 'insensitive' } },
-        {
-          categories: {
-            some: { name: { contains: query, mode: 'insensitive' } },
+      const where: Prisma.ProductWhereInput = {
+        hide: false,
+        OR: [
+          { name: { contains: query, mode: 'insensitive' } },
+          {
+            categories: {
+              some: { name: { contains: query, mode: 'insensitive' } },
+            },
           },
-        },
-      ],
-    }
+        ],
+      }
 
-    const cursor = pagination?.cursor
-      ? decodeCursor(pagination.cursor)
-      : undefined
+      const cursor = pagination?.cursor
+        ? decodeCursor(pagination.cursor)
+        : undefined
 
-    const [products, total] = await Promise.all([
-      prisma.product.findMany({
-        where,
-        include: {
-          variants: {
-            include: { optionValues: { include: { option: true } } },
+      const [products, total] = await Promise.all([
+        prisma.product.findMany({
+          where,
+          include: {
+            variants: {
+              include: { optionValues: { include: { option: true } } },
+            },
+            categories: true,
           },
-          categories: true,
-        },
-        orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
-        ...(cursor ? { cursor: { id: cursor.id }, skip: 1 } : {}),
-        take: take + 1,
-      }),
-      prisma.product.count({ where }),
-    ])
+          orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
+          ...(cursor ? { cursor: { id: cursor.id }, skip: 1 } : {}),
+          take: take + 1,
+        }),
+        prisma.product.count({ where }),
+      ])
 
-    const hasMore = products.length > take
-    const items = products
-      .slice(0, take)
-      .map(formatProduct) as unknown as ProductWithVariantsCategories[]
-    const nextCursor = hasMore ? encodeCursor(items.at(-1)!.id) : null
+      const hasMore = products.length > take
+      const items = products
+        .slice(0, take)
+        .map(formatProduct) as unknown as ProductWithVariantsCategories[]
+      const nextCursor = hasMore ? encodeCursor(items.at(-1)!.id) : null
 
-    return {
-      success: true,
-      message: 'Searched products successfully',
-      data: { items, nextCursor, hasMore, total },
+      return {
+        success: true,
+        message: 'Searched products successfully',
+        data: { items, nextCursor, hasMore, total },
+      }
+    } catch (error) {
+      console.error('searchProducts_ERROR:', error)
+      Sentry.captureException(error)
+      return {
+        success: false,
+        message:
+          error instanceof Error ? error.message : 'A database error occurred',
+        errors: error,
+      }
     }
-  } catch (error) {
-    console.error('searchProducts_ERROR:', error)
-    return {
-      success: false,
-      message:
-        error instanceof Error ? error.message : 'A database error occurred',
-      errors: error,
-    }
-  }
-}
+  },
+  ['search-products'],
+  { revalidate: 3600, tags: ['products'] },
+)

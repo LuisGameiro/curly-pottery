@@ -1,20 +1,14 @@
 import { createSumUpCheckout } from './sumUpPayment.actions'
 import { prisma } from 'prisma/prisma'
 
-jest.mock('next-auth', () => ({
-  getServerSession: jest.fn(),
-}))
-
-import { getServerSession } from 'next-auth'
+import { auth } from '@/auth'
 
 jest.mock('prisma/prisma', () => ({
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   prisma: require('jest-mock-extended').mockDeep(),
 }))
 
-const mockGetServerSession = getServerSession as jest.MockedFunction<
-  typeof getServerSession
->
+const mockAuth = auth as jest.MockedFunction<typeof auth>
 
 describe('createSumUpCheckout', () => {
   beforeEach(() => {
@@ -28,7 +22,7 @@ describe('createSumUpCheckout', () => {
   })
 
   it('should return unauthorized when user is not authenticated', async () => {
-    mockGetServerSession.mockResolvedValue(null as never)
+    mockAuth.mockResolvedValue(null as never)
 
     const result = await createSumUpCheckout()
 
@@ -38,7 +32,7 @@ describe('createSumUpCheckout', () => {
   })
 
   it('should return success with checkout id when API call succeeds', async () => {
-    mockGetServerSession.mockResolvedValue({
+    mockAuth.mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
     } as never)
     ;(prisma.cart.findUnique as jest.Mock).mockResolvedValue({
@@ -65,7 +59,7 @@ describe('createSumUpCheckout', () => {
   })
 
   it('should return error when cart does not exist', async () => {
-    mockGetServerSession.mockResolvedValue({
+    mockAuth.mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
     } as never)
     ;(prisma.cart.findUnique as jest.Mock).mockResolvedValue(null)
@@ -80,7 +74,7 @@ describe('createSumUpCheckout', () => {
   })
 
   it('should return error when API response is not ok', async () => {
-    mockGetServerSession.mockResolvedValue({
+    mockAuth.mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
     } as never)
     ;(prisma.cart.findUnique as jest.Mock).mockResolvedValue({
@@ -100,7 +94,7 @@ describe('createSumUpCheckout', () => {
   })
 
   it('should return error when fetch throws exception', async () => {
-    mockGetServerSession.mockResolvedValue({
+    mockAuth.mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
     } as never)
     ;(prisma.cart.findUnique as jest.Mock).mockResolvedValue({

@@ -27,11 +27,7 @@ jest.mock('./serverImages.action', () => ({
   deleteBlob: jest.fn().mockResolvedValue(undefined),
 }))
 
-import { getServerSession } from 'next-auth'
-
-jest.mock('next-auth', () => ({
-  getServerSession: jest.fn(),
-}))
+import { auth } from '@/auth'
 
 describe('getProductBySlug', () => {
   afterEach(() => {
@@ -202,7 +198,7 @@ describe('getProductById', () => {
 describe('deleteProduct', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'admin-1', role: 'ADMIN' },
     })
   })
@@ -266,7 +262,7 @@ describe('deleteProduct', () => {
 describe('toggleVisibility', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'admin-1', role: 'ADMIN' },
     })
   })
@@ -499,7 +495,7 @@ describe('getRelatedProducts', () => {
   })
 
   it('should return empty array when no categories provided', async () => {
-    const result = await getRelatedProducts({ categories: [] })
+    const result = await getRelatedProducts({ categoryNames: [] })
 
     expect(result).toEqual({
       success: true,
@@ -515,7 +511,9 @@ describe('getRelatedProducts', () => {
     ] as Category[]
     ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(0)
 
-    const result = await getRelatedProducts({ categories: mockCategories })
+    const result = await getRelatedProducts({
+      categoryNames: mockCategories.map((c) => c.name),
+    })
 
     expect(result).toEqual({
       success: true,
@@ -545,7 +543,9 @@ describe('getRelatedProducts', () => {
     ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(10)
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
 
-    const result = await getRelatedProducts({ categories: mockCategories })
+    const result = await getRelatedProducts({
+      categoryNames: mockCategories.map((c) => c.name),
+    })
 
     expect(result.success).toBe(true)
     expect(result.data).toEqual(mockProducts)
@@ -563,7 +563,7 @@ describe('getRelatedProducts', () => {
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
 
     const result = await getRelatedProducts({
-      categories: mockCategories,
+      categoryNames: mockCategories.map((c) => c.name),
       excludeId: '1',
     })
 
@@ -596,7 +596,10 @@ describe('getRelatedProducts', () => {
     ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(20)
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
 
-    await getRelatedProducts({ categories: mockCategories, limit: 5 })
+    await getRelatedProducts({
+      categoryNames: mockCategories.map((c) => c.name),
+      limit: 5,
+    })
 
     expect(prisma.product.findMany).toHaveBeenCalledWith({
       where: {
@@ -626,7 +629,9 @@ describe('getRelatedProducts', () => {
     ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(10)
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
 
-    await getRelatedProducts({ categories: mockCategories })
+    await getRelatedProducts({
+      categoryNames: mockCategories.map((c) => c.name),
+    })
 
     expect(prisma.product.count).toHaveBeenCalledWith({
       where: {
@@ -647,7 +652,9 @@ describe('getRelatedProducts', () => {
     ] as Category[]
     ;(prisma.product.count as jest.Mock).mockRejectedValueOnce(mockError)
 
-    const result = await getRelatedProducts({ categories: mockCategories })
+    const result = await getRelatedProducts({
+      categoryNames: mockCategories.map((c) => c.name),
+    })
 
     expect(result.success).toBe(false)
     expect(result.message).toBe('Database connection failed')
@@ -662,7 +669,9 @@ describe('getRelatedProducts', () => {
     ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(10)
     ;(prisma.product.findMany as jest.Mock).mockRejectedValueOnce(mockError)
 
-    const result = await getRelatedProducts({ categories: mockCategories })
+    const result = await getRelatedProducts({
+      categoryNames: mockCategories.map((c) => c.name),
+    })
 
     expect(result.success).toBe(false)
     expect(result.message).toBe('Database connection failed')
@@ -675,7 +684,9 @@ describe('getRelatedProducts', () => {
     ] as Category[]
     ;(prisma.product.count as jest.Mock).mockRejectedValueOnce('Unknown error')
 
-    const result = await getRelatedProducts({ categories: mockCategories })
+    const result = await getRelatedProducts({
+      categoryNames: mockCategories.map((c) => c.name),
+    })
 
     expect(result.success).toBe(false)
     expect(result.message).toBe('A database error occurred')
@@ -839,7 +850,7 @@ describe('getProductsByCategorySlug', () => {
 describe('upsertProduct', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'admin-1', role: 'ADMIN' },
     })
   })

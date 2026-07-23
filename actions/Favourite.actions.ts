@@ -1,9 +1,9 @@
 'use server'
 
-import { authOptions } from '@lib/auth/authOptions'
-import { getServerSession } from 'next-auth'
+import { auth } from '@/auth'
 import { prisma } from 'prisma/prisma'
 import { revalidatePath } from 'next/cache'
+import { checkRateLimit, getRateLimitKey } from '@lib/rate-limit'
 import {
   PaginationInput,
   FAVOURITES_PAGE_SIZE,
@@ -11,10 +11,11 @@ import {
   decodeCursor,
 } from '@lib/pagination'
 import { Prisma } from 'prisma/generated/prisma/client'
+import * as Sentry from '@sentry/nextjs'
 
 export async function getFavouritesAction(): Promise<string[]> {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (!session?.user?.id) return []
 
@@ -26,15 +27,35 @@ export async function getFavouritesAction(): Promise<string[]> {
     return favourites.map((f) => f.productId)
   } catch (error) {
     console.error('getFavouritesAction_ERROR:', error)
+    Sentry.captureException(error)
     return []
   }
 }
 
-export async function addFavouriteAction(productId: string): Promise<void> {
-  try {
-    const session = await getServerSession(authOptions)
+export async function addFavouriteAction(
+  productId: string,
+): Promise<{ success?: boolean; errors?: { message: string } }> {
+  if (!productId || typeof productId !== 'string') {
+    return { success: false, errors: { message: 'Invalid product ID' } }
+  }
 
-    if (!session?.user?.id) return
+  try {
+    const session = await auth()
+
+    if (!session?.user?.id) {
+      return { success: false, errors: { message: 'Authentication required' } }
+    }
+
+    const rateResult = await checkRateLimit(
+      getRateLimitKey(session.user.id, 'favourite-sync'),
+      { windowMs: 60 * 1000, maxRequests: 30 },
+    )
+    if (!rateResult.success) {
+      return {
+        success: false,
+        errors: { message: 'Too many requests. Please slow down.' },
+      }
+    }
 
     await prisma.favourite.upsert({
       where: {
@@ -52,18 +73,27 @@ export async function addFavouriteAction(productId: string): Promise<void> {
 
     revalidatePath('/user/favourites')
     revalidatePath('/')
+
+    return { success: true }
   } catch (error) {
     console.error('addFavouriteAction_ERROR:', error)
+    Sentry.captureException(error)
+    return { success: false, errors: { message: 'Failed to add favourite' } }
   }
 }
 
-export async function removeFavouriteAction(productId: string): Promise<void> {
+export async function removeFavouriteAction(
+  productId: string,
+): Promise<{ success?: boolean; errors?: { message: string } }> {
+  if (!productId || typeof productId !== 'string') {
+    return { success: false, errors: { message: 'Invalid product ID' } }
+  }
+
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (!session?.user?.id) {
-      console.error('[REMOVE_FAVOURITE] No session found')
-      return
+      return { success: false, errors: { message: 'Authentication required' } }
     }
 
     await prisma.favourite.deleteMany({
@@ -75,8 +105,12 @@ export async function removeFavouriteAction(productId: string): Promise<void> {
 
     revalidatePath('/user/favourites')
     revalidatePath('/')
+
+    return { success: true }
   } catch (error) {
     console.error('removeFavouriteAction_ERROR:', error)
+    Sentry.captureException(error)
+    return { success: false, errors: { message: 'Failed to remove favourite' } }
   }
 }
 
@@ -84,7 +118,7 @@ export async function getFavouritesWithProductsAction(
   pagination?: PaginationInput,
 ) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (!session?.user?.id) {
       return { items: [], nextCursor: null, hasMore: false, total: 0 }
@@ -122,6 +156,7 @@ export async function getFavouritesWithProductsAction(
     return { items, nextCursor, hasMore, total }
   } catch (error) {
     console.error('getFavouritesWithProductsAction_ERROR:', error)
+    Sentry.captureException(error)
     return { items: [], nextCursor: null, hasMore: false, total: 0 }
   }
 }

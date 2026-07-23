@@ -12,7 +12,7 @@ jest.mock('@actions/category.actions', () => ({
   upsertCategory: jest.fn(),
 }))
 
-jest.mock('@actions/images.actions', () => ({
+jest.mock('@lib/client-images', () => ({
   syncImages: jest.fn(),
 }))
 
@@ -52,7 +52,7 @@ const mockRouter = {
 // const mockUpsertCategory = jest.requireMock(
 //   '@actions/category.actions',
 // ).upsertCategory
-// const mockSyncImages = jest.requireMock('@actions/images.actions').syncImages
+// const mockSyncImages = jest.requireMock('@lib/client-images').syncImages
 // const mockToast = jest.requireMock('sonner').toast
 // const mockSlugify = jest.requireMock('@lib/slugify').slugify
 

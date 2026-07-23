@@ -17,6 +17,7 @@ interface Props {
   noNameTag?: boolean
   imgProps?: Omit<ImageProps, 'src' | 'layout' | 'placeholder' | 'blurDataURL'>
   variant?: 'default' | 'slim' | 'simple'
+  priority?: boolean
 }
 
 const placeholderImg = '/product-img-placeholder.svg'
@@ -27,6 +28,7 @@ const ProductCard = ({
   className,
   noNameTag = false,
   variant = 'default',
+  priority = false,
 }: Props) => {
   const rootClassName = cn(
     s.root,
@@ -63,6 +65,7 @@ const ProductCard = ({
                 objectFit: 'cover',
               }}
               {...imgProps}
+              priority={priority}
               placeholder="blur"
               blurDataURL={shimmerDataUrl(250, 250)}
             />
@@ -82,12 +85,13 @@ const ProductCard = ({
                 width={500}
                 quality={100}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                loading="lazy"
+                loading={priority ? undefined : 'lazy'}
                 style={{
                   aspectRatio: '1/1',
                   objectFit: 'cover',
                 }}
                 {...imgProps}
+                priority={priority}
                 placeholder="blur"
                 blurDataURL={shimmerDataUrl(500, 500)}
               />
@@ -131,12 +135,13 @@ const ProductCard = ({
               width={500}
               quality={100}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              loading="lazy"
+              loading={priority ? undefined : 'lazy'}
               style={{
                 aspectRatio: '1/1',
                 objectFit: 'cover',
               }}
               {...imgProps}
+              priority={priority}
               placeholder="blur"
               blurDataURL={shimmerDataUrl(500, 500)}
             />

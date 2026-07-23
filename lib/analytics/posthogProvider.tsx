@@ -3,7 +3,8 @@
 import posthog from 'posthog-js'
 import { PostHogProvider } from 'posthog-js/react'
 import { useEffect, useRef } from 'react'
-import { useConsent, hasAnalyticsConsent } from '@lib/hooks/useConsent'
+import { useConsent } from '@lib/hooks/useConsent'
+import { hasAnalyticsConsent } from '@lib/consent-utils'
 
 export function PHProvider({ children }: { children: React.ReactNode }) {
   const { consent } = useConsent()

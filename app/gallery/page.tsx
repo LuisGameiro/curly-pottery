@@ -3,6 +3,8 @@ import { Container, Text } from '@components/ui'
 import Image from 'next/image'
 import { getGalleryImages } from '@actions/Gallery.actions'
 
+export const revalidate = 3600
+
 export const metadata = constructMetadata({
   title: 'Gallery',
   description:

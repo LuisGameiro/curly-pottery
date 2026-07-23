@@ -10,7 +10,6 @@ export async function generateStaticParams() {
     const slugs = await prisma.product.findMany({
       where: { hide: false },
       select: { slug: true },
-      take: 50,
     })
     return slugs.map((product) => ({
       slug: product.slug,
@@ -80,7 +79,7 @@ export default async function ProductPage({
   const product = response.data
 
   const relatedResponse = await getRelatedProducts({
-    categories: product.categories,
+    categoryNames: product.categories.map((c) => c.name),
     excludeId: product.id,
   })
 

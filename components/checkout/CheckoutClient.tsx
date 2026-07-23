@@ -75,8 +75,6 @@ export default function CheckoutClient() {
     try {
       setLoading(true)
       await updateCartPrice(
-        currentValues.subtotalPrice,
-        currentValues.totalPrice,
         currentValues.taxes,
         currentValues.shippingPrice,
       )

@@ -14,7 +14,7 @@ import GeneralInformationSection from './GeneralInformationSection'
 import { toast } from 'sonner'
 import { slugify } from '@lib/slugify'
 import { upsertProduct } from '@actions/product.actions'
-import { syncImages } from '@actions/images.actions'
+import { syncImages } from '@lib/client-images'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 interface ProductFormProps {

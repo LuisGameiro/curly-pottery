@@ -1,8 +1,7 @@
 'use server'
 
-import { authOptions } from '@lib/auth/authOptions'
+import { auth } from '@/auth'
 import { ActionResponse } from '@lib/types/types'
-import { getServerSession } from 'next-auth'
 import { prisma } from 'prisma/prisma'
 import { DatabaseError } from '@lib/errors'
 import { withFetch } from '@lib/errors-utils'
@@ -18,7 +17,7 @@ interface SumUpCheckoutResponse {
 export async function createSumUpCheckout(): Promise<
   ActionResponse<string | null>
 > {
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   const userId = session?.user?.id
   const userEmail = session?.user?.email
 

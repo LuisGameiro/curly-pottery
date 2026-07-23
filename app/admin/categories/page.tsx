@@ -15,7 +15,7 @@ export const metadata = constructMetadata({
   description: 'Manage your store product groupings at Curly Pottery.',
 })
 
-export default async function CategoriesPage() {
+async function AdminCategoriesContent() {
   const response = await getAllCategories()
 
   if (!response.success) {
@@ -23,26 +23,32 @@ export default async function CategoriesPage() {
   }
 
   return (
+    <Container>
+      <header>
+        <div className="w-full flex flex-row justify-between">
+          <Text variant="heading">Categories</Text>
+
+          <Link href="/admin/categories/new" passHref>
+            <Button variant="slim">
+              <span className="mr-1">
+                <Plus size={18} />
+              </span>
+              <span>New Category</span>
+            </Button>
+          </Link>
+        </div>
+        <Text variant="subHeading">Manage your store product groupings.</Text>
+      </header>
+
+      <CategoryTable categories={response.data ?? []} />
+    </Container>
+  )
+}
+
+export default async function CategoriesPage() {
+  return (
     <Suspense fallback={<Loading />}>
-      <Container>
-        <header>
-          <div className="w-full flex flex-row justify-between">
-            <Text variant="heading">Categories</Text>
-
-            <Link href="/admin/categories/new" passHref>
-              <Button variant="slim">
-                <span className="mr-1">
-                  <Plus size={18} />
-                </span>
-                <span>New Category</span>
-              </Button>
-            </Link>
-          </div>
-          <Text variant="subHeading">Manage your store product groupings.</Text>
-        </header>
-
-        <CategoryTable categories={response.data ?? []} />
-      </Container>
+      <AdminCategoriesContent />
     </Suspense>
   )
 }

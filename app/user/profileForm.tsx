@@ -12,6 +12,7 @@ export default function ProfileForm({
   user,
 }: Readonly<{ user: UserWithOrdersAddress }>) {
   const [isEditing, setIsEditing] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const { register, control, handleSubmit, reset, watch } =
     useForm<UserWithOrdersAddress>({
@@ -38,6 +39,7 @@ export default function ProfileForm({
   }, [user, reset])
 
   const onSubmit = async (data: UserWithOrdersAddress) => {
+    setLoading(true)
     try {
       const response = await updateUser({ id: user.id, data })
 
@@ -50,6 +52,7 @@ export default function ProfileForm({
       console.error('Error updating profile:', error)
       toast.error('Failed to update profile. Please try again.')
     } finally {
+      setLoading(false)
       setIsEditing(false)
     }
   }
@@ -221,8 +224,14 @@ export default function ProfileForm({
         </div>
 
         {isEditing && (
-          <Button type="submit" width="100%" variant="slim" className="mt-6">
-            Save Changes
+          <Button
+            type="submit"
+            width="100%"
+            variant="slim"
+            className="mt-6"
+            loading={loading}
+          >
+            {loading ? 'Saving...' : 'Save Changes'}
           </Button>
         )}
       </form>

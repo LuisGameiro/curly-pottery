@@ -4,6 +4,8 @@ import { getProductsByCategorySlug as getProductsByCategorySlugAction } from '@a
 import constructMetadata from '@components/common/SEO'
 import { SHOP_PAGE_SIZE } from '@lib/pagination'
 
+export const revalidate = 3600
+
 export const metadata = constructMetadata({
   title: 'Shop',
   description:

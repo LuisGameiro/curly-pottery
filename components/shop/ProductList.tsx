@@ -24,8 +24,13 @@ export default function ProductList({
   return (
     <div className="flex flex-col gap-8">
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 sm:gap-4">
-        {ProductsSort.map((product) => (
-          <ProductCard key={product.id} product={product} variant="simple" />
+        {ProductsSort.map((product, index) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            variant="simple"
+            priority={index < 3}
+          />
         ))}
       </div>
     </div>

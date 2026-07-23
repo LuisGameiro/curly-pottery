@@ -5,8 +5,7 @@ import {
 } from '@lib/payments/klarna-client'
 import { getAppUrl } from '@lib/site-url'
 
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@lib/auth/authOptions'
+import { auth } from '@/auth'
 import { prisma } from 'prisma/prisma'
 
 export async function POST(request: NextRequest) {
@@ -18,7 +17,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
     if (!session?.user?.id) {
       return NextResponse.json(
         { success: false, message: 'Unauthorized: Please sign in.' },

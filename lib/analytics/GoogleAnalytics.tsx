@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from 'react'
 import Script from 'next/script'
-import { useConsent, hasAnalyticsConsent } from '@lib/hooks/useConsent'
+import { useConsent } from '@lib/hooks/useConsent'
+import { hasAnalyticsConsent } from '@lib/consent-utils'
 
 declare global {
   interface Window {

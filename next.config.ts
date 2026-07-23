@@ -19,7 +19,9 @@ const nextConfig: NextConfig = {
   experimental: {
     ppr: false,
     serverActions: {
-      allowedOrigins: [process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'].filter(Boolean) as string[],
+      allowedOrigins: [
+        process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+      ].filter(Boolean) as string[],
     },
   },
   async rewrites() {
@@ -31,11 +33,20 @@ const nextConfig: NextConfig = {
     ]
   },
   async headers() {
+    const isDev = process.env.NODE_ENV === 'development'
+    const cspScriptSrc = isDev
+      ? "'self' 'unsafe-eval' 'unsafe-inline' https://eu.i.posthog.com"
+      : "'self' 'unsafe-inline' https://eu.i.posthog.com"
+
     return [
       {
         source: '/:path*',
         headers: [
           { key: 'X-DNS-Prefetch-Control', value: 'on' },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
+          },
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-XSS-Protection', value: '1; mode=block' },
@@ -45,19 +56,31 @@ const nextConfig: NextConfig = {
             value: 'camera=(), microphone=(), geolocation=()',
           },
           {
+          key: 'Cross-Origin-Embedder-Policy',
+          value: 'credentialless',
+          },
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin',
+          },
+          {
+            key: 'Cross-Origin-Resource-Policy',
+            value: 'same-origin',
+          },
+          {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
               "base-uri 'self'",
               "object-src 'none'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://eu.i.posthog.com",
+              `script-src ${cspScriptSrc}`,
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' blob: data: https://*.public.blob.vercel-storage.com https://picsum.photos",
               "font-src 'self'",
               "connect-src 'self' https://eu.i.posthog.com",
               "frame-ancestors 'none'",
               "form-action 'self'",
-              "upgrade-insecure-requests",
+              'upgrade-insecure-requests',
             ].join('; '),
           },
         ],

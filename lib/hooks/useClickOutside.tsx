@@ -5,6 +5,11 @@ export function useClickOutside<T extends HTMLElement>(
   active: boolean = true,
 ) {
   const elementRef = useRef<T>(null)
+  const handlerRef = useRef(handler)
+
+  useEffect(() => {
+    handlerRef.current = handler
+  }, [handler])
 
   useEffect(() => {
     if (!active) return
@@ -16,7 +21,7 @@ export function useClickOutside<T extends HTMLElement>(
         return
       }
 
-      handler()
+      handlerRef.current()
     }
 
     document.addEventListener('mousedown', listener)
@@ -26,7 +31,7 @@ export function useClickOutside<T extends HTMLElement>(
       document.removeEventListener('mousedown', listener)
       document.removeEventListener('touchstart', listener)
     }
-  }, [handler, active])
+  }, [active])
 
   return elementRef
 }

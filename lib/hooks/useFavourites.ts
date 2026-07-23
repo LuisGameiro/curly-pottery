@@ -6,20 +6,28 @@ import { useUser } from '@lib/hooks/useUser'
 
 export default function useFavourites() {
   const { isAuthenticated } = useUser()
-  const store = useFavouritesStore()
+  const {
+    isHydrated,
+    syncWithDatabase,
+    favouriteIds,
+    isLoading,
+    addFavourite,
+    removeFavourite,
+    toggleFavourite,
+  } = useFavouritesStore()
 
   useEffect(() => {
-    if (isAuthenticated && store.isHydrated) {
-      store.syncWithDatabase()
+    if (isAuthenticated && isHydrated) {
+      syncWithDatabase()
     }
-  }, [isAuthenticated, store.isHydrated, store])
+  }, [isAuthenticated, isHydrated, syncWithDatabase])
 
   return {
-    favouriteIds: store.favouriteIds,
-    isLoading: store.isLoading,
-    addFavourite: store.addFavourite,
-    removeFavourite: store.removeFavourite,
-    toggleFavourite: store.toggleFavourite,
-    isFavourite: (productId: string) => store.favouriteIds.includes(productId),
+    favouriteIds,
+    isLoading,
+    addFavourite,
+    removeFavourite,
+    toggleFavourite,
+    isFavourite: (productId: string) => favouriteIds.includes(productId),
   }
 }

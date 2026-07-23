@@ -207,6 +207,7 @@ const config = {
     '^.+\\.(jpg|jpeg|png|gif|webp|avif|svg)$':
       '<rootDir>/__mocks__/fileMock.js',
 
+    '^@/(.*)$': '<rootDir>/$1',
     '^actions/(.*)$': '<rootDir>/actions/$1',
     '^prisma/(.*)$': '<rootDir>/prisma/$1',
     '^@components/(.*)$': '<rootDir>/components/$1',

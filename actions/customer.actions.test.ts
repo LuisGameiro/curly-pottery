@@ -12,16 +12,12 @@ jest.mock('prisma/prisma', () => ({
   prisma: require('jest-mock-extended').mockDeep(),
 }))
 
-import { getServerSession } from 'next-auth'
-
-jest.mock('next-auth', () => ({
-  getServerSession: jest.fn(),
-}))
+import { auth } from '@/auth'
 
 describe('getAllCustomers', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'admin-1', role: 'ADMIN' },
     })
   })
@@ -78,7 +74,7 @@ describe('getAllCustomers', () => {
 describe('updateNotes', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'admin-1', role: 'ADMIN' },
     })
   })
@@ -121,7 +117,7 @@ describe('updateNotes', () => {
 describe('updateUser', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'admin-1', role: 'ADMIN' },
     })
   })

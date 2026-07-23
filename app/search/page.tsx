@@ -4,6 +4,8 @@ import { Text } from '@components/ui'
 import { SEARCH_PAGE_SIZE } from '@lib/pagination'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+
 export default async function SearchPage({
   searchParams,
 }: Readonly<{

@@ -1,30 +1,38 @@
-const rateLimitStore = new Map<string, { count: number; resetAt: number }>()
+import { kv } from '@vercel/kv'
 
-const WINDOW_MS = 60 * 1000
-const MAX_REQUESTS = 5
+export interface RateLimitConfig {
+  windowMs: number
+  maxRequests: number
+}
 
-export function checkRateLimit(key: string): {
+const DEFAULTS: RateLimitConfig = {
+  windowMs: 60 * 1000,
+  maxRequests: 5,
+}
+
+export async function checkRateLimit(
+  key: string,
+  config?: Partial<RateLimitConfig>,
+): Promise<{
   success: boolean
   remaining: number
   resetIn: number
-} {
+}> {
+  const { windowMs, maxRequests } = { ...DEFAULTS, ...config }
   const now = Date.now()
-  const record = rateLimitStore.get(key)
+  const windowKey = `ratelimit:${key}:${Math.floor(now / windowMs)}`
 
-  if (!record || now > record.resetAt) {
-    rateLimitStore.set(key, { count: 1, resetAt: now + WINDOW_MS })
-    return { success: true, remaining: MAX_REQUESTS - 1, resetIn: WINDOW_MS }
+  const count = await kv.incr(windowKey)
+  if (count === 1) {
+    // First request in this window — set TTL
+    await kv.expire(windowKey, Math.ceil(windowMs / 1000))
   }
 
-  if (record.count >= MAX_REQUESTS) {
-    return { success: false, remaining: 0, resetIn: record.resetAt - now }
-  }
-
-  record.count++
+  const ttl = await kv.ttl(windowKey)
   return {
-    success: true,
-    remaining: MAX_REQUESTS - record.count,
-    resetIn: record.resetAt - now,
+    success: count <= maxRequests,
+    remaining: Math.max(0, maxRequests - count),
+    resetIn: ttl > 0 ? ttl * 1000 : 0,
   }
 }
 
@@ -35,14 +43,8 @@ export function getRateLimitKey(identifier: string, action: string): string {
 export async function rateLimitMiddleware(
   identifier: string,
   action: string,
-  onRateLimited?: () => void,
-): Promise<boolean> {
+  config?: Partial<RateLimitConfig>,
+): Promise<{ success: boolean; remaining: number; resetIn: number }> {
   const key = getRateLimitKey(identifier, action)
-  const result = checkRateLimit(key)
-
-  if (!result.success && onRateLimited) {
-    onRateLimited()
-  }
-
-  return result.success
+  return checkRateLimit(key, config)
 }

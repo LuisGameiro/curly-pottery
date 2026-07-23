@@ -1,11 +1,11 @@
 import constructMetadata from '@components/common/SEO/SEO'
 import OrderUserTable from '@components/tables/OrderUserTable'
 import { Container, Text } from '@components/ui'
-import { authOptions } from '@lib/auth/authOptions'
+import { auth } from '@/auth'
 import { getOrdersById } from '@actions/order.actions'
 import Loading from 'app/loading'
 import { CarFront } from 'lucide-react'
-import { getServerSession } from 'next-auth'
+
 import { Suspense } from 'react'
 import { USER_ORDERS_PAGE_SIZE } from '@lib/pagination'
 import Link from 'next/link'
@@ -22,7 +22,7 @@ export default async function Orders({
   searchParams: Promise<{ cursor?: string }>
 }>) {
   const { cursor } = await searchParams
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   const user = session?.user
 
   if (!user) {

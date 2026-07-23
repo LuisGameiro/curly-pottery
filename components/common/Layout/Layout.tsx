@@ -1,25 +1,7 @@
-'use client'
-
-import dynamic from 'next/dynamic'
 import Navbar from '../Navbar'
 import Footer from '../Footer'
-import { LoadingDots } from '@components/ui'
 import NewsletterBanner from '../NewsletterBanner/NewsletterBanner'
-
-const Loading = () => (
-  <div className="w-full min-h-[40vh] flex items-center text-center justify-center p-3">
-    <LoadingDots />
-  </div>
-)
-
-const dynamicProps = {
-  loading: Loading,
-  ssr: false,
-}
-
-const FeatureBar = dynamic(() => import('@components/common/FeatureBar'), {
-  ...dynamicProps,
-})
+import FeatureBar from '../FeatureBar'
 
 interface Props {
   children?: React.ReactNode

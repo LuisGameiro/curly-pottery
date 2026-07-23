@@ -66,7 +66,7 @@ const CartItem = ({
       {...rest}
     >
       <div className="flex items-center">
-        <div className="w-20 h-20 sm:w-24 sm:h-24 bg-accent-1 rounded-md overflow-hidden border border-border mr-2">
+        <div className="w-20 h-20 sm:w-24 sm:h-24 bg-accent-1 animate-pulse rounded-md overflow-hidden border border-border mr-2">
           <Link
             href={`/shop/${item.slug}`}
             className="relative block w-full h-full"

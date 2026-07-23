@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import I18nWidget from '../I18nWidget'
 import ThemeSwitcher from '@components/ui/ThemeSwitcher'
+import Image from 'next/image'
 import s from './Footer.module.css'
+import instagramImage from '@public/instagram.jpg'
 
 type Page = {
   name: string
@@ -35,8 +37,6 @@ const links: Page[] = [
   },
 ]
 
-import Image from 'next/image'
-
 const Footer = () => {
   return (
     <footer className={s.root}>
@@ -54,13 +54,14 @@ const Footer = () => {
             rel="noopener noreferrer"
             className="hover:opacity-80 transition-opacity"
           >
-            <div className="w-32 h-40 relative overflow-hidden ">
+            <div className="w-32 h-40 relative overflow-hidden bg-accent-1 animate-pulse">
               <Image
-                src="/instagram.jpg"
+                src={instagramImage}
                 alt="Instagram feed"
                 fill
                 sizes="128px"
                 className="object-contain"
+                placeholder="blur"
               />
             </div>
           </a>

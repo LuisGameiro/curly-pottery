@@ -1,8 +1,7 @@
 'use server'
 
 import { hashPassword } from '@lib/auth/password'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@lib/auth/authOptions'
+import { auth } from '@/auth'
 import { z } from 'zod'
 
 const passwordSchema = z
@@ -10,11 +9,21 @@ const passwordSchema = z
   .min(8, 'Password must be at least 8 characters')
   .regex(/[A-Za-z]/, 'Password must contain at least one letter')
   .regex(/[0-9]/, 'Password must contain at least one number')
+import { headers } from 'next/headers'
+import { checkRateLimit, getRateLimitKey } from '@lib/rate-limit'
 import ResetPasswordEmail from '@lib/emails/ResetPasswordEmail'
 import { ActionResponse } from '@lib/types/types'
 import { prisma } from 'prisma/prisma'
 import { ReactNode } from 'react'
 import { CreateEmailResponseSuccess, Resend } from 'resend'
+import * as Sentry from '@sentry/nextjs'
+
+const sendEmailSchema = z.object({
+  to: z.string().email(),
+  subject: z.string().min(1).max(200),
+  body: z.any(),
+  from: z.string().email().optional().default('noreply@curlypottery.com'),
+})
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -22,15 +31,24 @@ export async function sendEmail({
   to,
   subject,
   body,
-  from = 'onboarding@resend.dev',
+  from,
 }: {
   to: string
   subject: string
   body: ReactNode
   from?: string
 }): Promise<ActionResponse<CreateEmailResponseSuccess>> {
+  const validation = sendEmailSchema.safeParse({ to, subject, body, from })
+  if (!validation.success) {
+    return {
+      success: false,
+      message: 'Validation error',
+      errors: z.flattenError(validation.error),
+    }
+  }
+
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
     if (session?.user?.role !== 'ADMIN') {
       return {
         success: false,
@@ -39,9 +57,9 @@ export async function sendEmail({
     }
 
     const { data, error } = await resend.emails.send({
-      from,
-      to,
-      subject,
+      from: validation.data.from,
+      to: validation.data.to,
+      subject: validation.data.subject,
       react: body,
     })
 
@@ -56,6 +74,7 @@ export async function sendEmail({
     }
   } catch (error) {
     console.error('sendEmail_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message: 'Failed to send email',
@@ -66,14 +85,38 @@ export async function sendEmail({
 export async function sendResetEmail(
   email: string,
 ): Promise<ActionResponse<CreateEmailResponseSuccess>> {
+  const headersList = await headers()
+  const ip =
+    headersList.get('x-forwarded-for')?.split(',')[0] ??
+    headersList.get('x-real-ip') ??
+    'unknown'
+  const rateResult = await checkRateLimit(
+    getRateLimitKey(ip, 'password-reset'),
+    { windowMs: 60 * 1000, maxRequests: 2 },
+  )
+  if (!rateResult.success) {
+    return {
+      success: false,
+      message: 'Too many requests. Please try again later.',
+    }
+  }
+
+  const emailValidation = z.string().email().safeParse(email)
+  if (!emailValidation.success) {
+    return {
+      success: false,
+      message: 'Invalid email address',
+    }
+  }
+
   try {
     const user = await prisma.user.findUnique({ where: { email } })
 
     if (!user)
       return {
         success: false,
-        message: 'User not found',
-        errors: new Error('User not found'),
+        message:
+          'If an account with that email exists, a password reset link has been sent.',
       }
 
     const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000)
@@ -123,12 +166,33 @@ export async function resetPassword({
   token: string
   newPassword: string
 }): Promise<ActionResponse<null>> {
+  const headersList = await headers()
+  const ip =
+    headersList.get('x-forwarded-for')?.split(',')[0] ??
+    headersList.get('x-real-ip') ??
+    'unknown'
+  const rateResult = await checkRateLimit(
+    getRateLimitKey(ip, 'reset-password'),
+    { windowMs: 60 * 1000, maxRequests: 5 },
+  )
+  if (!rateResult.success) {
+    return {
+      success: false,
+      message: 'Too many requests. Please try again later.',
+    }
+  }
+
+  if (!token || typeof token !== 'string' || token.length < 10) {
+    return { success: false, message: 'Invalid reset token' }
+  }
+
   try {
     const passwordValidation = passwordSchema.safeParse(newPassword)
     if (!passwordValidation.success) {
       return {
         success: false,
-        message: passwordValidation.error.issues[0]?.message || 'Invalid password',
+        message:
+          passwordValidation.error.issues[0]?.message || 'Invalid password',
       }
     }
 

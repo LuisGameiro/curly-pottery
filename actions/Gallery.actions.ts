@@ -1,43 +1,61 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, unstable_cache, revalidateTag } from 'next/cache'
 import { prisma } from 'prisma/prisma'
 import { GalleryImage, ActionResponse } from '@lib/types/types'
 import { deleteBlob } from './serverImages.action'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@lib/auth/authOptions'
+import { auth } from '@/auth'
+import * as Sentry from '@sentry/nextjs'
 
-export async function getGalleryImages(): Promise<
-  ActionResponse<GalleryImage[]>
-> {
-  try {
-    const images = await prisma.galleryImage.findMany({
-      orderBy: {
-        sortOrder: 'asc',
-      },
-    })
+export const getGalleryImages = unstable_cache(
+  async (): Promise<ActionResponse<GalleryImage[]>> => {
+    try {
+      const images = await prisma.galleryImage.findMany({
+        orderBy: {
+          sortOrder: 'asc',
+        },
+      })
 
-    return {
-      success: true,
-      message: 'Fetched gallery images successfully',
-      data: images,
+      return {
+        success: true,
+        message: 'Fetched gallery images successfully',
+        data: images,
+      }
+    } catch (error) {
+      console.error('getGalleryImages_ERROR:', error)
+      Sentry.captureException(error)
+      return {
+        success: false,
+        message:
+          error instanceof Error ? error.message : 'A database error occurred',
+        errors: error,
+      }
     }
-  } catch (error) {
-    console.error('getGalleryImages_ERROR:', error)
-    return {
-      success: false,
-      message:
-        error instanceof Error ? error.message : 'A database error occurred',
-      errors: error,
-    }
-  }
-}
+  },
+  ['gallery-images'],
+  { revalidate: 3600, tags: ['gallery'] },
+)
 
 export async function addGalleryImage(
   url: string,
 ): Promise<ActionResponse<GalleryImage>> {
+  if (!url || typeof url !== 'string' || !url.startsWith('https://')) {
+    return {
+      success: false,
+      message: 'Invalid image URL',
+      errors: null,
+    }
+  }
+  if (url.length > 2000) {
+    return {
+      success: false,
+      message: 'Image URL too long',
+      errors: null,
+    }
+  }
+
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (session?.user?.role !== 'ADMIN') {
       return {
@@ -64,6 +82,7 @@ export async function addGalleryImage(
     })
 
     revalidatePath('/', 'layout')
+    revalidateTag('gallery', 'max')
     return {
       success: true,
       message: 'Image added to gallery successfully',
@@ -71,6 +90,7 @@ export async function addGalleryImage(
     }
   } catch (error) {
     console.error('addGalleryImage_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:
@@ -83,8 +103,16 @@ export async function addGalleryImage(
 export async function deleteGalleryImage(
   id: string,
 ): Promise<ActionResponse<GalleryImage>> {
+  if (!id || typeof id !== 'string') {
+    return {
+      success: false,
+      message: 'Invalid image ID',
+      errors: null,
+    }
+  }
+
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (session?.user?.role !== 'ADMIN') {
       return {
@@ -113,6 +141,7 @@ export async function deleteGalleryImage(
     })
 
     revalidatePath('/', 'layout')
+    revalidateTag('gallery', 'max')
     return {
       success: true,
       message: 'Image deleted from gallery successfully',
@@ -120,6 +149,7 @@ export async function deleteGalleryImage(
     }
   } catch (error) {
     console.error('deleteGalleryImage_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:
@@ -132,8 +162,20 @@ export async function deleteGalleryImage(
 export async function reorderGalleryImages(
   ids: string[],
 ): Promise<ActionResponse<GalleryImage[]>> {
+  if (
+    !Array.isArray(ids) ||
+    ids.length === 0 ||
+    !ids.every((id) => typeof id === 'string')
+  ) {
+    return {
+      success: false,
+      message: 'Invalid image IDs array',
+      errors: null,
+    }
+  }
+
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (session?.user?.role !== 'ADMIN') {
       return {
@@ -159,6 +201,7 @@ export async function reorderGalleryImages(
     })
 
     revalidatePath('/', 'layout')
+    revalidateTag('gallery', 'max')
     return {
       success: true,
       message: 'Gallery images reordered successfully',
@@ -166,6 +209,7 @@ export async function reorderGalleryImages(
     }
   } catch (error) {
     console.error('reorderGalleryImages_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:

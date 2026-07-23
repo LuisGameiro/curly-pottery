@@ -2,7 +2,7 @@
 
 import { ActionResponse } from '@lib/types/types'
 import { upload } from '@vercel/blob/client'
-import { deleteBlob } from './serverImages.action'
+import { deleteBlob } from '@actions/serverImages.action'
 import { cropToSquare } from '@lib/cropToSquare'
 function generateRandomImages({
   amount,

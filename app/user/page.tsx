@@ -1,7 +1,6 @@
-import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import ProfileForm from './profileForm'
-import { authOptions } from '@lib/auth/authOptions'
+import { auth } from '@/auth'
 import { getUserById } from '@actions/customer.actions'
 import constructMetadata from '@components/common/SEO/SEO'
 
@@ -11,7 +10,7 @@ export const metadata = constructMetadata({
     'Manage your personal information and account settings at Curly Pottery. Update your profile to ensure a personalized and secure shopping experience.',
 })
 export default async function ProfilePage() {
-  const session = await getServerSession(authOptions)
+  const session = await auth()
 
   if (!session) {
     redirect('/auth/login')

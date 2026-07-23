@@ -5,15 +5,11 @@ import {
   upsertCategory,
 } from './category.actions'
 import { prisma } from 'prisma/prisma'
-import { getServerSession } from 'next-auth'
+import { auth } from '@/auth'
 
 jest.mock('prisma/prisma', () => ({
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   prisma: require('jest-mock-extended').mockDeep(),
-}))
-
-jest.mock('next-auth', () => ({
-  getServerSession: jest.fn(),
 }))
 
 jest.mock('next/cache', () => ({
@@ -28,7 +24,7 @@ jest.mock('./serverImages.action', () => ({
 describe('getAllCategories', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'admin-1', role: 'ADMIN' },
     })
   })
@@ -84,7 +80,7 @@ describe('getAllCategories', () => {
 describe('getCategoryById', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'admin-1', role: 'ADMIN' },
     })
   })
@@ -141,7 +137,7 @@ describe('getCategoryById', () => {
 describe('upsertCategory', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'admin-1', role: 'ADMIN' },
     })
   })
@@ -244,7 +240,7 @@ describe('upsertCategory', () => {
 describe('deleteCategory', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'admin-1', role: 'ADMIN' },
     })
   })

@@ -12,8 +12,7 @@ import {
 
 import { registerSchema } from '@lib/form-validator'
 import { hashPassword } from '@lib/auth/password'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@lib/auth/authOptions'
+import { auth } from '@/auth'
 import { subscribeEmailToNewsletter } from '@lib/newsletter/service'
 import { revalidatePath } from 'next/cache'
 import {
@@ -25,11 +24,14 @@ import {
 } from '@lib/pagination'
 import { Prisma } from 'prisma/generated/prisma/client'
 
+import { z } from 'zod'
+import * as Sentry from '@sentry/nextjs'
+
 export async function getAllCustomers(
   pagination?: PaginationInput,
 ): Promise<ActionResponse<PaginatedResult<UserWithOrders>>> {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
     if (!session?.user?.id || session.user.role !== 'ADMIN') {
       return {
         success: false,
@@ -77,6 +79,7 @@ export async function getAllCustomers(
     }
   } catch (error) {
     console.error('getAllCustomers_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:
@@ -90,7 +93,7 @@ export async function getUserById(
   id: string,
 ): Promise<ActionResponse<UserWithOrdersAddress | null>> {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
     if (!session?.user?.id) {
       return {
         success: false,
@@ -119,22 +122,23 @@ export async function getUserById(
       data: user,
     }
   } catch (error) {
-      console.error('getUserById:', error)
-      return {
-        success: false,
-        message:
-          error instanceof Error ? error.message : 'A database error occurred',
-        errors: error,
-      }
+    console.error('getUserById:', error)
+    Sentry.captureException(error)
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : 'A database error occurred',
+      errors: error,
     }
   }
+}
 
 export async function updateNotes(
   id: string,
   notes: string,
 ): Promise<ActionResponse<User | null>> {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (session?.user?.role !== 'ADMIN') {
       return {
@@ -143,6 +147,14 @@ export async function updateNotes(
         errors: null,
       }
     }
+    if (notes && notes.length > 10000) {
+      return {
+        success: false,
+        message: 'Notes too long (max 10000 characters)',
+        errors: null,
+      }
+    }
+
     const user = await prisma.user.update({
       where: { id },
       data: { notes },
@@ -155,6 +167,7 @@ export async function updateNotes(
     }
   } catch (error) {
     console.error('updateNotes_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:
@@ -164,6 +177,13 @@ export async function updateNotes(
   }
 }
 
+const updateUserSchema = z.object({
+  firstName: z.string().min(1).max(100).optional(),
+  lastName: z.string().min(1).max(100).optional(),
+  phone: z.string().max(20).optional(),
+  company: z.string().max(200).optional(),
+})
+
 export async function updateUser({
   id,
   data,
@@ -172,7 +192,7 @@ export async function updateUser({
   data: UserWithOrdersAddress
 }): Promise<ActionResponse<User | null>> {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (!session?.user?.id) {
       return {
@@ -190,11 +210,21 @@ export async function updateUser({
       }
     }
 
-    const { orders: _orders, addresses, ...updateData } = data
+    // Only allow whitelisted fields
+    const safeFields = updateUserSchema.safeParse(data)
+    if (!safeFields.success) {
+      return {
+        success: false,
+        message: 'Invalid fields',
+        errors: z.flattenError(safeFields.error),
+      }
+    }
+
+    const { orders: _orders, addresses } = data
     const user = await prisma.user.update({
       where: { id },
       data: {
-        ...updateData,
+        ...safeFields.data,
         addresses: {
           deleteMany: {},
           create: addresses.map((addr: Address) => ({
@@ -215,6 +245,7 @@ export async function updateUser({
     }
   } catch (error) {
     console.error('updateUser_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:
@@ -279,6 +310,7 @@ export async function registerUser(
         })
       } catch (newsletterError) {
         console.error('Newsletter sync error:', newsletterError)
+        Sentry.captureException(newsletterError)
       }
     }
 
@@ -289,6 +321,7 @@ export async function registerUser(
     }
   } catch (error) {
     console.error('Registration error:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message: 'Internal server error',

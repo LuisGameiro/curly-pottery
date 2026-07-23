@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Container, Text, Button, InputCheckbox } from '@components/ui'
 import { useConsent, ConsentPreferences } from '@lib/hooks/useConsent'
-import { hasAnalyticsConsent, hasMarketingConsent } from '@lib/hooks/useConsent'
+import { hasAnalyticsConsent, hasMarketingConsent } from '@lib/consent-utils'
 import Link from 'next/link'
 
 export default function CookieSettingsPage() {

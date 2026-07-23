@@ -34,7 +34,7 @@ import {
   reorderGalleryImages,
 } from '@actions/Gallery.actions'
 import { GalleryImage } from '@lib/types/types'
-import { syncImages } from '@actions/images.actions'
+import { syncImages } from '@lib/client-images'
 import { cn } from '@lib/utils'
 
 // --- Sortable Image Card ---

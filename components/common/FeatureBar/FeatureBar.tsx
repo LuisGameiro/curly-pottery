@@ -81,4 +81,4 @@ export default function FeatureBar({ className }: FeatureBarProps) {
   )
 }
 
-export { hasAnalyticsConsent, hasMarketingConsent } from '@lib/hooks/useConsent'
+export { hasAnalyticsConsent, hasMarketingConsent } from '@lib/consent-utils'

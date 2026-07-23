@@ -1,4 +1,4 @@
-import { syncImages } from './images.actions'
+import { syncImages } from '@lib/client-images'
 import { upload } from '@vercel/blob/client'
 import { deleteBlob } from './serverImages.action'
 import { cropToSquare } from '@lib/cropToSquare'

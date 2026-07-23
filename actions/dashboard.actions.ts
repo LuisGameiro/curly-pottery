@@ -1,9 +1,9 @@
 'use server'
 
-import { authOptions } from '@lib/auth/authOptions'
+import { auth } from '@/auth'
 import { ActionResponse } from '@lib/types/types'
-import { getServerSession } from 'next-auth'
 import { prisma } from 'prisma/prisma'
+import * as Sentry from '@sentry/nextjs'
 
 export interface DashboardStats {
   totalCategories: number
@@ -20,7 +20,7 @@ export async function getDashboardStats(): Promise<
   ActionResponse<DashboardStats>
 > {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (session?.user?.role !== 'ADMIN') {
       return {
@@ -77,6 +77,7 @@ export async function getDashboardStats(): Promise<
     }
   } catch (error) {
     console.error('getDashboardStats_ERROR:', error)
+    Sentry.captureException(error)
     return {
       success: false,
       message:

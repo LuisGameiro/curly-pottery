@@ -1,15 +1,16 @@
 'use server'
 
-import { authOptions } from '@lib/auth/authOptions'
+import { auth } from '@/auth'
 import { CartLineItem, Cart } from '@lib/types/types'
-import { getServerSession } from 'next-auth'
 import { prisma } from 'prisma/prisma'
 import { calculateDiscount } from '@lib/calculate-price'
 import { revalidatePath } from 'next/cache'
+import { checkRateLimit, getRateLimitKey } from '@lib/rate-limit'
+import * as Sentry from '@sentry/nextjs'
 
 export async function getCartFromDbAction(): Promise<Cart | null> {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (!session?.user?.id) return null
 
@@ -38,14 +39,23 @@ export async function getCartFromDbAction(): Promise<Cart | null> {
     } as unknown as Cart
   } catch (error) {
     console.error('getCartFromDbAction_ERROR:', error)
+    Sentry.captureException(error)
     return null
   }
 }
 
 export async function syncCartAction(items: CartLineItem[]) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
     if (!session?.user) return
+
+    const rateResult = await checkRateLimit(
+      getRateLimitKey(session.user.id, 'cart-sync'),
+      { windowMs: 60 * 1000, maxRequests: 30 },
+    )
+    if (!rateResult.success) {
+      return { errors: { message: 'Too many requests. Please slow down.' } }
+    }
 
     // Securely validate items against the database to prevent quantity/price manipulation
     const validatedItems: CartLineItem[] = []
@@ -86,12 +96,13 @@ export async function syncCartAction(items: CartLineItem[]) {
     revalidatePath('/cart')
   } catch (error) {
     console.error('syncCartAction_ERROR:', error)
+    Sentry.captureException(error)
   }
 }
 
 export async function deleteCart(cartId: string) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (!session?.user?.id) {
       return { success: false, message: 'Unauthorized: Please sign in.' }
@@ -108,21 +119,23 @@ export async function deleteCart(cartId: string) {
     return { success: true, message: 'Cart deleted successfully.' }
   } catch (error) {
     console.error('deleteCart_ERROR:', error)
+    Sentry.captureException(error)
     return { success: false, message: 'Failed to delete cart.' }
   }
 }
 
 export async function updateCartPrice(
-  _subtotalPrice: number,
-  _totalPrice: number,
   taxes: number,
   shippingPrice: number,
 ) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (!session?.user?.id) {
-      return { success: false, message: 'Unauthorized: Please sign in before checkout.' }
+      return {
+        success: false,
+        message: 'Unauthorized: Please sign in before checkout.',
+      }
     }
 
     const cart = await prisma.cart.findUnique({
@@ -153,6 +166,7 @@ export async function updateCartPrice(
     return { success: true, message: 'Cart price updated.' }
   } catch (error) {
     console.error('updateCartPrice_ERROR:', error)
+    Sentry.captureException(error)
     return { success: false, message: 'Failed to update cart price.' }
   }
 }

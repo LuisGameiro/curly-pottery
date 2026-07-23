@@ -1,6 +1,8 @@
 import s from './HomeHero.module.css'
 import Image from 'next/image'
 import Link from 'next/link'
+import potteryHandsImage from '@public/Homepage 2.jpg'
+import artistImage from '@public/Homepage 1.jpg'
 
 const HomeHero = () => {
   return (
@@ -18,12 +20,13 @@ const HomeHero = () => {
       <Link href="/about" className={s.centerImage}>
         <div className={s.imageWrapper}>
           <Image
-            src="/Homepage 2.jpg"
+            src={potteryHandsImage}
             alt="Hands making pottery"
             fill
             sizes="(max-width: 768px) 50vw, 33vw"
             className="object-cover"
             priority
+            placeholder="blur"
           />
         </div>
       </Link>
@@ -32,12 +35,13 @@ const HomeHero = () => {
       <Link href="/about" className={s.rightImage}>
         <div className={s.imageWrapper}>
           <Image
-            src="/Homepage 1.jpg"
+            src={artistImage}
             alt="Curly Pottery Artist"
             fill
             sizes="(max-width: 768px) 50vw, 33vw"
             className="object-cover"
             priority
+            placeholder="blur"
           />
         </div>
       </Link>

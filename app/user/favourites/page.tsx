@@ -1,9 +1,9 @@
 import constructMetadata from '@components/common/SEO/SEO'
 import { Container, Text } from '@components/ui'
-import { authOptions } from '@lib/auth/authOptions'
+import { auth } from '@/auth'
 import { getFavouritesWithProductsAction } from '@actions/Favourite.actions'
 import { Heart } from 'lucide-react'
-import { getServerSession } from 'next-auth'
+
 import ProductCard from '@components/product/ProductCard/ProductCard'
 import { Suspense } from 'react'
 import { FAVOURITES_PAGE_SIZE } from '@lib/pagination'
@@ -22,7 +22,7 @@ export default async function FavouritesPage({
   searchParams: Promise<{ cursor?: string }>
 }>) {
   const { cursor } = await searchParams
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   const user = session?.user
 
   if (!user) {

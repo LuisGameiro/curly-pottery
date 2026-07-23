@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 // Removed CSS module import
 import NavbarRoot from './NavbarRoot'

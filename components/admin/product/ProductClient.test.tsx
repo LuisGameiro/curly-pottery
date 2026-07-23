@@ -1,6 +1,6 @@
 jest.mock('sonner')
 // jest.mock('@actions/product.actions')
-// jest.mock('@actions/images.actions')
+// jest.mock('@lib/client-images')
 jest.mock('next/link', () => {
   const MockLink = ({
     children,

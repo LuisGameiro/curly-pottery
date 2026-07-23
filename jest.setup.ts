@@ -26,16 +26,9 @@ if (typeof global.TransformStream === 'undefined') {
   global.TransformStream = TransformStream
 }
 
-jest.mock('next-auth', () => ({
+jest.mock('@/auth', () => ({
   __esModule: true,
-  default: jest.fn(),
-  getServerSession: jest.fn(),
-}))
-
-jest.mock('next-auth/next', () => ({
-  __esModule: true,
-  default: jest.fn(),
-  getServerSession: jest.fn(),
+  auth: jest.fn(),
 }))
 
 // Object.defineProperties(global, {
