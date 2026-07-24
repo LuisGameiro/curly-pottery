@@ -32,7 +32,14 @@ import { isAdminRole } from '@lib/auth/admin'
  * Convert Prisma Decimal fields to plain numbers for safe
  * serialization when passing to client components.
  */
-function formatOrder<T extends { subtotalPrice: unknown; totalPrice: unknown; taxes: unknown; shippingPrice: unknown }>(order: T): T {
+function formatOrder<
+  T extends {
+    subtotalPrice: unknown
+    totalPrice: unknown
+    taxes: unknown
+    shippingPrice: unknown
+  },
+>(order: T): T {
   return {
     ...order,
     subtotalPrice: Number(order.subtotalPrice),
@@ -86,7 +93,9 @@ export async function getAllOrders(
     ])
 
     const hasMore = orders.length > take
-    const items = (orders.slice(0, take) as unknown as OrderWithUser[]).map(formatOrder)
+    const items = (orders.slice(0, take) as unknown as OrderWithUser[]).map(
+      formatOrder,
+    )
     const nextCursor = hasMore ? encodeCursor(items.at(-1)!.id) : null
 
     return {
@@ -148,7 +157,9 @@ export async function getOrdersById(
     ])
 
     const hasMore = orders.length > take
-    const items = (orders.slice(0, take) as unknown as OrderWithUser[]).map(formatOrder)
+    const items = (orders.slice(0, take) as unknown as OrderWithUser[]).map(
+      formatOrder,
+    )
     const nextCursor = hasMore ? encodeCursor(items.at(-1)!.id) : null
 
     return {
