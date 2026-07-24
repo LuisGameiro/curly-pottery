@@ -203,7 +203,7 @@ export default function GalleryClient() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="gallery-client">
       <div className="flex items-center justify-between">
         <Text variant="pageHeading">Gallery Management</Text>
       </div>
@@ -223,7 +223,10 @@ export default function GalleryClient() {
               items={images.map((img) => img.id)}
               strategy={verticalListSortingStrategy}
             >
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              <div
+                className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
+                data-testid="gallery-images-grid"
+              >
                 {images.map((image) => (
                   <SortableImage
                     key={image.id}
@@ -238,7 +241,11 @@ export default function GalleryClient() {
       )}
 
       {/* Upload area */}
-      <Container variant="box" className="space-y-4">
+      <Container
+        variant="box"
+        className="space-y-4"
+        data-testid="gallery-upload-area"
+      >
         <Text variant="boxTitle">
           {images.length === 0 ? 'Add Your First Image' : 'Add More Images'}
         </Text>

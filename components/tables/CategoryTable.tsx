@@ -85,5 +85,9 @@ export default function CategoryTable({
     },
   ]
 
-  return <DataTable data={categories} columns={columns} />
+  return (
+    <div data-testid="category-table">
+      <DataTable data={categories} columns={columns} />
+    </div>
+  )
 }

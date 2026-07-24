@@ -41,6 +41,7 @@ export default function FavouriteButton({
       aria-label={filled ? 'Remove from favourites' : 'Add to favourites'}
       aria-pressed={filled}
       onClick={handleClick}
+      data-testid={'favourite-btn-' + productId}
       className={cn(
         'transition-all duration-200 rounded-full',
         filled

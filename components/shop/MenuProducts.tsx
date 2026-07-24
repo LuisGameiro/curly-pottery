@@ -51,6 +51,7 @@ export default function MenuProducts({
         <button
           className="rounded-full px-3 py-0.5 font-bold text-secondary flex items-center gap-2 hover:bg-primary transition-colors"
           onClick={() => setOpenFilter((v) => !v)}
+          data-testid="filter-button"
         >
           <Image src="/Filter.svg" alt="Filter" width={16} height={16} />
           Filters
@@ -95,6 +96,7 @@ export default function MenuProducts({
             <button
               className="rounded-full px-3 py-0.5 font-bold text-secondary flex items-center gap-2 hover:bg-primary transition-colors justify-between"
               onClick={() => setOpenSort((v) => !v)}
+              data-testid="sort-button"
             >
               <span>{sortLabels[sortMethod]}</span>
               <ChevronUp

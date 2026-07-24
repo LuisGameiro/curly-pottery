@@ -7,6 +7,8 @@ interface ContainerProps {
   el?: React.ElementType
   clean?: boolean
   variant?: 'default' | 'box'
+  /** Test identifier forwarded to the root element */
+  'data-testid'?: string
 }
 
 const Container = ({
@@ -15,6 +17,7 @@ const Container = ({
   el = 'div',
   variant = 'default',
   clean = false,
+  'data-testid': testId,
 }: ContainerProps) => {
   const rootClassName = cn(
     {
@@ -27,7 +30,11 @@ const Container = ({
   )
   const Component = el as ElementType<HTMLAttributes<HTMLElement>>
 
-  return <Component className={rootClassName}>{children}</Component>
+  return (
+    <Component className={rootClassName} data-testid={testId || 'container'}>
+      {children}
+    </Component>
+  )
 }
 
 export default Container

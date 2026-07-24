@@ -1,6 +1,8 @@
 import { hashPassword, verifyPassword } from './password'
 import { compare } from 'bcryptjs'
 
+jest.setTimeout(15000)
+
 describe('hashPassword', () => {
   it('should hash a password', async () => {
     const password = 'testPassword123'

@@ -49,6 +49,7 @@ const ProductCard = ({
       href={`/shop/${product.slug}`}
       className={rootClassName}
       aria-label={product.name}
+      data-testid={'product-card-' + product.slug}
     >
       {variant === 'slim' && (
         <div className="relative w-full h-full">

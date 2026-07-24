@@ -66,11 +66,13 @@ export default function OrderTable({
   ]
 
   return (
-    <DataTable
-      data={orders}
-      columns={orderColumns}
-      isLoading={isLoading}
-      emptyMessage="No orders found"
-    />
+    <div data-testid="admin-order-table">
+      <DataTable
+        data={orders}
+        columns={orderColumns}
+        isLoading={isLoading}
+        emptyMessage="No orders found"
+      />
+    </div>
   )
 }

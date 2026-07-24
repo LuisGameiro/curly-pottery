@@ -77,7 +77,7 @@ export default function ProductsClient({
   }, [initialData, initialSearch])
 
   return (
-    <Container>
+    <Container data-testid="products-client">
       <header>
         <div className="flex flex-col sm:flex-row items-center gap-2 justify-between">
           <Text className="w-full" variant="heading">
@@ -89,8 +89,13 @@ export default function ProductsClient({
               placeholder="Search name or SKU..."
               value={searchTerm}
               onValueChange={handleSearch}
+              data-testid="products-search-input"
             />
-            <Link href="/admin/products/new" passHref>
+            <Link
+              href="/admin/products/new"
+              passHref
+              data-testid="products-new-btn"
+            >
               <Button variant="slim" className="text-nowrap">
                 <span className="mr-1">
                   <Plus size={18} />

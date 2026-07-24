@@ -73,7 +73,7 @@ export default function PaymentSelector({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" data-testid="payment-selector">
       <Text variant="bold">Select Payment Method</Text>
 
       <div className="space-y-3">

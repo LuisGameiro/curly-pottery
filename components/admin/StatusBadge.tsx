@@ -10,6 +10,7 @@ export function StatusBadge({ status }: { status: string }) {
 
   return (
     <span
+      data-testid={'status-badge-' + status.toLowerCase()}
       className={`font-bold px-1 rounded-full border ${styles[status] || styles.PENDING}`}
     >
       {status}

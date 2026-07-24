@@ -4,9 +4,7 @@ import {
   deleteCart,
   updateCartPrice,
 } from './cart.actions'
-import { PrismaClient } from 'prisma/generated/prisma/client'
 import { prisma } from 'prisma/prisma'
-import { mockReset, DeepMockProxy } from 'jest-mock-extended'
 
 import { auth } from '@/auth'
 import { CartLineItem } from '@lib/types/types'
@@ -16,12 +14,20 @@ jest.mock('prisma/prisma', () => ({
   prisma: require('jest-mock-extended').mockDeep(),
 }))
 
-const prismaMock = prisma as unknown as DeepMockProxy<PrismaClient>
+jest.mock('@lib/rate-limit', () => ({
+  checkRateLimit: jest
+    .fn()
+    .mockResolvedValue({ success: true, remaining: 999, resetIn: 0 }),
+  getRateLimitKey: jest.fn().mockReturnValue('test-key'),
+}))
+
+jest.mock('next/cache', () => ({
+  revalidatePath: jest.fn(),
+  revalidateTag: jest.fn(),
+}))
 
 describe('getCartFromDbAction', () => {
   beforeEach(() => {
-    mockReset(prismaMock)
-
     jest.clearAllMocks()
   })
 
@@ -69,17 +75,16 @@ describe('getCartFromDbAction', () => {
     ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
-    ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
-      id: 'user-123',
-      cart: mockCart,
-    })
+    ;(prisma.cart.findUnique as jest.Mock).mockResolvedValue(mockCart)
 
     const result = await getCartFromDbAction()
 
     expect(result).toEqual(mockCart)
-    expect(prisma.user.findUnique).toHaveBeenCalledWith({
-      where: { id: 'user-123' },
-      include: { cart: true },
+    expect(prisma.cart.findUnique).toHaveBeenCalledWith({
+      where: { userId: 'user-123' },
+      include: {
+        lineItems: { include: { variant: { include: { product: true } } } },
+      },
     })
   })
 })
@@ -93,14 +98,16 @@ describe('getCartFromDbAction - additional', () => {
     ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
-    ;(prisma.user.findUnique as jest.Mock).mockResolvedValue(null)
+    ;(prisma.cart.findUnique as jest.Mock).mockResolvedValue(null)
 
     const result = await getCartFromDbAction()
 
     expect(result).toBeNull()
-    expect(prisma.user.findUnique).toHaveBeenCalledWith({
-      where: { id: 'user-123' },
-      include: { cart: true },
+    expect(prisma.cart.findUnique).toHaveBeenCalledWith({
+      where: { userId: 'user-123' },
+      include: {
+        lineItems: { include: { variant: { include: { product: true } } } },
+      },
     })
   })
 })
@@ -139,23 +146,29 @@ describe('syncCartAction', () => {
     ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
-    ;(prisma.productVariant.findUnique as jest.Mock).mockResolvedValue({
-      id: 'v1',
-      stock: 10,
-      price: 100,
-    })
+    ;(prisma.productVariant.findMany as jest.Mock).mockResolvedValue([
+      { id: 'v1', stock: 10, price: 100 },
+    ])
 
-    const expectedItems = items.map((item) => ({ ...item, stock: 10 }))
+    const mockTx = {
+      cart: {
+        upsert: jest.fn().mockResolvedValue({ id: 'cart-1' }),
+      },
+      cartLineItem: {
+        deleteMany: jest.fn().mockResolvedValue({ count: 0 }),
+        createMany: jest.fn().mockResolvedValue({ count: 0 }),
+      },
+    }
+    ;(prisma.$transaction as jest.Mock).mockImplementation(
+      (cb: (tx: typeof mockTx) => unknown) => cb(mockTx),
+    )
 
     await syncCartAction(items)
 
-    expect(prisma.cart.upsert).toHaveBeenCalledWith({
+    expect(mockTx.cart.upsert).toHaveBeenCalledWith({
       where: { userId: 'user-123' },
-      update: { lineItems: expectedItems },
-      create: {
-        lineItems: expectedItems,
-        user: { connect: { id: 'user-123' } },
-      },
+      update: {},
+      create: { user: { connect: { id: 'user-123' } } },
     })
   })
 
@@ -164,16 +177,27 @@ describe('syncCartAction', () => {
     ;(auth as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
+    ;(prisma.productVariant.findMany as jest.Mock).mockResolvedValue([])
+
+    const mockTx = {
+      cart: {
+        upsert: jest.fn().mockResolvedValue({ id: 'cart-1' }),
+      },
+      cartLineItem: {
+        deleteMany: jest.fn().mockResolvedValue({ count: 0 }),
+        createMany: jest.fn().mockResolvedValue({ count: 0 }),
+      },
+    }
+    ;(prisma.$transaction as jest.Mock).mockImplementation(
+      (cb: (tx: typeof mockTx) => unknown) => cb(mockTx),
+    )
 
     await syncCartAction(items)
 
-    expect(prisma.cart.upsert).toHaveBeenCalledWith({
+    expect(mockTx.cart.upsert).toHaveBeenCalledWith({
       where: { userId: 'user-123' },
-      update: { lineItems: items },
-      create: {
-        lineItems: items,
-        user: { connect: { id: 'user-123' } },
-      },
+      update: {},
+      create: { user: { connect: { id: 'user-123' } } },
     })
   })
 })
@@ -219,15 +243,18 @@ describe('updateCartPrice', () => {
       user: { id: 'user-123' },
     })
     ;(prisma.cart.findUnique as jest.Mock).mockResolvedValue({
+      id: 'cart-1',
       userId: 'user-123',
-      lineItems: [
-        {
-          price: 50,
-          quantity: 2,
-          discounts: [],
-        },
-      ],
     })
+    ;(prisma.cartLineItem.findMany as jest.Mock).mockResolvedValue([
+      {
+        variantId: 'v1',
+        quantity: 2,
+        price: 50,
+        currency: 'GBP',
+        discounts: [],
+      },
+    ])
 
     await updateCartPrice(20, 10)
 

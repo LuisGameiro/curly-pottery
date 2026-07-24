@@ -57,12 +57,14 @@ export default function SearchBar({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyUp={(e) => handleKeyUp(e, query)}
+          data-testid="search-bar-input"
         />
         <button
           type="button"
           className={cn(s.iconContainer, 'md:hidden relative inset-auto p-2')}
           aria-label="Open search"
           onClick={() => setIsOpen(true)}
+          data-testid="search-bar-submit-btn"
         >
           <Search size={16} className="text-secondary" />
         </button>

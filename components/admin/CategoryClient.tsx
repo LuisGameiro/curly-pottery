@@ -101,7 +101,7 @@ export default function CategoryClient({
   if (loading) return <LoadingDots />
 
   return (
-    <Container>
+    <Container data-testid="category-form">
       <header>
         <Link
           href="/admin/categories"
@@ -119,6 +119,7 @@ export default function CategoryClient({
             type="submit"
             variant="slim"
             disabled={loading}
+            data-testid="category-form-save-btn"
           >
             {isEditMode ? 'Save Category' : 'Create Category'}
           </Button>
@@ -135,6 +136,7 @@ export default function CategoryClient({
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             placeholder="e.g. Home Decor"
+            data-testid="category-form-name-input"
           />
 
           <div className="flex gap-2 ">

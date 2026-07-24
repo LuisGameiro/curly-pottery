@@ -6,6 +6,7 @@ import Credentials from 'next-auth/providers/credentials'
 import { verifyPassword } from '@lib/auth/password'
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  trustHost: true,
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
   providers: [

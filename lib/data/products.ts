@@ -1,9 +1,6 @@
 import { unstable_cache } from 'next/cache'
 import { prisma } from 'prisma/prisma'
-import {
-  ActionResponse,
-  ProductWithVariantsCategories,
-} from '@lib/types/types'
+import { ActionResponse, ProductWithVariantsCategories } from '@lib/types/types'
 import {
   PaginationInput,
   PaginatedResult,

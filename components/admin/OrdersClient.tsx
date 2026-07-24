@@ -79,7 +79,7 @@ export default function OrdersClient({
   const otherOrders = items.filter((o) => o.status !== 'PENDING')
 
   return (
-    <Container>
+    <Container data-testid="orders-client">
       <header>
         <Text variant="heading">Order Management</Text>
         <Text variant="subHeading">
@@ -90,6 +90,7 @@ export default function OrdersClient({
             placeholder="Search by name, email or order ID..."
             value={searchTerm}
             onValueChange={handleSearch}
+            data-testid="orders-search-input"
           />
         </div>
       </header>

@@ -325,7 +325,7 @@ export default function NewsletterClient({
   ]
 
   return (
-    <Container className="space-y-8">
+    <Container className="space-y-8" data-testid="newsletter-client">
       <header className="space-y-3">
         <Text variant="heading">Newsletter</Text>
         <Text variant="subHeading">
@@ -496,7 +496,11 @@ export default function NewsletterClient({
             </div>
 
             <div className="flex justify-end">
-              <Button type="submit" disabled={isPending}>
+              <Button
+                type="submit"
+                disabled={isPending}
+                data-testid="newsletter-create-draft-btn"
+              >
                 <Sparkles size={16} className="mr-2" />
                 {isPending ? 'Creating...' : 'Create draft'}
               </Button>

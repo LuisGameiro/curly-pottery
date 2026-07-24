@@ -96,7 +96,11 @@ const ProductSlider = ({ children, className = '' }: ProductSliderProps) => {
   const onPrev = () => slider.current?.prev()
   const onNext = () => slider.current?.next()
   return (
-    <div className={cn(s.root, className)} ref={sliderContainerRef}>
+    <div
+      className={cn(s.root, className)}
+      ref={sliderContainerRef}
+      data-testid="product-slider"
+    >
       <div
         ref={ref}
         className={cn(s.slider, { [s.show]: isMounted }, 'keen-slider')}

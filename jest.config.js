@@ -176,11 +176,13 @@ const config = {
   // testRunner: "jest-circus/runner",
 
   // A map from regular expressions to paths to transformers
-  // transform: undefined,
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx|mjs)$': ['ts-jest', { diagnostics: false }],
+  },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   transformIgnorePatterns: [
-    '/node_modules/(?!(next-auth|openid-client|jose|react-merge-refs)/)',
+    '/node_modules/(?!(next-auth|openid-client|jose|react-merge-refs|@vercel/kv|@upstash/redis|uncrypto)/)',
   ],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
@@ -212,7 +214,39 @@ const config = {
     '^prisma/(.*)$': '<rootDir>/prisma/$1',
     '^@components/(.*)$': '<rootDir>/components/$1',
     '^@lib/(.*)$': '<rootDir>/lib/$1',
+    '^@actions/(.*)$': '<rootDir>/actions/$1',
   },
 }
 
-module.exports = createJestConfig(config)
+// Wrap createJestConfig to fix transformIgnorePatterns.
+// Next.js's createJestConfig prepends its own patterns that ignore ALL node_modules
+// (except its internal transpiled list), which overrides our user patterns.
+// We override the node_modules patterns to also exempt packages that use ESM syntax
+// and need transformation by ts-jest in test context.
+module.exports = async () => {
+  const jestConfig = await createJestConfig(config)()
+
+  const esmPackages = [
+    'next-auth',
+    'openid-client',
+    'jose',
+    'react-merge-refs',
+    '@vercel/kv',
+    '@upstash/redis',
+    'uncrypto',
+  ].join('|')
+
+  return {
+    ...jestConfig,
+    transformIgnorePatterns: [
+      // Our pattern replaces Next.js's node_modules pattern:
+      // ignore everything in node_modules EXCEPT packages that need ESM transformation
+      `/node_modules/(?!.pnpm)(?!(${esmPackages})/)`,
+      `/node_modules/.pnpm/(?!(${esmPackages.replace(/\//g, '\\+')})@)`,
+      // Keep non-node_modules patterns from the default config (e.g. .module.css)
+      ...jestConfig.transformIgnorePatterns.filter(
+        (p) => !p.includes('/node_modules/') && !p.startsWith('/node_modules/'),
+      ),
+    ],
+  }
+}

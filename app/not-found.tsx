@@ -3,7 +3,10 @@ import { Text } from '@components/ui'
 
 export default function NotFound() {
   return (
-    <div className="space-y-10 text-center bg-linear-to-r from-background to-accent-2 py-20">
+    <div
+      className="space-y-10 text-center bg-linear-to-r from-background to-accent-2 py-20"
+      data-testid="not-found-page"
+    >
       <Text variant="heading">Oops! This page is missing.</Text>
       <Text variant="body">
         We could not find the page you are looking for. It might have moved, or

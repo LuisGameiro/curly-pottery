@@ -25,6 +25,7 @@ const Quantity = ({
           disabled={value <= 1}
           className="px-2 h-full flex-center hover:bg-accent-1 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border-r border-border"
           aria-label="Decrease quantity"
+          data-testid="quantity-decrease-btn"
         >
           <Minus width={14} height={14} />
         </button>
@@ -38,6 +39,7 @@ const Quantity = ({
           value={value}
           type="number"
           readOnly
+          data-testid="quantity-input"
         />
 
         <button
@@ -46,6 +48,7 @@ const Quantity = ({
           disabled={value >= max}
           className="px-2 h-full flex-center hover:bg-accent-1 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border-l border-border"
           aria-label="Increase quantity"
+          data-testid="quantity-increase-btn"
         >
           <Plus width={14} height={14} />
         </button>

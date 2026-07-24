@@ -63,6 +63,7 @@ const CartItem = ({
           'opacity-50 pointer-events-none': removing,
         },
       )}
+      data-testid={'cart-item-' + item.variantId}
       {...rest}
     >
       <div className="flex items-center">
@@ -144,6 +145,7 @@ const CartItem = ({
           color="danger"
           title="Remove item"
           variant="naked"
+          data-testid={'cart-item-remove-' + item.variantId}
         >
           <Trash width={18} height={18} />
         </Button>

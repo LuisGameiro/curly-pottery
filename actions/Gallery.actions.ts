@@ -6,9 +6,11 @@ import { GalleryImage, ActionResponse } from '@lib/types/types'
 import { deleteBlob } from './serverImages.action'
 import { assertAdmin } from '@lib/auth/admin'
 import * as Sentry from '@sentry/nextjs'
+import { getGalleryImages as getGalleryImagesData } from '@lib/data/gallery'
 
-// Re-export cached data function as server action for client-component callers
-export { getGalleryImages } from '@lib/data/gallery'
+export async function getGalleryImages() {
+  return getGalleryImagesData()
+}
 
 export async function addGalleryImage(
   url: string,

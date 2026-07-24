@@ -45,7 +45,11 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
 
   if (!variant) {
     return (
-      <Container clean className="bg-linear-to-r from-background to-accent-2">
+      <Container
+        clean
+        className="bg-linear-to-r from-background to-accent-2"
+        data-testid="product-view"
+      >
         <section className={s.root}>
           <div className="flex-center flex-col py-20">
             <Text variant="heading">Product Unavailable</Text>
@@ -66,7 +70,11 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
   }
 
   return (
-    <Container clean className="bg-linear-to-r from-background to-accent-2">
+    <Container
+      clean
+      className="bg-linear-to-r from-background to-accent-2"
+      data-testid="product-view"
+    >
       <section className={s.root}>
         <div className={s.main}>
           <ProductSlider>

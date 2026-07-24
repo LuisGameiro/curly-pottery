@@ -32,7 +32,7 @@ const ProductOptions = ({ product, setVariant }: ProductOptionsProps) => {
   return (
     <div className="flex flex-wrap justify-between gap-4">
       {allSizes.length > 1 && (
-        <div>
+        <div data-testid="product-size-options">
           <Text variant="bold">Size</Text>
           <div role="listbox" className="flex mt-2 gap-2">
             {allSizes.map((size) => (
@@ -65,7 +65,7 @@ const ProductOptions = ({ product, setVariant }: ProductOptionsProps) => {
         </div>
       )}
       {allColors.length > 1 && (
-        <div>
+        <div data-testid="product-color-options">
           <Text variant="bold">Color</Text>
           <div role="listbox" className="flex mt-2 gap-2">
             {allColors.map((color) => {

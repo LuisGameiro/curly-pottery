@@ -10,7 +10,10 @@ export const metadata = constructMetadata({
 
 export default function About() {
   return (
-    <Container className="px-4 py-6 sm:px-10 sm:py-10 bg-linear-to-r from-background to-accent-2">
+    <Container
+      className="px-4 py-6 sm:px-10 sm:py-10 bg-linear-to-r from-background to-accent-2"
+      data-testid="about-page"
+    >
       <div className="space-y-16 md:max-w-3xl mx-auto">
         {/* Section 1: About the artist */}
         <section className="space-y-6">

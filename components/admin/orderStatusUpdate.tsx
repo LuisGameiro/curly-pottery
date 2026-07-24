@@ -30,7 +30,11 @@ const OrderStatusUpdate = ({ orderId, currentStatus }: OrderStatusProps) => {
   }
 
   return (
-    <Container variant="box" className="space-y-3">
+    <Container
+      variant="box"
+      className="space-y-3"
+      data-testid="order-status-update"
+    >
       <div className="flex items-center gap-2 border-b pb-2">
         {isPending ? (
           <Loader2 size={18} className="text-secondary animate-spin" />
@@ -41,6 +45,7 @@ const OrderStatusUpdate = ({ orderId, currentStatus }: OrderStatusProps) => {
       </div>
 
       <select
+        data-testid="order-status-select"
         className={cn(
           'w-full border border-border text-sm font-medium rounded-lg px-3 py-2 bg-background cursor-pointer transition-opacity focus-visible:outline-2 focus-visible:outline-secondary focus-visible:outline-offset-2',
           isPending && 'opacity-50 pointer-events-none',

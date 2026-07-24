@@ -43,8 +43,11 @@ export default function UserLayoutClient({
     navItems.find((item) => item.href === pathname) || navItems[0]
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row">
-      <aside className="w-full lg:w-2/12 bg-background lg:border-r border-border px-4 py-2 ">
+    <div className="flex-1 flex flex-col lg:flex-row" data-testid="user-layout">
+      <aside
+        className="w-full lg:w-2/12 bg-background lg:border-r border-border px-4 py-2 "
+        data-testid="user-sidebar"
+      >
         <Text
           variant="pageHeading"
           className="hidden lg:block font-bold text-xl text-secondary mt-6 pt-6"
@@ -79,6 +82,14 @@ export default function UserLayoutClient({
           >
             {navItems.map((item) => {
               const isActive = pathname === item.href
+              const testid =
+                item.name === 'Profile'
+                  ? 'user-nav-profile'
+                  : item.name === 'Orders'
+                    ? 'user-nav-orders'
+                    : item.name === 'Favourites'
+                      ? 'user-nav-favourites'
+                      : undefined
               return (
                 <li key={item.name}>
                   <Link
@@ -90,6 +101,7 @@ export default function UserLayoutClient({
                         ? 'bg-secondary text-background'
                         : 'text-secondary hover:bg-secondary/60',
                     )}
+                    data-testid={testid}
                   >
                     <item.icon size={20} />
                     {item.name}
@@ -102,6 +114,7 @@ export default function UserLayoutClient({
                 type="button"
                 onClick={() => signOut()}
                 className="w-full flex items-center gap-2 px-4 py-2 rounded-lg transition-colors font-medium text-red-500 hover:bg-red-500/10 mt-2"
+                data-testid="user-nav-logout"
               >
                 <LogOut size={20} />
                 Logout

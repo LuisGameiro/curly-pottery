@@ -7,6 +7,24 @@ jest.mock('prisma/prisma', () => ({
   prisma: require('jest-mock-extended').mockDeep(),
 }))
 
+jest.mock('@lib/rate-limit', () => ({
+  checkRateLimit: jest
+    .fn()
+    .mockResolvedValue({ success: true, remaining: 999, resetIn: 0 }),
+  getRateLimitKey: jest.fn().mockReturnValue('test-key'),
+}))
+
+jest.mock('next/headers', () => ({
+  headers: jest.fn().mockResolvedValue({
+    get: jest.fn().mockReturnValue('127.0.0.1'),
+  }),
+}))
+
+jest.mock('next/cache', () => ({
+  revalidatePath: jest.fn(),
+  revalidateTag: jest.fn(),
+}))
+
 jest.mock('resend', () => {
   const mockResendInstance = {
     emails: {
@@ -19,6 +37,7 @@ jest.mock('resend', () => {
   }
 })
 
+import { auth } from '@/auth'
 import { resetPassword, sendEmail, sendResetEmail } from './email.actions'
 import { prisma } from 'prisma/prisma'
 import { hashPassword } from '@lib/auth/password'
@@ -30,6 +49,9 @@ describe('sendEmail', () => {
   const mockInstance = new Resend()
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(auth as jest.Mock).mockResolvedValue({
+      user: { id: 'admin-1', role: 'ADMIN' },
+    })
   })
 
   it('should send email successfully', async () => {
@@ -97,7 +119,7 @@ describe('sendEmail', () => {
     })
 
     const call = mockInstance.emails.send.mock.calls[0][0]
-    expect(call.from).toBe('onboarding@resend.dev')
+    expect(call.from).toBe('noreply@curlypottery.com')
   })
 })
 
@@ -137,7 +159,9 @@ describe('sendResetEmail', () => {
     const result = await sendResetEmail('nonexistent@example.com')
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('User not found')
+    expect(result.message).toBe(
+      'If an account with that email exists, a password reset link has been sent.',
+    )
   })
 
   it('should update user with reset token and expiry', async () => {

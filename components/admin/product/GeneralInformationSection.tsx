@@ -37,6 +37,7 @@ export default function GeneralInformationSection({
             error={errors.name?.message as string}
             type="text"
             placeholder="e.g. vase"
+            data-testid="product-form-name-input"
           />
 
           <div className="gap-2">
@@ -50,6 +51,7 @@ export default function GeneralInformationSection({
             error={errors.description?.message as string}
             {...register('description')}
             placeholder="e.g. vase dedcor description"
+            data-testid="product-form-description-input"
           />
         </div>
       </Container>

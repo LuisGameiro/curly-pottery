@@ -144,13 +144,13 @@ describe('upsertCategory', () => {
       id: '1',
       name: 'New Category',
       slug: 'new-category',
-      image: 'img.jpg',
+      image: 'https://example.com/img.jpg',
     }
     ;(prisma.category.create as jest.Mock).mockResolvedValue(mockCategory)
 
     const result = await upsertCategory({
       name: 'New Category',
-      image: 'img.jpg',
+      image: 'https://example.com/img.jpg',
     })
 
     expect(result.success).toBe(true)
@@ -160,7 +160,7 @@ describe('upsertCategory', () => {
       data: {
         name: 'New Category',
         slug: 'new-category',
-        image: 'img.jpg',
+        image: 'https://example.com/img.jpg',
       },
     })
   })
@@ -170,14 +170,14 @@ describe('upsertCategory', () => {
       id: '1',
       name: 'Updated Category',
       slug: 'updated-category',
-      image: 'new-img.jpg',
+      image: 'https://example.com/new-img.jpg',
     }
     ;(prisma.category.update as jest.Mock).mockResolvedValue(mockCategory)
 
     const result = await upsertCategory({
       id: '1',
       name: 'Updated Category',
-      image: 'new-img.jpg',
+      image: 'https://example.com/new-img.jpg',
     })
 
     expect(result.success).toBe(true)
@@ -188,7 +188,7 @@ describe('upsertCategory', () => {
       data: {
         name: 'Updated Category',
         slug: 'updated-category',
-        image: 'new-img.jpg',
+        image: 'https://example.com/new-img.jpg',
       },
     })
   })
@@ -199,7 +199,7 @@ describe('upsertCategory', () => {
 
     const result = await upsertCategory({
       name: 'New Category',
-      image: 'img.jpg',
+      image: 'https://example.com/img.jpg',
     })
 
     expect(result.success).toBe(false)
@@ -214,7 +214,7 @@ describe('upsertCategory', () => {
     const result = await upsertCategory({
       id: '1',
       name: 'Updated Category',
-      image: 'img.jpg',
+      image: 'https://example.com/img.jpg',
     })
 
     expect(result.success).toBe(false)
@@ -226,7 +226,7 @@ describe('upsertCategory', () => {
 
     const result = await upsertCategory({
       name: 'New Category',
-      image: 'img.jpg',
+      image: 'https://example.com/img.jpg',
     })
 
     expect(result.success).toBe(false)

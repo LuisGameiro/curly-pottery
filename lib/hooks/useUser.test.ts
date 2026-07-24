@@ -2,7 +2,10 @@ import { renderHook } from '@testing-library/react'
 import { useSession } from 'next-auth/react'
 import { useUser } from './useUser'
 
-jest.mock('next-auth/react')
+jest.mock('next-auth/react', () => ({
+  useSession: jest.fn(),
+  SessionProvider: ({ children }: { children: React.ReactNode }) => children,
+}))
 
 describe('useUser', () => {
   const mockUseSession = useSession as jest.MockedFunction<typeof useSession>

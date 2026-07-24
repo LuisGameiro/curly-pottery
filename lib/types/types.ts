@@ -99,7 +99,7 @@ export type DiscountType = (typeof DiscountType)[keyof typeof DiscountType]
 // Server persists CartLineItem model (variantId, quantity, price) and
 // returns the full display shape via JOIN on read.
 export type CartLineItem = {
-  id: string        // product id
+  id: string // product id
   variantId: string
   slug: string
   sku: string

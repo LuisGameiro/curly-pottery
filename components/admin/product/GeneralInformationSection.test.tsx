@@ -45,7 +45,7 @@ describe('GeneralInformationSection', () => {
         <GeneralInformationSection categories={mockCategories} />
       </FormWrapper>,
     )
-    expect(screen.getByTestId('Product Name')).toBeInTheDocument()
+    expect(screen.getByTestId('product-form-name-input')).toBeInTheDocument()
   })
 
   it('renders description textarea', () => {
@@ -54,7 +54,9 @@ describe('GeneralInformationSection', () => {
         <GeneralInformationSection categories={mockCategories} />
       </FormWrapper>,
     )
-    expect(screen.getByTestId('Description')).toBeInTheDocument()
+    expect(
+      screen.getByTestId('product-form-description-input'),
+    ).toBeInTheDocument()
   })
 
   it('renders category buttons', () => {

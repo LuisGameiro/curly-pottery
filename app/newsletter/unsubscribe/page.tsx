@@ -37,7 +37,10 @@ export default async function NewsletterUnsubscribePage({
   }
 
   return (
-    <Container className="max-w-2xl py-16 space-y-6">
+    <Container
+      className="max-w-2xl py-16 space-y-6"
+      data-testid="newsletter-unsubscribe-page"
+    >
       <Text variant="heading">{heading}</Text>
       <Text variant="subHeading">{description}</Text>
       <Link

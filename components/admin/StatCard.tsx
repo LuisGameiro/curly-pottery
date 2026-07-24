@@ -19,6 +19,7 @@ export function StatCard({
   return (
     <Container
       variant="box"
+      data-testid={'stat-card-' + label.toLowerCase().replace(/\s+/g, '-')}
       className={` ${isCritical ? 'border-red/60 ' : ''}`}
     >
       <div className="flex items-center justify-between ">

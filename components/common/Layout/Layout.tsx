@@ -9,7 +9,7 @@ interface Props {
 
 export default function Layout({ children }: Props) {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col" data-testid="layout">
       <Navbar />
       <NewsletterBanner />
       <main className="bg-background w-full flex-1 flex flex-col">

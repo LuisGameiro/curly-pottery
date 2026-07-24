@@ -31,7 +31,7 @@ export default async function SearchPage({
   const { items: products, total, nextCursor, hasMore } = result.data!
 
   return (
-    <div className="container mx-auto py-10 px-4">
+    <div className="container mx-auto py-10 px-4" data-testid="search-page">
       <div className="mb-8">
         <Text variant="heading" className="text-3xl">
           Search Results for &quot;{query}&quot;
@@ -42,14 +42,17 @@ export default async function SearchPage({
       </div>
 
       {products.length === 0 ? (
-        <div className="py-20 text-center">
+        <div className="py-20 text-center" data-testid="search-empty-state">
           <Text variant="bold" className="text-xl">
             No products found matching your search.
           </Text>
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"
+            data-testid="search-results"
+          >
             {products.map((product) => (
               <ProductCard
                 key={product.id}

@@ -14,6 +14,18 @@ jest.mock('prisma/prisma', () => ({
   prisma: require('jest-mock-extended').mockDeep(),
 }))
 
+// Mock the prisma generated client module to avoid import.meta.url ESM issue
+jest.mock('../prisma/generated/prisma/client', () => ({
+  Prisma: {
+    Decimal: class Decimal {
+      constructor(val: number) {
+        this.value = val
+      }
+      value: number
+    },
+  },
+}))
+
 jest.mock('next/cache', () => ({
   revalidatePath: jest.fn(),
   revalidateTag: jest.fn(),
@@ -48,25 +60,39 @@ describe('getAllOrders', () => {
     ]
 
     ;(prisma.order.findMany as jest.Mock).mockResolvedValue(mockOrders)
+    ;(prisma.order.count as jest.Mock).mockResolvedValue(2)
 
     const result = await getAllOrders()
 
     expect(result.success).toBe(true)
     expect(result.message).toBe('Fetched all orders successfully')
-    expect(result.data).toEqual(mockOrders)
+    expect(result.data).toEqual({
+      items: mockOrders,
+      nextCursor: null,
+      hasMore: false,
+      total: 2,
+    })
     expect(prisma.order.findMany).toHaveBeenCalledWith({
-      orderBy: { createdAt: 'desc' },
+      where: {},
+      orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
       include: { user: true },
+      take: 51,
     })
   })
 
   it('should return empty array when no orders exist', async () => {
     ;(prisma.order.findMany as jest.Mock).mockResolvedValue([])
+    ;(prisma.order.count as jest.Mock).mockResolvedValue(0)
 
     const result = await getAllOrders()
 
     expect(result.success).toBe(true)
-    expect(result.data).toEqual([])
+    expect(result.data).toEqual({
+      items: [],
+      nextCursor: null,
+      hasMore: false,
+      total: 0,
+    })
   })
 
   it('should handle error and return failure response', async () => {
@@ -132,27 +158,40 @@ describe('getOrdersById', () => {
     ]
 
     ;(prisma.order.findMany as jest.Mock).mockResolvedValue(mockOrders)
+    ;(prisma.order.count as jest.Mock).mockResolvedValue(2)
 
     const result = await getOrdersById(userId)
 
     expect(result.success).toBe(true)
     expect(result.message).toBe('Fetched order successfully')
-    expect(result.data).toEqual(mockOrders)
+    expect(result.data).toEqual({
+      items: mockOrders,
+      nextCursor: null,
+      hasMore: false,
+      total: 2,
+    })
     expect(prisma.order.findMany).toHaveBeenCalledWith({
       where: { userId },
-      orderBy: { createdAt: 'desc' },
+      orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
       include: { user: true },
+      take: 21,
     })
   })
 
   it('should return empty array when user has no orders', async () => {
     const userId = 'user1'
     ;(prisma.order.findMany as jest.Mock).mockResolvedValue([])
+    ;(prisma.order.count as jest.Mock).mockResolvedValue(0)
 
     const result = await getOrdersById(userId)
 
     expect(result.success).toBe(true)
-    expect(result.data).toEqual([])
+    expect(result.data).toEqual({
+      items: [],
+      nextCursor: null,
+      hasMore: false,
+      total: 0,
+    })
   })
 
   it('should handle database error', async () => {
@@ -320,7 +359,12 @@ describe('createOrder', () => {
 
     const result = await createOrder('checkoutId123', {
       userId: 'user1',
-      address: { street: '123 Main St' },
+      address: {
+        address: '123 Main St',
+        postalCode: '12345',
+        city: 'London',
+        country: 'UK',
+      },
       firstName: 'John',
       lastName: 'Doe',
       phone: '1234567890',
@@ -369,13 +413,21 @@ describe('createOrder', () => {
       },
     }
 
+    ;(prisma.productVariant.findMany as jest.Mock).mockResolvedValue([
+      { id: 'var2', price: 45, stock: 5 },
+    ])
     ;(prisma.$transaction as jest.Mock).mockImplementation((callback) =>
       callback(mockTx),
     )
 
     const result = await createOrder('checkoutId50', {
       userId: '',
-      address: {},
+      address: {
+        address: '456 Oak St',
+        postalCode: '67890',
+        city: 'Manchester',
+        country: 'UK',
+      },
       firstName: 'Jane',
       lastName: 'Smith',
       phone: '0987654321',
@@ -413,7 +465,12 @@ describe('createOrder', () => {
 
     const result = await createOrder('checkoutId123', {
       userId: 'user1',
-      address: {},
+      address: {
+        address: '456 Oak St',
+        postalCode: '67890',
+        city: 'Manchester',
+        country: 'UK',
+      },
       firstName: 'John',
       lastName: 'Doe',
       phone: '1234567890',
@@ -454,7 +511,12 @@ describe('createOrder', () => {
 
     const result = await createOrder('checkoutId123', {
       userId: 'user1',
-      address: {},
+      address: {
+        address: '456 Oak St',
+        postalCode: '67890',
+        city: 'Manchester',
+        country: 'UK',
+      },
       firstName: 'John',
       lastName: 'Doe',
       phone: '1234567890',
@@ -479,7 +541,12 @@ describe('createOrder', () => {
 
     const result = await createOrder('checkoutId123', {
       userId: 'user1',
-      address: {},
+      address: {
+        address: '456 Oak St',
+        postalCode: '67890',
+        city: 'Manchester',
+        country: 'UK',
+      },
       firstName: 'John',
       lastName: 'Doe',
       phone: '1234567890',
@@ -503,7 +570,12 @@ describe('createOrder', () => {
 
     const result = await createOrder('checkoutId123', {
       userId: 'user1',
-      address: {},
+      address: {
+        address: '456 Oak St',
+        postalCode: '67890',
+        city: 'Manchester',
+        country: 'UK',
+      },
       firstName: 'John',
       lastName: 'Doe',
       phone: '1234567890',
@@ -525,7 +597,12 @@ describe('createOrder', () => {
   it('should reject spoofed user context', async () => {
     const result = await createOrder('checkoutId123', {
       userId: 'other-user-id',
-      address: {},
+      address: {
+        address: '456 Oak St',
+        postalCode: '67890',
+        city: 'Manchester',
+        country: 'UK',
+      },
       firstName: 'John',
       lastName: 'Doe',
       phone: '1234567890',

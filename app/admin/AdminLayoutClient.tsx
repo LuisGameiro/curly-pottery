@@ -53,8 +53,14 @@ export default function AdminLayoutClient({
     navItems.find((item) => item.href === pathname) || navItems[0]
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row">
-      <aside className="w-full lg:w-2/12 bg-background lg:border-r border-border px-4 py-2 ">
+    <div
+      className="flex-1 flex flex-col lg:flex-row"
+      data-testid="admin-layout"
+    >
+      <aside
+        className="w-full lg:w-2/12 bg-background lg:border-r border-border px-4 py-2 "
+        data-testid="admin-sidebar"
+      >
         <Text
           variant="pageHeading"
           className="hidden lg:block font-bold text-xl text-secondary mt-6 pt-6"
@@ -94,6 +100,7 @@ export default function AdminLayoutClient({
                   <Link
                     href={item.href}
                     onClick={() => setIsOpen(false)}
+                    data-testid={'admin-nav-' + item.name.toLowerCase()}
                     className={cn(
                       'flex items-center gap-2 px-4 py-2 rounded-lg transition-colors font-medium',
                       isActive

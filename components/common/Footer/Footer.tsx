@@ -39,7 +39,7 @@ const links: Page[] = [
 
 const Footer = () => {
   return (
-    <footer className={s.root}>
+    <footer className={s.root} data-testid="footer">
       <div className={s.menuContainer}>
         {/* Instagram Column */}
         <div className="flex flex-col items-end gap-4 flex-1">

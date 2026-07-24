@@ -60,7 +60,10 @@ export default function RegisterForm() {
   }
 
   return (
-    <section className="space-y-5 md:max-w-lg mx-auto">
+    <section
+      className="space-y-5 md:max-w-lg mx-auto"
+      data-testid="register-form"
+    >
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
           name="firstName"
@@ -70,6 +73,7 @@ export default function RegisterForm() {
           value={formData.firstName}
           onChange={handleChange}
           required
+          data-testid="register-firstname-input"
         />
 
         <Input
@@ -80,6 +84,7 @@ export default function RegisterForm() {
           value={formData.lastName}
           onChange={handleChange}
           required
+          data-testid="register-lastname-input"
         />
         <Input
           name="email"
@@ -89,6 +94,7 @@ export default function RegisterForm() {
           value={formData.email}
           onChange={handleChange}
           required
+          data-testid="register-email-input"
         />
 
         <Input
@@ -99,6 +105,7 @@ export default function RegisterForm() {
           value={formData.password}
           onChange={handleChange}
           required
+          data-testid="register-password-input"
         />
 
         <Input
@@ -116,18 +123,27 @@ export default function RegisterForm() {
           name="acceptsMarketing"
           checked={formData.acceptsMarketing}
           onChange={handleChange}
-          label="I’d like to receive updates on new collections, glaze drops, and special offers."
+          label="I'd like to receive updates on new collections, glaze drops, and special offers."
         />
 
         <div className="h-8">
           {error && (
-            <Text className="text-red text-xs text-center font-medium">
+            <Text
+              className="text-red text-xs text-center font-medium"
+              data-testid="register-error-message"
+            >
               {error}
             </Text>
           )}
         </div>
 
-        <Button type="submit" width="100%" loading={loading} color="success">
+        <Button
+          type="submit"
+          width="100%"
+          loading={loading}
+          color="success"
+          data-testid="register-submit-btn"
+        >
           Create Account <ArrowRight size={16} className="ml-2" />
         </Button>
       </form>

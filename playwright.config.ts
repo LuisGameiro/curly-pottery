@@ -13,6 +13,8 @@ import { defineConfig, devices } from '@playwright/test'
  */
 export default defineConfig({
   testDir: './e2e',
+  /* Global setup runs before all tests — seeds the test database */
+  globalSetup: './e2e/global-setup.ts',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -75,5 +77,17 @@ export default defineConfig({
     command: 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
+    /* Inject the test database URL into the dev server so it uses the test DB.
+       Only set DB_DATABASE_URL when a test-specific env var is provided;
+       otherwise let the dev server pick up the .env file value. */
+    env:
+      process.env.DB_DATABASE_URL || process.env.DATABASE_TEST_URL
+        ? {
+            DB_DATABASE_URL:
+              process.env.DB_DATABASE_URL ||
+              process.env.DATABASE_TEST_URL ||
+              '',
+          }
+        : undefined,
   },
 })

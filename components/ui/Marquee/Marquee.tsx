@@ -122,6 +122,7 @@ const Marquee = ({ children = [], className = '' }: MarqueeProps) => {
       onMouseMove={handleMouseMove}
       onTouchStart={() => setIsHovered(true)}
       onTouchEnd={() => setIsHovered(false)}
+      data-testid="categories-marquee"
     >
       <div className="flex shrink-0 gap-6 px-3">{renderedChildren}</div>
       <div className="flex shrink-0 gap-6 px-3">{renderedChildren}</div>

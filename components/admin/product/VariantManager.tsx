@@ -44,7 +44,7 @@ export function VariantManager() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" data-testid="variant-manager">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Text variant="sectionHeading">Variants</Text>
@@ -53,6 +53,7 @@ export function VariantManager() {
         <button
           type="button"
           onClick={addVariant}
+          data-testid="variant-add-btn"
           className="flex items-center gap-2 text-sm font-medium text-secondary hover:text-secondary transition"
         >
           <Plus size={16} /> Add Variant

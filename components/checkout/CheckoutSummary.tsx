@@ -31,7 +31,11 @@ export function CheckoutSummary() {
     showCurrency[(order?.currency as CurrencyCode) || 'GBP']
 
   return (
-    <Container variant="box" className="lg:col-span-4">
+    <Container
+      variant="box"
+      className="lg:col-span-4"
+      data-testid="checkout-summary"
+    >
       <Text variant="boxTitle">Order Summary</Text>
       <div className="space-y-2 pb-4 border-b">
         {order?.lineItems &&

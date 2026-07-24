@@ -25,7 +25,10 @@ export default function CartClient() {
 
   if (isEmpty) {
     return (
-      <Container className="py-20 flex-col flex-center">
+      <Container
+        className="py-20 flex-col flex-center"
+        data-testid="cart-empty-state"
+      >
         <ShoppingBag size={64} className="text-muted mb-4" />
         <Text variant="heading">Your cart is empty</Text>
       </Container>
@@ -35,14 +38,14 @@ export default function CartClient() {
   const currencySymbol = showCurrency[data?.currency || 'GBP']
 
   return (
-    <Container>
+    <Container data-testid="cart-client">
       <header>
         <Text variant="heading">Shopping Cart</Text>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
         <div className="lg:col-span-8">
-          <ul className="divide-y border-b">
+          <ul className="divide-y border-b" data-testid="cart-items-list">
             {data?.lineItems.map((item: CartLineItem) => (
               <CartItem key={item.variantId} item={item} />
             ))}
@@ -69,7 +72,7 @@ export default function CartClient() {
               {currencySymbol} {data?.totalPrice.toFixed(2)}
             </Text>
           </div>
-          <Link href="/checkout">
+          <Link href="/checkout" data-testid="checkout-btn">
             <Button variant="slim">Checkout Now</Button>
           </Link>
         </Container>

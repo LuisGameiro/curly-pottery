@@ -16,7 +16,10 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
   }, [error])
 
   return (
-    <div className="space-y-10 text-center bg-background py-20">
+    <div
+      className="space-y-10 text-center bg-background py-20"
+      data-testid="error-page"
+    >
       <Text variant="heading" className="mb-2">
         We hit a little snag
       </Text>
@@ -34,7 +37,11 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
           <Text>{error?.message || 'Unknown error'}</Text>
         </>
       )}
-      <Button onClick={() => reset()} variant="secondary">
+      <Button
+        onClick={() => reset()}
+        variant="secondary"
+        data-testid="error-retry-btn"
+      >
         Try again
       </Button>
     </div>

@@ -15,14 +15,14 @@ if (typeof global.TextDecoder === 'undefined') {
 }
 
 if (typeof global.ReadableStream === 'undefined') {
-  // @ts-expect-error some errors here
+  // @ts-expect-error Incompatible type between Node stream/web and DOM ReadableStream
   global.ReadableStream = ReadableStream
 }
 if (typeof global.WritableStream === 'undefined') {
   global.WritableStream = WritableStream
 }
 if (typeof global.TransformStream === 'undefined') {
-  // @ts-expect-error some errors here
+  // @ts-expect-error Incompatible type between Node stream/web and DOM TransformStream
   global.TransformStream = TransformStream
 }
 
@@ -31,9 +31,13 @@ jest.mock('@/auth', () => ({
   auth: jest.fn(),
 }))
 
-// Object.defineProperties(global, {
-//   fetch: { value: fetch, writable: true },
-//   Request: { value: Request, writable: true },
-//   Response: { value: Response, writable: true },
-//   Headers: { value: Headers, writable: true },
-// });
+// Polyfill Web API globals needed by Next.js internal modules
+// jsdom doesn't provide Request/Response/fetch, so we polyfill from Node.js
+/* eslint-disable @typescript-eslint/no-require-imports */
+if (typeof global.Request === 'undefined') {
+  const undici = require('undici')
+  global.Request = undici.Request
+  global.Response = undici.Response
+  global.Headers = undici.Headers
+  global.fetch = undici.fetch
+}

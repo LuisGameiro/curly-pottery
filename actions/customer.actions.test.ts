@@ -12,6 +12,11 @@ jest.mock('prisma/prisma', () => ({
   prisma: require('jest-mock-extended').mockDeep(),
 }))
 
+jest.mock('next/cache', () => ({
+  revalidatePath: jest.fn(),
+  revalidateTag: jest.fn(),
+}))
+
 import { auth } from '@/auth'
 
 describe('getAllCustomers', () => {
@@ -29,25 +34,39 @@ describe('getAllCustomers', () => {
     ]
 
     ;(prisma.user.findMany as jest.Mock).mockResolvedValue(mockUsers)
+    ;(prisma.user.count as jest.Mock).mockResolvedValue(mockUsers.length)
 
     const result = await getAllCustomers()
 
     expect(result.success).toBe(true)
-    expect(result.message).toBe('Fetched all user successfully')
-    expect(result.data).toEqual(mockUsers)
+    expect(result.message).toBe('Fetched all users successfully')
+    expect(result.data).toEqual({
+      items: mockUsers,
+      nextCursor: null,
+      hasMore: false,
+      total: mockUsers.length,
+    })
     expect(prisma.user.findMany).toHaveBeenCalledWith({
-      orderBy: { createdAt: 'desc' },
+      where: {},
+      orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
       include: { orders: true },
+      take: 51,
     })
   })
 
   it('should return empty array when no customers exist', async () => {
     ;(prisma.user.findMany as jest.Mock).mockResolvedValue([])
+    ;(prisma.user.count as jest.Mock).mockResolvedValue(0)
 
     const result = await getAllCustomers()
 
     expect(result.success).toBe(true)
-    expect(result.data).toEqual([])
+    expect(result.data).toEqual({
+      items: [],
+      nextCursor: null,
+      hasMore: false,
+      total: 0,
+    })
   })
 
   it('should handle database errors', async () => {

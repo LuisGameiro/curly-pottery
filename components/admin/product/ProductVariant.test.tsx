@@ -3,7 +3,17 @@ import { useFormContext } from 'react-hook-form'
 import { ProductVariant } from './ProductVariant'
 import { skulify } from '@lib/skulify'
 
-jest.mock('react-hook-form')
+jest.mock('react-hook-form', () => ({
+  useFormContext: jest.fn(),
+  useFieldArray: jest.fn(),
+  Controller: ({
+    render,
+  }: {
+    render: (args: {
+      field: { value: boolean; onChange: jest.Mock }
+    }) => React.ReactNode
+  }) => render({ field: { value: false, onChange: jest.fn() } }),
+}))
 jest.mock('@lib/skulify')
 jest.mock('./VariantDetails', () => ({
   VariantDetails: () => <div>VariantDetails</div>,
@@ -183,5 +193,82 @@ describe('ProductVariant', () => {
     const buttons = screen.getAllByRole('button')
     fireEvent.click(buttons[1])
     expect(mockOnMoveDown).toHaveBeenCalled()
+  })
+
+  it('renders expanded content when variant is expanded', () => {
+    mockWatch.mockImplementation((field: string) => {
+      if (field === 'name') return 'Test Product'
+      if (field === 'variants.0.sizeName') return 'M'
+      if (field === 'variants.0.colorName') return 'Red'
+      if (field === 'variants.0.isExpanded') return true
+      if (field === 'variants.0.sku') return 'PRODUCT-S-RED'
+      if (field === 'variants.0')
+        return { price: 29.99, stock: 10, isExpanded: true }
+      return undefined
+    })
+
+    render(
+      <ProductVariant
+        index={0}
+        isFirst={true}
+        isLast={false}
+        onRemove={mockOnRemove}
+        onMoveUp={mockOnMoveUp}
+        onMoveDown={mockOnMoveDown}
+      />,
+    )
+
+    expect(screen.getByTestId('Price (£)')).toBeInTheDocument()
+    expect(screen.getByTestId('Inventory Stock')).toBeInTheDocument()
+    expect(screen.getByText('Size Variant')).toBeInTheDocument()
+    expect(screen.getByText('Color Variant')).toBeInTheDocument()
+    expect(screen.getByTestId('Available for Sale')).toBeInTheDocument()
+    expect(screen.getByText('VariantDetails')).toBeInTheDocument()
+    expect(screen.getByText('VariantDiscounts')).toBeInTheDocument()
+    expect(screen.getByTestId('input-image')).toBeInTheDocument()
+  })
+
+  it('displays error messages when formState has variant errors', () => {
+    ;(useFormContext as jest.Mock).mockReturnValue({
+      register: mockRegister,
+      watch: mockWatch,
+      setValue: mockSetValue,
+      control: {},
+      formState: {
+        errors: {
+          variants: [
+            {
+              price: { message: 'Price must be positive' },
+              stock: { message: 'Stock is required' },
+            },
+          ],
+        },
+      },
+    })
+
+    mockWatch.mockImplementation((field: string) => {
+      if (field === 'name') return 'Test Product'
+      if (field === 'variants.0.sizeName') return 'M'
+      if (field === 'variants.0.colorName') return 'Red'
+      if (field === 'variants.0.isExpanded') return true
+      if (field === 'variants.0.sku') return 'PRODUCT-S-RED'
+      if (field === 'variants.0')
+        return { price: 29.99, stock: 10, isExpanded: true }
+      return undefined
+    })
+
+    render(
+      <ProductVariant
+        index={0}
+        isFirst={true}
+        isLast={false}
+        onRemove={mockOnRemove}
+        onMoveUp={mockOnMoveUp}
+        onMoveDown={mockOnMoveDown}
+      />,
+    )
+
+    expect(screen.getByText('Price must be positive')).toBeInTheDocument()
+    expect(screen.getByText('Stock is required')).toBeInTheDocument()
   })
 })

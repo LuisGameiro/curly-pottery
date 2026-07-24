@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { auth } from '@/auth'
 import type { NextAuthRequest } from 'next-auth'
 
-export default auth((req: NextAuthRequest) => {
+export const proxy = auth((req: NextAuthRequest) => {
   const pathname = req.nextUrl.pathname
   const isAdminPage = pathname.startsWith('/admin')
   const token = req.auth?.user

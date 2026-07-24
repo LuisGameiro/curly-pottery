@@ -23,6 +23,7 @@ export default function FAQAccordion({ items }: FAQAccordionProps) {
           key={index}
           onClick={() => toggleAccordion(index)}
           className="w-full"
+          data-testid={`faq-item-${index}`}
         >
           <Container variant="box">
             <div className="w-full  flex items-center justify-between">

@@ -40,7 +40,7 @@ export default function CookieSettingsPage() {
   }
 
   return (
-    <Container className="py-12 max-w-2xl">
+    <Container className="py-12 max-w-2xl" data-testid="cookie-settings-page">
       <div className="space-y-6">
         <div>
           <Text variant="pageHeading">Cookie Settings</Text>

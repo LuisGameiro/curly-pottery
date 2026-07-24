@@ -22,5 +22,9 @@ export default async function ProfilePage() {
     redirect('/auth/login')
   }
 
-  return <ProfileForm user={user.data} />
+  return (
+    <div data-testid="user-dashboard-page">
+      <ProfileForm user={user.data} />
+    </div>
+  )
 }

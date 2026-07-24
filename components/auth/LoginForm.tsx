@@ -50,82 +50,97 @@ export default function LoginForm() {
   }
 
   return (
-    <Container className="px-4 py-6 sm:px-10 sm:py-10">
-      {isRegistered && (
-        <div className="bg-green/20 border border-green text-green px-4 py-3 rounded mb-4 text-center">
-          Registration successful! Please log in.
-        </div>
-      )}
+    <div data-testid="login-form">
+      <Container className="px-4 py-6 sm:px-10 sm:py-10">
+        {isRegistered && (
+          <div className="bg-green/20 border border-green text-green px-4 py-3 rounded mb-4 text-center">
+            Registration successful! Please log in.
+          </div>
+        )}
 
-      <header>
-        <div className="justify-center text-center mx-auto mb-4">
-          <Text variant="heading">Welcome Back</Text>
-          <Text variant="subHeading">Log in to manage your orders</Text>
-        </div>
-      </header>
+        <header>
+          <div className="justify-center text-center mx-auto mb-4">
+            <Text variant="heading">Welcome Back</Text>
+            <Text variant="subHeading">Log in to manage your orders</Text>
+          </div>
+        </header>
 
-      <main className="space-y-5 md:max-w-lg mx-auto">
-        <Button variant="ghost" width="100%" onClick={handleGoogleLogin}>
-          <Image
-            width={20}
-            height={20}
-            src="/google-icon.svg"
-            alt="Google"
-            className="mr-5"
-          />
-          Continue with Google
-        </Button>
+        <main className="space-y-5 md:max-w-lg mx-auto">
+          <Button variant="ghost" width="100%" onClick={handleGoogleLogin}>
+            <Image
+              width={20}
+              height={20}
+              src="/google-icon.svg"
+              alt="Google"
+              className="mr-5"
+            />
+            Continue with Google
+          </Button>
 
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className=" px-2 text-muted">Or email</span>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            name="email"
-            label="Email Address"
-            type="email"
-            placeholder="you@example.com"
-            required
-          />
-          <Input
-            label="Password"
-            name="password"
-            type="password"
-            placeholder="••••••••"
-            required
-          />
-
-          <Link
-            href="/auth/recovery"
-            className="text-sm font-bold text-secondary hover:underline flex justify-end"
-          >
-            Forgot Password?
-          </Link>
-
-          <div className="h-8">
-            {error && (
-              <Text className="text-red text-xs text-center">{error}</Text>
-            )}
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className=" px-2 text-muted">Or email</span>
           </div>
 
-          <Button type="submit" width="100%" loading={loading}>
-            Sign In <ArrowRight size={16} className="ml-2" />
-          </Button>
-        </form>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Input
+              name="email"
+              label="Email Address"
+              type="email"
+              placeholder="you@example.com"
+              required
+              data-testid="login-email-input"
+            />
+            <Input
+              label="Password"
+              name="password"
+              type="password"
+              placeholder="••••••••"
+              required
+              data-testid="login-password-input"
+            />
 
-        <div className="mt-6 text-center">
-          <Text className="text-sm">
-            Do not have an account?{' '}
             <Link
-              href="/auth/register"
-              className="font-bold text-secondary hover:underline"
+              href="/auth/recovery"
+              className="text-sm font-bold text-secondary hover:underline flex justify-end"
+              data-testid="login-forgot-password-link"
             >
-              Sign up
+              Forgot Password?
             </Link>
-          </Text>
-        </div>
-      </main>
-    </Container>
+
+            <div className="h-8">
+              {error && (
+                <Text
+                  className="text-red text-xs text-center"
+                  data-testid="login-error-message"
+                >
+                  {error}
+                </Text>
+              )}
+            </div>
+
+            <Button
+              type="submit"
+              width="100%"
+              loading={loading}
+              data-testid="login-submit-btn"
+            >
+              Sign In <ArrowRight size={16} className="ml-2" />
+            </Button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <Text className="text-sm">
+              Do not have an account?{' '}
+              <Link
+                href="/auth/register"
+                className="font-bold text-secondary hover:underline"
+              >
+                Sign up
+              </Link>
+            </Text>
+          </div>
+        </main>
+      </Container>
+    </div>
   )
 }

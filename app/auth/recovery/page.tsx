@@ -52,25 +52,34 @@ export default function RecoveryForm() {
 
       <main className="md:max-w-lg mx-auto">
         {!submitted ? (
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4"
+            data-testid="recovery-form"
+          >
             <Input
               name="email"
               label="Email Address"
               type="email"
               placeholder="you@example.com"
               required
+              data-testid="recovery-email-input"
             />
             <Button
               className="mt-12"
               type="submit"
               width="100%"
               loading={loading}
+              data-testid="recovery-submit-btn"
             >
               Send Reset Link
             </Button>
           </form>
         ) : (
-          <div className="text-center p-6 border rounded-xl bg-accent-1">
+          <div
+            className="text-center p-6 border rounded-xl bg-accent-1"
+            data-testid="recovery-success-message"
+          >
             <Text className="mb-4">
               If an account exists for that email, you will receive a reset link
               shortly.
@@ -85,6 +94,7 @@ export default function RecoveryForm() {
           <Link
             href="/auth/login"
             className="text-sm font-bold text-secondary hover:underline inline-flex items-center"
+            data-testid="recovery-back-link"
           >
             <ArrowLeft size={16} className="mr-2" /> Back to Login
           </Link>

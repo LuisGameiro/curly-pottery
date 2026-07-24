@@ -6,12 +6,16 @@ import artistImage from '@public/Homepage 1.jpg'
 
 const HomeHero = () => {
   return (
-    <section className={s.root}>
+    <section className={s.root} data-testid="homehero-section">
       {/* Left Text Block */}
       <div className={s.textBlock}>
         <h1 className={s.everyday}>Everyday rituals</h1>
         <h2 className={s.studio}>Curly Studio</h2>
-        <Link href="/shop" className={s.viewShop}>
+        <Link
+          href="/shop"
+          className={s.viewShop}
+          data-testid="homehero-view-shop-btn"
+        >
           View shop
         </Link>
       </div>

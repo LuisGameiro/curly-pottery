@@ -61,7 +61,7 @@ export default function ShopClient({
   }, [categorySlug, initialCursor, initialHasMore, initialProducts])
 
   return (
-    <Container>
+    <Container data-testid="shop-client">
       <div className="flex flex-col mt-4 lg:mt-8 mb-4 ml-0 lg:ml-8">
         <Text variant="heading" className="text-3xl font-bold mb-2">
           Welcome to My Shop
@@ -88,7 +88,10 @@ export default function ShopClient({
               <Text variant="bold">No products found!</Text>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 sm:gap-4">
+            <div
+              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 sm:gap-4"
+              data-testid="shop-product-grid"
+            >
               {sortedProducts.map((product, index) => (
                 <ProductCard
                   key={product.id}
@@ -106,6 +109,7 @@ export default function ShopClient({
                 onClick={handleLoadMore}
                 disabled={isLoading}
                 className="px-6 py-2 rounded-full border border-border hover:bg-accent-1 transition-colors disabled:opacity-50"
+                data-testid="shop-load-more-btn"
               >
                 {isLoading ? 'Loading...' : 'Load more'}
               </button>

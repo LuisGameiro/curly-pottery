@@ -42,42 +42,47 @@ export default async function Orders({
 
   if (orders.length === 0 && !cursor) {
     return (
-      <Container className="py-20 flex-center flex-col">
-        <CarFront size={64} className="text-muted mb-4" />
-        <Text variant="heading">Your Orders are empty</Text>
-      </Container>
+      <div data-testid="user-orders-empty-state">
+        <Container className="py-20 flex-center flex-col">
+          <CarFront size={64} className="text-muted mb-4" />
+          <Text variant="heading">Your Orders are empty</Text>
+        </Container>
+      </div>
     )
   }
 
   return (
     <Suspense fallback={<Loading />}>
-      <Container>
-        <header>
-          <Text variant="heading">Orders</Text>
-          <Text variant="subHeading">
-            Review your orders and track their status.
-          </Text>
-        </header>
+      <div data-testid="user-orders-page">
+        <Container>
+          <header>
+            <Text variant="heading">Orders</Text>
+            <Text variant="subHeading">
+              Review your orders and track their status.
+            </Text>
+          </header>
 
-        <OrderUserTable orders={orders} />
+          <OrderUserTable orders={orders} />
 
-        {hasMore && (
-          <div className="flex justify-center py-6">
-            <Link
-              href={`/user/orders?cursor=${encodeURIComponent(nextCursor!)}`}
-              className="px-6 py-2 rounded-full border border-border hover:bg-accent-1 transition-colors"
-            >
-              Next page
-            </Link>
-          </div>
-        )}
+          {hasMore && (
+            <div className="flex justify-center py-6">
+              <Link
+                href={`/user/orders?cursor=${encodeURIComponent(nextCursor!)}`}
+                className="px-6 py-2 rounded-full border border-border hover:bg-accent-1 transition-colors"
+                data-testid="user-orders-next-page-btn"
+              >
+                Next page
+              </Link>
+            </div>
+          )}
 
-        {total > USER_ORDERS_PAGE_SIZE && (
-          <Text variant="muted" className="text-center py-4">
-            Showing {orders.length} of {total} orders
-          </Text>
-        )}
-      </Container>
+          {total > USER_ORDERS_PAGE_SIZE && (
+            <Text variant="muted" className="text-center py-4">
+              Showing {orders.length} of {total} orders
+            </Text>
+          )}
+        </Container>
+      </div>
     </Suspense>
   )
 }

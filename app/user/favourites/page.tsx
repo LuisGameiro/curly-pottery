@@ -38,87 +38,94 @@ export default async function FavouritesPage({
 
   if (products.length === 0 && !cursor) {
     return (
-      <Container className="py-20 flex-center flex-col">
-        <Heart size={64} className="text-muted mb-4" />
-        <Text variant="heading">Your Favourites are empty</Text>
-        <Text variant="subHeading" className="mt-2">
-          Start adding some pieces you love!
-        </Text>
-      </Container>
+      <div data-testid="favourites-empty-state">
+        <Container className="py-20 flex-center flex-col">
+          <Heart size={64} className="text-muted mb-4" />
+          <Text variant="heading">Your Favourites are empty</Text>
+          <Text variant="subHeading" className="mt-2">
+            Start adding some pieces you love!
+          </Text>
+        </Container>
+      </div>
     )
   }
 
   return (
     <Suspense fallback={<Loading />}>
-      <Container>
-        <header className="mb-8">
-          <Text variant="heading">Favourites</Text>
-          <Text variant="subHeading">
-            Your saved handcrafted pottery pieces.
-          </Text>
-        </header>
+      <div data-testid="favourites-page">
+        <Container>
+          <header className="mb-8">
+            <Text variant="heading">Favourites</Text>
+            <Text variant="subHeading">
+              Your saved handcrafted pottery pieces.
+            </Text>
+          </header>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products.map(
-            (product: {
-              id: string
-              name: string
-              slug: string
-              description: string
-              hide: boolean
-              images: string[]
-              requiresShipping: boolean
-              createdAt: Date
-              updatedAt: Date
-              variants: Array<{
-                id: string
-                sku: string
-                price: number
-                currency: string
-                stock: number
-                availableForSale: boolean
-                images: string[]
-                sizeName: string
-                colorName: string
-                colorHex: string | null
-                details: unknown
-                discounts: unknown
-                productId: string
-                createdAt: Date
-                updatedAt: Date
-              }>
-              categories: Array<{
+          <div
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+            data-testid="favourites-grid"
+          >
+            {products.map(
+              (product: {
                 id: string
                 name: string
                 slug: string
-                url: string | null
-                image: string
+                description: string
+                hide: boolean
+                images: string[]
+                requiresShipping: boolean
                 createdAt: Date
                 updatedAt: Date
-              }>
-            }) => (
-              <ProductCard key={product.id} product={product} />
-            ),
-          )}
-        </div>
-
-        {hasMore && (
-          <div className="flex justify-center py-6">
-            <Link
-              href={`/user/favourites?cursor=${encodeURIComponent(nextCursor!)}`}
-              className="px-6 py-2 rounded-full border border-border hover:bg-accent-1 transition-colors"
-            >
-              Next page
-            </Link>
+                variants: Array<{
+                  id: string
+                  sku: string
+                  price: number
+                  currency: string
+                  stock: number
+                  availableForSale: boolean
+                  images: string[]
+                  sizeName: string
+                  colorName: string
+                  colorHex: string | null
+                  details: unknown
+                  discounts: unknown
+                  productId: string
+                  createdAt: Date
+                  updatedAt: Date
+                }>
+                categories: Array<{
+                  id: string
+                  name: string
+                  slug: string
+                  url: string | null
+                  image: string
+                  createdAt: Date
+                  updatedAt: Date
+                }>
+              }) => (
+                <ProductCard key={product.id} product={product} />
+              ),
+            )}
           </div>
-        )}
 
-        {total > FAVOURITES_PAGE_SIZE && (
-          <Text variant="muted" className="text-center py-4">
-            Showing {products.length} of {total} favourites
-          </Text>
-        )}
-      </Container>
+          {hasMore && (
+            <div className="flex justify-center py-6">
+              <Link
+                href={`/user/favourites?cursor=${encodeURIComponent(nextCursor!)}`}
+                className="px-6 py-2 rounded-full border border-border hover:bg-accent-1 transition-colors"
+              >
+                Next page
+              </Link>
+            </div>
+          )}
+
+          {total > FAVOURITES_PAGE_SIZE && (
+            <Text variant="muted" className="text-center py-4">
+              Showing {products.length} of {total} favourites
+            </Text>
+          )}
+        </Container>
+      </div>
     </Suspense>
   )
 }

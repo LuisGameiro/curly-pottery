@@ -46,7 +46,10 @@ export default function DataTable<T extends { id: string }>({
   }
 
   return (
-    <div className="border-2 border-border rounded-xl shadow-sm overflow-hidden">
+    <div
+      data-testid="datatable"
+      className="border-2 border-border rounded-xl shadow-sm overflow-hidden"
+    >
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>

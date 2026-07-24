@@ -95,11 +95,14 @@ const ProductSidebar = ({
   )
 
   return (
-    <div className={cn(className, 'space-y-4')}>
+    <div className={cn(className, 'space-y-4')} data-testid="product-sidebar">
       <section>
         <div className="flex justify-between items-start gap-4">
           <div className="flex-1">
-            <h2 className="text-3xl sm:text-4xl font-bold text-secondary tracking-tighter mb-2">
+            <h2
+              className="text-3xl sm:text-4xl font-bold text-secondary tracking-tighter mb-2"
+              data-testid="product-name"
+            >
               {product.name}
             </h2>
             <div className="flex flex-wrap gap-2 items-center">
@@ -132,7 +135,7 @@ const ProductSidebar = ({
       </section>
 
       <section className="space-y-4">
-        <Text variant="sectionHeading">
+        <Text variant="sectionHeading" data-testid="product-price">
           {price.hasDiscount ? (
             <div className="flex items-center gap-4 text-3xl sm:text-4xl font-semibold">
               <span className="line-through opacity-40">
@@ -161,7 +164,10 @@ const ProductSidebar = ({
         <ProductOptions product={product} setVariant={setVariant} />
 
         {!forSale ? (
-          <div className="bg-red/20 px-10 py-2 text-center justify-center border border-red/60 items-center tracking-wide">
+          <div
+            className="bg-red/20 px-10 py-2 text-center justify-center border border-red/60 items-center tracking-wide"
+            data-testid="out-of-stock-message"
+          >
             <Text variant="bold" className={s.button}>
               OUT OF STOCK
             </Text>
@@ -200,6 +206,7 @@ const ProductSidebar = ({
                 onClick={addToCart}
                 loading={loading}
                 disabled={!variant.availableForSale || remainingStock <= 0}
+                data-testid="add-to-cart-btn"
               >
                 {remainingStock <= 0
                   ? 'OUT OF STOCK'
@@ -218,7 +225,10 @@ const ProductSidebar = ({
         )}
       </section>
 
-      <Text className="wrap-break-word w-full max-w-xl text-justify leading-relaxed">
+      <Text
+        className="wrap-break-word w-full max-w-xl text-justify leading-relaxed"
+        data-testid="product-description"
+      >
         {product.description ||
           'Because each ceramic piece is individually hand-made, you may notice slight variations in shape and size. These unique differences are what make every ceramic piece special and full of character.'}
       </Text>

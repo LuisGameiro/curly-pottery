@@ -8,5 +8,9 @@ export const metadata = constructMetadata({
 })
 
 export default function Cart() {
-  return <CartClient />
+  return (
+    <div data-testid="user-cart-page">
+      <CartClient />
+    </div>
+  )
 }

@@ -10,7 +10,10 @@ export const metadata = constructMetadata({
 
 export default function TermsOfService() {
   return (
-    <Container className="px-4 py-6 sm:px-10 sm:py-10  bg-linear-to-r from-background to-accent-2">
+    <Container
+      className="px-4 py-6 sm:px-10 sm:py-10  bg-linear-to-r from-background to-accent-2"
+      data-testid="terms-page"
+    >
       <header className="justify-center text-center mx-auto mb-10">
         <Text variant="heading">Terms of Service</Text>
         <Text variant="body" className="mx-auto">

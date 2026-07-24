@@ -113,7 +113,11 @@ export default function InformationForm({
   }
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="space-y-6"
+      onSubmit={handleSubmit(onSubmit)}
+      data-testid="info-form"
+    >
       <section>
         <Text variant="sectionHeading">Contact Information</Text>
         <div className="grid grid-cols-2 gap-4">

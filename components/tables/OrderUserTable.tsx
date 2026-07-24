@@ -49,10 +49,12 @@ export default function OrderTable({ orders }: { orders: OrderWithUser[] }) {
   ]
 
   return (
-    <DataTable<OrderWithUser & { id: string }>
-      data={orders}
-      columns={orderColumns}
-      emptyMessage="No orders found"
-    />
+    <div data-testid="order-user-table">
+      <DataTable<OrderWithUser & { id: string }>
+        data={orders}
+        columns={orderColumns}
+        emptyMessage="No orders found"
+      />
+    </div>
   )
 }

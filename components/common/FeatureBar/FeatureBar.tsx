@@ -31,7 +31,10 @@ export default function FeatureBar({ className }: FeatureBarProps) {
   return (
     <>
       {showBanner && (
-        <div className={`${s.root} ${className || ''}`}>
+        <div
+          className={`${s.root} ${className || ''}`}
+          data-testid="feature-bar"
+        >
           <div className="max-w-screen mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-on-primary">
             <div className="text-sm">
               <Text variant="bold">We value your privacy</Text>
@@ -51,6 +54,7 @@ export default function FeatureBar({ className }: FeatureBarProps) {
                 variant="flat"
                 className="bg-transparent border border-white hover:bg-white/10 text-xs sm:text-sm px-3 py-1.5 sm:px-5 sm:py-5"
                 onClick={() => setIsModalOpen(true)}
+                data-testid="cookie-preferences-btn"
               >
                 Manage Preferences
               </Button>
@@ -59,6 +63,7 @@ export default function FeatureBar({ className }: FeatureBarProps) {
                 variant="slim"
                 className="text-xs sm:text-sm"
                 onClick={handleAcceptEssential}
+                data-testid="cookie-essential-only-btn"
               >
                 Essential Only
               </Button>
@@ -67,6 +72,7 @@ export default function FeatureBar({ className }: FeatureBarProps) {
                 variant="slim"
                 className="text-xs sm:text-sm"
                 onClick={handleAcceptAll}
+                data-testid="cookie-accept-all-btn"
               >
                 Accept All
               </Button>

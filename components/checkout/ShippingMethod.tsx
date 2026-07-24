@@ -15,7 +15,7 @@ export default function ShippingMethod({ onComplete }: ShippingMethodProps) {
   }, [setValue])
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="shipping-method-selector">
       <Text variant="sectionHeading">Shipping Method</Text>
 
       <div className="space-y-3">

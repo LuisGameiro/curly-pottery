@@ -17,7 +17,10 @@ const contacts = {
 
 export default function Contacts() {
   return (
-    <Container className="px-4 py-6 sm:px-10 sm:py-10  bg-linear-to-r from-background to-accent-2">
+    <Container
+      className="px-4 py-6 sm:px-10 sm:py-10  bg-linear-to-r from-background to-accent-2"
+      data-testid="contacts-page"
+    >
       <header className="justify-center text-center mx-auto mb-8">
         <Text variant="heading">Contact Us</Text>
         <Text className="mx-auto">

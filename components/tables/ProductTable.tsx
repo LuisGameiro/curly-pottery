@@ -172,13 +172,15 @@ export default function ProductTable({
   ]
 
   return (
-    <DataTable
-      data={products}
-      columns={productColumns}
-      isLoading={isLoading}
-      renderExpansion={(product) => (
-        <VariantTable variants={product.variants} />
-      )}
-    />
+    <div data-testid="product-table">
+      <DataTable
+        data={products}
+        columns={productColumns}
+        isLoading={isLoading}
+        renderExpansion={(product) => (
+          <VariantTable variants={product.variants} />
+        )}
+      />
+    </div>
   )
 }

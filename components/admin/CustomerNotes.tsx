@@ -35,7 +35,11 @@ const CustomerNotes = ({ initialNotes, customerId }: CustomerNotesProps) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full relative">
+    <form
+      onSubmit={handleSubmit}
+      className="w-full relative"
+      data-testid="customer-notes"
+    >
       <InputTextArea
         placeholder="No internal notes for this customer"
         value={notes}

@@ -24,7 +24,11 @@ const Grid = ({
     },
     className,
   )
-  return <div className={rootClassName}>{children}</div>
+  return (
+    <div className={rootClassName} data-testid="grid">
+      {children}
+    </div>
+  )
 }
 
 export default Grid

@@ -34,7 +34,7 @@ async function AdminDashboardContent() {
   const stats = response.data
 
   return (
-    <Container>
+    <Container data-testid="admin-dashboard">
       <header>
         <Text variant="heading">Store Dashboard</Text>
         <Text variant="subHeading">

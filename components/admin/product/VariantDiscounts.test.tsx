@@ -48,4 +48,75 @@ describe('VariantDiscounts', () => {
       value: 0,
     })
   })
+
+  it('renders existing discount fields', () => {
+    ;(useFieldArray as jest.Mock).mockReturnValue({
+      fields: [{ id: 'discount-1' }, { id: 'discount-2' }],
+      append: mockAppend,
+      remove: mockRemove,
+    })
+    mockWatch.mockImplementation((field: string) => {
+      if (field.includes('type')) return 'PERCENTAGE'
+      return undefined
+    })
+
+    render(<VariantDiscounts variantIndex={0} />)
+
+    const codeLabels = screen.getAllByText('Code')
+    expect(codeLabels).toHaveLength(2)
+
+    const removeButtons = screen.getAllByText('🗑')
+    expect(removeButtons).toHaveLength(2)
+  })
+
+  it('calls remove with the correct index when remove button is clicked', () => {
+    ;(useFieldArray as jest.Mock).mockReturnValue({
+      fields: [{ id: 'discount-1' }, { id: 'discount-2' }],
+      append: mockAppend,
+      remove: mockRemove,
+    })
+    mockWatch.mockImplementation((field: string) => {
+      if (field.includes('type')) return 'PERCENTAGE'
+      return undefined
+    })
+
+    render(<VariantDiscounts variantIndex={0} />)
+
+    const removeButtons = screen.getAllByText('🗑')
+    fireEvent.click(removeButtons[0])
+    expect(mockRemove).toHaveBeenCalledWith(0)
+
+    fireEvent.click(removeButtons[1])
+    expect(mockRemove).toHaveBeenCalledWith(1)
+  })
+
+  it('shows "%" label when discount type is PERCENTAGE', () => {
+    ;(useFieldArray as jest.Mock).mockReturnValue({
+      fields: [{ id: 'discount-1' }],
+      append: mockAppend,
+      remove: mockRemove,
+    })
+    mockWatch.mockImplementation((field: string) => {
+      if (field.includes('type')) return 'PERCENTAGE'
+      return undefined
+    })
+
+    render(<VariantDiscounts variantIndex={0} />)
+    expect(screen.getByText('%')).toBeInTheDocument()
+  })
+
+  it('shows "Fixed" label when discount type is FIXED_AMOUNT', () => {
+    ;(useFieldArray as jest.Mock).mockReturnValue({
+      fields: [{ id: 'discount-1' }],
+      append: mockAppend,
+      remove: mockRemove,
+    })
+    mockWatch.mockImplementation((field: string) => {
+      if (field.includes('type')) return 'FIXED_AMOUNT'
+      return undefined
+    })
+
+    render(<VariantDiscounts variantIndex={0} />)
+    expect(screen.getByText('Fixed')).toBeInTheDocument()
+  })
 })

@@ -155,7 +155,7 @@ export default function ProductClient({
   if (loading) return Loading()
 
   return (
-    <Container>
+    <Container data-testid="product-form">
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit(onSubmit, (errors) => {
@@ -176,7 +176,11 @@ export default function ProductClient({
               <Text variant="heading">
                 {isEditMode ? 'Edit Product' : 'New Product'}
               </Text>
-              <Button type="submit" variant="slim">
+              <Button
+                type="submit"
+                variant="slim"
+                data-testid="product-form-save-btn"
+              >
                 {isEditMode ? 'Update Product' : 'Create Product'}
               </Button>
             </div>

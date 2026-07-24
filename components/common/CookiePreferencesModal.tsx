@@ -34,7 +34,10 @@ export default function CookiePreferencesModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      data-testid="cookie-modal"
+    >
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
 
       <Container className="relative bg-background p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
@@ -101,6 +104,7 @@ export default function CookiePreferencesModal({
             width="100%"
             variant="flat"
             onClick={handleSave}
+            data-testid="cookie-save-btn"
           >
             Save Preferences
           </Button>

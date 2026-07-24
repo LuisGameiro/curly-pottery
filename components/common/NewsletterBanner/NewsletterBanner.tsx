@@ -59,7 +59,10 @@ const NewsletterBanner = () => {
   }
 
   return (
-    <section className="relative bg-secondary/10 border-b border-secondary/20">
+    <section
+      className="relative bg-secondary/10 border-b border-secondary/20"
+      data-testid="newsletter-banner"
+    >
       <div className="flex flex-col md:flex-row items-center justify-between gap-1 md:gap-2 py-2 pl-2 pr-14 md:pr-14">
         <div className="flex flex-row md:contents items-center justify-around md:justify-normal gap-1 md:gap-2">
           <div className="font-bold text-sm whitespace-nowrap shrink-0 md:order-1">
@@ -79,11 +82,13 @@ const NewsletterBanner = () => {
               onChange={(event) => setEmail(event.target.value)}
               placeholder="Enter your email"
               className="w-20 sm:w-28 md:w-34 px-1 sm:px-2 text-sm bg-background rounded-md focus:outline-hidden focus:ring-1 focus:ring-secondary h-8 min-w-0"
+              data-testid="newsletter-banner-email-input"
             />
             <button
               type="submit"
               disabled={isPending}
               className="px-2 sm:px-3 text-xs sm:text-sm bg-secondary text-background font-medium rounded-md hover:bg-secondary/90 transition-colors disabled:opacity-50 h-8 flex items-center justify-center whitespace-nowrap shrink-0"
+              data-testid="newsletter-banner-submit-btn"
             >
               {isPending ? 'Joining...' : 'Join'}
             </button>

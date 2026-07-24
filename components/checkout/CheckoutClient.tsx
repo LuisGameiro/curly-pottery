@@ -192,8 +192,13 @@ export default function CheckoutClient() {
 
   return (
     <FormProvider {...methods}>
-      <Container className="px-4 py-6 sm:px-10 sm:py-10 mx-auto grid grid-cols-1 lg:max-w-5xl lg:grid-cols-12 gap-20">
-        <div className="lg:col-span-8">
+      <Container
+        className="px-4 py-6 sm:px-10 sm:py-10 mx-auto grid grid-cols-1 lg:max-w-5xl lg:grid-cols-12 gap-20"
+        data-testid="checkout-client"
+      >
+        <div
+          className={'lg:col-span-8' + (step >= 2 ? ' order-2 lg:order-1' : '')}
+        >
           <div className="flex items-center gap-4 mb-8 text-sm font-medium">
             <button
               className={
@@ -386,7 +391,9 @@ export default function CheckoutClient() {
           )}
         </div>
 
-        <div className="lg:col-span-4">
+        <div
+          className={'lg:col-span-4' + (step >= 2 ? ' order-1 lg:order-2' : '')}
+        >
           <CheckoutSummary />
         </div>
       </Container>

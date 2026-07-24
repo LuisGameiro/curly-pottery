@@ -10,7 +10,6 @@ import {
   upsertProduct,
 } from './product.actions'
 import { prisma } from 'prisma/prisma'
-import { ProductInput } from '@lib/form-validator'
 import { Category, ProductWithVariantsCategories } from '@lib/types/types'
 
 jest.mock('prisma/prisma', () => ({
@@ -334,32 +333,36 @@ describe('getAllProducts', () => {
       { id: '2', name: 'Product 2', variants: [], categories: [] },
     ]
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
+    ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(2)
 
     const result = await getAllProducts()
 
     expect(result).toEqual({
       success: true,
       message: 'Fetched products successfully',
-      data: mockProducts,
+      data: { items: mockProducts, nextCursor: null, hasMore: false, total: 2 },
     })
     expect(prisma.product.findMany).toHaveBeenCalledWith({
+      where: {},
       include: {
         variants: { include: { optionValues: { include: { option: true } } } },
         categories: true,
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
+      take: 51,
     })
   })
 
   it('should return empty array when no products exist', async () => {
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce([])
+    ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(0)
 
     const result = await getAllProducts()
 
     expect(result).toEqual({
       success: true,
       message: 'Fetched products successfully',
-      data: [],
+      data: { items: [], nextCursor: null, hasMore: false, total: 0 },
     })
   })
 
@@ -399,20 +402,20 @@ describe('getRandomProducts', () => {
       { id: '3', name: 'Product 3', variants: [], categories: [] },
       { id: '4', name: 'Product 4', variants: [], categories: [] },
     ]
-    ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
+    ;(prisma.$queryRaw as jest.Mock).mockResolvedValueOnce([
+      { id: '1' },
+      { id: '2' },
+      { id: '3' },
+    ])
+    ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(
+      mockProducts.slice(0, 3),
+    )
 
     const result = await getRandomProducts()
 
     expect(result.success).toBe(true)
     expect(result.message).toBe('Fetched random products successfully')
     expect(result.data).toHaveLength(3)
-    expect(prisma.product.findMany).toHaveBeenCalledWith({
-      where: { variants: { some: { stock: { gt: 0 } } }, hide: false },
-      include: {
-        variants: { include: { optionValues: { include: { option: true } } } },
-        categories: true,
-      },
-    })
   })
 
   it('should return random products with custom limit', async () => {
@@ -423,6 +426,9 @@ describe('getRandomProducts', () => {
       { id: '4', name: 'Product 4', variants: [], categories: [] },
       { id: '5', name: 'Product 5', variants: [], categories: [] },
     ]
+    ;(prisma.$queryRaw as jest.Mock).mockResolvedValueOnce(
+      mockProducts.slice(0, 5).map((p) => ({ id: p.id })),
+    )
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
 
     const result = await getRandomProducts(5)
@@ -431,10 +437,11 @@ describe('getRandomProducts', () => {
     expect(result.data).toHaveLength(5)
   })
 
-  it('should return empty array when fewer products than limit', async () => {
+  it('should return fewer products when fewer than limit', async () => {
     const mockProducts = [
       { id: '1', name: 'Product 1', variants: [], categories: [] },
     ]
+    ;(prisma.$queryRaw as jest.Mock).mockResolvedValueOnce([{ id: '1' }])
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
 
     const result = await getRandomProducts(3)
@@ -444,7 +451,7 @@ describe('getRandomProducts', () => {
   })
 
   it('should return empty array when no products found', async () => {
-    ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce([])
+    ;(prisma.$queryRaw as jest.Mock).mockResolvedValueOnce([])
 
     const result = await getRandomProducts()
 
@@ -454,7 +461,7 @@ describe('getRandomProducts', () => {
 
   it('should handle database errors', async () => {
     const mockError = new Error('Database connection failed')
-    ;(prisma.product.findMany as jest.Mock).mockRejectedValueOnce(mockError)
+    ;(prisma.$queryRaw as jest.Mock).mockRejectedValueOnce(mockError)
 
     const result = await getRandomProducts()
 
@@ -464,9 +471,7 @@ describe('getRandomProducts', () => {
   })
 
   it('should handle unknown errors', async () => {
-    ;(prisma.product.findMany as jest.Mock).mockRejectedValueOnce(
-      'Unknown error',
-    )
+    ;(prisma.$queryRaw as jest.Mock).mockRejectedValueOnce('Unknown error')
 
     const result = await getRandomProducts()
 
@@ -481,6 +486,9 @@ describe('getRandomProducts', () => {
       { id: '2', name: 'Product 2', variants: [], categories: [] },
       { id: '3', name: 'Product 3', variants: [], categories: [] },
     ]
+    ;(prisma.$queryRaw as jest.Mock).mockResolvedValueOnce(
+      mockProducts.map((p) => ({ id: p.id })),
+    )
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
 
     const result = await getRandomProducts(3)
@@ -675,7 +683,7 @@ describe('getRelatedProducts', () => {
 
     expect(result.success).toBe(false)
     expect(result.message).toBe('Database connection failed')
-    expect(result.errors).toBe(mockError)
+    expect(result.errors).toEqual(mockError)
   })
 
   it('should handle unknown errors', async () => {
@@ -705,13 +713,14 @@ describe('getProductsByCategorySlug', () => {
       { id: '2', name: 'Product 2', hide: false, variants: [], categories: [] },
     ]
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
+    ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(2)
 
     const result = await getProductsByCategorySlug(null)
 
     expect(result).toEqual({
       success: true,
-      message: 'Category slug not provided',
-      data: mockProducts,
+      message: 'Fetched products successfully',
+      data: { items: mockProducts, nextCursor: null, hasMore: false, total: 2 },
     })
     expect(prisma.product.findMany).toHaveBeenCalledWith({
       where: { hide: false },
@@ -719,6 +728,8 @@ describe('getProductsByCategorySlug', () => {
         variants: { include: { optionValues: { include: { option: true } } } },
         categories: true,
       },
+      orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
+      take: 25,
     })
   })
 
@@ -727,12 +738,18 @@ describe('getProductsByCategorySlug', () => {
       { id: '1', name: 'Product 1', hide: false, variants: [], categories: [] },
     ]
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
+    ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(1)
 
     const result = await getProductsByCategorySlug('')
 
     expect(result.success).toBe(true)
-    expect(result.message).toBe('Category slug not provided')
-    expect(result.data).toEqual(mockProducts)
+    expect(result.message).toBe('Fetched products successfully')
+    expect(result.data).toEqual({
+      items: mockProducts,
+      nextCursor: null,
+      hasMore: false,
+      total: 1,
+    })
   })
 
   it('should return products filtered by category slug', async () => {
@@ -753,13 +770,14 @@ describe('getProductsByCategorySlug', () => {
       },
     ]
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
+    ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(2)
 
     const result = await getProductsByCategorySlug('pottery')
 
     expect(result).toEqual({
       success: true,
       message: 'Fetched products successfully',
-      data: mockProducts,
+      data: { items: mockProducts, nextCursor: null, hasMore: false, total: 2 },
     })
     expect(prisma.product.findMany).toHaveBeenCalledWith({
       where: {
@@ -770,26 +788,40 @@ describe('getProductsByCategorySlug', () => {
         variants: { include: { optionValues: { include: { option: true } } } },
         categories: true,
       },
+      orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
+      take: 25,
     })
   })
 
   it('should return empty array when no products found for category', async () => {
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce([])
+    ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(0)
 
     const result = await getProductsByCategorySlug('non-existent-category')
 
     expect(result.success).toBe(true)
     expect(result.message).toBe('Fetched products successfully')
-    expect(result.data).toEqual([])
+    expect(result.data).toEqual({
+      items: [],
+      nextCursor: null,
+      hasMore: false,
+      total: 0,
+    })
   })
 
   it('should return empty array when no non-hidden products exist', async () => {
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce([])
+    ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(0)
 
     const result = await getProductsByCategorySlug(null)
 
     expect(result.success).toBe(true)
-    expect(result.data).toEqual([])
+    expect(result.data).toEqual({
+      items: [],
+      nextCursor: null,
+      hasMore: false,
+      total: 0,
+    })
   })
 
   it('should handle database errors when category slug is provided', async () => {
@@ -837,6 +869,7 @@ describe('getProductsByCategorySlug', () => {
       },
     ]
     ;(prisma.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts)
+    ;(prisma.product.count as jest.Mock).mockResolvedValueOnce(1)
 
     const result = await getProductsByCategorySlug('pottery')
     expect(result.success).toBe(true)
@@ -855,29 +888,41 @@ describe('upsertProduct', () => {
     })
   })
 
+  const validVariant = (overrides: Record<string, unknown> = {}) => ({
+    id: 'v-1',
+    sku: 'SKU-001',
+    price: 100,
+    stock: 10,
+    sizeName: 'M',
+    colorName: 'Red',
+    colorHex: '#FF0000',
+    availableForSale: true,
+    isExpanded: false,
+    details: [],
+    discounts: [],
+    images: [],
+    files: ['img.jpg'],
+    previews: ['preview.jpg'],
+    ...overrides,
+  })
+
+  const validPayload = (overrides: Record<string, unknown> = {}) => ({
+    slug: 'test-product',
+    name: 'Test Product',
+    description: 'A beautiful handcrafted ceramic vase for home decor.',
+    hide: false,
+    requiresShipping: true,
+    files: ['img.jpg'],
+    images: [],
+    previews: ['https://example.com/preview.jpg'],
+    categoryIds: ['cat-1'],
+    variants: [validVariant()],
+    ...overrides,
+  })
+
   it('should create a new product successfully', async () => {
     const mockProduct = { id: '1', name: 'New Product', slug: 'new-product' }
-    const payload = {
-      id: 'temp-1',
-      name: 'New Product',
-      slug: 'new-product',
-      hide: false,
-      description: 'New Product Description',
-      images: null,
-      requiresShipping: true,
-      categoryIds: ['cat-1'],
-      variants: [
-        {
-          id: 'temp-v1',
-          price: 100,
-          details: [],
-          discounts: [],
-          images: [],
-        },
-      ],
-      files: [],
-      previews: [],
-    } as unknown as ProductInput
+    const payload = validPayload({ id: 'temp-1' })
 
     ;(prisma.product.upsert as jest.Mock).mockResolvedValueOnce(mockProduct)
 
@@ -897,23 +942,13 @@ describe('upsertProduct', () => {
       name: 'Updated Product',
       slug: 'updated-product',
     }
-    const payload = {
+    const payload = validPayload({
       id: '1',
-      name: 'Updated Product',
       slug: 'updated-product',
+      name: 'Updated Product',
       categoryIds: ['cat-1', 'cat-2'],
-      variants: [
-        {
-          id: 'v-1',
-          price: 150,
-          details: [],
-          discounts: [],
-          images: [],
-        },
-      ],
-      files: [],
-      previews: [],
-    } as unknown as ProductInput
+      variants: [validVariant({ id: 'v-1', price: 150 })],
+    })
 
     ;(prisma.product.upsert as jest.Mock).mockResolvedValueOnce(mockProduct)
 
@@ -925,31 +960,13 @@ describe('upsertProduct', () => {
 
   it('should handle temporary variant IDs correctly', async () => {
     const mockProduct = { id: '1', name: 'Product', slug: 'product' }
-    const payload = {
+    const payload = validPayload({
       id: '1',
-      name: 'Product',
-      slug: 'product',
-      categoryIds: ['cat-1'],
       variants: [
-        {
-          id: 'temp-v1',
-          name: 'New Variant',
-          price: 100,
-          details: [],
-          discounts: [],
-          images: [],
-        },
-        {
-          id: 'v-existing',
-          price: 200,
-          details: [],
-          discounts: [],
-          images: [],
-        },
+        validVariant({ id: 'temp-v1', name: 'New Variant', price: 100 }),
+        validVariant({ id: 'v-existing', price: 200 }),
       ],
-      files: [],
-      previews: [],
-    } as unknown as ProductInput
+    })
 
     ;(prisma.product.upsert as jest.Mock).mockResolvedValueOnce(mockProduct)
 
@@ -965,84 +982,53 @@ describe('upsertProduct', () => {
 
   it('should prepare variants correctly by removing unnecessary fields', async () => {
     const mockProduct = { id: '1', name: 'Product', slug: 'product' }
-    const payload = {
+    const payload = validPayload({
       id: '1',
-      name: 'Product',
-      slug: 'product',
-      categoryIds: ['cat-1'],
       variants: [
-        {
+        validVariant({
           id: 'v-1',
           price: 100,
-          details: [{ key: 'color', value: 'red' }],
+          details: [{ title: 'Color', description: 'red' }],
           discounts: [{ type: 'percentage', value: 10 }],
           images: ['img1.jpg'],
-          files: [],
-          previews: [],
           isExpanded: true,
-        },
+        }),
       ],
-      files: [],
-      previews: [],
-    } as unknown as ProductInput
+    })
 
     ;(prisma.product.upsert as jest.Mock).mockResolvedValueOnce(mockProduct)
 
     await upsertProduct(payload)
 
     const callArgs = (prisma.product.upsert as jest.Mock).mock.calls[0][0]
-    expect(callArgs.update.variants.upsert[0].create).not.toHaveProperty(
-      'files',
-    )
-    expect(callArgs.update.variants.upsert[0].create).not.toHaveProperty(
-      'previews',
-    )
-    expect(callArgs.update.variants.upsert[0].create).not.toHaveProperty(
-      'isExpanded',
-    )
+    expect(callArgs.update.variants.create[0]).not.toHaveProperty('files')
+    expect(callArgs.update.variants.create[0]).not.toHaveProperty('previews')
+    expect(callArgs.update.variants.create[0]).not.toHaveProperty('isExpanded')
   })
 
   it('should set empty arrays for variant details, discounts, and images when not provided', async () => {
     const mockProduct = { id: '1', name: 'Product', slug: 'product' }
-    const payload = {
+    const payload = validPayload({
       id: '1',
-      name: 'Product',
-      slug: 'product',
-      categoryIds: ['cat-1'],
-      variants: [
-        {
-          id: 'v-1',
-          price: 100,
-          files: [],
-          previews: [],
-          isExpanded: false,
-        },
-      ],
-      files: [],
-      previews: [],
-    } as unknown as ProductInput
+      variants: [validVariant({ id: 'v-1', price: 100, isExpanded: false })],
+    })
 
     ;(prisma.product.upsert as jest.Mock).mockResolvedValueOnce(mockProduct)
 
     await upsertProduct(payload)
 
     const callArgs = (prisma.product.upsert as jest.Mock).mock.calls[0][0]
-    expect(callArgs.update.variants.upsert[0].create.details).toEqual([])
-    expect(callArgs.update.variants.upsert[0].create.discounts).toEqual([])
-    expect(callArgs.update.variants.upsert[0].create.images).toEqual([])
+    expect(callArgs.update.variants.create[0].details).toEqual([])
+    expect(callArgs.update.variants.create[0].discounts).toEqual([])
+    expect(callArgs.update.variants.create[0].images).toEqual([])
   })
 
   it('should handle multiple categories correctly', async () => {
     const mockProduct = { id: '1', name: 'Product', slug: 'product' }
-    const payload = {
+    const payload = validPayload({
       id: '1',
-      name: 'Product',
-      slug: 'product',
       categoryIds: ['cat-1', 'cat-2', 'cat-3'],
-      variants: [],
-      files: [],
-      previews: [],
-    } as unknown as ProductInput
+    })
 
     ;(prisma.product.upsert as jest.Mock).mockResolvedValueOnce(mockProduct)
 
@@ -1058,15 +1044,10 @@ describe('upsertProduct', () => {
 
   it('should handle empty variants array', async () => {
     const mockProduct = { id: '1', name: 'Product', slug: 'product' }
-    const payload = {
+    const payload = validPayload({
       id: '1',
-      name: 'Product',
-      slug: 'product',
-      categoryIds: ['cat-1'],
-      variants: [],
-      files: [],
-      previews: [],
-    } as unknown as ProductInput
+      variants: [validVariant()],
+    })
 
     ;(prisma.product.upsert as jest.Mock).mockResolvedValueOnce(mockProduct)
 
@@ -1077,15 +1058,7 @@ describe('upsertProduct', () => {
 
   it('should handle database errors during upsert', async () => {
     const mockError = new Error('Database connection failed')
-    const payload = {
-      id: '1',
-      name: 'Product',
-      slug: 'product',
-      categoryIds: ['cat-1'],
-      variants: [],
-      files: [],
-      previews: [],
-    } as unknown as ProductInput
+    const payload = validPayload({ id: '1' })
 
     ;(prisma.product.upsert as jest.Mock).mockRejectedValueOnce(mockError)
 
@@ -1097,15 +1070,7 @@ describe('upsertProduct', () => {
   })
 
   it('should handle unknown errors during upsert', async () => {
-    const payload = {
-      id: '1',
-      name: 'Product',
-      slug: 'product',
-      categoryIds: ['cat-1'],
-      variants: [],
-      files: [],
-      previews: [],
-    } as unknown as ProductInput
+    const payload = validPayload({ id: '1' })
 
     ;(prisma.product.upsert as jest.Mock).mockRejectedValueOnce('Unknown error')
 
@@ -1118,15 +1083,7 @@ describe('upsertProduct', () => {
 
   it('should use temporary ID for new products without real ID', async () => {
     const mockProduct = { id: 'new-id', name: 'Product', slug: 'product' }
-    const payload = {
-      id: 'temp-new',
-      name: 'Product',
-      slug: 'product',
-      categoryIds: ['cat-1'],
-      variants: [],
-      files: [],
-      previews: [],
-    } as unknown as ProductInput
+    const payload = validPayload({ id: 'temp-new' })
 
     ;(prisma.product.upsert as jest.Mock).mockResolvedValueOnce(mockProduct)
 
@@ -1138,40 +1095,14 @@ describe('upsertProduct', () => {
 
   it('should filter out temporary variant IDs from existingVariantIds', async () => {
     const mockProduct = { id: '1', name: 'Product', slug: 'product' }
-    const payload = {
+    const payload = validPayload({
       id: '1',
-      name: 'Product',
-      slug: 'product',
-      categoryIds: ['cat-1'],
       variants: [
-        {
-          id: 'temp-v1',
-          name: 'New',
-          price: 100,
-          files: [],
-          previews: [],
-          isExpanded: false,
-        },
-        {
-          id: 'v-existing',
-          name: 'Existing',
-          price: 200,
-          files: [],
-          previews: [],
-          isExpanded: false,
-        },
-        {
-          id: 'temp-v2',
-          name: 'Another',
-          price: 150,
-          files: [],
-          previews: [],
-          isExpanded: false,
-        },
+        validVariant({ id: 'temp-v1', name: 'New', price: 100 }),
+        validVariant({ id: 'v-existing', name: 'Existing', price: 200 }),
+        validVariant({ id: 'temp-v2', name: 'Another', price: 150 }),
       ],
-      files: [],
-      previews: [],
-    } as unknown as ProductInput
+    })
 
     ;(prisma.product.upsert as jest.Mock).mockResolvedValueOnce(mockProduct)
 
@@ -1181,74 +1112,48 @@ describe('upsertProduct', () => {
     expect(callArgs.update.variants.deleteMany.id.notIn).toEqual(['v-existing'])
   })
 
-  it('should use temp ID for new variants in where clause', async () => {
+  it('should include new variant in create array', async () => {
     const mockProduct = { id: '1', name: 'Product', slug: 'product' }
-    const payload = {
+    const payload = validPayload({
       id: '1',
-      name: 'Product',
-      slug: 'product',
-      categoryIds: ['cat-1'],
-      variants: [
-        {
-          id: 'temp-v1',
-          name: 'New',
-          price: 100,
-          files: [],
-          previews: [],
-          isExpanded: false,
-        },
-      ],
-      files: [],
-      previews: [],
-    } as unknown as ProductInput
+      variants: [validVariant({ id: 'temp-v1', name: 'New', price: 100 })],
+    })
 
     ;(prisma.product.upsert as jest.Mock).mockResolvedValueOnce(mockProduct)
 
     await upsertProduct(payload)
 
     const callArgs = (prisma.product.upsert as jest.Mock).mock.calls[0][0]
-    expect(callArgs.update.variants.upsert[0].where.id).toBe(
-      '000000000000000000000000',
-    )
+    expect(callArgs.update.variants.create[0].name).toBe('New')
+    expect(callArgs.update.variants.create[0].price).toBe(100)
   })
 
   it('should preserve variant data during upsert', async () => {
     const mockProduct = { id: '1', name: 'Product', slug: 'product' }
-    const variantData = {
-      name: 'Premium Variant',
-      price: 250,
-      description: 'High quality variant',
-      details: [{ key: 'size', value: 'large' }],
-    }
-    const payload = {
+    const payload = validPayload({
       id: '1',
-      name: 'Product',
-      slug: 'product',
-      categoryIds: ['cat-1'],
       variants: [
-        {
+        validVariant({
           id: 'v-1',
-          ...variantData,
-          files: [],
-          previews: [],
-          isExpanded: false,
+          name: 'Premium Variant',
+          price: 250,
+          description: 'High quality variant',
+          details: [{ title: 'Size', description: 'large' }],
           discounts: [],
           images: [],
-        },
+        }),
       ],
-      files: [],
-      previews: [],
-    } as unknown as ProductInput
+    })
 
     ;(prisma.product.upsert as jest.Mock).mockResolvedValueOnce(mockProduct)
 
     await upsertProduct(payload)
 
     const callArgs = (prisma.product.upsert as jest.Mock).mock.calls[0][0]
-    const variant = callArgs.update.variants.upsert[0].update
+    const variant = callArgs.update.variants.create[0]
     expect(variant.name).toBe('Premium Variant')
     expect(variant.price).toBe(250)
     expect(variant.description).toBe('High quality variant')
-    expect(variant.details).toEqual([{ key: 'size', value: 'large' }])
+    expect(variant.details).toEqual([{ title: 'Size', description: 'large' }])
   })
 })

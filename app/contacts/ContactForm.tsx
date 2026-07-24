@@ -60,7 +60,7 @@ export default function ContactForm() {
   }
 
   return (
-    <section className="w-full">
+    <section className="w-full" data-testid="contact-form">
       <Text variant="sectionHeading">Contact Form</Text>
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
@@ -95,6 +95,7 @@ export default function ContactForm() {
             type="submit"
             variant="secondary"
             disabled={status === 'loading' || status === 'success'}
+            data-testid="contact-submit-btn"
           >
             {status === 'loading' ? 'Sending...' : 'Send Message'}
           </Button>

@@ -22,10 +22,13 @@ export default async function GalleryPage() {
   const images = response.data || []
 
   return (
-    <Container className="px-4 py-6 sm:px-10 sm:py-10 bg-linear-to-r from-background to-accent-2">
+    <Container
+      className="px-4 py-6 sm:px-10 sm:py-10 bg-linear-to-r from-background to-accent-2"
+      data-testid="gallery-page"
+    >
       <div className="space-y-12 md:max-w-4xl mx-auto">
         {/* Header */}
-        <section className="text-center space-y-4">
+        <section className="text-center space-y-4" data-testid="gallery-header">
           <Text variant="heading">Gallery</Text>
           <Text variant="body" className="max-w-2xl mx-auto">
             A collection of my past and current work. Take a look around and
@@ -44,7 +47,10 @@ export default async function GalleryPage() {
 
         {/* Masonry Image Grid */}
         {images.length > 0 ? (
-          <div className="columns-2 sm:columns-3 lg:columns-4 gap-3 sm:gap-4 space-y-3 sm:space-y-4">
+          <div
+            className="columns-2 sm:columns-3 lg:columns-4 gap-3 sm:gap-4 space-y-3 sm:space-y-4"
+            data-testid="gallery-grid"
+          >
             {images.map((image, index) => (
               <div
                 key={image.id}

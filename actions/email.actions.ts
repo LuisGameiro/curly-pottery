@@ -87,10 +87,10 @@ export async function sendResetEmail(
     'unknown'
   let rateResult: { success: boolean; remaining: number; resetIn: number }
   try {
-    rateResult = await checkRateLimit(
-      getRateLimitKey(ip, 'password-reset'),
-      { windowMs: 60 * 1000, maxRequests: 2 },
-    )
+    rateResult = await checkRateLimit(getRateLimitKey(ip, 'password-reset'), {
+      windowMs: 60 * 1000,
+      maxRequests: 2,
+    })
   } catch {
     rateResult = { success: true, remaining: 999, resetIn: 0 }
   }
@@ -173,10 +173,10 @@ export async function resetPassword({
     'unknown'
   let rateResult: { success: boolean; remaining: number; resetIn: number }
   try {
-    rateResult = await checkRateLimit(
-      getRateLimitKey(ip, 'reset-password'),
-      { windowMs: 60 * 1000, maxRequests: 5 },
-    )
+    rateResult = await checkRateLimit(getRateLimitKey(ip, 'reset-password'), {
+      windowMs: 60 * 1000,
+      maxRequests: 5,
+    })
   } catch {
     rateResult = { success: true, remaining: 999, resetIn: 0 }
   }

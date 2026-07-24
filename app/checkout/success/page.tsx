@@ -14,7 +14,10 @@ export default function SuccessPage() {
   }, [deleteAll])
 
   return (
-    <div className="flex-center flex-col py-20 px-4 sm:px-10 mx-auto max-w-lg">
+    <div
+      className="flex-center flex-col py-20 px-4 sm:px-10 mx-auto max-w-lg"
+      data-testid="checkout-success-page"
+    >
       <CheckCircle size={64} className="text-green mb-4" />
       <Text variant="heading" className="mb-2">
         Order Confirmed!
@@ -26,6 +29,7 @@ export default function SuccessPage() {
       <Link
         href="/shop"
         className="text-secondary px-8 py-3 rounded-full font-bold"
+        data-testid="checkout-continue-shopping-btn"
       >
         <Button variant="secondary">Continue Shopping</Button>
       </Link>

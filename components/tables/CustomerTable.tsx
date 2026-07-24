@@ -73,10 +73,12 @@ export default function CustomerTable({
   ]
 
   return (
-    <DataTable
-      data={customers}
-      columns={customerColumns}
-      isLoading={isLoading}
-    />
+    <div data-testid="customer-table">
+      <DataTable
+        data={customers}
+        columns={customerColumns}
+        isLoading={isLoading}
+      />
+    </div>
   )
 }

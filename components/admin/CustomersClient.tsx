@@ -75,7 +75,7 @@ export default function CustomersClient({
   }, [initialData, initialSearch])
 
   return (
-    <Container>
+    <Container data-testid="customers-client">
       <header>
         <div className="w-full flex flex-row justify-between">
           <Text variant="heading" className="w-full">
@@ -86,6 +86,7 @@ export default function CustomersClient({
             placeholder="Search by name or email..."
             value={searchTerm}
             onValueChange={handleSearch}
+            data-testid="customers-search-input"
           />
         </div>
         <Text variant="subHeading">

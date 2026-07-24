@@ -34,6 +34,10 @@ describe('deleteBlob', () => {
     const mockDel = del as jest.MockedFunction<typeof del>
     mockDel.mockRejectedValue(new Error('Delete failed'))
 
-    await expect(deleteBlob('blob-url')).resolves.toBeUndefined()
+    const result = await deleteBlob('blob-url')
+    expect(result).toEqual({
+      success: false,
+      message: 'Delete failed',
+    })
   })
 })
