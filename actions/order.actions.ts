@@ -28,6 +28,20 @@ import { z } from 'zod'
 import * as Sentry from '@sentry/nextjs'
 import { isAdminRole } from '@lib/auth/admin'
 
+/**
+ * Convert Prisma Decimal fields to plain numbers for safe
+ * serialization when passing to client components.
+ */
+function formatOrder<T extends { subtotalPrice: unknown; totalPrice: unknown; taxes: unknown; shippingPrice: unknown }>(order: T): T {
+  return {
+    ...order,
+    subtotalPrice: Number(order.subtotalPrice),
+    totalPrice: Number(order.totalPrice),
+    taxes: Number(order.taxes),
+    shippingPrice: Number(order.shippingPrice),
+  }
+}
+
 export async function getAllOrders(
   pagination?: PaginationInput,
 ): Promise<ActionResponse<PaginatedResult<OrderWithUser> | null>> {
@@ -72,7 +86,7 @@ export async function getAllOrders(
     ])
 
     const hasMore = orders.length > take
-    const items = orders.slice(0, take) as unknown as OrderWithUser[]
+    const items = (orders.slice(0, take) as unknown as OrderWithUser[]).map(formatOrder)
     const nextCursor = hasMore ? encodeCursor(items.at(-1)!.id) : null
 
     return {
@@ -134,7 +148,7 @@ export async function getOrdersById(
     ])
 
     const hasMore = orders.length > take
-    const items = orders.slice(0, take) as unknown as OrderWithUser[]
+    const items = (orders.slice(0, take) as unknown as OrderWithUser[]).map(formatOrder)
     const nextCursor = hasMore ? encodeCursor(items.at(-1)!.id) : null
 
     return {
@@ -184,7 +198,7 @@ export async function getOrderById(
     return {
       success: true,
       message: 'Fetched order successfully',
-      data: order,
+      data: order ? formatOrder(order) : null,
     }
   } catch (error) {
     console.error('getOrderById_ERROR:', error)

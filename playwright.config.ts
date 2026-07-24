@@ -77,6 +77,7 @@ export default defineConfig({
     command: 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
+    timeout: 120_000,
     /* Inject the test database URL into the dev server so it uses the test DB.
        Only set DB_DATABASE_URL when a test-specific env var is provided;
        otherwise let the dev server pick up the .env file value. */

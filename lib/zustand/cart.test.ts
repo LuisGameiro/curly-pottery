@@ -266,7 +266,7 @@ describe('useCartStore', () => {
           },
         ],
       }
-      jest.mocked(getCartFromDbAction).mockResolvedValue(dbItems as any)
+      jest.mocked(getCartFromDbAction).mockResolvedValue(dbItems as any) // eslint-disable-line @typescript-eslint/no-explicit-any
 
       await useCartStore.getState().syncWithDatabase()
 

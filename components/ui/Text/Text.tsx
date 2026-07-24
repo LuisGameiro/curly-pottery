@@ -11,6 +11,8 @@ interface TextProps {
   html?: string
   onClick?: () => void
   role?: string
+  /** Test identifier forwarded to the root element */
+  'data-testid'?: string
 }
 
 type Variant =
@@ -33,6 +35,7 @@ const Text = ({
   html,
   onClick,
   role,
+  'data-testid': testId,
 }: TextProps) => {
   const componentsMap: Record<Variant, ElementType> = {
     body: 'div',
@@ -60,6 +63,7 @@ const Text = ({
       onClick={onClick}
       style={style}
       role={role}
+      data-testid={testId}
       {...htmlContentProps}
       className={cn(s.root, s[variant], className)}
     >

@@ -45,7 +45,7 @@ async function login(
   // by polling with waitForFunction.
   await page.waitForFunction(
     () => !window.location.pathname.startsWith('/auth'),
-    { timeout: 15000 },
+    { timeout: 60000 },
   )
 }
 

@@ -217,7 +217,7 @@ describe('CategoryClient', () => {
                 success: true,
                 message: '',
                 data: ['new-image.jpg'],
-              } as any),
+              } as any), // eslint-disable-line @typescript-eslint/no-explicit-any
             50,
           ),
         ),
@@ -226,7 +226,7 @@ describe('CategoryClient', () => {
       success: true,
       message: '',
       data: mockCategory,
-    } as any)
+    } as any) // eslint-disable-line @typescript-eslint/no-explicit-any
 
     render(<CategoryClient category={null} isEditMode={false} />)
     const submitButton = screen.getByText('Create Category')

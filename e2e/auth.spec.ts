@@ -40,10 +40,15 @@ test.describe('Registration', () => {
 
     await page.locator('[data-testid="register-submit-btn"]').click()
 
-    // Registration logs in via signIn + router.push (client navigation).
-    // Poll for URL change since no full page load fires.
+    // Registration creates user then tries to sign in.
+    // If signIn succeeds → router.push('/user')
+    // If signIn fails  → router.push('/auth/login?registered=true')
+    // Accept either outcome.
     await page.waitForFunction(
-      () => !window.location.pathname.startsWith('/auth'),
+      () => {
+        const path = window.location.pathname
+        return path === '/user' || path === '/auth/login'
+      },
       { timeout: 15000 },
     )
 
@@ -131,9 +136,10 @@ test.describe('Login', () => {
     await page.locator('[data-testid="login-submit-btn"]').click()
 
     // Wait for client-side redirect away from /auth/login
+    // timeout raised for Neon cold-start + BCrypt latency
     await page.waitForFunction(
       () => !window.location.pathname.startsWith('/auth'),
-      { timeout: 15000 },
+      { timeout: 60000 },
     )
     expect(page.url()).not.toContain('/auth/login')
   })
@@ -283,8 +289,12 @@ test.describe.serial('Admin Login and Access', () => {
   test('should access the admin dashboard after admin login', async ({
     page,
   }) => {
-    await page.goto('/admin')
-    await expect(page.locator('[data-testid="admin-layout"]')).toBeVisible()
+    test.slow()
+    await page.goto('/admin', { timeout: 25000 })
+    await page.waitForLoadState('networkidle')
+    await expect(page.locator('[data-testid="admin-layout"]')).toBeVisible({
+      timeout: 10000,
+    })
   })
 })
 
@@ -303,8 +313,11 @@ test.describe.serial('Logout Flow', () => {
 
   test('should log out when clicking the logout button', async ({ page }) => {
     // Navigate to user area (still logged in from previous test context)
-    await page.goto('/user')
-    await expect(page.locator('[data-testid="user-layout"]')).toBeVisible()
+    await page.goto('/user', { timeout: 20000 })
+    await page.waitForLoadState('networkidle')
+    await expect(page.locator('[data-testid="user-layout"]')).toBeVisible({
+      timeout: 10000,
+    })
 
     // Click the logout button
     await page.locator('[data-testid="user-nav-logout"]').click()

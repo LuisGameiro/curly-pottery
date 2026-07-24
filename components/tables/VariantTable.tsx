@@ -22,7 +22,7 @@ export default function VariantTable({ variants }: { variants: Variant[] }) {
     {
       header: 'Price',
       align: 'center' as const,
-      render: (v: Variant) => `£${v.price.toFixed(2)}`,
+      render: (v: Variant) => `£${Number(v.price).toFixed(2)}`,
     },
     {
       header: 'Stock',

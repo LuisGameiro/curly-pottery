@@ -27,7 +27,7 @@ export default function OrderTable({ orders }: { orders: OrderWithUser[] }) {
         )
       },
     },
-    { header: 'Total', render: (o: Order) => `£${o.totalPrice.toFixed(2)}` },
+    { header: 'Total', render: (o: Order) => `£${Number(o.totalPrice).toFixed(2)}` },
     {
       header: 'Status',
       render: (o: Order) => <StatusBadge status={o.status} />,
