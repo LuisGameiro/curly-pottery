@@ -15,3 +15,16 @@
 .root > div > * > *:nth-child(2) * {
   max-height: 100%;
 }
+
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.autoScroll {
+  animation: marquee-scroll 30s linear infinite;
+}
+
+.paused {
+  animation-play-state: paused;
+}

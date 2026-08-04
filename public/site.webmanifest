@@ -1,11 +1,11 @@
 {
-  "name": "Next.js Commerce",
-  "short_name": "Next.js Commerce",
-  "description": "Next.js Commerce -> https://www.nextjs.org/commerce",
+  "name": "Curly Pottery",
+  "short_name": "Curly Pottery",
+  "description": "Handcrafted small-batch ceramics from Curly Pottery.",
   "display": "standalone",
   "start_url": "/",
-  "theme_color": "#fff",
-  "background_color": "#000000",
+  "theme_color": "#fde372",
+  "background_color": "#f1fbff",
   "orientation": "portrait",
   "icons": [
     {

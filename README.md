@@ -57,17 +57,8 @@ SUMUP_API=your_sumup_api_key
 SUMUP_MERCHANT_CODE=your_merchant_code
 ```
 
-**Klarna** (optional - add for buy now, pay later):
-
-```env
-# Get credentials from merchantportal.klarna.com
-KLARNA_API_URL=https://api.klarna.com
-KLARNA_MERCHANT_ID=your_merchant_id
-KLARNA_SHARED_SECRET=your_shared_secret
-
-# For testing, use sandbox:
-# KLARNA_API_URL=https://api-sandbox.klarna.com
-```
+> Google Pay and Apple Pay are supported through SumUp — enable them in your
+> SumUp dashboard (Settings > Payment methods).
 
 #### Email (Resend)
 
@@ -103,7 +94,7 @@ BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
 ### Payment Options
 
 1. **SumUp** (default) - Credit/debit card payments
-2. **Klarna** - Buy now, pay later or in installments
+2. **Google Pay / Apple Pay** - Fast wallet checkout via SumUp
 
 ### Newsletter System
 
@@ -161,7 +152,6 @@ Ensure these are set in your deployment platform:
 | ------------------------ | ------------------------- |
 | `/api/auth/*`            | Authentication routes     |
 | `/api/payments/sumup/*`  | SumUp payment processing  |
-| `/api/payments/klarna/*` | Klarna payment processing |
 | `/api/newsletter/*`      | Newsletter management     |
 | `/api/images`            | Image upload handling     |
 
@@ -173,7 +163,7 @@ Ensure these are set in your deployment platform:
 - **Database**: PostgreSQL via Prisma ORM
 - **Authentication**: NextAuth.js
 - **Styling**: Tailwind CSS 4
-- **Payments**: SumUp, Klarna
+- **Payments**: SumUp (cards, Google Pay, Apple Pay)
 - **Email**: Resend + React Email
 - **Analytics**: PostHog, Google Analytics
 - **Error Tracking**: Sentry

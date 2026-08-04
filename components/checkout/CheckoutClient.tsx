@@ -28,7 +28,7 @@ export default function CheckoutClient() {
   const [checkoutId, setCheckoutId] = useState('')
   const [loading, setLoading] = useState(false)
   const [paymentProvider, setPaymentProvider] = useState<
-    'sumup' | 'klarna' | 'googlepay'
+    'sumup' | 'googlepay'
   >('sumup')
   const [sameAsShipping, setSameAsShipping] = useState(true)
 
@@ -76,51 +76,26 @@ export default function CheckoutClient() {
       setLoading(true)
       await updateCartPrice(currentValues.taxes, currentValues.shippingPrice)
 
-      if (paymentProvider === 'klarna') {
-        const klarnaResponse = await fetch(
-          '/api/payments/klarna/create-session',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              orderId: `ORDER-${Date.now()}`,
-              amount: currentValues.totalPrice,
-              currency: currentValues.currency,
-            }),
-          },
+      const response = await createSumUpCheckout()
+      trackEvent('before_purchase', {
+        transaction_id: response.data,
+        userId: currentValues?.userId,
+        total_value: currentValues.totalPrice,
+        currency: currentValues.currency,
+        item_count: currentValues.lineItems.length,
+        items: currentValues.lineItems.map(
+          (item) => item.quantity + ' * ' + item.sku,
+        ),
+      })
+      if (!response.success && !response.data) {
+        Sentry.captureMessage(
+          `SumUp init failed: ${response.message}`,
+          'error',
         )
-        const klarnaData = await klarnaResponse.json()
-        if (klarnaData.success) {
-          setStep(3)
-        } else {
-          Sentry.captureMessage(
-            `Klarna init failed: ${klarnaData.message}`,
-            'error',
-          )
-          toast(klarnaData.message || 'Failed to initialize Klarna')
-        }
+        toast(response.message)
       } else {
-        const response = await createSumUpCheckout()
-        trackEvent('before_purchase', {
-          transaction_id: response.data,
-          userId: currentValues?.userId,
-          total_value: currentValues.totalPrice,
-          currency: currentValues.currency,
-          item_count: currentValues.lineItems.length,
-          items: currentValues.lineItems.map(
-            (item) => item.quantity + ' * ' + item.sku,
-          ),
-        })
-        if (!response.success && !response.data) {
-          Sentry.captureMessage(
-            `SumUp init failed: ${response.message}`,
-            'error',
-          )
-          toast(response.message)
-        } else {
-          setCheckoutId(response.data || '')
-          setStep(3)
-        }
+        setCheckoutId(response.data || '')
+        setStep(3)
       }
     } catch (error) {
       Sentry.captureException(error)
@@ -329,25 +304,6 @@ export default function CheckoutClient() {
                       </Text>
                     </div>
                   </label>
-
-                  <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-accent/5 transition-colors">
-                    <input
-                      type="radio"
-                      name="payment"
-                      value="klarna"
-                      checked={paymentProvider === 'klarna'}
-                      onChange={() => {
-                        setPaymentProvider('klarna')
-                      }}
-                      className="mr-3"
-                    />
-                    <div>
-                      <Text variant="bold">Klarna</Text>
-                      <Text variant="muted" className="text-sm">
-                        Pay now, pay later or in installments
-                      </Text>
-                    </div>
-                  </label>
                 </div>
               </section>
 
@@ -365,28 +321,17 @@ export default function CheckoutClient() {
                 }}
               >
                 Continue to{' '}
-                {paymentProvider === 'klarna'
-                  ? 'Klarna'
-                  : paymentProvider === 'googlepay'
-                    ? 'Google Pay'
-                    : 'Payment'}
+                {paymentProvider === 'googlepay' ? 'Google Pay' : 'Payment'}
               </Button>
             </div>
           )}
           {step === 3 && (
             <div className="space-y-4">
               <Text variant="bold">Complete Your Payment</Text>
-              {paymentProvider === 'sumup' ||
-              paymentProvider === 'googlepay' ? (
-                <SumUpPayment
-                  checkoutId={checkoutId}
-                  onComplete={onPaymentComplete}
-                />
-              ) : (
-                <div className="p-4 border rounded-lg">
-                  <Text variant="muted">Redirecting to Klarna...</Text>
-                </div>
-              )}
+              <SumUpPayment
+                checkoutId={checkoutId}
+                onComplete={onPaymentComplete}
+              />
             </div>
           )}
         </div>

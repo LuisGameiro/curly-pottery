@@ -21,9 +21,7 @@ export async function cropToSquare(file: File): Promise<Blob> {
       fileToProcess = new File(
         [blob],
         file.name.replace(/\.(heic|heif)$/i, '.jpeg'),
-        {
-          type: 'image/jpeg',
-        },
+        { type: 'image/jpeg' },
       )
     } catch (err) {
       console.error('Failed to convert HEIC/HEIF file:', err)
@@ -31,30 +29,63 @@ export async function cropToSquare(file: File): Promise<Blob> {
     }
   }
 
-  // 2. Load the image into a bitmap
-  const sourceBitmap = await createImageBitmap(fileToProcess)
+  // 2. Load the image via <img>, crop to center square, resize to 1000x1000
+  return new Promise<Blob>((resolve, reject) => {
+    const img = new Image()
+    const objectUrl = URL.createObjectURL(fileToProcess)
 
-  const targetSize = 1000
-  const minSide = Math.min(sourceBitmap.width, sourceBitmap.height)
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl)
 
-  // Calculate source offsets to grab the center square
-  const sx = (sourceBitmap.width - minSide) / 2
-  const sy = (sourceBitmap.height - minSide) / 2
+      try {
+        const targetSize = 1000
+        const minSide = Math.min(img.naturalWidth, img.naturalHeight)
+        const sx = (img.naturalWidth - minSide) / 2
+        const sy = (img.naturalHeight - minSide) / 2
 
-  // 3. Crop directly while creating a new bitmap
-  const croppedBitmap = await createImageBitmap(
-    sourceBitmap,
-    sx,
-    sy,
-    minSide,
-    minSide, // Source crop area
-    { resizeWidth: targetSize, resizeHeight: targetSize }, // Final resize
-  )
+        const canvas = document.createElement('canvas')
+        canvas.width = targetSize
+        canvas.height = targetSize
+        const ctx = canvas.getContext('2d')
 
-  // 4. Convert back to Blob using an OffscreenCanvas (no DOM needed)
-  const offscreen = new OffscreenCanvas(targetSize, targetSize)
-  const ctx = offscreen.getContext('2d')
-  ctx?.drawImage(croppedBitmap, 0, 0)
+        if (!ctx) {
+          reject(new Error('Failed to get canvas context'))
+          return
+        }
 
-  return offscreen.convertToBlob({ type: 'image/jpeg', quality: 0.9 })
+        // Crop center square and resize in a single draw
+        ctx.drawImage(
+          img,
+          sx, sy, minSide, minSide, // source: center square
+          0, 0, targetSize, targetSize, // dest: 1000x1000
+        )
+
+        canvas.toBlob(
+          (blob) => {
+            if (blob) resolve(blob)
+            else reject(new Error('Failed to encode image as JPEG'))
+          },
+          'image/jpeg',
+          0.9,
+        )
+      } catch (err) {
+        reject(
+          err instanceof Error
+            ? err
+            : new Error('Failed to process image'),
+        )
+      }
+    }
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl)
+      reject(
+        new Error(
+          'Failed to decode image. The file may be too large or in an unsupported format.',
+        ),
+      )
+    }
+
+    img.src = objectUrl
+  })
 }

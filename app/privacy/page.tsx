@@ -122,10 +122,10 @@ export default function PrivacyPolicy() {
         </Text>
         <ul className="list-disc pl-6 space-y-2">
           <li>
-            <strong>Payment Gateways:</strong> Credit card processors and
-            Klarna, to process your transaction securely. (If you use Klarna,
-            they will process your data in accordance with their own privacy
-            policy to assess whether you qualify for their payment options).
+            <strong>Payment Gateways:</strong> Our payment provider SumUp, to
+            process your transaction securely (including card payments, Google
+            Pay and Apple Pay). Your payment data is handled in accordance with
+            their privacy policy.
           </li>
           <li>
             <strong>Delivery Companies:</strong> Couriers and postal services

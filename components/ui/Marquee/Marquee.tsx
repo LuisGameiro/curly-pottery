@@ -22,6 +22,7 @@ const Marquee = ({ children = [], className = '' }: MarqueeProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [isHovered, setIsHovered] = useState(false)
   const [isVisible, setIsVisible] = useState(true)
+  const [isOverflowing, setIsOverflowing] = useState(false)
   const isDragging = useRef(false)
   const startX = useRef(0)
   const scrollLeftStart = useRef(0)
@@ -41,9 +42,25 @@ const Marquee = ({ children = [], className = '' }: MarqueeProps) => {
     return () => observer.disconnect()
   }, [])
 
+  // Detect if content overflows the container
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
+
+    const checkOverflow = () => {
+      setIsOverflowing(container.scrollWidth > container.clientWidth)
+    }
+
+    checkOverflow()
+
+    const observer = new ResizeObserver(checkOverflow)
+    observer.observe(container)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container || isOverflowing) return
 
     let animationId: number
 
@@ -64,7 +81,7 @@ const Marquee = ({ children = [], className = '' }: MarqueeProps) => {
     animationId = requestAnimationFrame(scroll)
 
     return () => cancelAnimationFrame(animationId)
-  }, [isHovered, isVisible])
+  }, [isHovered, isVisible, isOverflowing])
 
   const handleMouseDown = (e: React.MouseEvent) => {
     isDragging.current = true
@@ -107,25 +124,32 @@ const Marquee = ({ children = [], className = '' }: MarqueeProps) => {
       ref={containerRef}
       className={cn(
         s.root,
-        'flex overflow-x-auto whitespace-nowrap !overflow-hidden select-none',
+        'flex whitespace-nowrap select-none',
+        isOverflowing ? 'overflow-x-auto overflow-y-hidden' : 'overflow-hidden',
         className,
       )}
       style={{
         scrollbarWidth: 'none',
         WebkitOverflowScrolling: 'touch',
-        cursor,
+        cursor: isOverflowing ? cursor : 'default',
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onMouseMove={handleMouseMove}
+      onMouseDown={isOverflowing ? handleMouseDown : undefined}
+      onMouseUp={isOverflowing ? handleMouseUp : undefined}
+      onMouseMove={isOverflowing ? handleMouseMove : undefined}
       onTouchStart={() => setIsHovered(true)}
       onTouchEnd={() => setIsHovered(false)}
       data-testid="categories-marquee"
     >
-      <div className="flex shrink-0 gap-6 px-3">{renderedChildren}</div>
-      <div className="flex shrink-0 gap-6 px-3">{renderedChildren}</div>
+      {isOverflowing ? (
+        <div className="flex shrink-0 gap-6 px-3">{renderedChildren}</div>
+      ) : (
+        <div className={`flex ${s.autoScroll} ${isHovered ? s.paused : ''}`}>
+          <div className="flex shrink-0 gap-6 px-3">{renderedChildren}</div>
+          <div className="flex shrink-0 gap-6 px-3">{renderedChildren}</div>
+        </div>
+      )}
     </div>
   )
 }

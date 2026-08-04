@@ -26,7 +26,10 @@ export async function syncImages({
   currentItems: (File | string)[]
   existingUrls: string[]
 }): Promise<ActionResponse<string[]>> {
-  if (process.env.NEXT_PUBLIC_APP_ENV === 'dev')
+  if (
+    process.env.NODE_ENV === 'development' &&
+    process.env.NEXT_PUBLIC_APP_ENV === 'dev'
+  )
     return {
       success: true,
       message: 'Sync images skipped in development mode',

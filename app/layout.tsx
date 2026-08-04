@@ -1,6 +1,7 @@
 import '../globals.css'
 import 'keen-slider/keen-slider.min.css'
 
+import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import { Layout } from '@components/common'
 import { Providers } from '@components/common/Providers/Providers'
@@ -26,6 +27,15 @@ const grandHotel = localFont({
   variable: '--font-grand-hotel',
   display: 'swap',
 })
+
+// Versioned favicon URL so browsers fetch the new icon instead of their
+// aggressively-cached copy of /favicon.ico. Bump ?v= whenever the icon changes.
+export const metadata: Metadata = {
+  icons: {
+    icon: [{ url: '/favicon.ico?v=2', sizes: 'any', type: 'image/x-icon' }],
+    apple: [{ url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' }],
+  },
+}
 
 export default function RootLayout({
   children,
