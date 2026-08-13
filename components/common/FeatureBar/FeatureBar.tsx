@@ -36,7 +36,7 @@ export default function FeatureBar({ className }: FeatureBarProps) {
           data-testid="feature-bar"
         >
           <div className="max-w-screen mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-on-primary">
-            <div className="text-sm">
+            <div className="text-xs">
               <Text variant="bold">We value your privacy</Text>
               <Text>
                 We use cookies to enhance your experience. Essential cookies are
