@@ -27,9 +27,9 @@ export default function CheckoutClient() {
   const [step, setStep] = useState(1)
   const [checkoutId, setCheckoutId] = useState('')
   const [loading, setLoading] = useState(false)
-  const [paymentProvider, setPaymentProvider] = useState<
-    'sumup' | 'googlepay'
-  >('sumup')
+  const [paymentProvider, setPaymentProvider] = useState<'sumup' | 'googlepay'>(
+    'sumup',
+  )
   const [sameAsShipping, setSameAsShipping] = useState(true)
 
   const methods = useForm<CreateOrder>({
@@ -88,10 +88,7 @@ export default function CheckoutClient() {
         ),
       })
       if (!response.success && !response.data) {
-        Sentry.captureMessage(
-          `SumUp init failed: ${response.message}`,
-          'error',
-        )
+        Sentry.captureMessage(`SumUp init failed: ${response.message}`, 'error')
         toast(response.message)
       } else {
         setCheckoutId(response.data || '')

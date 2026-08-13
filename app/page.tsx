@@ -15,7 +15,7 @@ export const metadata = constructMetadata({
 })
 
 export default async function Home() {
-  const responseProducts = await getRandomProducts(6)
+  const responseProducts = await getRandomProducts(10)
   const responseCategories = await getAllCategories()
 
   if (!responseProducts.success || !responseCategories.success)
@@ -51,15 +51,19 @@ export default async function Home() {
         ))}
       </Grid>
 
+      <section className="pb-4">
+
       <div className="px-10 my-8">
         <h2 className="text-2xl font-bold mb-1">Explore Categories</h2>
         <p className="text-sm">Find the perfect piece for your home</p>
       </div>
-      <Marquee>
+      <Marquee >
         {categories.map((cat) => (
           <CategoriesCard key={cat.id} cat={cat} />
         ))}
-      </Marquee>
+        </Marquee>
+      </section>
+
     </main>
   )
 }

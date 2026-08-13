@@ -1,25 +1,33 @@
 import { renderHook, act } from '@testing-library/react'
+import { createElement } from 'react'
+import { renderToString } from 'react-dom/server'
 import Cookies from 'js-cookie'
 import { useConsent } from './useConsent'
 
+// In-memory cookie jar so `set`/`remove` are visible to subsequent `get`
+// calls, mirroring how document.cookie behaves in the browser.
+const mockCookieJar = new Map<string, string>()
+
 jest.mock('js-cookie', () => ({
-  get: jest.fn(),
-  set: jest.fn(),
-  remove: jest.fn(),
+  get: jest.fn((name: string) => mockCookieJar.get(name)),
+  set: jest.fn((name: string, value: string) => {
+    mockCookieJar.set(name, value)
+  }),
+  remove: jest.fn((name: string) => {
+    mockCookieJar.delete(name)
+  }),
 }))
 
-const mockGetCookie = Cookies.get as jest.Mock
 const mockSetCookie = Cookies.set as jest.Mock
 const mockRemoveCookie = Cookies.remove as jest.Mock
 
 describe('useConsent', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    mockCookieJar.clear()
   })
 
   it('should return default state when no cookie exists', () => {
-    mockGetCookie.mockReturnValue(undefined)
-
     const { result } = renderHook(() => useConsent())
 
     expect(result.current.hasConsented).toBe(false)
@@ -32,8 +40,6 @@ describe('useConsent', () => {
   })
 
   it('should set all consents to true and save cookie on acceptAll', () => {
-    mockGetCookie.mockReturnValue(undefined)
-
     const { result } = renderHook(() => useConsent())
 
     act(() => {
@@ -55,8 +61,6 @@ describe('useConsent', () => {
   })
 
   it('should set only essential consents on acceptEssential', () => {
-    mockGetCookie.mockReturnValue(undefined)
-
     const { result } = renderHook(() => useConsent())
 
     act(() => {
@@ -77,8 +81,6 @@ describe('useConsent', () => {
   })
 
   it('should update partial preferences via updateConsent', () => {
-    mockGetCookie.mockReturnValue(undefined)
-
     const { result } = renderHook(() => useConsent())
 
     act(() => {
@@ -98,8 +100,6 @@ describe('useConsent', () => {
   })
 
   it('should force necessary to true even if updateConsent attempts to set it false', () => {
-    mockGetCookie.mockReturnValue(undefined)
-
     const { result } = renderHook(() => useConsent())
 
     act(() => {
@@ -112,8 +112,6 @@ describe('useConsent', () => {
   })
 
   it('should reset consent to defaults and remove cookie', () => {
-    mockGetCookie.mockReturnValue(undefined)
-
     const { result } = renderHook(() => useConsent())
 
     // Prime the hook state by accepting all first
@@ -138,7 +136,7 @@ describe('useConsent', () => {
 
   it('should restore state from an existing cookie', () => {
     const storedConsent = { necessary: true, analytics: true, marketing: false }
-    mockGetCookie.mockReturnValue(JSON.stringify(storedConsent))
+    mockCookieJar.set('cookie-consent', JSON.stringify(storedConsent))
 
     const { result } = renderHook(() => useConsent())
 
@@ -148,7 +146,7 @@ describe('useConsent', () => {
   })
 
   it('should fall back to defaults when cookie contains invalid JSON', () => {
-    mockGetCookie.mockReturnValue('not-valid-json')
+    mockCookieJar.set('cookie-consent', 'not-valid-json')
 
     const { result } = renderHook(() => useConsent())
 
@@ -161,13 +159,29 @@ describe('useConsent', () => {
     })
   })
 
-  it('skips SSR guard branches (not testable in jsdom)', () => {
-    // The hook checks `typeof document === 'undefined'` in several places
-    // (initialConsent, hasConsented, acceptAll, acceptEssential,
-    //  updateConsent, resetConsent) to safely return early during SSR.
-    // In jsdom, `typeof document` is always `'object'`, so these SSR guard
-    // branches can never be reached in the test environment.
-    // They are only exercised in a true Node.js SSR context.
-    expect(true).toBe(true)
+  it('renders defaults on the server even when a consent cookie exists', () => {
+    mockCookieJar.set(
+      'cookie-consent',
+      JSON.stringify({ necessary: true, analytics: true, marketing: false }),
+    )
+
+    function Probe() {
+      const { consent, hasConsented, showBanner } = useConsent()
+      return createElement('div', {
+        'data-necessary': String(consent.necessary),
+        'data-analytics': String(consent.analytics),
+        'data-marketing': String(consent.marketing),
+        'data-has-consented': String(hasConsented),
+        'data-show-banner': String(showBanner),
+      })
+    }
+
+    const html = renderToString(createElement(Probe))
+
+    expect(html).toContain('data-necessary="true"')
+    expect(html).toContain('data-analytics="false"')
+    expect(html).toContain('data-marketing="false"')
+    expect(html).toContain('data-has-consented="false"')
+    expect(html).toContain('data-show-banner="false"')
   })
 })

@@ -57,3 +57,6 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Dymund Lyfe — temporary home while being built (will move to its own repo)
+dymund-lyfe/

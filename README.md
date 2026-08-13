@@ -148,12 +148,12 @@ Ensure these are set in your deployment platform:
 
 ## API Routes
 
-| Endpoint                 | Purpose                   |
-| ------------------------ | ------------------------- |
-| `/api/auth/*`            | Authentication routes     |
-| `/api/payments/sumup/*`  | SumUp payment processing  |
-| `/api/newsletter/*`      | Newsletter management     |
-| `/api/images`            | Image upload handling     |
+| Endpoint                | Purpose                  |
+| ----------------------- | ------------------------ |
+| `/api/auth/*`           | Authentication routes    |
+| `/api/payments/sumup/*` | SumUp payment processing |
+| `/api/newsletter/*`     | Newsletter management    |
+| `/api/images`           | Image upload handling    |
 
 ---
 

@@ -41,5 +41,5 @@
     "**/*.mts",
     "lib/click-outside/has-parent.js"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dymund-lyfe"]
 }

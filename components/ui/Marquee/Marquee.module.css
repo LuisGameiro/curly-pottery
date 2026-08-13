@@ -2,29 +2,7 @@
 @reference "../../../globals.css";
 
 .root {
-  @apply w-full min-w-full relative flex flex-row items-center overflow-hidden;
+  @apply relative overflow-hidden;
   max-height: 320px;
-}
-
-.root > div {
-  max-height: 320px;
-  padding: 0;
-  margin: 0;
-}
-
-.root > div > * > *:nth-child(2) * {
-  max-height: 100%;
-}
-
-@keyframes marquee-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.autoScroll {
-  animation: marquee-scroll 30s linear infinite;
-}
-
-.paused {
-  animation-play-state: paused;
+  touch-action: pan-y;
 }

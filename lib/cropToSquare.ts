@@ -56,8 +56,14 @@ export async function cropToSquare(file: File): Promise<Blob> {
         // Crop center square and resize in a single draw
         ctx.drawImage(
           img,
-          sx, sy, minSide, minSide, // source: center square
-          0, 0, targetSize, targetSize, // dest: 1000x1000
+          sx,
+          sy,
+          minSide,
+          minSide, // source: center square
+          0,
+          0,
+          targetSize,
+          targetSize, // dest: 1000x1000
         )
 
         canvas.toBlob(
@@ -70,9 +76,7 @@ export async function cropToSquare(file: File): Promise<Blob> {
         )
       } catch (err) {
         reject(
-          err instanceof Error
-            ? err
-            : new Error('Failed to process image'),
+          err instanceof Error ? err : new Error('Failed to process image'),
         )
       }
     }

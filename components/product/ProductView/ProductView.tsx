@@ -117,7 +117,7 @@ const ProductView = ({ product, relatedProducts = [] }: ProductViewProps) => {
       </section>
 
       {relatedProducts.length > 0 && (
-        <section className="py-12 border-t border-border mt-12">
+        <section className="py-4 border-t border-border mt-12">
           <Text variant="sectionHeading" className="mb-8 text-center">
             You Might Also Like
           </Text>

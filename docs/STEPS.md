@@ -17,7 +17,7 @@ Search function implementation? Give suggestions from the website ? or should sh
 [ ] Newsletter Sign-up: Build a pop-up with the provided text ("I am working on new pieces... Enter your email below and stay close").
 [ ] Footer Update: Remove the curly pottery logo image and replace it with just the text/letters.
 [ ] Footer Socials: Add the Instagram logo linking to the page, add the title "Follow Along on Instagram," and feature a picture of a recent post.
-[ ] Footer Payments: Add payment provider logos (e.g., Klarna) to the footer.
+[ ] Footer Payments: Add payment provider logos (e.g., SumUp, Google Pay, Apple Pay) to the footer.
 
 🏡 Home Page
 [ ] Hero Section: Add a "View Shop" introduction image that links directly to the shop.

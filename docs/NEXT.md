@@ -34,7 +34,7 @@
 - [ ] **Newsletter Banner:** Add a "Be the first to know" subheader banner that triggers the newsletter sign-up pop-up.
 - [ ] **Footer Update:** Remove the curly pottery logo image and replace it with just the text/letters.
 - [ ] **Footer Socials:** Add the Instagram logo linking to the page, add the title "Follow Along on Instagram," and feature a picture of a recent post.
-- [ ] **Footer Payments:** Add payment provider logos (e.g., Klarna) to the footer.
+- [ ] **Footer Payments:** Add payment provider logos (e.g., SumUp, Google Pay, Apple Pay) to the footer.
 
 ### 📧 Pop-ups
 

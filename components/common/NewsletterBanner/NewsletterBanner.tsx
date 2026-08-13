@@ -1,43 +1,123 @@
 'use client'
 
 import { subscribeToNewsletter } from '@actions/newsletter.actions'
-import { useState, useTransition, useRef, useEffect } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  useTransition,
+} from 'react'
 import { toast } from 'sonner'
 import { X } from 'lucide-react'
 import { useUser } from '@lib/hooks/useUser'
 import { usePathname } from 'next/navigation'
+
+const DISMISSAL_WINDOW_MS = 30 * 24 * 60 * 60 * 1000 // 30 days
+const SUCCESS_DURATION_MS = 4000
+
+const STORAGE_KEYS = {
+  dismissedAt: 'newsletter-banner.dismissedAt',
+  subscribedAt: 'newsletter-banner.subscribedAt',
+} as const
+
+type BannerState = 'signup' | 'success' | 'dismissed'
+
+// Cached snapshot so useSyncExternalStore sees a stable value between renders.
+// Invalidated when another tab changes storage, or on unmount (so SPA
+// navigation re-reads the latest persisted state).
+let cachedStoredState: BannerState | null = null
+
+const readStoredState = (): BannerState => {
+  if (cachedStoredState) return cachedStoredState
+  if (typeof window === 'undefined') return 'signup'
+
+  try {
+    const subscribedAt =
+      Number(window.localStorage.getItem(STORAGE_KEYS.subscribedAt)) || 0
+    const dismissedAt =
+      Number(window.localStorage.getItem(STORAGE_KEYS.dismissedAt)) || 0
+
+    if (subscribedAt > 0) {
+      cachedStoredState = 'dismissed'
+    } else if (
+      dismissedAt > 0 &&
+      Date.now() - dismissedAt < DISMISSAL_WINDOW_MS
+    ) {
+      cachedStoredState = 'dismissed'
+    } else {
+      cachedStoredState = 'signup'
+    }
+  } catch {
+    // Storage unavailable (e.g. private mode) - just show the banner
+    cachedStoredState = 'signup'
+  }
+
+  return cachedStoredState
+}
+
+const subscribeToStorage = (callback: () => void) => {
+  const onStorage = () => {
+    cachedStoredState = null
+    callback()
+  }
+  window.addEventListener('storage', onStorage)
+  return () => window.removeEventListener('storage', onStorage)
+}
 
 const NewsletterBanner = () => {
   const pathname = usePathname()
   const { isAuthenticated, isLoading } = useUser()
   const [email, setEmail] = useState('')
   const [isPending, startTransition] = useTransition()
-  const [state, setState] = useState<'signup' | 'success' | 'dismissed'>(
-    'signup',
+  const [state, setState] = useState<BannerState>('signup')
+  const dismissTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Reads localStorage without hydration mismatches or a flash of the banner
+  // for returning visitors (useSyncExternalStore re-renders before paint).
+  const storedState = useSyncExternalStore(
+    subscribeToStorage,
+    readStoredState,
+    () => 'signup',
   )
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const isDismissed = state === 'dismissed' || storedState === 'dismissed'
 
   useEffect(() => {
     return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+      if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current)
+      // Re-read persisted state if this component mounts again (SPA navigation
+      // keeps modules alive, so the cached snapshot would otherwise go stale).
+      cachedStoredState = null
     }
   }, [])
 
-  if (isLoading) return null
-  if (isAuthenticated) return null
-  if (pathname?.startsWith('/about')) return null
-  if (state === 'dismissed') return null
+  const storeTimestamp = (key: string) => {
+    try {
+      window.localStorage.setItem(key, String(Date.now()))
+    } catch {
+      // Storage unavailable - the banner will simply show again next visit
+    }
+  }
 
-  if (state === 'success') {
-    return (
-      <section className="flex flex-row bg-secondary/10 border-b border-secondary/20 px-2">
-        <div className="relative w-full py-4 px-4 lg:px-8 flex flex-row items-center justify-center">
-          <span className="text-sm font-medium">
-            Thanks for subscribing! Stay tuned for new pieces.
-          </span>
-        </div>
-      </section>
+  const stopDismissTimer = () => {
+    if (dismissTimerRef.current) {
+      clearTimeout(dismissTimerRef.current)
+      dismissTimerRef.current = null
+    }
+  }
+
+  const startDismissTimer = () => {
+    stopDismissTimer()
+    dismissTimerRef.current = setTimeout(
+      () => setState('dismissed'),
+      SUCCESS_DURATION_MS,
     )
+  }
+
+  const handleDismiss = () => {
+    storeTimestamp(STORAGE_KEYS.dismissedAt)
+    stopDismissTimer()
+    setState('dismissed')
   }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -47,63 +127,103 @@ const NewsletterBanner = () => {
       const response = await subscribeToNewsletter({ email })
 
       if (!response.success) {
-        toast(response.message)
+        toast.error(
+          response.message === 'Validation error'
+            ? 'Please enter a valid email address.'
+            : response.message,
+        )
         return
       }
 
-      toast('You are on the list. New pieces will land in your inbox.')
+      // Persist immediately so the banner never nags an existing subscriber,
+      // even if they navigate away during the success state.
+      storeTimestamp(STORAGE_KEYS.subscribedAt)
       setEmail('')
       setState('success')
-      timeoutRef.current = setTimeout(() => setState('dismissed'), 3000)
+      startDismissTimer()
     })
+  }
+
+  if (isLoading) return null
+  if (isAuthenticated) return null
+  if (pathname?.startsWith('/about') || pathname?.startsWith('/checkout')) {
+    return null
+  }
+  if (isDismissed) return null
+
+  if (state === 'success') {
+    return (
+      <section
+        className="flex flex-row bg-secondary/10 border-b border-secondary/20 px-2"
+        aria-label="Newsletter signup confirmation"
+        onMouseEnter={stopDismissTimer}
+        onMouseLeave={startDismissTimer}
+      >
+        <div className="relative w-full py-4 px-4 lg:px-8 flex flex-row items-center justify-center">
+          <p role="status" className="text-sm font-medium text-center">
+            Thanks for subscribing! Stay tuned for new pieces.
+          </p>
+        </div>
+      </section>
+    )
   }
 
   return (
     <section
       className="relative bg-secondary/10 border-b border-secondary/20"
+      aria-label="Newsletter"
       data-testid="newsletter-banner"
     >
-      <div className="flex flex-col md:flex-row items-center justify-between gap-1 md:gap-2 py-2 pl-2 pr-14 md:pr-14">
-        <div className="flex flex-row md:contents items-center justify-around md:justify-normal gap-1 md:gap-2">
-          <div className="font-bold text-sm whitespace-nowrap shrink-0 md:order-1">
-            Be the first to know
-          </div>
-          <form
-            onSubmit={handleSubmit}
-            className="flex items-center gap-1 shrink min-w-0 md:order-3"
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-1.5 md:gap-6 py-2 md:py-2.5 pl-3 pr-12 sm:pl-4 md:pl-6 md:pr-16">
+        <div className="flex items-center gap-2 min-w-0">
+          <p
+            id="newsletter-banner-heading"
+            className="font-bold text-sm whitespace-nowrap shrink-0"
           >
-            <input
-              id="newsletter-banner-email"
-              type="email"
-              name="email"
-              required
-              autoComplete="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              placeholder="Enter your email"
-              className="w-20 sm:w-28 md:w-34 px-1 sm:px-2 text-sm bg-background rounded-md focus:outline-hidden focus:ring-1 focus:ring-secondary h-8 min-w-0"
-              data-testid="newsletter-banner-email-input"
-            />
-            <button
-              type="submit"
-              disabled={isPending}
-              className="px-2 sm:px-3 text-xs sm:text-sm bg-secondary text-background font-medium rounded-md hover:bg-secondary/90 transition-colors disabled:opacity-50 h-8 flex items-center justify-center whitespace-nowrap shrink-0"
-              data-testid="newsletter-banner-submit-btn"
-            >
-              {isPending ? 'Joining...' : 'Join'}
-            </button>
-          </form>
+            Be the first to know
+          </p>
+          <p className="hidden sm:block text-xs text-secondary/80">
+            New pieces are on the way — get notified when they drop.
+          </p>
         </div>
-        <span className="text-xs text-center md:text-left md:order-2">
-          I am working on new pieces. Enter your email and I&apos;ll let you
-          know when they drop.
-        </span>
+
+        <form
+          onSubmit={handleSubmit}
+          aria-labelledby="newsletter-banner-heading"
+          aria-busy={isPending}
+          className="flex items-center gap-2 w-full md:w-auto"
+        >
+          <input
+            id="newsletter-banner-email"
+            type="email"
+            name="email"
+            required
+            autoComplete="email"
+            enterKeyHint="go"
+            aria-label="Email address"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            placeholder="Enter your email"
+            disabled={isPending}
+            className="flex-1 min-w-0 h-10 md:w-44 md:flex-none px-3 text-base md:text-sm bg-background rounded-md focus:outline-hidden focus:ring-1 focus:ring-secondary"
+            data-testid="newsletter-banner-email-input"
+          />
+          <button
+            type="submit"
+            disabled={isPending}
+            className="h-10 px-4 shrink-0 text-sm bg-secondary text-background font-medium rounded-md hover:bg-secondary/90 transition-colors disabled:opacity-50 flex items-center justify-center whitespace-nowrap"
+            data-testid="newsletter-banner-submit-btn"
+          >
+            {isPending ? 'Subscribing...' : 'Notify me'}
+          </button>
+        </form>
       </div>
 
       <button
-        onClick={() => setState('dismissed')}
+        type="button"
+        onClick={handleDismiss}
         className="absolute right-1 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center hover:bg-secondary/10 transition-colors z-50 rounded-md"
-        aria-label="Close banner"
+        aria-label="Dismiss newsletter banner"
       >
         <X
           size={18}

@@ -27,12 +27,11 @@ const CategoriesCard = ({ cat, imgProps }: Props) => {
           alt={cat.name || 'Product Image'}
           height={250}
           width={250}
-          quality={85}
+          quality={100}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           style={{
             aspectRatio: '1/1',
             objectFit: 'cover',
-            paddingRight: '16px',
           }}
           {...imgProps}
           placeholder="blur"
@@ -40,7 +39,7 @@ const CategoriesCard = ({ cat, imgProps }: Props) => {
         />
       )}
 
-      <div className="absolute bottom-0 left-0 right-0 z-20  ">
+      <div className="absolute bottom-0 left-0 right-4 z-20">
         <p className="bg-background/60 text backdrop-blur-sm px-4 capitalize">
           {cat.name}
         </p>

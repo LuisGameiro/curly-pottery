@@ -26,14 +26,14 @@ const eslintConfig = defineConfig([
     },
   },
   globalIgnores([
-    // Default ignores of eslint-config-next:
-    'node_modules/**',
-    'generated/**',
-    '.next/**',
-    'out/**',
-    'build/**',
-    'coverage/**',
-    'next-env.d.ts',
+    // Default ignores of eslint-config-next (also covers nested projects):
+    '**/node_modules/**',
+    '**/generated/**',
+    '**/.next/**',
+    '**/out/**',
+    '**/build/**',
+    '**/coverage/**',
+    '**/next-env.d.ts',
   ]),
 ])
 

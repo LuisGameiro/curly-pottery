@@ -17,14 +17,24 @@ function crc32(buf) {
     }
   }
   let c = 0xffffffff
-  for (let i = 0; i < buf.length; i++) c = crcTable[(c ^ buf[i]) & 0xff] ^ (c >>> 8)
+  for (let i = 0; i < buf.length; i++)
+    c = crcTable[(c ^ buf[i]) & 0xff] ^ (c >>> 8)
   return (c ^ 0xffffffff) >>> 0
 }
 
 function parsePNG(buf) {
-  if (buf.length < 24 || buf.readUInt32BE(0) !== 0x89504e47) throw new Error('not a PNG')
+  if (buf.length < 24 || buf.readUInt32BE(0) !== 0x89504e47)
+    throw new Error('not a PNG')
   let off = 8
-  const meta = { width: 0, height: 0, bitDepth: 0, colorType: 0, plte: null, trns: null, idat: [] }
+  const meta = {
+    width: 0,
+    height: 0,
+    bitDepth: 0,
+    colorType: 0,
+    plte: null,
+    trns: null,
+    idat: [],
+  }
   while (off + 8 <= buf.length) {
     const len = buf.readUInt32BE(off)
     const type = buf.toString('ascii', off + 4, off + 8)
@@ -56,13 +66,22 @@ function unfilter(raw, bytesPerRow, height, bpp) {
       const b = y > 0 ? out[rowStart - bytesPerRow + x] : 0
       const c = x >= bpp && y > 0 ? out[rowStart - bytesPerRow + x - bpp] : 0
       switch (filter) {
-        case 0: break
-        case 1: v = (v + a) & 0xff; break
-        case 2: v = (v + b) & 0xff; break
-        case 3: v = (v + ((a + b) >> 1)) & 0xff; break
+        case 0:
+          break
+        case 1:
+          v = (v + a) & 0xff
+          break
+        case 2:
+          v = (v + b) & 0xff
+          break
+        case 3:
+          v = (v + ((a + b) >> 1)) & 0xff
+          break
         case 4: {
           const p = a + b - c
-          const pa = Math.abs(p - a), pb = Math.abs(p - b), pc = Math.abs(p - c)
+          const pa = Math.abs(p - a),
+            pb = Math.abs(p - b),
+            pc = Math.abs(p - c)
           const pr = pa <= pb && pa <= pc ? a : pb <= pc ? b : c
           v = (v + pr) & 0xff
           break
@@ -78,13 +97,18 @@ function decodePNG(buf) {
   const m = parsePNG(buf)
   const { width: w, height: h, bitDepth, colorType } = m
   const channels = [0, 1, 3, 1, 2, 0, 4][colorType]
-  if (channels === undefined) throw new Error('unsupported colorType ' + colorType)
+  if (channels === undefined)
+    throw new Error('unsupported colorType ' + colorType)
   const bpp = Math.max(1, Math.ceil((channels * bitDepth) / 8))
   const bytesPerRow = Math.ceil((w * channels * bitDepth) / 8)
   const rows = unfilter(m.raw, bytesPerRow, h, bpp)
   const rgba = Buffer.alloc(w * h * 4)
   const scale = (v) =>
-    bitDepth === 16 ? v >> 8 : bitDepth < 8 ? Math.round((v * 255) / ((1 << bitDepth) - 1)) : v
+    bitDepth === 16
+      ? v >> 8
+      : bitDepth < 8
+        ? Math.round((v * 255) / ((1 << bitDepth) - 1))
+        : v
   let bitPos = 0
   for (let y = 0; y < h; y++) {
     const rowStart = y * bytesPerRow
@@ -93,27 +117,51 @@ function decodePNG(buf) {
       for (let c = 0; c < channels; c++) {
         let val = 0
         for (let b = 0; b < bitDepth; b++) {
-          val = (val << 1) | ((rows[rowStart + (bitPos >> 3)] >> (7 - (bitPos & 7))) & 1)
+          val =
+            (val << 1) |
+            ((rows[rowStart + (bitPos >> 3)] >> (7 - (bitPos & 7))) & 1)
           bitPos++
         }
         s.push(val)
       }
-      let R = 0, G = 0, B = 0, A = 255
+      let R = 0,
+        G = 0,
+        B = 0,
+        A = 255
       switch (colorType) {
-        case 0: R = G = B = scale(s[0]); break
-        case 2: R = scale(s[0]); G = scale(s[1]); B = scale(s[2]); break
+        case 0:
+          R = G = B = scale(s[0])
+          break
+        case 2:
+          R = scale(s[0])
+          G = scale(s[1])
+          B = scale(s[2])
+          break
         case 3: {
           const idx = scale(s[0])
           const po = idx * 3
-          R = m.plte[po]; G = m.plte[po + 1]; B = m.plte[po + 2]
+          R = m.plte[po]
+          G = m.plte[po + 1]
+          B = m.plte[po + 2]
           if (m.trns && m.trns[idx] !== undefined) A = m.trns[idx]
           break
         }
-        case 4: R = G = B = scale(s[0]); A = scale(s[1]); break
-        case 6: R = scale(s[0]); G = scale(s[1]); B = scale(s[2]); A = scale(s[3]); break
+        case 4:
+          R = G = B = scale(s[0])
+          A = scale(s[1])
+          break
+        case 6:
+          R = scale(s[0])
+          G = scale(s[1])
+          B = scale(s[2])
+          A = scale(s[3])
+          break
       }
       const o = (y * w + x) * 4
-      rgba[o] = R; rgba[o + 1] = G; rgba[o + 2] = B; rgba[o + 3] = A
+      rgba[o] = R
+      rgba[o + 1] = G
+      rgba[o + 2] = B
+      rgba[o + 3] = A
     }
   }
   return { width: w, height: h, rgba }
@@ -124,7 +172,11 @@ function encodePNG(width, height, rgba, filter = 0) {
   const ihdr = Buffer.alloc(13)
   ihdr.writeUInt32BE(width, 0)
   ihdr.writeUInt32BE(height, 4)
-  ihdr[8] = 8; ihdr[9] = 6; ihdr[10] = 0; ihdr[11] = 0; ihdr[12] = 0
+  ihdr[8] = 8
+  ihdr[9] = 6
+  ihdr[10] = 0
+  ihdr[11] = 0
+  ihdr[12] = 0
   const stride = width * 4
   const raw = Buffer.alloc((stride + 1) * height)
   for (let y = 0; y < height; y++) {
@@ -140,7 +192,12 @@ function encodePNG(width, height, rgba, filter = 0) {
     crc.writeUInt32BE(crc32(td))
     return Buffer.concat([len, td, crc])
   }
-  return Buffer.concat([sig, chunk('IHDR', ihdr), chunk('IDAT', idat), chunk('IEND', Buffer.alloc(0))])
+  return Buffer.concat([
+    sig,
+    chunk('IHDR', ihdr),
+    chunk('IDAT', idat),
+    chunk('IEND', Buffer.alloc(0)),
+  ])
 }
 
 function writeICO(path, entries) {
@@ -161,7 +218,10 @@ function writeICO(path, entries) {
     dir.writeUInt32LE(offset, i * 16 + 12)
     offset += e.data.length
   })
-  fs.writeFileSync(path, Buffer.concat([header, dir, ...entries.map((e) => e.data)]))
+  fs.writeFileSync(
+    path,
+    Buffer.concat([header, dir, ...entries.map((e) => e.data)]),
+  )
 }
 
 function resizeBilinear(src, sw, sh, dw, dh) {
@@ -202,7 +262,10 @@ function topColors(rgba, w, h, n = 5) {
   return [...counts.entries()]
     .sort((x, y) => y[1] - x[1])
     .slice(0, n)
-    .map(([k, c]) => `#${k.toString(16).padStart(6, '0')} ${((100 * c) / total).toFixed(1)}%`)
+    .map(
+      ([k, c]) =>
+        `#${k.toString(16).padStart(6, '0')} ${((100 * c) / total).toFixed(1)}%`,
+    )
 }
 
 // ---------- analysis ----------
@@ -210,43 +273,74 @@ const LOGO = 'public/Curly Logo Final 1.png'
 const img = decodePNG(fs.readFileSync(LOGO))
 const { width: W, height: H, rgba } = img
 
-let opaque = 0, semi = 0, trans = 0
+let opaque = 0,
+  semi = 0,
+  trans = 0
 for (let i = 0; i < W * H; i++) {
   const a = rgba[i * 4 + 3]
   if (a === 255) opaque++
   else if (a === 0) trans++
   else semi++
 }
-console.log(`logo ${W}x${H}  alpha: opaque=${opaque} semi=${semi} trans=${trans}`)
+console.log(
+  `logo ${W}x${H}  alpha: opaque=${opaque} semi=${semi} trans=${trans}`,
+)
 const corner = (x, y) => {
   const o = (y * W + x) * 4
   return [rgba[o], rgba[o + 1], rgba[o + 2], rgba[o + 3]]
 }
-console.log('corners TL,TR,BL,BR:', JSON.stringify([corner(0, 0), corner(W - 1, 0), corner(0, H - 1), corner(W - 1, H - 1)]))
+console.log(
+  'corners TL,TR,BL,BR:',
+  JSON.stringify([
+    corner(0, 0),
+    corner(W - 1, 0),
+    corner(0, H - 1),
+    corner(W - 1, H - 1),
+  ]),
+)
 
 // background = median corner color (use alpha too)
-const cs = [corner(0, 0), corner(W - 1, 0), corner(0, H - 1), corner(W - 1, H - 1)]
-const bg = cs.map((_, ci) => Math.round(cs.map((c) => c[ci]).sort((a, b) => a - b)[1]))
+const cs = [
+  corner(0, 0),
+  corner(W - 1, 0),
+  corner(0, H - 1),
+  corner(W - 1, H - 1),
+]
+const bg = cs.map((_, ci) =>
+  Math.round(cs.map((c) => c[ci]).sort((a, b) => a - b)[1]),
+)
 
 // content bbox: pixels that are actually visible (alpha above noise)
-const TOL = 28
-let minX = W, minY = H, maxX = -1, maxY = -1
+let minX = W,
+  minY = H,
+  maxX = -1,
+  maxY = -1
 for (let y = 0; y < H; y++) {
   for (let x = 0; x < W; x++) {
     const o = (y * W + x) * 4
     const a = rgba[o + 3]
     if (a <= 32) continue
-    minX = Math.min(minX, x); minY = Math.min(minY, y); maxX = Math.max(maxX, x); maxY = Math.max(maxY, y)
+    minX = Math.min(minX, x)
+    minY = Math.min(minY, y)
+    maxX = Math.max(maxX, x)
+    maxY = Math.max(maxY, y)
   }
 }
-console.log(`bg = #${bg[0].toString(16).padStart(2, '0')}${bg[1].toString(16).padStart(2, '0')}${bg[2].toString(16).padStart(2, '0')} a=${bg[3]}`)
-console.log(`content bbox: x ${minX}..${maxX}  y ${minY}..${maxY}  (${maxX - minX + 1}x${maxY - minY + 1})`)
+console.log(
+  `bg = #${bg[0].toString(16).padStart(2, '0')}${bg[1].toString(16).padStart(2, '0')}${bg[2].toString(16).padStart(2, '0')} a=${bg[3]}`,
+)
+console.log(
+  `content bbox: x ${minX}..${maxX}  y ${minY}..${maxY}  (${maxX - minX + 1}x${maxY - minY + 1})`,
+)
 
 // ASCII previews at favicon-ish sizes
 function ascii(w, h) {
   const sc = resizeBilinear(rgba, W, H, w, h)
   const char = (o) => {
-    const r = sc[o], g = sc[o + 1], b = sc[o + 2], a = sc[o + 3]
+    const r = sc[o],
+      g = sc[o + 1],
+      b = sc[o + 2],
+      a = sc[o + 3]
     if (a < 128) return ' '
     if (b > 140 && b > r + 60) return 'B' // blue
     if (r > 230 && g > 200 && b < 180) return 'Y' // yellow
@@ -266,12 +360,23 @@ if (process.argv.includes('--inspect')) {
   const cropW0 = maxX - minX + 1
   const cropH0 = maxY - minY + 1
   const crop0 = Buffer.alloc(cropW0 * cropH0 * 4)
-  for (let y = 0; y < cropH0; y++) rgba.copy(crop0, y * cropW0 * 4, ((minY + y) * W + minX) * 4, ((minY + y) * W + minX) * 4 + cropW0 * 4)
-  console.log(`content bbox: x ${minX}..${maxX}  y ${minY}..${maxY}  (${cropW0}x${cropH0})`)
+  for (let y = 0; y < cropH0; y++)
+    rgba.copy(
+      crop0,
+      y * cropW0 * 4,
+      ((minY + y) * W + minX) * 4,
+      ((minY + y) * W + minX) * 4 + cropW0 * 4,
+    )
+  console.log(
+    `content bbox: x ${minX}..${maxX}  y ${minY}..${maxY}  (${cropW0}x${cropH0})`,
+  )
   console.log('\n--- logo ASCII @ 60x38 ---\n' + ascii(60, 38))
   const sc = resizeBilinear(crop0, cropW0, cropH0, 16, 16)
   const char = (o) => {
-    const r = sc[o], g = sc[o + 1], b = sc[o + 2], a = sc[o + 3]
+    const r = sc[o],
+      g = sc[o + 1],
+      b = sc[o + 2],
+      a = sc[o + 3]
     if (a < 128) return ' '
     if (b > 140 && b > r + 60) return 'B'
     if (r > 230 && g > 200 && b < 180) return 'Y'
@@ -293,7 +398,13 @@ if (process.argv.includes('--inspect')) {
 const cropW = maxX - minX + 1
 const cropH = maxY - minY + 1
 const crop = Buffer.alloc(cropW * cropH * 4)
-for (let y = 0; y < cropH; y++) rgba.copy(crop, y * cropW * 4, ((minY + y) * W + minX) * 4, ((minY + y) * W + minX) * 4 + cropW * 4)
+for (let y = 0; y < cropH; y++)
+  rgba.copy(
+    crop,
+    y * cropW * 4,
+    ((minY + y) * W + minX) * 4,
+    ((minY + y) * W + minX) * 4 + cropW * 4,
+  )
 
 const padOpaque = bg[3] >= 250
 const pad = padOpaque ? [bg[0], bg[1], bg[2], 255] : [0, 0, 0, 0]
@@ -307,7 +418,10 @@ function squareWithLogo(size, marginFrac = 0.05) {
   const sc = resizeBilinear(crop, cropW, cropH, dw, dh)
   const canvas = Buffer.alloc(size * size * 4)
   for (let i = 0; i < size * size; i++) {
-    canvas[i * 4] = pad[0]; canvas[i * 4 + 1] = pad[1]; canvas[i * 4 + 2] = pad[2]; canvas[i * 4 + 3] = pad[3]
+    canvas[i * 4] = pad[0]
+    canvas[i * 4 + 1] = pad[1]
+    canvas[i * 4 + 2] = pad[2]
+    canvas[i * 4 + 3] = pad[3]
   }
   const ox = Math.round((size - dw) / 2)
   const oy = Math.round((size - dh) / 2)
@@ -318,7 +432,10 @@ function squareWithLogo(size, marginFrac = 0.05) {
       const sa = sc[s + 3]
       if (sa === 0) continue
       if (sa === 255) {
-        canvas[d] = sc[s]; canvas[d + 1] = sc[s + 1]; canvas[d + 2] = sc[s + 2]; canvas[d + 3] = 255
+        canvas[d] = sc[s]
+        canvas[d + 1] = sc[s + 1]
+        canvas[d + 2] = sc[s + 2]
+        canvas[d + 3] = 255
       } else {
         const f = sa / 255
         canvas[d] = Math.round(sc[s] * f + canvas[d] * (1 - f))
@@ -331,19 +448,37 @@ function squareWithLogo(size, marginFrac = 0.05) {
   return canvas
 }
 
-console.log(`\nBuilding favicon from logo crop ${cropW}x${cropH}, pad=#${pad[0].toString(16).padStart(2, '0')}${pad[1].toString(16).padStart(2, '0')}${pad[2].toString(16).padStart(2, '0')} (a=${pad[3]})`)
+console.log(
+  `\nBuilding favicon from logo crop ${cropW}x${cropH}, pad=#${pad[0].toString(16).padStart(2, '0')}${pad[1].toString(16).padStart(2, '0')}${pad[2].toString(16).padStart(2, '0')} (a=${pad[3]})`,
+)
 const icoSizes = [16, 32, 48, 256]
-const entries = icoSizes.map((s) => ({ w: s, h: s, data: encodePNG(s, s, squareWithLogo(s)) }))
+const entries = icoSizes.map((s) => ({
+  w: s,
+  h: s,
+  data: encodePNG(s, s, squareWithLogo(s)),
+}))
 writeICO('public/favicon.ico', entries)
-console.log('wrote public/favicon.ico:', entries.map((e) => `${e.w}x${e.h}`).join(', '))
+console.log(
+  'wrote public/favicon.ico:',
+  entries.map((e) => `${e.w}x${e.h}`).join(', '),
+)
 
 for (const size of [192, 512]) {
-  fs.writeFileSync(`public/icon-${size}x${size}.png`, encodePNG(size, size, squareWithLogo(size)))
+  fs.writeFileSync(
+    `public/icon-${size}x${size}.png`,
+    encodePNG(size, size, squareWithLogo(size)),
+  )
   console.log(`wrote public/icon-${size}x${size}.png`)
 }
 
 // verify
-for (const [p, data] of [['public/favicon.ico (16px)', entries[0].data], ['public/icon-192x192.png', fs.readFileSync('public/icon-192x192.png')], ['public/icon-512x512.png', fs.readFileSync('public/icon-512x512.png')]]) {
+for (const [p, data] of [
+  ['public/favicon.ico (16px)', entries[0].data],
+  ['public/icon-192x192.png', fs.readFileSync('public/icon-192x192.png')],
+  ['public/icon-512x512.png', fs.readFileSync('public/icon-512x512.png')],
+]) {
   const d = decodePNG(data)
-  console.log(`  ${p}: ${d.width}x${d.height} colors: ${topColors(d.rgba, d.width, d.height, 3).join(', ')}`)
+  console.log(
+    `  ${p}: ${d.width}x${d.height} colors: ${topColors(d.rgba, d.width, d.height, 3).join(', ')}`,
+  )
 }

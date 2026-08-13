@@ -335,7 +335,7 @@ npm run format:fix # auto-fix prettier issues
 - Never commit `.env` (contains secrets)
 - Use `.env.local.example` as template for required env vars
 - Required secrets: `DATABASE_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, `RESEND_API_KEY`
-- Optional: Klarna credentials, SumUp credentials, Google OAuth
+- Optional: SumUp credentials, Google OAuth
 
 ---
 
