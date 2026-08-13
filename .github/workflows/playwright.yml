@@ -8,18 +8,26 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    env:
+      DB_DATABASE_URL: ${{ secrets.DB_DATABASE_URL }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: lts/*
       - name: Install dependencies
         run: npm ci
+      - name: Check required secrets
+        run: |
+          if [ -z "$DB_DATABASE_URL" ]; then
+            echo "::error::Missing DB_DATABASE_URL secret — the app and the e2e seed script require a test database. Add it in repo Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Playwright tests
         run: npx playwright test
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
