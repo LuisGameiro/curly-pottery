@@ -174,15 +174,15 @@ const NewsletterBanner = () => {
       aria-label="Newsletter"
       data-testid="newsletter-banner"
     >
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-1.5 md:gap-6 py-2 md:py-2.5 pl-3 pr-12 sm:pl-4 md:pl-6 md:pr-16">
+      <div className="flex flex-col lg:flex-row lg:items-center md:justify-between gap-2 lg:gap-4 py-2 pl-4 lg:pl-8 pr-16 ">
         <div className="flex items-center gap-2 min-w-0">
           <p
             id="newsletter-banner-heading"
-            className="font-bold text-sm whitespace-nowrap shrink-0"
+            className="font-bold text whitespace-nowrap shrink-0"
           >
             Be the first to know
           </p>
-          <p className="hidden sm:block text-xs text-secondary/80">
+          <p className="hidden sm:block text text-secondary/80">
             New pieces are on the way — get notified when they drop.
           </p>
         </div>
@@ -205,13 +205,13 @@ const NewsletterBanner = () => {
             onChange={(event) => setEmail(event.target.value)}
             placeholder="Enter your email"
             disabled={isPending}
-            className="flex-1 min-w-0 h-10 md:w-44 md:flex-none px-3 text-base md:text-sm bg-background rounded-md focus:outline-hidden focus:ring-1 focus:ring-secondary"
+            className="flex-1 min-w-0 h-8 md:w-64 md:flex-none px-4 text-base md:text-sm bg-background rounded-md focus:outline-hidden focus:ring-1 focus:ring-secondary"
             data-testid="newsletter-banner-email-input"
           />
           <button
             type="submit"
             disabled={isPending}
-            className="h-10 px-4 shrink-0 text-sm bg-secondary text-background font-medium rounded-md hover:bg-secondary/90 transition-colors disabled:opacity-50 flex items-center justify-center whitespace-nowrap"
+            className="h-8 px-4 shrink-0 text-sm bg-secondary text-background font-medium rounded-md hover:bg-secondary/90 transition-colors disabled:opacity-50 flex items-center justify-center whitespace-nowrap"
             data-testid="newsletter-banner-submit-btn"
           >
             {isPending ? 'Subscribing...' : 'Notify me'}
@@ -222,11 +222,11 @@ const NewsletterBanner = () => {
       <button
         type="button"
         onClick={handleDismiss}
-        className="absolute right-1 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center hover:bg-secondary/10 transition-colors z-50 rounded-md"
+        className="absolute right-2 top-4 -translate-y-1/2 w-11 h-11 flex items-center justify-center hover:bg-secondary/10 transition-colors z-50 rounded-md"
         aria-label="Dismiss newsletter banner"
       >
         <X
-          size={18}
+          size={20}
           className="text-secondary/60 hover:text-secondary transition-colors"
         />
       </button>

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import I18nWidget from '../I18nWidget'
-import ThemeSwitcher from '@components/ui/ThemeSwitcher'
+import ThemeSwitcher from '@components/ui/Logo/ThemeSwitcher'
 import Image from 'next/image'
 import s from './Footer.module.css'
 import instagramImage from '@public/instagram.jpg'

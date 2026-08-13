@@ -258,7 +258,6 @@ const Marquee = ({ children = [], className = 'mx-8' }: MarqueeProps) => {
       style={{
         height: height || undefined,
         cursor: cursor,
-
       }}
       data-testid="categories-marquee"
       onMouseEnter={() => setIsHovered(true)}
@@ -270,10 +269,7 @@ const Marquee = ({ children = [], className = 'mx-8' }: MarqueeProps) => {
       onClickCapture={handleClickCapture}
     >
       {!measured && (
-        <div
-          aria-hidden
-          className="invisible absolute left-0 top-0 flex "
-        >
+        <div aria-hidden className="invisible absolute left-0 top-0 flex ">
           {childArray.map((child, i) => (
             <div
               key={i}

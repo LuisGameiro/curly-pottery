@@ -52,18 +52,16 @@ export default async function Home() {
       </Grid>
 
       <section className="pb-4">
-
-      <div className="px-10 my-8">
-        <h2 className="text-2xl font-bold mb-1">Explore Categories</h2>
-        <p className="text-sm">Find the perfect piece for your home</p>
-      </div>
-      <Marquee >
-        {categories.map((cat) => (
-          <CategoriesCard key={cat.id} cat={cat} />
-        ))}
+        <div className="px-10 my-8">
+          <h2 className="text-2xl font-bold mb-1">Explore Categories</h2>
+          <p className="text-sm">Find the perfect piece for your home</p>
+        </div>
+        <Marquee>
+          {categories.map((cat) => (
+            <CategoriesCard key={cat.id} cat={cat} />
+          ))}
         </Marquee>
       </section>
-
     </main>
   )
 }

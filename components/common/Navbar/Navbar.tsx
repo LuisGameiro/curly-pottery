@@ -33,7 +33,7 @@ const Navbar = () => {
             </Link>
 
             <nav
-              className="hidden ml-10 space-x-8 sm:flex items-center"
+              className="hidden ml-10 space-x-8 md:flex items-center"
               aria-label="Main navigation"
             >
               {navBarLinks.map((link) => (
@@ -60,10 +60,8 @@ const Navbar = () => {
             </nav>
           </div>
 
-          <div className="flex items-center gap-6">
-            <div className="hidden md:block">
-              <SearchBar />
-            </div>
+          <div className="flex items-center gap-4">
+            <SearchBar />
             <UserNav />
           </div>
         </div>

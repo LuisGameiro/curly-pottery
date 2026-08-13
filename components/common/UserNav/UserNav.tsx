@@ -23,11 +23,11 @@ export default function UserNav({ className }: UserNavProps) {
 
   return (
     <nav
-      className={cn('relative flex items-center', className)}
+      className={cn('relative flex items-center mr-8', className)}
       data-testid="user-nav"
     >
       <ul className="flex flex-row items-center justify-items-end h-full">
-        <li className="ml-0 flex items-center relative flex-row items-center gap-6 md:block hidden">
+        <li className="ml-0 items-center relative flex-row gap-4 md:block hidden">
           <Button
             variant="naked"
             type="button"
@@ -41,7 +41,7 @@ export default function UserNav({ className }: UserNavProps) {
             <User size={24} className="text-secondary" />
           </Button>
         </li>
-        <li className="ml-6 flex items-center relative">
+        <li className="flex items-center relative">
           {isAuthenticated && (
             <Button
               variant="naked"
@@ -54,7 +54,7 @@ export default function UserNav({ className }: UserNavProps) {
             </Button>
           )}
         </li>
-        <li className="ml-6 flex items-center relative">
+        <li className="flex items-center relative">
           <Button
             variant="naked"
             type="button"
@@ -71,7 +71,7 @@ export default function UserNav({ className }: UserNavProps) {
             )}
           </Button>
         </li>
-        <li className="p-2 rounded-lg flex md:hidden ml-6 text-on-primary hover:text-on-secondary hover:bg-secondary/20 focus:outline-2 focus:outline-offset-2 focus:outline-secondary">
+        <li className="p-2 rounded-lg flex md:hidden text-on-primary hover:text-on-secondary hover:bg-secondary/20 focus:outline-2 focus:outline-offset-2 focus:outline-secondary">
           <Dropdown modal={false}>
             <DropdownTrigger
               id="user-nav-mobile-trigger"
