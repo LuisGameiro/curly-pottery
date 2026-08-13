@@ -51,8 +51,9 @@ export default function FeatureBar({ className }: FeatureBarProps) {
             <div className="flex flex-row flex-wrap gap-1.5 sm:gap-2 shrink-0">
               <Button
                 type="button"
-                variant="flat"
-                className="bg-transparent border border-white hover:bg-white/10 text-xs sm:text-sm px-3 py-1.5 sm:px-5 sm:py-5"
+                variant="secondary"
+                color="secondary"
+                className="text-xs sm:text-sm"
                 onClick={() => setIsModalOpen(true)}
                 data-testid="cookie-preferences-btn"
               >
@@ -60,7 +61,7 @@ export default function FeatureBar({ className }: FeatureBarProps) {
               </Button>
               <Button
                 type="button"
-                variant="slim"
+                variant="secondary"
                 className="text-xs sm:text-sm"
                 onClick={handleAcceptEssential}
                 data-testid="cookie-essential-only-btn"
@@ -69,7 +70,7 @@ export default function FeatureBar({ className }: FeatureBarProps) {
               </Button>
               <Button
                 type="button"
-                variant="slim"
+                variant="secondary"
                 className="text-xs sm:text-sm"
                 onClick={handleAcceptAll}
                 data-testid="cookie-accept-all-btn"

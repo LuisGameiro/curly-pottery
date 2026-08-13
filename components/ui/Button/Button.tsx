@@ -11,7 +11,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string
   variant?: 'flat' | 'slim' | 'ghost' | 'naked' | 'secondary'
   size?: 'sm' | 'md' | 'lg'
-  color?: 'primary' | 'danger' | 'success' | 'warning'
+  color?: 'primary' | 'danger' | 'success' | 'warning' | 'secondary'
   active?: boolean
   type?: 'submit' | 'reset' | 'button'
   width?: string | number
@@ -43,11 +43,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         [s.ghost]: variant === 'ghost',
         [s.slim]: variant === 'slim',
         [s.naked]: variant === 'naked',
-        [s.secondary]: variant === 'secondary',
         // Map sizes
         [s.sm]: size === 'sm',
         [s.lg]: size === 'lg',
         // Map colors
+        [s.secondary]: color === 'secondary',
         [s.danger]: color === 'danger',
         [s.success]: color === 'success',
         [s.warning]: color === 'warning',

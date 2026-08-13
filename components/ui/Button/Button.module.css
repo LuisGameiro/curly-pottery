@@ -14,6 +14,14 @@
   @apply shadow-outline-normal outline-none;
 }
 
+.secondary {
+  @apply bg-secondary text-background;
+}
+
+.secondary:hover {
+  @apply bg-secondary/90;
+}
+
 .root[data-active] {
   @apply bg-primary;
 }
