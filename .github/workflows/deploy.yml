@@ -47,8 +47,8 @@ jobs:
             exit 1
           fi
 
-      - name: Verify Vercel authentication
-        run: vercel whoami --token=${{ secrets.VERCEL_TOKEN }}
+      # Note: do NOT use `vercel whoami` here. Project-scoped tokens (vcp_...)
+      # have no user identity and whoami always fails for them.
 
       - name: Pull Vercel project settings
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}

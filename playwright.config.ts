@@ -78,17 +78,22 @@ export default defineConfig({
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
-    /* Inject the test database URL into the dev server so it uses the test DB.
-       Only set DB_DATABASE_URL when a test-specific env var is provided;
-       otherwise let the dev server pick up the .env file value. */
-    env:
-      process.env.DB_DATABASE_URL || process.env.DATABASE_TEST_URL
+    /* NEXT_PUBLIC_APP_URL is required at request time (SEO metadata, robots,
+       sitemap), but .env files are gitignored so CI has no .env. Inject it so
+       the dev server always has it; keep matching baseURL above. */
+    env: {
+      NEXT_PUBLIC_APP_URL: 'http://localhost:3000',
+      /* Inject the test database URL into the dev server so it uses the test DB.
+         Only set DB_DATABASE_URL when a test-specific env var is provided;
+         otherwise let the dev server pick up the .env file value. */
+      ...(process.env.DB_DATABASE_URL || process.env.DATABASE_TEST_URL
         ? {
             DB_DATABASE_URL:
               process.env.DB_DATABASE_URL ||
               process.env.DATABASE_TEST_URL ||
               '',
           }
-        : undefined,
+        : {}),
+    },
   },
 })
