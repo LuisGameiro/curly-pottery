@@ -17,6 +17,19 @@ jest.mock('next/cache', () => ({
   revalidateTag: jest.fn(),
 }))
 
+jest.mock('next/headers', () => ({
+  headers: jest.fn().mockResolvedValue({
+    get: jest.fn().mockReturnValue('127.0.0.1'),
+  }),
+}))
+
+jest.mock('@lib/rate-limit', () => ({
+  checkRateLimit: jest
+    .fn()
+    .mockResolvedValue({ success: true, remaining: 999, resetIn: 0 }),
+  getRateLimitKey: jest.fn().mockReturnValue('test-key'),
+}))
+
 import { auth } from '@/auth'
 
 describe('getAllCustomers', () => {
@@ -76,7 +89,7 @@ describe('getAllCustomers', () => {
     const result = await getAllCustomers()
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database connection failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toEqual(mockError)
   })
 
@@ -120,7 +133,7 @@ describe('updateNotes', () => {
     const result = await updateNotes('1', 'Updated notes')
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database update failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toEqual(mockError)
   })
 
@@ -226,7 +239,7 @@ describe('updateUser', () => {
     })
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database update failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toEqual(mockError)
   })
 
@@ -297,8 +310,9 @@ describe('registerUser', () => {
 
     const result = await registerUser(formData)
 
-    expect(result.success).toBe(false)
-    expect(result.message).toBe('User already exists')
+    // Neutral response — never confirm whether an account exists.
+    expect(result.success).toBe(true)
+    expect(result.message).toBe('Registration successful. Please sign in.')
     expect(prisma.user.create).not.toHaveBeenCalled()
   })
 

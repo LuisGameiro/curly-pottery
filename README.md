@@ -80,6 +80,21 @@ GA_MEASUREMENT_ID=G-XXXXXXXXXX
 BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
 ```
 
+#### Platform Usage Widget (Optional)
+
+The admin dashboard “Platform Data” widget shows live usage for Blob, Neon and
+KV. Blob and KV usage need no extra config (they use `BLOB_READ_WRITE_TOKEN`
+and the linked KV store). To also show the Neon plan limit, region and PG
+version, add:
+
+```env
+NEON_API_KEY=your_neon_api_key
+NEON_PROJECT_ID=your_neon_project_id
+```
+
+`NEON_API_KEY` is created at console.neon.tech → Account → API Keys, and
+`NEON_PROJECT_ID` is the id shown in the Neon console URL.
+
 ---
 
 ## Features

@@ -9,6 +9,7 @@ import { Suspense } from 'react'
 import { FAVOURITES_PAGE_SIZE } from '@lib/pagination'
 import Link from 'next/link'
 import Loading from '../../loading'
+import { redirect } from 'next/navigation'
 
 export const metadata = constructMetadata({
   title: 'Your Favourites',
@@ -26,7 +27,7 @@ export default async function FavouritesPage({
   const user = session?.user
 
   if (!user) {
-    throw new Error('User not found')
+    redirect('/auth/login')
   }
 
   const result = await getFavouritesWithProductsAction({

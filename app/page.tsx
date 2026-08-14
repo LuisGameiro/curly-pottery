@@ -15,8 +15,10 @@ export const metadata = constructMetadata({
 })
 
 export default async function Home() {
-  const responseProducts = await getRandomProducts(10)
-  const responseCategories = await getAllCategories()
+  const [responseProducts, responseCategories] = await Promise.all([
+    getRandomProducts(10),
+    getAllCategories(),
+  ])
 
   if (!responseProducts.success || !responseCategories.success)
     throw new Error(
@@ -37,7 +39,7 @@ export default async function Home() {
         </div>
 
         <Grid variant="filled" layout="B">
-          {products.map((product: Product) => (
+          {products.map((product: Product, index: number) => (
             <ProductCard
               key={product.id}
               product={product}
@@ -46,7 +48,8 @@ export default async function Home() {
                 alt: product.name,
                 width: 1200,
                 height: 1200,
-                priority: true,
+                // Only the first row is above the fold — eager-load just those.
+                priority: index < 3,
               }}
             />
           ))}

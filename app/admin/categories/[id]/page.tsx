@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { getCategoryById } from '@lib/data/categories'
 import CategoryClient from '../../../../components/admin/CategoryClient'
-import notFound from 'app/not-found'
+import { notFound } from 'next/navigation'
 import constructMetadata from '@components/common/SEO/SEO'
 
 export const metadata = constructMetadata({

@@ -9,10 +9,11 @@ let prisma: PrismaClient | null = null
  */
 export function getTestDb(): PrismaClient {
   if (!prisma) {
-    const databaseUrl = process.env.DB_DATABASE_URL
+    const databaseUrl =
+      process.env.DATABASE_TEST_URL || process.env.DB_DATABASE_URL
     if (!databaseUrl) {
       throw new Error(
-        'DB_DATABASE_URL is not set. Configure it in playwright.config.ts webServer env.',
+        'DATABASE_TEST_URL is not set. Configure it in playwright.config.ts webServer env.',
       )
     }
     const adapter = new PrismaNeon({ connectionString: databaseUrl })

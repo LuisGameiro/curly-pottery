@@ -29,24 +29,34 @@ export default function LoginForm() {
     const email = target.email.value
     const password = target.password.value
 
-    const result = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    })
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      })
 
-    if (result?.error) {
-      setError('Invalid email or password')
+      if (result?.error) {
+        setError('Invalid email or password')
+      } else {
+        router.push(redirectTo)
+        router.refresh()
+      }
+    } catch (err) {
+      console.error('Sign in failed', err)
+      setError('Something went wrong. Please try again.')
+    } finally {
       setLoading(false)
-    } else {
-      setLoading(false)
-      router.push(redirectTo)
-      router.refresh()
     }
   }
 
-  const handleGoogleLogin = () => {
-    signIn('google', { callbackUrl: redirectTo })
+  const handleGoogleLogin = async () => {
+    try {
+      await signIn('google', { callbackUrl: redirectTo })
+    } catch (err) {
+      console.error('Google sign in failed', err)
+      setError('Google sign in failed. Please try again.')
+    }
   }
 
   return (

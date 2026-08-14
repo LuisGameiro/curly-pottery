@@ -1,7 +1,7 @@
 'use client'
 
 import { Container, Text } from '@components/ui'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Category, ProductWithVariantsCategories } from '@lib/types/types'
 import { ProductCard } from '@components/product'
@@ -32,32 +32,46 @@ export default function ShopClient({
   const [nextCursor, setNextCursor] = useState<string | null>(initialCursor)
   const [hasMore, setHasMore] = useState(initialHasMore)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  // Tracks the category at the latest reset so an in-flight load-more from an
+  // old category can't append its items to the new category's list.
+  const activeSlugRef = useRef(categorySlug)
 
   const sort = searchParams.get('sort') || 'newest'
   const sortedProducts = sortProducts(products, sort)
 
   const handleLoadMore = useCallback(async () => {
     if (!nextCursor || isLoading) return
+    const slugAtRequest = categorySlug
     setIsLoading(true)
+    setError(null)
     try {
       const response = await getProductsByCategorySlugAction(categorySlug, {
         cursor: nextCursor,
         take: SHOP_PAGE_SIZE,
       })
+      if (activeSlugRef.current !== slugAtRequest) return
       if (response.success && response.data) {
         setProducts((prev) => [...prev, ...response.data!.items])
         setNextCursor(response.data.nextCursor)
         setHasMore(response.data.hasMore)
+      } else {
+        setError(response.message)
       }
+    } catch (err) {
+      console.error('Failed to load more products', err)
+      setError('Failed to load more products. Please try again.')
     } finally {
       setIsLoading(false)
     }
   }, [nextCursor, isLoading, categorySlug])
 
   useEffect(() => {
+    activeSlugRef.current = categorySlug
     setProducts(initialProducts)
     setNextCursor(initialCursor)
     setHasMore(initialHasMore)
+    setError(null)
   }, [categorySlug, initialCursor, initialHasMore, initialProducts])
 
   return (
@@ -102,7 +116,7 @@ export default function ShopClient({
           )}
 
           {hasMore && (
-            <div className="flex justify-center py-8">
+            <div className="flex flex-col items-center gap-2 py-8">
               <button
                 onClick={handleLoadMore}
                 disabled={isLoading}
@@ -111,6 +125,9 @@ export default function ShopClient({
               >
                 {isLoading ? 'Loading...' : 'Load more'}
               </button>
+              {error && (
+                <p className="text-red text-sm">{error}</p>
+              )}
             </div>
           )}
         </div>

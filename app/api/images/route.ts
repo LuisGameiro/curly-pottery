@@ -1,9 +1,18 @@
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client'
 import { NextResponse } from 'next/server'
 import { auth } from '@/auth'
+import { isAdminRole } from '@lib/auth/admin'
 
 export async function POST(request: Request): Promise<NextResponse> {
-  const body = (await request.json()) as HandleUploadBody
+  let body: HandleUploadBody
+  try {
+    body = (await request.json()) as HandleUploadBody
+  } catch {
+    return NextResponse.json(
+      { error: 'Invalid request body.' },
+      { status: 400 },
+    )
+  }
 
   try {
     const jsonResponse = await handleUpload({
@@ -12,9 +21,9 @@ export async function POST(request: Request): Promise<NextResponse> {
       onBeforeGenerateToken: async () => {
         const session = await auth()
 
-        if (!session) {
+        if (!session?.user?.id || !isAdminRole(session.user.role)) {
           throw new Error(
-            'Unauthenticated: You must be logged in to upload images.',
+            'Unauthorized: Administrative privileges required to upload images.',
           )
         }
         return {

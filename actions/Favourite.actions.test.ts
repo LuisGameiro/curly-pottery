@@ -37,7 +37,7 @@ beforeEach(() => {
 })
 
 describe('getFavouritesAction', () => {
-  it('returns array of product IDs from prisma.favourite.findMany', async () => {
+  it('returns product IDs from prisma.favourite.findMany', async () => {
     ;(prisma.favourite.findMany as jest.Mock).mockResolvedValue([
       { productId: 'p1' },
       { productId: 'p2' },
@@ -46,9 +46,10 @@ describe('getFavouritesAction', () => {
 
     const result = await getFavouritesAction()
 
-    expect(result).toEqual(['p1', 'p2', 'p3'])
+    expect(result.success).toBe(true)
+    expect(result.success && result.data).toEqual(['p1', 'p2', 'p3'])
     expect(prisma.favourite.findMany).toHaveBeenCalledWith({
-      where: { userId: mockUserId },
+      where: { userId: mockUserId, product: { hide: false } },
       select: { productId: true },
     })
   })
@@ -58,40 +59,49 @@ describe('getFavouritesAction', () => {
 
     const result = await getFavouritesAction()
 
-    expect(result).toEqual([])
+    expect(result.success && result.data).toEqual([])
   })
 
-  it('returns empty array when session has no user', async () => {
+  it('returns authentication error when session has no user', async () => {
     ;(auth as jest.Mock).mockResolvedValue(null)
 
     const result = await getFavouritesAction()
 
-    expect(result).toEqual([])
+    expect(result.success).toBe(false)
+    expect(result.success === false && result.message).toBe(
+      'Authentication required',
+    )
     expect(prisma.favourite.findMany).not.toHaveBeenCalled()
   })
 
-  it('returns empty array when session user has no id', async () => {
+  it('returns authentication error when session user has no id', async () => {
     ;(auth as jest.Mock).mockResolvedValue({ user: {} })
 
     const result = await getFavouritesAction()
 
-    expect(result).toEqual([])
+    expect(result.success).toBe(false)
     expect(prisma.favourite.findMany).not.toHaveBeenCalled()
   })
 
-  it('returns empty array when findMany throws', async () => {
+  it('returns failure response when findMany throws', async () => {
     ;(prisma.favourite.findMany as jest.Mock).mockRejectedValue(
       new Error('DB error'),
     )
 
     const result = await getFavouritesAction()
 
-    expect(result).toEqual([])
+    expect(result.success).toBe(false)
+    expect(result.success === false && result.message).toBe(
+      'Failed to fetch favourites',
+    )
   })
 })
 
 describe('addFavouriteAction', () => {
   it('creates favourite, revalidates, and returns success', async () => {
+    ;(prisma.product.findFirst as jest.Mock).mockResolvedValue({
+      id: 'prod-1',
+    })
     ;(prisma.favourite.upsert as jest.Mock).mockResolvedValue({
       userId: mockUserId,
       productId: 'prod-1',
@@ -99,7 +109,11 @@ describe('addFavouriteAction', () => {
 
     const result = await addFavouriteAction('prod-1')
 
-    expect(result).toEqual({ success: true })
+    expect(result).toEqual({
+      success: true,
+      message: 'Added to favourites',
+      data: null,
+    })
     expect(prisma.favourite.upsert).toHaveBeenCalledWith({
       where: {
         userId_productId: { userId: mockUserId, productId: 'prod-1' },
@@ -114,30 +128,42 @@ describe('addFavouriteAction', () => {
 
     const result = await addFavouriteAction('prod-1')
 
-    expect(result).toEqual({
-      success: false,
-      errors: { message: 'Authentication required' },
-    })
+    expect(result.success).toBe(false)
+    expect(result.success === false && result.message).toBe(
+      'Authentication required',
+    )
     expect(prisma.favourite.upsert).not.toHaveBeenCalled()
   })
 
   it('returns error for invalid product ID', async () => {
     const result = await addFavouriteAction('')
 
-    expect(result).toEqual({
-      success: false,
-      errors: { message: 'Invalid product ID' },
-    })
+    expect(result.success).toBe(false)
+    expect(result.success === false && result.message).toBe(
+      'Invalid product ID',
+    )
     expect(prisma.favourite.upsert).not.toHaveBeenCalled()
   })
 
   it('returns error when productId is not a string', async () => {
     const result = await addFavouriteAction(undefined as unknown as string)
 
-    expect(result).toEqual({
-      success: false,
-      errors: { message: 'Invalid product ID' },
-    })
+    expect(result.success).toBe(false)
+    expect(result.success === false && result.message).toBe(
+      'Invalid product ID',
+    )
+  })
+
+  it('returns error for hidden/non-existent products', async () => {
+    ;(prisma.product.findFirst as jest.Mock).mockResolvedValue(null)
+
+    const result = await addFavouriteAction('prod-1')
+
+    expect(result.success).toBe(false)
+    expect(result.success === false && result.message).toBe(
+      'Product not found.',
+    )
+    expect(prisma.favourite.upsert).not.toHaveBeenCalled()
   })
 
   it('returns error when rate limited', async () => {
@@ -149,24 +175,27 @@ describe('addFavouriteAction', () => {
 
     const result = await addFavouriteAction('prod-1')
 
-    expect(result).toEqual({
-      success: false,
-      errors: { message: 'Too many requests. Please slow down.' },
-    })
+    expect(result.success).toBe(false)
+    expect(result.success === false && result.message).toBe(
+      'Too many requests. Please slow down.',
+    )
     expect(prisma.favourite.upsert).not.toHaveBeenCalled()
   })
 
   it('returns error when upsert throws', async () => {
+    ;(prisma.product.findFirst as jest.Mock).mockResolvedValue({
+      id: 'prod-1',
+    })
     ;(prisma.favourite.upsert as jest.Mock).mockRejectedValue(
       new Error('DB error'),
     )
 
     const result = await addFavouriteAction('prod-1')
 
-    expect(result).toEqual({
-      success: false,
-      errors: { message: 'Failed to add favourite' },
-    })
+    expect(result.success).toBe(false)
+    expect(result.success === false && result.message).toBe(
+      'Failed to add favourite',
+    )
   })
 })
 
@@ -176,7 +205,11 @@ describe('removeFavouriteAction', () => {
 
     const result = await removeFavouriteAction('prod-1')
 
-    expect(result).toEqual({ success: true })
+    expect(result).toEqual({
+      success: true,
+      message: 'Removed from favourites',
+      data: null,
+    })
     expect(prisma.favourite.deleteMany).toHaveBeenCalledWith({
       where: { userId: mockUserId, productId: 'prod-1' },
     })
@@ -187,30 +220,30 @@ describe('removeFavouriteAction', () => {
 
     const result = await removeFavouriteAction('prod-1')
 
-    expect(result).toEqual({
-      success: false,
-      errors: { message: 'Authentication required' },
-    })
+    expect(result.success).toBe(false)
+    expect(result.success === false && result.message).toBe(
+      'Authentication required',
+    )
     expect(prisma.favourite.deleteMany).not.toHaveBeenCalled()
   })
 
   it('returns error for invalid product ID', async () => {
     const result = await removeFavouriteAction('')
 
-    expect(result).toEqual({
-      success: false,
-      errors: { message: 'Invalid product ID' },
-    })
+    expect(result.success).toBe(false)
+    expect(result.success === false && result.message).toBe(
+      'Invalid product ID',
+    )
     expect(prisma.favourite.deleteMany).not.toHaveBeenCalled()
   })
 
   it('returns error when productId is not a string', async () => {
     const result = await removeFavouriteAction(undefined as unknown as string)
 
-    expect(result).toEqual({
-      success: false,
-      errors: { message: 'Invalid product ID' },
-    })
+    expect(result.success).toBe(false)
+    expect(result.success === false && result.message).toBe(
+      'Invalid product ID',
+    )
   })
 
   it('returns error when deleteMany throws', async () => {
@@ -220,10 +253,10 @@ describe('removeFavouriteAction', () => {
 
     const result = await removeFavouriteAction('prod-1')
 
-    expect(result).toEqual({
-      success: false,
-      errors: { message: 'Failed to remove favourite' },
-    })
+    expect(result.success).toBe(false)
+    expect(result.success === false && result.message).toBe(
+      'Failed to remove favourite',
+    )
   })
 })
 

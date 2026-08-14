@@ -129,9 +129,9 @@ describe('formatError', () => {
     expect(formatError(error)).toBe('App-level error')
   })
 
-  it('should return message for regular Error', () => {
+  it('should return fallback for regular Error', () => {
     const error = new Error('Regular error')
-    expect(formatError(error)).toBe('Regular error')
+    expect(formatError(error)).toBe('An unexpected error occurred')
   })
 
   it('should return fallback for non-Error input', () => {

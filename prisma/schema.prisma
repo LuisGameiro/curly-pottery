@@ -73,6 +73,7 @@ enum NewsletterCampaignStatus {
 
 enum NewsletterDeliveryStatus {
   PENDING
+  PROCESSING
   SENT
   FAILED
   SKIPPED
@@ -214,6 +215,7 @@ model CartLineItem {
  */
 model Order {
   id              String      @id @default(cuid())
+  checkoutId      String?     @unique
   email           String?
   phone           String?
   userId          String?
@@ -366,6 +368,7 @@ model User {
     campaignId        String
     subscriberId      String
     status            NewsletterDeliveryStatus @default(PENDING)
+    retryCount        Int                      @default(0)
     providerMessageId String?
     errorMessage      String?
     trackingToken     String                   @unique @default(cuid())

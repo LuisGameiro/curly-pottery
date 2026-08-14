@@ -7,6 +7,7 @@ import { slugify } from '@lib/slugify'
 import { deleteBlob } from './serverImages.action'
 import { assertAdmin } from '@lib/auth/admin'
 import { CategorySchema } from '@lib/form-validator'
+import { toClientMessage } from '@lib/errors'
 import { z } from 'zod'
 import * as Sentry from '@sentry/nextjs'
 
@@ -63,8 +64,7 @@ export async function upsertCategory({
     Sentry.captureException(error)
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : 'A database error occurred',
+      message: toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -80,11 +80,13 @@ export async function deleteCategory({
   try {
     const admin = await assertAdmin()
     if (!admin || 'success' in admin) return admin
-    await deleteBlob(image)
 
+    // Delete the DB row first, then clean up the blob best-effort (deleteBlob
+    // never throws) so a failure can't leave a broken record.
     const category = await prisma.category.delete({
       where: { id },
     })
+    await deleteBlob(image)
 
     revalidatePath('/', 'layout')
     revalidateTag('categories', 'max')
@@ -98,8 +100,7 @@ export async function deleteCategory({
     Sentry.captureException(error)
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : 'A database error occurred',
+      message: toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }

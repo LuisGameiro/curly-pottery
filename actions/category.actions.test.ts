@@ -60,7 +60,7 @@ describe('getAllCategories', () => {
     const result = await getAllCategories()
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database connection failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toBe(error)
   })
 
@@ -117,7 +117,7 @@ describe('getCategoryById', () => {
     const result = await getCategoryById({ id: '1' })
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database connection failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toBe(error)
   })
 
@@ -203,7 +203,7 @@ describe('upsertCategory', () => {
     })
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database connection failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toBe(error)
   })
 
@@ -218,7 +218,7 @@ describe('upsertCategory', () => {
     })
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Category not found')
+    expect(result.message).toBe('A database error occurred')
   })
 
   it('should handle non-Error exceptions', async () => {
@@ -268,7 +268,7 @@ describe('deleteCategory', () => {
     const result = await deleteCategory({ id: '1', image: 'img1.jpg' })
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Category not found')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toBe(error)
   })
 

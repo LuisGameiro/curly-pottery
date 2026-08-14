@@ -23,6 +23,8 @@ import {
 import { Prisma } from 'prisma/generated/prisma/client'
 import { z } from 'zod'
 import * as Sentry from '@sentry/nextjs'
+import { cache } from 'react'
+import { toClientMessage } from '@lib/errors'
 
 const formatVariant = (
   v: Prisma.ProductVariantGetPayload<{
@@ -45,99 +47,101 @@ const formatProduct = (
   variants: product.variants.map(formatVariant),
 })
 
-export async function getProductBySlug(
-  slug: string | null,
-): Promise<ActionResponse<ProductWithVariantsCategories | null>> {
-  if (!slug)
-    return {
-      success: false,
-      message: 'Slug not provided',
-      errors: null,
-    }
-  try {
-    const product = await prisma.product.findUnique({
-      where: {
-        slug,
-        hide: false,
-      },
-      include: {
-        variants: { include: { optionValues: { include: { option: true } } } },
-        categories: true,
-      },
-    })
-    if (product) {
+// React.cache() dedupes the identical query when it runs for both
+// generateMetadata and the page body in the same request.
+export const getProductBySlug = cache(
+  async (slug: string | null): Promise<ActionResponse<ProductWithVariantsCategories | null>> => {
+    if (!slug)
+      return {
+        success: false,
+        message: 'Slug not provided',
+        errors: null,
+      }
+    try {
+      const product = await prisma.product.findUnique({
+        where: {
+          slug,
+          hide: false,
+        },
+        include: {
+          variants: { include: { optionValues: { include: { option: true } } } },
+          categories: true,
+        },
+      })
+      if (product) {
+        return {
+          success: true,
+          message: 'Fetched product successfully',
+          data: formatProduct(
+            product,
+          ) as unknown as ProductWithVariantsCategories,
+        }
+      }
+
       return {
         success: true,
         message: 'Fetched product successfully',
-        data: formatProduct(
-          product,
-        ) as unknown as ProductWithVariantsCategories,
+        data: null,
+      }
+    } catch (error) {
+      console.error('getProductBySlug_ERROR:', error)
+      Sentry.captureException(error)
+      return {
+        success: false,
+        message:
+          toClientMessage(error, 'A database error occurred'),
+        errors: error,
       }
     }
+  },
+)
 
-    return {
-      success: true,
-      message: 'Fetched product successfully',
-      data: null,
-    }
-  } catch (error) {
-    console.error('getProductBySlug_ERROR:', error)
-    Sentry.captureException(error)
-    return {
-      success: false,
-      message:
-        error instanceof Error ? error.message : 'A database error occurred',
-      errors: error,
-    }
-  }
-}
+export const getProductById = cache(
+  async (id: string): Promise<ActionResponse<ProductWithVariantsCategories | null>> => {
+    if (!id)
+      return {
+        success: false,
+        message: 'Id not provided',
+        errors: null,
+      }
+    try {
+      const product = await prisma.product.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          variants: { include: { optionValues: { include: { option: true } } } },
+          categories: true,
+        },
+      })
 
-export async function getProductById(
-  id: string,
-): Promise<ActionResponse<ProductWithVariantsCategories | null>> {
-  if (!id)
-    return {
-      success: false,
-      message: 'Id not provided',
-      errors: null,
-    }
-  try {
-    const product = await prisma.product.findUnique({
-      where: {
-        id,
-      },
-      include: {
-        variants: { include: { optionValues: { include: { option: true } } } },
-        categories: true,
-      },
-    })
+      if (product) {
+        return {
+          success: true,
+          message: 'Fetched product successfully',
+          data: formatProduct(
+            product,
+          ) as unknown as ProductWithVariantsCategories,
+        }
+      }
 
-    if (product) {
       return {
         success: true,
         message: 'Fetched product successfully',
-        data: formatProduct(
-          product,
-        ) as unknown as ProductWithVariantsCategories,
+        data: null,
+      }
+    } catch (error) {
+      console.error('getProductById_ERROR:', error)
+      Sentry.captureException(error)
+      return {
+        success: false,
+        message:
+          toClientMessage(error, 'A database error occurred'),
+        errors: error,
       }
     }
-
-    return {
-      success: true,
-      message: 'Fetched product successfully',
-      data: null,
-    }
-  } catch (error) {
-    console.error('getProductById_ERROR:', error)
-    Sentry.captureException(error)
-    return {
-      success: false,
-      message:
-        error instanceof Error ? error.message : 'A database error occurred',
-      errors: error,
-    }
-  }
-}
+  },
+)
 
 export async function deleteProduct({
   id,
@@ -165,15 +169,20 @@ export async function deleteProduct({
       }
     }
 
-    await Promise.all(
-      images.map(async (img) => {
-        await deleteBlob(img)
-      }),
-    )
-
     const product = await prisma.product.delete({
       where: { id },
     })
+
+    // Clean up blobs AFTER the DB row is gone, deriving URLs from the DB
+    // record rather than trusting the client-supplied list. deleteBlob is
+    // best-effort and never throws.
+    const storedImages = (product.images as string[]) ?? []
+    const blobUrls = [...new Set([...storedImages, ...images])].filter(Boolean)
+    await Promise.all(
+      blobUrls.map(async (img) => {
+        await deleteBlob(img)
+      }),
+    )
 
     revalidatePath('/', 'layout')
     revalidateTag('products', 'max')
@@ -189,7 +198,7 @@ export async function deleteProduct({
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : 'A database error occurred',
+        toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -241,7 +250,7 @@ export async function toggleVisibility({
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : 'A database error occurred',
+        toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -311,7 +320,7 @@ export async function getAllProducts(
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : 'A database error occurred',
+        toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -357,7 +366,7 @@ export async function getRandomProducts(
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : 'A database error occurred',
+        toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -401,6 +410,7 @@ export async function getRelatedProducts({
 
     const relatedProducts = await prisma.product.findMany({
       where: {
+        hide: false,
         categories: {
           some: {
             name: { in: categoryNames },
@@ -429,7 +439,7 @@ export async function getRelatedProducts({
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : 'A database error occurred',
+        toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -487,7 +497,7 @@ export async function getProductsByCategorySlug(
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : 'A database error occurred',
+        toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -562,7 +572,12 @@ export async function upsertProduct(
           deleteMany: {
             id: { notIn: existingVariantIds.filter((id) => id !== '') },
           },
-          create: variants.map((v) => prepareVariant(v)),
+          update: variants
+            .filter((v) => v.id && !v.id.startsWith('temp-'))
+            .map((v) => ({ where: { id: v.id }, data: prepareVariant(v) })),
+          create: variants
+            .filter((v) => !v.id || v.id.startsWith('temp-'))
+            .map((v) => prepareVariant(v)),
         },
       },
       create: {
@@ -589,7 +604,7 @@ export async function upsertProduct(
     Sentry.captureException(error)
     return {
       success: false,
-      message: error instanceof Error ? error.message : 'Database error',
+      message: toClientMessage(error, 'Database error'),
       errors: error,
     }
   }

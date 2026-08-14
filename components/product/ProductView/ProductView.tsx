@@ -3,7 +3,8 @@
 import Image from 'next/image'
 import s from './ProductView.module.css'
 import { useEffect, useState } from 'react'
-import { ProductSlider, ProductCard } from '@components/product'
+import dynamic from 'next/dynamic'
+import ProductCard from '../ProductCard'
 import { Button, Container, Marquee, Text } from '@components/ui'
 import ProductSidebar from '../ProductSidebar'
 import {
@@ -17,6 +18,14 @@ import { calculateDiscount } from '@lib/calculate-price'
 import { shimmerDataUrl } from '@lib/shimmer'
 import { Undo2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+
+// ProductSlider pulls in keen-slider + react-spring — lazy-load it so those
+// libs only ship to visitors who actually see the product slider.
+const ProductSlider = dynamic(() => import('../ProductSlider'), {
+  loading: () => (
+    <div className="aspect-square w-full bg-accent-2 animate-pulse" />
+  ),
+})
 
 interface ProductViewProps {
   product: ProductWithVariantsCategories

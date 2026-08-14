@@ -31,7 +31,12 @@ export const useFavouritesStore = create<FavouritesStore>()(
 
         set({ favouriteIds: [...favouriteIds, productId] })
         try {
-          await addFavouriteAction(productId)
+          const res = await addFavouriteAction(productId)
+          if (!res.success) {
+            set({ favouriteIds })
+            toast.error(res.message || 'Failed to add to favourites')
+            return
+          }
           toast.success('Added to favourites')
         } catch (error) {
           set({ favouriteIds })
@@ -46,7 +51,12 @@ export const useFavouritesStore = create<FavouritesStore>()(
 
         set({ favouriteIds: newIds })
         try {
-          await removeFavouriteAction(productId)
+          const res = await removeFavouriteAction(productId)
+          if (!res.success) {
+            set({ favouriteIds })
+            toast.error(res.message || 'Failed to remove from favourites')
+            return
+          }
           toast.success('Removed from favourites')
         } catch (error) {
           set({ favouriteIds })
@@ -68,8 +78,8 @@ export const useFavouritesStore = create<FavouritesStore>()(
         if (get().isLoading) return
         set({ isLoading: true })
         try {
-          const ids = await getFavouritesAction()
-          set({ favouriteIds: ids })
+          const res = await getFavouritesAction()
+          set({ favouriteIds: res.success ? res.data : [] })
         } catch (error) {
           console.error('Failed to sync favourites', error)
         } finally {

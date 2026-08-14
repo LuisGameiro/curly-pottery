@@ -1,7 +1,6 @@
 'use server'
 
 import { hashPassword } from '@lib/auth/password'
-import { assertAdmin } from '@lib/auth/admin'
 import { z } from 'zod'
 
 const passwordSchema = z
@@ -17,12 +16,12 @@ import { prisma } from 'prisma/prisma'
 import { ReactNode } from 'react'
 import { CreateEmailResponseSuccess, Resend } from 'resend'
 import * as Sentry from '@sentry/nextjs'
+import { toClientMessage } from '@lib/errors'
 
 const sendEmailSchema = z.object({
   to: z.string().email(),
   subject: z.string().min(1).max(200),
   body: z.any(),
-  from: z.string().email().optional().default('noreply@curlypottery.com'),
 })
 
 const resend = new Resend(process.env.RESEND_API_KEY)
@@ -31,14 +30,12 @@ export async function sendEmail({
   to,
   subject,
   body,
-  from,
 }: {
   to: string
   subject: string
   body: ReactNode
-  from?: string
 }): Promise<ActionResponse<CreateEmailResponseSuccess>> {
-  const validation = sendEmailSchema.safeParse({ to, subject, body, from })
+  const validation = sendEmailSchema.safeParse({ to, subject, body })
   if (!validation.success) {
     return {
       success: false,
@@ -47,12 +44,35 @@ export async function sendEmail({
     }
   }
 
+  // Transactional email relay (checkout confirmations, contact form) is
+  // intentionally NOT admin-only, so it must be rate-limited per IP and use a
+  // fixed sender to prevent it becoming a spam relay.
+  const headersList = await headers()
+  const ip =
+    headersList.get('x-forwarded-for')?.split(',')[0] ??
+    headersList.get('x-real-ip') ??
+    'unknown'
   try {
-    const admin = await assertAdmin()
-    if (!admin || 'success' in admin) return admin
+    const rateResult = await checkRateLimit(
+      getRateLimitKey(ip, 'transactional-email'),
+      { windowMs: 60 * 1000, maxRequests: 10 },
+    )
+    if (!rateResult.success) {
+      return {
+        success: false,
+        message: 'Too many requests. Please try again later.',
+      }
+    }
+  } catch {
+    return {
+      success: false,
+      message: 'Email service temporarily unavailable.',
+    }
+  }
 
+  try {
     const { data, error } = await resend.emails.send({
-      from: validation.data.from,
+      from: 'Curly Pottery <noreply@curlypottery.com>',
       to: validation.data.to,
       subject: validation.data.subject,
       react: body,
@@ -79,7 +99,7 @@ export async function sendEmail({
 }
 export async function sendResetEmail(
   email: string,
-): Promise<ActionResponse<CreateEmailResponseSuccess>> {
+): Promise<ActionResponse<null>> {
   const headersList = await headers()
   const ip =
     headersList.get('x-forwarded-for')?.split(',')[0] ??
@@ -92,7 +112,11 @@ export async function sendResetEmail(
       maxRequests: 2,
     })
   } catch {
-    rateResult = { success: true, remaining: 999, resetIn: 0 }
+    // Fail closed: if the rate limiter is unavailable, don't process.
+    return {
+      success: false,
+      message: 'Service temporarily unavailable. Please try again later.',
+    }
   }
   if (!rateResult.success) {
     return {
@@ -152,7 +176,7 @@ export async function sendResetEmail(
     return {
       success: true,
       message: 'Email sent successfully!',
-      data: { id: token },
+      data: null,
     }
   } catch (error) {
     return { success: false, message: 'Failed to send email', errors: error }
@@ -178,7 +202,11 @@ export async function resetPassword({
       maxRequests: 5,
     })
   } catch {
-    rateResult = { success: true, remaining: 999, resetIn: 0 }
+    // Fail closed: if the rate limiter is unavailable, don't process.
+    return {
+      success: false,
+      message: 'Service temporarily unavailable. Please try again later.',
+    }
   }
   if (!rateResult.success) {
     return {
@@ -232,8 +260,7 @@ export async function resetPassword({
   } catch (error) {
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : 'A database error occurred',
+      message: toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }

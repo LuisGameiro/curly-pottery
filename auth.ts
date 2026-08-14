@@ -4,8 +4,9 @@ import { prisma } from 'prisma/prisma'
 import GoogleProvider from 'next-auth/providers/google'
 import Credentials from 'next-auth/providers/credentials'
 import { verifyPassword } from '@lib/auth/password'
+import { cache } from 'react'
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+const nextAuth = NextAuth({
   trustHost: true,
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
@@ -63,10 +64,30 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.lastName = user.lastName
         token.name = (user.firstName || '') + ' ' + (user.lastName || '')
         token.email = user.email
+        token.roleFetchedAt = Date.now()
       }
       if (trigger === 'update' && session) {
         token.firstName = session.firstName
         token.lastName = session.lastName
+        token.roleFetchedAt = 0 // force a role refresh next read
+      }
+      // Refresh the role from the DB periodically (at most every 5 min) so
+      // role changes (e.g. demoting an admin) take effect without waiting for
+      // the ~30 day JWT expiry.
+      const roleFetchedAt = (token.roleFetchedAt as number) || 0
+      if (token.sub && Date.now() - roleFetchedAt > 5 * 60 * 1000) {
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.sub },
+            select: { role: true },
+          })
+          if (dbUser) {
+            token.role = dbUser.role
+            token.roleFetchedAt = Date.now()
+          }
+        } catch {
+          // Swallow DB errors — keep the last known role.
+        }
       }
       return token
     },
@@ -85,3 +106,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     error: '/auth/login',
   },
 })
+
+// Wrap in React.cache() so calling auth() multiple times in one request
+// (page + server action) reuses the decoded session instead of re-reading
+// cookies/headers and re-decoding the JWT each time.
+export const { handlers, signIn, signOut } = nextAuth
+export const auth = cache(nextAuth.auth)

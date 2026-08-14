@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { getAllProducts } from '@actions/product.actions'
+import { prisma } from 'prisma/prisma'
 import { resolveSiteUrl } from '@lib/site-url'
 
 const staticRoutes: Array<{
@@ -25,20 +25,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: route.priority,
   }))
 
-  const productsResponse = await getAllProducts()
+  // Fetch ALL visible products (not paginated) — the sitemap must not be
+  // truncated to the admin page size.
+  let productEntries: MetadataRoute.Sitemap = []
+  try {
+    const products = await prisma.product.findMany({
+      where: { hide: false },
+      select: { slug: true, updatedAt: true },
+      orderBy: { updatedAt: 'desc' },
+    })
 
-  if (!productsResponse.success || !productsResponse.data) {
-    return staticEntries
-  }
-
-  const productEntries: MetadataRoute.Sitemap = productsResponse.data.items
-    .filter((product) => !product.hide)
-    .map((product) => ({
+    productEntries = products.map((product) => ({
       url: resolveSiteUrl(`/shop/${product.slug}`),
       lastModified: product.updatedAt,
-      changeFrequency: 'weekly',
+      changeFrequency: 'weekly' as const,
       priority: 0.7,
     }))
+  } catch (error) {
+    console.error('sitemap_ERROR:', error)
+  }
 
   return [...staticEntries, ...productEntries]
 }

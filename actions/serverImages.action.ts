@@ -4,6 +4,7 @@ import { del } from '@vercel/blob'
 import { revalidatePath } from 'next/cache'
 import { assertAdmin } from '@lib/auth/admin'
 import * as Sentry from '@sentry/nextjs'
+import { toClientMessage } from '@lib/errors'
 
 export async function deleteBlob(blobs: string) {
   if (!blobs || typeof blobs !== 'string') {
@@ -27,7 +28,7 @@ export async function deleteBlob(blobs: string) {
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : 'Failed to delete blob.',
+        toClientMessage(error, 'Failed to delete blob.'),
     }
   }
 }

@@ -5,6 +5,7 @@ import InformationForm from '@components/checkout/InformationForm'
 import SumUpPayment from '@components/checkout/SumUpPayment'
 import { CheckoutSummary } from '@components/checkout/CheckoutSummary'
 import useCart from '@lib/hooks/useCart'
+import { useCartStore } from '@lib/zustand/cart'
 import { createSumUpCheckout } from '@actions/sumUpPayment.actions'
 import { createOrder } from '@actions/order.actions'
 import { Container, Text, Button, Input } from '@components/ui'
@@ -23,6 +24,7 @@ import * as Sentry from '@sentry/nextjs'
 
 export default function CheckoutClient() {
   const { data, deleteAll } = useCart()
+  const isHydrated = useCartStore((s) => s.isHydrated)
   const { user, isAuthenticated } = useUser()
   const [step, setStep] = useState(1)
   const [checkoutId, setCheckoutId] = useState('')
@@ -48,22 +50,50 @@ export default function CheckoutClient() {
     },
   })
 
-  const { watch } = methods
-  const currentValues = watch()
+  // Re-populate the form once the session/cart hydrate after the first render,
+  // otherwise stale empty defaults reach the payment actions.
+  useEffect(() => {
+    if (!user || !data?.lineItems) return
+    methods.reset({
+      userId: user.id || '',
+      email: user.email || '',
+      currency: data.currency || CurrencyCode.GBP,
+      firstName: user.firstName || '',
+      lastName: user.lastName || '',
+      lineItems: data.lineItems,
+      subtotalPrice: data.subtotalPrice,
+      totalPrice: data.totalPrice,
+      shippingMethod: 'standard',
+      shippingPrice: 5.95,
+      taxes: 0,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, data.lineItems, methods])
 
   useEffect(() => {
     if (!data || data.lineItems.length === 0) return
+    const values = methods.getValues()
     trackEvent('begin_checkout', {
-      userId: currentValues?.userId,
-      total_value: currentValues.totalPrice,
-      currency: currentValues.currency,
-      item_count: currentValues.lineItems.length,
-      items: currentValues.lineItems.map(
+      userId: values?.userId,
+      total_value: values.totalPrice,
+      currency: values.currency,
+      item_count: values.lineItems.length,
+      items: values.lineItems.map(
         (item) => item.quantity + ' * ' + item.sku,
       ),
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // The cart lives in localStorage and is empty during SSR — only redirect
+  // once hydration has completed and the cart is genuinely empty.
+  if (!isHydrated) {
+    return (
+      <Container className="px-4 py-6 sm:px-10 sm:py-10 mx-auto lg:max-w-5xl">
+        <div className="py-20 text-center text-muted">Loading your cart…</div>
+      </Container>
+    )
+  }
 
   if (!data || data.lineItems.length === 0) {
     return redirect('/cart')
@@ -74,88 +104,105 @@ export default function CheckoutClient() {
   const nextToPayment = async () => {
     try {
       setLoading(true)
-      await updateCartPrice(currentValues.taxes, currentValues.shippingPrice)
+      const values = methods.getValues()
+      await updateCartPrice(values.taxes, values.shippingPrice)
 
-      const response = await createSumUpCheckout(currentValues)
+      const response = await createSumUpCheckout(values)
       trackEvent('before_purchase', {
         transaction_id: response.data,
-        userId: currentValues?.userId,
-        total_value: currentValues.totalPrice,
-        currency: currentValues.currency,
-        item_count: currentValues.lineItems.length,
-        items: currentValues.lineItems.map(
+        userId: values?.userId,
+        total_value: values.totalPrice,
+        currency: values.currency,
+        item_count: values.lineItems.length,
+        items: values.lineItems.map(
           (item) => item.quantity + ' * ' + item.sku,
         ),
       })
-      if (!response.success && !response.data) {
+      if (!response.success || !response.data) {
         Sentry.captureMessage(`SumUp init failed: ${response.message}`, 'error')
         toast(response.message)
       } else {
-        setCheckoutId(response.data || '')
+        setCheckoutId(response.data)
         setStep(3)
       }
     } catch (error) {
       Sentry.captureException(error)
       console.error(error)
+      toast.error('Something went wrong while initializing payment.')
     } finally {
       setLoading(false)
     }
   }
 
   const onPaymentComplete = async () => {
-    let red = false
     try {
       setLoading(true)
+      const values = methods.getValues()
+      const orderResponse = await createOrder(checkoutId, values)
 
-      const orderResponse = await createOrder(checkoutId, currentValues)
-
-      if (orderResponse.success) {
-        red = true
-        await sendEmail({
-          to: currentValues.email,
-          subject: 'Order Confirmation',
-          body: ClientOrderEmail({
-            customerName: currentValues.firstName,
-            orderId: orderResponse.data?.id || '',
-            totalAmount: `${showCurrency[currentValues.currency]} ${currentValues.totalPrice.toFixed(2)}`,
-          }),
-        })
-        await sendEmail({
-          to: process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'admin@curlypottery.com',
-          subject: `New Order: ${orderResponse.data?.id?.slice(-6).toUpperCase() || ''}`,
-          body: AdminOrderEmail({
-            customerEmail: currentValues.email,
-            orderId: orderResponse.data?.id || '',
-            itemsCount: currentValues.lineItems.length || 0,
-          }),
-        })
-        trackEvent('purchase_complete', {
-          order_id: orderResponse.data?.id,
-          transaction_id: checkoutId,
-          userId: currentValues?.userId,
-          total_value: currentValues.totalPrice,
-          currency: currentValues.currency,
-          item_count: currentValues.lineItems.length,
-          items: currentValues.lineItems.map(
-            (item) => item.quantity + ' * ' + item.sku,
-          ),
-        })
-
-        deleteAll()
-      } else {
+      if (!orderResponse.success) {
         Sentry.captureMessage(
           `Order creation failed: ${orderResponse.message}`,
           'error',
         )
         toast.error(orderResponse.message)
+        setLoading(false)
+        return
       }
+
+      // Order created and paid — clear the cart and move on. Notifications
+      // are best-effort and must never block the success redirect.
+      void deleteAll()
+
+      try {
+        await sendEmail({
+          to: values.email,
+          subject: 'Order Confirmation',
+          body: ClientOrderEmail({
+            customerName: values.firstName,
+            orderId: orderResponse.data?.id || '',
+            totalAmount: `${showCurrency[values.currency]} ${(values.totalPrice || 0).toFixed(2)}`,
+          }),
+        })
+      } catch (emailError) {
+        Sentry.captureException(emailError)
+      }
+      try {
+        await sendEmail({
+          to: process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'admin@curlypottery.com',
+          subject: `New Order: ${orderResponse.data?.id?.slice(-6).toUpperCase() || ''}`,
+          body: AdminOrderEmail({
+            customerEmail: values.email,
+            orderId: orderResponse.data?.id || '',
+            itemsCount: values.lineItems.length || 0,
+          }),
+        })
+      } catch (emailError) {
+        Sentry.captureException(emailError)
+      }
+      try {
+        trackEvent('purchase_complete', {
+          order_id: orderResponse.data?.id,
+          transaction_id: checkoutId,
+          userId: values?.userId,
+          total_value: values.totalPrice,
+          currency: values.currency,
+          item_count: values.lineItems.length,
+          items: values.lineItems.map(
+            (item) => item.quantity + ' * ' + item.sku,
+          ),
+        })
+      } catch (trackError) {
+        Sentry.captureException(trackError)
+      }
+
+      redirect('/checkout/success')
     } catch (error) {
       Sentry.captureException(error)
       console.error(error)
-    } finally {
       setLoading(false)
+      toast.error('Something went wrong while placing your order.')
     }
-    if (red) redirect('/checkout/success')
   }
 
   const goBack = (goStep: number) => {

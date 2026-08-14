@@ -21,6 +21,7 @@ import {
   unsubscribeNewsletterByToken,
 } from '@lib/newsletter/service'
 import { assertAdmin } from '@lib/auth/admin'
+import { toClientMessage } from '@lib/errors'
 
 export async function subscribeToNewsletter(
   rawInput: unknown,
@@ -37,7 +38,11 @@ export async function subscribeToNewsletter(
       maxRequests: 5,
     })
   } catch {
-    rateResult = { success: true, remaining: 999, resetIn: 0 }
+    // Fail closed: if the rate limiter is unavailable, don't process.
+    return {
+      success: false,
+      message: 'Service temporarily unavailable. Please try again later.',
+    }
   }
   if (!rateResult.success) {
     return {
@@ -71,8 +76,7 @@ export async function subscribeToNewsletter(
   } catch (error) {
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : 'Failed to subscribe email',
+      message: toClientMessage(error, 'Failed to subscribe email'),
       errors: error,
     }
   }
@@ -104,8 +108,7 @@ export async function unsubscribeNewsletter(
   } catch (error) {
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : 'Failed to unsubscribe email',
+      message: toClientMessage(error, 'Failed to unsubscribe email'),
       errors: error,
     }
   }
@@ -128,8 +131,7 @@ export async function getNewsletterAdminOverview(): Promise<
   } catch (error) {
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : 'Failed to load newsletter',
+      message: toClientMessage(error, 'Failed to load newsletter'),
       errors: error,
     }
   }
@@ -164,8 +166,7 @@ export async function createNewsletterCampaignAction(
   } catch (error) {
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : 'Failed to create campaign',
+      message: toClientMessage(error, 'Failed to create campaign'),
       errors: error,
     }
   }
@@ -202,8 +203,7 @@ export async function queueNewsletterCampaignAction(
   } catch (error) {
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : 'Failed to queue campaign',
+      message: toClientMessage(error, 'Failed to queue campaign'),
       errors: error,
     }
   }
@@ -232,8 +232,7 @@ export async function runNewsletterDispatchAction(): Promise<
   } catch (error) {
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : 'Failed to dispatch batch',
+      message: toClientMessage(error, 'Failed to dispatch batch'),
       errors: error,
     }
   }
@@ -257,8 +256,7 @@ export async function syncNewsletterSubscribersAction(): Promise<
   } catch (error) {
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : 'Failed to sync subscribers',
+      message: toClientMessage(error, 'Failed to sync subscribers'),
       errors: error,
     }
   }

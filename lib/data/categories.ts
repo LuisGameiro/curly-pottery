@@ -2,6 +2,7 @@ import { unstable_cache } from 'next/cache'
 import { prisma } from 'prisma/prisma'
 import { Category, ActionResponse } from '@lib/types/types'
 import * as Sentry from '@sentry/nextjs'
+import { toClientMessage } from '@lib/errors'
 
 export const getAllCategories = unstable_cache(
   async (): Promise<ActionResponse<Category[]>> => {
@@ -22,8 +23,7 @@ export const getAllCategories = unstable_cache(
       Sentry.captureException(error)
       return {
         success: false,
-        message:
-          error instanceof Error ? error.message : 'A database error occurred',
+        message: toClientMessage(error, 'A database error occurred'),
         errors: error,
       }
     }
@@ -51,8 +51,7 @@ export const getCategoryById = unstable_cache(
       Sentry.captureException(error)
       return {
         success: false,
-        message:
-          error instanceof Error ? error.message : 'A database error occurred',
+        message: toClientMessage(error, 'A database error occurred'),
         errors: error,
       }
     }

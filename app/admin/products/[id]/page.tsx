@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { getProductById } from '@actions/product.actions'
 import { getAllCategories } from '@lib/data/categories'
-import notFound from 'app/not-found'
+import { notFound } from 'next/navigation'
 import { Category, ProductWithVariantsCategories } from '@lib/types/types'
 import ProductClient from '@components/admin/product/ProductClient'
 import constructMetadata from '@components/common/SEO'

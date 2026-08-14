@@ -15,7 +15,7 @@ import {
   XCircle,
   Notebook,
 } from 'lucide-react'
-import notFound from 'app/not-found'
+import { notFound } from 'next/navigation'
 import OrderTable from '@components/tables/OrderTable'
 import CustomerNotes from '@components/admin/CustomerNotes'
 import { showCurrency } from '@lib/calculate-price'

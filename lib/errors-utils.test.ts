@@ -59,7 +59,7 @@ describe('withDatabase', () => {
     const result = await withDatabase('queryProducts', fn)
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Connection lost')
+    expect(result.message).toBe('An unexpected error occurred')
     expect(result.errors).toBeInstanceOf(DatabaseError)
     expect((result.errors as DatabaseError).operation).toBe('queryProducts')
   })
@@ -134,7 +134,7 @@ describe('withFetch', () => {
     const result = await withFetch('https://api.example.com/data')
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('ENOTFOUND')
+    expect(result.message).toBe('An unexpected error occurred')
     expect(result.errors).toBeInstanceOf(NetworkError)
   })
 })

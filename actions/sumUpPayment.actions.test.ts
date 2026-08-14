@@ -52,7 +52,7 @@ describe('createSumUpCheckout', () => {
     expect(global.fetch).toHaveBeenCalledWith(
       'https://api.sumup.com/v0.1/checkouts',
       expect.objectContaining({
-        body: expect.stringContaining('105.95'), // 2 × £50 + £5.95, server-priced
+        body: expect.stringContaining('10595'), // 2 x £50 + £5.95 -> minor units
       }),
     )
   })
@@ -78,6 +78,7 @@ describe('createSumUpCheckout', () => {
       id: 'cart-123',
       totalPrice: 123.45,
       currency: 'GBP',
+      lineItems: [],
     })
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
@@ -90,6 +91,11 @@ describe('createSumUpCheckout', () => {
     expect(result.data).toBe('checkout-123')
     expect(prisma.cart.findUnique).toHaveBeenCalledWith({
       where: { userId: 'user-1' },
+      include: {
+        lineItems: {
+          include: { variant: true },
+        },
+      },
     })
     expect(global.fetch).toHaveBeenCalledWith(
       'https://api.sumup.com/v0.1/checkouts',
@@ -120,6 +126,7 @@ describe('createSumUpCheckout', () => {
       id: 'cart-123',
       totalPrice: 123.45,
       currency: 'GBP',
+      lineItems: [],
     })
     global.fetch = jest.fn().mockResolvedValue({
       ok: false,
@@ -140,12 +147,13 @@ describe('createSumUpCheckout', () => {
       id: 'cart-123',
       totalPrice: 123.45,
       currency: 'GBP',
+      lineItems: [],
     })
     global.fetch = jest.fn().mockRejectedValue(new Error('Network error'))
 
     const result = await createSumUpCheckout()
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Network error')
+    expect(result.message).toBe('An unexpected error occurred')
   })
 })

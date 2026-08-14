@@ -76,7 +76,10 @@ export default defineConfig({
   webServer: {
     command: 'npm run dev',
     url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
+    /* Always start a fresh server: reusing an existing dev server would ignore
+       the DB_DATABASE_URL injected below and hit whatever DB it was started
+       with, while global-setup seeds the test DB — a silent mismatch. */
+    reuseExistingServer: false,
     timeout: 120_000,
     /* NEXT_PUBLIC_APP_URL is required at request time (SEO metadata, robots,
        sitemap), but .env files are gitignored so CI has no .env. Inject it so
@@ -84,13 +87,13 @@ export default defineConfig({
     env: {
       NEXT_PUBLIC_APP_URL: 'http://localhost:3000',
       /* Inject the test database URL into the dev server so it uses the test DB.
-         Only set DB_DATABASE_URL when a test-specific env var is provided;
-         otherwise let the dev server pick up the .env file value. */
-      ...(process.env.DB_DATABASE_URL || process.env.DATABASE_TEST_URL
+         DATABASE_TEST_URL wins over DB_DATABASE_URL when both are set, so the
+         dev database is never wiped by the e2e seed. */
+      ...(process.env.DATABASE_TEST_URL || process.env.DB_DATABASE_URL
         ? {
             DB_DATABASE_URL:
-              process.env.DB_DATABASE_URL ||
               process.env.DATABASE_TEST_URL ||
+              process.env.DB_DATABASE_URL ||
               '',
           }
         : {}),

@@ -32,7 +32,7 @@ const formatProduct = (
   variants: product.variants.map(formatVariant),
 })
 
-export const searchProducts = unstable_cache(
+export const searchProductsCached = unstable_cache(
   async (
     query: string,
     pagination?: PaginationInput,
@@ -99,3 +99,25 @@ export const searchProducts = unstable_cache(
   ['search-products'],
   { revalidate: 3600, tags: ['products'] },
 )
+
+/**
+ * Public search entry point. Normalizes the query before it hits the cache so
+ * every unique user string doesn't create a permanent cache entry, and empty
+ * queries short-circuit without a DB hit.
+ */
+export async function searchProducts(
+  query: string,
+  pagination?: PaginationInput,
+): Promise<
+  ActionResponse<PaginatedResult<ProductWithVariantsCategories> | null>
+> {
+  const normalized = query?.trim().toLowerCase().slice(0, 100) ?? ''
+  if (!normalized) {
+    return {
+      success: true,
+      message: 'Search query required',
+      data: { items: [], nextCursor: null, hasMore: false, total: 0 },
+    }
+  }
+  return searchProductsCached(normalized, pagination)
+}

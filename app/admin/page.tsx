@@ -1,9 +1,12 @@
 export const dynamic = 'force-dynamic'
 
 import { StatCard } from '@components/admin/StatCard'
+import { VercelDataCard } from '@components/admin/VercelDataCard'
+import { StockMovementsCard } from '@components/admin/StockMovementsCard'
 import constructMetadata from '@components/common/SEO'
 import { Container, Text } from '@components/ui'
-import { getDashboardStats } from '@actions/dashboard.actions'
+import { getDashboardStats, getRecentStockMovements } from '@actions/dashboard.actions'
+import { getVercelDataUsage } from '@actions/vercelData.actions'
 import Loading from 'app/loading'
 import {
   Users,
@@ -25,13 +28,19 @@ export const metadata = constructMetadata({
 })
 
 async function AdminDashboardContent() {
-  const response = await getDashboardStats()
+  const [statsResponse, vercelResponse, stockResponse] = await Promise.all([
+    getDashboardStats(),
+    getVercelDataUsage(),
+    getRecentStockMovements(50),
+  ])
 
-  if (!response.success) {
-    throw new Error(response.message)
-  }
+  if (!statsResponse.success) throw new Error(statsResponse.message)
+  if (!vercelResponse.success) throw new Error(vercelResponse.message)
+  if (!stockResponse.success) throw new Error(stockResponse.message)
 
-  const stats = response.data
+  const stats = statsResponse.data
+  const vercelData = vercelResponse.data
+  const stockMovements = stockResponse.data
 
   return (
     <Container data-testid="admin-dashboard">
@@ -84,13 +93,13 @@ async function AdminDashboardContent() {
                   <div
                     className="bg-green transition-all"
                     style={{
-                      width: `${(stats.productsWithStock / stats.totalProducts) * 100}%`,
+                      width: `${stats.totalProducts > 0 ? (stats.productsWithStock / stats.totalProducts) * 100 : 0}%`,
                     }}
                   />
                   <div
                     className="bg-red transition-all"
                     style={{
-                      width: `${(stats.productsOutOfStock / stats.totalProducts) * 100}%`,
+                      width: `${stats.totalProducts > 0 ? (stats.productsOutOfStock / stats.totalProducts) * 100 : 0}%`,
                     }}
                   />
                 </div>
@@ -157,6 +166,10 @@ async function AdminDashboardContent() {
             </div>
           </Container>
         </div>
+
+        <VercelDataCard data={vercelData} />
+
+        <StockMovementsCard movements={stockMovements} />
       </section>
     </Container>
   )

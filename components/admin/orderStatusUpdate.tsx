@@ -1,11 +1,12 @@
 'use client'
 
-import React, { useState, useTransition } from 'react'
+import React, { useEffect, useRef, useState, useTransition } from 'react'
 import { BellIcon, Loader2 } from 'lucide-react'
 import { Text, Container } from '@components/ui'
 import { cn } from '@lib/utils'
 import { OrderStatus } from '@lib/types/types'
 import { updateOrderStatus } from '@actions/order.actions'
+import { toast } from 'sonner'
 
 interface OrderStatusProps {
   orderId: string
@@ -15,15 +16,41 @@ interface OrderStatusProps {
 const OrderStatusUpdate = ({ orderId, currentStatus }: OrderStatusProps) => {
   const [isPending, startTransition] = useTransition()
   const [localStatus, setLocalStatus] = useState(currentStatus)
+  const [prevStatus, setPrevStatus] = useState(currentStatus)
+  // Last status confirmed by the server — roll back here on failure so two
+  // rapid changes don't revert to the original prop value.
+  const lastGoodStatusRef = useRef(currentStatus)
+
+  // Adjust state during render when the server-confirmed status changes
+  // (React's documented pattern for derived state — setState in an effect is
+  // what the lint rule forbids, this achieves the same sync safely).
+  if (currentStatus !== prevStatus) {
+    setPrevStatus(currentStatus)
+    setLocalStatus(currentStatus)
+  }
+
+  // Keep the rollback target in sync with the server-confirmed status.
+  // Ref writes belong in effects, so this needs no setState.
+  useEffect(() => {
+    lastGoodStatusRef.current = currentStatus
+  }, [currentStatus])
 
   const handleStatusChange = (newStatus: OrderStatus) => {
     setLocalStatus(newStatus)
 
     startTransition(async () => {
       try {
-        await updateOrderStatus(orderId, newStatus)
+        const response = await updateOrderStatus(orderId, newStatus)
+        if (response.success) {
+          lastGoodStatusRef.current = newStatus
+          setLocalStatus(newStatus)
+        } else {
+          setLocalStatus(lastGoodStatusRef.current)
+          toast.error(response.message)
+        }
       } catch (error) {
-        setLocalStatus(currentStatus)
+        setLocalStatus(lastGoodStatusRef.current)
+        toast.error('Failed to update status')
         console.error('Failed to update status', error)
       }
     })

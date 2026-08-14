@@ -9,6 +9,7 @@ import { CarFront } from 'lucide-react'
 import { Suspense } from 'react'
 import { USER_ORDERS_PAGE_SIZE } from '@lib/pagination'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
 export const metadata = constructMetadata({
   title: 'Your Orders',
@@ -26,7 +27,7 @@ export default async function Orders({
   const user = session?.user
 
   if (!user) {
-    throw new Error('User not found')
+    redirect('/auth/login')
   }
 
   const response = await getOrdersById(user.id, {

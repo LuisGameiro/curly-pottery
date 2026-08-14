@@ -32,6 +32,9 @@ const NEWSLETTER_FROM_EMAIL =
   process.env.NEWSLETTER_FROM_EMAIL ||
   'Curly Pottery <noreply@curlypottery.com>'
 
+/** Failed deliveries are re-queued up to this many times before giving up. */
+const NEWSLETTER_MAX_RETRIES = 3
+
 const emptyToNull = (value?: string | null) => {
   const normalized = value?.trim()
   return normalized || null
@@ -426,6 +429,7 @@ async function deliverNewsletterEmail({
           data: {
             status: 'FAILED',
             errorMessage: error.message,
+            retryCount: { increment: 1 },
           },
         }),
         prisma.newsletterCampaign.update({
@@ -468,6 +472,7 @@ async function deliverNewsletterEmail({
         data: {
           status: 'FAILED',
           errorMessage,
+          retryCount: { increment: 1 },
         },
       }),
       prisma.newsletterCampaign.update({
@@ -485,6 +490,19 @@ async function deliverNewsletterEmail({
 export async function dispatchQueuedNewsletterBatch(
   globalLimit = NEWSLETTER_DEFAULT_DAILY_LIMIT,
 ): Promise<NewsletterDispatchSummary> {
+  // Re-queue PROCESSING rows left behind by crashed runs (> 30 min old).
+  const staleCutoff = new Date(Date.now() - 30 * 60 * 1000)
+  await prisma.newsletterDelivery.updateMany({
+    where: { status: 'PROCESSING', updatedAt: { lt: staleCutoff } },
+    data: { status: 'PENDING' },
+  })
+
+  // Retry queue: FAILED deliveries with retries left go back to PENDING.
+  await prisma.newsletterDelivery.updateMany({
+    where: { status: 'FAILED', retryCount: { lt: NEWSLETTER_MAX_RETRIES } },
+    data: { status: 'PENDING' },
+  })
+
   const campaigns = await prisma.newsletterCampaign.findMany({
     where: {
       status: NewsletterCampaignStatus.QUEUED,
@@ -517,26 +535,60 @@ export async function dispatchQueuedNewsletterBatch(
       break
     }
 
-    const campaignLimit = Math.min(
-      remainingLimit,
-      campaign.dailySendLimit || NEWSLETTER_DEFAULT_DAILY_LIMIT,
-    )
-
-    const deliveries = await prisma.newsletterDelivery.findMany({
+    // Enforce the per-day limit: only today's sends count against
+    // dailySendLimit, so an hourly cron can't send 24x the configured limit.
+    const startOfToday = new Date()
+    startOfToday.setUTCHours(0, 0, 0, 0)
+    const todaySent = await prisma.newsletterDelivery.count({
       where: {
         campaignId: campaign.id,
-        status: 'PENDING',
-        subscriber: {
-          status: NewsletterSubscriberStatus.SUBSCRIBED,
-        },
+        status: 'SENT',
+        sentAt: { gte: startOfToday },
       },
+    })
+    const campaignDailyLimit =
+      campaign.dailySendLimit || NEWSLETTER_DEFAULT_DAILY_LIMIT
+    const campaignLimit = Math.max(
+      0,
+      Math.min(remainingLimit, campaignDailyLimit - todaySent),
+    )
+    if (campaignLimit <= 0) {
+      continue
+    }
+
+    // Atomically claim PENDING deliveries with FOR UPDATE SKIP LOCKED so two
+    // concurrent dispatch runs (cron + admin button) never double-send.
+    const claimed = await prisma.$queryRaw<Array<{ id: string }>>`
+      SELECT "NewsletterDelivery".id
+      FROM "NewsletterDelivery"
+      JOIN "NewsletterSubscriber" s ON s.id = "NewsletterDelivery"."subscriberId"
+      WHERE "NewsletterDelivery"."campaignId" = ${campaign.id}
+        AND "NewsletterDelivery".status = 'PENDING'
+        AND s.status = 'SUBSCRIBED'
+      ORDER BY "NewsletterDelivery"."createdAt" ASC
+      LIMIT ${campaignLimit}
+      FOR UPDATE SKIP LOCKED
+    `
+
+    if (claimed.length === 0) {
+      await markCampaignCompleteIfDone(campaign.id)
+      continue
+    }
+
+    const claimIds = claimed.map((row) => row.id)
+    await prisma.newsletterDelivery.updateMany({
+      where: { id: { in: claimIds }, status: 'PENDING' },
+      data: { status: 'PROCESSING' },
+    })
+
+    const deliveries = await prisma.newsletterDelivery.findMany({
+      where: { id: { in: claimIds } },
       include: {
         subscriber: true,
       },
       orderBy: {
         createdAt: 'asc',
       },
-      take: campaignLimit,
     })
 
     for (const delivery of deliveries) {

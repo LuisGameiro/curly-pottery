@@ -48,6 +48,10 @@ describe('getAllOrders', () => {
         userId: 'user1',
         status: 'PENDING',
         createdAt: new Date(),
+        subtotalPrice: 100,
+        totalPrice: 120,
+        taxes: 20,
+        shippingPrice: 10,
         user: { id: 'user1', name: 'John Doe' },
       },
       {
@@ -55,6 +59,10 @@ describe('getAllOrders', () => {
         userId: 'user2',
         status: 'COMPLETED',
         createdAt: new Date(),
+        subtotalPrice: 50,
+        totalPrice: 60,
+        taxes: 10,
+        shippingPrice: 5,
         user: { id: 'user2', name: 'Jane Doe' },
       },
     ]
@@ -102,7 +110,7 @@ describe('getAllOrders', () => {
     const result = await getAllOrders()
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database connection failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toEqual(mockError)
   })
 
@@ -146,6 +154,10 @@ describe('getOrdersById', () => {
         userId: 'user1',
         status: 'PENDING',
         createdAt: new Date(),
+        subtotalPrice: 100,
+        totalPrice: 120,
+        taxes: 20,
+        shippingPrice: 10,
         user: { id: 'user1', name: 'John Doe' },
       },
       {
@@ -153,6 +165,10 @@ describe('getOrdersById', () => {
         userId: 'user1',
         status: 'COMPLETED',
         createdAt: new Date(),
+        subtotalPrice: 50,
+        totalPrice: 60,
+        taxes: 10,
+        shippingPrice: 5,
         user: { id: 'user1', name: 'John Doe' },
       },
     ]
@@ -202,7 +218,7 @@ describe('getOrdersById', () => {
     const result = await getOrdersById(userId)
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database query failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toEqual(mockError)
   })
 
@@ -242,6 +258,10 @@ describe('getOrderById', () => {
       userId: 'user1',
       status: 'PENDING',
       createdAt: new Date(),
+      subtotalPrice: 100,
+      totalPrice: 120,
+      taxes: 20,
+      shippingPrice: 10,
       user: { id: 'user1', name: 'John Doe' },
     }
 
@@ -276,7 +296,7 @@ describe('getOrderById', () => {
     const result = await getOrderById(orderId)
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database connection failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toEqual(mockError)
   })
 
@@ -316,12 +336,15 @@ describe('createOrder', () => {
     })
     globalThis.fetch = jest.fn().mockImplementation((url) => {
       const checkoutId = url.split('/').pop()
-      let amount = 120
-      if (checkoutId === 'checkoutId123') amount = 120
-      if (checkoutId === 'checkoutId50') amount = 60
+      // SumUp returns amounts in minor units (pence).
+      // 100 subtotal + 5.95 standard shipping = 105.95 -> 10595
+      // 45 subtotal + 9.95 express shipping = 54.95 -> 5495
+      let amount = 10595
+      if (checkoutId === 'checkoutId123') amount = 10595
+      if (checkoutId === 'checkoutId50') amount = 5495
       return Promise.resolve({
         ok: true,
-        json: async () => ({ status: 'PAID', amount }),
+        json: async () => ({ status: 'PAID', amount, currency: 'GBP' }),
       })
     })
   })
@@ -330,17 +353,46 @@ describe('createOrder', () => {
     const mockOrder = {
       id: '1',
       userId: 'user1',
-      status: 'PENDING',
+      status: 'PAID',
       createdAt: new Date(),
     }
 
+    // No existing order for this checkout (idempotency).
+    ;(prisma.order.findUnique as jest.Mock).mockResolvedValue(null)
+    ;(prisma.cart.findUnique as jest.Mock).mockResolvedValue({
+      id: 'cart-1',
+      userId: 'user1',
+      currency: 'GBP',
+      lineItems: [
+        {
+          variantId: 'var1',
+          quantity: 2,
+          price: 50,
+          currency: 'GBP',
+          variant: {
+            id: 'var1',
+            sku: 'VASE-1',
+            stock: 10,
+            colorName: 'Blue',
+            sizeName: 'M',
+            discounts: [],
+            product: {
+              id: 'p1',
+              name: 'Vase',
+              slug: 'vase',
+              images: ['/vase.jpg'],
+            },
+          },
+        },
+      ],
+    })
+
     const mockTx = {
       productVariant: {
-        findUnique: jest.fn().mockResolvedValue({
-          stock: 10,
-          product: { name: 'Vase' },
-        }),
-        update: jest.fn().mockResolvedValue({}),
+        findMany: jest.fn().mockResolvedValue([
+          { id: 'var1', stock: 10, product: { name: 'Vase' } },
+        ]),
+        updateMany: jest.fn().mockResolvedValue({ count: 1 }),
       },
       order: {
         create: jest.fn().mockResolvedValue(mockOrder),
@@ -382,6 +434,10 @@ describe('createOrder', () => {
     expect(result.success).toBe(true)
     expect(result.message).toBe('Order created successfully')
     expect(result.data).toEqual(mockOrder)
+    expect(mockTx.productVariant.updateMany).toHaveBeenCalledWith({
+      where: { id: 'var1', stock: { gte: 2 } },
+      data: { stock: { decrement: 2 } },
+    })
   })
 
   it('should create order without userId', async () => {
@@ -390,32 +446,30 @@ describe('createOrder', () => {
     const mockOrder = {
       id: '2',
       userId: null,
-      status: 'PENDING',
+      status: 'PAID',
       createdAt: new Date(),
     }
 
+    ;(prisma.order.findUnique as jest.Mock).mockResolvedValue(null)
+    ;(prisma.productVariant.findMany as jest.Mock).mockResolvedValue([
+      { id: 'var2', price: 45, stock: 5, discounts: [] },
+    ])
+
     const mockTx = {
       productVariant: {
-        findUnique: jest.fn().mockResolvedValue({
-          stock: 5,
-          product: { name: 'Bowl' },
-        }),
-        update: jest.fn().mockResolvedValue({}),
+        findMany: jest.fn().mockResolvedValue([
+          { id: 'var2', stock: 5, product: { name: 'Bowl' } },
+        ]),
+        updateMany: jest.fn().mockResolvedValue({ count: 1 }),
       },
       order: {
         create: jest.fn().mockResolvedValue(mockOrder),
-      },
-      user: {
-        update: jest.fn().mockResolvedValue({}),
       },
       stockMovement: {
         create: jest.fn().mockResolvedValue({}),
       },
     }
 
-    ;(prisma.productVariant.findMany as jest.Mock).mockResolvedValue([
-      { id: 'var2', price: 45, stock: 5 },
-    ])
     ;(prisma.$transaction as jest.Mock).mockImplementation((callback) =>
       callback(mockTx),
     )
@@ -447,24 +501,13 @@ describe('createOrder', () => {
   })
 
   it('should throw error when variant not found', async () => {
-    const mockTx = {
-      productVariant: {
-        findUnique: jest.fn().mockResolvedValue(null),
-      },
-      order: {
-        create: jest.fn().mockResolvedValue({ id: 'temp-order' }),
-      },
-      stockMovement: {
-        create: jest.fn(),
-      },
-    }
-
-    ;(prisma.$transaction as jest.Mock).mockImplementation((callback) =>
-      callback(mockTx),
-    )
+    mockAuth.mockResolvedValue(null)
+    ;(prisma.order.findUnique as jest.Mock).mockResolvedValue(null)
+    // Guest validation finds no matching variant.
+    ;(prisma.productVariant.findMany as jest.Mock).mockResolvedValue([])
 
     const result = await createOrder('checkoutId123', {
-      userId: 'user1',
+      userId: '',
       address: {
         address: '456 Oak St',
         postalCode: '67890',
@@ -486,31 +529,18 @@ describe('createOrder', () => {
     } as unknown as CreateOrder)
 
     expect(result.success).toBe(false)
-    expect(result.message).toContain('Variant not found')
+    expect(result.message).toContain('not found')
   })
 
   it('should throw error when insufficient stock', async () => {
-    const mockTx = {
-      productVariant: {
-        findUnique: jest.fn().mockResolvedValue({
-          stock: 2,
-          product: { name: 'Plate' },
-        }),
-      },
-      order: {
-        create: jest.fn().mockResolvedValue({ id: 'temp-order' }),
-      },
-      stockMovement: {
-        create: jest.fn(),
-      },
-    }
-
-    ;(prisma.$transaction as jest.Mock).mockImplementation((callback) =>
-      callback(mockTx),
-    )
+    mockAuth.mockResolvedValue(null)
+    ;(prisma.order.findUnique as jest.Mock).mockResolvedValue(null)
+    ;(prisma.productVariant.findMany as jest.Mock).mockResolvedValue([
+      { id: 'var1', price: 100, stock: 2, discounts: [] },
+    ])
 
     const result = await createOrder('checkoutId123', {
-      userId: 'user1',
+      userId: '',
       address: {
         address: '456 Oak St',
         postalCode: '67890',
@@ -536,11 +566,16 @@ describe('createOrder', () => {
   })
 
   it('should handle transaction error', async () => {
+    mockAuth.mockResolvedValue(null)
+    ;(prisma.order.findUnique as jest.Mock).mockResolvedValue(null)
+    ;(prisma.productVariant.findMany as jest.Mock).mockResolvedValue([
+      { id: 'var1', price: 100, stock: 10, discounts: [] },
+    ])
     const mockError = new Error('Transaction failed')
     ;(prisma.$transaction as jest.Mock).mockRejectedValue(mockError)
 
     const result = await createOrder('checkoutId123', {
-      userId: 'user1',
+      userId: '',
       address: {
         address: '456 Oak St',
         postalCode: '67890',
@@ -562,14 +597,19 @@ describe('createOrder', () => {
     } as unknown as CreateOrder)
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Transaction failed')
+    expect(result.message).toBe('An unexpected error occurred')
   })
 
   it('should handle non-Error exceptions', async () => {
+    mockAuth.mockResolvedValue(null)
+    ;(prisma.order.findUnique as jest.Mock).mockResolvedValue(null)
+    ;(prisma.productVariant.findMany as jest.Mock).mockResolvedValue([
+      { id: 'var1', price: 100, stock: 10, discounts: [] },
+    ])
     ;(prisma.$transaction as jest.Mock).mockRejectedValue('Unknown error')
 
     const result = await createOrder('checkoutId123', {
-      userId: 'user1',
+      userId: '',
       address: {
         address: '456 Oak St',
         postalCode: '67890',
@@ -643,14 +683,26 @@ describe('updateOrderStatus', () => {
       createdAt: new Date(),
     }
 
-    ;(prisma.order.update as jest.Mock).mockResolvedValue(mockOrder)
+    // Current order must allow SHIPPED -> COMPLETED.
+    ;(prisma.order.findUnique as jest.Mock).mockResolvedValue({
+      id: '1',
+      status: 'SHIPPED',
+      lineItems: [],
+    })
+
+    const mockTx = {
+      order: { update: jest.fn().mockResolvedValue(mockOrder) },
+    }
+    ;(prisma.$transaction as jest.Mock).mockImplementation((callback) =>
+      callback(mockTx),
+    )
 
     const result = await updateOrderStatus('1', 'completed')
 
     expect(result.success).toBe(true)
     expect(result.message).toBe('Updated order status successfully')
     expect(result.data).toEqual(mockOrder)
-    expect(prisma.order.update).toHaveBeenCalledWith({
+    expect(mockTx.order.update).toHaveBeenCalledWith({
       where: { id: '1' },
       data: { status: 'COMPLETED' },
     })
@@ -658,32 +710,42 @@ describe('updateOrderStatus', () => {
   })
 
   it('should convert status to uppercase', async () => {
-    const mockOrder = { id: '2', status: 'PENDING' }
+    const mockOrder = { id: '2', status: 'SHIPPED' }
 
-    ;(prisma.order.update as jest.Mock).mockResolvedValue(mockOrder)
+    ;(prisma.order.findUnique as jest.Mock).mockResolvedValue({
+      id: '2',
+      status: 'PAID',
+      lineItems: [],
+    })
+    const mockTx = {
+      order: { update: jest.fn().mockResolvedValue(mockOrder) },
+    }
+    ;(prisma.$transaction as jest.Mock).mockImplementation((callback) =>
+      callback(mockTx),
+    )
 
-    await updateOrderStatus('2', 'pending')
+    await updateOrderStatus('2', 'shipped')
 
-    expect(prisma.order.update).toHaveBeenCalledWith({
+    expect(mockTx.order.update).toHaveBeenCalledWith({
       where: { id: '2' },
-      data: { status: 'PENDING' },
+      data: { status: 'SHIPPED' },
     })
   })
 
   it('should handle database error', async () => {
     const mockError = new Error('Update failed')
 
-    ;(prisma.order.update as jest.Mock).mockRejectedValue(mockError)
+    ;(prisma.order.findUnique as jest.Mock).mockRejectedValue(mockError)
 
     const result = await updateOrderStatus('1', 'shipped')
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Update failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toEqual(mockError)
   })
 
   it('should handle non-Error exceptions', async () => {
-    ;(prisma.order.update as jest.Mock).mockRejectedValue('Unknown error')
+    ;(prisma.order.findUnique as jest.Mock).mockRejectedValue('Unknown error')
 
     const result = await updateOrderStatus('1', 'cancelled')
 

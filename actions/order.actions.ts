@@ -10,10 +10,11 @@ import {
   CreateOrder,
   CartLineItem,
   CurrencyCode,
+  Discount,
 } from '@lib/types/types'
 import { revalidatePath } from 'next/cache'
 import { auth } from '@/auth'
-import { AppError, DatabaseError, NetworkError, formatError } from '@lib/errors'
+import { AppError, DatabaseError, NetworkError, formatError, toClientMessage } from '@lib/errors'
 import { withFetch } from '@lib/errors-utils'
 import {
   PaginationInput,
@@ -27,6 +28,12 @@ import {
 import { z } from 'zod'
 import * as Sentry from '@sentry/nextjs'
 import { isAdminRole } from '@lib/auth/admin'
+import {
+  computeFinalPrice,
+  getServerTaxes,
+  getShippingPrice,
+  toMinorUnits,
+} from '@lib/pricing'
 
 /**
  * Convert Prisma Decimal fields to plain numbers for safe
@@ -109,7 +116,7 @@ export async function getAllOrders(
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : 'A database error occurred',
+        toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -173,7 +180,7 @@ export async function getOrdersById(
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : 'A database error occurred',
+        toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -217,7 +224,7 @@ export async function getOrderById(
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : 'A database error occurred',
+        toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -246,6 +253,8 @@ const createOrderSchema = z.object({
     .optional(),
   shippingMethod: z.string().min(1).max(100),
   currency: z.nativeEnum(CurrencyCode).default('GBP'),
+  taxes: z.number().optional(),
+  shippingPrice: z.number().optional(),
 })
 
 export async function createOrder(
@@ -278,6 +287,9 @@ export async function createOrder(
       address,
       billingAddress,
       shippingMethod,
+      taxes,
+      shippingPrice,
+      currency,
     })
     if (!inputValidation.success) {
       return {
@@ -288,6 +300,15 @@ export async function createOrder(
     }
     const v = inputValidation.data
 
+    const checkoutIdValidation = z.string().min(10).max(200).safeParse(checkoutId)
+    if (!checkoutIdValidation.success) {
+      return {
+        success: false,
+        message: 'Invalid checkout reference.',
+        errors: null,
+      }
+    }
+
     const session = await auth()
     const sessionUserId = session?.user?.id ?? null
 
@@ -296,6 +317,20 @@ export async function createOrder(
         success: false,
         message: 'Unauthorized: Invalid user context for order creation.',
         errors: null,
+      }
+    }
+
+    // Idempotency: a paid SumUp checkout must only ever produce one order.
+    const existingOrder = await prisma.order.findUnique({
+      where: { checkoutId: checkoutIdValidation.data },
+    })
+    if (existingOrder) {
+      revalidatePath('/admin/orders')
+      revalidatePath('/user/orders')
+      return {
+        success: true,
+        message: 'Order already placed.',
+        data: existingOrder,
       }
     }
 
@@ -314,8 +349,8 @@ export async function createOrder(
     let finalLineItems = lineItems
     let finalSubtotalPrice = Number(subtotalPrice) || 0
     let finalTotalPrice = Number(totalPrice) || 0
-    let finalTaxes = taxes || 0
-    let finalShippingPrice = shippingPrice || 0
+    let finalTaxes = getServerTaxes()
+    let finalShippingPrice = getShippingPrice(v.shippingMethod)
     let finalCurrency = currency || 'GBP'
 
     // For guest users, still validate variant existence and server prices
@@ -323,7 +358,7 @@ export async function createOrder(
       const variantIds = finalLineItems.map((item) => item.variantId)
       const variants = await prisma.productVariant.findMany({
         where: { id: { in: variantIds } },
-        select: { id: true, price: true, stock: true },
+        select: { id: true, price: true, stock: true, discounts: true },
       })
       const variantMap = new Map(variants.map((v) => [v.id, v]))
 
@@ -353,15 +388,20 @@ export async function createOrder(
           price: Number(variant.price), // force server price
           quantity: Math.min(item.quantity, variant.stock),
           stock: variant.stock,
+          discounts: (variant.discounts ?? []) as Discount[],
         })
       }
       finalLineItems = validatedItems
-      // Recalculate totals from validated items
+      // Recalculate totals from validated items (including discounts)
       finalSubtotalPrice = validatedItems.reduce(
-        (sum, item) => sum + item.price * item.quantity,
+        (sum, item) =>
+          sum + computeFinalPrice(item.price, item.discounts) * item.quantity,
         0,
       )
-      finalTotalPrice = finalSubtotalPrice + finalTaxes + finalShippingPrice
+      // Shipping is derived server-side from the method; taxes are 0.
+      finalShippingPrice = getShippingPrice(v.shippingMethod)
+      finalTaxes = getServerTaxes()
+      finalTotalPrice = finalSubtotalPrice + finalShippingPrice + finalTaxes
     }
 
     if (resolvedUserId) {
@@ -375,31 +415,58 @@ export async function createOrder(
           },
         },
       })
-      if (cart) {
-        finalLineItems = cart.lineItems.map((li) => ({
-          id: li.variant.product.id,
+      if (!cart) {
+        return {
+          success: false,
+          message: 'Cart not found. Please add items to your cart.',
+          errors: new DatabaseError('Cart not found', 'createOrder'),
+        }
+      }
+
+      finalLineItems = cart.lineItems
+        .filter((li) => li.variant)
+        .map((li) => ({
+          id: li.variant!.product.id,
           variantId: li.variantId,
-          slug: li.variant.product.slug,
-          sku: li.variant.sku,
-          name: li.variant.product.name,
-          images: li.variant.product.images[0] || '',
+          slug: li.variant!.product.slug,
+          sku: li.variant!.sku,
+          name: li.variant!.product.name,
+          images: li.variant!.product.images[0] || '',
           quantity: li.quantity,
-          stock: li.variant.stock,
+          stock: li.variant!.stock,
           price: Number(li.price),
           currency: li.currency as CurrencyCode,
-          colorName: li.variant.colorName,
-          sizeName: li.variant.sizeName,
-          discounts: [],
+          colorName: li.variant!.colorName,
+          sizeName: li.variant!.sizeName,
+          discounts: (li.variant!.discounts ?? []) as Discount[],
         })) as CartLineItem[]
-        finalSubtotalPrice = Number(cart.subtotalPrice)
-        finalTotalPrice = Number(cart.totalPrice)
-        finalTaxes = Number(cart.taxes)
-        finalShippingPrice = Number(cart.shippingPrice)
-        finalCurrency = cart.currency
+
+      finalSubtotalPrice = finalLineItems.reduce(
+        (sum, item) =>
+          sum + computeFinalPrice(item.price, item.discounts) * item.quantity,
+        0,
+      )
+      // Shipping derived server-side from the method; taxes are 0; client
+      // taxes/shipping/totals stored on the cart are never trusted.
+      finalShippingPrice = getShippingPrice(v.shippingMethod)
+      finalTaxes = getServerTaxes()
+      finalTotalPrice = finalSubtotalPrice + finalShippingPrice + finalTaxes
+      finalCurrency = cart.currency
+    }
+
+    if (finalLineItems.length === 0) {
+      return {
+        success: false,
+        message: 'Your cart is empty.',
+        errors: new DatabaseError('Empty cart', 'createOrder'),
       }
     }
 
-    const fetchResult = await withFetch<{ status: string; amount: number }>(
+    const fetchResult = await withFetch<{
+      status: string
+      amount: number
+      currency: string
+    }>(
       `https://api.sumup.com/v0.1/checkouts/${checkoutId}`,
       {
         headers: {
@@ -425,8 +492,13 @@ export async function createOrder(
       }
     }
 
-    // Strict validation to ensure the paid amount matches the database cart total
-    if (fetchResult.data?.amount !== finalTotalPrice) {
+    // Strict validation to ensure the paid amount (minor units) and currency
+    // match the server-derived total.
+    const expectedMinorAmount = toMinorUnits(finalTotalPrice)
+    if (
+      fetchResult.data?.amount !== expectedMinorAmount ||
+      fetchResult.data?.currency !== finalCurrency
+    ) {
       return {
         success: false,
         message:
@@ -439,6 +511,7 @@ export async function createOrder(
       // 1. Create the Order first to get the ID
       const newOrder = await tx.order.create({
         data: {
+          checkoutId: checkoutIdValidation.data,
           lineItems: finalLineItems,
           lastName: v.lastName,
           firstName: v.firstName,
@@ -448,7 +521,7 @@ export async function createOrder(
           currency: finalCurrency,
           shippingAddress: v.address || {},
           billingAddress: v.billingAddress || v.address || {},
-          status: 'PENDING',
+          status: 'PAID', // payment already verified
           taxes: new Prisma.Decimal(finalTaxes),
           shippingPrice: new Prisma.Decimal(finalShippingPrice),
           subtotalPrice: new Prisma.Decimal(finalSubtotalPrice),
@@ -460,13 +533,16 @@ export async function createOrder(
         },
       })
 
-      // 2. Process each line item for stock and tracking
-      for (const item of finalLineItems) {
-        const variant = await tx.productVariant.findUnique({
-          where: { id: item.variantId },
-          select: { stock: true, product: { select: { name: true } } },
-        })
+      // 2. Process each line item for stock and tracking (single batched read)
+      const variantIds = finalLineItems.map((item) => item.variantId)
+      const variants = await tx.productVariant.findMany({
+        where: { id: { in: variantIds } },
+        select: { id: true, stock: true, product: { select: { name: true } } },
+      })
+      const variantMap = new Map(variants.map((v) => [v.id, v]))
 
+      for (const item of finalLineItems) {
+        const variant = variantMap.get(item.variantId)
         if (!variant) {
           throw new DatabaseError(
             `Variant not found: ${item.variantId}`,
@@ -474,21 +550,19 @@ export async function createOrder(
           )
         }
 
-        if (variant.stock < item.quantity) {
+        // Conditional decrement — atomically guards against overselling when
+        // two concurrent orders race for the last unit.
+        const updated = await tx.productVariant.updateMany({
+          where: { id: item.variantId, stock: { gte: item.quantity } },
+          data: { stock: { decrement: item.quantity } },
+        })
+        if (updated.count === 0) {
           throw new AppError(
             `Insufficient stock for ${variant.product.name}. Requested: ${item.quantity}, Available: ${variant.stock}`,
             'INSUFFICIENT_STOCK',
             409,
           )
         }
-
-        // Decrement stock
-        await tx.productVariant.update({
-          where: { id: item.variantId },
-          data: {
-            stock: { decrement: item.quantity },
-          },
-        })
 
         // Record stock movement
         await tx.stockMovement.create({
@@ -537,6 +611,14 @@ export async function createOrder(
   }
 }
 
+const ALLOWED_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
+  PENDING: ['PAID', 'CANCELLED'],
+  PAID: ['SHIPPED', 'CANCELLED'],
+  SHIPPED: ['COMPLETED', 'CANCELLED'],
+  COMPLETED: [],
+  CANCELLED: [],
+}
+
 export async function updateOrderStatus(
   orderId: string,
   newStatus: string,
@@ -552,19 +634,77 @@ export async function updateOrderStatus(
       }
     }
 
-    const orderStatusSchema = z.nativeEnum(OrderStatus)
-    const status = orderStatusSchema.parse(newStatus.toUpperCase())
+    const parsed = z.nativeEnum(OrderStatus).safeParse(newStatus.toUpperCase())
+    if (!parsed.success) {
+      return {
+        success: false,
+        message: 'Invalid order status.',
+        errors: null,
+      }
+    }
+    const status = parsed.data
 
-    const order = await prisma.order.update({
-      where: { id: orderId },
-      data: { status },
+    const order = await prisma.order.findUnique({ where: { id: orderId } })
+    if (!order) {
+      return {
+        success: false,
+        message: 'Order not found.',
+        errors: null,
+      }
+    }
+
+    const current = order.status as OrderStatus
+    if (current === status) {
+      return {
+        success: true,
+        message: 'Order is already in this state.',
+        data: order,
+      }
+    }
+
+    if (!ALLOWED_TRANSITIONS[current]?.includes(status)) {
+      return {
+        success: false,
+        message: `Cannot transition order from ${current} to ${status}.`,
+        errors: null,
+      }
+    }
+
+    const updated = await prisma.$transaction(async (tx) => {
+      const updatedOrder = await tx.order.update({
+        where: { id: orderId },
+        data: { status },
+      })
+
+      // Cancelling an order restores the sold stock and records the movement.
+      if (status === 'CANCELLED') {
+        const lineItems = updatedOrder.lineItems as unknown as CartLineItem[]
+        for (const item of lineItems ?? []) {
+          await tx.productVariant.update({
+            where: { id: item.variantId },
+            data: { stock: { increment: item.quantity } },
+          })
+          await tx.stockMovement.create({
+            data: {
+              variantId: item.variantId,
+              quantity: item.quantity,
+              type: 'CANCELLATION',
+              orderId,
+              userId: session.user.id,
+              note: `Order #${orderId.slice(-6).toUpperCase()} cancelled`,
+            },
+          })
+        }
+      }
+
+      return updatedOrder
     })
 
     revalidatePath('/admin/orders')
     return {
       success: true,
       message: 'Updated order status successfully',
-      data: order,
+      data: updated,
     }
   } catch (error) {
     console.error('updateOrderStatus_ERROR:', error)
@@ -572,7 +712,7 @@ export async function updateOrderStatus(
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : 'A database error occurred',
+        toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }

@@ -65,7 +65,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         data-color={color}
         ref={mergeRefs([ref, buttonRef])}
         className={rootClassName}
-        disabled={disabled}
+        disabled={loading || disabled}
         data-testid={`button-${variant || 'default'}`}
         style={{
           width,

@@ -88,7 +88,7 @@ describe('sendEmail', () => {
     expect(result.success).toBe(false)
     expect(result.message).toBe('Resend API error')
   })
-  it('should use custom from address', async () => {
+  it('should always use the fixed sender address', async () => {
     mockInstance.emails.send.mockResolvedValue({
       data: { id: '123' },
       error: null,
@@ -98,28 +98,11 @@ describe('sendEmail', () => {
       to: 'test@example.com',
       subject: 'Test',
       body: 'Body',
-      from: 'custom@example.com',
     })
 
     const call = mockInstance.emails.send.mock.calls[0][0]
-    expect(call.from).toBe('custom@example.com')
+    expect(call.from).toBe('Curly Pottery <noreply@curlypottery.com>')
     expect(call.to).toBe('test@example.com')
-  })
-
-  it('should use default from address when not provided', async () => {
-    mockInstance.emails.send.mockResolvedValue({
-      data: { id: '123' },
-      error: null,
-    })
-
-    await sendEmail({
-      to: 'test@example.com',
-      subject: 'Test',
-      body: 'Body',
-    })
-
-    const call = mockInstance.emails.send.mock.calls[0][0]
-    expect(call.from).toBe('noreply@curlypottery.com')
   })
 })
 
@@ -150,7 +133,7 @@ describe('sendResetEmail', () => {
 
     expect(result.success).toBe(true)
     expect(result.message).toBe('Email sent successfully!')
-    expect(result.data?.id).toBe('mock-token-123')
+    expect(result.data).toBeNull()
   })
 
   it('should return error when user not found', async () => {
@@ -264,7 +247,7 @@ describe('resetPassword', () => {
     })
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Hash error')
+    expect(result.message).toBe('A database error occurred')
   })
 
   it('should return default error message for non-Error exceptions', async () => {

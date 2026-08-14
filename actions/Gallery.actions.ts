@@ -5,6 +5,7 @@ import { prisma } from 'prisma/prisma'
 import { GalleryImage, ActionResponse } from '@lib/types/types'
 import { deleteBlob } from './serverImages.action'
 import { assertAdmin } from '@lib/auth/admin'
+import { toClientMessage } from '@lib/errors'
 import * as Sentry from '@sentry/nextjs'
 import { getGalleryImages as getGalleryImagesData } from '@lib/data/gallery'
 
@@ -62,8 +63,7 @@ export async function addGalleryImage(
     Sentry.captureException(error)
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : 'A database error occurred',
+      message: toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -96,11 +96,12 @@ export async function deleteGalleryImage(
       }
     }
 
-    await deleteBlob(image.url)
-
+    // Delete the DB row first, then clean up the blob best-effort (deleteBlob
+    // never throws) so a failure can't leave a broken record.
     const deletedImage = await prisma.galleryImage.delete({
       where: { id },
     })
+    await deleteBlob(image.url)
 
     revalidatePath('/', 'layout')
     revalidateTag('gallery', 'max')
@@ -114,8 +115,7 @@ export async function deleteGalleryImage(
     Sentry.captureException(error)
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : 'A database error occurred',
+      message: toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -167,8 +167,7 @@ export async function reorderGalleryImages(
     Sentry.captureException(error)
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : 'A database error occurred',
+      message: toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }

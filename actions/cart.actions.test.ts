@@ -147,7 +147,13 @@ describe('syncCartAction', () => {
       user: { id: 'user-123' },
     })
     ;(prisma.productVariant.findMany as jest.Mock).mockResolvedValue([
-      { id: 'v1', stock: 10, price: 100 },
+      {
+        id: 'v1',
+        stock: 10,
+        price: 100,
+        availableForSale: true,
+        product: { hide: false },
+      },
     ])
 
     const mockTx = {
@@ -165,10 +171,16 @@ describe('syncCartAction', () => {
 
     await syncCartAction(items)
 
-    expect(mockTx.cart.upsert).toHaveBeenCalledWith({
-      where: { userId: 'user-123' },
-      update: {},
-      create: { user: { connect: { id: 'user-123' } } },
+    expect(mockTx.cartLineItem.createMany).toHaveBeenCalledWith({
+      data: [
+        {
+          cartId: 'cart-1',
+          variantId: 'v1',
+          quantity: 2,
+          price: 100,
+          currency: 'USD',
+        },
+      ],
     })
   })
 
@@ -252,7 +264,7 @@ describe('updateCartPrice', () => {
         quantity: 2,
         price: 50,
         currency: 'GBP',
-        discounts: [],
+        variant: { discounts: [] },
       },
     ])
 

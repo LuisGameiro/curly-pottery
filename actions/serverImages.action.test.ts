@@ -37,7 +37,7 @@ describe('deleteBlob', () => {
     const result = await deleteBlob('blob-url')
     expect(result).toEqual({
       success: false,
-      message: 'Delete failed',
+      message: 'Failed to delete blob.',
     })
   })
 })

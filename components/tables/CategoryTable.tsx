@@ -9,6 +9,7 @@ import DataTable from '@components/ui/Table/DataTable'
 import { deleteCategory } from '@actions/category.actions'
 import { useRouter } from 'next/navigation'
 import { Category } from '@lib/types/types'
+import { toast } from 'sonner'
 
 export default function CategoryTable({
   categories,
@@ -26,9 +27,12 @@ export default function CategoryTable({
       const response = await deleteCategory({ id, image })
       if (response.success) {
         router.refresh()
+      } else {
+        toast.error(response.message)
       }
     } catch (error) {
       console.error('Delete failed', error)
+      toast.error('Delete failed')
     } finally {
       setIsDeleting(null)
     }

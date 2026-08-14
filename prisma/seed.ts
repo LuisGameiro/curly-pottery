@@ -1,7 +1,16 @@
 import { prisma } from './prisma'
 import { hashPassword } from '@lib/auth/password'
+import crypto from 'node:crypto'
 
 async function main() {
+  // Guard: never wipe a non-empty production database by accident.
+  const existingUsers = await prisma.user.count()
+  if (existingUsers > 0 && process.env.ALLOW_DB_WIPE !== 'true') {
+    throw new Error(
+      'Refusing to seed: the database already contains data. Set ALLOW_DB_WIPE=true to force a wipe.',
+    )
+  }
+
   await prisma.productVariant.deleteMany()
   await prisma.product.deleteMany()
   await prisma.category.deleteMany()
@@ -21,17 +30,26 @@ async function main() {
 
   console.log('Cleaned database...')
 
-  // Create admin user
+  // Create admin user — credentials come from env, never hardcoded defaults.
+  const adminEmail = process.env.SEED_ADMIN_EMAIL || 'admin@curlypottery.com'
+  const adminPassword =
+    process.env.SEED_ADMIN_PASSWORD || crypto.randomBytes(16).toString('hex')
   const _admin = await prisma.user.create({
     data: {
-      email: 'admin@curlypottery.com',
+      email: adminEmail,
       firstName: 'Admin',
       lastName: 'User',
       role: 'ADMIN',
-      password: await hashPassword('admin123'),
+      password: await hashPassword(adminPassword),
       emailVerified: new Date(),
     },
   })
+  if (!process.env.SEED_ADMIN_PASSWORD) {
+    console.warn(
+      `⚠️  No SEED_ADMIN_PASSWORD set — generated a random one: ${adminPassword}\n` +
+        '   Save it now; it will not be shown again.',
+    )
+  }
   console.log('✅ Admin user created')
 
   // Create categories

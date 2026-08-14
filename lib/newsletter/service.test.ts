@@ -211,6 +211,10 @@ describe('newsletter service', () => {
         ],
       },
     ] as never)
+    jest.mocked(prisma.$queryRaw).mockResolvedValue([{ id: 'delivery-1' }])
+    jest.mocked(prisma.newsletterDelivery.updateMany).mockResolvedValue({
+      count: 1,
+    } as never)
     jest.mocked(prisma.newsletterDelivery.findMany).mockResolvedValue([
       {
         id: 'delivery-1',
@@ -252,10 +256,7 @@ describe('newsletter service', () => {
     jest.mocked(prisma.newsletterCampaign.update).mockResolvedValue({
       id: 'campaign-1',
     } as never)
-    jest
-      .mocked(prisma.newsletterDelivery.count)
-      .mockResolvedValueOnce(0)
-      .mockResolvedValueOnce(0)
+    jest.mocked(prisma.newsletterDelivery.count).mockResolvedValue(0)
 
     const result = await dispatchQueuedNewsletterBatch()
 
@@ -580,6 +581,10 @@ describe('dispatchQueuedNewsletterBatch edge cases', () => {
         products: [],
       },
     ] as never)
+    jest.mocked(prisma.$queryRaw).mockResolvedValue([{ id: 'delivery-error-1' }])
+    jest.mocked(prisma.newsletterDelivery.updateMany).mockResolvedValue({
+      count: 1,
+    } as never)
     jest.mocked(prisma.newsletterDelivery.findMany).mockResolvedValue([
       {
         id: 'delivery-error-1',
@@ -617,10 +622,7 @@ describe('dispatchQueuedNewsletterBatch edge cases', () => {
     })
     jest.mocked(prisma.newsletterDelivery.update).mockResolvedValue({} as never)
     jest.mocked(prisma.newsletterCampaign.update).mockResolvedValue({} as never)
-    jest
-      .mocked(prisma.newsletterDelivery.count)
-      .mockResolvedValueOnce(0)
-      .mockResolvedValueOnce(0)
+    jest.mocked(prisma.newsletterDelivery.count).mockResolvedValue(0)
 
     const result = await dispatchQueuedNewsletterBatch()
 
@@ -669,6 +671,10 @@ describe('dispatchQueuedNewsletterBatch edge cases', () => {
         products: [],
       },
     ] as never)
+    jest.mocked(prisma.$queryRaw).mockResolvedValue([{ id: 'delivery-catch-1' }])
+    jest.mocked(prisma.newsletterDelivery.updateMany).mockResolvedValue({
+      count: 1,
+    } as never)
     jest.mocked(prisma.newsletterDelivery.findMany).mockResolvedValue([
       {
         id: 'delivery-catch-1',
@@ -703,10 +709,7 @@ describe('dispatchQueuedNewsletterBatch edge cases', () => {
     mockResend.emails.send.mockRejectedValue(new Error('Connection timeout'))
     jest.mocked(prisma.newsletterDelivery.update).mockResolvedValue({} as never)
     jest.mocked(prisma.newsletterCampaign.update).mockResolvedValue({} as never)
-    jest
-      .mocked(prisma.newsletterDelivery.count)
-      .mockResolvedValueOnce(0)
-      .mockResolvedValueOnce(0)
+    jest.mocked(prisma.newsletterDelivery.count).mockResolvedValue(0)
 
     const result = await dispatchQueuedNewsletterBatch()
 
@@ -747,6 +750,10 @@ describe('dispatchQueuedNewsletterBatch edge cases', () => {
         products: [],
       },
     ] as never)
+    jest.mocked(prisma.$queryRaw).mockResolvedValue([{ id: 'delivery-string-1' }])
+    jest.mocked(prisma.newsletterDelivery.updateMany).mockResolvedValue({
+      count: 1,
+    } as never)
     jest.mocked(prisma.newsletterDelivery.findMany).mockResolvedValue([
       {
         id: 'delivery-string-1',
@@ -781,10 +788,7 @@ describe('dispatchQueuedNewsletterBatch edge cases', () => {
     mockResend.emails.send.mockRejectedValue('Network error string')
     jest.mocked(prisma.newsletterDelivery.update).mockResolvedValue({} as never)
     jest.mocked(prisma.newsletterCampaign.update).mockResolvedValue({} as never)
-    jest
-      .mocked(prisma.newsletterDelivery.count)
-      .mockResolvedValueOnce(0)
-      .mockResolvedValueOnce(0)
+    jest.mocked(prisma.newsletterDelivery.count).mockResolvedValue(0)
 
     const result = await dispatchQueuedNewsletterBatch()
 
@@ -825,6 +829,13 @@ describe('dispatchQueuedNewsletterBatch edge cases', () => {
         products: [],
       },
     ] as never)
+    jest.mocked(prisma.$queryRaw).mockResolvedValue([
+      { id: 'delivery-limit-1' },
+      { id: 'delivery-limit-2' },
+    ])
+    jest.mocked(prisma.newsletterDelivery.updateMany).mockResolvedValue({
+      count: 2,
+    } as never)
     jest.mocked(prisma.newsletterDelivery.findMany).mockResolvedValue([
       {
         id: 'delivery-limit-1',
@@ -891,10 +902,7 @@ describe('dispatchQueuedNewsletterBatch edge cases', () => {
     })
     jest.mocked(prisma.newsletterDelivery.update).mockResolvedValue({} as never)
     jest.mocked(prisma.newsletterCampaign.update).mockResolvedValue({} as never)
-    jest
-      .mocked(prisma.newsletterDelivery.count)
-      .mockResolvedValueOnce(0)
-      .mockResolvedValueOnce(0)
+    jest.mocked(prisma.newsletterDelivery.count).mockResolvedValue(0)
 
     const result = await dispatchQueuedNewsletterBatch(2)
 

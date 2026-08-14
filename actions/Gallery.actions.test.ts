@@ -159,7 +159,7 @@ describe('addGalleryImage', () => {
     const result = await addGalleryImage('https://example.com/image.jpg')
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('DB error')
+    expect(result.message).toBe('A database error occurred')
   })
 })
 
@@ -249,11 +249,11 @@ describe('deleteGalleryImage', () => {
     const result = await deleteGalleryImage('img-1')
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('DB error')
+    expect(result.message).toBe('A database error occurred')
   })
 })
 
-describe('reorderGalleryImages', () => {
+describe('deleteGalleryImage', () => {
   const ids = ['img-a', 'img-b', 'img-c']
 
   it('admin user updates sort orders in transaction and returns success', async () => {
@@ -340,6 +340,6 @@ describe('reorderGalleryImages', () => {
     const result = await reorderGalleryImages(ids)
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Transaction failed')
+    expect(result.message).toBe('A database error occurred')
   })
 })

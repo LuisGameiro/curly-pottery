@@ -138,7 +138,7 @@ describe('subscribeToNewsletter', () => {
     const result = await subscribeToNewsletter(validInput)
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Service error')
+    expect(result.message).toBe('Failed to subscribe email')
   })
 })
 
@@ -185,7 +185,7 @@ describe('unsubscribeNewsletter', () => {
     const result = await unsubscribeNewsletter(validInput)
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Token not found')
+    expect(result.message).toBe('Failed to unsubscribe email')
   })
 })
 
@@ -238,7 +238,7 @@ describe('getNewsletterAdminOverview', () => {
     const result = await getNewsletterAdminOverview()
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Failed to load')
+    expect(result.message).toBe('Failed to load newsletter')
   })
 })
 
@@ -307,7 +307,7 @@ describe('createNewsletterCampaignAction', () => {
     const result = await createNewsletterCampaignAction(validInput)
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Product not found')
+    expect(result.message).toBe('Failed to create campaign')
   })
 })
 
@@ -359,7 +359,7 @@ describe('queueNewsletterCampaignAction', () => {
     const result = await queueNewsletterCampaignAction(validInput)
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Campaign not found')
+    expect(result.message).toBe('Failed to queue campaign')
   })
 })
 
@@ -400,7 +400,7 @@ describe('runNewsletterDispatchAction', () => {
     const result = await runNewsletterDispatchAction()
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Dispatch failed')
+    expect(result.message).toBe('Failed to dispatch batch')
   })
 })
 
@@ -440,6 +440,6 @@ describe('syncNewsletterSubscribersAction', () => {
     const result = await syncNewsletterSubscribersAction()
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Sync failed')
+    expect(result.message).toBe('Failed to sync subscribers')
   })
 })

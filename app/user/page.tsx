@@ -18,6 +18,10 @@ export default async function ProfilePage() {
 
   const user = await getUserById(session.user.id)
 
+  if (!user.success) {
+    throw new Error(user.message)
+  }
+
   if (!user.data) {
     redirect('/auth/login')
   }

@@ -24,27 +24,41 @@ export default function OrdersClient({
   const [total, setTotal] = useState(initialData.total)
   const [searchTerm, setSearchTerm] = useState(initialSearch)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   )
+  // Monotonic request id — ignores stale responses so an older search can't
+  // overwrite a newer one.
+  const requestIdRef = useRef(0)
 
   const fetchPage = useCallback(
     async (opts: { search?: string; cursor?: string | null }) => {
+      const requestId = ++requestIdRef.current
       setIsLoading(true)
+      setError(null)
       try {
         const response = await getAllOrders({
           search: opts.search,
           cursor: opts.cursor,
           take: ADMIN_PAGE_SIZE,
         })
+        if (requestId !== requestIdRef.current) return
         if (response.success && response.data) {
           setItems(response.data.items)
           setNextCursor(response.data.nextCursor)
           setHasMore(response.data.hasMore)
           setTotal(response.data.total)
+        } else {
+          setError(response.message)
+        }
+      } catch (err) {
+        if (requestId === requestIdRef.current) {
+          console.error('Failed to load orders', err)
+          setError('Failed to load orders. Please try again.')
         }
       } finally {
-        setIsLoading(false)
+        if (requestId === requestIdRef.current) setIsLoading(false)
       }
     },
     [],
@@ -117,6 +131,8 @@ export default function OrdersClient({
           </Text>
         </div>
         <OrderTable orders={otherOrders} isLoading={isLoading} />
+
+        {error && <div className="py-4 text-center text-red text-sm">{error}</div>}
 
         {hasMore && !isLoading && (
           <div className="flex justify-center py-6">

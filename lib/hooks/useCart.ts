@@ -5,6 +5,7 @@ import { useUser } from './useUser'
 import { calculateDiscount } from '@lib/calculate-price'
 import { useCartStore } from '@lib/zustand/cart'
 import { CurrencyCode } from '@lib/types/types'
+import { useShallow } from 'zustand/react/shallow'
 
 export default function useCart() {
   const { isAuthenticated } = useUser()
@@ -16,7 +17,17 @@ export default function useCart() {
     removeItem,
     updateItem,
     deleteAll,
-  } = useCartStore()
+  } = useCartStore(
+    useShallow((s) => ({
+      syncWithDatabase: s.syncWithDatabase,
+      cartItems: s.cartItems,
+      isLoading: s.isLoading,
+      addItem: s.addItem,
+      removeItem: s.removeItem,
+      updateItem: s.updateItem,
+      deleteAll: s.deleteAll,
+    })),
+  )
 
   const prevAuthRef = useRef(isAuthenticated)
 

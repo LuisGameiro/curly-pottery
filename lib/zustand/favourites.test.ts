@@ -42,7 +42,9 @@ describe('useFavouritesStore', () => {
 
   describe('addFavourite', () => {
     it('should add a product ID to the list', async () => {
-      jest.mocked(addFavouriteAction).mockResolvedValue({ success: true })
+      jest
+        .mocked(addFavouriteAction)
+        .mockResolvedValue({ success: true, message: 'ok', data: null })
 
       await useFavouritesStore.getState().addFavourite('prod-1')
 
@@ -59,7 +61,9 @@ describe('useFavouritesStore', () => {
     })
 
     it('should call addFavouriteAction and show success toast', async () => {
-      jest.mocked(addFavouriteAction).mockResolvedValue({ success: true })
+      jest
+        .mocked(addFavouriteAction)
+        .mockResolvedValue({ success: true, message: 'ok', data: null })
 
       await useFavouritesStore.getState().addFavourite('prod-1')
 
@@ -91,7 +95,9 @@ describe('useFavouritesStore', () => {
   describe('removeFavourite', () => {
     it('should remove a product ID and call removeFavouriteAction', async () => {
       useFavouritesStore.setState({ favouriteIds: ['prod-1', 'prod-2'] })
-      jest.mocked(removeFavouriteAction).mockResolvedValue({ success: true })
+      jest
+        .mocked(removeFavouriteAction)
+        .mockResolvedValue({ success: true, message: 'ok', data: null })
 
       await useFavouritesStore.getState().removeFavourite('prod-1')
 
@@ -129,7 +135,9 @@ describe('useFavouritesStore', () => {
 
   describe('toggleFavourite', () => {
     it('should call addFavourite when product is not favourited', async () => {
-      jest.mocked(addFavouriteAction).mockResolvedValue({ success: true })
+      jest
+        .mocked(addFavouriteAction)
+        .mockResolvedValue({ success: true, message: 'ok', data: null })
 
       await useFavouritesStore.getState().toggleFavourite('prod-1')
 
@@ -139,7 +147,9 @@ describe('useFavouritesStore', () => {
 
     it('should call removeFavourite when product is already favourited', async () => {
       useFavouritesStore.setState({ favouriteIds: ['prod-1'] })
-      jest.mocked(removeFavouriteAction).mockResolvedValue({ success: true })
+      jest
+        .mocked(removeFavouriteAction)
+        .mockResolvedValue({ success: true, message: 'ok', data: null })
 
       await useFavouritesStore.getState().toggleFavourite('prod-1')
 
@@ -150,7 +160,11 @@ describe('useFavouritesStore', () => {
 
   describe('syncWithDatabase', () => {
     it('should fetch IDs and set favouriteIds', async () => {
-      jest.mocked(getFavouritesAction).mockResolvedValue(['prod-1', 'prod-2'])
+      jest.mocked(getFavouritesAction).mockResolvedValue({
+        success: true,
+        message: 'ok',
+        data: ['prod-1', 'prod-2'],
+      })
 
       await useFavouritesStore.getState().syncWithDatabase()
 

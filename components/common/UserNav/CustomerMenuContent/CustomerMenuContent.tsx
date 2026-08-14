@@ -11,6 +11,8 @@ import {
 import { Moon, Sun } from 'lucide-react'
 import { useUser } from '@lib/hooks/useUser'
 import { signOut } from 'next-auth/react'
+import { useCartStore } from '@lib/zustand/cart'
+import { useFavouritesStore } from '@lib/zustand/favourites'
 
 const LINKS = [
   {
@@ -31,6 +33,14 @@ export default function CustomerMenuContent() {
 
   function handleClick(href: string) {
     router.push(href)
+  }
+
+  async function handleSignOut() {
+    // Clear persisted cart/favourites so the next visitor on this browser
+    // doesn't inherit the previous user's data.
+    useCartStore.setState({ cartItems: [] })
+    useFavouritesStore.setState({ favouriteIds: [] })
+    await signOut()
   }
 
   return (
@@ -99,7 +109,7 @@ export default function CustomerMenuContent() {
             >
               Favourites
             </button>
-            <button type="button" className={s.link} onClick={() => signOut()}>
+            <button type="button" className={s.link} onClick={() => handleSignOut()}>
               Logout
             </button>
           </div>

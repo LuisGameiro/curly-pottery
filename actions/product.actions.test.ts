@@ -99,7 +99,7 @@ describe('getProductBySlug', () => {
     const result = await getProductBySlug('test-product')
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database connection failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toBe(mockError)
   })
 
@@ -177,7 +177,7 @@ describe('getProductById', () => {
     const result = await getProductById('1')
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database connection failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toBe(mockError)
   })
 
@@ -230,7 +230,7 @@ describe('deleteProduct', () => {
     })
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database connection failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toBe(mockError)
   })
 
@@ -307,7 +307,7 @@ describe('toggleVisibility', () => {
     const result = await toggleVisibility({ id: '1', state: true })
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database connection failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toBe(mockError)
   })
 
@@ -373,7 +373,7 @@ describe('getAllProducts', () => {
     const result = await getAllProducts()
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database connection failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toBe(mockError)
   })
 
@@ -466,7 +466,7 @@ describe('getRandomProducts', () => {
     const result = await getRandomProducts()
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database connection failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toBe(mockError)
   })
 
@@ -578,6 +578,7 @@ describe('getRelatedProducts', () => {
     expect(result.success).toBe(true)
     expect(prisma.product.findMany).toHaveBeenCalledWith({
       where: {
+        hide: false,
         categories: {
           some: {
             name: { in: ['Category 1'] },
@@ -611,6 +612,7 @@ describe('getRelatedProducts', () => {
 
     expect(prisma.product.findMany).toHaveBeenCalledWith({
       where: {
+        hide: false,
         categories: {
           some: {
             name: { in: ['Category 1'] },
@@ -665,7 +667,7 @@ describe('getRelatedProducts', () => {
     })
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database connection failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toBe(mockError)
   })
 
@@ -682,7 +684,7 @@ describe('getRelatedProducts', () => {
     })
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database connection failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toEqual(mockError)
   })
 
@@ -831,7 +833,7 @@ describe('getProductsByCategorySlug', () => {
     const result = await getProductsByCategorySlug('pottery')
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database connection failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toBe(mockError)
   })
 
@@ -854,7 +856,7 @@ describe('getProductsByCategorySlug', () => {
     const result = await getProductsByCategorySlug(null)
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database connection failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toBe(mockError)
   })
 
@@ -1001,9 +1003,9 @@ describe('upsertProduct', () => {
     await upsertProduct(payload)
 
     const callArgs = (prisma.product.upsert as jest.Mock).mock.calls[0][0]
-    expect(callArgs.update.variants.create[0]).not.toHaveProperty('files')
-    expect(callArgs.update.variants.create[0]).not.toHaveProperty('previews')
-    expect(callArgs.update.variants.create[0]).not.toHaveProperty('isExpanded')
+    expect(callArgs.update.variants.update[0].data).not.toHaveProperty('files')
+    expect(callArgs.update.variants.update[0].data).not.toHaveProperty('previews')
+    expect(callArgs.update.variants.update[0].data).not.toHaveProperty('isExpanded')
   })
 
   it('should set empty arrays for variant details, discounts, and images when not provided', async () => {
@@ -1018,9 +1020,9 @@ describe('upsertProduct', () => {
     await upsertProduct(payload)
 
     const callArgs = (prisma.product.upsert as jest.Mock).mock.calls[0][0]
-    expect(callArgs.update.variants.create[0].details).toEqual([])
-    expect(callArgs.update.variants.create[0].discounts).toEqual([])
-    expect(callArgs.update.variants.create[0].images).toEqual([])
+    expect(callArgs.update.variants.update[0].data.details).toEqual([])
+    expect(callArgs.update.variants.update[0].data.discounts).toEqual([])
+    expect(callArgs.update.variants.update[0].data.images).toEqual([])
   })
 
   it('should handle multiple categories correctly', async () => {
@@ -1065,7 +1067,7 @@ describe('upsertProduct', () => {
     const result = await upsertProduct(payload)
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database connection failed')
+    expect(result.message).toBe('Database error')
     expect(result.errors).toBe(mockError)
   })
 
@@ -1150,7 +1152,7 @@ describe('upsertProduct', () => {
     await upsertProduct(payload)
 
     const callArgs = (prisma.product.upsert as jest.Mock).mock.calls[0][0]
-    const variant = callArgs.update.variants.create[0]
+    const variant = callArgs.update.variants.update[0].data
     expect(variant.name).toBe('Premium Variant')
     expect(variant.price).toBe(250)
     expect(variant.description).toBe('High quality variant')

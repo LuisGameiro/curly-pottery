@@ -7,13 +7,27 @@ jest.mock('@vercel/blob/client')
 jest.mock('./serverImages.action')
 jest.mock('@lib/cropToSquare')
 
+const ORIGINAL_NODE_ENV = process.env.NODE_ENV
+
+function setNodeEnv(value: string | undefined) {
+  // NODE_ENV is typed read-only on process.env — cast to assign it.
+  ;(process.env as Record<string, string | undefined>).NODE_ENV = value
+}
+
 describe('syncImages', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     delete process.env.NEXT_PUBLIC_APP_ENV
   })
 
+  afterEach(() => {
+    setNodeEnv(ORIGINAL_NODE_ENV)
+  })
+
   it('should return random images in dev mode', async () => {
+    // The dev branch in lib/client-images requires BOTH NODE_ENV=development
+    // and NEXT_PUBLIC_APP_ENV=dev (Jest runs with NODE_ENV=test by default).
+    setNodeEnv('development')
     process.env.NEXT_PUBLIC_APP_ENV = 'dev'
     const result = await syncImages({
       currentItems: ['file1', 'file2'],

@@ -6,7 +6,7 @@ import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { sendResetEmail } from '@actions/email.actions'
-import zod from 'zod'
+import { z } from 'zod'
 
 export default function RecoveryForm() {
   const [loading, setLoading] = useState(false)
@@ -19,16 +19,19 @@ export default function RecoveryForm() {
     const formData = new FormData(e.currentTarget)
     const email = formData.get('email')
 
-    if (
-      zod.email().safeParse(email).success === false &&
-      typeof email === null
-    ) {
+    const emailValidation = z.string().email().safeParse(email)
+    if (!emailValidation.success) {
       toast.error('Please enter a valid email address.')
       setLoading(false)
       return
     }
     try {
-      await sendResetEmail(email as string)
+      const result = await sendResetEmail(emailValidation.data)
+      if (!result.success) {
+        toast.error(result.message)
+        setLoading(false)
+        return
+      }
 
       setSubmitted(true)
       toast.success('Reset link sent to your email')

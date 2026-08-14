@@ -35,27 +35,39 @@ export default function RegisterForm() {
     setLoading(true)
     setError('')
 
-    const formData = new FormData(e.currentTarget)
-    const result = await registerUser(formData)
-
-    if (!result.success) {
-      setError(result.message)
+    if (formData.password !== formData.password2) {
+      setError('Passwords do not match')
       setLoading(false)
-    } else {
-      const email = formData.get('email') as string
-      const password = formData.get('password') as string
+      return
+    }
 
-      const signInResult = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      })
+    const formDataValues = new FormData(e.currentTarget)
+    try {
+      const result = await registerUser(formDataValues)
 
-      if (signInResult?.error) {
-        router.push('/auth/login?registered=true')
+      if (!result.success) {
+        setError(result.message)
+        setLoading(false)
       } else {
-        router.push('/user')
+        const email = formDataValues.get('email') as string
+        const password = formDataValues.get('password') as string
+
+        const signInResult = await signIn('credentials', {
+          email,
+          password,
+          redirect: false,
+        })
+
+        if (signInResult?.error) {
+          router.push('/auth/login?registered=true')
+        } else {
+          router.push('/user')
+        }
       }
+    } catch (err) {
+      console.error('Registration failed', err)
+      setError('Something went wrong. Please try again.')
+      setLoading(false)
     }
   }
 

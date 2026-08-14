@@ -34,7 +34,10 @@ export default function MenuProducts({
 
   const handleSortMethodChange = (key: SortLabels) => {
     setOpenSort(false)
-    router.replace(`/shop?category=${activeCategory || ''}&sort=${key}`)
+    const query = activeCategory
+      ? `category=${activeCategory}&sort=${key}`
+      : `sort=${key}`
+    router.replace(`/shop?${query}`)
   }
 
   const containerSortRef = useClickOutside<HTMLDivElement>(() => {
@@ -51,6 +54,8 @@ export default function MenuProducts({
         <button
           className="rounded-full px-3 py-0.5 font-bold text-secondary flex items-center gap-2 hover:bg-primary transition-colors"
           onClick={() => setOpenFilter((v) => !v)}
+          aria-expanded={openFilter}
+          aria-haspopup="menu"
           data-testid="filter-button"
         >
           <Image src="/Filter.svg" alt="Filter" width={16} height={16} />
@@ -61,30 +66,38 @@ export default function MenuProducts({
             'absolute left-0 top-full mt-2 p-2 bg-background border-2 border-secondary rounded-2xl shadow-xl min-w-[200px] z-60 transition-all',
             { hidden: !openFilter },
           )}
+          role="menu"
         >
-          <li
-            className={cn(
-              'px-4 py-2 rounded-lg c ursor-pointer transition-colors ',
-              !activeCategory
-                ? 'bg-secondary text-primary font-bold'
-                : 'hover:bg-primary',
-            )}
-            onClick={() => handleCategoryChange()}
-          >
-            All Products
-          </li>
-          {categories.map((cat: Category) => (
-            <li
-              key={cat.id}
+          <li>
+            <button
+              type="button"
+              role="menuitem"
               className={cn(
-                'px-4 py-2 rounded-lg cursor-pointer transition-colors',
-                activeCategory === cat.slug
+                'w-full text-left px-4 py-2 rounded-lg transition-colors',
+                !activeCategory
                   ? 'bg-secondary text-primary font-bold'
                   : 'hover:bg-primary',
               )}
-              onClick={() => handleCategoryChange(cat.slug)}
+              onClick={() => handleCategoryChange()}
             >
-              {cat.name}
+              All Products
+            </button>
+          </li>
+          {categories.map((cat: Category) => (
+            <li key={cat.id}>
+              <button
+                type="button"
+                role="menuitem"
+                className={cn(
+                  'w-full text-left px-4 py-2 rounded-lg transition-colors',
+                  activeCategory === cat.slug
+                    ? 'bg-secondary text-primary font-bold'
+                    : 'hover:bg-primary',
+                )}
+                onClick={() => handleCategoryChange(cat.slug)}
+              >
+                {cat.name}
+              </button>
             </li>
           ))}
         </ul>
@@ -96,6 +109,8 @@ export default function MenuProducts({
             <button
               className="rounded-full px-3 py-0.5 font-bold text-secondary flex items-center gap-2 hover:bg-primary transition-colors justify-between"
               onClick={() => setOpenSort((v) => !v)}
+              aria-expanded={openSort}
+              aria-haspopup="menu"
               data-testid="sort-button"
             >
               <span>{sortLabels[sortMethod]}</span>
@@ -109,19 +124,23 @@ export default function MenuProducts({
                 'absolute right-0 top-full mt-2 p-2 bg-background border-2 border-secondary rounded-2xl shadow-xl min-w-[200px] z-60 transition-all',
                 { hidden: !openSort },
               )}
+              role="menu"
             >
               {Object.entries(sortLabels).map(([key, label]) => (
-                <li
-                  key={key}
-                  className={cn(
-                    'px-4 py-2 rounded-lg cursor-pointer transition-colors',
-                    sortMethod === key
-                      ? 'bg-secondary text-primary font-bold'
-                      : 'hover:bg-primary',
-                  )}
-                  onClick={() => handleSortMethodChange(key as SortLabels)}
-                >
-                  {label}
+                <li key={key}>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className={cn(
+                      'w-full text-left px-4 py-2 rounded-lg transition-colors',
+                      sortMethod === key
+                        ? 'bg-secondary text-primary font-bold'
+                        : 'hover:bg-primary',
+                    )}
+                    onClick={() => handleSortMethodChange(key as SortLabels)}
+                  >
+                    {label}
+                  </button>
                 </li>
               ))}
             </ul>

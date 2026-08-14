@@ -74,10 +74,21 @@ export function formatError(error: unknown): string {
   if (error instanceof AppError) {
     return error.message
   }
-  if (error instanceof Error) {
-    return error.message
-  }
+  // Never leak raw library/DB error messages (connection strings, constraint
+  // details, stack traces) to the client. Log the real error server-side.
   return 'An unexpected error occurred'
+}
+
+/**
+ * Safe message to send to the client. Only messages from our own AppError
+ * subclasses are considered safe to surface; everything else gets the
+ * fallback (already logged via Sentry by the caller).
+ */
+export function toClientMessage(
+  error: unknown,
+  fallback = 'Something went wrong. Please try again.',
+): string {
+  return error instanceof AppError ? error.message : fallback
 }
 
 export function getErrorCode(error: unknown): string {

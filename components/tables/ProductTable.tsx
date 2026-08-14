@@ -30,13 +30,16 @@ export default function ProductTable({
     try {
       const productToDelete = products.find(
         (p: ProductWithVariantsCategories) => p.id === id,
-      )!
+      )
+      if (!productToDelete) return
       const images = productToDelete.variants.flatMap((v: Variant) => v.images)
       images.push(...productToDelete.images)
 
       const response = await deleteProduct({ id, images })
       if (response.success) {
         router.refresh()
+      } else {
+        toast.error(response.message)
       }
     } catch (error) {
       console.error('Delete failed', error)
@@ -52,6 +55,8 @@ export default function ProductTable({
       const response = await toggleVisibility({ id, state: !hide })
       if (response.success) {
         router.refresh()
+      } else {
+        toast.error(response.message)
       }
     } catch (error) {
       toast.error('Toggle visibility failed')

@@ -17,21 +17,16 @@ describe('getDashboardStats', () => {
   })
 
   it('should return dashboard stats successfully', async () => {
-    const mockVariants = [
-      { stock: 10, availableForSale: true },
-      { stock: 3, availableForSale: true },
-      { stock: 0, availableForSale: false },
-    ]
-
     ;(prisma.category.count as jest.Mock).mockResolvedValue(5)
     ;(prisma.product.count as jest.Mock)
       .mockResolvedValueOnce(20)
       .mockResolvedValueOnce(15)
     ;(prisma.user.count as jest.Mock).mockResolvedValue(100)
     ;(prisma.order.count as jest.Mock).mockResolvedValue(8)
-    ;(prisma.productVariant.findMany as jest.Mock).mockResolvedValue(
-      mockVariants,
-    )
+    ;(prisma.productVariant.aggregate as jest.Mock).mockResolvedValue({
+      _sum: { stock: 13 },
+    })
+    ;(prisma.productVariant.count as jest.Mock).mockResolvedValue(1)
 
     const result = await getDashboardStats()
 
@@ -55,7 +50,7 @@ describe('getDashboardStats', () => {
     const result = await getDashboardStats()
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Database connection failed')
+    expect(result.message).toBe('A database error occurred')
     expect(result.errors).toBe(error)
   })
 
@@ -69,21 +64,16 @@ describe('getDashboardStats', () => {
   })
 
   it('should calculate low stock variants correctly', async () => {
-    const mockVariants = [
-      { stock: 1, availableForSale: true },
-      { stock: 5, availableForSale: true },
-      { stock: 10, availableForSale: true },
-    ]
-
     ;(prisma.category.count as jest.Mock).mockResolvedValue(1)
     ;(prisma.product.count as jest.Mock)
       .mockResolvedValueOnce(5)
       .mockResolvedValueOnce(5)
     ;(prisma.user.count as jest.Mock).mockResolvedValue(10)
     ;(prisma.order.count as jest.Mock).mockResolvedValue(2)
-    ;(prisma.productVariant.findMany as jest.Mock).mockResolvedValue(
-      mockVariants,
-    )
+    ;(prisma.productVariant.aggregate as jest.Mock).mockResolvedValue({
+      _sum: { stock: 16 },
+    })
+    ;(prisma.productVariant.count as jest.Mock).mockResolvedValue(2)
 
     const result = await getDashboardStats()
 

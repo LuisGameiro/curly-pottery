@@ -3,7 +3,7 @@
 import { auth } from '@/auth'
 import { CartLineItem, Cart, CurrencyCode, Discount } from '@lib/types/types'
 import { prisma } from 'prisma/prisma'
-import { calculateDiscount } from '@lib/calculate-price'
+import { computeFinalPrice, clampNonNegative } from '@lib/pricing'
 import { revalidatePath } from 'next/cache'
 import { checkRateLimit, getRateLimitKey } from '@lib/rate-limit'
 import * as Sentry from '@sentry/nextjs'
@@ -80,13 +80,15 @@ export async function syncCartAction(items: CartLineItem[]) {
     const variantIds = items.map((item) => item.variantId)
     const variants = await prisma.productVariant.findMany({
       where: { id: { in: variantIds } },
+      include: { product: { select: { hide: true } } },
     })
     const variantMap = new Map(variants.map((v) => [v.id, v]))
 
     for (const item of items) {
       const variant = variantMap.get(item.variantId)
 
-      if (variant) {
+      // Skip variants that are no longer for sale or belong to hidden products.
+      if (variant && !variant.product.hide && variant.availableForSale) {
         // Prevent exceeding stock limit (solves the Quantity Bug)
         const maxQuantity = Math.min(item.quantity, variant.stock)
 
@@ -183,35 +185,31 @@ export async function updateCartPrice(taxes: number, shippingPrice: number) {
 
     const lineItemRows = await prisma.cartLineItem.findMany({
       where: { cartId: cart.id },
+      include: { variant: true },
     })
-    const items: CartLineItem[] = lineItemRows.map((li) => ({
-      ...li,
-      id: '',
-      variantId: li.variantId,
-      quantity: li.quantity,
-      price: Number(li.price),
-      currency: li.currency as CurrencyCode,
-      slug: '',
-      sku: '',
-      name: '',
-      images: '',
-      stock: 0,
-      colorName: '',
-      sizeName: '',
-      discounts: [],
-    }))
-    const trueSubtotal = items.reduce((total, item) => {
-      const { finalPrice } = calculateDiscount(item.price, item.discounts || [])
-      return total + finalPrice * item.quantity
+
+    // Recompute the subtotal server-side WITH discounts so the stored/charged
+    // total matches what the customer sees in the UI.
+    const trueSubtotal = lineItemRows.reduce((total, li) => {
+      const finalPrice = computeFinalPrice(
+        Number(li.price),
+        (li.variant.discounts ?? []) as Discount[],
+      )
+      return total + finalPrice * li.quantity
     }, 0)
+
+    // Never trust client-supplied amounts: clamp to non-negative so a negative
+    // shippingPrice/taxes can't zero out the order total.
+    const safeTaxes = clampNonNegative(Number(taxes), trueSubtotal)
+    const safeShipping = clampNonNegative(Number(shippingPrice))
 
     await prisma.cart.update({
       where: { userId: session.user.id },
       data: {
         subtotalPrice: trueSubtotal,
-        totalPrice: trueSubtotal + taxes + shippingPrice,
-        taxes,
-        shippingPrice,
+        totalPrice: trueSubtotal + safeTaxes + safeShipping,
+        taxes: safeTaxes,
+        shippingPrice: safeShipping,
       },
     })
 

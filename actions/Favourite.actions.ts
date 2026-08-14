@@ -11,39 +11,57 @@ import {
   decodeCursor,
 } from '@lib/pagination'
 import { Prisma } from 'prisma/generated/prisma/client'
+import { ActionResponse } from '@lib/types/types'
 import * as Sentry from '@sentry/nextjs'
 
-export async function getFavouritesAction(): Promise<string[]> {
+export async function getFavouritesAction(): Promise<ActionResponse<string[]>> {
   try {
     const session = await auth()
 
-    if (!session?.user?.id) return []
+    if (!session?.user?.id) {
+      return {
+        success: false,
+        message: 'Authentication required',
+        errors: null,
+      }
+    }
 
     const favourites = await prisma.favourite.findMany({
-      where: { userId: session.user.id },
+      where: {
+        userId: session.user.id,
+        product: { hide: false },
+      },
       select: { productId: true },
     })
 
-    return favourites.map((f) => f.productId)
+    return {
+      success: true,
+      message: 'Fetched favourites successfully',
+      data: favourites.map((f) => f.productId),
+    }
   } catch (error) {
     console.error('getFavouritesAction_ERROR:', error)
     Sentry.captureException(error)
-    return []
+    return {
+      success: false,
+      message: 'Failed to fetch favourites',
+      errors: error,
+    }
   }
 }
 
 export async function addFavouriteAction(
   productId: string,
-): Promise<{ success?: boolean; errors?: { message: string } }> {
+): Promise<ActionResponse<null>> {
   if (!productId || typeof productId !== 'string') {
-    return { success: false, errors: { message: 'Invalid product ID' } }
+    return { success: false, message: 'Invalid product ID', errors: null }
   }
 
   try {
     const session = await auth()
 
     if (!session?.user?.id) {
-      return { success: false, errors: { message: 'Authentication required' } }
+      return { success: false, message: 'Authentication required', errors: null }
     }
 
     const rateResult = await checkRateLimit(
@@ -53,8 +71,18 @@ export async function addFavouriteAction(
     if (!rateResult.success) {
       return {
         success: false,
-        errors: { message: 'Too many requests. Please slow down.' },
+        message: 'Too many requests. Please slow down.',
+        errors: null,
       }
+    }
+
+    // Only visible products can be favourited.
+    const product = await prisma.product.findFirst({
+      where: { id: productId, hide: false },
+      select: { id: true },
+    })
+    if (!product) {
+      return { success: false, message: 'Product not found.', errors: null }
     }
 
     await prisma.favourite.upsert({
@@ -74,26 +102,39 @@ export async function addFavouriteAction(
     revalidatePath('/user/favourites')
     revalidatePath('/')
 
-    return { success: true }
+    return { success: true, message: 'Added to favourites', data: null }
   } catch (error) {
     console.error('addFavouriteAction_ERROR:', error)
     Sentry.captureException(error)
-    return { success: false, errors: { message: 'Failed to add favourite' } }
+    return { success: false, message: 'Failed to add favourite', errors: error }
   }
 }
 
 export async function removeFavouriteAction(
   productId: string,
-): Promise<{ success?: boolean; errors?: { message: string } }> {
+): Promise<ActionResponse<null>> {
   if (!productId || typeof productId !== 'string') {
-    return { success: false, errors: { message: 'Invalid product ID' } }
+    return { success: false, message: 'Invalid product ID', errors: null }
   }
 
   try {
     const session = await auth()
 
     if (!session?.user?.id) {
-      return { success: false, errors: { message: 'Authentication required' } }
+      return { success: false, message: 'Authentication required', errors: null }
+    }
+
+    // Rate-limit parity with addFavouriteAction.
+    const rateResult = await checkRateLimit(
+      getRateLimitKey(session.user.id, 'favourite-sync'),
+      { windowMs: 60 * 1000, maxRequests: 30 },
+    )
+    if (!rateResult.success) {
+      return {
+        success: false,
+        message: 'Too many requests. Please slow down.',
+        errors: null,
+      }
     }
 
     await prisma.favourite.deleteMany({
@@ -106,11 +147,15 @@ export async function removeFavouriteAction(
     revalidatePath('/user/favourites')
     revalidatePath('/')
 
-    return { success: true }
+    return { success: true, message: 'Removed from favourites', data: null }
   } catch (error) {
     console.error('removeFavouriteAction_ERROR:', error)
     Sentry.captureException(error)
-    return { success: false, errors: { message: 'Failed to remove favourite' } }
+    return {
+      success: false,
+      message: 'Failed to remove favourite',
+      errors: error,
+    }
   }
 }
 
@@ -129,7 +174,10 @@ export async function getFavouritesWithProductsAction(
       ? decodeCursor(pagination.cursor)
       : undefined
 
-    const where = { userId: session.user.id }
+    const where = {
+      userId: session.user.id,
+      product: { hide: false },
+    }
 
     const [favourites, total] = await Promise.all([
       prisma.favourite.findMany({

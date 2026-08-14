@@ -8,8 +8,13 @@ export const proxy = auth((req: NextAuthRequest) => {
   const token = req.auth?.user
 
   // Admin routes: must have ADMIN role
-  if (isAdminPage && token?.role !== 'ADMIN') {
-    return NextResponse.redirect(new URL('/auth/login', req.url))
+  if (isAdminPage) {
+    if (!token) {
+      return NextResponse.redirect(new URL('/auth/login', req.url))
+    }
+    if (token.role !== 'ADMIN') {
+      return NextResponse.redirect(new URL('/forbidden', req.url))
+    }
   }
 
   // User routes require a valid session
