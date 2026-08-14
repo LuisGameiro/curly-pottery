@@ -42,7 +42,7 @@ const Footer = () => {
     <footer className={s.root} data-testid="footer">
       <div className={s.menuContainer}>
         {/* Instagram Column */}
-        <div className="flex flex-col items-end gap-4 flex-1">
+        <div className="flex flex-col items-end self-center gap-4 flex-1">
           <h3 className="text-secondary font-bold text-xl text-center leading-tight">
             Follow me
             <br />
@@ -52,9 +52,9 @@ const Footer = () => {
             href="https://www.instagram.com/curly_pottery/"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:opacity-80 transition-opacity"
+            className="hover:opacity-80"
           >
-            <div className="w-32 h-40 relative overflow-hidden bg-accent-1 animate-pulse">
+            <div className="w-32 h-40 relative overflow-hidden ">
               <Image
                 src={instagramImage}
                 alt="Instagram feed"
@@ -68,7 +68,7 @@ const Footer = () => {
         </div>
 
         {/* Links Column */}
-        <div className="flex flex-col gap-6 flex-1">
+        <div className="flex flex-col gap-4 flex-1">
           {links.map((item) => (
             <Link
               key={item.name}

@@ -62,26 +62,25 @@ export default function ShopClient({
 
   return (
     <Container data-testid="shop-client">
-      <div className="flex flex-col mt-4 lg:mt-8 mb-4 ml-0 lg:ml-8">
-        <Text variant="heading" className="text-3xl font-bold mb-2">
+      <div className="flex flex-col mt-4 lg:mt-8 ml-4 lg:ml-8">
+        <Text variant="heading" className="text-3xl font-bold ">
           Welcome to My Shop
         </Text>
-        <Text variant="muted" className="max-w-2xl whitespace-nowrap">
+        <Text variant="body" className="max-w-2xl">
           Discover my handmade ceramic pieces made with love in North London.
           All have been crafted to bring warmth, charm and a little everyday joy
           to your home.
         </Text>
       </div>
 
-      <div className="mb-6">
+
         <MenuProducts
           sortMethod={sort}
           categories={categories}
           activeCategory={activeCategory}
         />
-      </div>
 
-      <div className="flex gap-4">
+      <div className="flex gap-4 my-4">
         <div className="flex-1">
           {sortedProducts.length === 0 ? (
             <div className="py-10 text-center">

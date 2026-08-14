@@ -30,7 +30,8 @@ export default async function Home() {
     <main className="flex flex-col bg-linear-to-r from-background to-accent-2">
       <HomeHero />
 
-      <div className="px-10 my-8">
+      <section className="px-2 md:px-4 lg:px-8 mt-4">
+      <div className="md:px-2  mb-4">
         <h2 className="text-2xl font-bold mb-1">New in</h2>
         <p className="text-sm">Everything that&apos;s hot right now</p>
       </div>
@@ -50,9 +51,10 @@ export default async function Home() {
           />
         ))}
       </Grid>
+      </section>
 
-      <section className="pb-4">
-        <div className="px-10 my-8">
+      <section className="md:px-4 lg:px-8 my-4">
+        <div className="px-2 mb-4">
           <h2 className="text-2xl font-bold mb-1">Explore Categories</h2>
           <p className="text-sm">Find the perfect piece for your home</p>
         </div>

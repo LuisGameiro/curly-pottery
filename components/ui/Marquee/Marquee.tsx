@@ -28,7 +28,7 @@ const MIN_ITEM_SIZE = 250 // fallback while measuring (cards are 250x250)
 // current scroll offset and position them absolutely. The item sequence is
 // repeated infinitely, so the marquee loops seamlessly forever without ever
 // mounting the full list. Items are measured once on mount.
-const Marquee = ({ children = [], className = 'mx-8' }: MarqueeProps) => {
+const Marquee = ({ children = [], className = '' }: MarqueeProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const measureItemRefs = useRef<(HTMLDivElement | null)[]>([])
   const wrapperRefs = useRef(new Map<number, HTMLDivElement>())

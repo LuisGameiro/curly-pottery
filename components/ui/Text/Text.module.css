@@ -2,11 +2,11 @@
 @reference "../../../globals.css";
 
 .body {
-  @apply text-sm sm:text-base leading-7 max-w-6xl;
+  @apply text-sm sm:text-base leading-7 max-w-6xl tracking-tight;
 }
 
 .heading {
-  @apply text-2xl sm:text-3xl font-semibold tracking-wide  pt-1 sm:pb-2 mb-2;
+  @apply text-2xl sm:text-3xl font-semibold tracking-normal  pt-1 sm:pb-2 mb-2;
 }
 
 .pageHeading {

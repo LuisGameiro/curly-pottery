@@ -38,7 +38,7 @@ export default function FeatureBar({ className }: FeatureBarProps) {
           <div className="max-w-screen mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-on-primary">
             <div className="text-xs">
               <Text variant="bold">We value your privacy</Text>
-              <Text>
+              <Text className="text-xs">
                 We use cookies to enhance your experience. Essential cookies are
                 necessary for the site to function. Others help us analyze
                 traffic and provide personalized content.
@@ -51,7 +51,8 @@ export default function FeatureBar({ className }: FeatureBarProps) {
             <div className="flex flex-row flex-wrap gap-1.5 sm:gap-2 shrink-0">
               <Button
                 type="button"
-                variant="secondary"
+                variant="slim"
+                size="sm"
                 color="secondary"
                 className="text-xs sm:text-sm"
                 onClick={() => setIsModalOpen(true)}
@@ -61,7 +62,8 @@ export default function FeatureBar({ className }: FeatureBarProps) {
               </Button>
               <Button
                 type="button"
-                variant="secondary"
+                variant="slim"
+                size="sm"
                 className="text-xs sm:text-sm"
                 onClick={handleAcceptEssential}
                 data-testid="cookie-essential-only-btn"
@@ -70,7 +72,8 @@ export default function FeatureBar({ className }: FeatureBarProps) {
               </Button>
               <Button
                 type="button"
-                variant="secondary"
+                variant="slim"
+                size="sm"
                 className="text-xs sm:text-sm"
                 onClick={handleAcceptAll}
                 data-testid="cookie-accept-all-btn"

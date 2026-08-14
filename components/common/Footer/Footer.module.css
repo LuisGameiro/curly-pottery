@@ -48,5 +48,5 @@
 }
 
 .signature {
-  @apply border-t border-secondary/10 px-10 py-3 flex flex-col md:flex-row justify-between items-center text-secondary/60 text-sm gap-4;
+  @apply border-t border-secondary/10 px-10 py-3 flex flex-col md:mx-32 md:flex-row justify-between items-center text-secondary/60 text-sm gap-4;
 }
