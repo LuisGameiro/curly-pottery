@@ -581,7 +581,9 @@ describe('dispatchQueuedNewsletterBatch edge cases', () => {
         products: [],
       },
     ] as never)
-    jest.mocked(prisma.$queryRaw).mockResolvedValue([{ id: 'delivery-error-1' }])
+    jest
+      .mocked(prisma.$queryRaw)
+      .mockResolvedValue([{ id: 'delivery-error-1' }])
     jest.mocked(prisma.newsletterDelivery.updateMany).mockResolvedValue({
       count: 1,
     } as never)
@@ -671,7 +673,9 @@ describe('dispatchQueuedNewsletterBatch edge cases', () => {
         products: [],
       },
     ] as never)
-    jest.mocked(prisma.$queryRaw).mockResolvedValue([{ id: 'delivery-catch-1' }])
+    jest
+      .mocked(prisma.$queryRaw)
+      .mockResolvedValue([{ id: 'delivery-catch-1' }])
     jest.mocked(prisma.newsletterDelivery.updateMany).mockResolvedValue({
       count: 1,
     } as never)
@@ -750,7 +754,9 @@ describe('dispatchQueuedNewsletterBatch edge cases', () => {
         products: [],
       },
     ] as never)
-    jest.mocked(prisma.$queryRaw).mockResolvedValue([{ id: 'delivery-string-1' }])
+    jest
+      .mocked(prisma.$queryRaw)
+      .mockResolvedValue([{ id: 'delivery-string-1' }])
     jest.mocked(prisma.newsletterDelivery.updateMany).mockResolvedValue({
       count: 1,
     } as never)
@@ -829,10 +835,12 @@ describe('dispatchQueuedNewsletterBatch edge cases', () => {
         products: [],
       },
     ] as never)
-    jest.mocked(prisma.$queryRaw).mockResolvedValue([
-      { id: 'delivery-limit-1' },
-      { id: 'delivery-limit-2' },
-    ])
+    jest
+      .mocked(prisma.$queryRaw)
+      .mockResolvedValue([
+        { id: 'delivery-limit-1' },
+        { id: 'delivery-limit-2' },
+      ])
     jest.mocked(prisma.newsletterDelivery.updateMany).mockResolvedValue({
       count: 2,
     } as never)

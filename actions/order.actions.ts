@@ -14,7 +14,13 @@ import {
 } from '@lib/types/types'
 import { revalidatePath } from 'next/cache'
 import { auth } from '@/auth'
-import { AppError, DatabaseError, NetworkError, formatError, toClientMessage } from '@lib/errors'
+import {
+  AppError,
+  DatabaseError,
+  NetworkError,
+  formatError,
+  toClientMessage,
+} from '@lib/errors'
 import { withFetch } from '@lib/errors-utils'
 import {
   PaginationInput,
@@ -115,8 +121,7 @@ export async function getAllOrders(
     Sentry.captureException(error)
     return {
       success: false,
-      message:
-        toClientMessage(error, 'A database error occurred'),
+      message: toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -179,8 +184,7 @@ export async function getOrdersById(
     Sentry.captureException(error)
     return {
       success: false,
-      message:
-        toClientMessage(error, 'A database error occurred'),
+      message: toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -223,8 +227,7 @@ export async function getOrderById(
     Sentry.captureException(error)
     return {
       success: false,
-      message:
-        toClientMessage(error, 'A database error occurred'),
+      message: toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -300,7 +303,11 @@ export async function createOrder(
     }
     const v = inputValidation.data
 
-    const checkoutIdValidation = z.string().min(10).max(200).safeParse(checkoutId)
+    const checkoutIdValidation = z
+      .string()
+      .min(10)
+      .max(200)
+      .safeParse(checkoutId)
     if (!checkoutIdValidation.success) {
       return {
         success: false,
@@ -466,15 +473,12 @@ export async function createOrder(
       status: string
       amount: number
       currency: string
-    }>(
-      `https://api.sumup.com/v0.1/checkouts/${checkoutId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.SUMUP_API}`,
-        },
-        timeout: 10000,
+    }>(`https://api.sumup.com/v0.1/checkouts/${checkoutId}`, {
+      headers: {
+        Authorization: `Bearer ${process.env.SUMUP_API}`,
       },
-    )
+      timeout: 10000,
+    })
 
     if (!fetchResult.success) {
       return {
@@ -711,8 +715,7 @@ export async function updateOrderStatus(
     Sentry.captureException(error)
     return {
       success: false,
-      message:
-        toClientMessage(error, 'A database error occurred'),
+      message: toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }

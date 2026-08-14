@@ -150,8 +150,7 @@ export async function getVercelDataUsage(): Promise<
     Sentry.captureException(error)
     return {
       success: false,
-      message:
-        toClientMessage(error, 'A data fetch error occurred'),
+      message: toClientMessage(error, 'A data fetch error occurred'),
       errors: error,
     }
   }

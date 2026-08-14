@@ -50,7 +50,9 @@ const formatProduct = (
 // React.cache() dedupes the identical query when it runs for both
 // generateMetadata and the page body in the same request.
 export const getProductBySlug = cache(
-  async (slug: string | null): Promise<ActionResponse<ProductWithVariantsCategories | null>> => {
+  async (
+    slug: string | null,
+  ): Promise<ActionResponse<ProductWithVariantsCategories | null>> => {
     if (!slug)
       return {
         success: false,
@@ -64,7 +66,9 @@ export const getProductBySlug = cache(
           hide: false,
         },
         include: {
-          variants: { include: { optionValues: { include: { option: true } } } },
+          variants: {
+            include: { optionValues: { include: { option: true } } },
+          },
           categories: true,
         },
       })
@@ -88,8 +92,7 @@ export const getProductBySlug = cache(
       Sentry.captureException(error)
       return {
         success: false,
-        message:
-          toClientMessage(error, 'A database error occurred'),
+        message: toClientMessage(error, 'A database error occurred'),
         errors: error,
       }
     }
@@ -97,7 +100,9 @@ export const getProductBySlug = cache(
 )
 
 export const getProductById = cache(
-  async (id: string): Promise<ActionResponse<ProductWithVariantsCategories | null>> => {
+  async (
+    id: string,
+  ): Promise<ActionResponse<ProductWithVariantsCategories | null>> => {
     if (!id)
       return {
         success: false,
@@ -110,7 +115,9 @@ export const getProductById = cache(
           id,
         },
         include: {
-          variants: { include: { optionValues: { include: { option: true } } } },
+          variants: {
+            include: { optionValues: { include: { option: true } } },
+          },
           categories: true,
         },
       })
@@ -135,8 +142,7 @@ export const getProductById = cache(
       Sentry.captureException(error)
       return {
         success: false,
-        message:
-          toClientMessage(error, 'A database error occurred'),
+        message: toClientMessage(error, 'A database error occurred'),
         errors: error,
       }
     }
@@ -197,8 +203,7 @@ export async function deleteProduct({
     Sentry.captureException(error)
     return {
       success: false,
-      message:
-        toClientMessage(error, 'A database error occurred'),
+      message: toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -249,8 +254,7 @@ export async function toggleVisibility({
     Sentry.captureException(error)
     return {
       success: false,
-      message:
-        toClientMessage(error, 'A database error occurred'),
+      message: toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -319,8 +323,7 @@ export async function getAllProducts(
     Sentry.captureException(error)
     return {
       success: false,
-      message:
-        toClientMessage(error, 'A database error occurred'),
+      message: toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -365,8 +368,7 @@ export async function getRandomProducts(
     Sentry.captureException(error)
     return {
       success: false,
-      message:
-        toClientMessage(error, 'A database error occurred'),
+      message: toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -438,8 +440,7 @@ export async function getRelatedProducts({
     Sentry.captureException(error)
     return {
       success: false,
-      message:
-        toClientMessage(error, 'A database error occurred'),
+      message: toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }
@@ -496,8 +497,7 @@ export async function getProductsByCategorySlug(
     Sentry.captureException(error)
     return {
       success: false,
-      message:
-        toClientMessage(error, 'A database error occurred'),
+      message: toClientMessage(error, 'A database error occurred'),
       errors: error,
     }
   }

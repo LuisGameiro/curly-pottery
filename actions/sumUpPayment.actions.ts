@@ -1,7 +1,12 @@
 'use server'
 
 import { auth } from '@/auth'
-import { ActionResponse, CartLineItem, CurrencyCode, Discount } from '@lib/types/types'
+import {
+  ActionResponse,
+  CartLineItem,
+  CurrencyCode,
+  Discount,
+} from '@lib/types/types'
 import { prisma } from 'prisma/prisma'
 import { AppError, DatabaseError, toClientMessage } from '@lib/errors'
 import { withFetch } from '@lib/errors-utils'
@@ -80,7 +85,8 @@ export async function createSumUpCheckout(
           computeFinalPrice(
             Number(li.price),
             (li.variant.discounts ?? []) as Discount[],
-          ) * li.quantity
+          ) *
+            li.quantity
         )
       }, 0)
       amountMinor = toMinorUnits(subtotal + shippingPrice)
@@ -118,14 +124,21 @@ export async function createSumUpCheckout(
           return {
             success: false,
             message: `Variant ${item.variantId} not found.`,
-            errors: new DatabaseError('Variant not found', 'createSumUpCheckout'),
+            errors: new DatabaseError(
+              'Variant not found',
+              'createSumUpCheckout',
+            ),
           }
         }
         if (variant.stock < item.quantity) {
           return {
             success: false,
             message: `Insufficient stock for ${item.name}. Available: ${variant.stock}`,
-            errors: new AppError('Insufficient stock', 'INSUFFICIENT_STOCK', 409),
+            errors: new AppError(
+              'Insufficient stock',
+              'INSUFFICIENT_STOCK',
+              409,
+            ),
           }
         }
       }
@@ -139,7 +152,8 @@ export async function createSumUpCheckout(
           computeFinalPrice(
             Number(variant.price),
             (variant.discounts ?? []) as Discount[],
-          ) * item.quantity
+          ) *
+            item.quantity
         )
       }, 0)
       amountMinor = toMinorUnits(subtotal + shippingPrice)
@@ -185,8 +199,7 @@ export async function createSumUpCheckout(
     Sentry.captureException(error)
     return {
       success: false,
-      message:
-        toClientMessage(error, 'Failed to create checkout'),
+      message: toClientMessage(error, 'Failed to create checkout'),
       errors: error,
     }
   }

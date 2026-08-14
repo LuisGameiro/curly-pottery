@@ -78,9 +78,7 @@ export default function CheckoutClient() {
       total_value: values.totalPrice,
       currency: values.currency,
       item_count: values.lineItems.length,
-      items: values.lineItems.map(
-        (item) => item.quantity + ' * ' + item.sku,
-      ),
+      items: values.lineItems.map((item) => item.quantity + ' * ' + item.sku),
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -114,9 +112,7 @@ export default function CheckoutClient() {
         total_value: values.totalPrice,
         currency: values.currency,
         item_count: values.lineItems.length,
-        items: values.lineItems.map(
-          (item) => item.quantity + ' * ' + item.sku,
-        ),
+        items: values.lineItems.map((item) => item.quantity + ' * ' + item.sku),
       })
       if (!response.success || !response.data) {
         Sentry.captureMessage(`SumUp init failed: ${response.message}`, 'error')

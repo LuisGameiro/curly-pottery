@@ -5,7 +5,10 @@ import { VercelDataCard } from '@components/admin/VercelDataCard'
 import { StockMovementsCard } from '@components/admin/StockMovementsCard'
 import constructMetadata from '@components/common/SEO'
 import { Container, Text } from '@components/ui'
-import { getDashboardStats, getRecentStockMovements } from '@actions/dashboard.actions'
+import {
+  getDashboardStats,
+  getRecentStockMovements,
+} from '@actions/dashboard.actions'
 import { getVercelDataUsage } from '@actions/vercelData.actions'
 import Loading from 'app/loading'
 import {

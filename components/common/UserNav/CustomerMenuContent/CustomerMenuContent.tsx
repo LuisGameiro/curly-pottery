@@ -109,7 +109,11 @@ export default function CustomerMenuContent() {
             >
               Favourites
             </button>
-            <button type="button" className={s.link} onClick={() => handleSignOut()}>
+            <button
+              type="button"
+              className={s.link}
+              onClick={() => handleSignOut()}
+            >
               Logout
             </button>
           </div>

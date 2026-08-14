@@ -389,9 +389,11 @@ describe('createOrder', () => {
 
     const mockTx = {
       productVariant: {
-        findMany: jest.fn().mockResolvedValue([
-          { id: 'var1', stock: 10, product: { name: 'Vase' } },
-        ]),
+        findMany: jest
+          .fn()
+          .mockResolvedValue([
+            { id: 'var1', stock: 10, product: { name: 'Vase' } },
+          ]),
         updateMany: jest.fn().mockResolvedValue({ count: 1 }),
       },
       order: {
@@ -457,9 +459,11 @@ describe('createOrder', () => {
 
     const mockTx = {
       productVariant: {
-        findMany: jest.fn().mockResolvedValue([
-          { id: 'var2', stock: 5, product: { name: 'Bowl' } },
-        ]),
+        findMany: jest
+          .fn()
+          .mockResolvedValue([
+            { id: 'var2', stock: 5, product: { name: 'Bowl' } },
+          ]),
         updateMany: jest.fn().mockResolvedValue({ count: 1 }),
       },
       order: {

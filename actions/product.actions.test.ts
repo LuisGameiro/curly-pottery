@@ -1004,8 +1004,12 @@ describe('upsertProduct', () => {
 
     const callArgs = (prisma.product.upsert as jest.Mock).mock.calls[0][0]
     expect(callArgs.update.variants.update[0].data).not.toHaveProperty('files')
-    expect(callArgs.update.variants.update[0].data).not.toHaveProperty('previews')
-    expect(callArgs.update.variants.update[0].data).not.toHaveProperty('isExpanded')
+    expect(callArgs.update.variants.update[0].data).not.toHaveProperty(
+      'previews',
+    )
+    expect(callArgs.update.variants.update[0].data).not.toHaveProperty(
+      'isExpanded',
+    )
   })
 
   it('should set empty arrays for variant details, discounts, and images when not provided', async () => {

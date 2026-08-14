@@ -61,7 +61,11 @@ export async function addFavouriteAction(
     const session = await auth()
 
     if (!session?.user?.id) {
-      return { success: false, message: 'Authentication required', errors: null }
+      return {
+        success: false,
+        message: 'Authentication required',
+        errors: null,
+      }
     }
 
     const rateResult = await checkRateLimit(
@@ -121,7 +125,11 @@ export async function removeFavouriteAction(
     const session = await auth()
 
     if (!session?.user?.id) {
-      return { success: false, message: 'Authentication required', errors: null }
+      return {
+        success: false,
+        message: 'Authentication required',
+        errors: null,
+      }
     }
 
     // Rate-limit parity with addFavouriteAction.

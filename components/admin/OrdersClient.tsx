@@ -132,7 +132,9 @@ export default function OrdersClient({
         </div>
         <OrderTable orders={otherOrders} isLoading={isLoading} />
 
-        {error && <div className="py-4 text-center text-red text-sm">{error}</div>}
+        {error && (
+          <div className="py-4 text-center text-red text-sm">{error}</div>
+        )}
 
         {hasMore && !isLoading && (
           <div className="flex justify-center py-6">

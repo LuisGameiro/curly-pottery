@@ -27,8 +27,7 @@ export async function deleteBlob(blobs: string) {
     Sentry.captureException(error)
     return {
       success: false,
-      message:
-        toClientMessage(error, 'Failed to delete blob.'),
+      message: toClientMessage(error, 'Failed to delete blob.'),
     }
   }
 }

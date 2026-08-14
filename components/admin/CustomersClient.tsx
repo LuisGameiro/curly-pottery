@@ -112,7 +112,9 @@ export default function CustomersClient({
 
       <CustomerTable customers={items} isLoading={isLoading} />
 
-      {error && <div className="py-4 text-center text-red text-sm">{error}</div>}
+      {error && (
+        <div className="py-4 text-center text-red text-sm">{error}</div>
+      )}
 
       {hasMore && !isLoading && (
         <div className="flex justify-center py-6">

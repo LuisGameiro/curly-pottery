@@ -125,9 +125,7 @@ export default function ShopClient({
               >
                 {isLoading ? 'Loading...' : 'Load more'}
               </button>
-              {error && (
-                <p className="text-red text-sm">{error}</p>
-              )}
+              {error && <p className="text-red text-sm">{error}</p>}
             </div>
           )}
         </div>
