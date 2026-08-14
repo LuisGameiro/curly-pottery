@@ -1,9 +1,9 @@
 'use server'
 
 import { auth } from '@/auth'
-import { ActionResponse } from '@lib/types/types'
+import { ActionResponse, CartLineItem, CurrencyCode } from '@lib/types/types'
 import { prisma } from 'prisma/prisma'
-import { DatabaseError } from '@lib/errors'
+import { AppError, DatabaseError } from '@lib/errors'
 import { withFetch } from '@lib/errors-utils'
 
 interface SumUpCheckoutResponse {
@@ -14,20 +14,22 @@ interface SumUpCheckoutResponse {
   status: string
 }
 
-export async function createSumUpCheckout(): Promise<
-  ActionResponse<string | null>
-> {
+/** Client-provided cart data used for guest checkout. Registered users are
+ *  charged from their database cart instead, so this input is ignored for them. */
+interface SumUpCheckoutInput {
+  email?: string
+  lineItems?: CartLineItem[]
+  taxes?: number
+  shippingPrice?: number
+  currency?: CurrencyCode
+}
+
+export async function createSumUpCheckout(
+  input: SumUpCheckoutInput = {},
+): Promise<ActionResponse<string | null>> {
   const session = await auth()
   const userId = session?.user?.id
   const userEmail = session?.user?.email
-
-  if (!userId || !userEmail) {
-    return {
-      success: false,
-      message: 'Unauthorized: Please sign in before checkout.',
-      errors: new DatabaseError('Unauthorized access', 'createSumUpCheckout'),
-    }
-  }
 
   if (!process.env.SUMUP_API || !process.env.SUMUP_MERCHANT_CODE) {
     return {
@@ -40,19 +42,84 @@ export async function createSumUpCheckout(): Promise<
     }
   }
 
-  const cart = await prisma.cart.findUnique({
-    where: { userId },
-  })
+  let amount = 0
+  let currency: string = input.currency || CurrencyCode.GBP
+  let payToEmail = process.env.SUMUP_MERCHANT_EMAIL || input.email || ''
 
-  if (!cart) {
-    return {
-      success: false,
-      message: 'Cart not found. Please add items to your cart.',
-      errors: new DatabaseError('Cart not found', 'createSumUpCheckout'),
+  if (userId && userEmail) {
+    // Registered users: charge the database cart.
+    const cart = await prisma.cart.findUnique({
+      where: { userId },
+    })
+
+    if (!cart) {
+      return {
+        success: false,
+        message: 'Cart not found. Please add items to your cart.',
+        errors: new DatabaseError('Cart not found', 'createSumUpCheckout'),
+      }
     }
+
+    amount = Number(cart.totalPrice)
+    currency = cart.currency
+    payToEmail = process.env.SUMUP_MERCHANT_EMAIL || userEmail
+  } else {
+    // Guests: validate the client cart against the database (mirrors
+    // createOrder) so the charged amount can't be tampered with.
+    if (!input.email) {
+      return {
+        success: false,
+        message: 'Email is required to checkout.',
+        errors: new DatabaseError('Email missing', 'createSumUpCheckout'),
+      }
+    }
+
+    if (!input.lineItems?.length) {
+      return {
+        success: false,
+        message: 'Your cart is empty.',
+        errors: new DatabaseError('Empty cart', 'createSumUpCheckout'),
+      }
+    }
+
+    const variantIds = input.lineItems.map((item) => item.variantId)
+    const variants = await prisma.productVariant.findMany({
+      where: { id: { in: variantIds } },
+      select: { id: true, price: true, stock: true },
+    })
+    const variantMap = new Map(variants.map((v) => [v.id, v]))
+
+    for (const item of input.lineItems) {
+      const variant = variantMap.get(item.variantId)
+      if (!variant) {
+        return {
+          success: false,
+          message: `Variant ${item.variantId} not found.`,
+          errors: new DatabaseError('Variant not found', 'createSumUpCheckout'),
+        }
+      }
+      if (variant.stock < item.quantity) {
+        return {
+          success: false,
+          message: `Insufficient stock for ${item.name}. Available: ${variant.stock}`,
+          errors: new AppError('Insufficient stock', 'INSUFFICIENT_STOCK', 409),
+        }
+      }
+    }
+
+    // Recompute totals from server prices — createOrder verifies the same
+    // amount when the payment completes.
+    const subtotal = input.lineItems.reduce(
+      (sum, item) =>
+        sum + Number(variantMap.get(item.variantId)!.price) * item.quantity,
+      0,
+    )
+    amount =
+      subtotal + (Number(input.taxes) || 0) + (Number(input.shippingPrice) || 0)
+    payToEmail = process.env.SUMUP_MERCHANT_EMAIL || input.email
   }
 
-  const checkoutRef = `ORDER-${cart.id}-${Date.now()}`
+  const checkoutRef = `ORDER-${userId || 'guest'}-${Date.now()}`
 
   const fetchResult = await withFetch<SumUpCheckoutResponse>(
     'https://api.sumup.com/v0.1/checkouts',
@@ -64,10 +131,10 @@ export async function createSumUpCheckout(): Promise<
       },
       body: JSON.stringify({
         checkout_reference: checkoutRef,
-        amount: Number(cart.totalPrice),
-        currency: cart.currency,
+        amount,
+        currency,
         merchant_code: process.env.SUMUP_MERCHANT_CODE,
-        pay_to_email: process.env.SUMUP_MERCHANT_EMAIL || userEmail,
+        pay_to_email: payToEmail,
       }),
       timeout: 15000,
     },

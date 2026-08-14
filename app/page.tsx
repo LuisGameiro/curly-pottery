@@ -31,26 +31,26 @@ export default async function Home() {
       <HomeHero />
 
       <section className="px-2 md:px-4 lg:px-8 mt-4">
-      <div className="md:px-2  mb-4">
-        <h2 className="text-2xl font-bold mb-1">New in</h2>
-        <p className="text-sm">Everything that&apos;s hot right now</p>
-      </div>
+        <div className="md:px-2  mb-4">
+          <h2 className="text-2xl font-bold mb-1">New in</h2>
+          <p className="text-sm">Everything that&apos;s hot right now</p>
+        </div>
 
-      <Grid variant="filled" layout="B">
-        {products.map((product: Product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            variant="slim"
-            imgProps={{
-              alt: product.name,
-              width: 1200,
-              height: 1200,
-              priority: true,
-            }}
-          />
-        ))}
-      </Grid>
+        <Grid variant="filled" layout="B">
+          {products.map((product: Product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              variant="slim"
+              imgProps={{
+                alt: product.name,
+                width: 1200,
+                height: 1200,
+                priority: true,
+              }}
+            />
+          ))}
+        </Grid>
       </section>
 
       <section className="md:px-4 lg:px-8 my-4">

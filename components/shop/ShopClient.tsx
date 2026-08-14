@@ -73,12 +73,11 @@ export default function ShopClient({
         </Text>
       </div>
 
-
-        <MenuProducts
-          sortMethod={sort}
-          categories={categories}
-          activeCategory={activeCategory}
-        />
+      <MenuProducts
+        sortMethod={sort}
+        categories={categories}
+        activeCategory={activeCategory}
+      />
 
       <div className="flex gap-4 my-4">
         <div className="flex-1">

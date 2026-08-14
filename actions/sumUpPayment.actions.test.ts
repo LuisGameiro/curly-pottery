@@ -2,6 +2,7 @@ import { createSumUpCheckout } from './sumUpPayment.actions'
 import { prisma } from 'prisma/prisma'
 
 import { auth } from '@/auth'
+import { CurrencyCode } from '@lib/types/types'
 
 jest.mock('prisma/prisma', () => ({
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -21,14 +22,52 @@ describe('createSumUpCheckout', () => {
     jest.restoreAllMocks()
   })
 
-  it('should return unauthorized when user is not authenticated', async () => {
+  it('should create a checkout for a guest with validated line items', async () => {
+    mockAuth.mockResolvedValue(null as never)
+    ;(prisma.productVariant.findMany as jest.Mock).mockResolvedValue([
+      { id: 'variant-1', price: 50, stock: 5 },
+    ])
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ id: 'checkout-guest-1' }),
+    })
+
+    const result = await createSumUpCheckout({
+      email: 'guest@example.com',
+      lineItems: [
+        {
+          variantId: 'variant-1',
+          quantity: 2,
+          name: 'Vase',
+        } as never,
+      ],
+      taxes: 0,
+      shippingPrice: 5.95,
+      currency: CurrencyCode.GBP,
+    })
+
+    expect(result.success).toBe(true)
+    expect(result.data).toBe('checkout-guest-1')
+    expect(prisma.cart.findUnique).not.toHaveBeenCalled()
+    expect(global.fetch).toHaveBeenCalledWith(
+      'https://api.sumup.com/v0.1/checkouts',
+      expect.objectContaining({
+        body: expect.stringContaining('105.95'), // 2 × £50 + £5.95, server-priced
+      }),
+    )
+  })
+
+  it('should return an error for a guest without an email', async () => {
     mockAuth.mockResolvedValue(null as never)
 
-    const result = await createSumUpCheckout()
+    const result = await createSumUpCheckout({
+      lineItems: [{ variantId: 'variant-1', quantity: 1 }] as never,
+    })
 
     expect(result.success).toBe(false)
-    expect(result.message).toBe('Unauthorized: Please sign in before checkout.')
-    expect(prisma.cart.findUnique).not.toHaveBeenCalled()
+    expect(result.message).toBe('Email is required to checkout.')
+    expect(prisma.productVariant.findMany).not.toHaveBeenCalled()
+    expect(global.fetch).not.toHaveBeenCalled()
   })
 
   it('should return success with checkout id when API call succeeds', async () => {

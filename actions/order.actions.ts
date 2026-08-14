@@ -447,7 +447,7 @@ export async function createOrder(
           discounts: discounts || [],
           currency: finalCurrency,
           shippingAddress: v.address || {},
-          billingAddress: v.address || {},
+          billingAddress: v.billingAddress || v.address || {},
           status: 'PENDING',
           taxes: new Prisma.Decimal(finalTaxes),
           shippingPrice: new Prisma.Decimal(finalShippingPrice),

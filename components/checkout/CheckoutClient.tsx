@@ -76,7 +76,7 @@ export default function CheckoutClient() {
       setLoading(true)
       await updateCartPrice(currentValues.taxes, currentValues.shippingPrice)
 
-      const response = await createSumUpCheckout()
+      const response = await createSumUpCheckout(currentValues)
       trackEvent('before_purchase', {
         transaction_id: response.data,
         userId: currentValues?.userId,
